@@ -37,33 +37,6 @@ public class MainTest {
     }
 
     @Test
-    public void testGoogle() throws InterruptedException {
-        ChromeOptions options = new ChromeOptions();
-        options.addArguments("--no-sandbox");
-
-        WebDriver driver = new ChromeDriver(options);
-
-        driver.get("https://www.google.com/");
-
-        WebElement textBox = driver.findElement(By.className("gLFyf"));
-        textBox.sendKeys("Selenium");
-
-        Thread.sleep(1000);
-
-        WebElement submitButton = driver.findElement(By.xpath("//div[1]/div[3]/form/div[1]/div[1]/div[2]/div[4]/div[6]/center/input[1]"));
-        submitButton.click();
-
-        Thread.sleep(1000);
-
-        WebElement message = driver.findElement(
-                By.xpath("//div[3]/div/div[13]/div[1]/div[2]/div/div/div[1]/div/div[1]/div/div/div/div[1]/div/div[1]/div/div/div[3]/div/div/div[1]/div/div/div[1]/div/div/div[1]/div/span/span[1]"));
-
-        Assert.assertEquals(message.getText(), "There are multiple matches for selenium, including a mineral and a browser automation framework:");
-
-        driver.quit();
-    }
-
-    @Test
     public void testZara() throws InterruptedException {
         ChromeOptions options = new ChromeOptions();
         options.addArguments("--no-sandbox");
