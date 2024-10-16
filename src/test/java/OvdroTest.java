@@ -14,7 +14,7 @@ import java.time.Duration;
 
 public class OvdroTest {
 
-    @Test
+    @Test(description = "Практика заполнение формы регистрации https://demoqa.com/automation-practice-form")
     public void testAutomationToolsFormRegistrationValidFields() {
         ChromeOptions options = new ChromeOptions();
         options.addArguments("--disable-search-engine-choice-screen");
@@ -29,35 +29,27 @@ public class OvdroTest {
         String userEmailField = "//*[@id=\"userEmail\"]";
         String genderRadiobutton = "//*[@id=\"gender-radio-1\"]";
         String mobileNumberField = "//*[@id=\"userNumber\"]";
-        String mobileNumber = "1234567890";
         String submitButton = "//*[@id=\"submit\"]";
         String closeButton = "//*[@id=\"closeLargeModal\"]";
-        // String closeButtonText = "class org.openqa.selenium.remote.RemoteWebElement";
-
 
         String firstName = "FirstName";
         String lastName = "LastName";
         String email = "FirstNameLastName@test.test";
+        String mobileNumber = "1234567890";
 
         driver.findElement(By.xpath(firstNameField)).sendKeys(firstName);
         driver.findElement(By.xpath(lastNameField)).sendKeys(lastName);
         driver.findElement(By.xpath(userEmailField)).sendKeys(email);
-
         Actions actions = new Actions(driver);
         actions.moveToElement(driver.findElement(By.xpath(genderRadiobutton))).click().perform();
-
         driver.findElement(By.xpath(mobileNumberField)).sendKeys(mobileNumber);
         actions.moveToElement(driver.findElement(By.xpath(submitButton))).click().perform();
-
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
         WebElement closeModalButton = wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(closeButton)));
+
         Assert.assertTrue(closeModalButton.isDisplayed(), "true");
 
         closeModalButton.click();
-
         driver.quit();
-
     }
-
-
 }
