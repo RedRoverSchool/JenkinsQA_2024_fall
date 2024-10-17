@@ -54,7 +54,7 @@ public class MainTest {
 
         WebElement itemTitle = driver.findElement(
                 By.xpath("//*[@id='main']/article/div/div/section/div/section[1]/ul/li[1]/div[2]/div/div/div/div[1]/a/h2"));
-        Assert.assertEquals(itemTitle.getText(), "OVERSIZED 100% WOOL CARDIGAN");
+        Assert.assertEquals(itemTitle.getText(), "BUTTONED KNIT CARDIGAN");
 
         driver.quit();
     }
