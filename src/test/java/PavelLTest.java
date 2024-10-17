@@ -24,3 +24,4 @@ public class PavelLTest {
         Assert.assertEquals(CurrentUrl, ExpectedUrl);
     }
 }
+
