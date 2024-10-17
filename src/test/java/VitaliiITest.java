@@ -31,4 +31,17 @@ public class VitaliiITest {
 
         driver.quit();
         }
+    @Test
+    public void checkIfElementExists() {
+
+        WebDriver driver = new ChromeDriver();
+        driver.manage().window().maximize();
+
+        driver.get("https://practicetestautomation.com/practice-test-login/");
+
+
+        Assert.assertNotNull(driver.findElement(By.id("username")));
+
+        driver.quit();
+    }
 }
