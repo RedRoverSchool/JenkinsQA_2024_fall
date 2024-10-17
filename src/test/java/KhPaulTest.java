@@ -12,13 +12,11 @@ import org.testng.annotations.Test;
 public class KhPaulTest {
 
     WebDriver driver;
-
     @BeforeMethod
     public void setup() {
         // Инициализация WebDriver
         driver = new ChromeDriver();
         driver.get("https://anixtd.ru/contacts.php");
-
         // Заполнение формы перед каждым тестом
         WebElement userName = driver.findElement(By.name("user_name"));
         userName.sendKeys("Test testov");
