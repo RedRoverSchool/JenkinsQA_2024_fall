@@ -2,8 +2,12 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.Test;
+
+import java.time.Duration;
 
 public class PakhomovaElenaTest {
     @Test
@@ -26,6 +30,7 @@ public class PakhomovaElenaTest {
         driver.quit();
     }
 
+    @Test
     public void testCheckAmountInCard() {
 
         ChromeOptions options = new ChromeOptions();
@@ -59,5 +64,27 @@ public class PakhomovaElenaTest {
         driver.quit();
     }
 
+    @Test
+    public void testNewElementIsVisible() {
+        String divLocator = "p[class='bg-success']";
+
+        ChromeOptions options = new ChromeOptions();
+        options.addArguments("--no-sandbox");
+
+        WebDriver driver = new ChromeDriver(options);
+
+        driver.get("http://uitestingplayground.com/ajax");
+
+        driver.findElement(By.cssSelector("button[id='ajaxButton']")).click();
+
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(15));
+
+        String textInDiv = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(divLocator))).getText();
+
+        Assert.assertEquals(textInDiv,"Data loaded with AJAX get request.");
+
+        driver.quit();
+
+    }
 
 }
