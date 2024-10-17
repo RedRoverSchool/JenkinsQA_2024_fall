@@ -1,9 +1,7 @@
-import org.openqa.selenium.By;
-import org.openqa.selenium.TimeoutException;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.Test;
@@ -24,6 +22,29 @@ public class AlexMotoTest {
         }
         WebElement myBagButton = driver.findElement(By.xpath("//a[@id='aBagLink']"));
         Assert.assertTrue(myBagButton.isDisplayed(), "My button should displayed");
+        driver.quit();
+    }
+    @Test
+    public void testLinkHomePage () throws InterruptedException {
+        WebDriver driver = new ChromeDriver();
+        driver.get("https://demoqa.com/");
+        WebDriverWait webDriverWait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        WebElement elementsButton = driver.findElement(By.xpath("//div[@class='category-cards']//div[1]//div[1]//div[1]"));
+        elementsButton.click();
+        WebElement linksButton = driver.findElement(By.xpath("//li[@id=\"item-5\"]"));
+        linksButton.click();
+        WebElement homePageLink = driver.findElement(By.xpath("//a[@id=\"simpleLink\"]"));
+        homePageLink.click();
+        String originalWindow = driver.getWindowHandle();
+        for (String windowHandle : driver.getWindowHandles()){
+            if (!windowHandle.equals(originalWindow)){
+                driver.switchTo().window(windowHandle);
+                break;
+            }
+        }
+        String currentUrl = driver.getCurrentUrl();
+        Assert.assertEquals(currentUrl, "https://demoqa.com/", "Current URL doesn't meet expectations");
+        Thread.sleep(3000);
         driver.quit();
     }
 }
