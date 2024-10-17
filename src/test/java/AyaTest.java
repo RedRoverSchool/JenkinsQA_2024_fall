@@ -9,7 +9,7 @@ public class AyaTest {
     @Test
     public void testLogin(){
         WebDriver driver=new ChromeDriver();
-        driver.get("https://www.saucedemo.com/?form=MG0AV3");
+        driver.get( "https://www.saucedemo.com/?form=MG0AV3");
 
         WebElement username= driver.findElement(By.id("user-name"));
         username.sendKeys("standard_user");
@@ -17,6 +17,6 @@ public class AyaTest {
         password.sendKeys("secret_sauce");
         WebElement loginBtn=driver.findElement(By.id("login-button"));
         loginBtn.click();
-        driver.quit();
+        driver. quit();
     }
 }
