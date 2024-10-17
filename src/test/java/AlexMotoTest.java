@@ -28,7 +28,6 @@ public class AlexMotoTest {
     public void testLinkHomePage () throws InterruptedException {
         WebDriver driver = new ChromeDriver();
         driver.get("https://demoqa.com/");
-        WebDriverWait webDriverWait = new WebDriverWait(driver, Duration.ofSeconds(10));
         WebElement elementsButton = driver.findElement(By.xpath("//div[@class='category-cards']//div[1]//div[1]//div[1]"));
         elementsButton.click();
         WebElement linksButton = driver.findElement(By.xpath("//li[@id=\"item-5\"]"));
