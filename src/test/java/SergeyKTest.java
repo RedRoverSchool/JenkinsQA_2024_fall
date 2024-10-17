@@ -46,8 +46,8 @@ public class SergeyKTest {
         Assert.assertEquals(driver.getTitle(), "OZON.ru - Моя корзина");
     }
 
-    @AfterTest
-    public void quitDriver() {
-        driver.quit();
-    }
+//    @AfterTest
+//    public void quitDriver() {
+//        driver.quit();
+//    }
 }
