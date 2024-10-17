@@ -39,6 +39,7 @@ public class AnnaL {
 
         WebElement inputZipCode = driver.findElement(By.name("zip_code"));
         inputZipCode.sendKeys("1234");
+
         sleep(2000);
 
         WebElement buttonContinue = driver.findElement(By.xpath("//input[@value='Continue']"));
@@ -47,6 +48,5 @@ public class AnnaL {
         WebElement errorMessage = driver.findElement(By.xpath("//span[@class='error_message']"));
 
         Assert.assertEquals(errorMessage.getText(), "Oops, error on page. ZIP code should have 5 digits");
-
     }
 }
