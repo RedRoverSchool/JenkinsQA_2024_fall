@@ -163,4 +163,13 @@ public class PakhomovaElenaTest {
         Assert.assertTrue(defaultRadio2.isSelected());
         Assert.assertFalse(checkedRadio1.isSelected());
     }
+
+    @Test
+    public void testInputs() {
+        driver.get("https://bonigarcia.dev/selenium-webdriver-java/web-form.html");
+
+        WebElement textInput = driver.findElement(By.id("my-text-id"));
+
+        Assert.assertEquals(textInput.getTagName(), "input");
+    }
 }
