@@ -48,6 +48,7 @@ public class YasminJaborovaTest {
         Assert.assertEquals(headerOfPage.getText(), "Products");
 
         driver.quit();
+
         }
 
 }
