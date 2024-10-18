@@ -11,6 +11,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import java.time.Duration;
+import java.util.Objects;
 
 public class PakhomovaElenaTest {
     WebDriver driver;
@@ -113,5 +114,53 @@ public class PakhomovaElenaTest {
 
         Boolean textInp = wait.until(ExpectedConditions.textToBe(By.id("text"), "Done!"));
         Assert.assertEquals(textInp, true);
+    }
+
+    @Test
+    public void testcheckboxandradio() {
+
+        driver.get("https://bonigarcia.dev/selenium-webdriver-java/web-form.html");
+
+        WebElement checkedCheckbox1 = driver.findElement(By.id("my-check-1"));
+
+        Assert.assertEquals((checkedCheckbox1.getAttribute("name")), "my-check");
+        Assert.assertEquals((checkedCheckbox1.getAttribute("type")), "checkbox");
+        Assert.assertTrue(checkedCheckbox1.isSelected());
+
+        checkedCheckbox1.click();
+
+        Assert.assertFalse(checkedCheckbox1.isSelected());
+
+        WebElement defaultCheckbox2 = driver.findElement(By.id("my-check-2"));
+        Assert.assertEquals((defaultCheckbox2.getAttribute("name")), "my-check");
+        Assert.assertEquals((defaultCheckbox2.getAttribute("type")), "checkbox");
+        Assert.assertFalse(defaultCheckbox2.isSelected());
+
+        defaultCheckbox2.click();
+        checkedCheckbox1.click();
+
+        Assert.assertTrue(defaultCheckbox2.isSelected());
+        Assert.assertTrue(checkedCheckbox1.isSelected());
+
+        WebElement checkedRadio1 = driver.findElement(By.id("my-radio-1"));
+
+        Assert.assertEquals((checkedRadio1.getAttribute("name")), "my-radio");
+        Assert.assertEquals((checkedRadio1.getAttribute("type")), "radio");
+        Assert.assertTrue(checkedRadio1.isSelected());
+
+        checkedRadio1.click();
+
+        Assert.assertTrue(checkedRadio1.isSelected());
+
+        WebElement defaultRadio2 = driver.findElement(By.id("my-radio-2"));
+
+        Assert.assertEquals((defaultRadio2.getAttribute("name")), "my-radio");
+        Assert.assertEquals((defaultRadio2.getAttribute("type")), "radio");
+        Assert.assertFalse(defaultRadio2.isSelected());
+
+        defaultRadio2.click();
+
+        Assert.assertTrue(defaultRadio2.isSelected());
+        Assert.assertFalse(checkedRadio1.isSelected());
     }
 }
