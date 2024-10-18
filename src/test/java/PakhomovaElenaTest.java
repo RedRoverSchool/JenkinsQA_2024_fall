@@ -6,18 +6,30 @@ import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import java.time.Duration;
 
 public class PakhomovaElenaTest {
+    WebDriver driver;
 
-    @Test
-    public void testLogInStandardUser() {
+    @BeforeMethod
+    public void setDriver() {
         ChromeOptions options = new ChromeOptions();
         options.addArguments("--no-sandbox");
 
-        WebDriver driver = new ChromeDriver(options);
+        driver = new ChromeDriver(options);
+    }
+
+    @AfterMethod
+    public void closeBrowser() {
+        driver.quit();
+    }
+
+    @Test
+    public void testLogInStandardUser() {
 
         driver.get("https://www.saucedemo.com/");
 
@@ -28,8 +40,6 @@ public class PakhomovaElenaTest {
         String textLogoPage = driver.findElement(By.cssSelector("span[data-test='title']")).getText();
 
         Assert.assertEquals(textLogoPage, "Products");
-
-        driver.quit();
     }
 
     @Test
@@ -116,5 +126,10 @@ public class PakhomovaElenaTest {
 
 
         driver.quit();
+    }
+
+    @Test
+    public void testWaitForLoadingPicture() {
+
     }
 }
