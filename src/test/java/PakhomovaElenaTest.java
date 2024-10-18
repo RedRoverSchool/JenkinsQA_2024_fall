@@ -45,11 +45,6 @@ public class PakhomovaElenaTest {
     @Test
     public void testCheckAmountInCard() {
 
-        ChromeOptions options = new ChromeOptions();
-        options.addArguments("--no-sandbox");
-
-        WebDriver driver = new ChromeDriver(options);
-
         driver.get("https://www.saucedemo.com/");
 
         driver.findElement(By.id("user-name")).sendKeys("standard_user");
@@ -72,18 +67,11 @@ public class PakhomovaElenaTest {
         String expectedAmountInCard = driver.findElement(By.xpath("//div[@data-test='total-label']")).getText();
 
         Assert.assertEquals(expectedAmountInCard,"Total: $58.29");
-
-        driver.quit();
     }
 
     @Test
     public void testNewElementIsVisible() {
         String divLocator = "p[class='bg-success']";
-
-        ChromeOptions options = new ChromeOptions();
-        options.addArguments("--no-sandbox");
-
-        WebDriver driver = new ChromeDriver(options);
 
         driver.get("http://uitestingplayground.com/ajax");
 
@@ -94,17 +82,10 @@ public class PakhomovaElenaTest {
         String textInDiv = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(divLocator))).getText();
 
         Assert.assertEquals(textInDiv,"Data loaded with AJAX get request.");
-
-        driver.quit();
-
     }
 
     @Test
     public void testVisibilityOfButtons() {
-        ChromeOptions options = new ChromeOptions();
-        options.addArguments("--no-sandbox");
-
-        WebDriver driver = new ChromeDriver(options);
 
         driver.get("http://uitestingplayground.com/visibility");
 
@@ -123,9 +104,6 @@ public class PakhomovaElenaTest {
         Assert.assertFalse(invisibleButton.isDisplayed());
         Assert.assertFalse(notdisplayedButton.isDisplayed());
         Assert.assertFalse(offscreenButton.isDisplayed());
-
-
-        driver.quit();
     }
 
     @Test
