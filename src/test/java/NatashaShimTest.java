@@ -39,7 +39,6 @@ public class NatashaShimTest {
         ChromeOptions options = new ChromeOptions();
         options.addArguments("--no-sandbox");
 
-
         WebDriver driver = new ChromeDriver();
         //  driver.manage().timeouts().implicitlyWait(Duration.ofMillis(500));
 
