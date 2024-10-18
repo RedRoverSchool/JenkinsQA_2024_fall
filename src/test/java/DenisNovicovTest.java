@@ -27,6 +27,5 @@ public class DenisNovicovTest {
         Assert.assertEquals(driver.getCurrentUrl(),"https://opensource-demo.orangehrmlive.com/web/index.php/dashboard/index");
 
         driver.quit();
-
     }
 }
