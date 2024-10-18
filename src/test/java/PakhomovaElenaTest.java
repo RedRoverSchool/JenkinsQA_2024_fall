@@ -6,18 +6,29 @@ import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import java.time.Duration;
 
 public class PakhomovaElenaTest {
+    WebDriver driver;
+
+    @BeforeMethod
+    public void setDriver() {
+        ChromeOptions options = new ChromeOptions();
+        options.addArguments("--no-sandbox");
+        driver = new ChromeDriver(options);
+    }
+
+    @AfterMethod
+    public void closeBrowser() {
+        driver.quit();
+    }
 
     @Test
     public void testLogInStandardUser() {
-        ChromeOptions options = new ChromeOptions();
-        options.addArguments("--no-sandbox");
-
-        WebDriver driver = new ChromeDriver(options);
 
         driver.get("https://www.saucedemo.com/");
 
@@ -28,17 +39,10 @@ public class PakhomovaElenaTest {
         String textLogoPage = driver.findElement(By.cssSelector("span[data-test='title']")).getText();
 
         Assert.assertEquals(textLogoPage, "Products");
-
-        driver.quit();
     }
 
     @Test
     public void testCheckAmountInCard() {
-
-        ChromeOptions options = new ChromeOptions();
-        options.addArguments("--no-sandbox");
-
-        WebDriver driver = new ChromeDriver(options);
 
         driver.get("https://www.saucedemo.com/");
 
@@ -62,18 +66,11 @@ public class PakhomovaElenaTest {
         String expectedAmountInCard = driver.findElement(By.xpath("//div[@data-test='total-label']")).getText();
 
         Assert.assertEquals(expectedAmountInCard,"Total: $58.29");
-
-        driver.quit();
     }
 
     @Test
     public void testNewElementIsVisible() {
         String divLocator = "p[class='bg-success']";
-
-        ChromeOptions options = new ChromeOptions();
-        options.addArguments("--no-sandbox");
-
-        WebDriver driver = new ChromeDriver(options);
 
         driver.get("http://uitestingplayground.com/ajax");
 
@@ -84,17 +81,10 @@ public class PakhomovaElenaTest {
         String textInDiv = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(divLocator))).getText();
 
         Assert.assertEquals(textInDiv,"Data loaded with AJAX get request.");
-
-        driver.quit();
-
     }
 
     @Test
     public void testVisibilityOfButtons() {
-        ChromeOptions options = new ChromeOptions();
-        options.addArguments("--no-sandbox");
-
-        WebDriver driver = new ChromeDriver(options);
 
         driver.get("http://uitestingplayground.com/visibility");
 
@@ -113,8 +103,15 @@ public class PakhomovaElenaTest {
         Assert.assertFalse(invisibleButton.isDisplayed());
         Assert.assertFalse(notdisplayedButton.isDisplayed());
         Assert.assertFalse(offscreenButton.isDisplayed());
+    }
 
+    @Test
+    public void testWaitForLoadingPicture() {
+        driver.get("https://bonigarcia.dev/selenium-webdriver-java/loading-images.html");
 
-        driver.quit();
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(15));
+
+        Boolean textInp = wait.until(ExpectedConditions.textToBe(By.id("text"), "Done!"));
+        Assert.assertEquals(textInp, true);
     }
 }
