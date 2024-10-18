@@ -11,7 +11,6 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import java.time.Duration;
-import java.util.Objects;
 
 public class PakhomovaElenaTest {
     WebDriver driver;
@@ -165,11 +164,16 @@ public class PakhomovaElenaTest {
     }
 
     @Test
-    public void testInputs() {
+    public void testInputs() throws InterruptedException {
         driver.get("https://bonigarcia.dev/selenium-webdriver-java/web-form.html");
 
         WebElement textInput = driver.findElement(By.id("my-text-id"));
 
         Assert.assertEquals(textInput.getTagName(), "input");
+
+        textInput.sendKeys("REST");
+        Assert.assertEquals(textInput.getAttribute("value"), "REST");
+        textInput.clear();
+        Assert.assertTrue(textInput.getAttribute("value").isEmpty());
     }
 }
