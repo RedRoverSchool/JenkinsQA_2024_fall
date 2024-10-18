@@ -112,6 +112,6 @@ public class PakhomovaElenaTest {
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(15));
 
         Boolean textInp = wait.until(ExpectedConditions.textToBe(By.id("text"), "Done!"));
-        Assert.assertTrue(textInp);
+        Assert.assertEquals(textInp, true);
     }
 }
