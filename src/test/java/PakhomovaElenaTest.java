@@ -118,6 +118,7 @@ public class PakhomovaElenaTest {
 
     @Test
     public void testcheckboxandradio() {
+
         driver.get("https://bonigarcia.dev/selenium-webdriver-java/web-form.html");
 
         WebElement checkedCheckbox1 = driver.findElement(By.id("my-check-1"));
@@ -130,14 +131,16 @@ public class PakhomovaElenaTest {
 
         Assert.assertFalse(checkedCheckbox1.isSelected());
 
-        WebElement checkedCheckbox2 = driver.findElement(By.id("my-check-2"));
-        Assert.assertEquals((checkedCheckbox2.getAttribute("name")), "my-check");
-        Assert.assertEquals((checkedCheckbox2.getAttribute("type")), "checkbox");
-        Assert.assertFalse(checkedCheckbox2.isSelected());
+        WebElement defaultCheckbox2 = driver.findElement(By.id("my-check-2"));
+        Assert.assertEquals((defaultCheckbox2.getAttribute("name")), "my-check");
+        Assert.assertEquals((defaultCheckbox2.getAttribute("type")), "checkbox");
+        Assert.assertFalse(defaultCheckbox2.isSelected());
 
-        checkedCheckbox2.click();
+        defaultCheckbox2.click();
+        checkedCheckbox1.click();
 
-        Assert.assertTrue(checkedCheckbox2.isSelected());
+        Assert.assertTrue(defaultCheckbox2.isSelected());
+        Assert.assertTrue(checkedCheckbox1.isSelected());
 
         WebElement checkedRadio1 = driver.findElement(By.id("my-radio-1"));
 
@@ -145,5 +148,19 @@ public class PakhomovaElenaTest {
         Assert.assertEquals((checkedRadio1.getAttribute("type")), "radio");
         Assert.assertTrue(checkedRadio1.isSelected());
 
+        checkedRadio1.click();
+
+        Assert.assertTrue(checkedRadio1.isSelected());
+
+        WebElement defaultRadio2 = driver.findElement(By.id("my-radio-2"));
+
+        Assert.assertEquals((defaultRadio2.getAttribute("name")), "my-radio");
+        Assert.assertEquals((defaultRadio2.getAttribute("type")), "radio");
+        Assert.assertFalse(defaultRadio2.isSelected());
+
+        defaultRadio2.click();
+
+        Assert.assertTrue(defaultRadio2.isSelected());
+        Assert.assertFalse(checkedRadio1.isSelected());
     }
 }
