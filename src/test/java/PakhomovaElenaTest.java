@@ -1,5 +1,6 @@
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -10,6 +11,7 @@ import org.testng.annotations.Test;
 import java.time.Duration;
 
 public class PakhomovaElenaTest {
+
     @Test
     public void testLogInStandardUser() {
         ChromeOptions options = new ChromeOptions();
@@ -87,4 +89,32 @@ public class PakhomovaElenaTest {
 
     }
 
+    @Test
+    public void testVisibilityOfButtons() {
+        ChromeOptions options = new ChromeOptions();
+        options.addArguments("--no-sandbox");
+
+        WebDriver driver = new ChromeDriver(options);
+
+        driver.get("http://uitestingplayground.com/visibility");
+
+        WebElement zeroWidthButton = driver.findElement(By.id("zeroWidthButton"));
+        WebElement overlappedButton = driver.findElement(By.id("overlappedButton"));
+        WebElement transparentButton = driver.findElement(By.id("transparentButton"));
+        WebElement invisibleButton = driver.findElement(By.id("invisibleButton"));
+        WebElement notdisplayedButton = driver.findElement(By.id("notdisplayedButton"));
+        WebElement offscreenButton = driver.findElement(By.id("offscreenButton"));
+
+        driver.findElement(By.id("hideButton")).click();
+
+        Assert.assertFalse(zeroWidthButton.isDisplayed());
+        Assert.assertTrue(overlappedButton.isDisplayed());
+        Assert.assertFalse(transparentButton.isDisplayed());
+        Assert.assertFalse(invisibleButton.isDisplayed());
+        Assert.assertFalse(notdisplayedButton.isDisplayed());
+        Assert.assertFalse(offscreenButton.isDisplayed());
+
+
+        driver.quit();
+    }
 }
