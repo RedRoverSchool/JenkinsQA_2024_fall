@@ -7,6 +7,7 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import java.time.Duration;
+import java.util.List;
 
 public class AlexMotoTest {
     @Test
@@ -46,4 +47,19 @@ public class AlexMotoTest {
         Thread.sleep(3000);
         driver.quit();
     }
+    @Test
+    public void testCheckBox() {
+        WebDriver driver = new ChromeDriver();
+        driver.get("https://qa-practice.netlify.app/checkboxes");
+        List<WebElement> checkBoxes = driver.findElements(By.xpath("//div[@class='form-group']//input[@type='checkbox']"));
+        for (WebElement checkbox : checkBoxes) {
+            if (!checkbox.isSelected()) {
+                checkbox.click();
+            }
+        }
+        for (WebElement checkBox : checkBoxes) {
+            Assert.assertTrue(checkBox.isSelected(), "Checkbox ID :" + checkBox.getAttribute("ID :" + " is not selected"));
+        } driver.quit();
+    }
+
 }
