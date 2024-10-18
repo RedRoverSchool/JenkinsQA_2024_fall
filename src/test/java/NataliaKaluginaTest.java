@@ -12,13 +12,10 @@ public class NataliaKaluginaTest {
     @Test
     public void testA1WinterSemesterPrice(){
         WebDriver driver = new ChromeDriver();
-
         driver.get("https://www.srpski-strani.com/pocetninivo1_eng.php");
-
         driver.manage().timeouts().implicitlyWait(Duration.ofMillis(500));
 
         WebElement textPrice1 = driver.findElement(By.xpath("/html/body/div/div[3]/div/table[2]/tbody/tr[1]/td[4]"));
-
         String foundResult = textPrice1.getText();
         Assert.assertEquals(foundResult, "26.400 RSD (224 €)");
 
