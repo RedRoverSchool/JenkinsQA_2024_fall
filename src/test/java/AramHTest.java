@@ -13,7 +13,6 @@ public class AramHTest {
     public void AramHtest() {
 
         WebDriver driver = new ChromeDriver();
-
         driver.get("https://www.bestbuy.com/");
 
         driver.manage().timeouts().implicitlyWait(Duration.ofMillis(500));
