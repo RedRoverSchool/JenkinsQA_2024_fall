@@ -2,14 +2,14 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.testng.Assert;
-import org.testng.annotations.AfterTest;
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 
 public class IlyaTTest {
 
-    public static WebDriver driver;
+    private static WebDriver driver;
 
     @BeforeMethod
     public static void setUp() {
@@ -19,8 +19,8 @@ public class IlyaTTest {
         driver.manage().window().maximize();
     }
 
-    @AfterTest
-    public void aft() {
+    @AfterMethod
+    public void tearDown() {
         driver.close();
     }
 
