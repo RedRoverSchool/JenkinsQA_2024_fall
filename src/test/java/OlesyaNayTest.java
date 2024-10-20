@@ -17,6 +17,8 @@ public class OlesyaNayTest {
         WebElement title = driver.findElement(By.xpath("//*[@class='h2']"));
 
         Assert.assertEquals(title.getText(), "Typing Certification Test");
+
+        driver.quit(); 
     }
 
 }
