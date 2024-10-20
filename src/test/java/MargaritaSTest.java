@@ -23,6 +23,7 @@ public class MargaritaSTest {
          webDriverWait = new WebDriverWait(driver, Duration.ofSeconds(15));
          javascriptExecutor = (JavascriptExecutor)driver;
          driver.manage().window().maximize();
+
 //        WebDriver driver = new FirefoxDriver();
 //        WebDriver driver = new EdgeDriver();
     }
@@ -31,41 +32,31 @@ public class MargaritaSTest {
     public void test() throws InterruptedException {
 
         driver.get("https://practice-automation.com/form-fields/");
-        webDriverWait.until(ExpectedConditions.visibilityOf(driver.findElement(By.id("name-input"))));
-        WebElement name = driver.findElement(By.id("name-input"));
-        name.sendKeys("Test");
+        webDriverWait.until(ExpectedConditions.visibilityOf(driver.findElement(By.id("name-input")))).sendKeys("Test");
 
         driver.findElement(By.xpath("/html/body/div[1]/div[2]/div/div/main/div/article/div/form/label[8]")).click();
         driver.findElement(By.xpath("//label[text()='Water']")).click();
         driver.findElement(By.id("drink3")).click();
 
         javascriptExecutor.executeScript("window.scrollBy(0,350)", "");
-        webDriverWait.until(ExpectedConditions.visibilityOf(driver.findElement(By.cssSelector("#color2"))));
-        WebElement blueColor = driver.findElement(By.cssSelector("#color2"));
-        blueColor.click();
+        webDriverWait.until(ExpectedConditions.elementToBeClickable(driver.findElement(By.cssSelector("#color2")))).click();
 
-        webDriverWait.until(ExpectedConditions.visibilityOf(driver.findElement(By.id("automation"))));
-        Select select = new Select(driver.findElement(By.id("automation")));
+        Select select = new Select( webDriverWait.until(ExpectedConditions.visibilityOf(driver.findElement(By.id("automation")))));
         select.selectByValue("yes");
         Thread.sleep(800);
         javascriptExecutor.executeScript("window.scrollBy(0,750)", "");
 
-        webDriverWait.until(ExpectedConditions.visibilityOf(driver.findElement(By.xpath("/html/body/div[1]/div[2]/div/div/main/div/article/div/form/ul/li[1]"))));
-        WebElement tools = driver.findElement(By.xpath("/html/body/div[1]/div[2]/div/div/main/div/article/div/form/ul/li[1]"));
+        WebElement tools = webDriverWait.until(ExpectedConditions.visibilityOf(driver.findElement(By.xpath("/html/body/div[1]/div[2]/div/div/main/div/article/div/form/ul/li[1]"))));
         Assert.assertEquals("Selenium", tools.getText());
 
         driver.findElement(By.id("email")).sendKeys("test@test.com");
 
-        webDriverWait.until(ExpectedConditions.visibilityOf(driver.findElement(By.cssSelector("#message"))));
-        driver.findElement(By.cssSelector("#message")).sendKeys("test message");
-
-        webDriverWait.until(ExpectedConditions.visibilityOf(driver.findElement(By.id("submit-btn"))));
-        WebElement submitButton = driver.findElement(By.id("submit-btn"));
-        submitButton.click();
+        javascriptExecutor.executeScript("window.scrollBy(0,1050)", "");
+        webDriverWait.until(ExpectedConditions.visibilityOf(driver.findElement(By.cssSelector("#message")))).sendKeys("test message");
+        webDriverWait.until(ExpectedConditions.elementToBeClickable(driver.findElement(By.id("submit-btn")))).click();
 
         webDriverWait.until(ExpectedConditions.alertIsPresent());
-        Alert alert = driver.switchTo().alert();
-        alert.accept();
+        driver.switchTo().alert().accept();
     }
 
     @AfterTest
