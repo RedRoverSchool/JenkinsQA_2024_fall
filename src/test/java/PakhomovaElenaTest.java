@@ -17,9 +17,8 @@ public class PakhomovaElenaTest {
 
     @BeforeMethod
     public void setDriver() {
-        ChromeOptions options = new ChromeOptions();
-        options.addArguments("--no-sandbox");
-        driver = new ChromeDriver(options);
+        driver = new ChromeDriver();
+
     }
 
     @AfterMethod
@@ -173,7 +172,10 @@ public class PakhomovaElenaTest {
 
         textInput.sendKeys("REST");
         Assert.assertEquals(textInput.getAttribute("value"), "REST");
+
         textInput.clear();
         Assert.assertTrue(textInput.getAttribute("value").isEmpty());
+
+
     }
 }
