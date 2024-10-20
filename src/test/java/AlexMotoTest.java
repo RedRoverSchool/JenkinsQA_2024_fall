@@ -61,5 +61,32 @@ public class AlexMotoTest {
             Assert.assertTrue(checkBox.isSelected(), "Checkbox ID :" + checkBox.getAttribute("ID :" + " is not selected"));
         } driver.quit();
     }
+    @Test
+    public void radioButtonTest() {
+        WebDriver driver = new ChromeDriver();
+        driver.get("https://qa-practice.netlify.app/radiobuttons");
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
 
+        List<WebElement> radioButtons = wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath("//div[@id='content']//input[@type='radio']")));
+
+        for (int i = 0; i < radioButtons.size(); i++) {
+            WebElement radioButton = radioButtons.get(i);
+            if (radioButton.getAttribute("disabled") != null) {
+                System.out.println("Radio button " + (i + 1) + " is disabled and cannot be selected.");
+                continue;
+            }
+
+            radioButton.click();
+
+
+            Assert.assertTrue(radioButton.isSelected(), "Radio button " + (i + 1) + " is not selected as expected.");
+
+            for (int j = 0; j < radioButtons.size(); j++) {
+                if (j != i) {
+                    Assert.assertFalse(radioButtons.get(j).isSelected(), "Radio button " + (j + 1) + " is incorrectly selected.");
+                }
+            }
+        }
+        driver.quit();
+    }
 }
