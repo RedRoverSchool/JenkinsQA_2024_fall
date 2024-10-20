@@ -1,4 +1,5 @@
 import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -58,6 +59,29 @@ public class JulieVPTest {
 
         WebElement itemTitle = driver.findElement(By.xpath("//*[@id='app']/div/div[2]/div[1]/div[1]/div[2]/div/div/div/h1"));
         Assert.assertEquals(itemTitle.getText(), "WOMEN'S CLOTHING NEW ARRIVALS");
+
+        driver.quit();
+    }
+
+    @Test
+    public void testAdidas() throws InterruptedException {
+
+        ChromeOptions options = new ChromeOptions();
+        options.addArguments("--no-sandbox");
+
+        WebDriver driver = new ChromeDriver(options);
+
+        driver.get("https://www.adidas.com/us");
+
+        WebElement textBox = driver.findElement(By.xpath("//*[@id='__next']/div[3]/div[2]/div/header/div[2]/div/div[2]/div[1]/input"));
+        textBox.sendKeys("jacket");
+        Thread.sleep(500);
+        textBox.sendKeys(Keys.RETURN);
+
+        Thread.sleep(1000);
+
+        WebElement itemTitle = driver.findElement(By.xpath("//*[@id='__next']/div[2]/main/section[2]/article[1]/div/a/footer/p[1]"));
+        Assert.assertEquals(itemTitle.getText(), "Essentials 3-Stripes Light Down Jacket");
 
         driver.quit();
     }
