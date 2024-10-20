@@ -5,7 +5,7 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-public class ArtsiomAzarankaTests {
+public class ArtsiomATest {
 
     @Test
     public void testStrategArendaPomewenii() throws InterruptedException {
@@ -24,7 +24,6 @@ public class ArtsiomAzarankaTests {
                 "ул.Янки Лучины 5");
 
         driver.quit();
-
     }
 
     @Test
@@ -43,16 +42,11 @@ public class ArtsiomAzarankaTests {
         submitObektiButton.click();
         Thread.sleep(200);
 
-
         WebElement mfkStrateg01 = driver.findElement(By.xpath("//*[@id='cardtitle1_793111500']"));
         Assert.assertEquals(mfkStrateg01.getText(),
-                "МНОГОФУНКЦИОНАЛЬНЫЙ\n" +
-                        "КУЛЬТУРНО-РАЗВЛЕКАТЕЛЬНЫЙ\n" +
-                        "КОМПЛЕКС СТРАТЕГ 01\n" +
-                        "г.Минск, ул. Янки Лучины , дома 5 и 7");
+                "МНОГОФУНКЦИОНАЛЬНЫЙ\nКУЛЬТУРНО-РАЗВЛЕКАТЕЛЬНЫЙ\nКОМПЛЕКС СТРАТЕГ 01\nг.Минск, ул. Янки Лучины , дома 5 и 7");
 
         driver.quit();
-
     }
 
     @Test
@@ -70,13 +64,9 @@ public class ArtsiomAzarankaTests {
 
         WebElement ymaps = driver.findElement(By.xpath("//ymaps[@class = 'ymaps-2-1-79-balloon__content']//ymaps//ymaps"));
         Assert.assertEquals(ymaps.getText(),
-                "МФК СТРАТЕГ-01\n" +
-                         "г.Минск, ул. Янки Лучины, 5\n" +
-                         "г.Минск, ул. Янки Лучины, 7"
+                "МФК СТРАТЕГ-01\nг.Минск, ул. Янки Лучины, 5\nг.Минск, ул. Янки Лучины, 7"
                 );
-
         driver.quit();
-
     }
 
     @Test
@@ -104,9 +94,5 @@ public class ArtsiomAzarankaTests {
         Assert.assertTrue(whatsAppButton.isDisplayed());
 
         driver.quit();
-
     }
-
-
-
 }
