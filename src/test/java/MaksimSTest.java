@@ -5,11 +5,8 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.Select;
 import org.testng.Assert;
 import org.testng.annotations.Test;
-
-import javax.xml.crypto.Data;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 public class MaksimSTest {
@@ -48,7 +45,7 @@ public class MaksimSTest {
     }
 
     @Test
-    public void testSortingPrice() throws InterruptedException {
+    public void testSortingPrice() {
         WebDriver driver = new ChromeDriver();
 
         driver.get("https://www.saucedemo.com/");
