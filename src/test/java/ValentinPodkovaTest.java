@@ -5,6 +5,8 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
+import java.time.Duration;
+
 public class ValentinPodkovaTest {
     @Test
     public void testButton() {
@@ -37,4 +39,29 @@ public class ValentinPodkovaTest {
 
         driver.quit();
     }
+
+    @Test
+    public void testLoginPage() {
+
+        WebDriver driver = new ChromeDriver();
+        driver.manage().timeouts().implicitlyWait(Duration.ofMillis(500));
+
+        driver.get("https://demo.guru99.com/test/login.html");
+
+        WebElement emailField = driver.findElement(By.id("email"));
+        emailField.sendKeys("abcd@gmail.com");
+
+        WebElement passwordField = driver.findElement(By.name("passwd"));
+        passwordField.sendKeys("abcdefghlkjl");
+
+        WebElement loginButton = driver.findElement(By.id("SubmitLogin"));
+        loginButton.click();
+
+        String expectedUrl = "https://demo.guru99.com/test/success.html";
+        String actualUrl = driver.getCurrentUrl();
+        Assert.assertEquals(expectedUrl, actualUrl);
+
+        driver.quit();
+    }
 }
+

@@ -161,7 +161,7 @@ public class PakhomovaElenaTest {
     }
 
     @Test
-    public void testInputs() throws InterruptedException {
+    public void testInputs()  {
         driver.get("https://bonigarcia.dev/selenium-webdriver-java/web-form.html");
 
         String title = driver.getTitle();

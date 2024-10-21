@@ -71,4 +71,38 @@ public class SerovNikitaFirstTest {
 
         Assert.assertEquals(elementA.getText(), "B");
     }
+    @Test
+    public void isDisplayedTest() {
+        driver.get("https://the-internet.herokuapp.com/dynamic_content?with_content=static");
+
+        WebElement refreshButton = driver.findElement(By.xpath("//*[@id=\"content\"]/div/p[2]/a"));
+        refreshButton.click();
+
+        WebElement updatedElement = driver.findElement(By.xpath("//*[@id=\"content\"]/div[3]"));
+        Assert.assertTrue(updatedElement.isDisplayed());
+    }
+
+    @Test
+    public void dynamicControlTest() throws InterruptedException {
+        driver.get("https://the-internet.herokuapp.com/dynamic_controls");
+
+        WebElement checkboxA = driver.findElement(By.xpath("//*[@id=\"checkbox\"]/input"));
+        Assert.assertTrue(checkboxA.isDisplayed());
+
+        WebElement removeButton = driver.findElement(By.xpath("//*[@id=\"checkbox-example\"]/button"));
+        removeButton.click();
+
+        Thread.sleep(3000);
+
+        WebElement informMessage = driver.findElement(By.xpath("//*[@id=\"message\"]"));
+        Assert.assertEquals(informMessage.getText(),"It's gone!");
+
+        WebElement addButton = driver.findElement(By.xpath("//*[@id=\"checkbox-example\"]/button"));
+        addButton.click();
+
+        Thread.sleep(3000);
+
+        WebElement checkboxAppeared = driver.findElement(By.xpath("//*[@id=\"checkbox\"]"));
+        Assert.assertTrue(checkboxAppeared.isDisplayed());
+    }
 }
