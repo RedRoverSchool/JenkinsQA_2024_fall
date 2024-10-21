@@ -38,8 +38,21 @@ public class VitaliiITest {
         driver.manage().window().maximize();
 
         driver.get("https://practicetestautomation.com/practice-test-login/");
+        WebElement usernameField = driver.findElement(By.id("username"));
 
-        Assert.assertNotNull(driver.findElement(By.id("username")));
+        Assert.assertNotNull(usernameField);
+
+        driver.quit();
+    }
+    @Test
+    public void testFindElementByXpath() {
+        WebDriver driver = new ChromeDriver();
+        driver.manage().window().maximize();
+
+        driver.get("https://practicetestautomation.com/practice-test-login/");
+        WebElement usename = driver.findElement(By.xpath("//*[@type='text']"));
+
+        Assert.assertTrue(usename.isDisplayed());
 
         driver.quit();
     }
