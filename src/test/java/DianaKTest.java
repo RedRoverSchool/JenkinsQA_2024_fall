@@ -3,10 +3,9 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.testng.Assert;
-import org.testng.annotations.AfterMethod;
+import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
-
 import java.time.Duration;
 
 public class DianaKTest {
@@ -15,23 +14,23 @@ public class DianaKTest {
 
     @BeforeTest
     public void avto(){
-        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
+        driver.manage().window().maximize();
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(8));
     }
 
-    @AfterMethod
-    public void clouse(){
+    @AfterTest
+    public void close(){
         driver.quit();
     }
 
 
-    @Test
+    @Test (priority = 1)
     public void testGarfild() {
 
         driver.get("https://garfield.by/?utm_source=google&utm_medium=cpc&utm_campaign=17619287198&utm_content=&utm_term=&gad_source=1&gclid=CjwKCAjw9p24BhB_EiwA8ID5BlycoY_gj8tdIObtHyJdlX0EleOFbNVrF1vokbRJm7b6uhC1n2gh9hoCTCwQAvD_BwE");
-        driver.findElement(By.className("icon-open")).click();
+        driver.findElement(By.xpath("//a[contains(text(),'Щенки')]")).click();
 
-        driver.findElement(By.partialLinkText("Для щенков")).click();
-        driver.findElement(By.partialLinkText("Сухие корма")).click();
+        driver.findElement(By.xpath("//div[@class='js-accordion-wrap active']//a[@class='catalog-nav-links__item link'][contains(text(),'Сухие корма')]")).click();
         driver.findElement(By.xpath("//div[@class='manufacturer__default']//p[@class='catalog-filter-content-checkbox__label'][normalize-space()='Grandorf']")).click();
 
         WebElement filter = driver.findElement(By.id("line_arrFilterCat_124_3205278765"));
@@ -39,7 +38,7 @@ public class DianaKTest {
     }
 
 
-    @Test
+    @Test (priority = 2)
     public void testRunin() {
         driver.get("https://runin.by/");
         driver.findElement(By.xpath("//*[@id=\"sub-header\"]/div[2]/div/div/a[1]")).click();
@@ -50,7 +49,6 @@ public class DianaKTest {
 
         driver.findElement(By.name("allSeasons")).click();
         driver.findElement(By.xpath("//*[@id=\"app\"]/main/section/div/div/div[1]/div[1]/div[1]/div[3]/div/div[2]/div[2]/div/div/div/div[5]/div/div[1]/a/div/div[1]")).click();
-
         driver.findElement(By.xpath("//*[@id=\"app\"]/div[5]/div/div[2]/div/div/button")).click();
 
         driver.findElement(By.xpath("//div[@class='event-intro__actions']//button[@type='button']")).click();
@@ -62,7 +60,7 @@ public class DianaKTest {
 
 
 
-    @Test
+    @Test (priority = 3)
     public void testKufar() {
 
         driver.get("https://re.kufar.by/");
