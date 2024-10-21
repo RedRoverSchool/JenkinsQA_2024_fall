@@ -45,7 +45,7 @@ public class JennQaTest {
             for (String word : words) {
                 try {
                     int year = Integer.parseInt(word);
-                    if ((year < 1970 || year > 1980) && word.length() == 4) {
+                    if ((year < 1970 || year > 1973) && word.length() == 4) {
                         allReleaseYearsInRange = false;
                     }
                 } catch (NumberFormatException e) {
