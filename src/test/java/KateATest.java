@@ -137,4 +137,22 @@ public class KateATest {
 
         driver.quit();
     }
+
+    @Test
+    public void testButtonTotalModal() throws InterruptedException {
+        WebDriver driver = new ChromeDriver();
+        driver.get("https://coffee-cart.app/");
+
+        WebElement buttonTotal = driver.findElement(
+                By.xpath("//*[@aria-label='Proceed to checkout']")
+        );
+        buttonTotal.click();
+
+        Thread.sleep(2000);
+
+        WebElement headerModal = driver.findElement(By.tagName("h1"));
+        Assert.assertEquals(headerModal.getText(), "Payment details");
+
+        driver.close();
+    }
 }
