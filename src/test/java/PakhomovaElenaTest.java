@@ -3,6 +3,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.AfterMethod;
@@ -10,6 +11,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import java.time.Duration;
+import java.util.List;
 
 public class PakhomovaElenaTest {
     WebDriver driver;
@@ -194,4 +196,33 @@ public class PakhomovaElenaTest {
 
         Assert.assertTrue(readOnlyInput.isEnabled());
     }
+
+        @Test
+        public void testSelectItemsDropDownMenu() throws InterruptedException {
+        driver.get("https://bonigarcia.dev/selenium-webdriver-java/web-form.html");
+
+        WebElement selectDropDown = driver.findElement(By.name("my-select"));
+        Select select = new Select(selectDropDown);
+
+        WebElement selectDropDown1 =
+                driver.findElement(By.xpath("//select[@name='my-select']/option[@value='1']"));
+        WebElement selectDropDown2 =
+                    driver.findElement(By.xpath("//select[@name='my-select']/option[@value='2']"));
+        WebElement selectDropDown3 =
+                    driver.findElement(By.xpath("//select[@name='my-select']/option[@value='3']"));
+
+        select.selectByValue("2");
+        Assert.assertTrue(selectDropDown2.isSelected());
+
+        Thread.sleep(500);
+
+        select.selectByVisibleText("Three");
+        Assert.assertTrue(selectDropDown3.isSelected());
+
+        Thread.sleep(500);
+
+        select.selectByIndex(1);
+        Assert.assertTrue(selectDropDown1.isSelected());
+
+        }
 }
