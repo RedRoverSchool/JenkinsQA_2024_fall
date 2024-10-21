@@ -15,18 +15,18 @@ import org.testng.annotations.Test;
             WebDriver driver = new ChromeDriver();
             driver.get("https://thecode.media/");
 
-            WebElement search_button = driver.findElement(By.className("heading-search__open"));
-            search_button.click();
+            WebElement searchButton = driver.findElement(By.className("heading-search__open"));
+            searchButton.click();
 
-            WebElement search_text = driver.findElement(By.className("heading-search__input"));
-            search_text.sendKeys("Api");
+            WebElement searchText = driver.findElement(By.className("heading-search__input"));
+            searchText.sendKeys("Api");
 
-            search_button.click();
+            searchButton.click();
 
-            WebElement found_text = driver.findElement(By.className("search__title"));
-            String result_Search = found_text.getText();
+            WebElement foundText = driver.findElement(By.className("search__title"));
+            String resultSearch = foundText.getText();
 
-            Assert.assertEquals("api", result_Search);
+            Assert.assertEquals("api", resultSearch);
 
             driver.quit();
 
@@ -37,15 +37,15 @@ import org.testng.annotations.Test;
             WebDriver driver = new ChromeDriver();
             driver.get("https://thecode.media/");
 
-            WebElement search_area = driver.findElement(By.className("tab-questions"));
+            WebElement searchArea = driver.findElement(By.className("tab-questions"));
 
-            Action myAction = new Actions(driver).doubleClick(search_area).build();
+            Action myAction = new Actions(driver).doubleClick(searchArea).build();
             myAction.perform();
 
-            WebElement found_text = driver.findElement(By.xpath("(//h1[@class='search__title'])"));
-            String found_search_title = found_text.getText();
+            WebElement foundText = driver.findElement(By.xpath("(//h1[@class='search__title'])"));
+            String foundSearchTitle = foundText.getText();
 
-            Assert.assertEquals("Как решить", found_search_title);
+            Assert.assertEquals("Как решить", foundSearchTitle);
 
             driver.quit();
 
