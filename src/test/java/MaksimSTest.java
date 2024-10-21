@@ -2,12 +2,11 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.support.ui.Select;
 import org.testng.Assert;
 import org.testng.annotations.Test;
-
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 public class MaksimSTest {
@@ -46,7 +45,7 @@ public class MaksimSTest {
     }
 
     @Test
-    public void testSortingPrice() throws InterruptedException {
+    public void testSortingPrice() {
         WebDriver driver = new ChromeDriver();
 
         driver.get("https://www.saucedemo.com/");
@@ -79,6 +78,23 @@ public class MaksimSTest {
         Collections.sort(sortedPrices);
 
         Assert.assertEquals(prices,sortedPrices);
+
+        driver.quit();
+    }
+
+    @Test
+    public void testSelectingOption() {
+
+        WebDriver driver = new ChromeDriver();
+
+        driver.get("https://www.selenium.dev/selenium/web/web-form.html");
+
+        WebElement dropdownSelect = driver.findElement(By.cssSelector("[name='my-select']"));
+        Select select = new Select(dropdownSelect);
+        select.selectByVisibleText("Three");
+
+        WebElement threeOption = driver.findElement(By.cssSelector("[value='3']"));
+        Assert.assertTrue(threeOption.isSelected());
 
         driver.quit();
     }
