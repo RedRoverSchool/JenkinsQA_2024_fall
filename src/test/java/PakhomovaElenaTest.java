@@ -2,7 +2,6 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
@@ -18,7 +17,6 @@ public class PakhomovaElenaTest {
     @BeforeMethod
     public void setDriver() {
         driver = new ChromeDriver();
-
     }
 
     @AfterMethod
@@ -166,9 +164,18 @@ public class PakhomovaElenaTest {
     public void testInputs() throws InterruptedException {
         driver.get("https://bonigarcia.dev/selenium-webdriver-java/web-form.html");
 
+        String title = driver.getTitle();
+        Assert.assertEquals(title, "Hands-On Selenium WebDriver with Java");
+
+        String url = driver.getCurrentUrl();
+        Assert.assertEquals(url, "https://bonigarcia.dev/selenium-webdriver-java/web-form.html");
+
         WebElement textInput = driver.findElement(By.id("my-text-id"));
 
         Assert.assertEquals(textInput.getTagName(), "input");
+
+        WebElement labelTextInput = driver.findElement(By.xpath("//input[@id='my-text-id']/.."));
+        Assert.assertEquals(labelTextInput.getText(), "Text input");
 
         textInput.sendKeys("REST");
         Assert.assertEquals(textInput.getAttribute("value"), "REST");
@@ -176,6 +183,15 @@ public class PakhomovaElenaTest {
         textInput.clear();
         Assert.assertTrue(textInput.getAttribute("value").isEmpty());
 
+        textInput.sendKeys("REST");
+        Assert.assertEquals(textInput.getAttribute("value"), "REST");
 
+        WebElement disabledInput = driver.findElement(By.name("my-disabled"));
+
+        Assert.assertFalse(disabledInput.isEnabled());
+
+        WebElement readOnlyInput = driver.findElement(By.name("my-readonly"));
+
+        Assert.assertTrue(readOnlyInput.isEnabled());
     }
 }
