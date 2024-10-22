@@ -1,17 +1,19 @@
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.interactions.Actions;
 import org.testng.Assert;
-import org.testng.annotations.AfterTest;
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import java.util.List;
 
 public class ArtsiomASecondTest {
 
-    WebDriver driver;
+    public static WebDriver driver;
+
 
     public void openInteractionsPage(){
         WebElement sectionInteractions = driver.findElement(By.xpath("//*[@class = 'card mt-4 top-card']//h5[contains(text(), 'Interactions')]"));
@@ -23,19 +25,29 @@ public class ArtsiomASecondTest {
         buttonGridFormat.click();
     }
 
+    public void openBookStoreApplication() {
+        WebElement buttonBookStoreApplication = driver.findElement(By.xpath("//*[@class = 'card mt-4 top-card']//h5[contains(text(), 'Book Store Application')]"));
+        scroolDown();
+        buttonBookStoreApplication.click();
+    }
+
+    public void scroolDown(){
+        JavascriptExecutor js = (JavascriptExecutor) driver;
+        js.executeScript("window.scrollTo(0, document.body.scrollHeight)");
+    }
+
     @BeforeMethod
-    public void startTest () {
+    public void startTest () throws InterruptedException {
         driver = new ChromeDriver();
         driver.manage().window().maximize();
-
         driver.get("https://demoqa.com/");
     }
 
     @Test
     public void testNumberOfCategories() {
 
-        List<WebElement> leftPanel = driver.findElements(By.xpath("//*[@class = 'card mt-4 top-card']"));
-        Assert.assertEquals(leftPanel.size(), 6 );
+        List<WebElement> categoriestPanel = driver.findElements(By.xpath("//*[@class = 'card mt-4 top-card']"));
+        Assert.assertEquals(categoriestPanel.size(), 6 );
     }
 
     @Test
@@ -62,7 +74,7 @@ public class ArtsiomASecondTest {
         Assert.assertEquals(gridNotActiveIcon.size(), 4);
     }
 
-    @Test (invocationCount = 10)
+    @Test
     public void testSortableGridDragAndDropActions() throws InterruptedException {
 
         openInteractionsPage();
@@ -84,7 +96,53 @@ public class ArtsiomASecondTest {
         Assert.assertEquals(newGridPanel.get(2).getText(), "One");
     }
 
-    @AfterTest
+    @Test
+    public void testBookStoreFiltration() throws InterruptedException {
+
+        openBookStoreApplication();
+        Thread.sleep(1000);
+        List<WebElement> listOfBooks = driver.findElements(By.xpath("//*[@class = 'rt-tbody']//div[@class='rt-tr-group']"));
+        Assert.assertEquals(listOfBooks.size(), 10);
+        listOfBooks.removeIf(nextBook -> nextBook.getText().equals("    "));
+        Assert.assertEquals(listOfBooks.size(), 8);
+    }
+
+    @Test
+    public void testBookStoreFiltration5BooksPerPage() throws InterruptedException {
+
+        openBookStoreApplication();
+        Thread.sleep(1000);
+        scroolDown();
+        WebElement fieldRowsPerPage = driver.findElement(By.xpath("//*[@aria-label='rows per page']"));
+        fieldRowsPerPage.click();
+        WebElement rowsPerPage5 = driver.findElement(By.xpath("//*[@aria-label='rows per page']//option[@value='5']"));
+        rowsPerPage5.click();
+        WebElement nextButton = driver.findElement(By.xpath("//button[@class='-btn' and ./text()='Next']"));
+        nextButton.click();
+
+        List<WebElement> listOfBooks = driver.findElements(By.xpath("//*[@class = 'rt-tbody']//div[@class='rt-tr-group']"));
+        Assert.assertEquals(listOfBooks.size(), 5);
+        listOfBooks.removeIf(nextBook -> nextBook.getText().equals("    "));
+        Assert.assertEquals(listOfBooks.size(), 3);
+        WebElement totalPage = driver.findElement(By.xpath("//*[@class='-totalPages']"));
+        Assert.assertEquals(totalPage.getText(), "2");
+    }
+
+    @Test
+    public void testBookStoreSearch() throws InterruptedException {
+        openBookStoreApplication();
+        Thread.sleep(500);
+        WebElement serchBox = driver.findElement(By.xpath("//*[@class='form-control']"));
+        serchBox.sendKeys("O'Reilly Media");
+        Thread.sleep(150);
+        List<WebElement> listOfBooks = driver.findElements(By.xpath("//*[@class = 'rt-tbody']//div[@class='rt-tr-group']"));
+        Assert.assertEquals(listOfBooks.size(), 10);
+        listOfBooks.removeIf(nextBook -> nextBook.getText().equals("    "));
+        Assert.assertEquals(listOfBooks.size(), 6);
+    }
+
+
+    @AfterMethod
     public void exitFromTheTest(){
         driver.quit();
     }
