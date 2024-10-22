@@ -12,26 +12,26 @@ import java.util.List;
 
 public class ArtsiomASecondTest {
 
-    public static WebDriver driver;
+    private WebDriver driver;
 
 
-    public void openInteractionsPage(){
+    private void openInteractionsPage(){
         WebElement sectionInteractions = driver.findElement(By.xpath("//*[@class = 'card mt-4 top-card']//h5[contains(text(), 'Interactions')]"));
         sectionInteractions.click();
     }
 
-    public void switchToGridVisualisation(){
+    private void switchToGridVisualisation(){
         WebElement buttonGridFormat = driver.findElement(By.xpath("//a[@ id = 'demo-tab-grid']"));
         buttonGridFormat.click();
     }
 
-    public void openBookStoreApplication() {
+    private void openBookStoreApplication() {
         WebElement buttonBookStoreApplication = driver.findElement(By.xpath("//*[@class = 'card mt-4 top-card']//h5[contains(text(), 'Book Store Application')]"));
         scroolDown();
         buttonBookStoreApplication.click();
     }
 
-    public void scroolDown(){
+    private void scroolDown(){
         JavascriptExecutor js = (JavascriptExecutor) driver;
         js.executeScript("window.scrollTo(0, document.body.scrollHeight)");
     }
@@ -61,6 +61,7 @@ public class ArtsiomASecondTest {
 
         List<WebElement> gridPanel = driver.findElements(By.xpath("//div[@ id = 'gridContainer']//li"));
         Assert.assertEquals(gridPanel.size(), 9);
+        scroolDown();
         gridPanel.get(0).click();
         gridPanel.get(2).click();
         gridPanel.get(4).click();
