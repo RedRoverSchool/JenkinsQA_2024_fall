@@ -29,17 +29,39 @@ public class DmitrySTest {
 
         testInputNumbersAndEnter(driver);
 
-        WebElement processOnServerInput = driver.findElement(By.xpath("//*[@id=\"numentry\"]"));
-        processOnServerInput.sendKeys("123");
-        Thread.sleep(INPUT_PAUSE_MS);
-        WebElement processOnServerButton = driver.findElement(By.xpath("//*[@id=\"submit-to-server\"]"));
-        processOnServerButton.click();
+        proceccOnServerButtonClick(driver);
+
+
+        showAsAlertInputButtonClick(driver);
+        showAsParaButtonClick(driver);
+
+        showClickUrlLink(driver, "//*[@id=\"clickable-link\"]", "one, two, three, four, five, six, seven, eight, nine");
+
+
+        driver.quit();
+    }
+
+    private static void showClickUrlLink(WebDriver driver, String xpathExpression, String expected) throws InterruptedException {
+        WebElement url = driver.findElement(By.xpath(xpathExpression));
+        url.click();
         Thread.sleep(MAIN_PAUSE_MS);
-        WebElement processOnServerResult = driver.findElement(By.xpath("//*[@id='message']"));
-        String processOnServerTextResult = processOnServerResult.getText();
-        Assert.assertEquals(processOnServerTextResult, "one, two, three");
+        WebElement urlTextResult = driver.findElement(By.xpath("//*[@id='message']"));
+        String textUrlResult = urlTextResult.getText();
+        Assert.assertEquals(textUrlResult, expected);
+        Thread.sleep(MAIN_PAUSE_MS);
+    }
 
+    private static void showAsParaButtonClick(WebDriver driver) throws InterruptedException {
+        WebElement showAsParaButton = driver.findElement(By.xpath("//*[@id=\"show-as-para\"]"));
+        showAsParaButton.click();
+        Thread.sleep(MAIN_PAUSE_MS);
+        WebElement showParaResult = driver.findElement(By.xpath("//*[@id='message']"));
+        String showParaTextResult = showParaResult.getText();
+        Assert.assertEquals(showParaTextResult, "one, two, three");
+        Thread.sleep(MAIN_PAUSE_MS);
+    }
 
+    private static void showAsAlertInputButtonClick(WebDriver driver) throws InterruptedException {
         WebElement showAsAlertInput = driver.findElement(By.xpath("//*[@id=\"numentry\"]"));
         showAsAlertInput.sendKeys("123");
         Thread.sleep(MAIN_PAUSE_MS);
@@ -53,24 +75,18 @@ public class DmitrySTest {
         driver.switchTo().alert().accept();
 
         Thread.sleep(MAIN_PAUSE_MS);
-        WebElement showAsParaButton = driver.findElement(By.xpath("//*[@id=\"show-as-para\"]"));
-        showAsParaButton.click();
-        Thread.sleep(MAIN_PAUSE_MS);
-        WebElement showParaResult = driver.findElement(By.xpath("//*[@id='message']"));
-        String showParaTextResult = showParaResult.getText();
-        Assert.assertEquals(showParaTextResult, "one, two, three");
-        Thread.sleep(MAIN_PAUSE_MS);
+    }
 
-        WebElement url = driver.findElement(By.xpath("//*[@id=\"clickable-link\"]"));
-        url.click();
+    private static void proceccOnServerButtonClick(WebDriver driver) throws InterruptedException {
+        WebElement processOnServerInput = driver.findElement(By.xpath("//*[@id=\"numentry\"]"));
+        processOnServerInput.sendKeys("123");
+        Thread.sleep(INPUT_PAUSE_MS);
+        WebElement processOnServerButton = driver.findElement(By.xpath("//*[@id=\"submit-to-server\"]"));
+        processOnServerButton.click();
         Thread.sleep(MAIN_PAUSE_MS);
-        WebElement urlTextResult = driver.findElement(By.xpath("//*[@id='message']"));
-        String textUrlResult = urlTextResult.getText();
-        Assert.assertEquals(textUrlResult, "one, two, three, four, five, six, seven, eight, nine");
-        Thread.sleep(MAIN_PAUSE_MS);
-
-
-        driver.quit();
+        WebElement processOnServerResult = driver.findElement(By.xpath("//*[@id='message']"));
+        String processOnServerTextResult = processOnServerResult.getText();
+        Assert.assertEquals(processOnServerTextResult, "one, two, three");
     }
 
     private static void testInputNumbersAndEnter(WebDriver driver) throws InterruptedException {
