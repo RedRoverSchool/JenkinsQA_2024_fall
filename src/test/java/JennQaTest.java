@@ -1,8 +1,12 @@
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
+import java.time.Duration;
 import java.util.List;
 
 public class JennQaTest {
@@ -91,6 +95,68 @@ public class JennQaTest {
         String signInPageHeader = driver.findElement(By.tagName("h1")).getText();
 
         Assert.assertEquals(signInPageHeader, "Sign in");
+
+        driver.quit();
+    }
+
+    @Test
+    public void testLamdbatestRegistrationWithValidCredentials() {
+        String password = "myPassword";
+        String uniqueEmail = "elevator" + System.currentTimeMillis() + "@test.com";
+
+        WebDriver driver = new ChromeDriver();
+
+        driver.get("https://ecommerce-playground.lambdatest.io/index.php?route=common/home");
+
+        WebElement myAccountHover = driver.findElement(
+                By.xpath("(//a[@href='https://ecommerce-playground.lambdatest.io/index.php?route=account/account'])[2]"));
+        Actions actions = new Actions(driver);
+        actions.moveToElement(myAccountHover).perform();
+
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
+        WebElement dropdownRegister = wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//a[@href='https://ecommerce-playground.lambdatest.io/index.php?route=account/register']")));
+        dropdownRegister.click();
+
+        driver.findElement(By.name("firstname")).sendKeys("Johnny");
+        driver.findElement(By.id("input-lastname")).sendKeys("Elevator");
+        driver.findElement(By.id("input-email")).sendKeys(uniqueEmail);
+        driver.findElement(By.id("input-telephone")).sendKeys("+15555555577");
+        driver.findElement(By.id("input-password")).sendKeys(password);
+        driver.findElement(By.id("input-confirm")).sendKeys(password);
+
+        actions.moveToElement(driver.findElement(By.id("input-agree"))).click().perform();
+        driver.findElement(By.xpath("//input[@type='submit']")).click();
+
+        Assert.assertEquals(driver.findElement(By.xpath("//h1")).getText(), "Your Account Has Been Created!");
+
+        driver.quit();
+    }
+
+    @Test
+    public void testLamdbatestLoginWithValidCredentials() {
+        String password = "myPassword";
+        String email = "elevator1test@gmail.com";
+
+        WebDriver driver = new ChromeDriver();
+
+        driver.get("https://ecommerce-playground.lambdatest.io/index.php?route=common/home");
+
+        WebElement myAccountHover = driver.findElement(
+                By.xpath("(//a[@href='https://ecommerce-playground.lambdatest.io/index.php?route=account/account'])[2]"));
+        Actions actions = new Actions(driver);
+        actions.moveToElement(myAccountHover).perform();
+
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
+        WebElement dropdownLogin = wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//a[@href='https://ecommerce-playground.lambdatest.io/index.php?route=account/login']")));
+        dropdownLogin.click();
+
+        driver.findElement(By.id("input-email")).sendKeys(email);
+        driver.findElement(By.id("input-password")).sendKeys(password);
+        driver.findElement(By.xpath("//input[@value='Login']")).click();
+
+        Assert.assertEquals(driver.findElement(By.tagName("h2")).getText(), "My Account");
 
         driver.quit();
     }
