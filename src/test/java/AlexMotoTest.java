@@ -89,4 +89,42 @@ public class AlexMotoTest {
         }
         driver.quit();
     }
+    @Test
+    public void testRecoverPassword (){
+        WebDriver driver = new ChromeDriver();
+        driver.get("https://qa-practice.netlify.app/recover-password");
+        WebElement emailField = driver.findElement(By.xpath("//input[@id=\"email\"]"));
+        emailField.sendKeys("dgffhgjgh0@gmail.com");
+        WebElement recoverPasswordButton = driver.findElement(By.xpath("//button[@type=\"submit\"]"));
+        recoverPasswordButton.click();
+        WebElement confirmationText = driver.findElement(By.xpath("//div[@id=\"content\"]"));
+        String actualMessage = confirmationText.getText();
+        String expectedMessage = "An email with the new password has been sent ";
+        Assert.assertTrue(actualMessage.contains(expectedMessage), "Confirmation text does not match the expected text");
+        driver.quit();
+    }
+    @Test
+    public void testAddItemToCard(){
+        WebDriver driver = new ChromeDriver();
+        driver.get("https://qa-practice.netlify.app/products_list");
+        WebDriverWait webDriverWait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        WebElement itemIphone = driver.findElement(By.xpath("//div[@class='shop-items']//div[1]//div[1]//button[1]"));
+        itemIphone.click();
+        WebElement itemHuawei = webDriverWait.until(ExpectedConditions.elementToBeClickable(By.xpath("(//button[@type='button'][normalize-space()='ADD TO CART'])[2]")));
+        itemHuawei.click();
+        List<WebElement> checkShoppingCard = driver.findElements(By.xpath("//div[@class=\"cart-items\"]"));
+        boolean iphoneInCard = false;
+        boolean huaweiInCard = false;
+        for (WebElement element : checkShoppingCard){
+            if (element.getText().contains("iPhone")){
+                iphoneInCard = true;
+            }
+            if (element.getText().contains("Huawei")){
+                huaweiInCard = true;
+            }
+        }
+        Assert.assertTrue(iphoneInCard, "Item Iphone did not add to card");
+        Assert.assertTrue(huaweiInCard, "Item Huawei did not add to card");
+        driver.quit();
+    }
 }
