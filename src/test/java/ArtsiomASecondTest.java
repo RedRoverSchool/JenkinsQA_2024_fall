@@ -37,7 +37,7 @@ public class ArtsiomASecondTest {
     }
 
     @BeforeMethod
-    public void startTest () throws InterruptedException {
+    public void startTest () {
         driver = new ChromeDriver();
         driver.manage().window().maximize();
         driver.get("https://demoqa.com/");
