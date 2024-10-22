@@ -3,11 +3,14 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import java.time.Duration;
 import java.util.List;
 
 public class KateATest {
@@ -150,5 +153,65 @@ public class KateATest {
 
         WebElement headerModal = driver.findElement(By.tagName("h1"));
         Assert.assertEquals(headerModal.getText(), "Payment details");
+    }
+
+    @Test
+    public void testButtonTotalModalClose() throws InterruptedException {
+        driver.get("https://coffee-cart.app/");
+
+        WebElement buttonTotal = driver.findElement((
+                By.xpath("//*[@aria-label='Proceed to checkout']")
+                ));
+        buttonTotal.click();
+
+        Thread.sleep(2000);
+
+        WebElement buttonClose = driver.findElement(
+                By.className("close"));
+        buttonClose.click();
+    }
+
+    @Test
+    public void testButtonSubmitTotalModal() throws InterruptedException{
+        driver.get("https://coffee-cart.app/");
+
+        List<WebElement> cups = driver.findElements(
+                By.className("cup-body"));
+        WebElement anyCup = cups.get(0);
+        anyCup.click();
+
+        Thread.sleep(2000);
+
+        WebElement buttonTotal = driver.findElement(
+                By.xpath("//*[@aria-label='Proceed to checkout']")
+        );
+        buttonTotal.click();
+
+        Thread.sleep(2000);
+
+        WebElement inputName = driver.findElement(
+                By.xpath("//input[@id='name']"));
+        inputName.sendKeys("Client name");
+
+        WebElement inputEmail = driver.findElement(
+                By.xpath("//input[@id='email']"));
+        inputEmail.sendKeys("clientname@email.com");
+
+        WebElement checkboxModal = driver.findElement(
+                By.xpath("//*[@aria-label='Promotion checkbox']"));
+        checkboxModal.click();
+
+        Thread.sleep(2000);
+
+        WebElement buttonSubmit = driver.findElement(
+                By.id("submit-payment"));
+        buttonSubmit.click();
+
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        WebElement footerSuccess = wait.until(
+                ExpectedConditions.visibilityOfElementLocated(
+                        By.xpath("//div[contains(@class, 'snackbar success') and text()='Thanks for your purchase. Please check your email for payment.']")));
+        String actualText = footerSuccess.getText();
+        Assert.assertEquals(actualText, "Thanks for your purchase. Please check your email for payment.");
     }
 }
