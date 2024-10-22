@@ -1,12 +1,16 @@
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-public class SerovNikitaFirstTest {
+import java.time.Duration;
+
+public class SerovNikitaTests {
 
     WebDriver driver;
 
@@ -104,5 +108,48 @@ public class SerovNikitaFirstTest {
 
         WebElement checkboxAppeared = driver.findElement(By.xpath("//*[@id=\"checkbox\"]"));
         Assert.assertTrue(checkboxAppeared.isDisplayed());
+    }
+
+    @Test
+    public void findHiddenTest() {
+        driver.get("https://the-internet.herokuapp.com/dynamic_loading");
+
+        WebElement hiddenElement = driver.findElement(By.xpath("//*[@id=\"content\"]/div/a[1]"));
+        hiddenElement.click();
+
+        driver.getCurrentUrl();
+
+        WebElement startButton = driver.findElement(By.xpath("//*[@id=\"start\"]/button"));
+        startButton.click();
+
+        WebDriverWait w = new WebDriverWait(driver, Duration.ofSeconds(5));
+        w.until(ExpectedConditions.visibilityOfElementLocated(By.id("finish")));
+
+        Assert.assertEquals(driver.findElement(By.id("finish")).getText(), "Hello World!");
+    }
+
+    @Test
+    public void closeAd() {
+        driver.get("https://the-internet.herokuapp.com/entry_ad");
+        WebElement modalWindow = driver.findElement(By.xpath("//*[@id=\"modal\"]/div[2]"));
+
+        WebDriverWait w = new WebDriverWait(driver, Duration.ofSeconds(1));
+        w.until(ExpectedConditions.visibilityOfAllElements(modalWindow));
+
+        WebElement closeButton = driver.findElement(By.xpath("//*[@id=\"modal\"]/div[2]/div[3]/p"));
+        closeButton.click();
+
+        Assert.assertFalse(modalWindow.isDisplayed());
+
+        driver.findElement(By.xpath("/html/body")).sendKeys((Keys.F5));
+
+        WebElement reEnableButton = driver.findElement(By.xpath("//*[@id=\"restart-ad\"]"));
+        reEnableButton.click();
+
+        driver.findElement(By.xpath("/html/body")).sendKeys((Keys.F5));
+        WebElement modalWindowEnable = driver.findElement(By.xpath("//*[@id=\"modal\"]/div[2]"));
+
+        w.until(ExpectedConditions.visibilityOfAllElements(modalWindowEnable));
+        Assert.assertTrue(modalWindowEnable.isDisplayed());
     }
 }
