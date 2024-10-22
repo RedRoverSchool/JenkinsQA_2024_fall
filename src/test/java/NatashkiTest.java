@@ -7,6 +7,7 @@ import org.testng.annotations.Test;
 public class NatashkiTest {
     @Test
     public void testSearchCheeseInVkusville(){
+        //test
         ChromeDriver driver2 = new ChromeDriver();
         driver2.get("https://vkusvill.ru/");
 
