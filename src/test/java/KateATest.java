@@ -4,15 +4,28 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.interactions.Actions;
 import org.testng.Assert;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import java.util.List;
 
 public class KateATest {
 
+    WebDriver driver;
+
+    @BeforeMethod
+    public void setUp() {
+        driver = new ChromeDriver();
+    }
+
+    @AfterMethod
+    public void tearDown() {
+        driver.quit();
+    }
+
     @Test
     public void testAddToCart() throws InterruptedException {
-        WebDriver driver = new ChromeDriver();
         driver.get("https://coffee-cart.app/");
 
         Thread.sleep(1000);
@@ -32,13 +45,10 @@ public class KateATest {
         WebElement listCart = driver.findElement(
                 By.xpath("//div[@data-v-8965af83 and text()='Espresso']"));
         Assert.assertEquals(listCart.getText(), "Espresso");
-
-        driver.quit();
     }
 
     @Test
     public void testCartEmpty() throws InterruptedException {
-        WebDriver driver = new ChromeDriver();
         driver.get("https://coffee-cart.app/");
 
         Thread.sleep(1000);
@@ -52,13 +62,10 @@ public class KateATest {
         WebElement emptyCart = driver.findElement(
                 By.xpath("//p[@data-v-8965af83]"));
         Assert.assertEquals(emptyCart.getText(), "No coffee, go add some.");
-
-        driver.quit();
     }
 
     @Test
     public void testCostAmount() throws InterruptedException {
-        WebDriver driver = new ChromeDriver();
         driver.get("https://coffee-cart.app/");
 
         Thread.sleep(1000);
@@ -85,13 +92,10 @@ public class KateATest {
         System.out.println(priceCoffeePage);
 
         Assert.assertEquals(priceCoffeePage, priceCoffeeCart);
-
-        driver.quit();
     }
 
     @Test
     public void testHoverOverTotal() throws InterruptedException {
-        WebDriver driver = new ChromeDriver();
         driver.get("https://coffee-cart.app/");
 
         Actions actions = new Actions(driver);
@@ -113,13 +117,10 @@ public class KateATest {
                 By.className("cart-preview"));
 
         Assert.assertTrue(totalPreview.isDisplayed());
-
-        driver.quit();
     }
 
     @Test
     public void testHoverOverEmpty() throws InterruptedException {
-        WebDriver driver = new ChromeDriver();
         driver.get("https://coffee-cart.app/");
 
         Actions action = new Actions(driver);
@@ -134,13 +135,10 @@ public class KateATest {
         boolean isPreviewDisplayed = !driver.findElements(
                 By.className("cart-preview")).isEmpty();
         Assert.assertFalse(isPreviewDisplayed);
-
-        driver.quit();
     }
 
     @Test
     public void testButtonTotalModal() throws InterruptedException {
-        WebDriver driver = new ChromeDriver();
         driver.get("https://coffee-cart.app/");
 
         WebElement buttonTotal = driver.findElement(
@@ -152,7 +150,5 @@ public class KateATest {
 
         WebElement headerModal = driver.findElement(By.tagName("h1"));
         Assert.assertEquals(headerModal.getText(), "Payment details");
-
-        driver.close();
     }
 }
