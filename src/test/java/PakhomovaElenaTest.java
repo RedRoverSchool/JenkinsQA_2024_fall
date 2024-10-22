@@ -207,9 +207,9 @@ public class PakhomovaElenaTest {
         WebElement selectDropDown1 =
                 driver.findElement(By.xpath("//select[@name='my-select']/option[@value='1']"));
         WebElement selectDropDown2 =
-                    driver.findElement(By.xpath("//select[@name='my-select']/option[@value='2']"));
+                driver.findElement(By.xpath("//select[@name='my-select']/option[@value='2']"));
         WebElement selectDropDown3 =
-                    driver.findElement(By.xpath("//select[@name='my-select']/option[@value='3']"));
+                driver.findElement(By.xpath("//select[@name='my-select']/option[@value='3']"));
 
         select.selectByValue("2");
         Assert.assertTrue(selectDropDown2.isSelected());
@@ -225,4 +225,5 @@ public class PakhomovaElenaTest {
         Assert.assertTrue(selectDropDown1.isSelected());
 
         }
+
 }
