@@ -45,11 +45,11 @@ public class AlevtinaSemeniukTest {
         WebElement mainCheckbox = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//span[@class='rct-checkbox']")));
         mainCheckbox.click();
 
-        // Получить все дочерние чекбоксы
+        
 
         List<WebElement> childChekboxes = driver.findElements(By.xpath("//input[@type='checkbox']"));
 
-        // Проверка каждого чекбокса из листа, является ли он checked:
+        
         for (WebElement checkbox : childChekboxes){
 
             Assert.assertTrue(checkbox.isSelected());
