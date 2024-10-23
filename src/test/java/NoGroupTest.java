@@ -4,8 +4,11 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.interactions.Actions;
 import org.testng.Assert;
 import org.testng.annotations.Test;
+
+import java.util.List;
 
 public class NoGroupTest {
 
@@ -97,5 +100,35 @@ public class NoGroupTest {
         Assert.assertTrue(usename.isDisplayed());
 
         driver.quit();
+    }
+
+    @Test
+    public void testHoverOverButtonTotal() throws InterruptedException {
+
+        WebDriver driver = new ChromeDriver();
+        driver.get("https://coffee-cart.app/");
+
+        Actions actions = new Actions(driver);
+
+        List<WebElement> cups = driver.findElements(
+                By.className("cup-body"));
+        WebElement anyCup = cups.get(0);
+        anyCup.click();
+
+        Thread.sleep(1000);
+
+        WebElement total = driver.findElement(
+                By.xpath("//*[@aria-label='Proceed to checkout']"));
+        actions.moveToElement(total).perform();
+
+        Thread.sleep(1000);
+
+        WebElement totalPreview = driver.findElement(
+                By.className("cart-preview"));
+
+        Assert.assertTrue(totalPreview.isDisplayed());
+
+        driver.quit();
+
     }
 }
