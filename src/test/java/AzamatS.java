@@ -9,6 +9,7 @@ import org.testng.annotations.Test;
 
 public class AzamatS {
 
+    private static final String URL = "https://openweather.co.uk/";
     private static final String PRODUCT_BUTTON_LOCATOR = "//*[@id='desktop-menu']/ul/li[1]/a";
 
     private WebDriver driver;
@@ -25,7 +26,7 @@ public class AzamatS {
 
     @Test
     public void testProducts(){
-        driver.get("https://openweather.co.uk/");
+        driver.get(URL);
         WebElement productBtn = driver.findElement(By.xpath(PRODUCT_BUTTON_LOCATOR));
         productBtn.click();
         Assert.assertEquals(driver.getTitle(), "Products - OpenWeather");

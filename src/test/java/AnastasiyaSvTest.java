@@ -109,6 +109,13 @@ public class AnastasiyaSvTest {
         Assert.assertTrue(first > last);
     }
 
+    @Test(priority = 3)
+    public void shouldOpenCart(){
+        driver.findElement(By.xpath("//a[@class='shopping_cart_link']")).click();
+        String expectUrl = "https://www.saucedemo.com/cart.html";
+        Assert.assertEquals(driver.getCurrentUrl(),expectUrl);
+    }
+
     @AfterClass
     public void down() {
         driver.close();
