@@ -4,7 +4,7 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-public class BugBustersTest {
+public class BugBustersGroupTest {
 
     @Test
     public void testSearchCheeseInVkusville(){
