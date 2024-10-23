@@ -1,10 +1,11 @@
-import org.openqa.selenium.*;
+import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.testng.Assert;
 import org.testng.annotations.Test;
-
-import java.time.Duration;
 
 public class GroupQAMyWayTest {
 
@@ -203,4 +204,21 @@ public class GroupQAMyWayTest {
             Assert.assertTrue(true, "Privacy pop-up is closed.");
         }
     }
+
+    @Test
+    public void testGoogle() {
+
+        WebDriver driver = new ChromeDriver();
+
+        driver.get("https://www.google.com/");
+
+        driver.findElement(By.name("q")).sendKeys("bear");
+        driver.findElement(By.name("q")).sendKeys(Keys.ENTER);
+
+        WebElement bear = driver.findElement(By.xpath("//div[@role='heading'][text()='Bears']"));
+        Assert.assertEquals(bear.getText(), "Bears");
+
+        driver.quit();
+    }
 }
+
