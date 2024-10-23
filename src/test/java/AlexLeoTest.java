@@ -13,6 +13,7 @@ public class AlexLeoTest {
 
     @Test(description = "Практика работы с чекбоксом  https://demoqa.com/checkbox")
     public void testCheckBox() {
+
         ChromeOptions options = new ChromeOptions();
         options.addArguments("--disable-search-engine-choice-screen");
         WebDriver driver = new ChromeDriver(options);
@@ -26,6 +27,7 @@ public class AlexLeoTest {
 
     @Test(description = "Двойной клик https://demoqa.com/buttons")
     public void testDoubleClickButton() {
+
         ChromeOptions options = new ChromeOptions();
         options.addArguments("--disable-search-engine-choice-screen");
         WebDriver driver = new ChromeDriver(options);
@@ -37,12 +39,14 @@ public class AlexLeoTest {
         actions.doubleClick(doubleClickButton).perform();
         WebElement doubleClickMessage = driver.findElement(By.id("doubleClickMessage"));
         String doubleClickMessageText = doubleClickMessage.getText();
+
         Assert.assertEquals(doubleClickMessageText, "You have done a double click");
         driver.quit();
 
     }
     @Test(description = "Правый клик https://demoqa.com/buttons")
     public void testRightClickButton() {
+
         ChromeOptions options = new ChromeOptions();
         options.addArguments("--disable-search-engine-choice-screen");
         WebDriver driver = new ChromeDriver(options);
@@ -54,6 +58,7 @@ public class AlexLeoTest {
         actions.contextClick(rightClickButton).perform();
         WebElement rightClickClickMessage = driver.findElement(By.id("rightClickMessage"));
         String rightClickClickMessageText = rightClickClickMessage.getText();
+
         Assert.assertEquals(rightClickClickMessageText, "You have done a right click");
         driver.quit();
 
@@ -61,6 +66,7 @@ public class AlexLeoTest {
 
     @Test(description = "Динамический клик https://demoqa.com/buttons")
     public void testDynamicClickButton() {
+
         ChromeOptions options = new ChromeOptions();
         options.addArguments("--disable-search-engine-choice-screen");
         WebDriver driver = new ChromeDriver(options);
@@ -72,8 +78,10 @@ public class AlexLeoTest {
         actions.click(dynamicClickButton).perform();
         WebElement dynamicClickClickMessage = driver.findElement(By.id("dynamicClickMessage"));
         String dynamicClickClickMessageText = dynamicClickClickMessage.getText();
+
         Assert.assertEquals(dynamicClickClickMessageText, "You have done a dynamic click");
         driver.quit();
 
     }
+
 }
