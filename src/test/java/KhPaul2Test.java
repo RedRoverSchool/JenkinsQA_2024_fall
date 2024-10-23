@@ -10,13 +10,14 @@ import java.util.Random;
 
 import static java.lang.Thread.sleep;
 
-public class KhPaulTest2 {
-    public String generateUniqueEmail() {
+public class KhPaul2Test {
+     private String generateUniqueEmail() {
         Random random = new Random();
         int randomNumber = random.nextInt(10000); // Генерируем случайное число от 0 до 9999
         return "JohnDoe" + randomNumber + "@mi.com";
     }
-    WebDriver driver;
+
+    private WebDriver driver;
 
     @BeforeMethod
     public void SignUp() throws InterruptedException {
