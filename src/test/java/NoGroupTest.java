@@ -8,6 +8,7 @@ import org.openqa.selenium.interactions.Actions;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
+import java.time.Duration;
 import java.util.List;
 
 public class NoGroupTest {
@@ -144,6 +145,25 @@ public class NoGroupTest {
 
         Assert.assertTrue(search_filter.isDisplayed());
 
+        driver.quit();
+    }
+
+    @Test
+    public void testSearchWiki() {
+        WebDriver driver = new ChromeDriver();
+        driver.manage().window().maximize();
+
+        driver.get("https://en.wikipedia.org/wiki/Main_Page");
+
+        driver.manage().timeouts().implicitlyWait(Duration.ofMillis(500));
+        driver.findElement(By.name("search"));
+        driver.manage().timeouts().implicitlyWait(Duration.ofMillis(500));
+        driver.findElement(By.name("search")).sendKeys("Selenium");
+
+        driver.findElement(By.cssSelector("#searchform > div > button")).click();
+
+        WebElement articleTitle = driver.findElement(By.xpath("//*[@id='firstHeading']/span[text()='Selenium']"));
+        Assert.assertEquals(articleTitle.getText(), ("Selenium"));
         driver.quit();
     }
 }
