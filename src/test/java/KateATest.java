@@ -15,7 +15,7 @@ import java.util.List;
 
 public class KateATest {
 
-    WebDriver driver;
+    private WebDriver driver;
 
     @BeforeMethod
     public void setUp() {
