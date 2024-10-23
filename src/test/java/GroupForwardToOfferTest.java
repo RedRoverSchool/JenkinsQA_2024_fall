@@ -3,6 +3,8 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
@@ -12,10 +14,12 @@ import java.time.Duration;
 
 public class GroupForwardToOfferTest {
     private WebDriver driver;
+    private WebDriverWait webDriverWait;
 
     @BeforeTest
     public void beforTest() {
         driver = new ChromeDriver();
+        webDriverWait = new WebDriverWait(driver, Duration.ofSeconds(10));
         driver.manage().window().maximize();
     }
     @Test
@@ -103,6 +107,36 @@ public class GroupForwardToOfferTest {
         WebElement name = driver.findElement(By.xpath("//h1[contains(text(),'Аренда квартир на длительный срок в Минске')]"));
         Assert.assertEquals(name.getText(),"Аренда квартир на длительный срок в Минске");
     }
+
+    @Test
+    public void test() {
+
+        driver.get("https://ru.pinterest.com/");
+
+        //находит и нажимает на "Посмотреть"
+        clickWhenVisible(By.xpath("//button[@class='RCK Hsu USg adn gn8 L4E kVc CCY oRi lnZ wsz']//div[1][@class='X8m tg7 tBJ dyH iFc sAJ H2s']"));
+
+        //находит и нажимает на категорию с животными
+        clickWhenVisible(By.xpath("//h3[text()='Животные']"));
+
+        //находит пин с уткой
+        clickWhenVisible(By.xpath("//div[@id='mweb-unauth-container']//article[2]//a[.//img[contains(@src, 'f6655347abfddc935a854b2b192a2c3d.jpg')]]"));
+
+        //порверить текст пина
+        WebElement pinText = driver.findElement(By.xpath("//h1"));
+        Assert.assertEquals(pinText.getText(), "25+ фото с животными, которые согреют даже в самый морозный день");
+
+    }
+    private WebElement waitUntilVisible(By locator) {
+        return webDriverWait.until(ExpectedConditions.visibilityOf(driver.findElement(locator)));
+    }
+
+    private void clickWhenVisible(By locator) {
+        WebElement element = waitUntilVisible(locator);
+        element.click();
+    }
+
+
     @AfterTest
     public void afterTest(){
         driver.quit();
