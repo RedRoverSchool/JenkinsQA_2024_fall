@@ -12,9 +12,11 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import java.time.Duration;
+import java.util.List;
 
 
 public class PakhomovaElenaTest {
+
     private WebDriver driver;
 
     @BeforeMethod
@@ -70,7 +72,6 @@ public class PakhomovaElenaTest {
 
     @Test
     public void testNewElementIsVisible() {
-        String divLocator = "p[class='bg-success']";
 
         driver.get("http://uitestingplayground.com/ajax");
 
@@ -78,7 +79,7 @@ public class PakhomovaElenaTest {
 
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(15));
 
-        String textInDiv = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(divLocator))).getText();
+        String textInDiv = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("p[class='bg-success']"))).getText();
 
         Assert.assertEquals(textInDiv,"Data loaded with AJAX get request.");
     }
@@ -107,6 +108,7 @@ public class PakhomovaElenaTest {
 
     @Test
     public void testWaitForLoadingPicture() {
+
         driver.get("https://bonigarcia.dev/selenium-webdriver-java/loading-images.html");
 
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(15));
@@ -165,6 +167,7 @@ public class PakhomovaElenaTest {
 
     @Test
     public void testInputs()  {
+
         driver.get("https://bonigarcia.dev/selenium-webdriver-java/web-form.html");
 
         String title = driver.getTitle();
@@ -200,6 +203,7 @@ public class PakhomovaElenaTest {
 
         @Test
         public void testSelectItemsDropDownMenu() throws InterruptedException {
+
         driver.get("https://bonigarcia.dev/selenium-webdriver-java/web-form.html");
 
         WebElement selectDropDown = driver.findElement(By.name("my-select"));
@@ -229,6 +233,7 @@ public class PakhomovaElenaTest {
 
         @Test
         public void testMouseActionDropDown() throws InterruptedException {
+
         driver.get("https://bonigarcia.dev/selenium-webdriver-java/dropdown-menu.html");
 
         Actions actions = new Actions(driver);
@@ -249,7 +254,4 @@ public class PakhomovaElenaTest {
         WebElement contextMenu1 = driver.findElement(By.xpath("//ul[@class='dropdown-menu show']"));
         Assert.assertTrue(contextMenu1.isDisplayed());
         }
-
-
-
 }
