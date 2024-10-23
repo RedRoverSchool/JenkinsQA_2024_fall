@@ -54,4 +54,48 @@ public class NoGroupTest {
 
         driver.quit();
     }
+
+    @Test
+    public void testLogin() {
+        WebDriver driver=new ChromeDriver();
+        driver.manage().window().maximize();
+
+        driver.get("https://practicetestautomation.com/practice-test-login/");
+
+        WebElement username = driver.findElement(By.id("username"));
+        WebElement password = driver.findElement(By.id("password"));
+        WebElement login = driver.findElement(By.id("submit"));
+
+        username.sendKeys("student");
+        password.sendKeys("Password123");
+        login.click();
+
+        Assert.assertTrue(driver.getCurrentUrl().contains("practicetestautomation.com/logged-in-successfully/"));
+
+        driver.quit();
+    }
+    @Test
+    public void testCheckIfElementExists() {
+        WebDriver driver = new ChromeDriver();
+        driver.manage().window().maximize();
+
+        driver.get("https://practicetestautomation.com/practice-test-login/");
+        WebElement usernameField = driver.findElement(By.id("username"));
+
+        Assert.assertNotNull(usernameField);
+
+        driver.quit();
+    }
+    @Test
+    public void testFindElementByXpath() {
+        WebDriver driver = new ChromeDriver();
+        driver.manage().window().maximize();
+
+        driver.get("https://practicetestautomation.com/practice-test-login/");
+        WebElement usename = driver.findElement(By.xpath("//*[@type='text']"));
+
+        Assert.assertTrue(usename.isDisplayed());
+
+        driver.quit();
+    }
 }
