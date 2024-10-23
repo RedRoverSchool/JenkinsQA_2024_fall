@@ -10,7 +10,7 @@ import java.util.Random;
 
 import static java.lang.Thread.sleep;
 
-public class KhPaulTest2 {
+public class KhPaul2Test {
      private String generateUniqueEmail() {
         Random random = new Random();
         int randomNumber = random.nextInt(10000); // Генерируем случайное число от 0 до 9999
