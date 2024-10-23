@@ -7,14 +7,14 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import java.time.Duration;
+
 public class GroupLeadsAndRoversTest {
     private WebDriver driver;
 
     @BeforeMethod
     private void initDriver() throws InterruptedException {
         this.driver = new ChromeDriver();
-        driver.get("https://www.google.com");
-        Thread.sleep(1000);
     }
 
     @AfterMethod
@@ -23,15 +23,55 @@ public class GroupLeadsAndRoversTest {
     }
 
     @Test
-    public void testSearchBoxIsPresent() {
+    public void testSearchBoxIsPresent() throws InterruptedException {
+
+        driver.get("https://www.google.com");
+        Thread.sleep(1000);
+
         WebElement searchBox = driver.findElement(By.name("q"));
         Assert.assertTrue(searchBox.isDisplayed(), "Search box should be displayed");
     }
 
     @Test
-    public void testGoogleLogoIsDisplayed() {
+    public void testGoogleLogoIsDisplayed() throws InterruptedException {
+
+        driver.get("https://www.google.com");
+        Thread.sleep(1000);
+
         WebElement googleLogo = driver.findElement(By.xpath("//img[@alt='Google']"));
         Assert.assertTrue(googleLogo.isDisplayed(), "Google logo should be displayed");
     }
 
+    @Test
+    public void testFormAuthentication() {
+
+        driver.manage().timeouts().implicitlyWait(Duration.ofMillis(500));
+        driver.get("https://the-internet.herokuapp.com/");
+
+        WebElement formAuthentication = driver.findElement(By.xpath("//a[@href='/login']"));
+        formAuthentication.click();
+
+        WebElement loginTitle = driver.findElement(By.xpath("//*[@id=\"content\"]/div/h2"));
+        Assert.assertEquals(loginTitle.getText(), "Login Page");
+    }
+
+    @Test
+    public void testCorectPassword() {
+
+        driver.manage().timeouts().implicitlyWait(Duration.ofMillis(500));
+        driver.get("https://the-internet.herokuapp.com/login");
+
+        WebElement userName = driver.findElement(By.id("username"));
+        WebElement userPassword = driver.findElement(By.id("password"));
+        WebElement buttonLogin = driver.findElement(By.cssSelector("button[type='submit']"));
+
+        userName.sendKeys("tomsmith");
+        userPassword.sendKeys("SuperSecretPassword!");
+        buttonLogin.click();
+
+        String expectedUrl = "https://the-internet.herokuapp.com/secure";
+        String actualUrl = driver.getCurrentUrl();
+
+        Assert.assertEquals(expectedUrl, actualUrl);
+    }
 }
