@@ -7,7 +7,8 @@ import org.openqa.selenium.chrome.ChromeOptions;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-public class IrinaNapTest {
+public class GroupEmojiClubTest {
+
     @Test
     public void testCart() {
         ChromeOptions options = new ChromeOptions();
@@ -74,4 +75,3 @@ public class IrinaNapTest {
         driver.quit();
     }
 }
-
