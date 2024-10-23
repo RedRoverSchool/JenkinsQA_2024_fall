@@ -6,7 +6,6 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.Test;
-
 import java.time.Duration;
 import java.util.List;
 
@@ -100,6 +99,36 @@ public class NoGroupTest {
         Assert.assertTrue(usename.isDisplayed());
 
         driver.quit();
+    }
+
+    @Test
+    public void testHoverOverButtonTotal() throws InterruptedException {
+
+        WebDriver driver = new ChromeDriver();
+        driver.get("https://coffee-cart.app/");
+
+        Actions actions = new Actions(driver);
+
+        List<WebElement> cups = driver.findElements(
+                By.className("cup-body"));
+        WebElement anyCup = cups.get(0);
+        anyCup.click();
+
+        Thread.sleep(1000);
+
+        WebElement total = driver.findElement(
+                By.xpath("//*[@aria-label='Proceed to checkout']"));
+        actions.moveToElement(total).perform();
+
+        Thread.sleep(1000);
+
+        WebElement totalPreview = driver.findElement(
+                By.className("cart-preview"));
+
+        Assert.assertTrue(totalPreview.isDisplayed());
+
+        driver.quit();
+
     }
 
     @Test
