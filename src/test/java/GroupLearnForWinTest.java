@@ -6,7 +6,7 @@ import org.openqa.selenium.chrome.ChromeOptions;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-public class LiudaKTest {
+public class GroupLearnForWinTest {
 
     @Test
     public void verifyStandartUserPassword() throws InterruptedException {
@@ -37,5 +37,6 @@ public class LiudaKTest {
 
         driver.quit();
     }
+
 
 }
