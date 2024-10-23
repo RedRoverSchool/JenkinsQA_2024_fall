@@ -9,7 +9,7 @@ import org.testng.annotations.Test;
 
 public class IrinaNapTest {
     @Test
-    public void testCart() throws InterruptedException{
+    public void testCart() {
         ChromeOptions options = new ChromeOptions();
         options.addArguments("--no-sandbox");
 
@@ -22,6 +22,8 @@ public class IrinaNapTest {
 
         WebElement message = driver.findElement(By.xpath("//*[@id='__next']/main/div[2]/div/div/div/div[2]"));
         Assert.assertEquals(message.getText(), "Сейчас в корзине нет товаров");
+
+        driver.quit();
     }
 
     @Test
@@ -45,6 +47,8 @@ public class IrinaNapTest {
 
         WebElement message = driver.findElement(By.xpath("//*[@id='__next']/main/section[1]/div/h1"));
         Assert.assertEquals(message.getText(), "Результаты поиска «Платье»");
+
+        driver.quit();
     }
 
     @Test
@@ -66,6 +70,8 @@ public class IrinaNapTest {
 
         WebElement message = driver.findElement(By.xpath("//*[@id='__next']/main/section[4]/div/div[2]/div[1]/div/div[1]/article/a/p"));
         Assert.assertEquals(message.getText(), "Сумка на пояс с принтом Эсла");
+
+        driver.quit();
     }
 }
 
