@@ -26,5 +26,7 @@ public class OlegShulaevTest {
         Assert.assertEquals(message.getText(), "Welcome to the Secure Area. When you are done click logout below.");
 
         driver.quit();
+
+        // проверка пуш
     }
 }
