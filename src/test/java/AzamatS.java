@@ -8,9 +8,11 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 public class AzamatS {
-    String URL = "https://openweather.co.uk/";
-    String productBtnLocator = "//*[@id=\"desktop-menu\"]/ul/li[1]/a";
-    WebDriver driver;
+
+    private static final String URL = "https://openweather.co.uk/";
+    private static final String PRODUCT_BUTTON_LOCATOR = "//*[@id='desktop-menu']/ul/li[1]/a";
+
+    private WebDriver driver;
 
     @BeforeMethod
     public void setUp(){
@@ -25,7 +27,7 @@ public class AzamatS {
     @Test
     public void testProducts(){
         driver.get(URL);
-        WebElement productBtn = driver.findElement(By.xpath(productBtnLocator));
+        WebElement productBtn = driver.findElement(By.xpath(PRODUCT_BUTTON_LOCATOR));
         productBtn.click();
         Assert.assertEquals(driver.getTitle(), "Products - OpenWeather");
     }
