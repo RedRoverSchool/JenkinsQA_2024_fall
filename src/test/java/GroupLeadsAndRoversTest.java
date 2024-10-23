@@ -43,7 +43,7 @@ public class GroupLeadsAndRoversTest {
     }
 
     @Test
-    public void formAuthentication() {
+    public void testFormAuthentication() {
 
         driver.manage().timeouts().implicitlyWait(Duration.ofMillis(500));
         driver.get("https://the-internet.herokuapp.com/");
@@ -56,7 +56,7 @@ public class GroupLeadsAndRoversTest {
     }
 
     @Test
-    public void corectPassword() {
+    public void testCorectPassword() {
 
         driver.manage().timeouts().implicitlyWait(Duration.ofMillis(500));
         driver.get("https://the-internet.herokuapp.com/login");
