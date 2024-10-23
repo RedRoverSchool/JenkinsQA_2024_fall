@@ -10,7 +10,7 @@ import org.testng.annotations.Test;
 
 import java.time.Duration;
 
-public class NataliaKaluginaTest {
+public class GroupForwardToOfferTest {
     private WebDriver driver;
 
     @BeforeTest
@@ -52,5 +52,4 @@ public class NataliaKaluginaTest {
     public void afterTest(){
         driver.quit();
     }
-
 }
