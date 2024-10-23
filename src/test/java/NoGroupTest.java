@@ -349,5 +349,6 @@ public class NoGroupTest {
         Assert.assertEquals(driver.findElement(By.tagName("h2")).getText(), "My Account");
 
         driver.quit();
+
     }
 }
