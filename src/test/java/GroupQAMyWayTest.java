@@ -6,7 +6,8 @@ import org.openqa.selenium.chrome.ChromeOptions;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-public class NatashaShimTest {
+public class GroupQAMyWayTest {
+
     @Test
     public void testGoogleDoodles() throws InterruptedException {
         ChromeOptions options = new ChromeOptions();
@@ -80,5 +81,3 @@ public class NatashaShimTest {
 
     }
 }
-
-
