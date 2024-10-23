@@ -8,7 +8,7 @@ import org.openqa.selenium.interactions.Actions;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-public class DenisProkofyevTest {
+public class GroupUnitedByJavaTest {
 
     @Test
     public void testDoubleClick() {
@@ -26,8 +26,7 @@ public class DenisProkofyevTest {
 
         WebElement doubleClickMe = driver.findElement(By.id("doubleClickBtn"));
         Actions actions = new Actions(driver);
-        actions.doubleClick(doubleClickMe);
-        actions.perform();
+        actions.doubleClick(doubleClickMe).perform();
 
         String doubleClickMessage = driver.findElement(By.id("doubleClickMessage")).getText();
 
