@@ -131,5 +131,21 @@ public class GroupQAMyWayTest {
 
         driver.quit();
     }
+    @Test
+    public void testGoogle() {
 
-}
+        WebDriver driver = new ChromeDriver();
+
+        driver.get("https://www.google.com/");
+
+        driver.findElement(By.name("q")).sendKeys("bear");
+        driver.findElement(By.name("q")).sendKeys(Keys.ENTER);
+
+        WebElement bear = driver.findElement(By.xpath("//div[@role='heading'][text()='Bears']"));
+        Assert.assertEquals(bear.getText(), "Bears");
+
+        driver.quit();
+    }
+
+
+    }
