@@ -131,4 +131,74 @@ public class NoGroupTest {
         driver.quit();
 
     }
+
+    @Test
+    public void testButtonTotalDeleteItem() throws InterruptedException {
+
+        WebDriver driver = new ChromeDriver();
+        driver.get("https://coffee-cart.app/");
+
+        List<WebElement> cups = driver.findElements(
+                By.className("cup-body"));
+        WebElement anyCup = cups.get(0);
+        anyCup.click();
+
+        Thread.sleep(2000);
+
+        WebElement buttonTotal = driver.findElement(
+                By.xpath("//*[@aria-label='Proceed to checkout']"));
+
+        Actions action = new Actions(driver);
+        action.moveToElement(buttonTotal).perform();
+
+        Thread.sleep(2000);
+
+        WebElement buttonHoverRemove = driver.findElement(
+                By.xpath("//*[@aria-label='Remove one Espresso']"));
+        buttonHoverRemove.click();
+
+        boolean isPreviewDisplayed = !driver.findElements(
+                By.className("cart-preview")).isEmpty();
+        Assert.assertFalse(isPreviewDisplayed);
+
+        driver.quit();
+
+    }
+
+    @Test
+    public void testButtonTotalAddItem() throws InterruptedException {
+
+        WebDriver driver = new ChromeDriver();
+        driver.get("https://coffee-cart.app/");
+
+        List<WebElement> cups = driver.findElements(
+                By.className("cup-body"));
+        WebElement anyCup = cups.get(0);
+        anyCup.click();
+
+        WebElement buttonTotal = driver.findElement(
+                By.xpath("//*[@aria-label='Proceed to checkout']"));
+
+        Actions action = new Actions(driver);
+        action.moveToElement(buttonTotal).perform();
+
+        Thread.sleep(2000);
+
+        WebElement buttonHoverAdd = driver.findElement(
+                By.xpath("//button[text()='+']"));
+
+        Thread.sleep(2000);
+
+        buttonHoverAdd.click();
+
+        WebElement buttonPlus = driver.findElement(
+                By.className("unit-desc"));
+
+        String buttonNameAdd = buttonPlus.getText();
+
+        Assert.assertEquals(buttonNameAdd, "x 2");
+
+        driver.quit();
+
+    }
 }
