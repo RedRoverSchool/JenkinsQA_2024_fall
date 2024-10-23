@@ -15,8 +15,6 @@ public class GroupLeadsAndRoversTest {
     @BeforeMethod
     private void initDriver() throws InterruptedException {
         this.driver = new ChromeDriver();
-        driver.get("https://www.google.com");
-        Thread.sleep(1000);
     }
 
     @AfterMethod
@@ -25,13 +23,21 @@ public class GroupLeadsAndRoversTest {
     }
 
     @Test
-    public void testSearchBoxIsPresent() {
+    public void testSearchBoxIsPresent() throws InterruptedException {
+
+        driver.get("https://www.google.com");
+        Thread.sleep(1000);
+
         WebElement searchBox = driver.findElement(By.name("q"));
         Assert.assertTrue(searchBox.isDisplayed(), "Search box should be displayed");
     }
 
     @Test
-    public void testGoogleLogoIsDisplayed() {
+    public void testGoogleLogoIsDisplayed() throws InterruptedException {
+
+        driver.get("https://www.google.com");
+        Thread.sleep(1000);
+
         WebElement googleLogo = driver.findElement(By.xpath("//img[@alt='Google']"));
         Assert.assertTrue(googleLogo.isDisplayed(), "Google logo should be displayed");
     }
