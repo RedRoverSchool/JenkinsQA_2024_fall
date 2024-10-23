@@ -1,4 +1,5 @@
 import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -9,7 +10,7 @@ import org.testng.annotations.Test;
 public class NoGroupTest {
 
     @Test
-    public void testSelenium()
+    public void testSelenium() {
         ChromeOptions options = new ChromeOptions();
         options.addArguments("--no-sandbox");
 
