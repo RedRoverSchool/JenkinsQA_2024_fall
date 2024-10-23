@@ -1,19 +1,30 @@
 import java.awt.*;
+
+import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.support.FindBy;
 import org.testng.Assert;
 import org.openqa.selenium.*;
 import org.openqa.selenium.By;
+
 import java.awt.event.KeyEvent;
+
 import org.testng.annotations.Test;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.StringSelection;
+
 import org.openqa.selenium.chrome.ChromeDriver;
 
-public class StanislavArTests {
+public class ArashkevichStanTests {
 
-    WebDriver driver = new ChromeDriver();
+    WebDriver driver;
 
     @Test
     public void downloadImage() throws AWTException, InterruptedException {
+
+        driver = new ChromeDriver();
 
         driver.get("https://wallscloud.net/en");
         driver.manage().window().maximize();
@@ -46,10 +57,13 @@ public class StanislavArTests {
         Thread.sleep(1000);
 
         robot.keyPress(KeyEvent.VK_ENTER);
+        robot.keyRelease(KeyEvent.VK_ENTER);
     }
 
     @Test
     public void testAuthorization() throws InterruptedException {
+
+        driver = new ChromeDriver();
 
         driver.get("https://school.qa.guru/cms/system/login?required=true");
         driver.manage().window().maximize();
@@ -67,7 +81,8 @@ public class StanislavArTests {
 
         driver.findElement(By.name(emailField)).sendKeys(email);
         driver.findElement(By.name(passwordField)).sendKeys(password);
-        driver.findElement(By.id(enterButton)).click(); Thread.sleep(2000);
+        driver.findElement(By.id(enterButton)).click();
+        Thread.sleep(2000);
         driver.findElement(By.xpath(menu)).click();
         driver.findElement(By.xpath(profile)).click();
 
@@ -76,6 +91,29 @@ public class StanislavArTests {
         Thread.sleep(500);
 
         Assert.assertEquals(getName.getText(), "Мой профиль");
+    }
+
+
+    @Test
+    public void uploadFile() throws InterruptedException {
+
+        String filePath = "C:\\Users\\Stan\\Downloads\\Xc90_Volvo.jpg";
+
+        driver = new ChromeDriver();
+        driver.get("https://practice-automation.com/file-upload/");
+
+        WebElement chooseFile = driver.findElement(By.xpath("//*[@id=\"file-upload\"]"));
+        Thread.sleep(500);
+        chooseFile.sendKeys(filePath);
+
+        WebElement uploadBtn = driver.findElement(By.cssSelector("#upload-btn"));
+        uploadBtn.click();
+        Thread.sleep(500);
+
+        WebElement checkText = driver.findElement(By.xpath("//*[@id=\"wpcf7-f13587-p1037-o1\"]/form/div[2]"));
+        Thread.sleep(2000);
+
+        Assert.assertEquals(checkText.getText(), "Thank you for your message. It has been sent.");
 
         driver.quit();
     }
