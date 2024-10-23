@@ -1,4 +1,5 @@
 import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -80,4 +81,55 @@ public class GroupQAMyWayTest {
         driver.quit();
 
     }
+
+    @Test
+    public void testLacoste() throws InterruptedException {
+        ChromeOptions options = new ChromeOptions();
+        options.addArguments("--no-sandbox");
+
+
+        WebDriver driver = new ChromeDriver(options);
+
+
+        driver.get("https://global.lacoste.com/en/homepage");
+
+        WebElement submitButton = driver.findElement(By.xpath("//*[@id='didomi-notice-agree-button']"));
+        submitButton.click();
+
+
+        WebElement textBox = driver.findElement(By.xpath("//*[@id='search-input']"));
+        textBox.sendKeys("black");
+        Thread.sleep(500);
+        textBox.sendKeys(Keys.RETURN);
+
+        Thread.sleep(1000);
+
+
+        driver.quit();
+    }
+
+    @Test
+    public void testPostMarket() throws InterruptedException {
+        ChromeOptions options = new ChromeOptions();
+        options.addArguments("--no-sandbox");
+
+
+        WebDriver driver = new ChromeDriver(options);
+
+        driver.get("https://www.postmarket.am/");
+
+        WebElement submitButton = driver.findElement(By.xpath("//*[@id='full-width-tabpanel-0']/div/div/div/div/div[3]/div/div/div[1]/a/div/div/p"));
+        submitButton.click();
+
+        Thread.sleep(1000);
+
+
+        WebElement submitButton1 = driver.findElement(By.xpath("//*[@id='root']/div/div[2]/div[2]/div[3]/button"));
+        submitButton1.click();
+        Thread.sleep(4000);
+
+
+        driver.quit();
+    }
+
 }
