@@ -370,4 +370,18 @@ public class NoGroupTest {
         Assert.assertEquals(articleTitle.getText(), ("Selenium"));
         driver.quit();
     }
+
+    @Test
+    public void testTicketSearchPage() {
+        WebDriver driver = new ChromeDriver();
+        driver.get("https://airmontenegro.com/en");
+
+        WebElement agree_button = driver.findElement(By.xpath("//*[@id=\"content_wrap\"]/div[2]/button"));
+        agree_button.click();
+        WebElement search_filter = driver.findElement(By.xpath("//*[@id=\"reservations_table\"]"));
+
+        Assert.assertTrue(search_filter.isDisplayed());
+
+        driver.quit();
+    }
 }
