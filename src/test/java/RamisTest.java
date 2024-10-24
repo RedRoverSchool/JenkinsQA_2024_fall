@@ -6,12 +6,12 @@ import org.testng.annotations.Test;
 
 public class RamisTest {
 
-    String url = "https://www.saucedemo.com";
+    private static final String URL = "https://www.saucedemo.com";
 
     @Test(priority = 1)
-    public void successLogin() throws InterruptedException {
+    public void testSuccessLogin() throws InterruptedException {
         ChromeDriver driver = new ChromeDriver();
-        driver.get(url);
+        driver.get(URL);
         Thread.sleep(500);
 
         WebElement username = driver.findElement(By.xpath("//*[@id='user-name']"));
@@ -32,9 +32,9 @@ public class RamisTest {
     }
 
     @Test(priority = 2)
-    public void lockedUserLogin() throws InterruptedException{
+    public void testLockedUserLogin() throws InterruptedException{
         ChromeDriver driver = new ChromeDriver();
-        driver.get(url);
+        driver.get(URL);
 
         WebElement username = driver.findElement(By.xpath("//*[@id='user-name']"));
         username.sendKeys("locked_out_user");
@@ -55,9 +55,9 @@ public class RamisTest {
     }
 
     @Test(priority = 3)
-    public void problemUserLogin() throws InterruptedException{
+    public void testProblemUserLogin() throws InterruptedException{
         ChromeDriver driver = new ChromeDriver();
-        driver.get(url);
+        driver.get(URL);
 
         WebElement username = driver.findElement(By.xpath("//*[@id='user-name']"));
         username.sendKeys("problem_user");
