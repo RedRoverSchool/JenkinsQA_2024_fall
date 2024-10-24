@@ -1,6 +1,4 @@
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -11,6 +9,8 @@ import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
 import java.time.Duration;
+import java.util.List;
+import java.util.function.Consumer;
 
 public class GroupForwardToOfferTest {
     private WebDriver driver;
@@ -136,6 +136,47 @@ public class GroupForwardToOfferTest {
         element.click();
     }
 
+    @Test
+    public void testNumberOfCarsPresented() {
+        driver.get("https://av.by/");
+        //нажать на кнопку отказатся во всплывающем окне про cookies
+        driver.findElement(By.xpath("//button[@class='button button--default button--block button--large']")).click();
+        ((JavascriptExecutor) driver).executeScript("javascript:window.scrollBy(0,500)");
+        //собрать веб элементы которые обозначают марки машин в лист
+        List<WebElement> carsModels = driver.findElements(By.xpath("//span[@class='catalog__title']"));
+        Assert.assertEquals(carsModels.size(), 30);
+    }
+
+    @Test
+    public void testSearchWB() {
+        driver.get("https://www.wildberries.ru/");
+
+        WebElement search = driver.findElement(By.xpath("//input[@id='searchInput']"));
+        search.sendKeys("жилетка мужская");
+
+        search.sendKeys(Keys.ENTER);
+
+        WebElement searchResponse = driver.findElement(By.xpath("//h1[@class='searching-results__title']"));
+
+        Assert.assertEquals(searchResponse.getText(), "жилетка мужская");
+    }
+
+    @Test
+    public void testPutInBasketWB() {
+        driver.get("https://www.wildberries.ru/catalog/230563558/detail.aspx");
+
+        driver.findElement(By.xpath("//button[@class='cookies__btn btn-minor-md']")).click();
+
+        driver.findElement(By.xpath("//label[@class='j-size sizes-list__button']")).click();
+
+        driver.findElement(By.xpath("//div[@class='product-page__aside']//button[@class='order__button btn-main']")).click();
+
+        driver.findElement(By.xpath("//div[@class='navbar-pc__item j-item-basket']//a[@class='navbar-pc__link j-wba-header-item']")).click();
+
+        WebElement basket = driver.findElement(By.xpath("//h1[@class='basket-section__header basket-section__header--main active']"));
+
+        Assert.assertEquals(basket.getText(), "Корзина");
+    }
 
     @AfterTest
     public void afterTest(){

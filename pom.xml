@@ -27,5 +27,6 @@
             <artifactId>selenium-java</artifactId>
             <version>4.25.0</version>
         </dependency>
+
     </dependencies>
 </project>
