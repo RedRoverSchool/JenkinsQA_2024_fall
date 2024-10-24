@@ -509,6 +509,7 @@ public class NoGroupTest {
 
         driver.quit();
     }
+
     @Test
     public void loginTest() {
 
@@ -529,6 +530,24 @@ public class NoGroupTest {
 
         driver.quit();
     }
+
+
+    @Test
+    public void testAramH() {
+
+        WebDriver driver = new ChromeDriver();
+        driver.get("https://www.bestbuy.com/");
+
+        driver.manage().timeouts().implicitlyWait(Duration.ofMillis(500));
+
+        driver.findElement(By.id("gh-search-input")).sendKeys("laptop");
+        driver.findElement(By.xpath("//span[@class='header-search-icon']")).click();
+
+        WebElement message = driver.findElement(By.xpath("//div[@class='title-wrapper title']/span[2]/span[2]"));
+
+        Assert.assertEquals(message.getText(), "in Laptops");
+
+        driver.quit();
+
+    }
 }
-
-
