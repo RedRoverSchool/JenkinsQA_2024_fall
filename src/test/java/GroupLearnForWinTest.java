@@ -39,6 +39,23 @@ public class GroupLearnForWinTest {
     }
 
     @Test
+    public void testFindSubmitNewLanguage() {
+
+        WebDriver driver = new ChromeDriver();
+
+        driver.get("https://www.99-bottles-of-beer.net/");
+
+        driver.findElement(By.linkText("Submit new Language")).click();
+        String submitNewLanguage = driver.findElement(By.linkText("Submit New Language")).getText();
+
+
+        Assert.assertEquals(submitNewLanguage, "Submit New Language");
+
+        driver.quit();
+
+    }
+
+    @Test
     public void verifyLogout() throws InterruptedException{
         ChromeOptions options = new ChromeOptions();
         options.addArguments("--no-sandbox");

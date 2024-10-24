@@ -233,6 +233,22 @@ public class GroupCodeBrewTest {
             Assert.assertTrue(huaweiInCard, "Item Huawei did not add to card");
             driver.quit();
         }
+        @Test
+        public void testQApractice() throws InterruptedException {
+            WebDriver driver = new ChromeDriver();
+            driver.get("https://qa-practice.netlify.app/auth_ecommerce");
+            WebElement textBox = driver.findElement(By.id("email"));
+            textBox.sendKeys("admin@admin.com");
+
+            WebElement textBoxPass = driver.findElement(By.name("password"));
+            textBoxPass.sendKeys("admin123");
+
+
+            WebElement button = driver.findElement(By.id("submitLoginBtn"));
+            button.click();
+
+            driver.quit();
+        }
     }
 
 
