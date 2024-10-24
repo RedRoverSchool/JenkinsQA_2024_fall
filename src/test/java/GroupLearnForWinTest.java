@@ -55,5 +55,21 @@ public class GroupLearnForWinTest {
 
     }
 
+    @Test
+    public void testSubmitLanguageEmptyError() {
+
+        WebDriver driver = new ChromeDriver();
+
+        driver.get("https://www.99-bottles-of-beer.net/submitnewlanguage.html");
+
+        driver.findElement(By.name("submitlanguage")).click();
+        String textError = driver.findElement(By.xpath("//p[contains(text(), ' Precondition failed - Incomplete Input.')]")).getText();
+
+        Assert.assertEquals(textError, "Error: Precondition failed - Incomplete Input.");
+
+        driver.quit();
+
+    }
+
 
 }
