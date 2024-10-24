@@ -40,9 +40,9 @@ public class SergeyKTest {
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
         driver.findElement(By.xpath("//div[@class='product-page__aside']//button[@class='order__button btn-main']")).click();
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(3));
-//        driver.findElement(By.xpath("//div[@class='product-page__order']//a[@class='order__button btn-base j-go-to-basket']")).click();
-//        WebElement basket = driver.findElement(By.xpath("//h1[@class='basket-section__header basket-section__header--main active']"));
-//        Assert.assertEquals(basket.getText(), "            Корзина                    ");
+        driver.findElement(By.xpath("//div[@class='navbar-pc__item j-item-basket']//a[@class='navbar-pc__link j-wba-header-item']")).click();
+        WebElement basket = driver.findElement(By.xpath("//h1[@class='basket-section__header basket-section__header--main active']"));
+        Assert.assertEquals(basket.getText(), "Корзина");
     }
 
     @AfterTest
