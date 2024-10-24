@@ -11,7 +11,8 @@ import org.testng.annotations.Test;
 import java.time.Duration;
 import java.util.List;
 
-public class AlevtinaSemeniukTest {
+public class GroupCodeBrewTest {
+
     @Test
     public void testSearchField() throws InterruptedException {
         WebDriver driver = new ChromeDriver();
@@ -34,7 +35,7 @@ public class AlevtinaSemeniukTest {
         Assert.assertEquals(text, "Affordable Prescription Sunglasses");
 
         driver.quit();
-        }
+    }
     @Test
     public void testMainCheckbox() {
 
@@ -45,20 +46,13 @@ public class AlevtinaSemeniukTest {
         WebElement mainCheckbox = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//span[@class='rct-checkbox']")));
         mainCheckbox.click();
 
-        
-
         List<WebElement> childChekboxes = driver.findElements(By.xpath("//input[@type='checkbox']"));
 
-        
         for (WebElement checkbox : childChekboxes){
 
             Assert.assertTrue(checkbox.isSelected());
         }
         driver.quit();
-
     }
 
-
-    }
-
-
+}
