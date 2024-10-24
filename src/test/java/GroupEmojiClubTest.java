@@ -28,7 +28,7 @@ public class GroupEmojiClubTest {
     }
 
     @Test
-    public void testSearch() throws InterruptedException{
+    public void testSearch() throws InterruptedException {
         ChromeOptions options = new ChromeOptions();
         options.addArguments("--no-sandbox");
 
@@ -53,7 +53,7 @@ public class GroupEmojiClubTest {
     }
 
     @Test
-    public void testLimitedEdition() throws InterruptedException{
+    public void testLimitedEdition() throws InterruptedException {
         ChromeOptions options = new ChromeOptions();
         options.addArguments("--no-sandbox");
 
@@ -71,6 +71,33 @@ public class GroupEmojiClubTest {
 
         WebElement message = driver.findElement(By.xpath("//*[@id='__next']/main/section[4]/div/div[2]/div[1]/div/div[1]/article/a/p"));
         Assert.assertEquals(message.getText(), "Сумка на пояс с принтом Эсла");
+
+        driver.quit();
+    }
+
+    @Test
+    public void testLockedOutUserAuthorization() throws InterruptedException {
+
+        ChromeOptions options = new ChromeOptions();
+        options.addArguments("--no-sandbox");
+        options.addArguments("--incognito");
+
+        WebDriver driver = new ChromeDriver(options);
+        driver.get("https://www.saucedemo.com/");
+
+        WebElement textBoxUsername = driver.findElement(By.xpath("//input[@name='user-name']"));
+        textBoxUsername.sendKeys("locked_out_user");
+
+        WebElement textBoxPassword = driver.findElement(By.xpath("//input[@name='password']"));
+        textBoxPassword.sendKeys("secret_sauce");
+
+        WebElement loginButton = driver.findElement(By.xpath("//input[@id='login-button']"));
+        loginButton.click();
+
+        Thread.sleep(2000);
+
+        WebElement textBoxError = driver.findElement(By.cssSelector(".error-message-container"));
+        Assert.assertEquals(textBoxError.getText(), "Epic sadface: Sorry, this user has been locked out.");
 
         driver.quit();
     }
@@ -101,5 +128,4 @@ public class GroupEmojiClubTest {
 
         driver.quit();
     }
-
 }
