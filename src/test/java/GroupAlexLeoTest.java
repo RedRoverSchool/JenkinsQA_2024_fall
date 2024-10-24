@@ -84,4 +84,18 @@ public class GroupAlexLeoTest {
 
     }
 
+    @Test(description = "VerifyTitle https://discover.bklynlibrary.org/")
+    public static void testVerifyTitle() {
+        WebDriver driver = new ChromeDriver();
+        driver.get("https://discover.bklynlibrary.org/");
+        String act_title = driver.getTitle();
+        if(act_title.equals("Brooklyn Public Library")){
+            System.out.println("Test Passed");
+        }
+        else{
+            System.out.println("Test Failed");
+        }
+        driver.close();
+    }
+
 }
