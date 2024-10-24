@@ -7,6 +7,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
+import java.awt.*;
 import java.time.Duration;
 import java.util.List;
 
@@ -369,5 +370,184 @@ public class NoGroupTest {
         WebElement articleTitle = driver.findElement(By.xpath("//*[@id='firstHeading']/span[text()='Selenium']"));
         Assert.assertEquals(articleTitle.getText(), ("Selenium"));
         driver.quit();
+    }
+
+    @Test
+    public void testTicketSearchPage() {
+        WebDriver driver = new ChromeDriver();
+        driver.get("https://airmontenegro.com/en");
+
+        WebElement agreeButton = driver.findElement(By.xpath("//*[@id=\"content_wrap\"]/div[2]/button"));
+        agreeButton.click();
+        WebElement searchFilter = driver.findElement(By.xpath("//*[@id=\"reservations_table\"]"));
+
+        Assert.assertTrue(searchFilter.isDisplayed());
+
+        driver.quit();
+    }
+
+    @Test
+    public void testRatatype() {
+        WebDriver driver;
+        driver = new ChromeDriver(new ChromeOptions().addArguments("incognito", "start-maximized"));
+
+        driver.get("https://www.ratatype.com/");
+
+        driver.findElement(By.xpath("//*[text()='Test your speed']")).click();
+        WebElement title = driver.findElement(By.xpath("//*[@class='h2']"));
+
+        Assert.assertEquals(title.getText(), "Typing Certification Test");
+
+        driver.quit();
+    }
+
+    @Test
+    public void testRatatypeSelectSpanishLanguage() throws InterruptedException {
+        WebDriver driver;
+        driver = new ChromeDriver(new ChromeOptions().addArguments("incognito", "start-maximized"));
+
+        driver.get("https://www.ratatype.com/");
+
+        Thread.sleep(2000);
+        driver.findElement(By.xpath("//*[@data-bs-target='#footerLangModal']")).click();
+        WebElement language = driver.findElement(By.xpath("//a[contains(@href,'/es/')]"));
+        Thread.sleep(2000);
+        language.click();
+
+        WebElement title = driver.findElement(By.xpath("//h1"));
+        Assert.assertEquals(title.getText(), "Prácticas de escritura a mecanografía");
+
+        driver.quit();
+    }
+
+    // !!! !!! !!!
+    // В тесте используется Robot для имитации нажатия клавиш на клавиатуре.
+    // Если закрыть окно с тестом до окончания набора текста, то Robot продолжит нажимать клавиши
+    // в ранее открытом окне (в IDE) пока не закончится текст или пока не будет остановлен тест.
+    // !!! !!! !!!
+    @Test
+    public void testRatatypePrintSpeed() throws AWTException {
+        WebDriver driver;
+        driver = new ChromeDriver(new ChromeOptions().addArguments("incognito", "start-maximized"));
+
+        driver.get("https://www.ratatype.com/typing-tutor/");
+
+        Robot robot = new Robot();
+        robot.delay(3000);      // Create a three seconds delay.
+
+        // Фраза "type me to find out how many words per minute you can type", которую нужно напечатать,
+        // закодирована числовыми кодами клавиш для раскладки клавиатуры QWERTY
+        // ('t'=84; 'y'=89; ' '=32 и т.д.)
+        Integer[] intArray = {
+                84,89,80,69,32, 77,69,32, 84,79,32, 70,73,78,68,32, 79,85,84,32, 72,79,87,32, 77,65,78,89,32,
+                87,79,82,68,83,32, 80,69,82,32, 77,73,78,85,84,69,32, 89,79,85,32, 67,65,78,32, 84,89,80,69
+        };
+
+        // Generating key press event for writing the QWERTY letters
+        for(int i = 0; i < intArray.length; i++) {
+            robot.delay(120);
+            robot.keyPress(intArray[i]);
+        }
+
+        WebElement titleH2 = driver.findElement(By.xpath("//h2"));
+        Assert.assertTrue(titleH2.getText().contains("words per minute"));
+
+        driver.quit();
+    }
+    @Test
+    public void testButton() {
+        WebDriver driver = new ChromeDriver();
+        driver.get("https://demo.guru99.com/test/radio.html");
+
+        WebElement option1 = driver.findElement(By.xpath("//input[@value='Option 1']"));
+        option1.click();
+        Assert.assertTrue(option1.isSelected());
+
+        WebElement option2 = driver.findElement(By.xpath("//input[@value='Option 2']"));
+        option2.click();
+        Assert.assertTrue(option2.isSelected());
+
+        WebElement option3 = driver.findElement(By.xpath("//input[@value='Option 3']"));
+        option3.click();
+        Assert.assertTrue(option3.isSelected());
+
+        WebElement checkbox1 = driver.findElement(By.xpath("//input[@value='checkbox1']"));
+        checkbox1.click();
+        Assert.assertTrue(checkbox1.isSelected());
+
+        WebElement checkbox2 = driver.findElement(By.xpath("//input[@value='checkbox2']"));
+        checkbox2.click();
+        Assert.assertTrue(checkbox2.isSelected());
+
+        WebElement checkbox3 = driver.findElement(By.xpath("//input[@value='checkbox3']"));
+        checkbox3.click();
+        Assert.assertTrue(checkbox3.isSelected());
+
+        driver.quit();
+    }
+
+    @Test
+    public void testLoginPage() {
+
+        WebDriver driver = new ChromeDriver();
+        driver.manage().timeouts().implicitlyWait(Duration.ofMillis(500));
+
+        driver.get("https://demo.guru99.com/test/login.html");
+
+        WebElement emailField = driver.findElement(By.id("email"));
+        emailField.sendKeys("abcd@gmail.com");
+
+        WebElement passwordField = driver.findElement(By.name("passwd"));
+        passwordField.sendKeys("abcdefghlkjl");
+
+        WebElement loginButton = driver.findElement(By.id("SubmitLogin"));
+        loginButton.click();
+
+        String expectedUrl = "https://demo.guru99.com/test/success.html";
+        String actualUrl = driver.getCurrentUrl();
+        Assert.assertEquals(expectedUrl, actualUrl);
+
+        driver.quit();
+    }
+
+    @Test
+    public void loginTest() {
+
+        WebDriver driver = new ChromeDriver();
+        driver.get("https://the-internet.herokuapp.com/login");
+
+        WebElement userNameBox = driver.findElement(By.xpath("//*[@id=\"username\"]"));
+        userNameBox.sendKeys("tomsmith");
+
+        WebElement passwordBox = driver.findElement(By.xpath("//*[@id=\"password\"]"));
+        passwordBox.sendKeys("SuperSecretPassword!");
+
+        WebElement loginButton = driver.findElement(By.xpath("//*[@id=\"login\"]/button"));
+        loginButton.click();
+
+        WebElement message = driver.findElement(By.xpath("//*[@id=\"content\"]/div/h4"));
+        Assert.assertEquals(message.getText(), "Welcome to the Secure Area. When you are done click logout below.");
+
+        driver.quit();
+    }
+
+
+    @Test
+    public void testAramH() {
+
+        WebDriver driver = new ChromeDriver();
+        driver.get("https://www.bestbuy.com/");
+
+        driver.manage().timeouts().implicitlyWait(Duration.ofMillis(500));
+
+        driver.findElement(By.id("gh-search-input")).sendKeys("laptop");
+        driver.findElement(By.xpath("//span[@class='header-search-icon']")).click();
+
+        WebElement message = driver.findElement(By.xpath("//div[@class='title-wrapper title']/span[2]/span[2]"));
+
+        Assert.assertEquals(message.getText(), "in Laptops");
+
+        driver.quit();
+
     }
 }
