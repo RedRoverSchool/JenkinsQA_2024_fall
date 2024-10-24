@@ -103,7 +103,7 @@ public class AutoamigosGroupTest {
 
     @Test (description = "Практика работы с check box https://demoqa.com/checkbox")
 
-    public void checkBox() throws InterruptedException {
+    public void testCheckBox() throws InterruptedException {
 
         driver.get("https://demoqa.com/checkbox");
         driver.manage().window().maximize();
