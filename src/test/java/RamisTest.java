@@ -5,25 +5,77 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 
 public class RamisTest {
-    @Test
-    public void testSearchTea() throws InterruptedException {
+
+    String url = "https://www.saucedemo.com";
+
+    @Test(priority = 1)
+    public void successLogin() throws InterruptedException {
         ChromeDriver driver = new ChromeDriver();
-        driver.get("https://magnit.ru/");
+        driver.get(url);
+        Thread.sleep(500);
+
+        WebElement username = driver.findElement(By.xpath("//*[@id='user-name']"));
+        username.sendKeys("standard_user");
+        Thread.sleep(500);
+
+        WebElement password = driver.findElement(By.xpath("//*[@id='password']"));
+        password.sendKeys("secret_sauce");
+        Thread.sleep(500);
+
+        WebElement loginButton = driver.findElement(By.xpath("//*[@id='login-button']"));
+        loginButton.click();
         Thread.sleep(1000);
 
-        WebElement search = driver.findElement(By.xpath("//*[@id='magnit-root']/div/header/div[3]/div/div[1]/div[2]/form/div[1]/div/div/input"));
-        search.sendKeys("чай");
-        Thread.sleep(1000);
-
-        WebElement firstOption = driver.findElement(By.xpath("//*[@id='magnit-root']/div/header/div[3]/div/div[1]/div[2]/div/div/div/a[1]"));
-        firstOption.click();
-        Thread.sleep(1000);
-
-        //WebElement descriptionTitle = driver.findElement(By.xpath("//*[@id='magnit-root']/div/div/main/div/div[1]/section/div/div/div/div[2]/section[2]/div[2]/div[2]/div"));
-        //Assert.assertEquals(descriptionTitle.getText(), "Описание");
+        WebElement product = driver.findElement(By.xpath("//*[@id=\"item_4_title_link\"]/div"));
+        Assert.assertEquals(product.getText(), "Sauce Labs Backpack");
         driver.quit();
     }
 
+    @Test(priority = 2)
+    public void lockedUserLogin() throws InterruptedException{
+        ChromeDriver driver = new ChromeDriver();
+        driver.get(url);
+
+        WebElement username = driver.findElement(By.xpath("//*[@id='user-name']"));
+        username.sendKeys("locked_out_user");
+        Thread.sleep(500);
+
+        WebElement password = driver.findElement(By.xpath("//*[@id='password']"));
+        password.sendKeys("secret_sauce");
+        Thread.sleep(500);
+
+        WebElement loginButton = driver.findElement(By.xpath("//*[@id='login-button']"));
+        loginButton.click();
+        Thread.sleep(1000);
+
+        WebElement lockedError = driver.findElement(By.xpath("//*[@data-test='error']"));
+        Assert.assertEquals(lockedError.getText(), "Epic sadface: Sorry, this user has been locked out.");
+        driver.quit();
+
+    }
+
+    @Test(priority = 3)
+    public void problemUserLogin() throws InterruptedException{
+        ChromeDriver driver = new ChromeDriver();
+        driver.get(url);
+
+        WebElement username = driver.findElement(By.xpath("//*[@id='user-name']"));
+        username.sendKeys("problem_user");
+        Thread.sleep(500);
+
+        WebElement password = driver.findElement(By.xpath("//*[@id='password']"));
+        password.sendKeys("secret_sauce");
+        Thread.sleep(500);
+
+        WebElement loginButton = driver.findElement(By.xpath("//*[@id='login-button']"));
+        loginButton.click();
+        Thread.sleep(1000);
+
+        WebElement headerLabel = driver.findElement(By.xpath("//*[@class='app_logo']"));
+        Assert.assertEquals(headerLabel.getText(), "Swag Labs");
+
+        driver.quit();
+    }
 }
 
 
