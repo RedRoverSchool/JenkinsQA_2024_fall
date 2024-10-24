@@ -3,15 +3,14 @@ import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.chrome.ChromeOptions;
 import org.testng.Assert;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import java.time.Duration;
 
 public class OlgaTest {
+
     WebDriver driver = new ChromeDriver();
     @BeforeMethod
     public void BaseURL() {
@@ -34,6 +33,15 @@ public class OlgaTest {
 
         String AssertMVD = driver.findElement(By.xpath("/html/body/div[1]/div[4]/div/div[1]/h1")).getText();
         Assert.assertEquals(AssertMVD,"РЕЗУЛЬТАТОВ ПО ЗАПРОСУ «НАГРАДА МВД»: 235");
+    }
+    @Test
+    public void test3() throws InterruptedException {
+        WebElement imagePhone = driver.findElement(By.xpath("/html/body/div[1]/header/div[2]/div/div/div[2]/div[2]/a[1]"));
+        imagePhone.click();
+        Thread.sleep(1000);
+
+        String QuestionsAnswers = driver.findElement(By.xpath("//*[@id='modal-faq']/div[1]/div")).getText();
+        Assert.assertEquals(QuestionsAnswers,"ВОПРОСЫ И ОТВЕТЫ");
     }
 
     @AfterTest
