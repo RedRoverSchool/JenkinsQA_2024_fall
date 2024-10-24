@@ -69,4 +69,17 @@ public class GroupKrutyeBobryTest {
         System.out.println("Page title: " + title);
         driver.quit();
     }
+
+    @Test
+    public void testGoCatalogByImageLink(){
+        WebDriver driver = new ChromeDriver();
+        driver.get("https://magento.softwaretestingboard.com/");
+        WebElement link = driver.findElement(By.xpath("//*[@id=\"maincontent\"]/div[3]/div/div[2]/div[1]/a"));
+
+        String url = "https://magento.softwaretestingboard.com/collections/yoga-new.html";
+        link.click();
+        String currentUrl = driver.getCurrentUrl();
+        Assert.assertEquals(currentUrl, url);
+
+    }
 }
