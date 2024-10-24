@@ -18,7 +18,7 @@ public class ElenaUstsTest {
         Thread.sleep(1000);
     }
     @Test
-    public void openBookStoreTest() {
+    public void testOpenBookStore() {
         WebElement bookStore = driver.findElement(By.xpath("//div[@class='card-body']//h5[text()='Book Store Application']"));
         JavascriptExecutor js = (JavascriptExecutor) driver;
         js.executeScript("arguments[0].scrollIntoView(true);", bookStore);
@@ -28,7 +28,7 @@ public class ElenaUstsTest {
         Assert.assertEquals(newUrl, "https://demoqa.com/books");
     }
     @Test
-    public void checkTestBoxTest() {
+    public void testCheckTestBox() {
         WebElement element = driver.findElement(By.cssSelector(".avatar.mx-auto.white"));
         element.click();
         WebElement textBox = driver.findElement(By.xpath("//span[text()='Text Box']"));
@@ -51,7 +51,7 @@ public class ElenaUstsTest {
         Assert.assertEquals(description, expectedDescription);
     }
     @Test
-    public void doubleClickCheckTest() throws InterruptedException{
+    public void testDoubleClickCheck() throws InterruptedException{
         WebElement element = driver.findElement(By.cssSelector(".avatar.mx-auto.white"));
         element.click();
         Thread.sleep(1000);
@@ -66,7 +66,7 @@ public class ElenaUstsTest {
         Assert.assertEquals(actualResult, expextedresult);
     }
     @Test
-    public void rightClickCheckTest() throws InterruptedException{
+    public void testRightClickCheck() throws InterruptedException{
         WebElement element = driver.findElement(By.cssSelector(".avatar.mx-auto.white"));
         element.click();
         Thread.sleep(2000);
