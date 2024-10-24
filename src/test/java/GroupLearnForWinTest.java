@@ -76,6 +76,7 @@ public class GroupLearnForWinTest {
         Assert.assertTrue(loginButtonContainer.isDisplayed());
 
         driver.quit();
+
     }
 
 
