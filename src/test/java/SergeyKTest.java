@@ -4,50 +4,50 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.testng.Assert;
-import org.testng.annotations.AfterTest;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.BeforeTest;
-import org.testng.annotations.Test;
+import org.testng.annotations.*;
 
 import java.time.Duration;
 
 public class SergeyKTest {
-    WebDriver driver = new ChromeDriver();
+
+    WebDriver driver;
 
     @BeforeTest
-    public void robot() {
-        driver.get("https://www.ozon.ru");
-        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(3));
-        driver.findElement(By.id("reload-button")).click();
-    }
-
-    @BeforeMethod
     public void getDriver() {
+        driver = new ChromeDriver();
         driver.manage().window().maximize();
     }
 
 
-    @Test(priority = 1)
+    @Test
     public void searchTest() {
-        driver.get("https://www.ozon.ru");
-        WebElement search = driver.findElement(By.xpath("//input[@placeholder='Искать на Ozon']"));
+        driver.get("https://www.wildberries.ru/");
+        WebElement search = driver.findElement(By.xpath("//input[@id='searchInput']"));
         search.sendKeys("жилетка мужская");
         search.sendKeys(Keys.ENTER);
-        Assert.assertEquals(driver.getTitle(), "жилетка мужская - купить на OZON");
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+        WebElement searchResponse = driver.findElement(By.xpath("//h1[@class='searching-results__title']"));
+        Assert.assertEquals(searchResponse.getText(), "жилетка мужская");
     }
 
-    @Test(priority = 2)
+    @Test
     public void putInBasket() {
-        driver.get("https://www.ozon.ru/product/zhilet-uteplennyy-sheridi-shop-1136008418");
-        driver.findElement(By.xpath("//div[@class='l7t_27 u0l_27']//button[@class='k3v_27 b2115-a0 b2115-b2 b2115-a4']")).click();
+        driver.get("https://www.wildberries.ru/catalog/230563558/detail.aspx");
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+        driver.findElement(By.xpath("//button[@class='cookies__btn btn-minor-md']")).click();
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+        driver.findElement(By.xpath("//label[@class='j-size sizes-list__button']")).click();
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+        driver.findElement(By.xpath("//div[@class='product-page__aside']//button[@class='order__button btn-main']")).click();
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(3));
-        driver.findElement(By.xpath("//div[@class='l7t_27 u0l_27']//div[@class='b2115-a']")).click();
-        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(3));
-        Assert.assertEquals(driver.getTitle(), "OZON.ru - Моя корзина");
+        driver.findElement(By.xpath("//div[@class='navbar-pc__item j-item-basket']//a[@class='navbar-pc__link j-wba-header-item']")).click();
+        WebElement basket = driver.findElement(By.xpath("//h1[@class='basket-section__header basket-section__header--main active']"));
+        Assert.assertEquals(basket.getText(), "Корзина");
     }
 
-//    @AfterTest
-//    public void quitDriver() {
-//        driver.quit();
-//    }
+    @AfterTest
+    public void quitDriver() {
+        driver.quit();
+    }
+
 }
