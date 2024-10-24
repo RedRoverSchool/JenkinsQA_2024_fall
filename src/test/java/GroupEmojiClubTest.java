@@ -138,10 +138,6 @@ public class GroupEmojiClubTest {
     @Test
     public void testMcDonalds() throws InterruptedException {
 
-        ChromeOptions options = new ChromeOptions();
-        options.addArguments("--no-sandbox");
-
-        WebDriver driver = new ChromeDriver(options);
         driver.get("https://www.mcdonalds.com/us/en-us.html");
 
         WebElement submitMenuButton = driver.findElement(By.xpath("//*[@id='container-1e52aa8d39']/div/div[2]/div/div/div[2]/div/div[2]/div/nav/ul/li[1]/button"));
@@ -157,6 +153,5 @@ public class GroupEmojiClubTest {
         WebElement itemTitle = driver.findElement(By.xpath("//*[@id='title-34dd02d5b0']/h1"));
         Assert.assertEquals(itemTitle.getText(), "Chicken Big Mac®");
 
-        driver.quit();
     }
 }
