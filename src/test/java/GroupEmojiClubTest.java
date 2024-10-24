@@ -5,9 +5,27 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.testng.Assert;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 public class GroupEmojiClubTest {
+    WebDriver driver;
+
+    @BeforeMethod
+    public void setUp() {
+        ChromeOptions options = new ChromeOptions();
+        options.addArguments("--no-sandbox");
+        options.addArguments("--incognito");
+
+        driver = new ChromeDriver(options);
+    }
+
+    @AfterMethod
+    public void tearDown() {
+        driver.quit();
+    }
+
 
     @Test
     public void testCart() {
@@ -78,11 +96,6 @@ public class GroupEmojiClubTest {
     @Test
     public void testLockedOutUserAuthorization() throws InterruptedException {
 
-        ChromeOptions options = new ChromeOptions();
-        options.addArguments("--no-sandbox");
-        options.addArguments("--incognito");
-
-        WebDriver driver = new ChromeDriver(options);
         driver.get("https://www.saucedemo.com/");
 
         WebElement textBoxUsername = driver.findElement(By.xpath("//input[@name='user-name']"));
@@ -99,17 +112,11 @@ public class GroupEmojiClubTest {
         WebElement textBoxError = driver.findElement(By.cssSelector(".error-message-container"));
         Assert.assertEquals(textBoxError.getText(), "Epic sadface: Sorry, this user has been locked out.");
 
-        driver.quit();
     }
 
     @Test
     public void testSuccessfulAuthorization() throws InterruptedException {
 
-        ChromeOptions options = new ChromeOptions();
-        options.addArguments("--no-sandbox");
-        options.addArguments("--incognito");
-
-        WebDriver driver = new ChromeDriver(options);
         driver.get("https://www.saucedemo.com/");
 
         WebElement textBoxUsername = driver.findElement(By.xpath("//input[@name='user-name']"));
@@ -126,6 +133,5 @@ public class GroupEmojiClubTest {
         WebElement itemTitle = driver.findElement(By.xpath("//a[@id='item_4_title_link']/div[@class='inventory_item_name ']"));
         Assert.assertEquals(itemTitle.getText(), "Sauce Labs Backpack");
 
-        driver.quit();
     }
 }
