@@ -9,7 +9,7 @@ import org.testng.annotations.Test;
 
 import java.time.Duration;
 
-public class AlexLeoTest {
+public class GroupAlexLeoTest {
 
     @Test(description = "Практика работы с чекбоксом  https://demoqa.com/checkbox")
     public void testCheckBox() {
