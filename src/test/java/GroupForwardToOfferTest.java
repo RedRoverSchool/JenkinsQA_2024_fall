@@ -1,4 +1,5 @@
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -11,6 +12,8 @@ import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
 import java.time.Duration;
+import java.util.List;
+import java.util.function.Consumer;
 
 public class GroupForwardToOfferTest {
     private WebDriver driver;
@@ -112,8 +115,9 @@ public class GroupForwardToOfferTest {
     public void test() {
 
         driver.get("https://ru.pinterest.com/");
-
+        driver.manage().window().maximize();
         //находит и нажимает на "Посмотреть"
+        WebElement web = driver.findElement(By.xpath("//button[@class='RCK Hsu USg adn gn8 L4E kVc CCY oRi lnZ wsz']//div[1][@class='X8m tg7 tBJ dyH iFc sAJ H2s']"));
         clickWhenVisible(By.xpath("//button[@class='RCK Hsu USg adn gn8 L4E kVc CCY oRi lnZ wsz']//div[1][@class='X8m tg7 tBJ dyH iFc sAJ H2s']"));
 
         //находит и нажимает на категорию с животными
@@ -136,9 +140,20 @@ public class GroupForwardToOfferTest {
         element.click();
     }
 
+    @Test
+    public void testNumberOfCarsPresented() {
+        driver.get("https://av.by/");
+        //нажать на кнопку отказатся во всплывающем окне про cookies
+        driver.findElement(By.xpath("//button[@class='button button--default button--block button--large']")).click();
+        ((JavascriptExecutor) driver).executeScript("javascript:window.scrollBy(0,500)");
+        //собрать веб элементы которые обозначают марки машин в лист
+        List<WebElement> carsModels = driver.findElements(By.xpath("//span[@class='catalog__title']"));
+        Assert.assertEquals(carsModels.size(), 30);
+    }
+
 
     @AfterTest
     public void afterTest(){
-        driver.quit();
+        //driver.quit();
     }
 }
