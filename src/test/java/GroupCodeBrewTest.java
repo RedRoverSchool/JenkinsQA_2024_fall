@@ -17,7 +17,7 @@ public class GroupCodeBrewTest {
         WebDriver driver = new ChromeDriver();
         driver.get("https://www.zennioptical.com/");
 
-        Thread.sleep(1000);
+        Thread.sleep(2000);
 
         WebElement searchField = driver.findElement(By.xpath("//*[@id=\"search-input\"]/div/input"));
         searchField.sendKeys("sunglasses");
