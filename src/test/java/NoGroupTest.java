@@ -377,11 +377,11 @@ public class NoGroupTest {
         WebDriver driver = new ChromeDriver();
         driver.get("https://airmontenegro.com/en");
 
-        WebElement agree_button = driver.findElement(By.xpath("//*[@id=\"content_wrap\"]/div[2]/button"));
-        agree_button.click();
-        WebElement search_filter = driver.findElement(By.xpath("//*[@id=\"reservations_table\"]"));
+        WebElement agreeButton = driver.findElement(By.xpath("//*[@id=\"content_wrap\"]/div[2]/button"));
+        agreeButton.click();
+        WebElement searchFilter = driver.findElement(By.xpath("//*[@id=\"reservations_table\"]"));
 
-        Assert.assertTrue(search_filter.isDisplayed());
+        Assert.assertTrue(searchFilter.isDisplayed());
 
         driver.quit();
     }
