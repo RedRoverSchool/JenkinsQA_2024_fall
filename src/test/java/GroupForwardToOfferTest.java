@@ -1,4 +1,5 @@
 import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -136,6 +137,36 @@ public class GroupForwardToOfferTest {
         element.click();
     }
 
+    @Test
+    public void testSearchWB() {
+        driver.get("https://www.wildberries.ru/");
+
+        WebElement search = driver.findElement(By.xpath("//input[@id='searchInput']"));
+        search.sendKeys("жилетка мужская");
+
+        search.sendKeys(Keys.ENTER);
+
+        WebElement searchResponse = driver.findElement(By.xpath("//h1[@class='searching-results__title']"));
+
+        Assert.assertEquals(searchResponse.getText(), "жилетка мужская");
+    }
+
+    @Test
+    public void testPutInBasketWB() {
+        driver.get("https://www.wildberries.ru/catalog/230563558/detail.aspx");
+
+        driver.findElement(By.xpath("//button[@class='cookies__btn btn-minor-md']")).click();
+
+        driver.findElement(By.xpath("//label[@class='j-size sizes-list__button']")).click();
+
+        driver.findElement(By.xpath("//div[@class='product-page__aside']//button[@class='order__button btn-main']")).click();
+
+        driver.findElement(By.xpath("//div[@class='navbar-pc__item j-item-basket']//a[@class='navbar-pc__link j-wba-header-item']")).click();
+
+        WebElement basket = driver.findElement(By.xpath("//h1[@class='basket-section__header basket-section__header--main active']"));
+
+        Assert.assertEquals(basket.getText(), "Корзина");
+    }
 
     @AfterTest
     public void afterTest(){
