@@ -1,7 +1,9 @@
 import org.openqa.selenium.By;
+import org.openqa.selenium.PageLoadStrategy;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -53,5 +55,31 @@ public class GroupKrutyeBobryTest {
         Assert.assertTrue(contextMenu1.isDisplayed());
 
         driver.quit();
+    }
+
+    @Test
+    public void testFindPageTitleHeadless(){
+        ChromeOptions chromeOptions = new ChromeOptions();
+        chromeOptions.addArguments("--headless");
+        chromeOptions.setPageLoadStrategy(PageLoadStrategy.EAGER);
+        WebDriver driver = new ChromeDriver(chromeOptions);
+        driver.get("https://magento.softwaretestingboard.com/");
+        String title = driver.getTitle();
+        Assert.assertEquals(title, "Home Page");
+        System.out.println("Page title: " + title);
+        driver.quit();
+    }
+
+    @Test
+    public void testGoCatalogByImageLink(){
+        WebDriver driver = new ChromeDriver();
+        driver.get("https://magento.softwaretestingboard.com/");
+        WebElement link = driver.findElement(By.xpath("//*[@id=\"maincontent\"]/div[3]/div/div[2]/div[1]/a"));
+
+        String url = "https://magento.softwaretestingboard.com/collections/yoga-new.html";
+        link.click();
+        String currentUrl = driver.getCurrentUrl();
+        Assert.assertEquals(currentUrl, url);
+
     }
 }
