@@ -12,13 +12,6 @@ public class SergeyKTest {
 
     WebDriver driver;
 
-//    @BeforeTest
-//    public void robot() {
-//        driver.get("https://www.ozon.ru");
-//        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(3));
-//        driver.findElement(By.id("reload-button")).click();
-//    }
-
     @BeforeTest
     public void getDriver() {
         driver = new ChromeDriver();
@@ -51,11 +44,6 @@ public class SergeyKTest {
 //        WebElement basket = driver.findElement(By.xpath("//h1[@class='basket-section__header basket-section__header--main active']"));
 //        Assert.assertEquals(basket.getText(), "            Корзина                    ");
     }
-
-//    @AfterMethod
-//    public void closeBrowser() {
-//        driver.close();
-//    }
 
     @AfterTest
     public void quitDriver() {
