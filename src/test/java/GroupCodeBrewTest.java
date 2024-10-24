@@ -50,6 +50,8 @@ public class GroupCodeBrewTest {
 
         for (WebElement checkbox : childChekboxes){
 
+
+
             Assert.assertTrue(checkbox.isSelected());
         }
         driver.quit();
