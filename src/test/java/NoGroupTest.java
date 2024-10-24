@@ -701,6 +701,7 @@ public class NoGroupTest {
         WebElement selectedItemColor = driver.findElement(By.id("productInfoPanel"));
 
         Assert.assertTrue(selectedItemColor.getText().contains("Midnight Plum"));
+
         driver.quit();
     }
 }
