@@ -457,7 +457,7 @@ public class NoGroupTest {
 
 
     @Test
-    public void AramHtest() {
+    public void testAramH() {
 
         WebDriver driver = new ChromeDriver();
         driver.get("https://www.bestbuy.com/");
