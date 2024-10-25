@@ -64,4 +64,25 @@ public class AutoamigosGroupTest {
         Assert.assertEquals(driver.getCurrentUrl(), "https://demoqa.com/elements");
     }
 
+    @Test
+    public void testCheckBoxAngular() throws InterruptedException {
+
+        driver.get("https://demoqa.com/checkbox");
+        driver.manage().window().maximize();
+
+        WebElement checkBoxMenu = driver.findElement(By.xpath("//span[text()='Check Box']/.."));
+        checkBoxMenu.click();
+
+        WebElement expandAllButton = driver.findElement(By.xpath("//button[@aria-label='Expand all']"));
+        expandAllButton.click();
+
+        WebElement angularCheckBox = driver.findElement(By.xpath("//span[text()='Angular']/preceding-sibling::span[@class='rct-checkbox']"));
+        angularCheckBox.click();
+
+        WebElement resultOfSelection = driver.findElement(By.xpath("//span[text()='angular']"));
+
+        Assert.assertEquals(resultOfSelection.getText(), "angular");
+
+    }
+
 }
