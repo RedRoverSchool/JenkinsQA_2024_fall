@@ -51,4 +51,17 @@ public class AutoamigosGroupTest {
 
         Assert.assertEquals(driver.getCurrentUrl(), "https://demoqa.com/");
     }
+
+    @Test
+    public void testElementsCard() {
+
+        driver.get("https://demoqa.com/");
+        driver.manage().window().maximize();
+
+        WebElement elements = driver.findElement(By.xpath("//h5[text()='Elements']/../../.."));
+        elements.click();
+
+        Assert.assertEquals(driver.getCurrentUrl(), "https://demoqa.com/elements");
+    }
+
 }
