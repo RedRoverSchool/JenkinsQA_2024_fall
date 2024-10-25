@@ -1,8 +1,4 @@
-import org.openqa.selenium.By;
-import org.openqa.selenium.PageLoadStrategy;
-import org.openqa.selenium.Keys;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.interactions.Actions;
@@ -62,7 +58,7 @@ public class GroupUnitedByJavaTest {
 
         WebElement messageText = driver.findElement(By.id("message"));
 
-        Assert.assertEquals(messageText.getText(),"Received!");
+        Assert.assertEquals(messageText.getText(), "Received!");
         driver.quit();
     }
 
@@ -75,7 +71,7 @@ public class GroupUnitedByJavaTest {
         WebElement checkInput = driver.findElement(By.id("my-check-2"));
         checkInput.click();
 
-        Assert.assertEquals(checkInput.getDomProperty("checked"),"true");
+        Assert.assertEquals(checkInput.getDomProperty("checked"), "true");
 
         driver.quit();
     }
@@ -123,7 +119,7 @@ public class GroupUnitedByJavaTest {
 
         List<Double> prices = new ArrayList<>();
 
-        for (WebElement priceElement: priceList) {
+        for (WebElement priceElement : priceList) {
             String priceText = priceElement.getText().replace("$", "");
             prices.add(Double.parseDouble(priceText));
         }
@@ -131,7 +127,7 @@ public class GroupUnitedByJavaTest {
         List<Double> sortedPrices = new ArrayList<>(prices);
         Collections.sort(sortedPrices);
 
-        Assert.assertEquals(prices,sortedPrices);
+        Assert.assertEquals(prices, sortedPrices);
 
         driver.quit();
     }
@@ -240,7 +236,7 @@ public class GroupUnitedByJavaTest {
 
         driver.findElement(By.id("userEmail")).sendKeys("juju@mail.com");
 
-        driver.findElement(By.xpath ("//*[contains(text(),'Female')]")).click();
+        driver.findElement(By.xpath("//*[contains(text(),'Female')]")).click();
 
         driver.findElement(By.id("userNumber")).sendKeys("78479857847");
 
@@ -260,7 +256,7 @@ public class GroupUnitedByJavaTest {
         subjects.sendKeys("English");
         subjects.sendKeys(Keys.ENTER);
 
-        driver.findElement(By.xpath ("//*[contains(text(),'Reading')]")).click();
+        driver.findElement(By.xpath("//*[contains(text(),'Reading')]")).click();
 
         driver.findElement(By.id("currentAddress")).sendKeys("12 Warwickshire Mansions");
 
@@ -306,7 +302,7 @@ public class GroupUnitedByJavaTest {
     }
 
     @Test
-    public void testLockedUserLogin() throws InterruptedException{
+    public void testLockedUserLogin() throws InterruptedException {
         ChromeDriver driver = new ChromeDriver();
         driver.get(URL);
 
@@ -329,7 +325,7 @@ public class GroupUnitedByJavaTest {
     }
 
     @Test
-    public void testProblemUserLogin() throws InterruptedException{
+    public void testProblemUserLogin() throws InterruptedException {
         ChromeDriver driver = new ChromeDriver();
         driver.get(URL);
 
@@ -349,6 +345,39 @@ public class GroupUnitedByJavaTest {
         Assert.assertEquals(headerLabel.getText(), "Swag Labs");
 
         driver.quit();
+    }
+
+    @Test
+    public void getTitle() {
+        ChromeOptions options = new ChromeOptions();
+        options.addArguments("--no-sandbox");
+        WebDriver driver = new ChromeDriver(options);
+        driver.get("https://chatgpt.com/");
+        driver.manage().window().maximize();
+
+        System.out.println(driver.getTitle());
+        Assert.assertEquals(driver.getTitle(), "ChatGPT");
+
+        driver.quit();
+
+    }
+
+    @Test
+    public void checkDialogWindow() {
+        ChromeOptions options = new ChromeOptions();
+        options.addArguments("--no-sandbox");
+        WebDriver driver = new ChromeDriver(options);
+        driver.get("https://chatgpt.com/");
+        driver.manage().window().maximize();
+
+        WebElement newChatButton = driver.findElement(By.xpath("//span[@class='flex']"));
+        newChatButton.click();
+
+        WebElement dialogWindow = driver.findElement(By.xpath("//div[@role='dialog']"));
+        Assert.assertTrue(dialogWindow.getText().contains("Clear current chat"));
+
+        driver.quit();
+
     }
 
 }
