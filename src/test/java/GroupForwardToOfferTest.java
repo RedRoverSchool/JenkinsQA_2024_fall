@@ -179,7 +179,7 @@ public class GroupForwardToOfferTest {
 
         driver.get("https://ru.wikipedia.org/wiki/");
         WebElement search = driver.findElement(By.xpath( "//*[@id='searchInput']"));
-        search.sendKeys("Java ");
+        search.sendKeys("Java qwerty ");
         search.sendKeys(Keys.ENTER);
 
         Assert.assertEquals(driver.findElement(By.xpath("//div[2]/div[2]/div[1]/a/span")).getText(), "Java");
