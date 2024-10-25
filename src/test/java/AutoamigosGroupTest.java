@@ -83,6 +83,31 @@ public class AutoamigosGroupTest {
         WebElement resultOfSelection = driver.findElement(By.xpath("//span[text()='angular']"));
 
         Assert.assertEquals(resultOfSelection.getText(), "angular");
+
+    }
+
+    @Test
+    public void testYesRadioButton() throws InterruptedException {
+
+        driver.get("https://demoqa.com/elements");
+        driver.manage().window().maximize();
+        sleep(3000);
+
+        WebElement radioButtonMenu = driver.findElement(By.xpath("//span[text()='Radio Button']/.."));
+        radioButtonMenu.click();
+
+        sleep(1000);
+
+//        WebElement yesRadioButton =
+                driver.findElement(By.xpath("//div/input[@id='yesRadio']")).click();////label[@for='yesRadio']/preceding-sibling::input"
+//        yesRadioButton.click();
+
+        sleep(3000);
+
+        WebElement message = driver.findElement(By.xpath("//p/span[@class='text-success']"));
+
+        Assert.assertEquals(message.getText(), "Yes");
+
     }
 
 }
