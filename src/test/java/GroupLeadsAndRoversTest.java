@@ -56,7 +56,7 @@ public class GroupLeadsAndRoversTest {
     }
 
     @BeforeMethod
-    private void initDriver() throws InterruptedException {
+    private void initDriver() {
         this.driver = new ChromeDriver();
     }
 
