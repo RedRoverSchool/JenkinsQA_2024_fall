@@ -66,7 +66,6 @@ public class GroupKrutyeBobryTest {
         driver.get("https://magento.softwaretestingboard.com/");
         String title = driver.getTitle();
         Assert.assertEquals(title, "Home Page");
-        System.out.println("Page title: " + title);
         driver.quit();
     }
 
@@ -80,6 +79,6 @@ public class GroupKrutyeBobryTest {
         link.click();
         String currentUrl = driver.getCurrentUrl();
         Assert.assertEquals(currentUrl, url);
-
+        driver.quit();
     }
 }
