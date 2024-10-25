@@ -12,7 +12,6 @@ import java.util.List;
 
 public class KhPaulConflictTest {
 
-    private static WebDriver driver;
     private static final String validLogin = "standard_user";
     private static final String validPassword = "secret_sauce";
     private static final String URL = "https://www.saucedemo.com/";
@@ -32,7 +31,7 @@ public class KhPaulConflictTest {
 
     @AfterTest
     public void closeWebDriver() {
-            driver.quit();
+
     }
 
     public void timeSleep() {
