@@ -8,7 +8,6 @@ import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.Select;
 import org.testng.Assert;
 import org.testng.annotations.Test;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -59,7 +58,7 @@ public class GroupUnitedByJavaTest {
 
         WebElement messageText = driver.findElement(By.id("message"));
 
-        Assert.assertEquals(messageText.getText(), "Received!");
+        Assert.assertEquals(messageText.getText(),"Received!");
         driver.quit();
     }
 
@@ -72,7 +71,7 @@ public class GroupUnitedByJavaTest {
         WebElement checkInput = driver.findElement(By.id("my-check-2"));
         checkInput.click();
 
-        Assert.assertEquals(checkInput.getDomProperty("checked"), "true");
+        Assert.assertEquals(checkInput.getDomProperty("checked"),"true");
 
         driver.quit();
     }
@@ -120,7 +119,7 @@ public class GroupUnitedByJavaTest {
 
         List<Double> prices = new ArrayList<>();
 
-        for (WebElement priceElement : priceList) {
+        for (WebElement priceElement: priceList) {
             String priceText = priceElement.getText().replace("$", "");
             prices.add(Double.parseDouble(priceText));
         }
@@ -128,7 +127,7 @@ public class GroupUnitedByJavaTest {
         List<Double> sortedPrices = new ArrayList<>(prices);
         Collections.sort(sortedPrices);
 
-        Assert.assertEquals(prices, sortedPrices);
+        Assert.assertEquals(prices,sortedPrices);
 
         driver.quit();
     }
