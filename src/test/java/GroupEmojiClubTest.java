@@ -29,11 +29,6 @@ public class GroupEmojiClubTest {
 
     @Test
     public void testCart() {
-        ChromeOptions options = new ChromeOptions();
-        options.addArguments("--no-sandbox");
-
-        WebDriver driver = new ChromeDriver(options);
-
         driver.get("https://stockmann.ru/");
 
         WebElement submitButton = driver.findElement(By.xpath("//*[@id='__next']/header/div[1]/div[3]/a[2]"));
@@ -41,17 +36,10 @@ public class GroupEmojiClubTest {
 
         WebElement message = driver.findElement(By.xpath("//*[@id='__next']/main/div[2]/div/div/div/div[2]"));
         Assert.assertEquals(message.getText(), "Сейчас в корзине нет товаров");
-
-        driver.quit();
     }
 
     @Test
     public void testSearch() throws InterruptedException {
-        ChromeOptions options = new ChromeOptions();
-        options.addArguments("--no-sandbox");
-
-        WebDriver driver = new ChromeDriver(options);
-
         driver.get("https://stockmann.ru/");
 
         WebElement submitButton = driver.findElement(By.xpath("//*[@id='__next']/header/div[1]/div[1]/button[2]"));
@@ -66,17 +54,10 @@ public class GroupEmojiClubTest {
 
         WebElement message = driver.findElement(By.xpath("//*[@id='__next']/main/section[1]/div/h1"));
         Assert.assertEquals(message.getText(), "Результаты поиска «Платье»");
-
-        driver.quit();
     }
 
     @Test
     public void testLimitedEdition() throws InterruptedException {
-        ChromeOptions options = new ChromeOptions();
-        options.addArguments("--no-sandbox");
-
-        WebDriver driver = new ChromeDriver(options);
-
         driver.get("https://stockmann.ru/");
 
         WebElement submitButton = driver.findElement(By.xpath("//*[@id='__next']/header/div[1]/div[1]/button[1]"));
@@ -89,8 +70,6 @@ public class GroupEmojiClubTest {
 
         WebElement message = driver.findElement(By.xpath("//*[@id='__next']/main/section[4]/div/div[2]/div[1]/div/div[1]/article/a/p"));
         Assert.assertEquals(message.getText(), "Сумка на пояс с принтом Эсла");
-
-        driver.quit();
     }
 
     @Test
