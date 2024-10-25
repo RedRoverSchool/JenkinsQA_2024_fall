@@ -3,7 +3,6 @@ import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.support.ui.Select;
 import org.testng.Assert;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
@@ -77,6 +76,7 @@ public class AutoamigosGroupTest {
         WebElement expandAllButton = driver.findElement(By.xpath("//button[@aria-label='Expand all']"));
         expandAllButton.click();
 
+        //ищем элемент class='rct-checkbox' являющийся предшествующим sibling для элемента span[text()='Angular']
         WebElement angularCheckBox = driver.findElement(By.xpath("//span[text()='Angular']/preceding-sibling::span[@class='rct-checkbox']"));
         angularCheckBox.click();
 
