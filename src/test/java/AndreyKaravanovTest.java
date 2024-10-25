@@ -20,7 +20,6 @@ public class AndreyKaravanovTest {
         WebElement firstStep = driver.findElement(By.xpath("//html/body/div[2]/div/div/div/div[1]/div/div/div[2]/div/ul/li/span"));
         firstStep.click();
 
-
         WebElement name = driver.findElement(By.xpath("//html/body/div[2]/div/div/div/div[2]/div[2]/form/div[1]/div[2]/input"));
         name.sendKeys("Andrey");
 
