@@ -112,5 +112,41 @@ public class GroupLearnForWinTest {
         driver.quit();
 
     }
+    @Test
+    public void testSubmitLanguageCapitalLetter() {
+
+        WebDriver driver = new ChromeDriver();
+
+        driver.get("https://www.99-bottles-of-beer.net/submitnewlanguage.html");
+
+        driver.findElement(By.name("submitlanguage")).click();
+        String textError = driver.findElement(By.xpath("//p[contains(text(), 'Precondition failed - Incomplete Input.')]")).getText();
+
+        String words[] = textError.split(" ");
+
+        boolean result = true; //Предполагаем, что все слова в строке написаны правильно
+
+        for (int i = 0; i < words.length; i++) {
+
+            if (words[i].isEmpty() || words[i].equals("-")) {
+                continue;
+            }
+
+            if (words[i].equals("failed")) {
+
+            } else {
+
+                if (!Character.isUpperCase(words[i].charAt(0))) {
+                    result = false;
+                    break;
+                }
+            }
+        }
+
+        Assert.assertTrue(result);
+
+        driver.quit();
+    }
+
 
 }
