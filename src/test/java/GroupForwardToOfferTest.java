@@ -178,6 +178,18 @@ public class GroupForwardToOfferTest {
         Assert.assertEquals(basket.getText(), "Корзина");
     }
 
+    @Test
+    public void wikiTest() {
+
+        driver.get("https://ru.wikipedia.org/wiki/");
+        WebElement search = driver.findElement(By.xpath( "//*[@id='searchInput']"));
+        search.sendKeys("Java");
+        search.sendKeys(Keys.ENTER);
+
+        Assert.assertEquals(driver.findElement(By.xpath("//div[2]/div[2]/div[1]/a/span")).getText(), "Java");
+
+    }
+
     @AfterTest
     public void afterTest(){
         driver.quit();
