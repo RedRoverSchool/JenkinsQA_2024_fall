@@ -1,7 +1,4 @@
-import org.openqa.selenium.By;
-import org.openqa.selenium.PageLoadStrategy;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.interactions.Actions;
@@ -15,6 +12,7 @@ import java.util.List;
 public class GroupUnitedByJavaTest {
 
     private static final String URL_SELENIUM_TEST_PAGE = "https://www.selenium.dev/selenium/web/web-form.html";
+    private static final String URL_GOOGLE_COM = "https://www.google.com";
 
     @Test
     public void testDoubleClick() {
@@ -128,6 +126,43 @@ public class GroupUnitedByJavaTest {
         Collections.sort(sortedPrices);
 
         Assert.assertEquals(prices,sortedPrices);
+
+        driver.quit();
+    }
+
+    @Test
+    public void testTitleGoogle() {
+        WebDriver driver = new ChromeDriver();
+        driver.manage().window().maximize();
+
+        String expectedTitle = "Google";
+
+        driver.get(URL_GOOGLE_COM);
+
+        String actualTitle = driver.getTitle();
+
+        Assert.assertEquals(actualTitle, expectedTitle);
+
+        driver.quit();
+    }
+
+    @Test
+    public void testSearchBar() {
+        WebDriver driver = new ChromeDriver();
+        driver.manage().window().maximize();
+
+        String expectedURL = "https://www.google.ru/?hl=ru";
+
+        driver.get(URL_GOOGLE_COM);
+
+        WebElement searchBar = driver.findElement(By.xpath("//textarea[@title='Поиск']"));
+        searchBar.sendKeys("Google");
+        searchBar.sendKeys(Keys.ENTER);
+
+        WebElement lineResponse = driver.findElement(By.xpath("(//h3[.='Google'])[1]"));
+        lineResponse.click();
+
+        Assert.assertEquals(driver.getCurrentUrl(), expectedURL);
 
         driver.quit();
     }
