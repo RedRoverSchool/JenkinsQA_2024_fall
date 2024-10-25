@@ -64,4 +64,9 @@ public class AutoamigosGroupTest {
         Assert.assertEquals(driver.getCurrentUrl(), "https://demoqa.com/elements");
     }
 
+    @Test
+    public void testConflict() {
+
+    }
+
 }
