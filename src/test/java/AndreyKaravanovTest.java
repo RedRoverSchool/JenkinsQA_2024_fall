@@ -12,13 +12,13 @@ import java.time.Duration;
 public class AndreyKaravanovTest {
     @Test
     public  void testDemoQaForms () throws InterruptedException {
+
         WebDriver driver=new ChromeDriver();
         driver.get("https://demoqa.com/forms");
         driver.manage().timeouts().implicitlyWait(Duration.ofMillis(500));
 
         WebElement firstStep = driver.findElement(By.xpath("//html/body/div[2]/div/div/div/div[1]/div/div/div[2]/div/ul/li/span"));
         firstStep.click();
-
 
         WebElement name = driver.findElement(By.xpath("//html/body/div[2]/div/div/div/div[2]/div[2]/form/div[1]/div[2]/input"));
         name.sendKeys("Andrey");
@@ -40,7 +40,6 @@ public class AndreyKaravanovTest {
         date.sendKeys("19 Apr 1993");
         date.sendKeys(Keys.RETURN);
 
-        //Как  тестируются псевдоэлемнты По хпасу или цсс их брать?
         WebElement hobby = driver.findElement(By.xpath("//label[text()='Sports']"));
         JavascriptExecutor js = (JavascriptExecutor) driver;
         js.executeScript("arguments[0].click();", hobby);
