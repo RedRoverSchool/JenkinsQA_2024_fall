@@ -87,7 +87,6 @@ public class AutoamigosGroupTest {
 
     @Test
     public void testConflict() {
-
     }
 
 }

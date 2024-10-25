@@ -10,7 +10,6 @@ import org.testng.annotations.Test;
 
 import java.time.Duration;
 import java.util.List;
-import java.util.function.Consumer;
 
 public class GroupForwardToOfferTest {
     private WebDriver driver;
@@ -54,9 +53,8 @@ public class GroupForwardToOfferTest {
     }
 
 
-    @Test //(priority = 1)
+    @Test
     public void testGarfild() {
-        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(8));
         driver.get("https://garfield.by/?utm_source=google&utm_medium=cpc&utm_campaign=17619287198&utm_content=&utm_term=&gad_source=1&gclid=CjwKCAjw9p24BhB_EiwA8ID5BlycoY_gj8tdIObtHyJdlX0EleOFbNVrF1vokbRJm7b6uhC1n2gh9hoCTCwQAvD_BwE");
         driver.findElement(By.xpath("//a[contains(text(),'Щенки')]")).click();
 
@@ -68,9 +66,8 @@ public class GroupForwardToOfferTest {
     }
 
 
-    @Test //(priority = 2)
+    @Test
     public void testRunin() {
-        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(8));
         driver.get("https://runin.by/");
         driver.findElement(By.xpath("//*[@id=\"sub-header\"]/div[2]/div/div/a[1]")).click();
 
@@ -91,9 +88,8 @@ public class GroupForwardToOfferTest {
 
 
 
-    @Test //(priority = 3)
+    @Test
     public void testKufar() {
-        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(8));
         driver.get("https://re.kufar.by/");
         driver.findElement(By.xpath("//*[@id=\"__next\"]/div[3]/div/div/div/div/button")).click();
         driver.findElement(By.id("let_long")).click();
@@ -176,6 +172,19 @@ public class GroupForwardToOfferTest {
         WebElement basket = driver.findElement(By.xpath("//h1[@class='basket-section__header basket-section__header--main active']"));
 
         Assert.assertEquals(basket.getText(), "Корзина");
+    }
+
+    @Test
+    public void wikiTest() {
+
+        driver.get("https://ru.wikipedia.org/wiki/");
+        WebElement search = driver.findElement(By.xpath( "//*[@id='searchInput']"));
+        search.sendKeys("Java");
+
+        search.sendKeys(Keys.ENTER);
+
+        Assert.assertEquals(driver.findElement(By.xpath("//div[2]/div[2]/div[1]/a/span")).getText(), "Java");
+
     }
 
     @AfterTest
