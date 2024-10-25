@@ -219,5 +219,28 @@ public class GroupQAMyWayTest {
 
         driver.quit();
     }
+
+    @Test
+    public void testLogin() {
+        WebDriver driver = new ChromeDriver();
+
+        driver.get("https://practicetestautomation.com/practice-test-login/");
+
+        driver.findElement(By.xpath("//input[@name='username']")).sendKeys("student");
+        driver.findElement(By.xpath("//input[@name='password']")).sendKeys("Password123");
+
+        driver.findElement(By.xpath("//button[@id='submit']")).click();
+
+        String expectedUrl = "https://practicetestautomation.com/logged-in-successfully/";
+        String actualUrl = driver.getCurrentUrl();
+
+        if (actualUrl.equals(expectedUrl)) {
+            System.out.println("Login successful!");
+        } else {
+            System.out.println("Login failed!");
+        }
+
+        driver.quit();
+    }
 }
 
