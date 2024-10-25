@@ -666,4 +666,42 @@ public class NoGroupTest {
 
         driver.quit();
     }
+
+    @Test
+    public void testReebokChooseProductOfSpecificColor() {
+        WebDriver driver = new ChromeDriver();
+
+        driver.get("https://www.reebok.com/");
+        driver.manage().window().maximize();
+
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        WebElement womenMenu = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//a[@title='WOMEN']")));
+
+        Actions actions = new Actions(driver);
+        actions.moveToElement(womenMenu).perform();
+
+        WebElement hatsCategory = driver.findElement(By.xpath("//a[text()='Hats']"));
+        hatsCategory.click();
+
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//h1")));
+
+        actions.scrollToElement(driver.findElement(By.xpath("//span[text()='Activity']/../../..")));
+        WebElement colorFilter = wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//span[text()='Color']/../../..")));
+        colorFilter.click();
+
+        WebElement colorButton = driver.findElement(By.xpath("//input[@value='Color:\"purple\"']"));
+        ((JavascriptExecutor) driver).executeScript("arguments[0].click();", colorButton);
+
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//span[text()='Applied Filters']")));
+        WebElement selectedItem = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("(//a[@href='/p/100232204/reebok-logo-cuff-hat'])[2]")));
+        ((JavascriptExecutor) driver).executeScript("arguments[0].click();", selectedItem);
+
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//button[text()='Add to Cart']")));
+        WebElement selectedItemColor = driver.findElement(By.id("productInfoPanel"));
+
+        Assert.assertTrue(selectedItemColor.getText().contains("Midnight Plum"));
+
+        driver.quit();
+    }
 }
