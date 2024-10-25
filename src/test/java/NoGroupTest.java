@@ -603,4 +603,67 @@ public class NoGroupTest {
 
         driver.quit();
     }
+    @Test
+    public void totalSumTest() {
+        WebDriver driver = new ChromeDriver();
+        driver.get("https://www.saucedemo.com/");
+
+        WebElement userNameBox = driver.findElement(By.xpath("//*[@id='user-name']"));
+        userNameBox.sendKeys("standard_user");
+
+        WebElement passwordBox = driver.findElement(By.xpath("//*[@id=\"password\"]"));
+        passwordBox.sendKeys("secret_sauce");
+
+        WebElement loginButton = driver.findElement(By.xpath("//*[@id=\"login-button\"]"));
+        loginButton.click();
+
+        WebElement itemFleeceJacketAddToCart = driver.findElement(
+                By.xpath("//*[@id=\"add-to-cart-sauce-labs-fleece-jacket\"]"));
+        itemFleeceJacketAddToCart.click();
+
+        WebElement itemOnesie = driver.findElement(
+                By.xpath("//*[@id=\"add-to-cart-sauce-labs-onesie\"]"));
+        itemOnesie.click();
+
+        WebElement cartIcon = driver.findElement(By.xpath("//*[@id=\"shopping_cart_container\"]/a"));
+        cartIcon.click();
+
+        WebElement checkoutButton = driver.findElement(By.xpath("//*[@id=\"checkout\"]"));
+        checkoutButton.click();
+
+        WebElement firstNameField = driver.findElement(By.xpath("//*[@id=\"first-name\"]"));
+        firstNameField.sendKeys("Allie");
+
+        WebElement lastNameField = driver.findElement(By.xpath("//*[@id=\"last-name\"]"));
+        lastNameField.sendKeys("Smith");
+
+        WebElement zipCodeField = driver.findElement(By.xpath("//*[@id=\"postal-code\"]"));
+        zipCodeField.sendKeys("10001");
+
+        WebElement continueButton = driver.findElement(By.xpath("//*[@id=\"continue\"]"));
+        continueButton.click();
+
+        List<WebElement> prices = driver.findElements(By.className("inventory_item_price"));
+        double calculatedTotal = 0.0;
+
+        for (WebElement priceElement : prices) {
+            String priceText = priceElement.getText();
+            double price = Double.parseDouble(priceText.replace("$", "").trim());
+            calculatedTotal += price;
+        }
+        WebElement total = driver.findElement(
+                By.xpath("//*[@id=\"checkout_summary_container\"]/div/div[2]/div[6]"));
+        String totalText = total.getText();
+        double displayedTotal = Double.parseDouble(totalText.replace("Item total: $", ""));
+
+        Assert.assertEquals(calculatedTotal, displayedTotal, 0.01);
+
+        WebElement finishButton = driver.findElement(By.xpath("//*[@id=\"finish\"]"));
+        finishButton.click();
+
+        WebElement completeOrder = driver.findElement(By.xpath("//*[@id=\"checkout_complete_container\"]/h2"));
+        Assert.assertEquals(completeOrder.getText(), "Thank you for your order!");
+
+        driver.quit();
+    }
 }
