@@ -204,6 +204,7 @@ public class GroupUnitedByJavaTest {
         driver.quit();
     }
 
+    @Test
     public void testCheckRegisterFields() {
 
         WebDriver driver = new ChromeDriver();
