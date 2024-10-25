@@ -6,6 +6,10 @@ import org.openqa.selenium.chrome.ChromeOptions;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
 public class GroupLearnForWinTest {
 
     @Test
@@ -73,7 +77,7 @@ public class GroupLearnForWinTest {
 
 
     @Test
-    public void verifyLogout() throws InterruptedException{
+    public void verifyLogout() throws InterruptedException {
         ChromeOptions options = new ChromeOptions();
         options.addArguments("--no-sandbox");
 
@@ -108,6 +112,68 @@ public class GroupLearnForWinTest {
 
         WebElement loginButtonContainer = driver.findElement(By.xpath("//*[@id='login_button_container']"));
         Assert.assertTrue(loginButtonContainer.isDisplayed());
+
+        driver.quit();
+
+    }
+    @Test
+    public void testSubmitLanguageCapitalLetter() {
+
+        WebDriver driver = new ChromeDriver();
+
+        driver.get("https://www.99-bottles-of-beer.net/submitnewlanguage.html");
+
+        driver.findElement(By.name("submitlanguage")).click();
+        String textError = driver.findElement(By.xpath("//p[contains(text(), 'Precondition failed - Incomplete Input.')]")).getText();
+
+        String words[] = textError.split(" ");
+
+        boolean result = true; //Предполагаем, что все слова в строке написаны правильно
+
+        for (int i = 0; i < words.length; i++) {
+
+            if (words[i].isEmpty() || words[i].equals("-")) {
+                continue;
+            }
+
+            if (words[i].equals("failed")) {
+
+            } else {
+
+                if (!Character.isUpperCase(words[i].charAt(0))) {
+                    result = false;
+                    break;
+                }
+            }
+        }
+
+        Assert.assertTrue(result);
+
+        driver.quit();
+    }
+
+
+    @Test
+    public void testSubMenuItems() {
+
+        WebDriver driver = new ChromeDriver();
+
+        driver.get("https://www.99-bottles-of-beer.net");
+        driver.findElement(By.xpath("//*[@id='menu']/li[4]/a")).click();
+
+        List<String> listOfExpectedSubMenuItems = Arrays.asList(
+                "Top Rated",
+                "Top Rated Real",
+                "Top Rated Esoteric",
+                "Top Rated Assembly",
+                "Top Hits",
+                "New Languages this month",
+                "New Comments");
+        List<WebElement> listOfDashboardSubMenuItems = driver.findElements(By.xpath("//ul[@id = 'submenu']/li"));
+        List<String> extractedTexts = listOfDashboardSubMenuItems.stream()
+                .map(WebElement::getText)
+                .collect(Collectors.toList());
+        Assert.assertEquals(extractedTexts, listOfExpectedSubMenuItems);
 
         driver.quit();
 

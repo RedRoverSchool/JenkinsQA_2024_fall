@@ -27,6 +27,26 @@ public class VladimirIzTest {
 
     }
 
+    @Test
+    public void wildberriesTest() {
+
+        driver.get("https://www.wildberries.ru/");
+        WebElement search = driver.findElement(By.xpath("//*[@id='searchInput']"));
+        search.sendKeys("Джинсы");
+        search.sendKeys(Keys.ENTER);
+
+        driver.findElement(By.xpath("//button[@class='product-card__heart j-add-to-postpone']")).click();
+
+        driver.manage().getCookies();
+
+//        Assert.assertEquals(driver.findElement(By.xpath("//*[@id='catalog']/div/div[1]/div/h1")).getText(), "Джинсы");
+//
+//
+//        driver.quit();   //h1[@class='searching-results__title']  //*[@id='catalog']/div/div[1]/div/h1
+//
+
+    }
+
 
 
 
