@@ -610,4 +610,22 @@ public class GroupLeadsAndRoversTest {
         String expextedresult = "You have done a right click".trim().toLowerCase();
         Assert.assertEquals(actualResult, expextedresult);
     }
+
+    @Test
+    public void testBookSearchCountEmptyFieldWithFilter() throws InterruptedException {
+
+        startTestDemoQaCom();
+        openBookStoreApplication();
+        Thread.sleep(500);
+
+        WebElement serchBox = driver.findElement(By.xpath("//*[@class='form-control']"));
+        serchBox.sendKeys("No Starch Press");
+        Thread.sleep(150);
+
+        List<WebElement> listOfBooks = driver.findElements(By.xpath("//*[@class = 'rt-tbody']//div[@class='rt-tr-group']"));
+        Assert.assertEquals(listOfBooks.size(), 10);
+        listOfBooks.removeIf(nextBook -> !nextBook.getText().equals("    "));
+        Assert.assertEquals(listOfBooks.size(), 8);
+    }
+
 }
