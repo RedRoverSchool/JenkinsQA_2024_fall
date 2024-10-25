@@ -171,4 +171,23 @@ public class GroupUnitedByJavaTest {
 
         driver.quit();
     }
+
+    @Test
+    public void testCheckRegisterFields() {
+
+        WebDriver driver = new ChromeDriver();
+        driver.get("https://parabank.parasoft.com/parabank/register.htm");
+        driver.manage().window().fullscreen();
+
+        final List<String> expectedFields = List.of("First Name:", "Last Name:", "Address:",
+                "City:", "State:", "Zip Code:", "Phone #:", "SSN:", "Username:", "Password:", "Confirm:");
+
+        List<WebElement> fieldsElements = driver.findElements(By.xpath("//tbody/tr/td/b"));
+
+        List<String> actualFields = fieldsElements.stream().map(WebElement::getText).toList();
+
+        Assert.assertEquals(actualFields, expectedFields);
+
+        driver.quit();
+    }
 }
