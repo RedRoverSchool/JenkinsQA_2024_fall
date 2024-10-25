@@ -32,7 +32,7 @@ public class AutoamigosGroupTest {
         driver.get("https://demoqa.com/links");
         driver.manage().window().maximize();
 
-        String maimWindowHandle = driver.getWindowHandle();
+        String mainWindowHandle = driver.getWindowHandle();
 
         JavascriptExecutor js = (JavascriptExecutor) driver;
         js.executeScript("window.scrollBy(0, 1000);");
@@ -44,11 +44,24 @@ public class AutoamigosGroupTest {
 
         Set<String> allWindowsHandle = driver.getWindowHandles();
         for (String window: allWindowsHandle) {
-            if (!window.equals(maimWindowHandle)){
+            if (!window.equals(mainWindowHandle)){
                 driver.switchTo().window(window);
             }
         }
 
         Assert.assertEquals(driver.getCurrentUrl(), "https://demoqa.com/");
     }
+
+    @Test
+    public void testElementsCard() {
+
+        driver.get("https://demoqa.com/");
+        driver.manage().window().maximize();
+
+        WebElement elements = driver.findElement(By.xpath("//h5[text()='Elements']/../../.."));
+        elements.click();
+
+        Assert.assertEquals(driver.getCurrentUrl(), "https://demoqa.com/elements");
+    }
+
 }
