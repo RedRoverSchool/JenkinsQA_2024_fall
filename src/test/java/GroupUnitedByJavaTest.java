@@ -382,9 +382,9 @@ public class GroupUnitedByJavaTest {
     }
 
     @Test
-    public  void testDemoQaForms () {
+    public void testDemoQaForms() {
 
-        WebDriver driver=new ChromeDriver();
+        WebDriver driver = new ChromeDriver();
         driver.get("https://demoqa.com/forms");
         driver.manage().timeouts().implicitlyWait(Duration.ofMillis(500));
 
@@ -407,7 +407,7 @@ public class GroupUnitedByJavaTest {
         mobileNumber.sendKeys("8977977977");
 
         WebElement date = driver.findElement(By.xpath("//html/body/div[2]/div/div/div/div[2]/div[2]/form/div[5]/div[2]/div[1]/div/input"));
-        date.sendKeys(Keys.CONTROL+"a");
+        date.sendKeys(Keys.CONTROL + "a");
         date.sendKeys("19 Apr 1993");
         date.sendKeys(Keys.RETURN);
 
@@ -479,6 +479,18 @@ public class GroupUnitedByJavaTest {
         //Thread.sleep(500); //если хочется посмотреть что получилось в браузере
         driver.quit();
 
+    }
+
+    @Test
+    public void testLogin() {
+        WebDriver driver = new ChromeDriver();
+        driver.get("https://www.saucedemo.com/");
+        driver.findElement(By.id("user-name")).sendKeys("standard_user");
+        driver.findElement(By.id("password")).sendKeys("secret_sauce");
+        driver.findElement(By.id("login-button")).click();
+        Assert.assertEquals(driver.getCurrentUrl(), "https://www.saucedemo.com/inventory.html");
+        Assert.assertEquals(driver.findElement(By.className("title")).getText(), "Products");
+        driver.quit();
     }
 
 }
