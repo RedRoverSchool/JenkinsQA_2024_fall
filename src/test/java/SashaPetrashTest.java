@@ -11,6 +11,7 @@ public class SashaPetrashTest {
         WebDriver driver = new FirefoxDriver();
         @Test
         public void testPushClose() throws InterruptedException {
+
             //WebDriver driver2 = new EdgeDriver();
             driver.get("https://7karat.by/online?utm_source=google&utm_medium=cpc&utm_campaign=Performance%20Max%20%7C%20%D0%A3%D0%BA%D1%80%D0%B0%D1%88%D0%B5%D0%BD%D0%B8%D1%8F%20%7C%20%D0%9E%D0%B1%D1%89%D0%B0%D1%8F%20%7C%20%D0%9C%D0%B8%D0%BD%D1%81%D0%BA&utm_content=&gad_source=1&gclid=Cj0KCQjw4Oe4BhCcARIsADQ0cskQKODafOsATNV92RbW29t-mwBPkHFkWBHTPWI4ooVOuTFzIwiFZv8aAroEEALw_wcB");
 
