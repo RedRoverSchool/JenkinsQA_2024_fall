@@ -66,6 +66,18 @@ public class GroupWinnersTest {
         }
     }
 
+    @Test
+    public void actionTest() {
+
+        WebElement calculate = driver.findElement(By.xpath("//*[@id='korpus_calcul']/div[3]/div[1]/input"));
+        calculate.click();
+
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[@id='psgv_resn']/table/tbody/tr[1]/td/strong")));
+
+        Assert.assertEquals(driver.findElement(By.xpath("//*[@id='psgv_resn']/table/tbody/tr[1]/td/strong")).getText(), "Ошибки в задинии:");
+
+    }
+
     @AfterTest
     public void cleanEverything(){
         driver.quit();
