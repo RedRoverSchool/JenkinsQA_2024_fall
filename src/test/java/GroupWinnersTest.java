@@ -67,7 +67,7 @@ public class GroupWinnersTest {
     }
 
     @Test
-    public void actionTest() throws InterruptedException {
+    public void actionTest() {
 
         WebElement calculate = driver.findElement(By.xpath("//*[@id='korpus_calcul']/div[3]/div[1]/input"));
         calculate.click();
