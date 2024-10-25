@@ -1,5 +1,5 @@
-import org.openqa.selenium.PageLoadStrategy;
 import org.openqa.selenium.By;
+import org.openqa.selenium.PageLoadStrategy;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -173,6 +173,37 @@ public class GroupUnitedByJavaTest {
     }
 
     @Test
+    public void testAddToCardBag() {
+        WebDriver driver = new ChromeDriver();
+        driver.get("https://www.saucedemo.com/");
+
+        WebElement setUserName = driver.findElement(By.id("user-name"));
+        setUserName.click();
+        setUserName.sendKeys("standard_user");
+
+        WebElement setPassword = driver.findElement(By.id("password"));
+        setPassword.click();
+        setPassword.sendKeys("secret_sauce");
+
+        WebElement buttonLogin = driver.findElement(By.id("login-button"));
+        buttonLogin.click();
+
+        WebElement getBag = driver.findElement(By.id("item_4_title_link"));
+        getBag.click();
+
+        WebElement buttonAddToCard = driver.findElement(By.name("add-to-cart"));
+        buttonAddToCard.click();
+
+        WebElement buttonBasket = driver.findElement(By.className("shopping_cart_link"));
+        buttonBasket.click();
+
+        WebElement text = driver.findElement(By.xpath("//*[@data-test=\"inventory-item-name\"]"));
+
+        Assert.assertEquals(text.getText(), "Sauce Labs Backpack");
+
+        driver.quit();
+    }
+
     public void testCheckRegisterFields() {
 
         WebDriver driver = new ChromeDriver();
@@ -191,4 +222,3 @@ public class GroupUnitedByJavaTest {
         driver.quit();
     }
 }
-
