@@ -111,7 +111,7 @@ public class AutoamigosGroupTest {
 
         WebElement toggleButtonHomeOn = driver.findElement(By.xpath("//*[@id='tree-node']/ol/li/span/button"));
         toggleButtonHomeOn.click();
-        sleep(5000);
+        sleep(500);
 
         WebElement toggleButtonDesktopOn = driver.findElement(By.xpath("//*[@id='tree-node']/ol/li/ol/li[1]/span/button"));
         toggleButtonDesktopOn.click();
@@ -133,13 +133,10 @@ public class AutoamigosGroupTest {
         checkBoxNotesOff.click();
         sleep(500);
 
-        WebElement toggleButtonDesktopOff = driver.findElement(By.xpath("//*[@id='tree-node']/ol/li/ol/li[1]/span/button"));
-        toggleButtonDesktopOff.click();
+        WebElement toggleButtonHomeOff = driver.findElement(By.xpath("//*[@id='tree-node']/ol/li/span/button"));
+        toggleButtonHomeOff.click();
         sleep(500);
 
-        WebElement toggleButtonOff = driver.findElement(By.xpath("//*[@id='tree-node']/ol/li/span/button"));
-        toggleButtonOff.click();
-        sleep(500);
 
         WebElement openAllFolders = driver.findElement(By.xpath("//*[@id='tree-node']/div/button[1]"));
         openAllFolders.click();
@@ -149,5 +146,7 @@ public class AutoamigosGroupTest {
         closeAllFolders.click();
         sleep(500);
 
+        WebElement fieldCheckBoxHome = driver.findElement(By.xpath("/html/body/div[2]/div/div/div/div[2]/div[2]/div/ol/li/span/label/span[1]"));
+        Assert.assertTrue(fieldCheckBoxHome.isEnabled(), "Чек бокс должен быть доступным для нажатия");
     }
 }
