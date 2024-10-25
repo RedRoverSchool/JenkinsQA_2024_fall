@@ -76,17 +76,13 @@ public class AutoamigosGroupTest {
         WebElement expandAllButton = driver.findElement(By.xpath("//button[@aria-label='Expand all']"));
         expandAllButton.click();
 
+        //ищем элемент class='rct-checkbox' являющийся предшествующим sibling для элемента span[text()='Angular']
         WebElement angularCheckBox = driver.findElement(By.xpath("//span[text()='Angular']/preceding-sibling::span[@class='rct-checkbox']"));
         angularCheckBox.click();
 
         WebElement resultOfSelection = driver.findElement(By.xpath("//span[text()='angular']"));
 
         Assert.assertEquals(resultOfSelection.getText(), "angular");
-
-    }
-
-    @Test
-    public void testConflict() {
     }
 
 }
