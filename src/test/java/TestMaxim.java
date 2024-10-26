@@ -20,7 +20,7 @@ public class TestMaxim {
             WebElement itemTitle = driver.findElement(By.xpath("//section/div/div/div[2]/div[1]/div/div/div[1]/h4"));
             Assert.assertEquals(itemTitle.getText(), "Added!");
 
-            driver.quit(); //
+            driver.quit();
         }
 }
 
