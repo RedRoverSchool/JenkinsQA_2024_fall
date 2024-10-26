@@ -1,5 +1,6 @@
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -185,6 +186,23 @@ public class GroupForwardToOfferTest {
 
         Assert.assertEquals(driver.findElement(By.xpath("//div[2]/div[2]/div[1]/a/span")).getText(), "Java");
 
+    }
+
+    @Test
+    public void testGoToPageCallCenterSchedule(){
+
+        driver.get("https://www.drive2.ru/");
+
+        WebElement login = driver.findElement(By.xpath("//div[@class='o-group']/a[1]"));
+        login.click();
+
+        WebElement yandex = driver.findElement(By.xpath("//div[@CLASS='c-button__icon m-icon i-yandex']"));
+        yandex.click();
+
+        WebElement titleOfYandexId = driver.findElement(By.xpath("//h1[@CLASS='Title Title_align_center Title_view_default']"));
+        String actualResult = titleOfYandexId.getText();
+
+        Assert.assertEquals(actualResult,"Войдите с Яндекс ID");
     }
 
     @AfterTest
