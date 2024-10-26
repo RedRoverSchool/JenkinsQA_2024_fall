@@ -47,16 +47,17 @@ public class CoffeeCart {
 
     @Test //Проверяем стоимость товаров в корзине
     public void testCart() {
-        int i = RandomValue.getRandomValue(1, 9);
+        int i = RandomValue.getRandomValue(0, 8);
 
-        String path = String.format("//ul/li/div/div/div[@aria-label=\"%s\"]", CoffeeList.getGoffeeNameActual(i));
-        driver.findElement(By.xpath(path)).click();
+        String coffeeItem = String.format("//ul/li/div/div/div[@aria-label=\"%s\"]", CoffeeList.getGoffeeNameActual(i));
+        driver.findElement(By.xpath(coffeeItem)).click();
 
-        String Cart = driver.findElement(By.className("pay")).getText();
-        int index = Cart.indexOf("$");
-        Cart = Cart.substring(index + 1, Cart.length());
+        String cart = driver.findElement(By.className("pay")).getText();
+        int index = cart.indexOf("$");
+        cart = cart.substring(index + 1, cart.length());
 
-        System.out.println(Cart);
+        Assert.assertEquals(cart,CoffeeList.getCoffeePriceActual(i));
+
 
 
     }

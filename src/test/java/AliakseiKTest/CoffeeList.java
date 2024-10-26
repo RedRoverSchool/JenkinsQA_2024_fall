@@ -20,8 +20,10 @@ public class CoffeeList {
 
     //Получаем цену кофе из листа CoffeeList
     public static String getCoffeePriceActual(int i){
-        WebElement Coffee = getCoffeeListActual().get(i);
-        String price = Coffee.findElement(By.xpath("//small")).getText();
+        String path = String.format("//div[2]/ul/li[%s]/h4/small", i+1);
+        String price = driver.findElement(By.xpath(path)).getText();
+         //= Coffee.findElement().getText();
+        price = price.substring(1);
         return price;
     }
 
@@ -43,15 +45,15 @@ public class CoffeeList {
     //На сайте эти значения меняются несколько раз за день.
     public static Map<String, String> getCoffeMapExpected(){
         Map<String, String> coffeeMapExpected = new HashMap<>();
-        coffeeMapExpected.put("Espresso", "$10.00");
-        coffeeMapExpected.put("Espresso Macchiato", "$10.00");
-        coffeeMapExpected.put("Cappuccino", "$19.00");
-        coffeeMapExpected.put("Mocha", "$8.00");
-        coffeeMapExpected.put("Flat White", "$18.00");
-        coffeeMapExpected.put("Americano", "$7.00");
-        coffeeMapExpected.put("Cafe Latte", "$10.00");
-        coffeeMapExpected.put("Espresso Con Panna", "$14.00");
-        coffeeMapExpected.put("Cafe Breve", "$10.00");
+        coffeeMapExpected.put("Espresso", "10.00");
+        coffeeMapExpected.put("Espresso Macchiato", "10.00");
+        coffeeMapExpected.put("Cappuccino", "19.00");
+        coffeeMapExpected.put("Mocha", "8.00");
+        coffeeMapExpected.put("Flat White", "18.00");
+        coffeeMapExpected.put("Americano", "7.00");
+        coffeeMapExpected.put("Cafe Latte", "10.00");
+        coffeeMapExpected.put("Espresso Con Panna", "14.00");
+        coffeeMapExpected.put("Cafe Breve", "10.00");
         return coffeeMapExpected;
     }
 
