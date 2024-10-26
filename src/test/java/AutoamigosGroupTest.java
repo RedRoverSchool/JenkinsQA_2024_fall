@@ -110,4 +110,54 @@ public class AutoamigosGroupTest {
 
     }
 
+    @Test (description = "Практика работы с check box https://demoqa.com/checkbox")
+
+    public void testCheckBox() throws InterruptedException {
+
+        driver.get("https://demoqa.com/checkbox");
+        driver.manage().window().maximize();
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(6));
+
+        WebElement toggleButtonHomeOn = driver.findElement(By.xpath("//*[@id='tree-node']/ol/li/span/button"));
+        toggleButtonHomeOn.click();
+        sleep(500);
+
+        WebElement toggleButtonDesktopOn = driver.findElement(By.xpath("//*[@id='tree-node']/ol/li/ol/li[1]/span/button"));
+        toggleButtonDesktopOn.click();
+        sleep(500);
+
+        WebElement checkBoxNotesOn = driver.findElement(By.xpath("//*[@id='tree-node']/ol/li/ol/li[1]/ol/li[1]/span/label/span[1]"));
+        checkBoxNotesOn.click();
+        sleep(500);
+
+        WebElement checkBoxCommandsOn = driver.findElement(By.xpath("//*[@id='tree-node']/ol/li/ol/li[1]/ol/li[2]/span/label/span[1]"));
+        checkBoxCommandsOn.click();
+        sleep(500);
+
+        WebElement checkBoxCommandsOff = driver.findElement(By.xpath("//*[@id='tree-node']/ol/li/ol/li[1]/ol/li[2]/span/label/span[1]"));
+        checkBoxCommandsOff.click();
+        sleep(500);
+
+        WebElement checkBoxNotesOff = driver.findElement(By.xpath("//*[@id='tree-node']/ol/li/ol/li[1]/ol/li[1]/span/label/span[1]"));
+        checkBoxNotesOff.click();
+        sleep(500);
+
+        WebElement toggleButtonHomeOff = driver.findElement(By.xpath("//*[@id='tree-node']/ol/li/span/button"));
+        toggleButtonHomeOff.click();
+        sleep(500);
+
+        WebElement fieldCheckBoxHome = driver.findElement(By.xpath("/html/body/div[2]/div/div/div/div[2]/div[2]/div/ol/li/span/label/span[1]"));
+        Assert.assertTrue(fieldCheckBoxHome.isEnabled(), "Чек бокс должен быть доступным для нажатия");
+
+        WebElement openAllFolders = driver.findElement(By.xpath("//*[@id='tree-node']/div/button[1]"));
+        openAllFolders.click();
+        sleep(500);
+
+        WebElement closeAllFolders = driver.findElement(By.xpath("//*[@id='tree-node']/div/button[2]"));
+        closeAllFolders.click();
+        sleep(500);
+
+        
+    }
+
 }
