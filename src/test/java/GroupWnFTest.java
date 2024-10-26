@@ -7,6 +7,7 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import java.time.Duration;
+
 public class GroupWnFTest {
 
     private static final String USER_NAME = "Akiko";
@@ -30,8 +31,7 @@ public class GroupWnFTest {
         WebElement inputPerAdress = driver.findElement(By.id("permanentAddress"));
         inputPerAdress.sendKeys(USER_PER_ADDRESS);
 
-        // driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
-        JavascriptExecutor js1 = (JavascriptExecutor) driver; // скролл вниз
+        JavascriptExecutor js1 = (JavascriptExecutor) driver; 
         js1.executeScript("window.scrollBy(0,1000)");
 
         WebElement button = driver.findElement(By.xpath("//*[@id=\"submit\"]"));
