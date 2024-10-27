@@ -1,6 +1,4 @@
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.interactions.Actions;
@@ -25,6 +23,13 @@ public class GroupQualitySeekersTest {
     @AfterMethod
     public void closeBrowser() {
         driver.quit();
+    }
+
+    @BeforeMethod
+    public void BaseURL() {
+
+        driver.get("https://beta.chelznak.ru/made/ ");
+        driver.manage().window().maximize();
     }
 
     @Test
@@ -57,6 +62,7 @@ public class GroupQualitySeekersTest {
 
         driver.findElement(By.xpath("//*[@id=\"elements\"]/button")).click();
     }
+
     @Test
     public void selectCheckboxesTest() {
 
@@ -71,6 +77,7 @@ public class GroupQualitySeekersTest {
 
         checkbox1.isSelected();
     }
+
     @Test
     public void contextMenuTest() {
 
@@ -83,7 +90,7 @@ public class GroupQualitySeekersTest {
 
         Alert displayMessage = driver.switchTo().alert();
 
-        Assert.assertEquals(displayMessage.getText(),"You selected a context menu");
+        Assert.assertEquals(displayMessage.getText(), "You selected a context menu");
     }
 
     @Test
@@ -95,10 +102,11 @@ public class GroupQualitySeekersTest {
         WebElement elementB = driver.findElement(By.id("column-b"));
 
         Actions action = new Actions(driver);
-        action.dragAndDrop(elementA,elementB).build().perform();
+        action.dragAndDrop(elementA, elementB).build().perform();
 
         Assert.assertEquals(elementA.getText(), "B");
     }
+
     @Test
     public void isDisplayedTest() {
 
@@ -125,7 +133,7 @@ public class GroupQualitySeekersTest {
         Thread.sleep(3000);
 
         WebElement informMessage = driver.findElement(By.xpath("//*[@id=\"message\"]"));
-        Assert.assertEquals(informMessage.getText(),"It's gone!");
+        Assert.assertEquals(informMessage.getText(), "It's gone!");
 
         WebElement addButton = driver.findElement(By.xpath("//*[@id=\"checkbox-example\"]/button"));
         addButton.click();
@@ -183,16 +191,53 @@ public class GroupQualitySeekersTest {
 
     @Test
     public void goToHome() {
+
         ChromeOptions options = new ChromeOptions();
         options.addArguments("--no-sandbx");
+
         WebDriver driver = new ChromeDriver(options);
         driver.get("https://www.globalsqa.com/angularJs-protractor/BankingProject/#/manager");
         driver.manage().timeouts().implicitlyWait(Duration.ofMillis(2000));
+
         WebElement buttonHome = driver.findElement(By.xpath("//div/div/div[1]/button[1]"));
         buttonHome.click();
-        //WebElement buttonManager = driver.findElement(By.xpath("//div/div/div[2]/div/div[1]/div[2]/button"));
+
         WebElement buttonManager = driver.findElement(By.xpath("//div[1]/div[2]/button"));
         Assert.assertEquals(buttonManager.getText(), "Bank Manager Login");
         driver.quit();
     }
+
+
+    @Test
+    public void testTitle() {
+
+        String pageTitle = driver.getTitle();
+        Assert.assertEquals(pageTitle, "Изготовление наград на заказ в ТПП Челзнак");
+    }
+
+    @Test
+    public void test2() {
+
+        WebElement textBox = driver.findElement(By.xpath("/html/body/div[1]/header/div[2]/div/div/div[1]/div/form/input"));
+        textBox.sendKeys("Награда МВД");
+        textBox.sendKeys(Keys.ENTER);
+
+        String AssertMVD = driver.findElement(By.xpath("/html/body/div[1]/div[4]/div/div[1]/h1")).getText();
+        Assert.assertEquals(AssertMVD, "РЕЗУЛЬТАТОВ ПО ЗАПРОСУ «НАГРАДА МВД»: 235");
+    }
+
+    @Test
+    public void test3() throws InterruptedException {
+
+        WebElement imagePhone = driver.findElement(By.xpath("/html/body/div[1]/header/div[2]/div/div/div[2]/div[2]/a[1]"));
+        imagePhone.click();
+        Thread.sleep(1000);
+
+        String QuestionsAnswers = driver.findElement(By.xpath("//*[@id='modal-faq']/div[1]/div")).getText();
+        Assert.assertEquals(QuestionsAnswers, "ВОПРОСЫ И ОТВЕТЫ");
+    }
+
+
 }
+
+
