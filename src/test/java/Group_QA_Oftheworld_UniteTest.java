@@ -16,7 +16,7 @@ public class Group_QA_Oftheworld_UniteTest {
             WebDriver driver = new ChromeDriver();
             driver.manage().timeouts().implicitlyWait(Duration.ofMillis(500));
 
-            driver.get("https://text.ru/");
+            driver.get("https://text.ru/"); // юрл сайта
             driver.getTitle();
 
             // поиск поля для ввода текста
