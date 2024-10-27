@@ -287,6 +287,7 @@ public class GroupUnitedByJavaTest {
     public void testSuccessLogin() throws InterruptedException {
         ChromeDriver driver=new ChromeDriver();
         driver.get(URL);
+        driver.manage().window().maximize();
         Thread.sleep(500);
 
         WebElement username=driver.findElement(By.xpath("//*[@id='user-name']"));
@@ -310,6 +311,7 @@ public class GroupUnitedByJavaTest {
     public void testLockedUserLogin() throws InterruptedException {
         ChromeDriver driver=new ChromeDriver();
         driver.get(URL);
+        driver.manage().window().maximize();
 
         WebElement username=driver.findElement(By.xpath("//*[@id='user-name']"));
         username.sendKeys("locked_out_user");
@@ -333,6 +335,7 @@ public class GroupUnitedByJavaTest {
     public void testProblemUserLogin() throws InterruptedException {
         ChromeDriver driver=new ChromeDriver();
         driver.get(URL);
+        driver.manage().window().maximize();
 
         WebElement username=driver.findElement(By.xpath("//*[@id='user-name']"));
         username.sendKeys("problem_user");
