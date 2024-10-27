@@ -22,7 +22,7 @@ public class AutoamigosGroupTest {
         driver = new ChromeDriver();
     }
 
-    @AfterMethod
+//    @AfterMethod
     public void tearDown(){
         driver.quit();
     }
@@ -157,6 +157,23 @@ public class AutoamigosGroupTest {
         WebElement fieldPermanentAddress = driver.findElement(By.xpath("/html/body/div[2]/div/div/div/div[2]/div[2]/form/div[6]/div/p[4]"));
         String name3 = fieldPermanentAddress.getText();
         Assert.assertEquals(name3, "Permanent Address :Balti, Index:3120, Republic of Moldova, str. Alecu Ruso, ap. 36");
+    }
+
+    @Test(description = "Практика работы с radio button https://demoqa.com/radio-button")
+
+    public void radioButtonTest() throws InterruptedException{
+
+        driver.get("https://demoqa.com/radio-button");
+        driver.manage().window().maximize();
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(6));
+
+        WebElement radioButtonYes = driver.findElement(By.xpath("//*[@id='app']/div/div/div/div[2]/div[2]/div[2]/label"));
+        radioButtonYes.click();
+
+        sleep(500);
+
+        WebElement radioButtonImpressive = driver.findElement(By.xpath("//*[@id='app']/div/div/div/div[2]/div[2]/div[3]/label"));
+        radioButtonImpressive.click();
     }
 
     @Test (description = "Практика работы с check box https://demoqa.com/checkbox")
