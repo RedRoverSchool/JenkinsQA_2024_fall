@@ -65,12 +65,12 @@ public class GroupBugBustersTest{
     }
 
 
-    @Test
+    @Test //Ivan
     public void CookiesTest(){
         driver.get("https://monkeytype.com");
         Assert.assertTrue(clickElementAndVerifyDisappearance(By.cssSelector(".acceptAll")));
     }
-    @Test
+    @Test //Ivan
     public void ThirdPartyCookiesTest(){
         driver.get("https://monkeytype.com");
         AcceptCookies();
@@ -83,7 +83,7 @@ public class GroupBugBustersTest{
         startTyping();
         Assert.assertTrue(isResultDisplayed());
     }
-    @Test
+    @Test //Ivan
     public void modeWordsTest(){
         driver.get("https://monkeytype.com");
         AcceptAll();
@@ -103,7 +103,7 @@ public class GroupBugBustersTest{
     public void shutDown() {
         driver.quit();
     }
-
+  
     public boolean isPresent(By locator) {
         try {
             WebElement element = driver.findElement(locator);
@@ -112,26 +112,26 @@ public class GroupBugBustersTest{
             return false;
         }
     }
-    public void AcceptAll(){
+    public void AcceptAll(){ //Ivan
         AcceptCookies();
         AcceptThirdPartyCookies();
         sleep(500);
     }
-    private void AcceptCookies(){
+    private void AcceptCookies(){ //Ivan
         WebElement acceptAllButton = driver.findElement(By.className("acceptAll"));
         acceptAllButton.click();
     }
-    private void AcceptThirdPartyCookies(){
+    private void AcceptThirdPartyCookies(){ //Ivan
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(20));
         WebElement consentButton = driver.findElement(By.cssSelector(".fc-button.fc-cta-consent.fc-primary-button"));
         consentButton.click();
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
     }
-    private boolean clickElementAndVerifyDisappearance(By locator){
+    private boolean clickElementAndVerifyDisappearance(By locator){ //Ivan
         driver.findElement(locator).click();
         return wait.until(ExpectedConditions.invisibilityOfElementLocated(locator));
     }
-    private void startTyping(){
+    private void startTyping(){ //Ivan
         WebElement input = driver.findElement(By.id("wordsInput"));
         sleep(2000);
         List<WebElement> words;
@@ -152,7 +152,7 @@ public class GroupBugBustersTest{
         catch (ElementNotInteractableException ignored) {}
         sleep(500);
     }
-    private void selectMode(String option){
+    private void selectMode(String option){ //Ivan
         By locator;
         switch (option){
             case "time": locator = By.xpath("//button[@mode = 'time']"); break;
@@ -165,7 +165,7 @@ public class GroupBugBustersTest{
         driver.findElement(locator).click();
         sleep(500);
     }
-    private void selectOptionModeWords(int optionNumber){
+    private void selectOptionModeWords(int optionNumber){ //Ivan
         //Check if window selected
         WebElement optionWordsButton = driver.findElement(By.xpath("//button[@mode = 'words']"));
         if (!optionWordsButton.getAttribute("class").contains("active")) throw new SkipException("Mode words hasn't been selected");
@@ -187,7 +187,7 @@ public class GroupBugBustersTest{
         }
         sleep(500);
     }
-    private void disableAdd(){
+    private void disableAdd(){ //Ivan
         By locator = By.cssSelector("#ad_position_box");
         if(!isPresent(locator)) return;
         WebElement Add = driver.findElement(locator);
@@ -200,17 +200,38 @@ public class GroupBugBustersTest{
         return !resultContainer.getAttribute("class").contains("hidden");
     }
 
-    private void sleep(double milis)  {
+    private void sleep(double milis)  { //Ivan
         try {
             Thread.sleep((long) milis);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
     }
-    private static int getRandomNormalInt(int mean, int stdDev) {
+    private static int getRandomNormalInt(int mean, int stdDev) { //Ivan
         Random random = new Random();
         double gaussian = random.nextGaussian(); // Generates a number from a standard normal distribution
         double value = mean + gaussian * stdDev; // Scale it to the desired mean and standard deviation
         return (int) Math.abs(Math.round(value)); // Round to the nearest integer
+    }
+  
+  
+    @Test
+    public void loginTest() {
+// Олег Шулаев тест
+        driver.get("https://the-internet.herokuapp.com/login");
+
+        WebElement userNameBox = driver.findElement(By.xpath("//*[@id=\"username\"]"));
+        userNameBox.sendKeys("tomsmith");
+
+        WebElement passwordBox = driver.findElement(By.xpath("//*[@id=\"password\"]"));
+        passwordBox.sendKeys("SuperSecretPassword!");
+
+        WebElement loginButton = driver.findElement(By.xpath("//*[@id=\"login\"]/button"));
+        loginButton.click();
+
+        WebElement message = driver.findElement(By.xpath("//*[@id=\"content\"]/div/h4"));
+        Assert.assertEquals(message.getText(), "Welcome to the Secure Area. When you are done click logout below.");
+
+        // проверка пуш
     }
 }

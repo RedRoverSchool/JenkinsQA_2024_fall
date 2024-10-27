@@ -27,7 +27,7 @@ public class JuliaE {
         Thread.sleep(500);
         Assert.assertEquals(monthlyWeather.getText(), "Monthly");
 
-        driver.quit();
+        driver.quit(); //выход
 
     }
 
