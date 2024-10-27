@@ -12,20 +12,6 @@ import org.testng.annotations.Test;
 import java.time.Duration;
 
 public class GroupQualitySeekersTest {
-    @Test
-    public void bankManagerLogin() {
-        ChromeOptions options = new ChromeOptions();
-        options.addArguments("--no-sandbx");
-        WebDriver driver = new ChromeDriver(options);
-        driver.get("https://www.globalsqa.com/angularJs-protractor/BankingProject/#/login");
-        driver.manage().timeouts().implicitlyWait(Duration.ofMillis(1000));
-
-        WebElement buttonManager = driver.findElement(By.xpath("//div[1]/div[2]/button"));
-        buttonManager.click();
-        WebElement buttonAddCustomer = driver.findElement(By.xpath("//div[2]/div/div[1]/button[1]"));
-        Assert.assertEquals(buttonAddCustomer.getText(), "Add Customer");
-        driver.quit();
-    }
 
     WebDriver driver;
 
@@ -40,7 +26,25 @@ public class GroupQualitySeekersTest {
     }
 
     @Test
+    public void bankManagerLogin() {
+
+        ChromeOptions options = new ChromeOptions();
+        options.addArguments("--no-sandbx");
+        WebDriver driver = new ChromeDriver(options);
+        driver.get("https://www.globalsqa.com/angularJs-protractor/BankingProject/#/login");
+        driver.manage().timeouts().implicitlyWait(Duration.ofMillis(1000));
+
+        WebElement buttonManager = driver.findElement(By.xpath("//div[1]/div[2]/button"));
+        buttonManager.click();
+        WebElement buttonAddCustomer = driver.findElement(By.xpath("//div[2]/div/div[1]/button[1]"));
+        Assert.assertEquals(buttonAddCustomer.getText(), "Add Customer");
+        driver.quit();
+    }
+
+
+    @Test
     public void testRemoveTest() {
+
         driver.get("https://the-internet.herokuapp.com/add_remove_elements/");
 
         WebElement addElement = driver.findElement(By.xpath("//*[@id=\"content\"]/div/button"));
@@ -53,6 +57,7 @@ public class GroupQualitySeekersTest {
     }
     @Test
     public void selectCheckboxesTest() {
+
         driver.get("https://the-internet.herokuapp.com/checkboxes");
 
         WebElement checkbox1 = driver.findElement(By.xpath("//*[@id=\"checkboxes\"]/input[1]"));
@@ -66,6 +71,7 @@ public class GroupQualitySeekersTest {
     }
     @Test
     public void contextMenuTest() {
+
         driver.get("https://the-internet.herokuapp.com/context_menu");
 
         Actions action = new Actions(driver);
@@ -80,6 +86,7 @@ public class GroupQualitySeekersTest {
 
     @Test
     public void drugAndDropTest() {
+
         driver.get("https://the-internet.herokuapp.com/drag_and_drop");
 
         WebElement elementA = driver.findElement(By.id("column-a"));
@@ -92,6 +99,7 @@ public class GroupQualitySeekersTest {
     }
     @Test
     public void isDisplayedTest() {
+
         driver.get("https://the-internet.herokuapp.com/dynamic_content?with_content=static");
 
         WebElement refreshButton = driver.findElement(By.xpath("//*[@id=\"content\"]/div/p[2]/a"));
@@ -103,6 +111,7 @@ public class GroupQualitySeekersTest {
 
     @Test
     public void dynamicControlTest() throws InterruptedException {
+
         driver.get("https://the-internet.herokuapp.com/dynamic_controls");
 
         WebElement checkboxA = driver.findElement(By.xpath("//*[@id=\"checkbox\"]/input"));
@@ -127,6 +136,7 @@ public class GroupQualitySeekersTest {
 
     @Test
     public void findHiddenTest() {
+
         driver.get("https://the-internet.herokuapp.com/dynamic_loading");
 
         WebElement hiddenElement = driver.findElement(By.xpath("//*[@id=\"content\"]/div/a[1]"));
@@ -145,6 +155,7 @@ public class GroupQualitySeekersTest {
 
     @Test
     public void closeAd() {
+
         driver.get("https://the-internet.herokuapp.com/entry_ad");
         WebElement modalWindow = driver.findElement(By.xpath("//*[@id=\"modal\"]/div[2]"));
 
