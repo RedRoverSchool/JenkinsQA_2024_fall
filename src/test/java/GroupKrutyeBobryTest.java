@@ -13,6 +13,8 @@ import org.testng.annotations.BeforeGroups;
 import org.testng.annotations.Test;
 
 import java.time.Duration;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class GroupKrutyeBobryTest {
@@ -188,6 +190,32 @@ public class GroupKrutyeBobryTest {
 
     @AfterGroups("saucedemo")
     public void tearDown(){
+        driver.quit();
+    }
+
+    @Test
+    public void testFindCarMenu(){
+        ChromeOptions chromeOptions = new ChromeOptions();
+        chromeOptions.addArguments("--disable-search-engine-choice-screen");
+        chromeOptions.setPageLoadStrategy(PageLoadStrategy.EAGER);
+        WebDriver driver = new ChromeDriver(chromeOptions);
+        driver.get("https://www.toyota.com/brochures/cars-minivan/");
+        ArrayList<String> navMenu = new ArrayList<>(Arrays.asList("Cars & Minivan",
+            "Trucks",
+            "Crossovers & SUVs",
+            "Electrified",
+            "Other Brochures"));
+
+        int countTruth = 0;
+        WebElement list = driver.findElement(By.xpath("/html/body/div[1]/div/div[2]/div/div[2]/div/div/div/div/div/div[1]/div/div/nav/ul"));
+        List<WebElement> listItems = list.findElements(By.tagName("li"));
+        for (int i = 0; i < listItems.size(); i++) {
+            if (listItems.get(i).getText().equals(navMenu.get(i))){
+                countTruth++;
+//                System.out.println(listItems.get(i).getText()+ ',' + navMenu.get(i));
+            }
+        }
+        Assert.assertEquals(listItems.size(), countTruth);
         driver.quit();
     }
 }
