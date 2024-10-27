@@ -654,4 +654,61 @@ public class GroupUnitedByJavaTest {
 
         driver.quit();
     }
+
+    @Test
+    public void testAddReviewOnProduct(){
+        WebDriver driver = new ChromeDriver();
+        driver.manage().window().maximize();
+        driver.get("https://automationexercise.com/");
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+
+        WebElement productsButton = driver.findElement(By.xpath("//*[@id='header']//ul/li[2]"));
+        productsButton.click();
+        WebElement viewProductsButton = driver.findElement(By.xpath("//*//a[@href='/product_details/1']"));
+        JavascriptExecutor js = (JavascriptExecutor) driver;
+        js.executeScript("arguments[0].scrollIntoView(true);", viewProductsButton);
+        viewProductsButton.click();
+
+        WebElement inputName = driver.findElement(By.xpath("//*[@id='name']"));
+        js.executeScript("arguments[0].scrollIntoView(true);", inputName);
+        inputName.sendKeys("Specific Name");
+        WebElement inputEmail = driver.findElement(By.xpath("//*[@id='email']"));
+        inputEmail.sendKeys("yasministesting@domain.com");
+        WebElement inputReview = driver.findElement(By.xpath("//*[@id='review']"));
+        inputReview.sendKeys("Lorem ipsum dolor sit amet, consectetur adipiscing elit, " +
+                "sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. " +
+                "Proin tortor purus platea sit eu id nisi litora libero. " +
+                "Neque vulputate consequat ac amet augue blandit maximus aliquet congue. " +
+                "Pharetra vestibulum posuere ornare faucibus fusce dictumst orci aenean eu " +
+                "facilisis ut volutpat commodo senectus purus himenaeos fames primis convallis nisi.");
+        WebElement submitButton = driver.findElement(By.xpath("//*[@id='button-review']"));
+        submitButton.click();
+
+        WebElement alertSuccessTooltipAboutReview = driver.findElement(By.xpath("//*[@class='alert-success alert']"));
+        Assert.assertEquals(alertSuccessTooltipAboutReview.getText(), "Thank you for your review.");
+
+        driver.quit();
+
+    }
+
+    @Test
+    public void testVerifySubscriptionInMainPage(){
+        WebDriver driver = new ChromeDriver();
+        driver.manage().window().maximize();
+        driver.get("https://automationexercise.com/");
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+
+        WebElement inputSubscribeEmail = driver.findElement(By.xpath("//*[@id='susbscribe_email']"));
+        JavascriptExecutor js = (JavascriptExecutor) driver;
+        js.executeScript("window.scrollTo(0, document.body.scrollHeight);");
+        inputSubscribeEmail.sendKeys("yasministestingsubs+1@domain.com");
+        WebElement subscribeButton = driver.findElement(By.xpath("//*[@class='btn btn-default']"));
+        subscribeButton.click();
+
+        WebElement tooltipSuccessSubscription = driver.findElement(By.xpath("//*[@class='alert-success alert']"));
+        Assert.assertEquals(tooltipSuccessSubscription.getText(), "You have been successfully subscribed!");
+
+        driver.quit();
+
+    }
 }
