@@ -36,11 +36,11 @@ public class GroupLeadsAndRoversTest {
 
     private void openBookStoreApplication() {
         WebElement buttonBookStoreApplication = driver.findElement(By.xpath("//*[@class = 'card mt-4 top-card']//h5[contains(text(), 'Book Store Application')]"));
-        scroolDown();
+        scrollDown();
         buttonBookStoreApplication.click();
     }
 
-    private void scroolDown(){
+    private void scrollDown(){
         JavascriptExecutor js = (JavascriptExecutor) driver;
         js.executeScript("window.scrollTo(0, document.body.scrollHeight)");
     }
@@ -56,7 +56,7 @@ public class GroupLeadsAndRoversTest {
     }
 
     @BeforeMethod
-    private void initDriver() throws InterruptedException {
+    private void initDriver() {
         this.driver = new ChromeDriver();
     }
 
@@ -99,7 +99,7 @@ public class GroupLeadsAndRoversTest {
     }
 
     @Test
-    public void testCorectPassword() {
+    public void testCorrectPassword() {
 
         driver.manage().timeouts().implicitlyWait(Duration.ofMillis(500));
         driver.get("https://the-internet.herokuapp.com/login");
@@ -213,7 +213,7 @@ public class GroupLeadsAndRoversTest {
 
         List<WebElement> gridPanel = driver.findElements(By.xpath("//div[@ id = 'gridContainer']//li"));
         Assert.assertEquals(gridPanel.size(), 9);
-        scroolDown();
+        scrollDown();
         gridPanel.get(0).click();
         gridPanel.get(2).click();
         gridPanel.get(4).click();
@@ -272,7 +272,7 @@ public class GroupLeadsAndRoversTest {
         openBookStoreApplication();
         Thread.sleep(1000);
 
-        scroolDown();
+        scrollDown();
         WebElement fieldRowsPerPage = driver.findElement(By.xpath("//*[@aria-label='rows per page']"));
         fieldRowsPerPage.click();
         WebElement rowsPerPage5 = driver.findElement(By.xpath("//*[@aria-label='rows per page']//option[@value='5']"));
