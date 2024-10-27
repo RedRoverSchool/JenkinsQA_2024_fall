@@ -615,4 +615,40 @@ public class GroupUnitedByJavaTest {
 
         driver.quit();
     }
+
+    @Test
+    public void tesCheckingValidationMessageOnProductPage() {
+
+        WebDriver driver = new ChromeDriver();
+        driver.get("https://www.ebay.com/");
+
+        WebElement geoLink = driver.findElement(By.id("gh-eb-Geo-a-default"));
+        Actions actions = new Actions(driver);
+        actions.moveToElement(geoLink).perform();
+
+        WebElement geoEnLink = driver.findElement(By.id("gh-eb-Geo-a-en"));
+        geoEnLink.click();
+
+        WebElement searchInput = driver.findElement(By.id("gh-ac"));
+        searchInput.sendKeys("New Casio G-shock GBX-100-2 Digital G-lide Surfers Bluetooth Tide Blue Watch"
+                , Keys.ENTER);
+
+        WebElement item = driver.findElement(By.id("item4021337616"));
+        item.click();
+
+        List<String> tabs = new ArrayList<>(driver.getWindowHandles());
+        driver.switchTo().window(tabs.get(1));
+
+        WebElement quantityInput = driver.findElement(By.xpath("//input[@name='quantity']"));
+        quantityInput.sendKeys(Keys.BACK_SPACE, "-");
+
+        WebElement validationMessage = driver.findElement(By.id("qtyErrMsg"));
+        String validationText = validationMessage.getText();
+        String colorText =  validationMessage.getCssValue("color");
+
+        Assert.assertEquals(validationText, "Please enter a quantity of 1 or more");
+        Assert.assertEquals(colorText, "rgba(213, 11, 11, 1)");
+
+        driver.quit();
+    }
 }
