@@ -628,4 +628,41 @@ public class GroupLeadsAndRoversTest {
         Assert.assertEquals(listOfBooks.size(), 8);
     }
 
+    @Test
+    public void testCannotLoginWithoutLoginAndPassword() {
+        driver.get("https://parabank.parasoft.com/parabank/index.htm");
+        driver.findElement(By.xpath("//input[@type='submit']")).click();
+        String error = driver.findElement(By.cssSelector("#rightPanel .title")).getText();
+        String errorMessage = driver.findElement(By.cssSelector("#rightPanel .error")).getText();
+        Assert.assertEquals(error, "Error!");
+        Assert.assertEquals(errorMessage, "Please enter a username and password.");
+    }
+    @Test
+    public void testCannotCreateNewAccountWithoutRequiredData() {
+        driver.get("https://parabank.parasoft.com/parabank/index.htm");
+        driver.findElement(By.xpath("//a[contains(@href,'register.htm')]")).click();
+        driver.findElement(By.xpath("//input[@value='Register']")).click();
+        Assert.assertEquals(driver.findElement(By.xpath("//span[@id='customer.firstName.errors']")).getText(), "First name is required.");
+        Assert.assertEquals(driver.findElement(By.xpath("//span[@id='customer.lastName.errors']")).getText(), "Last name is required.");
+        Assert.assertEquals(driver.findElement(By.xpath("//span[@id='customer.address.street.errors']")).getText(), "Address is required.");
+        Assert.assertEquals(driver.findElement(By.xpath("//span[@id='customer.address.city.errors']")).getText(), "City is required.");
+        Assert.assertEquals(driver.findElement(By.xpath("//span[@id='customer.address.state.errors']")).getText(), "State is required.");
+        Assert.assertEquals(driver.findElement(By.xpath("//span[@id='customer.address.zipCode.errors']")).getText(), "Zip Code is required.");
+        Assert.assertEquals(driver.findElement(By.xpath("//span[@id='customer.ssn.errors']")).getText(), "Social Security Number is required.");
+        Assert.assertEquals(driver.findElement(By.xpath("//span[@id='customer.username.errors']")).getText(), "Username is required.");
+        Assert.assertEquals(driver.findElement(By.xpath("//span[@id='customer.password.errors']")).getText(), "Password is required.");
+        Assert.assertEquals(driver.findElement(By.xpath("//span[@id='repeatedPassword.errors']")).getText(), "Password confirmation is required.");
+    }
+
+    @Test
+    public void testLeftMenuList() {
+        driver.get("https://parabank.parasoft.com/parabank/index.htm");
+        List <WebElement> leftMenuList = driver.findElements(By.xpath("//ul[@class='leftmenu']/li"));
+        List <String> expectedleftMenuList = List.of("Solutions", "About Us", "Services", "Products", "Locations", "Admin Page");
+        for (int i = 0; i < leftMenuList.size(); i++) {
+            Assert.assertEquals(leftMenuList.get(i).getText(), expectedleftMenuList.get(i));
+        }
+    }
+
+
 }
