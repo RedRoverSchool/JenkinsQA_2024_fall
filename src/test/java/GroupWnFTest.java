@@ -1,4 +1,5 @@
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -7,25 +8,68 @@ import org.testng.annotations.Test;
 
 import java.time.Duration;
 
+public class GroupWnFTest {
 
+    private static final String USER_NAME = "Akiko";
+    private static final String USER_EMAIL = "iakikoaokii@gmail.com";
+    private static final String USER_ADDRESS = "Moscow";
+    private static final String USER_PER_ADDRESS = "Street 1, House 1";
+    @Test
+    public void testDemoQATextBox() {
+        WebDriver driver = new ChromeDriver();
+        driver.get("https://demoqa.com/text-box");
 
-    public class WnFMariaTest {
+        WebElement inputName = driver.findElement(By.id("userName"));
+        inputName.sendKeys(USER_NAME);
 
-        @Test
-        public void test() {
+        WebElement inputEmail = driver.findElement(By.id("userEmail"));
+        inputEmail.sendKeys(USER_EMAIL);
+
+        WebElement inputAdress = driver.findElement(By.id("currentAddress"));
+        inputAdress.sendKeys(USER_ADDRESS);
+
+        WebElement inputPerAdress = driver.findElement(By.id("permanentAddress"));
+        inputPerAdress.sendKeys(USER_PER_ADDRESS);
+
+        JavascriptExecutor js1 = (JavascriptExecutor) driver; 
+        js1.executeScript("window.scrollBy(0,1000)");
+
+        WebElement button = driver.findElement(By.xpath("//*[@id=\"submit\"]"));
+        button.click();
+
+        WebElement actualName = driver.findElement(By.id("name"));
+        WebElement actualEmail = driver.findElement(By.id("email"));
+        WebElement actualAddress = driver.findElement(By.xpath("//p[@id='currentAddress']"));
+        WebElement actualPerAddress = driver.findElement(By.xpath("//p[@id='permanentAddress']"));
+
+        Assert.assertEquals(actualName.getText(), "Name:" + USER_NAME);
+        Assert.assertEquals(actualEmail.getText(), "Email:" + USER_EMAIL);
+        Assert.assertEquals(actualAddress.getText(), "Current Address :" + USER_ADDRESS);
+        Assert.assertEquals(actualPerAddress.getText(), "Permananet Address :" + USER_PER_ADDRESS);
+
+        driver.quit();
+    }
+
+    @Test
+        public void testMango() {
 
             WebDriver driver = new ChromeDriver();
+            driver.manage().window().maximize();
             driver.get("https://shop.mango.com/uz/en");
             driver.getTitle();
             driver.manage().timeouts().implicitlyWait(Duration.ofMillis(500));
 
             // Нашли кнопку с кукисами и нажали "accept all cookies"
-            WebElement submitButton = driver.findElement(By.xpath("//*[@id=\"cookies.button.acceptAll\"]/span"));
+            WebElement submitButton = driver.findElement(By.id("cookies.button.acceptAll"));
             submitButton.click();
 
+            // Нааходим кнопку "Accept", что мы в Узбекистане
+            WebElement submitButton1 = driver.findElement(By.id("changeCountryAccept"));
+            submitButton1.click();
+
             // Нашли кнопку Woman и перешли в раздел женской одежды
-            WebElement submitButton2 = driver.findElement(By.xpath("//*[@id=\"app\"]/main/div/div[1]/div/ul/li[1]/a"));
-            submitButton2.click();
+            WebElement submitButton3 = driver.findElement(By.xpath("//a[contains(@href, 'women/promotion_7914393e')]"));
+            submitButton3.click();
 
             // Сравниваем URL ожидаемый и фактический
             String expectedUrl = "https://shop.mango.com/uz/en/c/women/promotion_7914393e";
@@ -59,4 +103,4 @@ import java.time.Duration;
 
             driver.quit();
         }
-    }
+}
