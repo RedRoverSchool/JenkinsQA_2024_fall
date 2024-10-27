@@ -131,4 +131,23 @@ public class GroupAlexLeoTest {
         String confirmationMessage = driver.findElement(By.xpath("//div[@class = 'row contact']//h2")).getText();
         Assert.assertEquals(confirmationMessage, "Thanks for getting in touch John!");
     }
+
+    @Test(description = " Create an Account https://www.saucedemo.com/")
+    public void testLogIn() {
+
+        WebDriver driver = new ChromeDriver();
+        driver.get("https://www.saucedemo.com/");
+        driver.manage().window().maximize();
+
+        WebElement usernameInput = driver.findElement(By.xpath("//input[@placeholder='Username']"));
+        usernameInput.sendKeys("problem_user");
+
+        WebElement passwordInput = driver.findElement(By.xpath("//input[@placeholder='Password']"));
+        passwordInput.sendKeys("secret_sauce");
+
+        WebElement clickLoginButton = driver.findElement(By.xpath("//input[@class='submit-button btn_action']"));
+        clickLoginButton.click();
+
+        driver.quit();
+    }
 }

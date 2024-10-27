@@ -8,6 +8,7 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import java.time.Duration;
 import java.util.Set;
 
 import static java.lang.Thread.sleep;
@@ -83,7 +84,6 @@ public class AutoamigosGroupTest {
         WebElement resultOfSelection = driver.findElement(By.xpath("//span[text()='angular']"));
 
         Assert.assertEquals(resultOfSelection.getText(), "angular");
-
     }
 
     @Test
@@ -108,6 +108,55 @@ public class AutoamigosGroupTest {
 
         Assert.assertEquals(message.getText(), "Yes");
 
+    }
+
+    @Test(description = "Практика заполнение Text Box https://demoqa.com/text-box ")
+
+    public void TextBoxTest() throws InterruptedException {
+
+        driver.get("https://demoqa.com/text-box");
+        driver.manage().window().maximize();
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(4));
+
+        WebElement fullName = driver.findElement(By.xpath("//*[@id='userName']"));
+        fullName.sendKeys("Max");
+
+        WebElement email = driver.findElement(By.xpath("//*[@id='userEmail']"));
+        email.sendKeys("max@mail.ru");
+
+        WebElement currentAddress = driver.findElement(By.xpath("//*[@id='currentAddress']"));
+        currentAddress.sendKeys("Balti, Index:3120, Republic of Moldova, str. Alecu Ruso, ap. 36");
+
+        WebElement permanentAddress = driver.findElement(By.xpath("//*[@id='permanentAddress']"));
+        permanentAddress.sendKeys("Balti, Index:3120, Republic of Moldova, str. Alecu Ruso, ap. 36");
+
+        // Прокрутка к элементу, найденному по XPath
+        WebElement element = driver.findElement(By.xpath("//*[@id='submit']"));
+        JavascriptExecutor js = (JavascriptExecutor) driver;
+        js.executeScript("arguments[0].scrollIntoView(true);", element);
+
+        sleep(500);
+
+        WebElement buttonSubmit = driver.findElement(By.xpath("//*[@id='submit']"));
+        buttonSubmit.click();
+
+        sleep(500);
+
+        WebElement fieldName = driver.findElement(By.xpath("//*[@id='name']"));
+        String name = fieldName.getText();
+        Assert.assertEquals(name, "Name:Max");
+
+        WebElement fieldEmail = driver.findElement(By.xpath("//*[@id='email']"));
+        String name1 = fieldEmail.getText();
+        Assert.assertEquals(name1, "Email:max@mail.ru");
+
+        WebElement fieldCurrentAddress = driver.findElement(By.xpath("/html/body/div[2]/div/div/div/div[2]/div[2]/form/div[6]/div/p[3]"));
+        String name2 = fieldCurrentAddress.getText();
+        Assert.assertEquals(name2,"Current Address :Balti, Index:3120, Republic of Moldova, str. Alecu Ruso, ap. 36");
+
+        WebElement fieldPermanentAddress = driver.findElement(By.xpath("/html/body/div[2]/div/div/div/div[2]/div[2]/form/div[6]/div/p[4]"));
+        String name3 = fieldPermanentAddress.getText();
+        Assert.assertEquals(name3, "Permanent Address :Balti, Index:3120, Republic of Moldova, str. Alecu Ruso, ap. 36");
     }
 
     @Test (description = "Практика работы с check box https://demoqa.com/checkbox")
@@ -156,8 +205,6 @@ public class AutoamigosGroupTest {
         WebElement closeAllFolders = driver.findElement(By.xpath("//*[@id='tree-node']/div/button[2]"));
         closeAllFolders.click();
         sleep(500);
-
-        
     }
 
 }
