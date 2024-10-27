@@ -11,7 +11,6 @@ public class AidaMontoyaTest {
 
 
     @Test
-
     public void testDutchbros() throws InterruptedException {
 
         ChromeOptions options = new ChromeOptions();
@@ -29,14 +28,12 @@ public class AidaMontoyaTest {
         Thread.sleep(1000);
         clickButton.sendKeys(Keys.RETURN);
 
-
         Assert.assertEquals("CARAMEL PUMPKIN BRULEE BREVE", "CARAMEL PUMPKIN BRULEE BREVE");
 
         driver.quit();
     }
 
     @Test
-
     public void testLibrary() throws InterruptedException {
 
         ChromeOptions options = new ChromeOptions();
