@@ -2,6 +2,7 @@ import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.Test;
@@ -309,6 +310,21 @@ public class GroupCodeBrewTest {
         Assert.assertEquals(enterCityLabel.getText(), "Enter zip code, city, or full address");
 
         driver.quit();
+    }
+
+    @Test
+    public void testDropDownMenu () {
+        WebDriver webDriver = new ChromeDriver();
+        webDriver.get("https://qa-practice.netlify.app/dropdowns");
+
+        WebElement dropDownMenu = webDriver.findElement(By.xpath("//select[@id='dropdown-menu']"));
+        Select pickCounty = new Select(dropDownMenu);
+        pickCounty.selectByVisibleText("Austria");
+
+        String selectedOption = pickCounty.getFirstSelectedOption().getText();
+        Assert.assertEquals(selectedOption, "Austria", "Selected country is not Austria");
+
+        webDriver.quit();
     }
 
 }
