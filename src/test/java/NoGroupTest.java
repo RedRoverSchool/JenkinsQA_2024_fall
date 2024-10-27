@@ -9,6 +9,7 @@ import org.testng.annotations.Test;
 
 import java.awt.*;
 import java.time.Duration;
+import java.util.ArrayList;
 import java.util.List;
 
 public class NoGroupTest {
@@ -733,6 +734,46 @@ public class NoGroupTest {
         Assert.assertEquals(message.getText(), "Il tracking inserito non è stato trovato nel nostro database.\n" +
                 "Per assistenza contattare il servizio clienti.");
 
+        driver.quit();
+    }
+
+    @Test
+    public void testProducts() {
+        WebDriver driver = new ChromeDriver();
+        driver.get("https://openweather.co.uk/");
+        WebElement productButton = driver.findElement(By.xpath("//*[@id='desktop-menu']/ul/li[1]/a"));
+        productButton.click();
+        Assert.assertEquals(driver.getTitle(), "Products - OpenWeather");
+        System.out.println(driver.getWindowHandles());
+        driver.quit();
+    }
+
+    @Test
+    public void testDashboard() {
+        WebDriver driver = new ChromeDriver();
+        driver.get("https://openweather.co.uk/");
+        WebElement dashboardButton = driver.findElement(By.xpath("//*[@id='desktop-menu']/ul/li[2]/a"));
+        dashboardButton.click();
+        List<String> tabs = new ArrayList<>(driver.getWindowHandles());
+        driver.switchTo().window(tabs.get(1));
+        Assert.assertEquals(driver.getCurrentUrl(), "https://dashboard.openweather.co.uk/");
+        driver.quit();
+    }
+
+    @Test
+    public void testHowToBuyButton() {
+        WebDriver driver = new ChromeDriver();
+        driver.get("https://openweather.co.uk/");
+        WebElement dashboardButton = driver.findElement(By.xpath("//*[@id='desktop-menu']/ul/li[3]/a"));
+        dashboardButton.click();
+        driver.manage().window().maximize();
+        JavascriptExecutor js = (JavascriptExecutor) driver;
+        js.executeScript("window.scrollBy(0,2500)");
+        WebElement howToBuyButton = driver.findElement(By.xpath("//*[@id='current']/div/div/div/a[1]"));
+        js.executeScript("arguments[0].click();", howToBuyButton);
+        List<String> tabs = new ArrayList<>(driver.getWindowHandles());
+        driver.switchTo().window(tabs.get(1));
+        Assert.assertEquals(driver.getCurrentUrl(), "https://openweather.co.uk/how-to-buy");
         driver.quit();
     }
 }
