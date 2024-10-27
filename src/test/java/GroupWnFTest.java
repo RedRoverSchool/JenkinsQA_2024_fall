@@ -4,6 +4,8 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.testng.Assert;
+import org.testng.annotations.AfterTest;
+import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
 import java.time.Duration;
@@ -14,9 +16,22 @@ public class GroupWnFTest {
     private static final String USER_EMAIL = "iakikoaokii@gmail.com";
     private static final String USER_ADDRESS = "Moscow";
     private static final String USER_PER_ADDRESS = "Street 1, House 1";
+    private static final String URL = "https://websters.dev/";
+    private static WebDriver driver;
+
+    @BeforeTest
+    public void setUp() {
+        driver = new ChromeDriver();
+        driver.manage().window().maximize();
+    }
+
+    @AfterTest
+    public void closeUp() {
+        driver.quit();
+    }
+
     @Test
     public void testDemoQATextBox() {
-        WebDriver driver = new ChromeDriver();
         driver.get("https://demoqa.com/text-box");
 
         WebElement inputName = driver.findElement(By.id("userName"));
@@ -47,14 +62,11 @@ public class GroupWnFTest {
         Assert.assertEquals(actualAddress.getText(), "Current Address :" + USER_ADDRESS);
         Assert.assertEquals(actualPerAddress.getText(), "Permananet Address :" + USER_PER_ADDRESS);
 
-        driver.quit();
     }
 
     @Test
         public void testMango() {
 
-            WebDriver driver = new ChromeDriver();
-            driver.manage().window().maximize();
             driver.get("https://shop.mango.com/uz/en");
             driver.getTitle();
             driver.manage().timeouts().implicitlyWait(Duration.ofMillis(500));
@@ -101,6 +113,45 @@ public class GroupWnFTest {
             String actualUrl2 = driver.getCurrentUrl();
             Assert.assertEquals(actualUrl2, expectedUrl2, "URL не соответствует ожидаемому!");
 
-            driver.quit();
         }
+
+    @Test
+    public static void startTest() throws InterruptedException {
+        driver.get(URL);
+        Thread.sleep(1500);
+        WebElement mainTitle = driver.findElement(By.xpath("//h1"));
+        Assert.assertEquals(mainTitle.getText().toUpperCase(), "WEBSTERS");
+    }
+
+    @Test
+    public static void modalFormTest(){
+        driver.get(URL);
+
+        driver.manage().timeouts().implicitlyWait(Duration.ofMillis(1500));
+
+        WebElement headerButton = driver.findElement(By.xpath("//button[contains(@class, 'Header_button')]"));
+        headerButton.click();
+
+        driver.manage().timeouts().implicitlyWait(Duration.ofMillis(1500));
+
+        WebElement nameField = driver.findElement(By.xpath("//label[@for='name' and contains(@class, 'Modal')]//input"));
+        nameField.sendKeys("Иван Иванов");
+
+        WebElement emailField = driver.findElement(By.xpath("//label[@for='email' and contains(@class, 'Modal')]//input"));
+        emailField.sendKeys("oaogku@fexbox.org");
+
+        WebElement messageField = driver.findElement(By.xpath("//label[@for='message' and contains(@class, 'Modal')]//textarea"));
+        messageField.sendKeys("поставьте капчу =)");
+
+        WebElement submitButton = driver.findElement(By.xpath("//button[@type='submit' and contains(@class, 'Modal')]"));
+        submitButton.click();
+
+        driver.manage().timeouts().implicitlyWait(Duration.ofMillis(1500));
+
+        WebElement finishModal = driver.findElement(By.xpath("//div[contains(@class, 'Modal_finish')]//p"));
+
+        Assert.assertEquals(finishModal.getText(), "Thank you! Our manager will contact you as soon as possible");
+    }
+
+
 }
