@@ -24,7 +24,7 @@ public class AutoamigosGroupTest {
         driver = new ChromeDriver();
     }
 
-//    @AfterMethod
+    @AfterMethod
     public void tearDown(){
         driver.quit();
     }
@@ -100,11 +100,8 @@ public class AutoamigosGroupTest {
 
         sleep(1000);
 
-//        WebElement yesRadioButton =
-                driver.findElement(By.xpath("//div/input[@id='yesRadio']")).click();////label[@for='yesRadio']/preceding-sibling::input"
-//        yesRadioButton.click();
-
-        sleep(3000);
+        WebElement yesRadioButton = driver.findElement(By.xpath("//input[@id='yesRadio']/following-sibling::label"));
+        yesRadioButton.click();
 
         WebElement message = driver.findElement(By.xpath("//p/span[@class='text-success']"));
 
