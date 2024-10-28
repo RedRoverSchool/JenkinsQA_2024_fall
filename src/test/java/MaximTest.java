@@ -5,7 +5,7 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-public class TestMaxim {
+public class MaximTest {
 
         @Test
         public void testAutomation() throws InterruptedException {
