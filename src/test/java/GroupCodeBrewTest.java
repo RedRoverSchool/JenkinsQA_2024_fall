@@ -341,8 +341,48 @@ public class GroupCodeBrewTest {
     public void testOpenApp() {
 
     }
+
+    @Test
+    public void formSubmission() {
+        WebDriver driver = new ChromeDriver();
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
+
+        driver.get("https://demoqa.com/automation-practice-form");
+
+        driver.findElement(By.id("firstName")).sendKeys("Nickolay");
+        driver.findElement(By.id("lastName")).sendKeys("Schmidt");
+        driver.findElement(By.id("userEmail")).sendKeys("Schmidt123@gmail.com");
+
+        driver.findElement(By.xpath("//*[@id=\"genterWrapper\"]/div[2]/div[1]")).click();
+
+        driver.findElement(By.id("userNumber")).sendKeys("3236228088");
+
+        driver.findElement(By.xpath("//*[@id='dateOfBirthInput']")).click();
+        driver.findElement(By.className("react-datepicker__month-select")).sendKeys("August");
+        driver.findElement(By.className("react-datepicker__year-select")).sendKeys("1987");
+        driver.findElement(By.xpath("//div[@aria-label='Choose Saturday, August 15th, 1987']")).click();
+
+        // Selecting hobbies
+        driver.findElement(By.cssSelector("label[for='hobbies-checkbox-1']")).click();
+
+        WebElement uploadElement = driver.findElement(By.id("uploadPicture"));
+        uploadElement.sendKeys("/Users/michaelluts/Desktop/Likari.jpg");
+
+        // Filling current address
+        driver.findElement(By.id("currentAddress")).sendKeys("Los Angeles");
+
+        driver.findElement(By.id("state")).click();
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(1));
+        driver.findElement(By.xpath("//div[text()='NCR']")).click();
+
+        driver.findElement(By.id("city")).click();
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(1));
+        driver.findElement(By.xpath("//div[text()='Delhi']")).click();
+
+        driver.findElement(By.id("submit")).click();
+
+        driver.quit();
+    }
 }
-
-
 
 
