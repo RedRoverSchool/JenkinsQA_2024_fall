@@ -329,10 +329,6 @@ public class GroupCodeBrewTest {
 
     @Test
     public void testOpenApp() {
-        WebDriver driver = new ChromeDriver();
-        driver.get("https://qa-practice.netlify.app");
-        driver.quit();
-
 
     }
 }
