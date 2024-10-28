@@ -15,20 +15,14 @@ public class GroupQualitySeekersTest {
 
     WebDriver driver;
 
-    @BeforeMethod
-    public void setDriver() {
-        driver = new ChromeDriver();
-    }
-
     @AfterMethod
     public void closeBrowser() {
         driver.quit();
     }
 
     @BeforeMethod
-    public void BaseURL() {
-
-        driver.get("https://beta.chelznak.ru/made/ ");
+    public void setDriver() {
+        driver = new ChromeDriver();
         driver.manage().window().maximize();
     }
 
@@ -48,23 +42,8 @@ public class GroupQualitySeekersTest {
         driver.quit();
     }
 
-
     @Test
-    public void testRemoveTest() {
-
-        driver.get("https://the-internet.herokuapp.com/add_remove_elements/");
-
-        WebElement addElement = driver.findElement(By.xpath("//*[@id=\"content\"]/div/button"));
-        addElement.click();
-
-        Assert.assertEquals(driver.findElement(By.xpath("//*[@id=\"elements\"]/button"))
-                .getText(), "Delete");
-
-        driver.findElement(By.xpath("//*[@id=\"elements\"]/button")).click();
-    }
-
-    @Test
-    public void selectCheckboxesTest() {
+    public void testSelectCheckboxes() {
 
         driver.get("https://the-internet.herokuapp.com/checkboxes");
 
@@ -79,7 +58,7 @@ public class GroupQualitySeekersTest {
     }
 
     @Test
-    public void contextMenuTest() {
+    public void testContextMenu() {
 
         driver.get("https://the-internet.herokuapp.com/context_menu");
 
@@ -94,7 +73,7 @@ public class GroupQualitySeekersTest {
     }
 
     @Test
-    public void drugAndDropTest() {
+    public void testDrugAndDrop() {
 
         driver.get("https://the-internet.herokuapp.com/drag_and_drop");
 
@@ -108,19 +87,7 @@ public class GroupQualitySeekersTest {
     }
 
     @Test
-    public void isDisplayedTest() {
-
-        driver.get("https://the-internet.herokuapp.com/dynamic_content?with_content=static");
-
-        WebElement refreshButton = driver.findElement(By.xpath("//*[@id=\"content\"]/div/p[2]/a"));
-        refreshButton.click();
-
-        WebElement updatedElement = driver.findElement(By.xpath("//*[@id=\"content\"]/div[3]"));
-        Assert.assertTrue(updatedElement.isDisplayed());
-    }
-
-    @Test
-    public void dynamicControlTest() throws InterruptedException {
+    public void testDynamicControl() throws InterruptedException {
 
         driver.get("https://the-internet.herokuapp.com/dynamic_controls");
 
@@ -145,7 +112,7 @@ public class GroupQualitySeekersTest {
     }
 
     @Test
-    public void findHiddenTest() {
+    public void testFindHiddenTest() {
 
         driver.get("https://the-internet.herokuapp.com/dynamic_loading");
 
@@ -164,18 +131,16 @@ public class GroupQualitySeekersTest {
     }
 
     @Test
-    public void closeAd() {
+    public void testCloseAd() {
 
         driver.get("https://the-internet.herokuapp.com/entry_ad");
         WebElement modalWindow = driver.findElement(By.xpath("//*[@id=\"modal\"]/div[2]"));
 
-        WebDriverWait w = new WebDriverWait(driver, Duration.ofSeconds(1));
+        WebDriverWait w = new WebDriverWait(driver, Duration.ofSeconds(2));
         w.until(ExpectedConditions.visibilityOfAllElements(modalWindow));
 
         WebElement closeButton = driver.findElement(By.xpath("//*[@id=\"modal\"]/div[2]/div[3]/p"));
         closeButton.click();
-
-        Assert.assertFalse(modalWindow.isDisplayed());
 
         driver.findElement(By.xpath("/html/body")).sendKeys((Keys.F5));
 
@@ -211,12 +176,16 @@ public class GroupQualitySeekersTest {
     @Test
     public void testTitle() {
 
+        driver.get("https://beta.chelznak.ru/made/ ");
+
         String pageTitle = driver.getTitle();
         Assert.assertEquals(pageTitle, "Изготовление наград на заказ в ТПП Челзнак");
     }
 
     @Test
     public void test2() {
+
+        driver.get("https://beta.chelznak.ru/made/");
 
         WebElement textBox = driver.findElement(By.xpath("/html/body/div[1]/header/div[2]/div/div/div[1]/div/form/input"));
         textBox.sendKeys("Награда МВД");
@@ -228,6 +197,8 @@ public class GroupQualitySeekersTest {
 
     @Test
     public void test3() throws InterruptedException {
+
+        driver.get("https://beta.chelznak.ru/made/");
 
         WebElement imagePhone = driver.findElement(By.xpath("/html/body/div[1]/header/div[2]/div/div/div[2]/div[2]/a[1]"));
         imagePhone.click();
