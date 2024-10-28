@@ -14,6 +14,7 @@ public class GroupQaJavaRedroverTest {
         String url = "https://sport-marafon.ru/";
 
         WebDriver driver = new ChromeDriver();
+
         driver.get(url);
         driver.manage().window().maximize();
         driver.manage().timeouts().implicitlyWait(Duration.ofMillis(500));
