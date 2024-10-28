@@ -1,7 +1,10 @@
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.interactions.Action;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.Select;
 import org.testng.Assert;
 import org.testng.annotations.AfterTest;
@@ -88,4 +91,57 @@ public class GroupQAandJavaTest {
         driver.findElement(By.id("logout_sidebar_link")).click();
         Assert.assertEquals(driver.getCurrentUrl(), "https://www.saucedemo.com/");
     }
+
+    @Test
+    public void testMCode() {
+        driver.get("https://thecode.media/");
+
+        WebElement searchButton = driver.findElement(By.className("heading-search__open"));
+        searchButton.click();
+
+        WebElement searchText = driver.findElement(By.className("heading-search__input"));
+        searchText.sendKeys("Api");
+
+        searchButton.click();
+
+        WebElement foundText = driver.findElement(By.className("search__title"));
+        String resultSearch = foundText.getText();
+
+        Assert.assertEquals("api", resultSearch);
+    }
+
+    @Test
+    public void testTasksArea() {
+        driver.get("https://thecode.media/");
+
+        WebElement searchArea = driver.findElement(By.className("tab-questions"));
+
+        Action myAction = new Actions(driver).doubleClick(searchArea).build();
+        myAction.perform();
+
+        WebElement foundText = driver.findElement(By.xpath("(//h1[@class='search__title'])"));
+        String foundSearchTitle = foundText.getText();
+
+        Assert.assertEquals("Как решить", foundSearchTitle);
+    }
+
+    @Test
+    public void testRadioButton() throws InterruptedException {
+        driver.get("https://demoqa.com/radio-button");
+        driver.findElement(By.xpath("//*[@for='impressiveRadio']")).click();
+        Thread.sleep(2000);
+        Assert.assertTrue(driver.findElement(By.className("text-success")).isDisplayed(), "radiobutton is not selected");
+    }
+
+    @Test
+    public void testToolsQA() {
+        driver.get("https://demoqa.com/text-box");
+
+        String title = driver.getTitle();
+        Assert.assertEquals(title, "DEMOQA");
+
+        WebElement primaryImage = driver.findElement(By.xpath("//img[@src = '/images/Toolsqa.jpg']"));
+        Assert.assertTrue(primaryImage.isDisplayed());
+    }
+
 }
