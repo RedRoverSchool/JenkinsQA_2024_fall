@@ -24,6 +24,9 @@ public class GroupCodeBrewTest {
 
         Thread.sleep(1000);
 
+
+
+
         searchField.sendKeys(Keys.ENTER);
 
         Thread.sleep(1000);
