@@ -242,7 +242,6 @@ public class GroupQAMyWayTest {
 
         driver.quit();
     }
-
     @Test
     public void testAskona() throws InterruptedException {
         ChromeOptions options = new ChromeOptions();
