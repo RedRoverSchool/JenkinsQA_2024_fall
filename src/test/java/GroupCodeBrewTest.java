@@ -1,6 +1,8 @@
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.Test;
@@ -260,6 +262,88 @@ public class GroupCodeBrewTest {
 
         driver.quit();
     }
+
+    @Test
+    public void testVeggieGrillMenu() throws InterruptedException {
+        ChromeOptions options = new ChromeOptions();
+        options.addArguments("--no-sandbox");
+
+        WebDriver driver = new ChromeDriver(options);
+
+        driver.get("https://www.veggiegrill.com/");
+
+        Thread.sleep(1000);
+
+        WebElement popup = driver.findElement(By.xpath("//*[@id=\"popup-alert\"]/button"));
+        popup.click();
+
+        Thread.sleep(1000);
+
+        WebElement menuList = driver.findElement(By.xpath("/html/body/header/div[2]/button"));
+        menuList.click();
+
+        Thread.sleep(1000);
+
+        WebElement menuButton = driver.findElement(By.xpath("//*[@id=\"SiteHeaderMobilePanel\"]/div[1]/nav/ul/li[2]/a"));
+        Assert.assertEquals(menuButton.getText(), "MENUS");
+        //menuButton.click();
+
+        driver.quit();
+    }
+
+    @Test
+    public void testVeggieGrillLocations() throws InterruptedException {
+        ChromeOptions options = new ChromeOptions();
+        options.addArguments("--no-sandbox");
+
+        WebDriver driver = new ChromeDriver(options);
+
+        driver.get("https://www.veggiegrill.com/");
+
+        Thread.sleep(1000);
+
+        WebElement popup = driver.findElement(By.xpath("//*[@id=\"popup-alert\"]/button"));
+        popup.click();
+
+        Thread.sleep(1000);
+
+        WebElement menuList = driver.findElement(By.xpath("/html/body/header/div[2]/button"));
+        menuList.click();
+
+        Thread.sleep(1000);
+
+        WebElement locationsButton = driver.findElement(By.xpath("//*[@id=\"SiteHeaderMobilePanel\"]/div[1]/nav/ul/li[1]/a"));
+        locationsButton.click();
+
+        Thread.sleep(1000);
+
+        WebElement enterCityLabel = driver.findElement(By.xpath("//*[@id=\"locationsContainer\"]/div[1]/label"));
+        Assert.assertEquals(enterCityLabel.getText(), "Enter zip code, city, or full address");
+
+        driver.quit();
+    }
+
+    @Test
+    public void testDropDownMenu() {
+        WebDriver webDriver = new ChromeDriver();
+        webDriver.get("https://qa-practice.netlify.app/dropdowns");
+
+        WebElement dropDownMenu = webDriver.findElement(By.xpath("//select[@id='dropdown-menu']"));
+        Select pickCounty = new Select(dropDownMenu);
+        pickCounty.selectByVisibleText("Austria");
+
+        String selectedOption = pickCounty.getFirstSelectedOption().getText();
+        Assert.assertEquals(selectedOption, "Austria", "Selected country is not Austria");
+
+        webDriver.quit();
+    }
+
+    @Test
+    public void testOpenApp() {
+
+    }
 }
+
+
 
 
