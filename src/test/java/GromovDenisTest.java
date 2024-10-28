@@ -12,6 +12,7 @@ public class GromovDenisTest {
         WebDriver driver = new ChromeDriver();
         driver.get("https://www.google.com/");
         Thread.sleep(1000);
+        
 
 //        driver.findElement(By.xpath("//*[@id=\"W0wltc\"]")).click();
         WebElement text = driver.findElement(By.className("gLFyf"));
