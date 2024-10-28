@@ -219,6 +219,8 @@ public class GroupKrutyeBobryTest {
 
     @Test
     public void testfillInForm() throws InterruptedException {
+        WebDriver driver = new ChromeDriver();
+
         driver.get("https://practice-automation.com/form-fields/");
 
         driver.findElement(By.id("name-input")).sendKeys("Ippolit");
@@ -241,6 +243,27 @@ public class GroupKrutyeBobryTest {
         Assert.assertEquals(text, "Message received!");
 
         alert.accept();
+
+        driver.quit();
+    }
+
+    @Test
+    public void testListOfElementsMainPage() {
+        WebDriver driver = new ChromeDriver();
+
+        driver.get("https://demoqa.com/");
+
+        List<String> expectedListCards = new ArrayList<>(List.of("Elements",
+                "Forms", "Alerts, Frame & Windows", "Widgets", "Interactions",
+                "Book Store Application"));
+
+        WebElement cardsList = driver.findElement(By.xpath("//div[@class='category-cards']"));
+        List<WebElement> listHeaders = cardsList.findElements(By.tagName("h5"));
+
+        for (int i = 0; i < listHeaders.size(); i++) {
+            Assert.assertEquals(expectedListCards.get(i),listHeaders.get(i).getText());
+        }
+        Assert.assertEquals(expectedListCards.size(), listHeaders.size());
 
         driver.quit();
     }
