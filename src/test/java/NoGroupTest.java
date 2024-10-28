@@ -849,4 +849,37 @@ public class NoGroupTest {
 
         driver.quit();
     }
+
+    @Test
+    public void testAddToCart() {
+        WebDriver driver = new ChromeDriver();
+
+        driver.get("https://fh.by/");
+        driver.manage().window().maximize();
+
+        WebElement interiorSection = driver.findElement(By.xpath("//a[text()='Интерьер']"));
+        interiorSection.click();
+
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(15));
+
+        WebElement itemToBuy = wait.until(ExpectedConditions.elementToBeClickable(
+                By.xpath("(//a[contains(@class, 'ProductCard_isCatalog')])[1]")));
+        itemToBuy.click();
+
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//h4[text()='Описание']")));
+
+        WebElement addToCartButton = wait.until(ExpectedConditions.elementToBeClickable(
+                By.xpath("(//button[@type='submit'])[1]")));
+        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", addToCartButton);
+        ((JavascriptExecutor) driver).executeScript("arguments[0].click();", addToCartButton);
+
+        WebElement cartIcon = driver.findElement(By.xpath("//a[@aria-label='Корзина']"));
+        cartIcon.click();
+
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//h1[text()='Корзина']")));
+
+        Assert.assertTrue(driver.findElement(By.xpath("//button[@type='submit']")).isDisplayed());
+
+        driver.quit();
+    }
 }
