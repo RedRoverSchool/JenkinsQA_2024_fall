@@ -236,7 +236,7 @@ public class GroupCodeBrewTest {
             driver.quit();
         }
         @Test
-        public void testQApractice() throws InterruptedException {
+        public void testQApractice() {
             WebDriver driver = new ChromeDriver();
             driver.get("https://qa-practice.netlify.app/auth_ecommerce");
             WebElement textBox = driver.findElement(By.id("email"));
@@ -244,7 +244,6 @@ public class GroupCodeBrewTest {
 
             WebElement textBoxPass = driver.findElement(By.name("password"));
             textBoxPass.sendKeys("admin123");
-
 
             WebElement button = driver.findElement(By.id("submitLoginBtn"));
             button.click();
