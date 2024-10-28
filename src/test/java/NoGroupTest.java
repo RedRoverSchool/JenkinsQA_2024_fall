@@ -776,4 +776,39 @@ public class NoGroupTest {
         Assert.assertEquals(driver.getCurrentUrl(), "https://openweather.co.uk/how-to-buy");
         driver.quit();
     }
+
+    @Test
+    public void emptyFieldsTest() {
+
+        WebDriver driver = new ChromeDriver();
+        driver.get("https://www.saucedemo.com/");
+
+        WebElement userNameBox = driver.findElement(By.xpath("//*[@id='user-name']"));
+        userNameBox.sendKeys("standard_user");
+
+        WebElement passwordBox = driver.findElement(By.xpath("//*[@id=\"password\"]"));
+        passwordBox.sendKeys("secret_sauce");
+
+        WebElement loginButton = driver.findElement(By.xpath("//*[@id=\"login-button\"]"));
+        loginButton.click();
+
+        WebElement itemOnesie = driver.findElement(
+                By.xpath("//*[@id=\"add-to-cart-sauce-labs-onesie\"]"));
+        itemOnesie.click();
+
+        WebElement cartIcon = driver.findElement(By.xpath("//*[@id=\"shopping_cart_container\"]/a"));
+        cartIcon.click();
+
+        WebElement checkoutButton = driver.findElement(By.xpath("//*[@id=\"checkout\"]"));
+        checkoutButton.click();
+
+        WebElement continueButton = driver.findElement(By.xpath("//*[@id=\"continue\"]"));
+        continueButton.click();
+
+        WebElement errorMessage = driver.findElement(By.xpath("//*[@id=\"checkout_info_container\"]/div/form/div[1]/div[4]/h3"));
+        Assert.assertEquals(errorMessage.getText(), "Error: First Name is required");
+
+        driver.quit();
+
+    }
 }

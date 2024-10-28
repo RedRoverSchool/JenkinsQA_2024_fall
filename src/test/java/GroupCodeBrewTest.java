@@ -176,35 +176,34 @@ public class GroupCodeBrewTest {
         }
         driver.quit();
     }
+@Test
+public void radioButtonTest() {
+    WebDriver driver = new ChromeDriver();
+    driver.get("https://qa-practice.netlify.app/radiobuttons");
+    WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
 
-    @Test
-    public void radioButtonTest() {
-        WebDriver driver = new ChromeDriver();
-        driver.get("https://qa-practice.netlify.app/radiobuttons");
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+    List<WebElement> radioButtons = wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath("//div[@id='content']//input[@type='radio']")));
 
-        List<WebElement> radioButtons = wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath("//div[@id='content']//input[@type='radio']")));
+    for (int i = 0; i < radioButtons.size(); i++) {
+        WebElement radioButton = radioButtons.get(i);
 
-        for (int i = 0; i < radioButtons.size(); i++) {
-            WebElement radioButton = radioButtons.get(i);
-            if (radioButton.getAttribute("disabled") != null) {
-                System.out.println("Radio button " + (i + 1) + " is disabled and cannot be selected.");
-                continue;
-            }
+        if (radioButton.getAttribute("disabled") != null) {
+            System.out.println("Radio button " + (i + 1) + " is disabled and cannot be selected.");
+            continue;
+        }
 
-            radioButton.click();
+        radioButton.click();
 
+        Assert.assertTrue(radioButton.isSelected(), "Radio button " + (i + 1) + " is not selected as expected.");
 
-            Assert.assertTrue(radioButton.isSelected(), "Radio button " + (i + 1) + " is not selected as expected.");
-
-            for (int j = 0; j < radioButtons.size(); j++) {
-                if (j != i) {
-                    Assert.assertFalse(radioButtons.get(j).isSelected(), "Radio button " + (j + 1) + " is incorrectly selected.");
-                }
+        for (int j = 0; j < radioButtons.size(); j++) {
+            if (j != i) {
+                Assert.assertFalse(radioButtons.get(j).isSelected(), "Radio button " + (j + 1) + " is incorrectly selected.");
             }
         }
-        driver.quit();
     }
+    driver.quit();
+}
 
     @Test
     public void testRecoverPassword() {
@@ -246,22 +245,22 @@ public class GroupCodeBrewTest {
         driver.quit();
     }
 
-    @Test
-    public void testQApractice() throws InterruptedException {
-        WebDriver driver = new ChromeDriver();
-        driver.get("https://qa-practice.netlify.app/auth_ecommerce");
-        WebElement textBox = driver.findElement(By.id("email"));
-        textBox.sendKeys("admin@admin.com");
+@Test
+public void testQApractice() throws InterruptedException {
+    WebDriver driver = new ChromeDriver();
+    driver.get("https://qa-practice.netlify.app/auth_ecommerce");
 
-        WebElement textBoxPass = driver.findElement(By.name("password"));
-        textBoxPass.sendKeys("admin123");
+    WebElement textBox = driver.findElement(By.id("email"));
+    textBox.sendKeys("admin@admin.com");
 
+    WebElement textBoxPass = driver.findElement(By.name("password"));
+    textBoxPass.sendKeys("admin123");
 
-        WebElement button = driver.findElement(By.id("submitLoginBtn"));
-        button.click();
+    WebElement button = driver.findElement(By.id("submitLoginBtn"));
+    button.click();
 
-        driver.quit();
-    }
+    driver.quit();
+}
 
     @Test
     public void testVeggieGrillMenu() throws InterruptedException {
@@ -340,10 +339,6 @@ public class GroupCodeBrewTest {
 
     @Test
     public void testOpenApp() {
-        WebDriver driver = new ChromeDriver();
-        driver.get("https://qa-practice.netlify.app");
-        driver.quit();
-
 
     }
 
