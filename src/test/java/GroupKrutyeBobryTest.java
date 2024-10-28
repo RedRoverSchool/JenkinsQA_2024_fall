@@ -1,11 +1,9 @@
-import org.openqa.selenium.By;
-import org.openqa.selenium.PageLoadStrategy;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.AfterGroups;
@@ -13,6 +11,8 @@ import org.testng.annotations.BeforeGroups;
 import org.testng.annotations.Test;
 
 import java.time.Duration;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class GroupKrutyeBobryTest {
@@ -188,6 +188,83 @@ public class GroupKrutyeBobryTest {
 
     @AfterGroups("saucedemo")
     public void tearDown(){
+        driver.quit();
+    }
+
+    @Test
+    public void testFindCarMenu(){
+        ChromeOptions chromeOptions = new ChromeOptions();
+        chromeOptions.addArguments("--disable-search-engine-choice-screen");
+        chromeOptions.setPageLoadStrategy(PageLoadStrategy.EAGER);
+        WebDriver driver = new ChromeDriver(chromeOptions);
+        driver.get("https://www.toyota.com/brochures/cars-minivan/");
+        ArrayList<String> navMenu = new ArrayList<>(Arrays.asList("Cars & Minivan",
+            "Trucks",
+            "Crossovers & SUVs",
+            "Electrified",
+            "Other Brochures"));
+
+        int countTruth = 0;
+        WebElement list = driver.findElement(By.xpath("/html/body/div[1]/div/div[2]/div/div[2]/div/div/div/div/div/div[1]/div/div/nav/ul"));
+        List<WebElement> listItems = list.findElements(By.tagName("li"));
+        for (int i = 0; i < listItems.size(); i++) {
+            if (listItems.get(i).getText().equals(navMenu.get(i))){
+                countTruth++;
+//                System.out.println(listItems.get(i).getText()+ ',' + navMenu.get(i));
+            }
+        }
+        Assert.assertEquals(listItems.size(), countTruth);
+        driver.quit();
+    }
+
+    @Test
+    public void testfillInForm() throws InterruptedException {
+        WebDriver driver = new ChromeDriver();
+
+        driver.get("https://practice-automation.com/form-fields/");
+
+        driver.findElement(By.id("name-input")).sendKeys("Ippolit");
+        driver.findElement(By.xpath("//input[@type='password']")).sendKeys("34567");
+
+        driver.findElement(By.xpath("//input[@value='Coffee']")).click();
+        driver.findElement(By.xpath("//input[@value='Yellow']")).click();
+
+        WebElement selectElement = driver.findElement(By.name("automation"));
+        Select select = new Select(selectElement);
+        select.selectByVisibleText("Yes");
+
+        WebElement buttonSubmit = driver.findElement(By.id("submit-btn"));
+        new Actions(driver).moveToElement(buttonSubmit).perform();
+        buttonSubmit.click();
+
+        Alert alert = driver.switchTo().alert();
+        String text = alert.getText();
+
+        Assert.assertEquals(text, "Message received!");
+
+        alert.accept();
+
+        driver.quit();
+    }
+
+    @Test
+    public void testListOfElementsMainPage() {
+        WebDriver driver = new ChromeDriver();
+
+        driver.get("https://demoqa.com/");
+
+        List<String> expectedListCards = new ArrayList<>(List.of("Elements",
+                "Forms", "Alerts, Frame & Windows", "Widgets", "Interactions",
+                "Book Store Application"));
+
+        WebElement cardsList = driver.findElement(By.xpath("//div[@class='category-cards']"));
+        List<WebElement> listHeaders = cardsList.findElements(By.tagName("h5"));
+
+        for (int i = 0; i < listHeaders.size(); i++) {
+            Assert.assertEquals(expectedListCards.get(i),listHeaders.get(i).getText());
+        }
+        Assert.assertEquals(expectedListCards.size(), listHeaders.size());
+
         driver.quit();
     }
 }
