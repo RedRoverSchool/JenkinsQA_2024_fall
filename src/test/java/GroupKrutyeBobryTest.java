@@ -1,11 +1,9 @@
-import org.openqa.selenium.By;
-import org.openqa.selenium.PageLoadStrategy;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.AfterGroups;
@@ -216,6 +214,34 @@ public class GroupKrutyeBobryTest {
             }
         }
         Assert.assertEquals(listItems.size(), countTruth);
+        driver.quit();
+    }
+
+    @Test
+    public void testfillInForm() throws InterruptedException {
+        driver.get("https://practice-automation.com/form-fields/");
+
+        driver.findElement(By.id("name-input")).sendKeys("Ippolit");
+        driver.findElement(By.xpath("//input[@type='password']")).sendKeys("34567");
+
+        driver.findElement(By.xpath("//input[@value='Coffee']")).click();
+        driver.findElement(By.xpath("//input[@value='Yellow']")).click();
+
+        WebElement selectElement = driver.findElement(By.name("automation"));
+        Select select = new Select(selectElement);
+        select.selectByVisibleText("Yes");
+
+        WebElement buttonSubmit = driver.findElement(By.id("submit-btn"));
+        new Actions(driver).moveToElement(buttonSubmit).perform();
+        buttonSubmit.click();
+
+        Alert alert = driver.switchTo().alert();
+        String text = alert.getText();
+
+        Assert.assertEquals(text, "Message received!");
+
+        alert.accept();
+
         driver.quit();
     }
 }
