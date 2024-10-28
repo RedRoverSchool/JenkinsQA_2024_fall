@@ -52,7 +52,7 @@ public class GroupWnFTest {
         Assert.assertEquals(actualAddress.getText(), "Current Address :" + USER_ADDRESS);
         Assert.assertEquals(actualPerAddress.getText(), "Permananet Address :" + USER_PER_ADDRESS);
     }
-
+    
     @Test
     public void testDemoQACheckboxes() {
         driver.get("https://qa-practice.netlify.app/checkboxes");
