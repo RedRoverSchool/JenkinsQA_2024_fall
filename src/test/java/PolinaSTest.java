@@ -25,7 +25,7 @@ public class PolinaSTest  {
 
 
         WebElement textBox = driver.findElement(By.id("name"));
-        Thread.sleep(2000);
+        Thread.sleep(3000);
         WebElement datePicker = driver.findElement((By.id("date")));
         Thread.sleep(2000);
         textBox.sendKeys("Polina");
