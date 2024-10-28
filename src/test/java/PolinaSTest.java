@@ -31,7 +31,7 @@ public class PolinaSTest  {
         textBox.sendKeys("Polina");
         Thread.sleep(2000);
         datePicker.sendKeys("12/12/2024");
-        Thread.sleep(2000);
+        Thread.sleep(3000);
         //exitButton.click();
 
         //WebElement message = driver.findElement(By.id("message"));
