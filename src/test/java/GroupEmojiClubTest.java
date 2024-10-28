@@ -28,7 +28,7 @@ public class GroupEmojiClubTest {
 
 
     @Test
-    public void testCart() {
+    public void testStokmannCart() {
         driver.get("https://stockmann.ru/");
 
         WebElement submitButton = driver.findElement(By.xpath("//*[@id='__next']/header/div[1]/div[3]/a[2]"));
