@@ -242,5 +242,27 @@ public class GroupQAMyWayTest {
 
         driver.quit();
     }
+    @Test
+    public void testAskona() throws InterruptedException {
+        ChromeOptions options = new ChromeOptions();
+        options.addArguments("--no-sandbox");
+
+        WebDriver driver = new ChromeDriver(options);
+
+        driver.get("https://askona.ru");
+
+        Thread.sleep(2500);
+
+        WebElement spalnya = driver.findElement(By.linkText("Спальня"));
+
+        spalnya.click();
+
+        Thread.sleep(3500);
+
+        WebElement titleBlock = driver.findElement(By.linkText("Детская"));
+        Assert.assertEquals(titleBlock.getText(), "Детская");
+
+        driver.quit();
+    }
 }
 
