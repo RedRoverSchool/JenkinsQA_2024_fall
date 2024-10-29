@@ -138,6 +138,7 @@ public class GroupEmojiClubTest {
 
     @Test
     void testRadioButtonSelection() {
+        driver.get("https://demoqa.com/radio-button");
         WebElement yesRadioButton = driver.findElement(By.xpath("//input[@id='yesRadio']"));
         yesRadioButton.click();
 
@@ -147,6 +148,7 @@ public class GroupEmojiClubTest {
 
     @Test
     void testRadioButtonGroupSelection() {
+        driver.get("https://demoqa.com/radio-button");
         WebElement impressiveRadioButton = driver.findElement(By.xpath("//input[@id='impressiveRadio']"));
         impressiveRadioButton.click();
 
@@ -156,6 +158,7 @@ public class GroupEmojiClubTest {
 
     @Test
     void testRadioButtonDisabled() {
+        driver.get("https://demoqa.com/radio-button");
         WebElement disabledRadioButton = driver.findElement(By.xpath("//input[@id='noRadio']"));
         assertTrue(disabledRadioButton.getAttribute("disabled").equals("true"));
     }
