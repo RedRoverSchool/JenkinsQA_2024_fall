@@ -27,10 +27,10 @@ public class AutoamigosGroupTest {
         driver = new ChromeDriver();
     }
 
-    @AfterMethod
-    public void tearDown(){
-        driver.quit();
-    }
+//    @AfterMethod
+//    public void tearDown(){
+//        driver.quit();
+//    }
 
     @Test
     public void testClickHomeLink() throws InterruptedException {
@@ -228,7 +228,7 @@ public class AutoamigosGroupTest {
 
     @Test(description = "Практика работы с web tables https://demoqa.com/webtables")
 
-    public void webTables() throws InterruptedException{
+    public void webTablesTest() throws InterruptedException{
 
         driver.get("https://demoqa.com/webtables");
         driver.manage().window().maximize();
@@ -283,7 +283,7 @@ public class AutoamigosGroupTest {
 
     @Test(description = "Практика нажатия click-click https://demoqa.com/buttons")
 
-    public void buttonsClick() throws InterruptedException {
+    public void buttonsClickTest() throws InterruptedException {
 
         WebDriver driver = new ChromeDriver();
         driver.get("https://demoqa.com/buttons");
@@ -334,5 +334,30 @@ public class AutoamigosGroupTest {
 
         List<String> expectedNamesOfElements = new ArrayList<>(List.of("Text Box", "Check Box", "Radio Button", "Web Tables", "Buttons", "Links", "Broken Links - Images", "Upload and Download", "Dynamic Properties"));
         Assert.assertEquals(expectedNamesOfElements, actualNamesOfElements);
+    }
+
+    @Test(description = "Практика переход на новое окно по ссылке https://demoqa.com/links")
+
+    public void testClickNewWindows() throws InterruptedException {
+
+        driver.get("https://demoqa.com/links");
+        driver.manage().window().maximize();
+
+        String mainWindowHandle = driver.getWindowHandle();
+        driver.findElement(By.xpath("//*[@id='simpleLink']")).click();
+        sleep(2000);
+
+        for (String windowHandle : driver.getWindowHandles()) {
+            if (!windowHandle.equals(mainWindowHandle)) {
+                driver.switchTo().window(windowHandle);
+                break;
+            }
+        }
+
+        String newWindowUrl = driver.getCurrentUrl();
+        System.out.println("URL нового окна: " + newWindowUrl);
+        String expectedUrl = "https://demoqa.com/";
+
+        Assert.assertEquals(newWindowUrl, expectedUrl, "URL нового окна не соответствует ожидаемому!");
     }
 }
