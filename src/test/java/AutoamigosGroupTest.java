@@ -27,10 +27,10 @@ public class AutoamigosGroupTest {
         driver = new ChromeDriver();
     }
 
-//    @AfterMethod
-//    public void tearDown(){
-//        driver.quit();
-//    }
+    @AfterMethod
+    public void tearDown(){
+        driver.quit();
+    }
 
     @Test
     public void testClickHomeLink() throws InterruptedException {
