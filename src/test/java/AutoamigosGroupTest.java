@@ -9,6 +9,8 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import java.time.Duration;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 import static java.lang.Thread.sleep;
@@ -219,6 +221,26 @@ public class AutoamigosGroupTest {
         WebElement closeAllFolders = driver.findElement(By.xpath("//*[@id='tree-node']/div/button[2]"));
         closeAllFolders.click();
         sleep(500);
+    }
+
+    @Test
+    public void testCheckingListOfElementsMenu() throws InterruptedException {
+
+        driver.get("https://demoqa.com/elements");
+        driver.manage().window().maximize();
+
+        sleep(3000);
+
+        List<WebElement> elements = driver.findElements(By.xpath("//div[@class='element-list collapse show']/ul/li"));
+
+        List<String> actualNamesOfElements = new ArrayList<>();
+        for (WebElement eachElement: elements) {
+            actualNamesOfElements.add(eachElement.getText());
+        }
+//        System.out.println(actualNamesOfElements);
+
+        List<String> expectedNamesOfElements = new ArrayList<>(List.of("Text Box", "Check Box", "Radio Button", "Web Tables", "Buttons", "Links", "Broken Links - Images", "Upload and Download", "Dynamic Properties"));
+        Assert.assertEquals(expectedNamesOfElements, actualNamesOfElements);
     }
 
 }
