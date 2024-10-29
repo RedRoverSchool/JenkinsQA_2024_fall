@@ -1,5 +1,3 @@
-package school.redrover.old;
-
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
@@ -11,6 +9,8 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
+
+import static org.testng.Assert.assertTrue;
 
 @Ignore
 public class GroupEmojiClubTest {
@@ -136,5 +136,32 @@ public class GroupEmojiClubTest {
         WebElement itemTitle = driver.findElement(By.xpath("//*[@id='title-34dd02d5b0']/h1"));
         Assert.assertEquals(itemTitle.getText(), "Chicken Big Mac®");
 
+    }
+
+    @Test
+    void testRadioButtonSelection() {
+        driver.get("https://demoqa.com/radio-button");
+        WebElement yesRadioButton = driver.findElement(By.xpath("//input[@id='yesRadio']"));
+        yesRadioButton.click();
+
+        WebElement selectedRadioButton = driver.findElement(By.xpath("//input[@checked='checked']"));
+        assertTrue(selectedRadioButton.getAttribute("id").equals("yesRadio"));
+    }
+
+    @Test
+    void testRadioButtonGroupSelection() {
+        driver.get("https://demoqa.com/radio-button");
+        WebElement impressiveRadioButton = driver.findElement(By.xpath("//input[@id='impressiveRadio']"));
+        impressiveRadioButton.click();
+
+        WebElement selectedRadioButton = driver.findElement(By.xpath("//input[@checked='checked']"));
+        assertTrue(selectedRadioButton.getAttribute("id").equals("impressiveRadio"));
+    }
+
+    @Test
+    void testRadioButtonDisabled() {
+        driver.get("https://demoqa.com/radio-button");
+        WebElement disabledRadioButton = driver.findElement(By.xpath("//input[@id='noRadio']"));
+        assertTrue(disabledRadioButton.getAttribute("disabled").equals("true"));
     }
 }

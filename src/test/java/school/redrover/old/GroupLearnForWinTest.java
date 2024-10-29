@@ -6,6 +6,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.interactions.Action;
 import org.openqa.selenium.interactions.Actions;
 import org.testng.Assert;
 import org.testng.annotations.Ignore;
@@ -13,6 +14,7 @@ import org.testng.annotations.Test;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Ignore
@@ -124,7 +126,7 @@ public class GroupLearnForWinTest {
     }
 
     @Test
-    public void testSubmitLanguageCapitalLetter() {
+    public void submitLanguageCapitalLetterTest() {
 
         WebDriver driver = new ChromeDriver();
 
@@ -187,7 +189,7 @@ public class GroupLearnForWinTest {
     }
 
     @Test
-    public void testContextMenu() {
+    public void contextMenuTest() {
 
         WebDriver driver = new ChromeDriver();
 
@@ -206,6 +208,59 @@ public class GroupLearnForWinTest {
 
         driver.quit();
 
+    }
+
+    @Test
+
+    public  void ABTestControlTest() {
+
+        WebDriver driver = new ChromeDriver();
+
+        driver.get("https://the-internet.herokuapp.com/abtest");
+
+        String originalWindow = driver.getWindowHandle();
+
+        driver.findElement(By.xpath("//a[@target='_blank']")).click();
+
+        Set<String> allWindows = driver.getWindowHandles();
+
+        for (String windowHandle : allWindows) {
+            if (!windowHandle.equals(originalWindow)) {
+                driver.switchTo().window(windowHandle);
+                break;
+            }
+        }
+        String elementalSelenium = driver.findElement(By.xpath("//h1[@class= 'hero__title']")).getText();
+
+        Assert.assertEquals(elementalSelenium, "Elemental Selenium" );
+
+        driver.quit();
+    }
+
+    @Test
+
+    public void dragAndDropTest() {
+
+        WebDriver driver = new ChromeDriver();
+
+        driver.get("https://the-internet.herokuapp.com/drag_and_drop");
+
+        WebElement columnA = driver.findElement(By.id("column-a"));
+        WebElement columnB = driver.findElement(By.id("column-b"));
+
+        String headerTextA = columnA.findElement(By.tagName("header")).getText();
+        String headerTextB = columnB.findElement(By.tagName("header")).getText();
+
+        Actions actions = new Actions(driver);
+        actions.dragAndDrop(columnA, columnB).perform();
+
+        String newHeaderTextA = columnA.findElement(By.tagName("header")).getText();
+        String newHeaderTextB = columnB.findElement(By.tagName("header")).getText();
+
+        Assert.assertEquals(newHeaderTextA, headerTextB);
+        Assert.assertEquals(newHeaderTextB, headerTextA);
+
+        driver.quit();
     }
 
 }
