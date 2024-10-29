@@ -5,10 +5,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.testng.Assert;
-import org.testng.annotations.AfterTest;
-import org.testng.annotations.BeforeTest;
-import org.testng.annotations.Ignore;
-import org.testng.annotations.Test;
+import org.testng.annotations.*;
 
 import java.time.Duration;
 import java.util.List;
@@ -23,13 +20,13 @@ public class GroupWnFTest {
     private static final String URL = "https://websters.dev/";
     private static WebDriver driver;
 
-    @BeforeTest
+    @BeforeMethod
     public void setUp() {
         driver = new ChromeDriver();
         driver.manage().window().maximize();
     }
 
-    @AfterTest
+    @AfterMethod
     public void closeUp() {
         driver.quit();
     }

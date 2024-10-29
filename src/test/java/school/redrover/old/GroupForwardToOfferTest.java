@@ -6,10 +6,7 @@ import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
-import org.testng.annotations.AfterTest;
-import org.testng.annotations.BeforeTest;
-import org.testng.annotations.Ignore;
-import org.testng.annotations.Test;
+import org.testng.annotations.*;
 
 import java.time.Duration;
 import java.util.List;
@@ -19,7 +16,7 @@ public class GroupForwardToOfferTest {
     private WebDriver driver;
     private WebDriverWait webDriverWait;
 
-    @BeforeTest
+    @BeforeMethod
     public void beforeTest() {
         driver = new ChromeDriver();
         webDriverWait = new WebDriverWait(driver, Duration.ofSeconds(10));
@@ -223,7 +220,7 @@ public class GroupForwardToOfferTest {
         Assert.assertListContainsObject(itemsTextList, "History", "History item is not found in the list");
     }
 
-    @AfterTest
+    @AfterMethod
     public void afterTest(){
         driver.quit();
     }

@@ -19,7 +19,7 @@ import java.util.List;
 
 @Ignore
 public class GroupKrutyeBobryTest {
-    WebDriver driver = new ChromeDriver();
+    WebDriver driver;// = new ChromeDriver();
 
     @Test
     public void testWaitForLoadingPicture() {

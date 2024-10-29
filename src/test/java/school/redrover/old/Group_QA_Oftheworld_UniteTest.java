@@ -12,7 +12,7 @@ import java.time.Duration;
 @Ignore
 public class Group_QA_Oftheworld_UniteTest {
 
-
+    @Ignore
     public class MainTest {
 
         @Test

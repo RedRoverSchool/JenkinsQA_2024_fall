@@ -5,10 +5,7 @@ import org.openqa.selenium.*;
 import org.testng.Assert;
 import java.awt.event.KeyEvent;
 
-import org.testng.annotations.Ignore;
-import org.testng.annotations.Test;
-import org.testng.annotations.AfterTest;
-import org.testng.annotations.BeforeTest;
+import org.testng.annotations.*;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.interactions.Action;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -22,14 +19,14 @@ public class GroupQAandJavaTest {
 
     private WebDriver driver;
 
-    @BeforeTest
+    @BeforeMethod
     public void setup() {
         ChromeOptions options = new ChromeOptions();
         options.addArguments("--no-sandbox");
         driver = new ChromeDriver(options);
     }
 
-    @AfterTest
+    @AfterMethod
     public void tearDown() {
         driver.quit();
     }

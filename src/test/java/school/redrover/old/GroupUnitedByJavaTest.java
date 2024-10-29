@@ -504,6 +504,7 @@ public class GroupUnitedByJavaTest {
         driver.quit();
     }
 
+    @Ignore
     public static class YasminJaborovaTest {
 
         @DataProvider(name = "userData")
@@ -544,6 +545,7 @@ public class GroupUnitedByJavaTest {
 
     }
 
+    @Ignore
     public static class YasminJaborovaSecondTest {
 
         @Test

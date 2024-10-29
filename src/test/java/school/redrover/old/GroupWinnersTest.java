@@ -7,17 +7,14 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
-import org.testng.annotations.AfterTest;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Ignore;
-import org.testng.annotations.Test;
+import org.testng.annotations.*;
 
 import java.time.Duration;
 
 @Ignore
 public class GroupWinnersTest {
 
-    WebDriver driver = new ChromeDriver();
+    WebDriver driver;// = new ChromeDriver();
     WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(2));
 
     @BeforeMethod
@@ -82,7 +79,7 @@ public class GroupWinnersTest {
 
     }
 
-    @AfterTest
+    @AfterMethod
     public void cleanEverything(){
         driver.quit();
     }
