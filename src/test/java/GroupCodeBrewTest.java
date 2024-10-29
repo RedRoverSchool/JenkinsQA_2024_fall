@@ -327,6 +327,32 @@ public class GroupCodeBrewTest {
         webDriver.quit();
     }
 
+    @Test
+    public void checkIfInputFieldIsDisabledTest() {
+
+        //Start the browser
+        WebDriver driver = new ChromeDriver();
+        driver.manage().window().maximize();
+
+        //Open the homepage
+        driver.get("https://www.selenium.dev/selenium/web/web-form.html");
+
+        //Wait until the homepage is loaded
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(2));
+        wait.until(ExpectedConditions
+                .textToBePresentInElement(driver.findElement(By.className("display-6")), "Web form"));
+
+        //Assert the "Disabled Input" field is disabled by default
+        Assert.assertFalse(driver.findElement(By.name("my-disabled"))
+                        .isEnabled(), "'Disabled Input' field is not disabled -");
+
+        //Close the browser
+        driver.quit();
+    }
+
+
+
+
 }
 
 
