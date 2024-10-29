@@ -9,6 +9,8 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import java.time.Duration;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 import static java.lang.Thread.sleep;
@@ -22,7 +24,7 @@ public class AutoamigosGroupTest {
         driver = new ChromeDriver();
     }
 
-//    @AfterMethod
+    @AfterMethod
     public void tearDown(){
         driver.quit();
     }
@@ -98,11 +100,8 @@ public class AutoamigosGroupTest {
 
         sleep(1000);
 
-//        WebElement yesRadioButton =
-                driver.findElement(By.xpath("//div/input[@id='yesRadio']")).click();////label[@for='yesRadio']/preceding-sibling::input"
-//        yesRadioButton.click();
-
-        sleep(3000);
+        WebElement yesRadioButton = driver.findElement(By.xpath("//input[@id='yesRadio']/following-sibling::label"));
+        yesRadioButton.click();
 
         WebElement message = driver.findElement(By.xpath("//p/span[@class='text-success']"));
 
@@ -156,7 +155,7 @@ public class AutoamigosGroupTest {
 
         WebElement fieldPermanentAddress = driver.findElement(By.xpath("/html/body/div[2]/div/div/div/div[2]/div[2]/form/div[6]/div/p[4]"));
         String name3 = fieldPermanentAddress.getText();
-        Assert.assertEquals(name3, "Permanent Address :Balti, Index:3120, Republic of Moldova, str. Alecu Ruso, ap. 36");
+        Assert.assertEquals(name3, "Permananet Address :Balti, Index:3120, Republic of Moldova, str. Alecu Ruso, ap. 36");
     }
 
     @Test(description = "Практика работы с radio button https://demoqa.com/radio-button")
@@ -223,5 +222,25 @@ public class AutoamigosGroupTest {
         closeAllFolders.click();
         sleep(500);
     }
-// gfgfgfgfgfgfgfg
+
+    @Test
+    public void testCheckingListOfElementsMenu() throws InterruptedException {
+
+        driver.get("https://demoqa.com/elements");
+        driver.manage().window().maximize();
+
+        sleep(3000);
+
+        List<WebElement> elements = driver.findElements(By.xpath("//div[@class='element-list collapse show']/ul/li"));
+
+        List<String> actualNamesOfElements = new ArrayList<>();
+        for (WebElement eachElement: elements) {
+            actualNamesOfElements.add(eachElement.getText());
+        }
+//        System.out.println(actualNamesOfElements);
+
+        List<String> expectedNamesOfElements = new ArrayList<>(List.of("Text Box", "Check Box", "Radio Button", "Web Tables", "Buttons", "Links", "Broken Links - Images", "Upload and Download", "Dynamic Properties"));
+        Assert.assertEquals(expectedNamesOfElements, actualNamesOfElements);
+    }
+
 }
