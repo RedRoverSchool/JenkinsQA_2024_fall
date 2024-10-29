@@ -3,12 +3,16 @@ import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import java.time.Duration;
+import java.util.List;
 import java.util.Set;
 
 import static java.lang.Thread.sleep;
@@ -221,4 +225,94 @@ public class AutoamigosGroupTest {
         sleep(500);
     }
 
+    @Test(description = "Практика работы с web tables https://demoqa.com/webtables")
+
+    public void webTables() throws InterruptedException{
+
+        driver.get("https://demoqa.com/webtables");
+        driver.manage().window().maximize();
+
+        WebElement buttonAdd = driver.findElement(By.xpath("//*[@id='addNewRecordButton']"));
+        buttonAdd.click();
+
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        WebElement modal = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[@id='userForm']")));
+
+        WebElement firstName = modal.findElement(By.xpath("//*[@id='firstName']"));
+        firstName.sendKeys("Max");
+
+        WebElement lastName = modal.findElement(By.xpath("//*[@id='lastName']"));
+        lastName.sendKeys("Pankratov");
+
+        WebElement email = modal.findElement(By.xpath("//*[@id='userEmail']"));
+        email.sendKeys("max@mail.ru");
+
+        WebElement age = modal.findElement(By.xpath("//*[@id='age']"));
+        age.sendKeys("43");
+
+        WebElement salary = modal.findElement(By.xpath("//*[@id='salary']"));
+        salary.sendKeys("10000");
+
+        WebElement department = modal.findElement(By.xpath("//*[@id='department']"));
+        department.sendKeys("QA Automation");
+
+        WebElement submit = modal.findElement(By.xpath("//*[@id='submit']"));
+        submit.click();
+
+        WebElement tables = driver.findElement(By.xpath("//*[@id='app']/div/div/div/div[2]"));
+        tables.click();
+
+        WebElement searchBox = driver.findElement(By.xpath("//*[@id='searchBox']"));
+        searchBox.sendKeys("Max");
+
+        sleep(500);
+
+        WebElement tableEntry = driver.findElement(By.xpath("//*[contains(text(),'Max')]"));
+        Assert.assertTrue(tableEntry.isDisplayed(), "Запись с именем Max не найдена в таблице");
+
+        WebElement delete = driver.findElement(By.xpath("//*[@id='delete-record-4']"));
+        sleep(500);
+        delete.click();
+
+        List<WebElement> deletedEntry = driver.findElements(By.xpath("//*[contains(text(),'Max')]"));
+        Assert.assertTrue(deletedEntry.isEmpty(), "Запись с именем Max все еще присутствует в таблице после удаления");
+
+
+    }
+
+    @Test(description = "Практика нажатия click-click https://demoqa.com/buttons")
+
+    public void buttonsClick() throws InterruptedException {
+
+        WebDriver driver = new ChromeDriver();
+        driver.get("https://demoqa.com/buttons");
+        driver.manage().window().maximize();
+
+        WebElement buttonsDoubleClick = driver.findElement(By.xpath("//*[@id='doubleClickBtn']"));
+        Actions actions1 = new Actions(driver);
+        actions1.doubleClick(buttonsDoubleClick).perform();
+        sleep(500);
+
+        WebElement doubleClickMessage = driver.findElement(By.id("doubleClickMessage"));
+        Assert.assertTrue(doubleClickMessage.isDisplayed(), "Сообщение о двойном клике не отображается");
+        Assert.assertEquals(doubleClickMessage.getText(), "You have done a double click");
+
+        WebElement buttonsRightClick = driver.findElement(By.xpath("//*[@id='rightClickBtn']"));
+        Actions actions = new Actions(driver);
+        actions.contextClick(buttonsRightClick).perform();
+        sleep(500);
+
+        WebElement rightClickMessage = driver.findElement(By.id("rightClickMessage"));
+        Assert.assertTrue(rightClickMessage.isDisplayed(), "Сообщение о правом клике не отображается");
+        Assert.assertEquals(rightClickMessage.getText(), "You have done a right click");
+
+        WebElement buttonsClick = driver.findElement(By.xpath("/html/body/div[2]/div/div/div/div[2]/div[2]/div[3]/button"));
+        buttonsClick.click();
+        sleep(500);
+
+        WebElement clickMessage = driver.findElement(By.id("dynamicClickMessage"));
+        Assert.assertTrue(clickMessage.isDisplayed(), "Сообщение о клике не отображается");
+        Assert.assertEquals(clickMessage.getText(), "You have done a dynamic click");
+
+    }
 }
