@@ -20,6 +20,9 @@ public class GroupWnFTest {
     private static final String URL = "https://websters.dev/";
     private static WebDriver driver;
 
+    private static final String URL1 = "https://www.saucedemo.com/";
+    private static final String validPasswordSaucedemo = "secret_sauce";
+
     @BeforeTest
     public void setUp() {
         driver = new ChromeDriver();
@@ -52,7 +55,7 @@ public class GroupWnFTest {
         Assert.assertEquals(actualAddress.getText(), "Current Address :" + USER_ADDRESS);
         Assert.assertEquals(actualPerAddress.getText(), "Permananet Address :" + USER_PER_ADDRESS);
     }
-    
+
     @Test
     public void testDemoQACheckboxes() {
         driver.get("https://qa-practice.netlify.app/checkboxes");
@@ -65,9 +68,9 @@ public class GroupWnFTest {
                 checkbox.click();
             }
         }
-        
+
         for (WebElement checkBox : checkBoxes) {
-            Assert.assertTrue(checkBox.isSelected(),"Checkbox ID: " + checkBox.getAttribute("id") + " is not selected");
+            Assert.assertTrue(checkBox.isSelected(), "Checkbox ID: " + checkBox.getAttribute("id") + " is not selected");
         }
     }
 
@@ -162,5 +165,20 @@ public class GroupWnFTest {
         WebElement finishModal = driver.findElement(By.xpath("//div[contains(@class, 'Modal_finish')]//p"));
 
         Assert.assertEquals(finishModal.getText(), "Thank you! Our manager will contact you as soon as possible");
+    }
+
+    @Test
+    public void testAuthSaucedemo() {
+        driver.get(URL1);
+        WebElement userName = driver.findElement(By.xpath("//*[@id=\"user-name\"]"));
+        WebElement password = driver.findElement(By.xpath("//*[@id=\"password\"]"));
+        WebElement login = driver.findElement(By.xpath("//*[@id=\"login-button\"]"));
+        userName.sendKeys("visual_user");
+        password.sendKeys(validPasswordSaucedemo);
+        login.click();
+
+        WebElement result = driver.findElement(By.xpath("//*[@id=\"header_container\"]/div[2]/span"));
+        Assert.assertEquals(result.getText(), "Products");
+
     }
 }
