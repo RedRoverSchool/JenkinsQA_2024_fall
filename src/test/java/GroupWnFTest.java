@@ -179,6 +179,5 @@ public class GroupWnFTest {
 
         WebElement result = driver.findElement(By.xpath("//*[@id=\"header_container\"]/div[2]/span"));
         Assert.assertEquals(result.getText(), "Products");
-
     }
 }
