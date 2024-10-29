@@ -932,4 +932,45 @@ public class NoGroupTest {
 
         driver.quit();
     }
+
+    @Test
+    public void testTitleMTS() {
+
+        WebDriver driver = new ChromeDriver();
+        driver.get("https://www.mts.by/");
+
+        WebElement payBox = driver.findElement(By.xpath(
+                "//*[@id=\"pay-section\"]/div/div/div[2]/section/div/h2"));
+
+        Assert.assertEquals(payBox.getText(), "Онлайн пополнение\n" +
+                "без комиссии");
+
+        driver.quit();
+    }
+
+    @Test
+    public void testPayPartners() {
+
+        WebDriver driver = new ChromeDriver();
+        driver.get("https://www.mts.by/");
+
+        WebElement visa = driver.findElement(By.xpath(
+                "//*[@id=\"pay-section\"]/div/div/div[2]/section/div/div[2]/ul/li[1]"));
+        WebElement visaVerified = driver.findElement(By.xpath(
+                "//*[@id=\"pay-section\"]/div/div/div[2]/section/div/div[2]/ul/li[2]/img"));
+        WebElement masterCard = driver.findElement(By.xpath(
+                "//*[@id=\"pay-section\"]/div/div/div[2]/section/div/div[2]/ul/li[3]/img"));
+        WebElement masterCardSecureCode = driver.findElement(By.xpath(
+                "//*[@id=\"pay-section\"]/div/div/div[2]/section/div/div[2]/ul/li[4]/img"));
+        WebElement belCard = driver.findElement(By.xpath(
+                "//*[@id=\"pay-section\"]/div/div/div[2]/section/div/div[2]/ul/li[5]/img"));
+
+        Assert.assertTrue(visa.isDisplayed());
+        Assert.assertTrue(visaVerified.isDisplayed());
+        Assert.assertTrue(masterCard.isDisplayed());
+        Assert.assertTrue(masterCardSecureCode.isDisplayed());
+        Assert.assertTrue(belCard.isDisplayed());
+
+        driver.quit();
+    }
 }
