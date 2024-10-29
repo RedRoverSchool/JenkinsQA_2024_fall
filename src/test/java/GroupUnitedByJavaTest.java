@@ -711,4 +711,37 @@ public class GroupUnitedByJavaTest {
         driver.quit();
 
     }
+
+    @Test
+    public void testTitleText() {
+
+        WebDriver driver = new ChromeDriver();
+
+        driver.get("https://www.selenium.dev/selenium/web/web-form.html");
+
+        WebElement title = driver.findElement(By.className("display-6"));
+        String titleText = title.getText();
+
+        Assert.assertEquals(titleText, "Web form");
+
+        driver.quit();
+    }
+
+    @Test
+    public void testSubmitButton() {
+
+        WebDriver driver = new ChromeDriver();
+
+        driver.get("https://www.selenium.dev/selenium/web/web-form.html");
+
+        WebElement button = driver.findElement(By.tagName("button"));
+        button.click();
+
+        WebElement title = driver.findElement(By.tagName("h1"));
+        String titleText = title.getText();
+
+        Assert.assertEquals(titleText, "Form submitted");
+
+        driver.quit();
+    }
 }
