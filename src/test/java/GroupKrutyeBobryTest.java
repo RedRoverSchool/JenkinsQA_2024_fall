@@ -267,4 +267,27 @@ public class GroupKrutyeBobryTest {
 
         driver.quit();
     }
+
+    public void openIndi(){
+        driver.get("https://indinotes.com");
+    }
+
+    @Test(groups = "indi")
+    public void testDisplayDescription(){
+        openIndi();
+        List<WebElement> menu = driver.findElements(By.xpath("//*[@id=\"nav\"]/ul/li"));
+        for (WebElement we : menu){
+            System.out.println(we.getText());
+            if (we.getText().toLowerCase().contains("скетч")){
+                new Actions(driver)
+                        .moveToElement(we)
+                        .perform();
+
+                WebElement descScetch = driver.findElement(By.xpath("/html/body/div[2]/div/nav/div[1]/div[1]/div/p"));
+                Assert.assertTrue(descScetch.getText().contains("Скетчбуки (альбомы для рисования) — блокноты или большие записные книжки"));
+                break;
+            }
+        }
+        driver.quit();
+    }
 }
