@@ -1,8 +1,10 @@
+import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.interactions.Actions;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -116,6 +118,7 @@ public class GroupLearnForWinTest {
         driver.quit();
 
     }
+
     @Test
     public void testSubmitLanguageCapitalLetter() {
 
@@ -174,6 +177,28 @@ public class GroupLearnForWinTest {
                 .map(WebElement::getText)
                 .collect(Collectors.toList());
         Assert.assertEquals(extractedTexts, listOfExpectedSubMenuItems);
+
+        driver.quit();
+
+    }
+
+    @Test
+    public void testContextMenu() {
+
+        WebDriver driver = new ChromeDriver();
+
+        driver.get("https://the-internet.herokuapp.com/context_menu");
+
+        WebElement hotSpot = driver.findElement(By.id("hot-spot"));
+
+
+        Actions action = new Actions(driver);
+        action.contextClick(hotSpot).perform();
+
+        Alert alert = driver.switchTo().alert();
+        String alertText = alert.getText();
+
+        Assert.assertEquals("You selected a context menu", alertText);
 
         driver.quit();
 

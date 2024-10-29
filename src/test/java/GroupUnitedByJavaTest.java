@@ -711,4 +711,81 @@ public class GroupUnitedByJavaTest {
         driver.quit();
 
     }
+
+    @Test
+    public void testTitleText() {
+
+        WebDriver driver = new ChromeDriver();
+
+        driver.get("https://www.selenium.dev/selenium/web/web-form.html");
+
+        WebElement title = driver.findElement(By.className("display-6"));
+        String titleText = title.getText();
+
+        Assert.assertEquals(titleText, "Web form");
+
+        driver.quit();
+    }
+
+    @Test
+    public void testSubmitButton() {
+
+        WebDriver driver = new ChromeDriver();
+
+        driver.get("https://www.selenium.dev/selenium/web/web-form.html");
+
+        WebElement button = driver.findElement(By.tagName("button"));
+        button.click();
+
+        WebElement title = driver.findElement(By.tagName("h1"));
+        String titleText = title.getText();
+
+        Assert.assertEquals(titleText, "Form submitted");
+
+        driver.quit();
+    }
+
+    @Test
+    public void testSauceDemo () {
+
+        WebDriver driver=new ChromeDriver();
+        driver.get("https://www.saucedemo.com/");
+        driver.manage().timeouts().implicitlyWait(Duration.ofMillis(500));
+
+        WebElement userName=driver.findElement(By.id("user-name"));
+        userName.sendKeys("standard_user");
+        WebElement password=driver.findElement(By.id("password"));
+        password.sendKeys("secret_sauce");
+        WebElement login=driver.findElement(By.id("login-button"));
+        login.click();
+
+        WebElement backpack=driver.findElement(By.id("add-to-cart-sauce-labs-backpack"));
+        backpack.click();
+        WebElement bikeLight=driver.findElement(By.id("add-to-cart-sauce-labs-bike-light"));
+        bikeLight.click();
+        WebElement shopingCartLink=driver.findElement(By.xpath("//*[@id=\"shopping_cart_container\"]/a"));
+        shopingCartLink.click();
+
+        WebElement checkout=driver.findElement(By.id("checkout"));
+        checkout.click();
+
+        WebElement firstName=driver.findElement(By.id("first-name"));
+        firstName.sendKeys("Ivan");
+        WebElement lastName=driver.findElement(By.id("last-name"));
+        lastName.sendKeys("Kryzhanovskiy");
+        WebElement index=driver.findElement(By.id("postal-code"));
+        index.sendKeys("655017");
+        WebElement Continue1=driver.findElement(By.id("continue"));
+        Continue1.click();
+
+        WebElement total=driver.findElement(By.xpath("//*[@id=\"checkout_summary_container\"]/div/div[2]/div[6]"));
+        Assert.assertEquals(total.getText(), "Item total: $39.98");
+        WebElement finish=driver.findElement(By.id("finish"));
+        finish.click();
+
+        WebElement message=driver.findElement(By.xpath("//*[@id=\"checkout_complete_container\"]/h2"));
+        Assert.assertEquals(message.getText(), "Thank you for your order!");
+
+        driver.quit();
+    }
 }

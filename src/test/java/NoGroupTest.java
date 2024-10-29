@@ -695,7 +695,8 @@ public class NoGroupTest {
         ((JavascriptExecutor) driver).executeScript("arguments[0].click();", colorButton);
 
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//span[text()='Applied Filters']")));
-        WebElement selectedItem = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("(//a[@href='/p/100232204/reebok-logo-cuff-hat'])[2]")));
+        WebElement selectedItem = wait.until(ExpectedConditions.elementToBeClickable(
+                By.xpath("(//a[@href='/p/100232204/reebok-logo-cuff-hat'])[2]")));
         ((JavascriptExecutor) driver).executeScript("arguments[0].click();", selectedItem);
 
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//button[text()='Add to Cart']")));
@@ -809,6 +810,126 @@ public class NoGroupTest {
         Assert.assertEquals(errorMessage.getText(), "Error: First Name is required");
 
         driver.quit();
+    }
 
+    @Test
+    public void testBrandFilter() throws InterruptedException {
+        WebDriver driver = new ChromeDriver();
+
+        driver.get("https://fh.by/");
+        driver.manage().window().maximize();
+
+        WebElement christmasDecorationsSection = driver.findElement(
+                By.xpath("//a[@href='/interer/category/elochnye-igrushki-podveski']"));
+        christmasDecorationsSection.click();
+
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
+        wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//h1[text()='Ёлочные игрушки, украшения на ёлку']")));
+
+        Thread.sleep(2000);
+
+        WebElement scrollToSeeButton = driver.findElement(By.xpath("//div[text()='Категории']"));
+        Actions actions = new Actions(driver);
+        actions.scrollToElement(scrollToSeeButton);
+
+        WebElement viewAllButton = driver.findElement(By.xpath("(//button[text()='Посмотреть все'])[1]"));
+        viewAllButton.click();
+
+        WebElement brandSearchField = driver.findElement(By.id("brand-search-input"));
+        String brandForSearch = "villeroy";
+        brandSearchField.sendKeys(brandForSearch);
+
+        WebElement firstCheckboxUnderBrandSearchField = driver.findElement(
+                By.xpath("//input[@id='brand-search-input']/../../following-sibling::div//label"));
+
+        String filteredCheckbox = firstCheckboxUnderBrandSearchField.getText().toLowerCase();
+
+        Assert.assertTrue(filteredCheckbox.contains(brandForSearch));
+
+        driver.quit();
+    }
+
+    @Test
+    public void testAddToCart() {
+        WebDriver driver = new ChromeDriver();
+
+        driver.get("https://fh.by/");
+        driver.manage().window().maximize();
+
+        WebElement interiorSection = driver.findElement(By.xpath("//a[text()='Интерьер']"));
+        interiorSection.click();
+
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(15));
+
+        WebElement itemToBuy = wait.until(ExpectedConditions.elementToBeClickable(
+                By.xpath("(//a[contains(@class, 'ProductCard_isCatalog')])[1]")));
+        itemToBuy.click();
+
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//h4[text()='Описание']")));
+
+        WebElement addToCartButton = wait.until(ExpectedConditions.elementToBeClickable(
+                By.xpath("(//button[@type='submit'])[1]")));
+        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", addToCartButton);
+        ((JavascriptExecutor) driver).executeScript("arguments[0].click();", addToCartButton);
+
+        WebElement cartIcon = driver.findElement(By.xpath("//a[@aria-label='Корзина']"));
+        cartIcon.click();
+
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//h1[text()='Корзина']")));
+
+        Assert.assertTrue(driver.findElement(By.xpath("//button[@type='submit']")).isDisplayed());
+
+        driver.quit();
+    }
+
+    @Test
+    public void testAddToFavorites() {
+        WebDriver driver = new ChromeDriver();
+
+        driver.get("https://fh.by/women");
+        driver.manage().window().maximize();
+
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
+        WebElement addToFavoritesButton = wait.until(ExpectedConditions.elementToBeClickable(
+                By.xpath("(//button[contains(@class, 'LikeButton_button')])[3]")));
+        addToFavoritesButton.click();
+
+        String selectedItemName = driver.findElement(By.xpath("(//span[@class='ProductCard_title__qqiuX'])[3]")).getText();
+
+        WebElement favoritesMenuIcon = driver.findElement(By.xpath("//a[@aria-label='Избранное']"));
+        favoritesMenuIcon.click();
+
+        WebElement ItemFromMyFavoritesList = wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//span[@class='WishlistProductCard_title__Hi03j']")));
+
+        Assert.assertEquals(ItemFromMyFavoritesList.getText(), selectedItemName);
+        driver.quit();
+    }
+
+    @Test
+    public void testRemoveFromFavoritesOnCataloguePage() throws InterruptedException {
+        WebDriver driver = new ChromeDriver();
+
+        driver.get("https://fh.by/women");
+        driver.manage().window().maximize();
+
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
+        WebElement addToFavoritesButton = wait.until(ExpectedConditions.elementToBeClickable(
+                By.xpath("(//button[contains(@class, 'LikeButton_button')])[3]")));
+        addToFavoritesButton.click();
+        Thread.sleep(1000);
+        addToFavoritesButton.click();
+
+        WebElement favoritesMenuIcon = driver.findElement(By.xpath("//a[@aria-label='Избранное']"));
+        favoritesMenuIcon.click();
+
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//li//span[text()='Избранное']")));
+
+        String myFavoritesListTitle = wait.until(ExpectedConditions.visibilityOfElementLocated((By.xpath("//h1")))).getText();
+
+        Assert.assertEquals(myFavoritesListTitle, "Список желаний пуст");
+
+        driver.quit();
     }
 }
