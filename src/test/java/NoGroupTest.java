@@ -849,4 +849,128 @@ public class NoGroupTest {
 
         driver.quit();
     }
+
+    @Test
+    public void testAddToCart() {
+        WebDriver driver = new ChromeDriver();
+
+        driver.get("https://fh.by/");
+        driver.manage().window().maximize();
+
+        WebElement interiorSection = driver.findElement(By.xpath("//a[text()='Интерьер']"));
+        interiorSection.click();
+
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(15));
+
+        WebElement itemToBuy = wait.until(ExpectedConditions.elementToBeClickable(
+                By.xpath("(//a[contains(@class, 'ProductCard_isCatalog')])[1]")));
+        itemToBuy.click();
+
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//h4[text()='Описание']")));
+
+        WebElement addToCartButton = wait.until(ExpectedConditions.elementToBeClickable(
+                By.xpath("(//button[@type='submit'])[1]")));
+        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", addToCartButton);
+        ((JavascriptExecutor) driver).executeScript("arguments[0].click();", addToCartButton);
+
+        WebElement cartIcon = driver.findElement(By.xpath("//a[@aria-label='Корзина']"));
+        cartIcon.click();
+
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//h1[text()='Корзина']")));
+
+        Assert.assertTrue(driver.findElement(By.xpath("//button[@type='submit']")).isDisplayed());
+
+        driver.quit();
+    }
+
+    @Test
+    public void testAddToFavorites() {
+        WebDriver driver = new ChromeDriver();
+
+        driver.get("https://fh.by/women");
+        driver.manage().window().maximize();
+
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
+        WebElement addToFavoritesButton = wait.until(ExpectedConditions.elementToBeClickable(
+                By.xpath("(//button[contains(@class, 'LikeButton_button')])[3]")));
+        addToFavoritesButton.click();
+
+        String selectedItemName = driver.findElement(By.xpath("(//span[@class='ProductCard_title__qqiuX'])[3]")).getText();
+
+        WebElement favoritesMenuIcon = driver.findElement(By.xpath("//a[@aria-label='Избранное']"));
+        favoritesMenuIcon.click();
+
+        WebElement ItemFromMyFavoritesList = wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//span[@class='WishlistProductCard_title__Hi03j']")));
+
+        Assert.assertEquals(ItemFromMyFavoritesList.getText(), selectedItemName);
+        driver.quit();
+    }
+
+    @Test
+    public void testRemoveFromFavoritesOnCataloguePage() throws InterruptedException {
+        WebDriver driver = new ChromeDriver();
+
+        driver.get("https://fh.by/women");
+        driver.manage().window().maximize();
+
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
+        WebElement addToFavoritesButton = wait.until(ExpectedConditions.elementToBeClickable(
+                By.xpath("(//button[contains(@class, 'LikeButton_button')])[3]")));
+        addToFavoritesButton.click();
+        Thread.sleep(1000);
+        addToFavoritesButton.click();
+
+        WebElement favoritesMenuIcon = driver.findElement(By.xpath("//a[@aria-label='Избранное']"));
+        favoritesMenuIcon.click();
+
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//li//span[text()='Избранное']")));
+
+        String myFavoritesListTitle = wait.until(ExpectedConditions.visibilityOfElementLocated((By.xpath("//h1")))).getText();
+
+        Assert.assertEquals(myFavoritesListTitle, "Список желаний пуст");
+
+        driver.quit();
+    }
+
+    @Test
+    public void testTitleMTS() {
+
+        WebDriver driver = new ChromeDriver();
+        driver.get("https://www.mts.by/");
+
+        WebElement payBox = driver.findElement(By.xpath(
+                "//*[@id=\"pay-section\"]/div/div/div[2]/section/div/h2"));
+
+        Assert.assertEquals(payBox.getText(), "Онлайн пополнение\n" +
+                "без комиссии");
+
+        driver.quit();
+    }
+
+    @Test
+    public void testPayPartners() {
+
+        WebDriver driver = new ChromeDriver();
+        driver.get("https://www.mts.by/");
+
+        WebElement visa = driver.findElement(By.xpath(
+                "//*[@id=\"pay-section\"]/div/div/div[2]/section/div/div[2]/ul/li[1]"));
+        WebElement visaVerified = driver.findElement(By.xpath(
+                "//*[@id=\"pay-section\"]/div/div/div[2]/section/div/div[2]/ul/li[2]/img"));
+        WebElement masterCard = driver.findElement(By.xpath(
+                "//*[@id=\"pay-section\"]/div/div/div[2]/section/div/div[2]/ul/li[3]/img"));
+        WebElement masterCardSecureCode = driver.findElement(By.xpath(
+                "//*[@id=\"pay-section\"]/div/div/div[2]/section/div/div[2]/ul/li[4]/img"));
+        WebElement belCard = driver.findElement(By.xpath(
+                "//*[@id=\"pay-section\"]/div/div/div[2]/section/div/div[2]/ul/li[5]/img"));
+
+        Assert.assertTrue(visa.isDisplayed());
+        Assert.assertTrue(visaVerified.isDisplayed());
+        Assert.assertTrue(masterCard.isDisplayed());
+        Assert.assertTrue(masterCardSecureCode.isDisplayed());
+        Assert.assertTrue(belCard.isDisplayed());
+
+        driver.quit();
+    }
 }

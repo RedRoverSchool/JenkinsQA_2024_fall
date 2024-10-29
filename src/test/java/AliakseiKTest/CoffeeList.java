@@ -10,7 +10,7 @@ import java.util.Map;
 
 public class CoffeeList {
 
-    static WebDriver driver = CoffeeCart.driver;
+    static WebDriver driver = CoffeeCartTest.driver;
 
     //Получаем список вэбэлементов (название кофе и цена) и записываем в лист CoffeeList
     public static List<WebElement> getCoffeeListActual(){
@@ -61,5 +61,15 @@ public class CoffeeList {
     public static int getCoffeeMapSizeExpected(){
         return getCoffeMapExpected().size();
     }
+
+    public static double getActualCartSumm() {
+        double actualCartSumm = 0;
+        String cart = driver.findElement(By.className("pay")).getText();
+        int index = cart.indexOf("$");
+        cart = cart.substring(index + 1, cart.length());
+        actualCartSumm = Double.parseDouble(cart);
+        return actualCartSumm;
+    }
 }
+
 

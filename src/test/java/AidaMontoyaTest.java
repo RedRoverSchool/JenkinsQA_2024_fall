@@ -24,13 +24,14 @@ public class AidaMontoyaTest {
         clickButton.sendKeys(Keys.RETURN);
         Thread.sleep(2000);
 
-        clickButton = driver.findElement(By.xpath("//*[@id='block-dutchbros-content']/article/div[2]/div[1]/a"));//find "caramel pumpkin"
-        Thread.sleep(1000);
-        clickButton.sendKeys(Keys.RETURN);
+        driver.findElement(By.xpath("//*[contains(@href,'caramel-pumpkin-brulee-breve')]")).click();//find "caramel pumpkin"
+        Thread.sleep(2000);
 
-        Assert.assertEquals("CARAMEL PUMPKIN BRULEE BREVE", "CARAMEL PUMPKIN BRULEE BREVE");
+        String message = driver.getCurrentUrl();
+        System.out.println(message.equals("https://www.dutchbros.com/menu/seasonal-drinks/caramel-pumpkin-brulee-breve"));
 
         driver.quit();
+
     }
 
     @Test
@@ -46,12 +47,12 @@ public class AidaMontoyaTest {
         driver.findElement(By.xpath("//a[starts-with(@href, 'http://linkencore.iii.com/')]")).click();// find link+ button/click
         Thread.sleep(2000);
 
-        driver.findElement(By.xpath("//*[@id='searchString']")).click();
+        WebElement search = driver.findElement(By.xpath("//input[@id='searchString']"));
+        search.sendKeys("Pushkik");
+        search.sendKeys(Keys.RETURN);
         Thread.sleep(2000);
 
-        driver.findElement(By.xpath("//*[@id='dialogComponent-content']"));// find "No results found"
-
-        Assert.assertEquals("You must enter a valid for Search.OK", "You must enter a valid for Search.OK");
+        Assert.assertEquals(driver.findElement(By.xpath("//div[@class='spellingSuggestion']")), "Did you mean: pushkin?");
 
         driver.quit();
     }
