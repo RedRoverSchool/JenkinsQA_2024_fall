@@ -396,6 +396,7 @@ public class GroupCodeBrewTest {
         //Close the browser
         driver.quit();
     }
+
 }
 
 
