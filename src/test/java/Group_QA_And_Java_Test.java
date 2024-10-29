@@ -11,7 +11,7 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.interactions.Actions;
 
-public class GroupQAandJavaTest {
+public class Group_QA_And_Java_Test {
 
     private static final String SAUCEDEMO_URL = "https://www.saucedemo.com/";
 
