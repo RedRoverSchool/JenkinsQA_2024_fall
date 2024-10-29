@@ -882,4 +882,15 @@ public class NoGroupTest {
 
         driver.quit();
     }
+    //EdGatin
+    @Test
+    public void test() {
+        WebDriver driver = new ChromeDriver();
+        driver.get("https://github.com/RedRoverSchool/JenkinsQA_2024_fall");
+        driver.findElement(new By.ByXPath("//*[@id=\":R55ab:\"]")).click();
+        String url = driver.findElement(By.id("clone-with-https")).getAttribute("value");
+        System.out.println(url);
+        driver.close();
+        Assert.assertEquals(url, "https://github.com/RedRoverSchool/JenkinsQA_2024_fall.git");
+    }
 }
