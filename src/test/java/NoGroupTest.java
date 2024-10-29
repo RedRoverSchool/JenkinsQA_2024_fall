@@ -5,11 +5,12 @@ import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
+import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 
 import java.awt.*;
 import java.time.Duration;
-import java.util.ArrayList;
+import java.util.*;
 import java.util.List;
 
 public class NoGroupTest {
@@ -931,5 +932,142 @@ public class NoGroupTest {
         Assert.assertEquals(myFavoritesListTitle, "Список желаний пуст");
 
         driver.quit();
+    }
+
+    //Map содержащий ожидаемые значения названия кофе и цены.
+    //На сайте эти значения меняются несколько раз за день.
+    private Map<String, String> getCoffeMapExpected(){
+        Map<String, String> coffeeMapExpected = new HashMap<>();
+        coffeeMapExpected.put("Espresso", "10.00");
+        coffeeMapExpected.put("Espresso Macchiato", "10.00");
+        coffeeMapExpected.put("Cappuccino", "19.00");
+        coffeeMapExpected.put("Mocha", "8.00");
+        coffeeMapExpected.put("Flat White", "18.00");
+        coffeeMapExpected.put("Americano", "7.00");
+        coffeeMapExpected.put("Cafe Latte", "10.00");
+        coffeeMapExpected.put("Espresso Con Panna", "14.00");
+        coffeeMapExpected.put("Cafe Breve", "10.00");
+        return coffeeMapExpected;
+    }
+
+    List<String> coffeeNameListActual = new ArrayList<>();
+    Map<String, String> coffeeMapActual = new HashMap<>();
+
+    private static int getRandomValue(int min, int max){
+        int randomValue = (int) (Math.random() * (max - min + 1)) + min;
+        return randomValue;
+    }
+
+    @Ignore
+    @Test //Проверяем title
+    public void testTitle() {
+        WebDriver driver = new ChromeDriver();
+        driver.get("https://coffee-cart.app/");
+        driver.manage().window().maximize();
+        driver.getTitle();
+        Assert.assertEquals(driver.getTitle(), "Coffee cart");
+        driver.quit();
+    }
+
+    @Ignore
+    @Test //Проверяем количество сущностей и пары значений имя : цена
+    public void testCoffeeNameAndPrice() {
+        WebDriver driver = new ChromeDriver();
+        driver.get("https://coffee-cart.app/");
+
+        List<WebElement> coffeeElementListActual = driver.findElements(By.xpath("//div[2]/ul/li"));
+        for (int i = 0; i < coffeeElementListActual.size(); i++) {
+
+            String coffee = coffeeElementListActual.get(i).getText();
+            int index = coffee.indexOf("\n");
+            coffee = coffee.substring(0, index);
+
+            String path = String.format("//div[2]/ul/li[%s]/h4/small", i+1);
+            String price = driver.findElement(By.xpath(path)).getText();
+            price = price.substring(1);
+
+            coffeeNameListActual.add(coffee);
+            coffeeMapActual.put(coffee, price);
+        }
+        //Assert.assertEquals(getCoffeMapExpected().size(), coffeeMapActual.size());
+        System.out.println(getCoffeMapExpected());
+        System.out.println(coffeeMapActual);
+        Assert.assertEquals(getCoffeMapExpected(), coffeeMapActual);
+
+        driver.quit();
+    }
+
+    @Test //Проверяем стоимость товаров в корзине
+    public void testCart() {
+        WebDriver driver = new ChromeDriver();
+        driver.get("https://coffee-cart.app/");
+        driver.manage().window().maximize();
+        Actions action = new Actions(driver);
+
+        List<WebElement> coffeeElementListActual = driver.findElements(By.xpath("//div[2]/ul/li"));
+        for (int i = 0; i < coffeeElementListActual.size(); i++) {
+
+            String coffee = coffeeElementListActual.get(i).getText();
+            int index = coffee.indexOf("\n");
+            coffee = coffee.substring(0, index);
+
+            String path = String.format("//div[2]/ul/li[%s]/h4/small", i+1);
+            String price = driver.findElement(By.xpath(path)).getText();
+            price = price.substring(1);
+
+            coffeeNameListActual.add(coffee);
+            coffeeMapActual.put(coffee, price);
+        }
+
+        double cartSummExpected = 0.2f;
+        double cartSummActual = 0.2f;
+
+        List<String> orderListActual = new ArrayList<>();
+        List<String> orderListExpected = new ArrayList<>();
+
+        int randomItem = getRandomValue(0, 8);
+        String coffeeItem = String.format("//ul/li/div/div/div[@aria-label=\"%s\"]", coffeeNameListActual.get(randomItem));
+        driver.findElement(By.xpath(coffeeItem)).click();
+
+        String cart = driver.findElement(By.className("pay")).getText();
+        int indexCart = cart.indexOf("$");
+        cartSummActual = Double.parseDouble(cart.substring(indexCart + 1, cart.length()));
+
+        cartSummExpected = Double.parseDouble(coffeeMapActual.get(coffeeNameListActual.get(randomItem)));
+        orderListExpected.add(coffeeNameListActual.get(randomItem));
+
+        //Проверяем общую сумму товаров в корзине после добавления туда одной покупки
+        Assert.assertEquals(cartSummActual, cartSummExpected);
+
+        randomItem = getRandomValue(0, 8);
+        coffeeItem = String.format("//ul/li/div/div/div[@aria-label=\"%s\"]", coffeeNameListActual.get(randomItem));
+        driver.findElement(By.xpath(coffeeItem)).click();
+
+        cart = driver.findElement(By.className("pay")).getText();
+        indexCart = cart.indexOf("$");
+        cartSummActual = Double.parseDouble(cart.substring(indexCart + 1, cart.length()));
+
+        cartSummExpected += Double.parseDouble(coffeeMapActual.get(coffeeNameListActual.get(randomItem)));
+        orderListExpected.add(coffeeNameListActual.get(randomItem));
+
+        //Проверяем общую сумму товаров в корзине после добавления туда второй покупки
+        Assert.assertEquals(cartSummActual, cartSummExpected);
+
+        //Получаем список товаров в корзине
+        action.moveToElement(driver.findElement(By.xpath("//div[1]/button"))).perform();
+
+        for (int i =1; i <= 2; i++){
+            String address = (String.format("//div[2]/div[1]/ul/li[%d]/div[1]/span[1]", i));
+            orderListActual.add(driver.findElement(By.xpath(address)).getText());
+        }
+        //На сайте элементы в контекстном меню отсортированы по имени
+        Collections.sort(orderListExpected);
+        //Проверяем названия товаров в корзине
+        Assert.assertEquals(orderListActual, orderListExpected);
+
+        driver.quit();
+
+        //Проверяем сумму товаров после увеличения количества товаров в корзине см помощью кнопки контекстного меню корзины
+
     }
 }
