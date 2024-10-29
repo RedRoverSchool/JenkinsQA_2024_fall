@@ -906,4 +906,30 @@ public class NoGroupTest {
         Assert.assertEquals(ItemFromMyFavoritesList.getText(), selectedItemName);
         driver.quit();
     }
+
+    @Test
+    public void testRemoveFromFavoritesOnCataloguePage() throws InterruptedException {
+        WebDriver driver = new ChromeDriver();
+
+        driver.get("https://fh.by/women");
+        driver.manage().window().maximize();
+
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
+        WebElement addToFavoritesButton = wait.until(ExpectedConditions.elementToBeClickable(
+                By.xpath("(//button[contains(@class, 'LikeButton_button')])[3]")));
+        addToFavoritesButton.click();
+        Thread.sleep(1000);
+        addToFavoritesButton.click();
+
+        WebElement favoritesMenuIcon = driver.findElement(By.xpath("//a[@aria-label='Избранное']"));
+        favoritesMenuIcon.click();
+
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//li//span[text()='Избранное']")));
+
+        String myFavoritesListTitle = wait.until(ExpectedConditions.visibilityOfElementLocated((By.xpath("//h1")))).getText();
+
+        Assert.assertEquals(myFavoritesListTitle, "Список желаний пуст");
+
+        driver.quit();
+    }
 }
