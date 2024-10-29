@@ -9,6 +9,7 @@ import org.testng.annotations.Test;
 
 import java.awt.*;
 import java.time.Duration;
+import java.util.ArrayList;
 import java.util.List;
 
 public class NoGroupTest {
@@ -694,7 +695,8 @@ public class NoGroupTest {
         ((JavascriptExecutor) driver).executeScript("arguments[0].click();", colorButton);
 
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//span[text()='Applied Filters']")));
-        WebElement selectedItem = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("(//a[@href='/p/100232204/reebok-logo-cuff-hat'])[2]")));
+        WebElement selectedItem = wait.until(ExpectedConditions.elementToBeClickable(
+                By.xpath("(//a[@href='/p/100232204/reebok-logo-cuff-hat'])[2]")));
         ((JavascriptExecutor) driver).executeScript("arguments[0].click();", selectedItem);
 
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//button[text()='Add to Cart']")));
@@ -732,6 +734,118 @@ public class NoGroupTest {
         WebElement message = driver.findElement(By.xpath("//*[@id='ja_172995591326639878']/div/div[3]"));
         Assert.assertEquals(message.getText(), "Il tracking inserito non è stato trovato nel nostro database.\n" +
                 "Per assistenza contattare il servizio clienti.");
+
+        driver.quit();
+    }
+
+    @Test
+    public void testProducts() {
+        WebDriver driver = new ChromeDriver();
+        driver.get("https://openweather.co.uk/");
+        WebElement productButton = driver.findElement(By.xpath("//*[@id='desktop-menu']/ul/li[1]/a"));
+        productButton.click();
+        Assert.assertEquals(driver.getTitle(), "Products - OpenWeather");
+        System.out.println(driver.getWindowHandles());
+        driver.quit();
+    }
+
+    @Test
+    public void testDashboard() {
+        WebDriver driver = new ChromeDriver();
+        driver.get("https://openweather.co.uk/");
+        WebElement dashboardButton = driver.findElement(By.xpath("//*[@id='desktop-menu']/ul/li[2]/a"));
+        dashboardButton.click();
+        List<String> tabs = new ArrayList<>(driver.getWindowHandles());
+        driver.switchTo().window(tabs.get(1));
+        Assert.assertEquals(driver.getCurrentUrl(), "https://dashboard.openweather.co.uk/");
+        driver.quit();
+    }
+
+    @Test
+    public void testHowToBuyButton() {
+        WebDriver driver = new ChromeDriver();
+        driver.get("https://openweather.co.uk/");
+        WebElement dashboardButton = driver.findElement(By.xpath("//*[@id='desktop-menu']/ul/li[3]/a"));
+        dashboardButton.click();
+        driver.manage().window().maximize();
+        JavascriptExecutor js = (JavascriptExecutor) driver;
+        js.executeScript("window.scrollBy(0,2500)");
+        WebElement howToBuyButton = driver.findElement(By.xpath("//*[@id='current']/div/div/div/a[1]"));
+        js.executeScript("arguments[0].click();", howToBuyButton);
+        List<String> tabs = new ArrayList<>(driver.getWindowHandles());
+        driver.switchTo().window(tabs.get(1));
+        Assert.assertEquals(driver.getCurrentUrl(), "https://openweather.co.uk/how-to-buy");
+        driver.quit();
+    }
+
+    @Test
+    public void emptyFieldsTest() {
+
+        WebDriver driver = new ChromeDriver();
+        driver.get("https://www.saucedemo.com/");
+
+        WebElement userNameBox = driver.findElement(By.xpath("//*[@id='user-name']"));
+        userNameBox.sendKeys("standard_user");
+
+        WebElement passwordBox = driver.findElement(By.xpath("//*[@id=\"password\"]"));
+        passwordBox.sendKeys("secret_sauce");
+
+        WebElement loginButton = driver.findElement(By.xpath("//*[@id=\"login-button\"]"));
+        loginButton.click();
+
+        WebElement itemOnesie = driver.findElement(
+                By.xpath("//*[@id=\"add-to-cart-sauce-labs-onesie\"]"));
+        itemOnesie.click();
+
+        WebElement cartIcon = driver.findElement(By.xpath("//*[@id=\"shopping_cart_container\"]/a"));
+        cartIcon.click();
+
+        WebElement checkoutButton = driver.findElement(By.xpath("//*[@id=\"checkout\"]"));
+        checkoutButton.click();
+
+        WebElement continueButton = driver.findElement(By.xpath("//*[@id=\"continue\"]"));
+        continueButton.click();
+
+        WebElement errorMessage = driver.findElement(By.xpath("//*[@id=\"checkout_info_container\"]/div/form/div[1]/div[4]/h3"));
+        Assert.assertEquals(errorMessage.getText(), "Error: First Name is required");
+
+        driver.quit();
+    }
+
+    @Test
+    public void testBrandFilter() throws InterruptedException {
+        WebDriver driver = new ChromeDriver();
+
+        driver.get("https://fh.by/");
+        driver.manage().window().maximize();
+
+        WebElement christmasDecorationsSection = driver.findElement(
+                By.xpath("//a[@href='/interer/category/elochnye-igrushki-podveski']"));
+        christmasDecorationsSection.click();
+
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
+        wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//h1[text()='Ёлочные игрушки, украшения на ёлку']")));
+
+        Thread.sleep(2000);
+
+        WebElement scrollToSeeButton = driver.findElement(By.xpath("//div[text()='Категории']"));
+        Actions actions = new Actions(driver);
+        actions.scrollToElement(scrollToSeeButton);
+
+        WebElement viewAllButton = driver.findElement(By.xpath("(//button[text()='Посмотреть все'])[1]"));
+        viewAllButton.click();
+
+        WebElement brandSearchField = driver.findElement(By.id("brand-search-input"));
+        String brandForSearch = "villeroy";
+        brandSearchField.sendKeys(brandForSearch);
+
+        WebElement firstCheckboxUnderBrandSearchField = driver.findElement(
+                By.xpath("//input[@id='brand-search-input']/../../following-sibling::div//label"));
+
+        String filteredCheckbox = firstCheckboxUnderBrandSearchField.getText().toLowerCase();
+
+        Assert.assertTrue(filteredCheckbox.contains(brandForSearch));
 
         driver.quit();
     }

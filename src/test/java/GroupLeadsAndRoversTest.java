@@ -36,11 +36,11 @@ public class GroupLeadsAndRoversTest {
 
     private void openBookStoreApplication() {
         WebElement buttonBookStoreApplication = driver.findElement(By.xpath("//*[@class = 'card mt-4 top-card']//h5[contains(text(), 'Book Store Application')]"));
-        scroolDown();
+        scrollDown();
         buttonBookStoreApplication.click();
     }
 
-    private void scroolDown(){
+    private void scrollDown(){
         JavascriptExecutor js = (JavascriptExecutor) driver;
         js.executeScript("window.scrollTo(0, document.body.scrollHeight)");
     }
@@ -56,7 +56,7 @@ public class GroupLeadsAndRoversTest {
     }
 
     @BeforeMethod
-    private void initDriver() throws InterruptedException {
+    private void initDriver() {
         this.driver = new ChromeDriver();
     }
 
@@ -99,7 +99,7 @@ public class GroupLeadsAndRoversTest {
     }
 
     @Test
-    public void testCorectPassword() {
+    public void testCorrectPassword() {
 
         driver.manage().timeouts().implicitlyWait(Duration.ofMillis(500));
         driver.get("https://the-internet.herokuapp.com/login");
@@ -213,7 +213,7 @@ public class GroupLeadsAndRoversTest {
 
         List<WebElement> gridPanel = driver.findElements(By.xpath("//div[@ id = 'gridContainer']//li"));
         Assert.assertEquals(gridPanel.size(), 9);
-        scroolDown();
+        scrollDown();
         gridPanel.get(0).click();
         gridPanel.get(2).click();
         gridPanel.get(4).click();
@@ -272,7 +272,7 @@ public class GroupLeadsAndRoversTest {
         openBookStoreApplication();
         Thread.sleep(1000);
 
-        scroolDown();
+        scrollDown();
         WebElement fieldRowsPerPage = driver.findElement(By.xpath("//*[@aria-label='rows per page']"));
         fieldRowsPerPage.click();
         WebElement rowsPerPage5 = driver.findElement(By.xpath("//*[@aria-label='rows per page']//option[@value='5']"));
@@ -627,5 +627,42 @@ public class GroupLeadsAndRoversTest {
         listOfBooks.removeIf(nextBook -> !nextBook.getText().equals("    "));
         Assert.assertEquals(listOfBooks.size(), 8);
     }
+
+    @Test
+    public void testCannotLoginWithoutLoginAndPassword() {
+        driver.get("https://parabank.parasoft.com/parabank/index.htm");
+        driver.findElement(By.xpath("//input[@type='submit']")).click();
+        String error = driver.findElement(By.cssSelector("#rightPanel .title")).getText();
+        String errorMessage = driver.findElement(By.cssSelector("#rightPanel .error")).getText();
+        Assert.assertEquals(error, "Error!");
+        Assert.assertEquals(errorMessage, "Please enter a username and password.");
+    }
+    @Test
+    public void testCannotCreateNewAccountWithoutRequiredData() {
+        driver.get("https://parabank.parasoft.com/parabank/index.htm");
+        driver.findElement(By.xpath("//a[contains(@href,'register.htm')]")).click();
+        driver.findElement(By.xpath("//input[@value='Register']")).click();
+        Assert.assertEquals(driver.findElement(By.xpath("//span[@id='customer.firstName.errors']")).getText(), "First name is required.");
+        Assert.assertEquals(driver.findElement(By.xpath("//span[@id='customer.lastName.errors']")).getText(), "Last name is required.");
+        Assert.assertEquals(driver.findElement(By.xpath("//span[@id='customer.address.street.errors']")).getText(), "Address is required.");
+        Assert.assertEquals(driver.findElement(By.xpath("//span[@id='customer.address.city.errors']")).getText(), "City is required.");
+        Assert.assertEquals(driver.findElement(By.xpath("//span[@id='customer.address.state.errors']")).getText(), "State is required.");
+        Assert.assertEquals(driver.findElement(By.xpath("//span[@id='customer.address.zipCode.errors']")).getText(), "Zip Code is required.");
+        Assert.assertEquals(driver.findElement(By.xpath("//span[@id='customer.ssn.errors']")).getText(), "Social Security Number is required.");
+        Assert.assertEquals(driver.findElement(By.xpath("//span[@id='customer.username.errors']")).getText(), "Username is required.");
+        Assert.assertEquals(driver.findElement(By.xpath("//span[@id='customer.password.errors']")).getText(), "Password is required.");
+        Assert.assertEquals(driver.findElement(By.xpath("//span[@id='repeatedPassword.errors']")).getText(), "Password confirmation is required.");
+    }
+
+    @Test
+    public void testLeftMenuList() {
+        driver.get("https://parabank.parasoft.com/parabank/index.htm");
+        List <WebElement> leftMenuList = driver.findElements(By.xpath("//ul[@class='leftmenu']/li"));
+        List <String> expectedleftMenuList = List.of("Solutions", "About Us", "Services", "Products", "Locations", "Admin Page");
+        for (int i = 0; i < leftMenuList.size(); i++) {
+            Assert.assertEquals(leftMenuList.get(i).getText(), expectedleftMenuList.get(i));
+        }
+    }
+
 
 }
