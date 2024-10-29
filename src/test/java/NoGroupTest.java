@@ -882,4 +882,28 @@ public class NoGroupTest {
 
         driver.quit();
     }
+
+    @Test
+    public void testAddToFavorites() {
+        WebDriver driver = new ChromeDriver();
+
+        driver.get("https://fh.by/women");
+        driver.manage().window().maximize();
+
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
+        WebElement addToFavoritesButton = wait.until(ExpectedConditions.elementToBeClickable(
+                By.xpath("(//button[contains(@class, 'LikeButton_button')])[3]")));
+        addToFavoritesButton.click();
+
+        String selectedItemName = driver.findElement(By.xpath("(//span[@class='ProductCard_title__qqiuX'])[3]")).getText();
+
+        WebElement favoritesMenuIcon = driver.findElement(By.xpath("//a[@aria-label='Избранное']"));
+        favoritesMenuIcon.click();
+
+        WebElement ItemFromMyFavoritesList = wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//span[@class='WishlistProductCard_title__Hi03j']")));
+
+        Assert.assertEquals(ItemFromMyFavoritesList.getText(), selectedItemName);
+        driver.quit();
+    }
 }
