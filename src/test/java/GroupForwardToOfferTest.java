@@ -1,6 +1,5 @@
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -17,7 +16,7 @@ public class GroupForwardToOfferTest {
     private WebDriverWait webDriverWait;
 
     @BeforeTest
-    public void beforTest() {
+    public void beforeTest() {
         driver = new ChromeDriver();
         webDriverWait = new WebDriverWait(driver, Duration.ofSeconds(10));
         driver.manage().window().maximize();
@@ -203,6 +202,21 @@ public class GroupForwardToOfferTest {
         String actualResult = titleOfYandexId.getText();
 
         Assert.assertEquals(actualResult,"Войдите с Яндекс ID");
+    }
+
+    @Test
+    public void testSeleniumAboutMenuContainsHistoryItem(){
+        driver.get("https://www.selenium.dev/");
+        driver.findElement(By.xpath("//*[@id='navbarDropdown']")).click();
+
+        List<String> itemsTextList = driver
+                .findElements(By.xpath("//*[@class='dropdown-menu show']/a[@class='dropdown-item']"))
+                .stream()
+                .map(WebElement::getText)
+                .toList();
+
+        Assert.assertEquals(itemsTextList.size(), 8);
+        Assert.assertListContainsObject(itemsTextList, "History", "History item is not found in the list");
     }
 
     @AfterTest
