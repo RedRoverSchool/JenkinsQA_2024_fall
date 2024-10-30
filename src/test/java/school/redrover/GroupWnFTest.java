@@ -1,4 +1,4 @@
-package school.redrover.old;
+package school.redrover;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
@@ -10,7 +10,7 @@ public class GroupWnFTest extends BaseTest {
 
     @Test
     public void welcomeMessage() {
-        WebElement welcomeMessage = getDriver().findElement(By.className("empty-state-block"));
+        WebElement welcomeMessage = getDriver().findElement(By.xpath("//h1"));
         Assert.assertEquals(welcomeMessage.getText(), "Welcome to Jenkins!");
     }
 }
