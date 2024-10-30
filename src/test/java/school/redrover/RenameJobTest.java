@@ -24,18 +24,16 @@ public class RenameJobTest extends BaseTest {
         getDriver().findElement(By.xpath("//*[@id='breadcrumbs']/li[1]/a")).click();
         getDriver().findElement(By.xpath("//*[@id='job_TestBuild']/td[3]/a/span")).getText();
 
-        Assert.assertEquals(getDriver().findElement(By.xpath("//*[@class='jenkins-table__link model-link inside']")).getText(),"TestBuild");
+        Assert.assertEquals(getDriver().findElement(By.xpath("//*[@class='jenkins-table__link model-link inside']")).getText(), "TestBuild");
 
         WebElement dropdownChevron = getDriver().findElement(By.xpath("//*[@id='job_TestBuild']/td[3]/a/button"));
         Actions actionsDropdownChevron = new Actions(getDriver());
         actionsDropdownChevron.moveToElement(dropdownChevron).click().perform();
 
-        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(10));
-        WebElement renameLink = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("/html/body/div[3]/div/div/div/a[4]")));
+        WebElement renameLink = getDriver().findElement(By.xpath("//div[3]/div/div/div/a[4]"));
         renameLink.click();
 
-
-        Assert.assertEquals(getDriver().getCurrentUrl(),"http://localhost:8080/job/TestBuild/confirm-rename");
+        Assert.assertEquals(getDriver().getCurrentUrl(), "http://localhost:8080/job/TestBuild/confirm-rename");
 
         WebElement inputField = getDriver().findElement(By.xpath("//*[@id='main-panel']/form/div[1]/div[1]/div[2]/input"));
         inputField.clear();
@@ -49,7 +47,7 @@ public class RenameJobTest extends BaseTest {
         getDriver().findElement(By.xpath("//*[@id='job_TestBuild_NewName']/td[3]/a/span")).getText();
 
         Assert.assertEquals(getDriver().findElement(By.xpath("//*[@class='jenkins-table__link model-link inside']"))
-                .getText(),"TestBuild_NewName");
+                .getText(), "TestBuild_NewName");
 
     }
 
