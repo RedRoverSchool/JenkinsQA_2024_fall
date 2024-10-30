@@ -1,8 +1,8 @@
 package school.redrover;
 
 import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import school.redrover.runner.BaseTest;
@@ -10,7 +10,7 @@ import school.redrover.runner.BaseTest;
 public class RenameJobTest extends BaseTest {
 
     @Test
-    public void tesRenameJob(){
+    public void tesRenameJob() throws InterruptedException {
 
         getDriver().findElement(By.xpath("//*[@id='main-panel']/div[2]/div/section[1]/ul/li/a")).click();
         getDriver().findElement(By.xpath("//*[@id='name']")).sendKeys("TestBuild");
@@ -23,15 +23,24 @@ public class RenameJobTest extends BaseTest {
         Assert.assertEquals(getDriver().findElement(By.xpath("//*[@id='job_TestBuild']/td[3]/a/span")).getText(),"TestBuild");
 
         WebElement dropdownChevron = getDriver().findElement(By.xpath("//*[@id='job_TestBuild']/td[3]/a/button"));
-        JavascriptExecutor jsDropdownChevron = (JavascriptExecutor) getDriver();
-        jsDropdownChevron.executeScript("arguments[0].click();", dropdownChevron);
-       // getDriver().findElement(By.xpath("//*[@id='tippy-6']/div/div/div/a[4]")).click();
+        Actions actionsDropdownChevron = new Actions(getDriver());
+        actionsDropdownChevron.moveToElement(dropdownChevron).click().perform();
 
-        WebElement renameButton = getDriver().findElement(By.xpath("//*[@id='tippy-6']/div/div/div"));
-        JavascriptExecutor jsRenameButton = (JavascriptExecutor) getDriver();
-        jsRenameButton.executeScript("arguments[0].click();", renameButton);
+        WebElement renameLink = getDriver().findElement(By.xpath("//*[@id='tippy-6']/div/div/div/a[4]"));
+        Actions actionsRenameLink = new Actions(getDriver());
+        actionsRenameLink.moveToElement(renameLink).click().perform();
 
+        Thread.sleep(5000);
 
+        Assert.assertEquals(getDriver().getCurrentUrl(),"http://localhost:8080/job/TestBuild/confirm-rename");
+
+        WebElement inputField = getDriver().findElement(By.xpath("//*[@id='main-pane']/form/div[1]/div[1]/div[2]/input"));
+        inputField.clear();
+        inputField.sendKeys("NewTestBuildName");
+
+        WebElement renameButton = getDriver().findElement(By.xpath("//*[@id='tippy-6']/div/div/div/a[4]"));
+        Actions actionsRenameButton = new Actions(getDriver());
+        actionsRenameButton.moveToElement(renameButton).click().perform();
 
 
     }
