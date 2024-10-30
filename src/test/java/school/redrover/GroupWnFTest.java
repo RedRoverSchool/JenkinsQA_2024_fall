@@ -1,4 +1,4 @@
-package school.redrover.old;
+package school.redrover;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
