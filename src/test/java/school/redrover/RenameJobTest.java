@@ -10,7 +10,7 @@ import school.redrover.runner.BaseTest;
 public class RenameJobTest extends BaseTest {
 
     @Test
-    public void tesRenameJob() throws InterruptedException {
+    public void tesRenameJob() {
 
         getDriver().findElement(By.xpath("//*[@id='main-panel']/div[2]/div/section[1]/ul/li/a")).click();
         getDriver().findElement(By.xpath("//*[@id='name']")).sendKeys("TestBuild");
@@ -30,8 +30,6 @@ public class RenameJobTest extends BaseTest {
         Actions actionsRenameLink = new Actions(getDriver());
         actionsRenameLink.moveToElement(renameLink).click().perform();
 
-     //   Thread.sleep(5000);
-
         Assert.assertEquals(getDriver().getCurrentUrl(),"http://localhost:8080/job/TestBuild/confirm-rename");
 
         WebElement inputField = getDriver().findElement(By.xpath("//*[@id='main-panel']/form/div[1]/div[1]/div[2]/input"));
@@ -42,9 +40,7 @@ public class RenameJobTest extends BaseTest {
         Actions actionsRenameButton = new Actions(getDriver());
         actionsRenameButton.moveToElement(renameButton).click().perform();
 
-      //  getDriver().get("http://localhost:8080/");
-
-
+        getDriver().findElement(By.id("jenkins-home-link")).click();
         getDriver().findElement(By.xpath("//*[@id='job_TestBuild_NewName']/td[3]/a/span")).getText();
 
         Assert.assertEquals(getDriver().findElement(By.xpath("//*[@class='jenkins-table__link model-link inside']"))
