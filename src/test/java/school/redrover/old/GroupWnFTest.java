@@ -10,7 +10,7 @@ public class GroupWnFTest extends BaseTest {
 
     @Test
     public void welcomeMessage() {
-        WebElement welcomeMessage = getDriver().findElement(By.className("empty-state-block"));
+        WebElement welcomeMessage = getDriver().findElement(By.className("empty-state-block > h1"));
         Assert.assertEquals(welcomeMessage.getText(), "Welcome to Jenkins!");
     }
 }
