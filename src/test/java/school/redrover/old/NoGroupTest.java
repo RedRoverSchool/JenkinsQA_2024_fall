@@ -1,5 +1,3 @@
-package school.redrover.old;
-
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
@@ -975,6 +973,16 @@ public class NoGroupTest {
         Assert.assertTrue(masterCardSecureCode.isDisplayed());
         Assert.assertTrue(belCard.isDisplayed());
 
+        driver.quit();
+    }
+    //EdGatin
+    @Test
+    public void CheckUrl() {
+        WebDriver driver = new ChromeDriver();
+        driver.get("https://github.com/RedRoverSchool/JenkinsQA_2024_fall");
+        driver.findElement(By.xpath("//*[@id=\":R55ab:\"]")).click();
+        String url = driver.findElement(By.id("clone-with-https")).getAttribute("value");
+        Assert.assertEquals(url, "https://github.com/RedRoverSchool/JenkinsQA_2024_fall.git");
         driver.quit();
     }
 }
