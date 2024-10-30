@@ -1,0 +1,6 @@
+local.admin.username=admin
+local.admin.password=f30fb2b140cb46c49c190f512ac376f9
+local.host=localhost
+local.port=8080
+local.chrome_options=--window-size=1920,1080
+local.closeBrowserIfError=false

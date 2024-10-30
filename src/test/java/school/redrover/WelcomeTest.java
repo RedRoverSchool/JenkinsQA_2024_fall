@@ -6,11 +6,12 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 import school.redrover.runner.BaseTest;
 
-public class GroupWnFTest extends BaseTest {
+public class WelcomeTest extends BaseTest {
 
     @Test
     public void welcomeMessage() {
-        WebElement welcomeMessage = getDriver().findElement(By.className("empty-state-block > h1"));
+        WebElement welcomeMessage = getDriver().findElement(By.xpath("//h1"));
+
         Assert.assertEquals(welcomeMessage.getText(), "Welcome to Jenkins!");
     }
 }
