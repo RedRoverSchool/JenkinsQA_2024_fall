@@ -980,7 +980,7 @@ public class NoGroupTest {
     public void CheckUrl() {
         WebDriver driver = new ChromeDriver();
         driver.get("https://github.com/RedRoverSchool/JenkinsQA_2024_fall");
-        driver.findElement(By.ByXPath("//*[@id=\":R55ab:\"]")).click();
+        driver.findElement(By.xpath("//*[@id=\":R55ab:\"]")).click();
         String url = driver.findElement(By.id("clone-with-https")).getAttribute("value");
         Assert.assertEquals(url, "https://github.com/RedRoverSchool/JenkinsQA_2024_fall.git");
         driver.quit();
