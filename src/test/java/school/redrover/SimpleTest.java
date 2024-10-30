@@ -9,7 +9,7 @@ public class SimpleTest extends BaseTest {
 
     @Test
     public void testWelcome() {
-        String welcomeStr = getDriver().findElement(By.cssSelector("111.empty-state-block > h1")).getText();
+        String welcomeStr = getDriver().findElement(By.cssSelector(".empty-state-block > h1")).getText();
 
         Assert.assertEquals(welcomeStr, "Welcome to Jenkins!");
     }
