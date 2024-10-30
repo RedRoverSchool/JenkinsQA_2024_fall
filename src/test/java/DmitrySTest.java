@@ -11,10 +11,10 @@ import java.time.Duration;
 public class DmitrySTest {
 
 
-    public static final int MAIN_PAUSE_MS = 1000;
-    public static final int INPUT_PAUSE = 500;
-    public static final int INPUT_PAUSE_MS = INPUT_PAUSE;
-    public static final String EVILTESTER_URL = "https://testpages.eviltester.com/styled/webdriver-example-page";
+    private final int MAIN_PAUSE_MS = 1000;
+    private final int INPUT_PAUSE = 500;
+    private final int INPUT_PAUSE_MS = INPUT_PAUSE;
+    private final String EVILTESTER_URL = "https://testpages.eviltester.com/styled/webdriver-example-page";
 
     @Test
     public void testPages() throws InterruptedException {
@@ -41,7 +41,7 @@ public class DmitrySTest {
         driver.quit();
     }
 
-    private static void showClickUrlLink(WebDriver driver, String xpathExpression, String expected) throws InterruptedException {
+    private void showClickUrlLink(WebDriver driver, String xpathExpression, String expected) throws InterruptedException {
         WebElement url = driver.findElement(By.xpath(xpathExpression));
         url.click();
         Thread.sleep(MAIN_PAUSE_MS);
@@ -51,7 +51,7 @@ public class DmitrySTest {
         Thread.sleep(MAIN_PAUSE_MS);
     }
 
-    private static void showAsParaButtonClick(WebDriver driver) throws InterruptedException {
+    private void showAsParaButtonClick(WebDriver driver) throws InterruptedException {
         WebElement showAsParaButton = driver.findElement(By.xpath("//*[@id=\"show-as-para\"]"));
         showAsParaButton.click();
         Thread.sleep(MAIN_PAUSE_MS);
@@ -61,7 +61,7 @@ public class DmitrySTest {
         Thread.sleep(MAIN_PAUSE_MS);
     }
 
-    private static void showAsAlertInputButtonClick(WebDriver driver) throws InterruptedException {
+    private void showAsAlertInputButtonClick(WebDriver driver) throws InterruptedException {
         WebElement showAsAlertInput = driver.findElement(By.xpath("//*[@id=\"numentry\"]"));
         showAsAlertInput.sendKeys("123");
         Thread.sleep(MAIN_PAUSE_MS);
@@ -77,7 +77,7 @@ public class DmitrySTest {
         Thread.sleep(MAIN_PAUSE_MS);
     }
 
-    private static void proceccOnServerButtonClick(WebDriver driver) throws InterruptedException {
+    private void proceccOnServerButtonClick(WebDriver driver) throws InterruptedException {
         WebElement processOnServerInput = driver.findElement(By.xpath("//*[@id=\"numentry\"]"));
         processOnServerInput.sendKeys("123");
         Thread.sleep(INPUT_PAUSE_MS);
@@ -89,7 +89,7 @@ public class DmitrySTest {
         Assert.assertEquals(processOnServerTextResult, "one, two, three");
     }
 
-    private static void testInputNumbersAndEnter(WebDriver driver) throws InterruptedException {
+    private void testInputNumbersAndEnter(WebDriver driver) throws InterruptedException {
         WebElement textInputAndEnter = driver.findElement(By.xpath("//*[@id=\"numentry\"]"));
         Thread.sleep(INPUT_PAUSE_MS);
         textInputAndEnter.sendKeys("123");
