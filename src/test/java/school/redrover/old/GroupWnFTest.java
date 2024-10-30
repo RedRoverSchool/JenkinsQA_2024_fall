@@ -1,14 +1,18 @@
 package school.redrover.old;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.interactions.Actions;
 import org.testng.Assert;
 import org.testng.annotations.*;
 
 import java.time.Duration;
 import java.util.List;
+
+import static java.lang.Thread.sleep;
 
 @Ignore
 public class GroupWnFTest {
@@ -162,5 +166,82 @@ public class GroupWnFTest {
         WebElement finishModal = driver.findElement(By.xpath("//div[contains(@class, 'Modal_finish')]//p"));
 
         Assert.assertEquals(finishModal.getText(), "Thank you! Our manager will contact you as soon as possible");
+    }
+
+    @Test(description = "Заполнение текстовых полей ввода, клик, корректность отображения введенных данных")
+    public void testTextBoxInput() {
+        driver.get("https://demoqa.com/text-box");
+
+        WebElement inputName = driver.findElement(By.id("userName"));
+        WebElement inputEmail = driver.findElement(By.id("userEmail"));
+        WebElement inputCurrentAdress = driver.findElement(By.id("currentAddress"));
+        WebElement inputPermamentAdress = driver.findElement(By.id("permanentAddress"));
+
+        inputName.sendKeys("Irina");
+        inputEmail.sendKeys("ir.gaidukova@gmail.com");
+        inputCurrentAdress.sendKeys("Astrakhan, street, house");
+        inputPermamentAdress.sendKeys("same as сurrent");
+
+        // driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
+        JavascriptExecutor js = (JavascriptExecutor) driver; // скролл вниз
+        js.executeScript("window.scrollBy(0,1000)");
+        WebElement submitButton = driver.findElement(By.id("submit"));
+        submitButton.click();
+
+        WebElement actualName = driver.findElement(By.id("name"));
+        WebElement actualEmail = driver.findElement(By.id("email"));
+        WebElement actualCurrentAddress = driver.findElement(By.xpath("//p[@id='currentAddress']"));
+        WebElement actualPermanentAddress = driver.findElement(By.xpath("//p[@id='permanentAddress']"));
+
+        Assert.assertEquals(actualName.getText(), "Name:" + inputName.getAttribute("value"));
+        Assert.assertEquals(actualEmail.getText(), "Email:" + inputEmail.getAttribute("value"));
+        Assert.assertEquals(actualCurrentAddress.getText(), "Current Address :" + inputCurrentAdress.getAttribute("value"));
+        Assert.assertEquals(actualPermanentAddress.getText(), "Permananet Address :" + inputPermamentAdress.getAttribute("value"));
+    }
+
+    @Test(description = "Двойной клик")
+    public void testDoubleClickButton() {
+
+        driver.get("https://demoqa.com/buttons");
+
+        WebElement doubleClickButton = driver.findElement(By.id("doubleClickBtn"));
+
+        Actions actionsDblClick = new Actions(driver); //класс действий для выполнения нескольких операций с клавиатурой и мышью (щелчок правой кнопкой мыши, перетаскивание, двойной клик и т. д.)
+        actionsDblClick.doubleClick(doubleClickButton).perform();
+        WebElement doubleClickMessage = driver.findElement(By.id("doubleClickMessage"));
+        Assert.assertEquals(doubleClickMessage.getText(), "You have done a double click");
+
+    }
+
+    @Test(description = "Клик правой кнопкой")
+    public void testRightButtonClick() {
+
+       driver.get("https://demoqa.com/buttons");
+
+        WebElement rightButtonClick = driver.findElement(By.id("rightClickBtn"));
+
+        Actions actionsRightButtonClick = new Actions(driver); //класс действий для выполнения нескольких операций с клавиатурой и мышью (щелчок правой кнопкой мыши, перетаскивание, двойной клик и т. д.)
+        actionsRightButtonClick.contextClick(rightButtonClick).perform();
+
+        WebElement rightButtonClickMessage = driver.findElement(By.id("rightClickMessage"));
+        Assert.assertEquals(rightButtonClickMessage.getText(), "You have done a right click");
+
+    }
+
+    @Test(description = "Кликабельность кнопки 1")
+    public void testIsButtonDisabled() throws InterruptedException {
+
+        driver.get("https://demoqa.com/dynamic-properties");
+        //sleep(6_000); // для проверки, что через 5 секунд элемент уже не находится
+        boolean isElementPresent = !driver.findElements(By.xpath("//button[@id='enableAfter' and @disabled='']")).isEmpty();
+        Assert.assertTrue(isElementPresent);
+    }
+    @Test(description = "Кликабельность кнопки 2")
+    public void testButtonIsNotDisabled() throws InterruptedException {
+
+        driver.get("https://demoqa.com/dynamic-properties");
+        sleep(6_000);
+        boolean isElementPresent = !driver.findElements(By.xpath("//button[@id='enableAfter' and @disabled='']")).isEmpty();
+        Assert.assertFalse(isElementPresent);
     }
 }
