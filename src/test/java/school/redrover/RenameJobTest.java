@@ -3,9 +3,13 @@ package school.redrover;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import school.redrover.runner.BaseTest;
+
+import java.time.Duration;
 
 public class RenameJobTest extends BaseTest {
 
@@ -26,9 +30,10 @@ public class RenameJobTest extends BaseTest {
         Actions actionsDropdownChevron = new Actions(getDriver());
         actionsDropdownChevron.moveToElement(dropdownChevron).click().perform();
 
-        WebElement renameLink = getDriver().findElement(By.xpath("/html/body/div[3]/div/div/div/a[4]"));
-        Actions actionsRenameLink = new Actions(getDriver());
-        actionsRenameLink.moveToElement(renameLink).click().perform();
+        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(10));
+        WebElement renameLink = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("/html/body/div[3]/div/div/div/a[4]")));
+        renameLink.click();
+
 
         Assert.assertEquals(getDriver().getCurrentUrl(),"http://localhost:8080/job/TestBuild/confirm-rename");
 
