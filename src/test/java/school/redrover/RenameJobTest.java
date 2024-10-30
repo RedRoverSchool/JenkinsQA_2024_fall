@@ -26,7 +26,7 @@ public class RenameJobTest extends BaseTest {
         Actions actionsDropdownChevron = new Actions(getDriver());
         actionsDropdownChevron.moveToElement(dropdownChevron).click().perform();
 
-        WebElement renameLink = getDriver().findElement(By.xpath("//*[@id='tippy-6']/div/div/div/a[4]"));
+        WebElement renameLink = getDriver().findElement(By.xpath("//a[@class='jenkins-dropdown__item ' and @href='/job/TestBuild/confirm-rename']"));
         Actions actionsRenameLink = new Actions(getDriver());
         actionsRenameLink.moveToElement(renameLink).click().perform();
 
