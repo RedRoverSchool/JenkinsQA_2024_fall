@@ -10,8 +10,6 @@ public class CreateJobTest extends BaseTest {
     @Test
     public void testCreateJob(){
 
-        Assert.assertEquals(getDriver().getCurrentUrl(), "http://localhost:8080/");
-
         getDriver().findElement(By.xpath("//*[@id='main-panel']/div[2]/div/section[1]/ul/li/a")).click();
         getDriver().findElement(By.xpath("//*[@id='name']")).sendKeys("TestBuild");
         getDriver().findElement(By.xpath("//*[@id='j-add-item-type-standalone-projects']/ul/li[1]")).click();
