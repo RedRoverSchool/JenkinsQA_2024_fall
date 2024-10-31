@@ -13,7 +13,6 @@ public class AddDescriptionTest extends BaseTest {
 
     getDriver().findElement(By.id("description-link")).click();
 
-
     WebElement textBox = getDriver().findElement(By.className("jenkins-input"));
     textBox.click();
     textBox.sendKeys("Hi!");
