@@ -17,7 +17,6 @@ public class AddDescriptionTest extends BaseTest {
     textBox.click();
     textBox.sendKeys("Hi!");
 
-
     getDriver().findElement(By.xpath("//*[@id='description']/form/div[2]/button")).click();
 
     String hiStr = getDriver().findElement(By.xpath("//*[@id='description']/div[1]")).getText();
