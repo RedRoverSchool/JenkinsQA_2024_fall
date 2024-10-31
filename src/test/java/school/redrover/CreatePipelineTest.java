@@ -9,12 +9,14 @@ import school.redrover.runner.BaseTest;
 public class CreatePipelineTest extends BaseTest {
 
     @Test
-    public void testPipeline () {
+    public void testPipeline () throws InterruptedException {
 
         getDriver().findElement(By.xpath("//*[@id='tasks']/div[1]/span/a/span[1]")).click();
         getDriver().findElement(By.id("name")).sendKeys("test");
         getDriver().findElement(By.className("org_jenkinsci_plugins_workflow_job_WorkflowJob")).click();
         getDriver().findElement(By.id("ok-button")).click();
+
+        Thread.sleep(3000);
 
         getDriver().findElement(By.xpath("//*[@id='main-panel']/form/div[1]/div[2]/div/div[2]/textarea")).click();
         getDriver().findElement(By.xpath("//*[@id='main-panel']/form/div[1]/div[2]/div/div[2]/textarea")).sendKeys("Test Pipeline");
