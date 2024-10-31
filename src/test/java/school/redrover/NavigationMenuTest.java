@@ -12,12 +12,12 @@ public class NavigationMenuTest extends BaseTest {
 
     @Test
     public void newItemPointExists () {
-        boolean isElementPresent = !getDriver().findElements(By.xpath("//*[@it='hudson.model.Hudson@348a33f6']")).isEmpty();
+        boolean isElementPresent = !getDriver().findElements(By.xpath("//span[contains(text(), 'New Item')]")).isEmpty();
         Assert.assertTrue(isElementPresent);
     }
     @Test
     public void newItemPointEnabled () {
-        getDriver().findElement(By.xpath("//*[@it='hudson.model.Hudson@348a33f6']")).click();
+        getDriver().findElement(By.xpath("//a[@href ='/view/all/newJob']")).click();
         String actualTitle = getDriver().findElement(By.tagName("h1")).getText();
         Assert.assertEquals(actualTitle,"New Item");
     }
