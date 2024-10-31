@@ -20,7 +20,6 @@ public class AddDescriptionTest extends BaseTest {
 
     getDriver().findElement(By.xpath("//*[@id='description']/form/div[2]/button")).click();
 
-
     String hiStr = getDriver().findElement(By.xpath("//*[@id='description']/div[1]")).getText();
 
         Assert.assertEquals(hiStr, "Hi!");
