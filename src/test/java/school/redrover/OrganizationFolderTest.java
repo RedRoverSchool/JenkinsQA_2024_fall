@@ -46,7 +46,6 @@ public class OrganizationFolderTest extends BaseTest {
         actions.moveToElement(getDriver().findElement(By.xpath("//div/button[@title='Delete']"))).perform();
         String tooltipButton = getDriver().findElement(By.xpath("//div/button[@title='Delete']")).getAttribute("tooltip");
         Assert.assertEquals(tooltipButton, "Delete");
-
         getDriver().findElement(By.xpath("//div[@name='navigators']/div/div/button[@title='Delete']")).click();
     }
 }
