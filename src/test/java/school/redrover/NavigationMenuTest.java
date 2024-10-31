@@ -10,45 +10,45 @@ import school.redrover.runner.BaseTest;
 public class NavigationMenuTest extends BaseTest {
 
     @Test
-    public void newItemPointExists () {
+    public void testNewItemPointExists () {
         boolean isElementPresent = !getDriver().findElements(By.xpath("//span[contains(text(), 'New Item')]")).isEmpty();
         Assert.assertTrue(isElementPresent);
     }
     @Test
-    public void newItemPointEnabled () {
+    public void testNewItemPointEnabled () {
         getDriver().findElement(By.xpath("//a[@href ='/view/all/newJob']")).click();
         String actualTitle = getDriver().findElement(By.tagName("h1")).getText();
         Assert.assertEquals(actualTitle,"New Item");
     }
     @Test
-    public void newBuildHistoryExists () {
+    public void testBuildHistoryExists () {
         boolean isElementPresent = !getDriver().findElements(By.cssSelector("#tasks > div:nth-child(2) > span > a")).isEmpty();
         Assert.assertTrue(isElementPresent);
     }
     @Test
-    public void newBuildHistoryEnabled () {
+    public void testBuildHistoryEnabled () {
         getDriver().findElement(By.cssSelector("#tasks > div:nth-child(2) > span > a")).click();
         String actualEndUrl = getDriver().getCurrentUrl().substring(getDriver().getCurrentUrl().length() - 16);
         Assert.assertEquals(actualEndUrl,"/view/all/builds");
     }
     @Test
-    public void myViewExists () {
+    public void testMyViewExists () {
         boolean isElementPresent = !getDriver().findElements(By.xpath("//a[@href ='/me/my-views']")).isEmpty();
         Assert.assertTrue(isElementPresent);
     }
     @Test
-    public void myViewEnabled () {
+    public void testMyViewEnabled () {
         getDriver().findElement(By.xpath("//a[@href ='/me/my-views']")).click();
         String actualEndUrl = getDriver().getCurrentUrl().substring(getDriver().getCurrentUrl().length() - 22);
         Assert.assertEquals(actualEndUrl,"/me/my-views/view/all/");
     }
     @Test
-    public void manageJenkinsExists () {
+    public void testManageJenkinsExists () {
         boolean isElementPresent = !getDriver().findElements(By.xpath("//span[contains(text(), 'Manage Jenkins')]")).isEmpty();
         Assert.assertTrue(isElementPresent);
     }
     @Test
-    public void manageJenkinsEnabled () {
+    public void testManageJenkinsEnabled () {
         getDriver().findElement(By.xpath("//a[@href ='/manage']")).click();
         String actualEndUrl = getDriver().getCurrentUrl().substring(getDriver().getCurrentUrl().length() - 8);
         Assert.assertEquals(actualEndUrl,"/manage/");
