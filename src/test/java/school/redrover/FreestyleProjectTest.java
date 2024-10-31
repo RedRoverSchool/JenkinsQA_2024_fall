@@ -28,5 +28,17 @@ public class FreestyleProjectTest extends BaseTest {
                 .getText(), nameProject);
     }
 
+    @Test
+    public void testCreateFreestyleProjectWithEmptyName() {
+
+        getDriver().findElement(By.xpath("//a[@href='/view/all/newJob']")).click();
+
+        getDriver().findElement(By.cssSelector(".hudson_model_FreeStyleProject")).click();
+
+        Assert.assertEquals(getDriver()
+                .findElement(By.id("itemname-required"))
+                .getText(), "» This field cannot be empty, please enter a valid name");
+    }
+
 }
 
