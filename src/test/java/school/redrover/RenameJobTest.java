@@ -3,14 +3,18 @@ package school.redrover;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import school.redrover.runner.BaseTest;
 
+import java.time.Duration;
+
 public class RenameJobTest extends BaseTest {
 
     @Test
-    public void tesRenameJob() throws InterruptedException {
+    public void tesRenameJob() {
 
         getDriver().findElement(By.xpath("//*[@id='main-panel']/div[2]/div/section[1]/ul/li/a")).click();
         getDriver().findElement(By.xpath("//*[@id='name']")).sendKeys("TestBuild");
@@ -22,17 +26,12 @@ public class RenameJobTest extends BaseTest {
 
         Assert.assertEquals(getDriver().findElement(By.xpath("//*[@class='jenkins-table__link model-link inside']")).getText(), "TestBuild");
 
-        WebElement dropdownChevron = getDriver().findElement(By.xpath("//*[@id='job_TestBuild']/td[3]/a/button"));
+        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(10));
+        WebElement dropdownChevron = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[@id='job_TestBuild']/td[3]/a/button")));
         Actions actionsDropdownChevron = new Actions(getDriver());
-
         actionsDropdownChevron.moveToElement(dropdownChevron).click().perform();
 
-        Thread.sleep(10000);
-
-        WebElement renameLink = getDriver().findElement(By.xpath("//div[3]/div/div/div/a[4]"));
-
-        Thread.sleep(10000);
-
+        WebElement renameLink = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//div[3]/div/div/div/a[4]")));
         renameLink.click();
 
         Assert.assertEquals(getDriver().getCurrentUrl(), "http://localhost:8080/job/TestBuild/confirm-rename");
