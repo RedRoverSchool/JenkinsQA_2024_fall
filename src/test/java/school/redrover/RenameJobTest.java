@@ -1,6 +1,7 @@
 package school.redrover;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -32,7 +33,7 @@ public class RenameJobTest extends BaseTest {
         actionsDropdownChevron.moveToElement(dropdownChevron).click().perform();
 
         WebElement renameLink = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//div[3]/div/div/div/a[4]")));
-        renameLink.click();
+        ((JavascriptExecutor) getDriver()).executeScript("arguments[0].click();", renameLink);
 
         Assert.assertEquals(getDriver().getCurrentUrl(), "http://localhost:8080/job/TestBuild/confirm-rename");
 
