@@ -14,10 +14,9 @@ public class AddDescriptionTest extends BaseTest {
     getDriver().findElement(By.id("description-link")).click();
 
     WebElement textBox = getDriver().findElement(By.className("jenkins-input"));
-    textBox.click();
     textBox.sendKeys("Hi!");
 
-    getDriver().findElement(By.xpath("//*[@id='description']/form/div[2]/button")).click();
+    getDriver().findElement(By.xpath("//button[@name='Submit']")).click();
 
     String hiStr = getDriver().findElement(By.xpath("//*[@id='description']/div[1]")).getText();
 
