@@ -10,7 +10,7 @@ import school.redrover.runner.BaseTest;
 public class RenameJobTest extends BaseTest {
 
     @Test
-    public void tesRenameJob() {
+    public void tesRenameJob() throws InterruptedException {
 
         getDriver().findElement(By.xpath("//*[@id='main-panel']/div[2]/div/section[1]/ul/li/a")).click();
         getDriver().findElement(By.xpath("//*[@id='name']")).sendKeys("TestBuild");
@@ -24,9 +24,15 @@ public class RenameJobTest extends BaseTest {
 
         WebElement dropdownChevron = getDriver().findElement(By.xpath("//*[@id='job_TestBuild']/td[3]/a/button"));
         Actions actionsDropdownChevron = new Actions(getDriver());
+
         actionsDropdownChevron.moveToElement(dropdownChevron).click().perform();
 
+        Thread.sleep(10000);
+
         WebElement renameLink = getDriver().findElement(By.xpath("//div[3]/div/div/div/a[4]"));
+
+        Thread.sleep(10000);
+
         renameLink.click();
 
         Assert.assertEquals(getDriver().getCurrentUrl(), "http://localhost:8080/job/TestBuild/confirm-rename");
