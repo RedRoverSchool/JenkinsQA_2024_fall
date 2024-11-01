@@ -61,9 +61,18 @@ public class RenameJobTest extends BaseTest {
         ProjectUtils.log("wait visibilityOf dropdownChevron");
 
         ((JavascriptExecutor) getDriver()).executeScript("arguments[0].click();", dropdownChevron);
+        // если закомментить стр.63 > клик в стр.66 >  element click intercepted: Element <button class="jenkins-menu-dropdown-chevron"
+        // Failed tests:   tesRenameJob(school.redrover.RenameJobTest): element click intercepted:
+        // Element <button class="jenkins-menu-dropdown-chevron" data-href="http://localhost:8080/job/TestBuild/" aria-expanded="true"></button>
+        // is not clickable at point (604, 310). Other element would receive the click: <td>...</td>(..)
         ProjectUtils.log("JavascriptExecutor click dropdownChevron");
         dropdownChevron.click();
+        // если закомментить стр.69 > Javascript клик в стр.63 >  бесконечная загрузка //*[@id="tippy-6"]/div/div/p
         ProjectUtils.log("getDriver click dropdownChevron");
+        // если оставить оба варианта, локально работает, на CI ошибка типа
+        // Expected condition failed: waiting for element to be clickable: By.xpath: //div[3]/div/div/div/a[4]
+        // не видит элемент списка
+        // вариант с Actions локально работает, CI та же ошибка By.xpath: //div[3]/div/div/div/a[4]
 
 /**
  * *******************************************************************************************************************************************
