@@ -3,6 +3,7 @@ package school.redrover;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import school.redrover.runner.BaseTest;
@@ -21,8 +22,11 @@ public class AddJenkinsPipelineTest extends BaseTest {
          getDriver().findElement(By.name("description")).sendKeys("My multi project");
 
          getDriver().findElement(By.xpath("//*[@id='main-panel']/form/div[1]/section[1]/div[9]/div[1]/div/span/label")).click();
-         getDriver().findElement(By.xpath("//input[@name='_.projectUrlStr']"))
-                 .sendKeys("https://github.com/dema28/DenisNovicov.git");
+
+         WebElement inputElement = getDriver().findElement(By.name("_.projectUrlStr"));
+         Actions actions = new Actions(getDriver());
+         actions.moveToElement(inputElement).click().perform();
+         inputElement.sendKeys("https://github.com/dema28/DenisNovicov.git");
 
          JavascriptExecutor js = (JavascriptExecutor) getDriver();
          js.executeScript("window.scrollBy(0, 1000);");
