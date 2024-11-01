@@ -21,7 +21,7 @@ public class AddJenkinsPipelineTest extends BaseTest {
 
          getDriver().findElement(By.name("description")).sendKeys("My multi project");
 
-         getDriver().findElement(By.xpath("//*[@id='main-panel']/form/div[1]/section[1]/div[9]/div[1]/div/span/label")).click();
+         getDriver().findElement(By.xpath("//span[@class='jenkins-checkbox']//label[text()= 'GitHub project'] ")).click();
 
          WebElement inputElement = getDriver().findElement(By.name("_.projectUrlStr"));
          Actions actions = new Actions(getDriver());
