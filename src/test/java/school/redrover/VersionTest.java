@@ -10,7 +10,6 @@ import school.redrover.runner.BaseTest;
 public class VersionTest extends BaseTest {
     @Test
     public void CheckVersionTest() {
-        getDriver().manage().window().maximize();
 
         WebElement version = getDriver().findElement(By.xpath("//button[@type='button']"));
         new Actions(getDriver())
