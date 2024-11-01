@@ -47,7 +47,7 @@ public class NewItemTest extends BaseTest {
     public void buildHistory(){
         getDriver().findElement(By.xpath("//*[@id='tasks']/div[2]/span/a")).click();
 
-        Assert.assertEquals(getDriver().findElement(By.tagName("h1")).getText(), "История сборок Jenkins");
+        Assert.assertEquals(getDriver().findElement(By.tagName("h1")).getText(), "Build History of Jenkins");
 
     }
 
