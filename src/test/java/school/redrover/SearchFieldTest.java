@@ -31,7 +31,7 @@ public class SearchFieldTest extends BaseTest {
         searchField.click();
         searchField.sendKeys("log" + Keys.ENTER);
 
-        String logPage = getDriver().findElement(By.xpath("//div[@id=\"main-panel\"]")).getText().toLowerCase();
+        String logPage = getDriver().findElement(By.xpath("//div[@id='main-panel']")).getText().toLowerCase();
 
         Assert.assertTrue(logPage.contains("log"), "Current page does not contain 'log' text");
     }
