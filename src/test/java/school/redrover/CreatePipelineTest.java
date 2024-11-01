@@ -1,10 +1,10 @@
 package school.redrover;
 
 import org.openqa.selenium.By;
-import org.openqa.selenium.Keys;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import school.redrover.runner.BaseTest;
+
 
 public class CreatePipelineTest extends BaseTest {
 
@@ -18,8 +18,6 @@ public class CreatePipelineTest extends BaseTest {
 
         getDriver().findElement(By.xpath("//label[contains(text(), 'Do not allow the pipeline to resume if the controller restarts')]")).click();
         getDriver().findElement(By.xpath("//label[contains(text(), 'Throttle builds')]")).click();
-        getDriver().findElement(By.xpath("//*[@id='main-panel']/form/div[1]/section[1]/div[18]/div[4]/div[1]/div[2]/input")).sendKeys(Keys.DELETE);
-        getDriver().findElement(By.xpath("//*[@id='main-panel']/form/div[1]/section[1]/div[18]/div[4]/div[1]/div[2]/input")).sendKeys("2");
 
         getDriver().findElement(By.name("Submit")).click();
 
