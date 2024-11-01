@@ -51,6 +51,7 @@ public class FreestyleProjectTest extends BaseTest {
         getDriver().findElement(By.id("jenkins-name-icon")).click();
         getDriver().findElement(By.xpath("//a[@href='/view/all/newJob']")).click();
         getDriver().findElement(By.id("name")).sendKeys(nameProject);
+        getDriver().findElement(By.cssSelector(".hudson_model_FreeStyleProject")).click();
 
         Assert.assertEquals(getDriver()
                 .findElement(By.id("itemname-invalid"))
