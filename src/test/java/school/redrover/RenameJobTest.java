@@ -44,7 +44,6 @@ public class RenameJobTest extends BaseTest {
         Actions actionsDropdownChevron = new Actions(getDriver());
         ProjectUtils.log("new actionsDropdownChevron");
         actionsDropdownChevron.moveToElement(dropdownChevron).click().perform();
-
         ProjectUtils.log("actionsDropdownChevron click");
 
 /**
@@ -81,7 +80,14 @@ public class RenameJobTest extends BaseTest {
  *
  */
 
-        Assert.assertTrue(getDriver().findElement(By.xpath("//a[@class='jenkins-table__link model-link inside model-link--open']")).isEnabled(), "true");
+        WebDriverWait waitChangeInsideLink = new WebDriverWait(getDriver(), Duration.ofSeconds(10));
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        WebElement changedLink = waitChangeInsideLink.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//a[@class='jenkins-table__link model-link inside model-link--open']")));
+        Assert.assertTrue(changedLink.isEnabled(), "Элемент не найден или не доступен");
 
         ProjectUtils.log("ассёрт на изменение строки в доме при открытии дропдауна");
 
