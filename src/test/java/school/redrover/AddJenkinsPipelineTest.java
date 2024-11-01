@@ -12,7 +12,6 @@ public class AddJenkinsPipelineTest extends BaseTest {
 
     @Test
     public void createMultiConfigProject() {
-
          getDriver().findElement(By.linkText("New Item")).click();
 
          getDriver().findElement(By.id("name")).sendKeys("Multi project");
@@ -22,7 +21,7 @@ public class AddJenkinsPipelineTest extends BaseTest {
          getDriver().findElement(By.name("description")).sendKeys("My multi project");
 
          getDriver().findElement(By.xpath("//*[@id='main-panel']/form/div[1]/section[1]/div[9]/div[1]/div/span/label")).click();
-         getDriver().findElement(By.xpath("//*[@id='main-panel']/form/div[1]/section[1]/div[9]/div[3]/div[1]/div[2]/input"))
+         getDriver().findElement(By.xpath("//input[@name='_.projectUrlStr']"))
                  .sendKeys("https://github.com/dema28/DenisNovicov.git");
 
          JavascriptExecutor js = (JavascriptExecutor) getDriver();
