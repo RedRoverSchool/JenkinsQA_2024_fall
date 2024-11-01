@@ -1,16 +1,11 @@
 package school.redrover;
 
 import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import school.redrover.runner.BaseTest;
-
-import java.time.Duration;
 
 public class RenameJobTest extends BaseTest {
 
@@ -23,20 +18,9 @@ public class RenameJobTest extends BaseTest {
         getDriver().findElement(By.xpath("//*[@id='ok-button']")).click();
         getDriver().findElement(By.xpath("//*[@id='bottom-sticker']/div/button[1]")).click();
         getDriver().findElement(By.xpath("//*[@id='breadcrumbs']/li[1]/a")).click();
-        getDriver().findElement(By.xpath("//*[@id='job_TestBuild']/td[3]/a/span")).getText();
+        getDriver().findElement(By.xpath("//*[@id='job_TestBuild']/td[3]/a/span")).click();
 
-        Assert.assertEquals(getDriver().findElement(By.xpath("//*[@class='jenkins-table__link model-link inside']")).getText(), "TestBuild");
-
-        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(5));
-        WebElement jobName = getDriver().findElement(By.xpath("//*[@id='job_TestBuild']/td[3]/a/span"));
-        Actions actionsJobName = new Actions(getDriver());
-        actionsJobName.moveToElement(jobName);
-        WebElement dropdownChevron = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[@id='job_TestBuild']/td[3]/a/button")));
-        Actions actionsDropdownChevron = new Actions(getDriver());
-        actionsDropdownChevron.moveToElement(dropdownChevron).click().perform();
-        WebElement renameLink = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//div[3]/div/div/div/a[4]")));
-        ((JavascriptExecutor) getDriver()).executeScript("arguments[0].scrollIntoView(true);", renameLink);
-        ((JavascriptExecutor) getDriver()).executeScript("arguments[0].click();", renameLink);
+        getDriver().findElement(By.xpath("//*[@id='tasks']/div[7]/span/a")).click();
 
         Assert.assertEquals(getDriver().getCurrentUrl(), "http://localhost:8080/job/TestBuild/confirm-rename");
 
