@@ -24,4 +24,23 @@ public class MultibranchPipelineTest extends BaseTest {
 
         Assert.assertEquals(actualDescription, expectedDescription);
     }
+
+    @Test
+    public void testDeleteItemFromStatusPage() {
+
+        getDriver().findElement(By.cssSelector("[href='newJob']")).click();
+
+        getDriver().findElement(By.id("name")).sendKeys("NewItem");
+        getDriver().findElement(By.cssSelector("[class*='MultiBranchProject']")).click();
+        getDriver().findElement(By.id("ok-button")).click();
+
+        getDriver().findElement(By.name("Submit")).click();
+
+        getDriver().findElement(By.cssSelector("[data-message*='Delete the Multibranch Pipeline ']")).click();
+
+        getDriver().findElement(By.cssSelector("[data-id='ok']")).click();
+
+        Assert.assertEquals(getDriver().findElement(By.xpath("//h1[text()='Welcome to Jenkins!']"))
+                .getText(), "Welcome to Jenkins!");
+    }
 }
