@@ -9,7 +9,7 @@ import school.redrover.runner.BaseTest;
 public class BuildExecutorStatusTest extends BaseTest {
 
     @Test
-    public void testBuildExecutorStatusPanel (){
+    public void testBuildExecutorStatusPanell (){
         WebElement buildExecutorStatusPanel = getDriver().findElement(By.id("executors"));
         Assert.assertTrue(buildExecutorStatusPanel.isDisplayed(), "Panel 'executors' is not displayed on the page.");
     }
