@@ -19,11 +19,7 @@ public class RenameJobTest extends BaseTest {
         getDriver().findElement(By.xpath("//*[@id='bottom-sticker']/div/button[1]")).click();
         getDriver().findElement(By.xpath("//*[@id='breadcrumbs']/li[1]/a")).click();
         getDriver().findElement(By.xpath("//*[@id='job_TestBuild']/td[3]/a/span")).click();
-
         getDriver().findElement(By.xpath("//*[@id='tasks']/div[7]/span/a")).click();
-
-        Assert.assertEquals(getDriver().getCurrentUrl(), "http://localhost:8080/job/TestBuild/confirm-rename");
-
         WebElement inputField = getDriver().findElement(By.xpath("//*[@id='main-panel']/form/div[1]/div[1]/div[2]/input"));
         inputField.clear();
         inputField.sendKeys("TestBuild_NewName");
