@@ -1,4 +1,4 @@
-package school.redrover.testCreateAndDelFolder;
+package school.redrover;
 
 import org.openqa.selenium.By;
 import org.testng.Assert;
@@ -6,12 +6,12 @@ import org.testng.annotations.Test;
 import school.redrover.runner.BaseTest;
 import school.redrover.runner.ProjectUtils;
 
-public class DeleteFolderTest extends BaseTest {
+public class CreateAndDeleteFolderTest extends BaseTest {
 
     @Test
-    public void deleteFolder() {
+    public void testDeleteFolder() {
 
-        ProjectUtils.log("Create first folder");
+        ProjectUtils.log("Create folder");
         getDriver()
                 .findElement(By.xpath("//*[@id=\"tasks\"]/div[1]"))
                 .click();
@@ -33,12 +33,22 @@ public class DeleteFolderTest extends BaseTest {
                 .sendKeys("Your advertisement could be in this field");
 
         getDriver()
+                .findElement(By.cssSelector("textarea.jenkins-input"))
+                .sendKeys("Advertising on websites from $5/month.\nCall as 555-55-55");
+
+        getDriver()
                 .findElement(By.cssSelector(".jenkins-submit-button"))
                 .click();
 
         getDriver()
                 .findElement(By.cssSelector("li.jenkins-breadcrumbs__list-item:nth-child(1) > a:nth-child(1)"))
                 .click();
+
+        String firstFolder = getDriver()
+                .findElement(By.xpath("//a[@href='job/Some%20folder%20name/']"))
+                .getText();
+
+        Assert.assertEquals(firstFolder, "Your advertisement could be in this field");
 
 
         ProjectUtils.log("Delete folder");
