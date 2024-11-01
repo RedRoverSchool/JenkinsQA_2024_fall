@@ -5,6 +5,7 @@ import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.Test;
@@ -16,7 +17,7 @@ import java.time.Duration;
 public class RenameJobTest extends BaseTest {
 
     @Test
-    public void tesRenameJob(){
+    public void tesRenameJob() {
 
         getDriver().findElement(By.xpath("//*[@id='main-panel']/div[2]/div/section[1]/ul/li/a")).click();
         getDriver().findElement(By.xpath("//*[@id='name']")).sendKeys("TestBuild");
@@ -39,12 +40,14 @@ public class RenameJobTest extends BaseTest {
  * *******************************************************************************************************************************************
  */
 
-//        WebElement dropdownChevron = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[@id='job_TestBuild']/td[3]/a/button")));
-//        ProjectUtils.log("wait visibilityOf dropdownChevron");
-//        Actions actionsDropdownChevron = new Actions(getDriver());
-//        ProjectUtils.log("new actionsDropdownChevron");
-//        actionsDropdownChevron.moveToElement(dropdownChevron).click().perform();
-//        ProjectUtils.log("actionsDropdownChevron click");
+        WebElement dropdownChevron = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[@id='job_TestBuild']/td[3]/a/button")));
+        ProjectUtils.log("wait visibilityOf dropdownChevron");
+        Actions actionsDropdownChevron = new Actions(getDriver());
+        ProjectUtils.log("new actionsDropdownChevron");
+        actionsDropdownChevron.moveToElement(dropdownChevron).click().perform();
+        ProjectUtils.log("actionsDropdownChevron click");
+
+
 /**
  * *******************************************************************************************************************************************
  */
@@ -57,27 +60,33 @@ public class RenameJobTest extends BaseTest {
  * *******************************************************************************************************************************************
  */
 
-        WebElement dropdownChevron = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[@id='job_TestBuild']/td[3]/a/button")));
-        ProjectUtils.log("wait visibilityOf dropdownChevron");
-
-        ((JavascriptExecutor) getDriver()).executeScript("arguments[0].click();", dropdownChevron);
-        // если закомментить стр.63 > клик в стр.66 >  element click intercepted: Element <button class="jenkins-menu-dropdown-chevron"
-        // Failed tests:   tesRenameJob(school.redrover.RenameJobTest): element click intercepted:
-        // Element <button class="jenkins-menu-dropdown-chevron" data-href="http://localhost:8080/job/TestBuild/" aria-expanded="true"></button>
-        // is not clickable at point (604, 310). Other element would receive the click: <td>...</td>(..)
-        ProjectUtils.log("JavascriptExecutor click dropdownChevron");
-        dropdownChevron.click();
-        // если закомментить стр.69 > Javascript клик в стр.63 >  бесконечная загрузка //*[@id="tippy-6"]/div/div/p
-        ProjectUtils.log("getDriver click dropdownChevron");
-        // если оставить оба варианта, локально работает, на CI ошибка типа
-        // Expected condition failed: waiting for element to be clickable: By.xpath: //div[3]/div/div/div/a[4]
-        // не видит элемент списка
-        // вариант с Actions локально работает, CI та же ошибка By.xpath: //div[3]/div/div/div/a[4]
+//        WebElement dropdownChevron = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[@id='job_TestBuild']/td[3]/a/button")));
+//        ProjectUtils.log("wait visibilityOf dropdownChevron");
+//
+//        ((JavascriptExecutor) getDriver()).executeScript("arguments[0].click();", dropdownChevron);
+//        // если закомментить стр.63 > клик в стр.66 >  element click intercepted: Element <button class="jenkins-menu-dropdown-chevron"
+//        // Failed tests:   tesRenameJob(school.redrover.RenameJobTest): element click intercepted:
+//        // Element <button class="jenkins-menu-dropdown-chevron" data-href="http://localhost:8080/job/TestBuild/" aria-expanded="true"></button>
+//        // is not clickable at point (604, 310). Other element would receive the click: <td>...</td>(..)
+//        ProjectUtils.log("JavascriptExecutor click dropdownChevron");
+//        dropdownChevron.click();
+//        // если закомментить стр.69 > Javascript клик в стр.63 >  бесконечная загрузка //*[@id="tippy-6"]/div/div/p
+//        ProjectUtils.log("getDriver click dropdownChevron");
+//        // если оставить оба варианта, локально работает, на CI ошибка типа
+//        // Expected condition failed: waiting for element to be clickable: By.xpath: //div[3]/div/div/div/a[4]
+//        // не видит элемент списка
+//        // вариант с Actions локально работает, CI та же ошибка By.xpath: //div[3]/div/div/div/a[4]
 
 /**
  * *******************************************************************************************************************************************
+ *
  */
-        WebElement renameLink = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[3]/div/div/div/a[4]")));
+
+        Assert.assertTrue(getDriver().findElement(By.xpath("//a[@class='jenkins-table__link model-link inside model-link--open']")).isEnabled(), "true");
+
+        ProjectUtils.log("ассёрт на изменение строки в доме при открытии дропдауна");
+
+        WebElement renameLink = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//div[3]/div/div/div/a[4]")));
 
         ((JavascriptExecutor) getDriver()).executeScript("arguments[0].scrollIntoView(true);", renameLink);
         ProjectUtils.log("javascript scroll to rename link");
