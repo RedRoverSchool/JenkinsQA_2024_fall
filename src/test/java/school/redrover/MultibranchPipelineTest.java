@@ -42,6 +42,7 @@ public class MultibranchPipelineTest extends BaseTest {
         JavascriptExecutor js1 = (JavascriptExecutor) getDriver();
         js1.executeScript("window.scrollTo(0, document.body.scrollHeight);");
 
+
         getDriver().findElement(By.xpath("//*[@id='bottom-sticker']/div/button[1]")).click();
         getDriver().findElement(By.cssSelector("#enable-project > button")).click();
 
