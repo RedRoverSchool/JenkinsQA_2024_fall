@@ -2,6 +2,7 @@ package school.redrover;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
+import org.testng.Assert;
 import org.testng.annotations.Test;
 import school.redrover.runner.BaseTest;
 
@@ -31,10 +32,8 @@ public class SearchPipelineOnMainPageTest extends BaseTest {
         WebElement elementWithText = getDriver().findElement(By.xpath("//a[@href='job/Regression/']/span"));
         String spanText = elementWithText.getText();
 
-        if (spanText.equals(namePipeLine)) {
-            System.out.println("Пайплайн создан и находится в списке на главной странице");
-        } else {
-            System.out.println("Что то пошло не так");
-        }
+        Assert.assertEquals(spanText, namePipeLine, "Пайплайн не найден на главной странице или текст не совпадает");
+
+        System.out.println("Пайплайн создан и находится в списке на главной странице");
     }
 }
