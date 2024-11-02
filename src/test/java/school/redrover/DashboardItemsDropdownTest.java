@@ -12,7 +12,7 @@ import school.redrover.runner.BaseTest;
 import java.time.Duration;
 import java.util.List;
 
-public class DashboardItemsDropdownTest extends BaseTest {
+public class DashboardItemsDropDownTest extends BaseTest {
 
     private WebDriverWait setWait() {
         WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(15));
