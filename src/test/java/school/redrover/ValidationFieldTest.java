@@ -8,7 +8,7 @@ import school.redrover.runner.BaseTest;
 
 public class ValidationFieldTest extends BaseTest {
 
-    private static final String CREATE_BUTTON = "//a[@it = 'hudson.model.Hudson@185982f1']";
+    private static final String CREATE_BUTTON = "//div[@class = 'task '] [1]";
     private static final String SUBMIT_BUTTON = "//button[@type = 'submit']";
     private static final String INPUT_FIELD = "//input[@class = 'jenkins-input']";
     private static final String SET_FOLDER_TYPE = "//div/ul/li[@class = 'com_cloudbees_hudson_plugins_folder_Folder']";
