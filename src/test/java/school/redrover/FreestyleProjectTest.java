@@ -1,12 +1,21 @@
 package school.redrover;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
 import org.testng.Assert;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 import school.redrover.runner.BaseTest;
 
 public class FreestyleProjectTest extends BaseTest {
+
+    public void createFreestyleProjectUtils(String nameFreestyleProject) {
+        getDriver().findElement(By.xpath("//a[@href='/view/all/newJob']")).click();
+        getDriver().findElement(By.id("name")).sendKeys(nameFreestyleProject);
+        getDriver().findElement(By.cssSelector(".hudson_model_FreeStyleProject")).click();
+        getDriver().findElement(By.id("ok-button")).click();
+
+    }
 
     @DataProvider
     public Object[][] providerUnsafeCharacters() {
@@ -22,14 +31,9 @@ public class FreestyleProjectTest extends BaseTest {
     public void testCreateFreestyleProjectWithValidName() throws InterruptedException {
         String nameProject = "My first freestyle project";
 
-        getDriver().findElement(By.xpath("//a[@href='/view/all/newJob']")).click();
-        getDriver().findElement(By.id("name")).sendKeys(nameProject);
-        getDriver().findElement(By.cssSelector(".hudson_model_FreeStyleProject")).click();
-        getDriver().findElement(By.id("ok-button")).click();
-
-        Thread.sleep(2000);
-
+        createFreestyleProjectUtils(nameProject);
         getDriver().findElement(By.id("jenkins-name-icon")).click();
+        Thread.sleep(2000);
 
         Assert.assertEquals(getDriver()
                 .findElement(By.xpath(String.format("//span[text()='%s']", nameProject)))
@@ -52,11 +56,7 @@ public class FreestyleProjectTest extends BaseTest {
     public void testCreateFreestyleProjectWithDuplicateName() throws InterruptedException {
         String nameProject = "TestNameProject";
 
-        getDriver().findElement(By.xpath("//a[@href='/view/all/newJob']")).click();
-        getDriver().findElement(By.id("name")).sendKeys(nameProject);
-        getDriver().findElement(By.cssSelector(".hudson_model_FreeStyleProject")).click();
-        getDriver().findElement(By.id("ok-button")).click();
-
+        createFreestyleProjectUtils(nameProject);
         Thread.sleep(2000);
 
         getDriver().findElement(By.id("jenkins-name-icon")).click();
@@ -74,11 +74,7 @@ public class FreestyleProjectTest extends BaseTest {
         String nameProject = "TestNameProject";
         String description = "Description freestyle project.";
 
-        getDriver().findElement(By.xpath("//a[@href='/view/all/newJob']")).click();
-        getDriver().findElement(By.id("name")).sendKeys(nameProject);
-        getDriver().findElement(By.cssSelector(".hudson_model_FreeStyleProject")).click();
-        getDriver().findElement(By.id("ok-button")).click();
-
+        createFreestyleProjectUtils(nameProject);
         Thread.sleep(2000);
 
         getDriver().findElement(By.id("jenkins-name-icon")).click();
@@ -107,5 +103,67 @@ public class FreestyleProjectTest extends BaseTest {
                 .getText(), "» ‘" + unsafeCharacter + "’ is an unsafe character");
     }
 
-}
 
+    @Test
+    public void testRenameFreestyleProjectViaSidePanel() throws InterruptedException {
+        String oldNameProject = "My first freestyle project";
+        String newNameProject = "My second freestyle project";
+
+        createFreestyleProjectUtils(oldNameProject);
+        getDriver().findElement(By.id("jenkins-name-icon")).click();
+        Thread.sleep(2000);
+
+        getDriver()
+                .findElement(By.xpath(String.format("//span[text()='%s']", oldNameProject)))
+                .click();
+        getDriver()
+                .findElement(By.xpath("//a[contains(@href, 'confirm-rename')]"))
+                .click();
+
+        WebElement itemName = getDriver()
+                .findElement(By.xpath("//input[@name='newName']"));
+        itemName.clear();
+        itemName.sendKeys(newNameProject);
+
+        getDriver()
+                .findElement(By.xpath("//button[@name='Submit']"))
+                .click();
+
+        getDriver().findElement(By.id("jenkins-name-icon")).click();
+        Thread.sleep(2000);
+
+        Assert.assertEquals(getDriver()
+                .findElement(By.xpath(String.format("//span[text()='%s']", newNameProject)))
+                .getText(), newNameProject);
+    }
+
+    @Test
+    public void testDeleteFreestyleProjectViaSidePanel() throws InterruptedException {
+        String nameProject = "My second freestyle project";
+
+        createFreestyleProjectUtils(nameProject);
+        getDriver().findElement(By.id("jenkins-name-icon")).click();
+        Thread.sleep(2000);
+
+        getDriver()
+                .findElement(By.xpath(String.format("//span[text()='%s']", nameProject)))
+                .click();
+        getDriver()
+                .findElement(By.xpath("//a[contains(@data-url, 'doDelete')]"))
+                .click();
+        Thread.sleep(1000);
+
+        getDriver()
+                .findElement(By.xpath("//button[@data-id='ok']"))
+                .click();
+
+        Thread.sleep(2000);
+
+        boolean isElementPresent = getDriver()
+                .findElements(By.xpath(String.format("//span[text()='%s']", nameProject)))
+                .isEmpty();
+
+        Assert.assertTrue(isElementPresent);
+    }
+
+}
