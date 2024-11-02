@@ -32,7 +32,7 @@ public class AboutJenkinsTest extends BaseTest {
 
         toAboutJenkinsPage();
 
-        int count = getDriver().findElements(By.xpath("//*[@id='main-panel']/div[4]/table/tbody/tr")).size();
+        int count = getDriver().findElements(By.xpath(""//*[@id='main-panel']/div[4]/table/tbody/tr"")).size();
 
         Assert.assertEquals(93,count);
 
