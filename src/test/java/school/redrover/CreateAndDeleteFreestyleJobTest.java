@@ -21,9 +21,7 @@ public class CreateAndDeleteFreestyleJobTest extends BaseTest {
 
         Assert.assertEquals(jobName, "MyJob");
 
-        getDriver().findElement(By.id("jenkins-home-link")).click();
-        getDriver().findElement(By.xpath("//*[@id=\"job_MyJob\"]/td[3]/a")).click();
-        getDriver().findElement(By.xpath("//*[@id=\"tippy-6\"]/div/div/div/button[2]")).click();
+        getDriver().findElement(By.xpath("//*[@id=\"tasks\"]/div[6]/span/a")).click();
         getDriver().findElement(By.xpath("//*[@id=\"jenkins\"]/dialog/div[3]/button[1]")).click();
         String h1 = getDriver().findElement(By.xpath("//h1")).getText();
 
