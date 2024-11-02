@@ -30,7 +30,8 @@ public class CreateFreeStyleJobTest extends BaseTest {
         getDriver().findElement(By.xpath("//button[@type='submit']")).click();
         getDriver().findElement(By.xpath("//textarea[@name='description']")).sendKeys(jobDescription);
 
-        List<WebElement> checkBoxes = getDriver().findElements(By.xpath("//section[@nameref='rowSetStart28']//span[@class='jenkins-checkbox']/label[@class='attach-previous ']"));
+        List<WebElement> checkBoxes = getDriver().findElements(By
+                .xpath("//section[@nameref='rowSetStart28']//span[@class='jenkins-checkbox']/label[@class='attach-previous ']"));
         for (WebElement checkBox : checkBoxes) {
             checkBox.click();
             JavascriptExecutor jse = (JavascriptExecutor) getDriver();
