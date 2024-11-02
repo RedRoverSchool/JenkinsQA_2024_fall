@@ -7,7 +7,7 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 import school.redrover.runner.BaseTest;
 
-public class RenameJobTest extends BaseTest {
+public class OperationsWithJobTest extends BaseTest {
 
     @Test
     public void tesRenameJob() {
