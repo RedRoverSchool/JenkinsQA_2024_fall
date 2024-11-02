@@ -62,9 +62,9 @@ public class MultibranchPipelineTest extends BaseTest {
         js1.executeScript("window.scrollTo(0, document.body.scrollHeight);");
 
         getDriver().findElement(By.xpath("//*[@id='bottom-sticker']/div/button[1]")).click();
-        getDriver().findElement(By.name("Submit")).click();
+        getDriver().findElement(By.id("description-link")).click();
 
-        String foundText = getDriver().findElement(By.cssSelector("#disable-project > button")).getText();
-        Assert.assertEquals(foundText, "Disable Multibranch Pipeline");
+        String foundText = getDriver().findElement(By.xpath("//*[@id='description']/form/div[2]/button")).getText();
+        Assert.assertEquals(foundText, "Save");
     }
 }
