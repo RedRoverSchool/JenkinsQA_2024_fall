@@ -38,7 +38,7 @@ public class PipelineTest extends BaseTest {
         getDriver().findElement(By.cssSelector("#toggle-switch-enable-disable-project > label")).click();
 
         getDriver().findElement(By.cssSelector(".jenkins-submit-button")).click();
-        getDriver().findElement(By.cssSelector("#enable-project > button")).click();
+        getDriver().findElement(By.name("Submit")).click();
 
         String foundText = getDriver().findElement(By.xpath("//*[@id='pipeline-box']/div")).getText();
         Assert.assertEquals(foundText, "No data available. This Pipeline has not yet run.");
