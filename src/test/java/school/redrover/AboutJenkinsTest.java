@@ -24,7 +24,7 @@ public class AboutJenkinsTest extends BaseTest {
 
         String version = getDriver().findElement(By.xpath("//p[@class='app-about-version']")).getText();
 
-        Assert.assertEquals(version, "Version 2.440.2");
+        Assert.assertEquals(version, "Version 2.462.3");
     }
 
     @Test
