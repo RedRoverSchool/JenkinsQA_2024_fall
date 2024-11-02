@@ -9,8 +9,8 @@ import school.redrover.runner.BaseTest;
 
 public class OperationsWithJobTest extends BaseTest {
 
-    @Test(description = "create and rename job")
-    public void tesRenameJob() {
+    @Test(description = "create and configure job")
+    public void testConfigureJob(){
 
         createJob("TestBuild");
 
@@ -18,13 +18,14 @@ public class OperationsWithJobTest extends BaseTest {
                 .findElement(By.xpath("//*[@id='job_TestBuild']/td[3]/a/span"))
                 .getText(),"TestBuild");
 
-        renameJob("TestBuild_NewName");
+        configureJob();
 
         Assert.assertEquals(getDriver()
-                .findElement(By.xpath("//*[@class='jenkins-table__link model-link inside']"))
-                .getText(), "TestBuild_NewName");
+                .findElement(By.xpath("//*[@id='main-panel']/div[1]/div[1]/h1"))
+                .getText(), "TestBuild");
 
     }
+
 
     @Test(description = "create and delete job")
     public void testDeleteJob(){
@@ -42,7 +43,30 @@ public class OperationsWithJobTest extends BaseTest {
 
     }
 
+    @Test(description = "create and rename job")
+    public void tesRenameJob() {
 
+        createJob("TestBuild");
+
+        Assert.assertEquals(getDriver()
+                .findElement(By.xpath("//*[@id='job_TestBuild']/td[3]/a/span"))
+                .getText(),"TestBuild");
+
+        renameJob("TestBuild_NewName");
+
+        Assert.assertEquals(getDriver()
+                .findElement(By.xpath("//*[@class='jenkins-table__link model-link inside']"))
+                .getText(), "TestBuild_NewName");
+
+    }
+
+    private void configureJob() {
+
+        getDriver().findElement(By.xpath("//*[@id='job_TestBuild']/td[3]/a/span")).click();
+        getDriver().findElement(By.xpath("//*[@id='tasks']/div[5]/span/a")).click();
+        getDriver().findElement(By.xpath("//*[@id='bottom-sticker']/div/button[1]")).click();
+
+    }
 
     public void createJob( String projectName) {
 
