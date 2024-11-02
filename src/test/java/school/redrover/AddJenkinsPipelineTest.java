@@ -12,7 +12,7 @@ import school.redrover.runner.BaseTest;
 public class AddJenkinsPipelineTest extends BaseTest {
 
     @Test
-    public void createMultiConfigProject() {
+    public void createMultiConfigProjectTest() {
          getDriver().findElement(By.linkText("New Item")).click();
 
          getDriver().findElement(By.id("name")).sendKeys("Multi project");
