@@ -2,10 +2,21 @@ package school.redrover;
 
 import org.openqa.selenium.By;
 import org.testng.Assert;
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 import school.redrover.runner.BaseTest;
 
 public class FreestyleProjectTest extends BaseTest {
+
+    @DataProvider
+    public Object[][] providerUnsafeCharacters() {
+
+        return new Object[][]{
+                {"\\"}, {"]"}, {":"}, {"#"}, {"&"}, {"?"}, {"!"}, {"@"},
+                {"$"}, {"%"}, {"^"}, {"*"}, {"|"}, {"/"}, {"<"}, {">"},
+                {"["}, {";"}
+        };
+    }
 
     @Test
     public void testCreateFreestyleProjectWithValidName() throws InterruptedException {
@@ -83,6 +94,17 @@ public class FreestyleProjectTest extends BaseTest {
         Assert.assertEquals(getDriver()
                 .findElement(By.xpath("//div[@id='description']/div"))
                 .getText(), description);
+    }
+
+    @Test(dataProvider = "providerUnsafeCharacters")
+    public void testCreateFreestyleProjectWithUnsafeCharactersInName(String unsafeCharacter) {
+        getDriver().findElement(By.xpath("//a[@href='/view/all/newJob']")).click();
+
+        getDriver().findElement(By.cssSelector(".hudson_model_FreeStyleProject")).click();
+        getDriver().findElement(By.id("name")).sendKeys(unsafeCharacter);
+        Assert.assertEquals(getDriver()
+                .findElement(By.id("itemname-invalid"))
+                .getText(), "» ‘" + unsafeCharacter + "’ is an unsafe character");
     }
 
 }
