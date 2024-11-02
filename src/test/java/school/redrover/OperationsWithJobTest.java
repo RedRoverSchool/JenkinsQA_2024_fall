@@ -9,6 +9,23 @@ import school.redrover.runner.BaseTest;
 
 public class OperationsWithJobTest extends BaseTest {
 
+    @Test(description = "create and build job")
+    public void testBuildJob(){
+
+        createJob("TestBuild");
+
+        Assert.assertEquals(getDriver()
+                .findElement(By.xpath("//*[@id='job_TestBuild']/td[3]/a/span"))
+                .getText(),"TestBuild");
+
+        buildJob();
+
+//        Assert.assertEquals(getDriver()
+//                .findElement(By.xpath("//*[@id='main-panel']/div[1]/div[1]/h1"))
+//                .getText(), "TestBuild");
+
+    }
+
     @Test(description = "create and configure job")
     public void testConfigureJob(){
 
@@ -60,6 +77,9 @@ public class OperationsWithJobTest extends BaseTest {
 
     }
 
+    private void buildJob() {
+    }
+
     private void configureJob() {
 
         getDriver().findElement(By.xpath("//*[@id='job_TestBuild']/td[3]/a/span")).click();
@@ -68,7 +88,7 @@ public class OperationsWithJobTest extends BaseTest {
 
     }
 
-    public void createJob( String projectName) {
+    private void createJob( String projectName) {
 
         getDriver().findElement(By.xpath("//*[@id='main-panel']/div[2]/div/section[1]/ul/li/a")).click();
         getDriver().findElement(By.xpath("//*[@id='name']")).sendKeys(projectName);
@@ -80,7 +100,7 @@ public class OperationsWithJobTest extends BaseTest {
     }
 
 
-    public void deleteJob() {
+    private void deleteJob() {
 
         getDriver().findElement(By.xpath("//*[@id='job_TestBuild']/td[3]/a/span")).click();
         getDriver().findElement(By.xpath("//*[@id='tasks']/div[6]/span/a")).click();
@@ -88,7 +108,7 @@ public class OperationsWithJobTest extends BaseTest {
 
     }
 
-    public void renameJob(String testBuildNewName){
+    private void renameJob(String testBuildNewName){
 
         getDriver().findElement(By.xpath("//*[@id='job_TestBuild']/td[3]/a/span")).click();
         getDriver().findElement(By.xpath("//*[@id='tasks']/div[7]/span/a")).click();
@@ -101,8 +121,5 @@ public class OperationsWithJobTest extends BaseTest {
         getDriver().findElement(By.id("jenkins-home-link")).click();
 
     }
-
-
-
 
 }
