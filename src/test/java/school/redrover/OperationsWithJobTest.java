@@ -3,9 +3,13 @@ package school.redrover;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import school.redrover.runner.BaseTest;
+
+import java.time.Duration;
 
 public class OperationsWithJobTest extends BaseTest {
 
@@ -18,11 +22,17 @@ public class OperationsWithJobTest extends BaseTest {
                 .findElement(By.xpath("//*[@id='job_TestBuild']/td[3]/a/span"))
                 .getText(),"TestBuild");
 
+        navigateToManageJob();
+
+        Assert.assertEquals(getDriver()
+                .findElement(By.xpath("//*[@id='no-builds']"))
+                .getText(),"No builds");
+
         buildJob();
 
-//        Assert.assertEquals(getDriver()
-//                .findElement(By.xpath("//*[@id='main-panel']/div[1]/div[1]/h1"))
-//                .getText(), "TestBuild");
+        Assert.assertFalse(getDriver()
+                .findElement(By.xpath("//*[@id='no-builds']"))
+                .isDisplayed());
 
     }
 
@@ -35,6 +45,7 @@ public class OperationsWithJobTest extends BaseTest {
                 .findElement(By.xpath("//*[@id='job_TestBuild']/td[3]/a/span"))
                 .getText(),"TestBuild");
 
+        navigateToManageJob();
         configureJob();
 
         Assert.assertEquals(getDriver()
@@ -52,6 +63,7 @@ public class OperationsWithJobTest extends BaseTest {
                 .findElement(By.xpath("//*[@id='job_TestBuild']/td[3]/a/span"))
                 .getText(),"TestBuild");
 
+        navigateToManageJob();
         deleteJob();
 
         Assert.assertEquals(getDriver()
@@ -69,6 +81,7 @@ public class OperationsWithJobTest extends BaseTest {
                 .findElement(By.xpath("//*[@id='job_TestBuild']/td[3]/a/span"))
                 .getText(),"TestBuild");
 
+        navigateToManageJob();
         renameJob("TestBuild_NewName");
 
         Assert.assertEquals(getDriver()
@@ -78,11 +91,17 @@ public class OperationsWithJobTest extends BaseTest {
     }
 
     private void buildJob() {
+        getDriver().findElement(By.xpath("//*[@id='tasks']/div[4]/span/a")).click();
+        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(10));
+        WebElement toolTipSuccess = wait
+                .until(ExpectedConditions
+                        .elementToBeClickable(By
+                                .xpath("//*[@id='buildHistory']/div[2]/table/tbody/tr[2]/td/div[1]/div[1]/div/a")));
+        Assert.assertTrue(toolTipSuccess.isDisplayed(),"true");
     }
 
     private void configureJob() {
 
-        getDriver().findElement(By.xpath("//*[@id='job_TestBuild']/td[3]/a/span")).click();
         getDriver().findElement(By.xpath("//*[@id='tasks']/div[5]/span/a")).click();
         getDriver().findElement(By.xpath("//*[@id='bottom-sticker']/div/button[1]")).click();
 
@@ -102,7 +121,6 @@ public class OperationsWithJobTest extends BaseTest {
 
     private void deleteJob() {
 
-        getDriver().findElement(By.xpath("//*[@id='job_TestBuild']/td[3]/a/span")).click();
         getDriver().findElement(By.xpath("//*[@id='tasks']/div[6]/span/a")).click();
         getDriver().findElement(By.xpath("//*[@id='jenkins']/dialog/div[3]/button[1]")).click();
 
@@ -110,7 +128,6 @@ public class OperationsWithJobTest extends BaseTest {
 
     private void renameJob(String testBuildNewName){
 
-        getDriver().findElement(By.xpath("//*[@id='job_TestBuild']/td[3]/a/span")).click();
         getDriver().findElement(By.xpath("//*[@id='tasks']/div[7]/span/a")).click();
         WebElement inputField = getDriver().findElement(By.xpath("//*[@id='main-panel']/form/div[1]/div[1]/div[2]/input"));
         inputField.clear();
@@ -120,6 +137,10 @@ public class OperationsWithJobTest extends BaseTest {
         actionsRenameButton.moveToElement(renameButton).click().perform();
         getDriver().findElement(By.id("jenkins-home-link")).click();
 
+    }
+
+    private void navigateToManageJob() {
+        getDriver().findElement(By.xpath("//*[@id='job_TestBuild']/td[3]/a/span")).click();
     }
 
 }
