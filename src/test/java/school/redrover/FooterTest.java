@@ -5,15 +5,20 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 import school.redrover.runner.BaseTest;
 
-public class FooterTest extends BaseTest{
+public class FooterTest extends BaseTest {
 
     @Test
+    public void testFooter() {
 
-    public void testCheckVersion()  {
-        getDriver().findElement(By.xpath("//*[@id='jenkins']/footer/div/div[2]/button")).click();
-        getDriver().findElement(By.xpath("//a[@href='/manage/about']")).click();
+        getDriver().findElement(By.xpath("//button[@type='button']")).click();
 
-        Assert.assertEquals(getDriver().findElement(By
-                .xpath("//p[@class='app-about-version']")).getText(), "Version 2.462.3");
-          }
-}
+
+        getDriver().findElement(By.xpath("//*[@id='tippy-1']/div/div/div/a[1]")).click();
+
+
+        String hiStr = getDriver().findElement(By.xpath("//*[@id='main-panel']/p")).getText();
+
+        Assert.assertEquals(hiStr, "The leading open source automation server which enables " +
+                "developers around the world to reliably build, test, and deploy their software.");
+    }
+    }
