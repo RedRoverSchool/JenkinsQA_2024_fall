@@ -2,33 +2,37 @@ package school.redrover;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 import school.redrover.runner.BaseTest;
 
+import java.time.Duration;
+
 public class FreestyleProjectTest extends BaseTest {
 
     private static final String PROJECT_NAME = "My freestyle project";
+    private static final String FOLDER_NAME = "My folder";
 
-    private void createFreestyleProjectUtils() {
+    private WebDriverWait wait5;
 
-        getDriver().findElement(By.xpath("//a[@href='/view/all/newJob']")).click();
-        getDriver().findElement(By.id("name")).sendKeys(PROJECT_NAME);
-        getDriver().findElement(By.cssSelector(".hudson_model_FreeStyleProject")).click();
-        getDriver().findElement(By.id("ok-button")).click();
-        getDriver().findElement(By.xpath("//div[@id='bottom-sticker']//button[@name='Submit']")).click();
+    private WebDriverWait getWait5() {
 
+        if (wait5 == null) {
+            wait5 = new WebDriverWait(getDriver(), Duration.ofSeconds(5));
+        }
+        return wait5;
     }
 
-    private void createFolderUtils(String nameFolder) {
+    private void createItemUtils(String name, String locator) {
 
         getDriver().findElement(By.xpath("//a[@href='/view/all/newJob']")).click();
-        getDriver().findElement(By.id("name")).sendKeys(nameFolder);
-        getDriver().findElement(By.cssSelector(".com_cloudbees_hudson_plugins_folder_Folder")).click();
+        getDriver().findElement(By.id("name")).sendKeys(name);
+        getDriver().findElement(By.cssSelector(locator)).click();
         getDriver().findElement(By.id("ok-button")).click();
-        getDriver().findElement(By.xpath("//div[@id='bottom-sticker']//button[@name='Submit']")).click();
 
     }
 
@@ -43,15 +47,18 @@ public class FreestyleProjectTest extends BaseTest {
     }
 
     @Test
-    public void testCreateFreestyleProjectWithValidName() throws InterruptedException {
+    public void testCreateFreestyleProjectWithValidName() {
 
-        createFreestyleProjectUtils();
+        createItemUtils(PROJECT_NAME, ".hudson_model_FreeStyleProject");
         getDriver().findElement(By.id("jenkins-name-icon")).click();
-        Thread.sleep(2000);
 
-        Assert.assertEquals(getDriver()
-                .findElement(By.xpath(String.format("//span[text()='%s']", PROJECT_NAME)))
-                .getText(), PROJECT_NAME);
+        WebElement freestyleProjectItem = getWait5().until(
+                ExpectedConditions.visibilityOfElementLocated(
+                        By.xpath(String.format("//span[text()='%s']", PROJECT_NAME))
+                )
+        );
+
+        Assert.assertEquals(freestyleProjectItem.getText(), PROJECT_NAME);
     }
 
     @Test
@@ -67,13 +74,20 @@ public class FreestyleProjectTest extends BaseTest {
     }
 
     @Test
-    public void testCreateFreestyleProjectWithDuplicateName() throws InterruptedException {
+    public void testCreateFreestyleProjectWithDuplicateName() {
 
-        createFreestyleProjectUtils();
+        createItemUtils(PROJECT_NAME, ".hudson_model_FreeStyleProject");
         getDriver().findElement(By.id("jenkins-name-icon")).click();
-        Thread.sleep(2000);
 
-        getDriver().findElement(By.xpath("//a[@href='/view/all/newJob']")).click();
+        WebElement freestyleProjectItem = getWait5().until(
+                ExpectedConditions.visibilityOfElementLocated(
+                        By.xpath(String.format("//span[text()='%s']", PROJECT_NAME))
+                )
+        );
+        if (freestyleProjectItem != null) {
+            getDriver().findElement(By.xpath("//a[@href='/view/all/newJob']")).click();
+        }
+
         getDriver().findElement(By.id("name")).sendKeys(PROJECT_NAME);
         getDriver().findElement(By.cssSelector(".hudson_model_FreeStyleProject")).click();
 
@@ -83,17 +97,19 @@ public class FreestyleProjectTest extends BaseTest {
     }
 
     @Test
-    public void testAddDescriptionForFreestyleProject() throws InterruptedException {
+    public void testAddDescriptionForFreestyleProject() {
 
         String description = "Description freestyle project.";
 
-        createFreestyleProjectUtils();
+        createItemUtils(PROJECT_NAME, ".hudson_model_FreeStyleProject");
         getDriver().findElement(By.id("jenkins-name-icon")).click();
-        Thread.sleep(2000);
 
-        getDriver()
-                .findElement(By.xpath(String.format("//span[text()='%s']", PROJECT_NAME)))
+        getWait5()
+                .until(ExpectedConditions.visibilityOfElementLocated(
+                        By.xpath(String.format("//span[text()='%s']", PROJECT_NAME)))
+                )
                 .click();
+
         getDriver().findElement(By.id("description-link")).click();
         getDriver()
                 .findElement(By.xpath("//textarea[@name='description']"))
@@ -119,17 +135,19 @@ public class FreestyleProjectTest extends BaseTest {
 
 
     @Test
-    public void testRenameFreestyleProjectViaSidePanel() throws InterruptedException {
+    public void testRenameFreestyleProjectViaSidePanel() {
 
         String newProjectName = "My second freestyle project";
 
-        createFreestyleProjectUtils();
+        createItemUtils(PROJECT_NAME, ".hudson_model_FreeStyleProject");
         getDriver().findElement(By.id("jenkins-name-icon")).click();
-        Thread.sleep(2000);
 
-        getDriver()
-                .findElement(By.xpath(String.format("//span[text()='%s']", PROJECT_NAME)))
+        getWait5()
+                .until(ExpectedConditions.visibilityOfElementLocated(
+                        By.xpath(String.format("//span[text()='%s']", PROJECT_NAME)))
+                )
                 .click();
+
         getDriver()
                 .findElement(By.xpath("//a[contains(@href, 'confirm-rename')]"))
                 .click();
@@ -144,7 +162,6 @@ public class FreestyleProjectTest extends BaseTest {
                 .click();
 
         getDriver().findElement(By.id("jenkins-name-icon")).click();
-        Thread.sleep(2000);
 
         Assert.assertEquals(getDriver()
                 .findElement(By.xpath(String.format("//span[text()='%s']", newProjectName)))
@@ -152,25 +169,24 @@ public class FreestyleProjectTest extends BaseTest {
     }
 
     @Test
-    public void testDeleteFreestyleProjectViaSidePanel() throws InterruptedException {
+    public void testDeleteFreestyleProjectViaSidePanel() {
 
-        createFreestyleProjectUtils();
+        createItemUtils(PROJECT_NAME, ".hudson_model_FreeStyleProject");
         getDriver().findElement(By.id("jenkins-name-icon")).click();
-        Thread.sleep(2000);
 
-        getDriver()
-                .findElement(By.xpath(String.format("//span[text()='%s']", PROJECT_NAME)))
+        getWait5()
+                .until(ExpectedConditions.visibilityOfElementLocated(
+                        By.xpath(String.format("//span[text()='%s']", PROJECT_NAME)))
+                )
                 .click();
+
         getDriver()
                 .findElement(By.xpath("//a[contains(@data-url, 'doDelete')]"))
                 .click();
-        Thread.sleep(1000);
 
         getDriver()
                 .findElement(By.xpath("//button[@data-id='ok']"))
                 .click();
-
-        Thread.sleep(2000);
 
         boolean isElementPresent = getDriver()
                 .findElements(By.xpath(String.format("//span[text()='%s']", PROJECT_NAME)))
@@ -180,17 +196,15 @@ public class FreestyleProjectTest extends BaseTest {
     }
 
     @Test
-    public void testMoveFreestyleProjectToFolder() throws InterruptedException {
+    public void testMoveFreestyleProjectToFolder(){
 
         String folderName = "My folder";
 
-        createFolderUtils(folderName);
+        createItemUtils(FOLDER_NAME, ".com_cloudbees_hudson_plugins_folder_Folder");
         getDriver().findElement(By.id("jenkins-name-icon")).click();
-        Thread.sleep(2000);
 
-        createFreestyleProjectUtils();
+        createItemUtils(PROJECT_NAME, ".hudson_model_FreeStyleProject");
         getDriver().findElement(By.id("jenkins-name-icon")).click();
-        Thread.sleep(2000);
 
         getDriver()
                 .findElement(By.xpath(String.format("//span[text()='%s']", PROJECT_NAME)))
@@ -199,7 +213,6 @@ public class FreestyleProjectTest extends BaseTest {
         getDriver()
                 .findElement(By.xpath("//a[contains(@href, 'move')]"))
                 .click();
-        Thread.sleep(1000);
 
         Select dropdown = new Select(getDriver().findElement(By.xpath("//select[@name='destination']")));
         dropdown.selectByValue("/" + folderName);
@@ -207,7 +220,6 @@ public class FreestyleProjectTest extends BaseTest {
                 .findElement(By.xpath("//button[@name='Submit']"))
                 .click();
         getDriver().findElement(By.id("jenkins-name-icon")).click();
-        Thread.sleep(2000);
 
         getDriver()
                 .findElement(By.xpath(String.format("//span[text()='%s']", folderName)))
@@ -216,6 +228,6 @@ public class FreestyleProjectTest extends BaseTest {
         Assert.assertEquals(getDriver()
                 .findElement(By.xpath(String.format("//span[text()='%s']", PROJECT_NAME)))
                 .getText(), PROJECT_NAME);
-        }
+    }
 
 }
