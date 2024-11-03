@@ -23,6 +23,8 @@ public class VersionTest extends BaseTest {
         Assert.assertEquals(getDriver()
                 .findElement(By.className("app-about-version"))
                 .getText(), "Version 2.462.3");
+
+
     }
 
 }
