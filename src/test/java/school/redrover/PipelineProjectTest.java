@@ -1,17 +1,23 @@
 package school.redrover;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import school.redrover.runner.BaseTest;
 
+import java.time.Duration;
 import java.util.List;
 
 
 public class PipelineProjectTest extends BaseTest {
 
-    private static final String PIPELINE_NAME = "Pipeline";
+    private static final String PIPELINE_NAME = "Pipeline name";
+    private static final String NEW_PROJECT_NAME = "New Pipeline Name";
 
     private void createProjectViaSidebar(String projectName) {
         getDriver().findElement(By.xpath("//a[@href='/view/all/newJob']")).click();
@@ -28,7 +34,11 @@ public class PipelineProjectTest extends BaseTest {
     }
 
     private void clickJobByName(String projectName) {
-        getDriver().findElement(By.xpath("//td/a[@href='job/"+ projectName + "/']")).click();
+        getDriver().findElement(By.xpath("//td/a[@href='job/" + encodeSpacesForURL(projectName) + "/']")).click();
+    }
+
+    private String encodeSpacesForURL(String input) {
+        return input.replaceAll(" ", "%20");
     }
 
     private List<String> getProjectList() {
@@ -68,25 +78,52 @@ public class PipelineProjectTest extends BaseTest {
 
     @Test
     public void testRenameProjectViaSidebar() {
-        final String newProjectName = "New Project Name";
-
         createProjectViaSidebar(PIPELINE_NAME);
         returnToHomePage();
         clickJobByName(PIPELINE_NAME);
 
-        getDriver().findElement(By.xpath("//a[@href='/job/" + PIPELINE_NAME + "/confirm-rename']")).click();
+        getDriver().findElement(By.xpath("//a[@href='/job/" + encodeSpacesForURL(PIPELINE_NAME) + "/confirm-rename']")).click();
 
         getDriver().findElement(By.xpath("//input[@checkdependson='newName']")).clear();
-        getDriver().findElement(By.xpath("//input[@checkdependson='newName']")).sendKeys(newProjectName);
+        getDriver().findElement(By.xpath("//input[@checkdependson='newName']")).sendKeys(NEW_PROJECT_NAME);
         getDriver().findElement(By.xpath("//button[@name='Submit']")).click();
 
         returnToHomePage();
 
-        Assert.assertListContainsObject(getProjectList(), newProjectName, "Project is not found");
+        Assert.assertListContainsObject(getProjectList(), NEW_PROJECT_NAME, "Project is not renamed");
     }
 
     @Test
-    public void testDeleteProjectViaSidebar(){
+    public void testRenameProjectViaDropdownMenu() {
+        createProjectViaSidebar(PIPELINE_NAME);
+        returnToHomePage();
+
+        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(10));
+        Actions actions = new Actions(getDriver());
+
+        WebElement projectElement = wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//a[@href='job/" + encodeSpacesForURL(PIPELINE_NAME) + "/']")));
+        actions.moveToElement(projectElement).perform();
+
+        actions.moveByOffset(15, 5).click().perform();
+
+        WebElement confirmRenameLink = wait.until(ExpectedConditions.elementToBeClickable(
+                By.xpath("//a[@href='/job/" + encodeSpacesForURL(PIPELINE_NAME) + "/confirm-rename']")));
+        confirmRenameLink.click();
+
+        WebElement nameInput = wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//input[@checkdependson='newName']")));
+        nameInput.clear();
+        nameInput.sendKeys(NEW_PROJECT_NAME);
+        getDriver().findElement(By.xpath("//button[@name='Submit']")).click();
+
+        returnToHomePage();
+
+        Assert.assertListContainsObject(getProjectList(), NEW_PROJECT_NAME, "Project is not renamed");
+    }
+
+    @Test
+    public void testDeleteProjectViaSidebar() {
         createProjectViaSidebar(PIPELINE_NAME);
         returnToHomePage();
         clickJobByName(PIPELINE_NAME);
