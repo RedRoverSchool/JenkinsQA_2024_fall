@@ -60,7 +60,7 @@ public class PipelineProjectTest extends BaseTest {
     private void openDropdownMenuForProject(String projectName) {
         Actions actions = new Actions(getDriver());
         actions.moveToElement(getDriver().findElement(By.xpath("//a[@href='job/" + encodeSpacesForURL(projectName) + "/']")))
-                .pause(500).moveToElement(getDriver().findElement(
+                .pause(1000).moveToElement(getDriver().findElement(
                         By.xpath("//a[@href='job/" + encodeSpacesForURL(projectName) + "/']//button[@class='jenkins-menu-dropdown-chevron']")))
                 .click().perform();
     }
