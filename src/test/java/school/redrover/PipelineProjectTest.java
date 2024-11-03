@@ -67,7 +67,7 @@ public class PipelineProjectTest extends BaseTest {
     }
 
     @Test
-    public void renameProjectViaSidebar() {
+    public void testRenameProjectViaSidebar() {
         final String newProjectName = "New Project Name";
 
         createProjectViaSidebar(PIPELINE_NAME);
@@ -86,7 +86,7 @@ public class PipelineProjectTest extends BaseTest {
     }
 
     @Test
-    public void deleteProjectViaSidebar(){
+    public void testDeleteProjectViaSidebar(){
         createProjectViaSidebar(PIPELINE_NAME);
         returnToHomePage();
         clickJobByName(PIPELINE_NAME);
