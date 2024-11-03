@@ -13,6 +13,23 @@ import java.time.Duration;
 
 public class OperationsWithJobTest extends BaseTest {
 
+
+    @Test(description = "create and changes job")
+    public void testChangesJob(){
+
+        createJob("TestBuild");
+
+        Assert.assertEquals(getDriver()
+                .findElement(By.xpath("//*[@id='job_TestBuild']/td[3]/a/span"))
+                .getText(),"TestBuild");
+
+        navigateToManageJob();
+
+        Assert.assertEquals(getDriver()
+                .findElement(By.xpath("//*[@id='no-builds']"))
+                .getText(),"No builds");
+
+    }
     @Test(description = "create and setup workspace job")
     public void testWorkspaceJob(){
 
