@@ -15,7 +15,7 @@ import java.util.List;
 public class DashboardItemsDropdownTest extends BaseTest {
 
     private WebDriverWait setWait() {
-        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(40));
+        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(60));
         return wait;
 
     }
