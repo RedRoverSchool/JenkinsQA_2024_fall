@@ -30,9 +30,9 @@ public class DashboardItemsDropdownTest extends BaseTest {
         Actions actions = new Actions(getDriver());
         actions.moveToElement(dashboardButton).perform();
 
-        WebElement buttonDropdown = wait.until(ExpectedConditions.elementToBeClickable(
-                By.xpath("//*[@id=\"breadcrumbs\"]/li[1]/a/button")));
-        buttonDropdown.click();
+        WebElement buttonDropdown = getDriver().findElement(
+                By.xpath("//*[@id=\"breadcrumbs\"]/li[1]/a/button"));
+        actions.moveToElement(buttonDropdown).click().perform();
 
         List<WebElement> dropDownList = wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(
                 By.xpath("//*[@id=\"tippy-3\"]/div/div/div")));
