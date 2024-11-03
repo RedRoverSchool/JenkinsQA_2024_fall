@@ -1,7 +1,6 @@
 package school.redrover;
 
 import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -16,8 +15,8 @@ import java.util.List;
 
 public class PipelineProjectTest extends BaseTest {
 
-    private static final String PIPELINE_NAME = "Pipeline name";
-    private static final String NEW_PROJECT_NAME = "New Pipeline Name";
+    private static final String PIPELINE_NAME = "Pipeline";
+    private static final String NEW_PROJECT_NAME = "New Pipeline name";
 
     private void createProjectViaSidebar(String projectName) {
         getDriver().findElement(By.xpath("//a[@href='/view/all/newJob']")).click();
@@ -34,7 +33,11 @@ public class PipelineProjectTest extends BaseTest {
     }
 
     private void clickJobByName(String projectName) {
-        getDriver().findElement(By.xpath("//td/a[@href='job/" + encodeSpacesForURL(projectName) + "/']")).click();
+        WebElement projectElement = getWebDriverWait().until(ExpectedConditions.elementToBeClickable(
+                By.xpath("//td/a[@href='job/" + encodeSpacesForURL(projectName) + "/']")));
+
+        Actions actions = new Actions(getDriver());
+        actions.moveToElement(projectElement).moveByOffset(-10, 0).click().perform();
     }
 
     private String encodeSpacesForURL(String input) {
@@ -48,6 +51,18 @@ public class PipelineProjectTest extends BaseTest {
                 .stream()
                 .map(WebElement::getText)
                 .toList();
+    }
+
+    private WebDriverWait getWebDriverWait() {
+        return new WebDriverWait(getDriver(), Duration.ofSeconds(10));
+    }
+
+    private void openDropdownMenuForProject(String projectName) {
+        Actions actions = new Actions(getDriver());
+        actions.moveToElement(getDriver().findElement(By.xpath("//a[@href='job/" + encodeSpacesForURL(projectName) + "/']")))
+                .pause(500).moveToElement(getDriver().findElement(
+                        By.xpath("//a[@href='job/" + encodeSpacesForURL(projectName) + "/']//button[@class='jenkins-menu-dropdown-chevron']")))
+                .click().perform();
     }
 
     @Test
@@ -97,21 +112,12 @@ public class PipelineProjectTest extends BaseTest {
     public void testRenameProjectViaDropdownMenu() {
         createProjectViaSidebar(PIPELINE_NAME);
         returnToHomePage();
+        openDropdownMenuForProject(PIPELINE_NAME);
 
-        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(10));
-        Actions actions = new Actions(getDriver());
+        getWebDriverWait().until(ExpectedConditions.elementToBeClickable(
+                By.xpath("//a[@href='/job/" + encodeSpacesForURL(PIPELINE_NAME) + "/confirm-rename']"))).click();
 
-        WebElement projectElement = wait.until(ExpectedConditions.visibilityOfElementLocated(
-                By.xpath("//a[@href='job/" + encodeSpacesForURL(PIPELINE_NAME) + "/']")));
-        actions.moveToElement(projectElement).perform();
-
-        actions.moveByOffset(15, 5).click().perform();
-
-        WebElement confirmRenameLink = wait.until(ExpectedConditions.elementToBeClickable(
-                By.xpath("//a[@href='/job/" + encodeSpacesForURL(PIPELINE_NAME) + "/confirm-rename']")));
-        confirmRenameLink.click();
-
-        WebElement nameInput = wait.until(ExpectedConditions.visibilityOfElementLocated(
+        WebElement nameInput = getWebDriverWait().until(ExpectedConditions.visibilityOfElementLocated(
                 By.xpath("//input[@checkdependson='newName']")));
         nameInput.clear();
         nameInput.sendKeys(NEW_PROJECT_NAME);
@@ -129,6 +135,20 @@ public class PipelineProjectTest extends BaseTest {
         clickJobByName(PIPELINE_NAME);
 
         getDriver().findElement(By.xpath("//a[@data-title='Delete Pipeline']")).click();
+        getDriver().findElement(By.xpath("//button[@data-id='ok']")).click();
+
+        Assert.assertListNotContainsObject(getProjectList(), PIPELINE_NAME, "Project is not deleted");
+    }
+
+    @Test
+    public void testDeleteProjectViaDropdownMenu() {
+        createProjectViaSidebar(PIPELINE_NAME);
+        returnToHomePage();
+        openDropdownMenuForProject(PIPELINE_NAME);
+
+        getWebDriverWait().until(ExpectedConditions.elementToBeClickable(
+                By.xpath("//button[@href='/job/" + encodeSpacesForURL(PIPELINE_NAME) + "/doDelete']"))).click();
+
         getDriver().findElement(By.xpath("//button[@data-id='ok']")).click();
 
         Assert.assertListNotContainsObject(getProjectList(), PIPELINE_NAME, "Project is not deleted");
