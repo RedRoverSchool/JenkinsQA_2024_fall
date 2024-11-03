@@ -15,7 +15,7 @@ import java.util.List;
 
 public class PipelineProjectTest extends BaseTest {
 
-    private static final String PIPELINE_NAME = "Pipeline";
+    private static final String PIPELINE_NAME = "Pipeline name";
     private static final String NEW_PROJECT_NAME = "New Pipeline name";
 
     private void createProjectViaSidebar(String projectName) {
