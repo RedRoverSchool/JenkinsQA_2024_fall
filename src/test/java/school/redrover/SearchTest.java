@@ -16,6 +16,8 @@ public class SearchTest extends BaseTest {
         search.sendKeys("manage");
         search.sendKeys(Keys.ENTER);
 
+
+
         String name = getDriver().findElement(By.xpath("//*[@id=\"main-panel\"]/div/div[1]/h1")).getText();
         Assert.assertEquals(name,"Manage Jenkins");
 
