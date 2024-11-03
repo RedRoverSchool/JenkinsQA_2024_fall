@@ -7,6 +7,13 @@ import school.redrover.runner.BaseTest;
 
 public class PageElementsTest extends BaseTest {
 
+    private void newItemsData(String itemName, String itemXpath){
+        getDriver().findElement(By.xpath("//*[@id='tasks']/div[1]/span/a")).click();
+        getDriver().findElement(By.id("name")).sendKeys(itemName);
+        getDriver().findElement(By.xpath(itemXpath)).click();
+        getDriver().findElement(By.id("ok-button")).click();
+    }
+
     @Test
     public void newItem (){
         String newItemElement = getDriver().findElement(By.xpath("//*[@id='tasks']/div[1]/span/a")).getText();
@@ -72,10 +79,7 @@ public class PageElementsTest extends BaseTest {
 
     @Test
     public void newPipeline (){
-        getDriver().findElement(By.xpath("//*[@id='tasks']/div[1]/span/a")).click();
-        getDriver().findElement(By.id("name")).sendKeys("PipeTest");
-        getDriver().findElement(By.xpath("//*[@id='j-add-item-type-standalone-projects']/ul/li[2]/div[2]/label")).click();
-        getDriver().findElement(By.id("ok-button")).click();
+        newItemsData("PipeTest", "//*[@id='j-add-item-type-standalone-projects']/ul/li[2]/div[2]/label");
 
         getDriver().findElement(By.xpath("//*[@id='main-panel']/form/div[1]/section[1]/div[3]/div[1]/div/span/label")).click();
         getDriver().findElement(By.name("_.daysToKeepStr")).sendKeys("5");
@@ -89,16 +93,60 @@ public class PageElementsTest extends BaseTest {
 
     @Test
     public void newFreeStyleProject (){
-        getDriver().findElement(By.xpath("//*[@id='tasks']/div[1]/span/a")).click();
-        getDriver().findElement(By.id("name")).sendKeys("FreeStyleProjectTest");
-        getDriver().findElement(By.xpath("//*[@id='j-add-item-type-standalone-projects']/ul/li[1]/div[2]/label")).click();
-        getDriver().findElement(By.id("ok-button")).click();
+        newItemsData("FreeStyleProjectTest", "//*[@id='j-add-item-type-standalone-projects']/ul/li[1]/div[2]/label");
 
         getDriver().findElement(By.name("Submit")).click();
 
         String result = getDriver().findElement(By.xpath("//*[@id='main-panel']/div[1]/div[1]/h1")).getText();
 
         Assert.assertEquals(result, "FreeStyleProjectTest");
+    }
+
+    @Test
+    public void newMultiConfigurationProject(){
+        newItemsData("MultiConfigurationProjectTest", "//*[@id='j-add-item-type-standalone-projects']/ul/li[3]/div[2]/label");
+
+        getDriver().findElement(By.name("Submit")).click();
+
+        String result = getDriver().findElement(By.xpath("//*[@id='main-panel']/h1")).getText();
+
+        Assert.assertEquals(result, "Project MultiConfigurationProjectTest");
+    }
+
+    @Test
+    public void newFolder(){
+        newItemsData("newFolderTest", "//*[@id='j-add-item-type-standalone-projects']/ul/li[3]/div[2]/label");
+
+        getDriver().findElement(By.id("jenkins")).sendKeys("Testing Folder");
+        getDriver().findElement(By.name("Submit")).click();
+
+        String result = getDriver().findElement(By.xpath("//*[@id='main-panel']/h1")).getText();
+
+        Assert.assertEquals(result, "Project newFolderTest");
+    }
+
+    @Test
+    public void newMultibranchPipeline(){
+        newItemsData("newMultibranchPipelineTest", "//*[@id='j-add-item-type-nested-projects']/ul/li[2]/div[2]/label");
+
+        getDriver().findElement(By.name("_.displayNameOrNull")).sendKeys("Testing MultibranchPipeline");
+        getDriver().findElement(By.name("Submit")).click();
+
+        String result = getDriver().findElement(By.xpath("//*[@id='main-panel']/h1")).getText();
+
+        Assert.assertEquals(result, "Testing MultibranchPipeline");
+    }
+
+    @Test
+    public void newOrganizationFolder(){
+        newItemsData("newOrganizationFolderTest", "//*[@id='j-add-item-type-nested-projects']/ul/li[3]/div[2]/label/span");
+
+        getDriver().findElement(By.name("_.displayNameOrNull")).sendKeys("Testing OrganizationFolder");
+        getDriver().findElement(By.name("Submit")).click();
+
+        String result = getDriver().findElement(By.xpath("//*[@id='main-panel']/h1")).getText();
+
+        Assert.assertEquals(result, "Testing OrganizationFolder");
     }
 
 }
