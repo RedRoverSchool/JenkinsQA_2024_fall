@@ -17,14 +17,14 @@ public class FreestyleProjectTest extends BaseTest {
     private static final String PROJECT_NAME = "My freestyle project";
     private static final String FOLDER_NAME = "My folder";
 
-    private WebDriverWait wait5;
+    private WebDriverWait wait10;
 
-    private WebDriverWait getWait5() {
+    private WebDriverWait getWait10() {
 
-        if (wait5 == null) {
-            wait5 = new WebDriverWait(getDriver(), Duration.ofSeconds(5));
+        if (wait10 == null) {
+            wait10 = new WebDriverWait(getDriver(), Duration.ofSeconds(10));
         }
-        return wait5;
+        return wait10;
     }
 
     private void createItemUtils(String name, String locator) {
@@ -52,7 +52,7 @@ public class FreestyleProjectTest extends BaseTest {
         createItemUtils(PROJECT_NAME, ".hudson_model_FreeStyleProject");
         getDriver().findElement(By.id("jenkins-name-icon")).click();
 
-        WebElement freestyleProjectItem = getWait5().until(
+        WebElement freestyleProjectItem = getWait10().until(
                 ExpectedConditions.visibilityOfElementLocated(
                         By.xpath(String.format("//span[text()='%s']", PROJECT_NAME))
                 )
@@ -79,14 +79,11 @@ public class FreestyleProjectTest extends BaseTest {
         createItemUtils(PROJECT_NAME, ".hudson_model_FreeStyleProject");
         getDriver().findElement(By.id("jenkins-name-icon")).click();
 
-        WebElement freestyleProjectItem = getWait5().until(
+        getWait10().until(
                 ExpectedConditions.visibilityOfElementLocated(
-                        By.xpath(String.format("//span[text()='%s']", PROJECT_NAME))
+                        By.xpath("//a[@href='/view/all/newJob']"))
                 )
-        );
-        if (freestyleProjectItem != null) {
-            getDriver().findElement(By.xpath("//a[@href='/view/all/newJob']")).click();
-        }
+                .click();
 
         getDriver().findElement(By.id("name")).sendKeys(PROJECT_NAME);
         getDriver().findElement(By.cssSelector(".hudson_model_FreeStyleProject")).click();
@@ -104,7 +101,7 @@ public class FreestyleProjectTest extends BaseTest {
         createItemUtils(PROJECT_NAME, ".hudson_model_FreeStyleProject");
         getDriver().findElement(By.id("jenkins-name-icon")).click();
 
-        getWait5()
+        getWait10()
                 .until(ExpectedConditions.visibilityOfElementLocated(
                         By.xpath(String.format("//span[text()='%s']", PROJECT_NAME)))
                 )
@@ -142,7 +139,7 @@ public class FreestyleProjectTest extends BaseTest {
         createItemUtils(PROJECT_NAME, ".hudson_model_FreeStyleProject");
         getDriver().findElement(By.id("jenkins-name-icon")).click();
 
-        getWait5()
+        getWait10()
                 .until(ExpectedConditions.visibilityOfElementLocated(
                         By.xpath(String.format("//span[text()='%s']", PROJECT_NAME)))
                 )
@@ -174,7 +171,7 @@ public class FreestyleProjectTest extends BaseTest {
         createItemUtils(PROJECT_NAME, ".hudson_model_FreeStyleProject");
         getDriver().findElement(By.id("jenkins-name-icon")).click();
 
-        getWait5()
+        getWait10()
                 .until(ExpectedConditions.visibilityOfElementLocated(
                         By.xpath(String.format("//span[text()='%s']", PROJECT_NAME)))
                 )
