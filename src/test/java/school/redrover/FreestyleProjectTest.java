@@ -17,16 +17,6 @@ public class FreestyleProjectTest extends BaseTest {
     private static final String PROJECT_NAME = "My freestyle project";
     private static final String FOLDER_NAME = "My folder";
 
-    private WebDriverWait wait10;
-
-    private WebDriverWait getWait10() {
-
-        if (wait10 == null) {
-            wait10 = new WebDriverWait(getDriver(), Duration.ofSeconds(10));
-        }
-        return wait10;
-    }
-
     private void createItemUtils(String name, String locator) {
 
         getDriver().findElement(By.xpath("//a[@href='/view/all/newJob']")).click();
@@ -48,11 +38,12 @@ public class FreestyleProjectTest extends BaseTest {
 
     @Test
     public void testCreateFreestyleProjectWithValidName() {
+        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(10));
 
         createItemUtils(PROJECT_NAME, ".hudson_model_FreeStyleProject");
         getDriver().findElement(By.id("jenkins-name-icon")).click();
 
-        WebElement freestyleProjectItem = getWait10().until(
+        WebElement freestyleProjectItem = wait.until(
                 ExpectedConditions.visibilityOfElementLocated(
                         By.xpath(String.format("//span[text()='%s']", PROJECT_NAME))
                 )
@@ -75,13 +66,14 @@ public class FreestyleProjectTest extends BaseTest {
 
     @Test
     public void testCreateFreestyleProjectWithDuplicateName() {
+        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(10));
 
         createItemUtils(PROJECT_NAME, ".hudson_model_FreeStyleProject");
         getDriver().findElement(By.id("jenkins-name-icon")).click();
 
-        getWait10().until(
-                ExpectedConditions.visibilityOfElementLocated(
-                        By.xpath("//a[@href='/view/all/newJob']"))
+        wait.until(
+                        ExpectedConditions.visibilityOfElementLocated(
+                                By.xpath("//a[@href='/view/all/newJob']"))
                 )
                 .click();
 
@@ -95,14 +87,14 @@ public class FreestyleProjectTest extends BaseTest {
 
     @Test
     public void testAddDescriptionForFreestyleProject() {
+        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(10));
 
         String description = "Description freestyle project.";
 
         createItemUtils(PROJECT_NAME, ".hudson_model_FreeStyleProject");
         getDriver().findElement(By.id("jenkins-name-icon")).click();
 
-        getWait10()
-                .until(ExpectedConditions.visibilityOfElementLocated(
+        wait.until(ExpectedConditions.visibilityOfElementLocated(
                         By.xpath(String.format("//span[text()='%s']", PROJECT_NAME)))
                 )
                 .click();
@@ -133,14 +125,14 @@ public class FreestyleProjectTest extends BaseTest {
 
     @Test
     public void testRenameFreestyleProjectViaSidePanel() {
+        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(10));
 
         String newProjectName = "My second freestyle project";
 
         createItemUtils(PROJECT_NAME, ".hudson_model_FreeStyleProject");
         getDriver().findElement(By.id("jenkins-name-icon")).click();
 
-        getWait10()
-                .until(ExpectedConditions.visibilityOfElementLocated(
+        wait.until(ExpectedConditions.visibilityOfElementLocated(
                         By.xpath(String.format("//span[text()='%s']", PROJECT_NAME)))
                 )
                 .click();
@@ -167,12 +159,12 @@ public class FreestyleProjectTest extends BaseTest {
 
     @Test
     public void testDeleteFreestyleProjectViaSidePanel() {
+        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(10));
 
         createItemUtils(PROJECT_NAME, ".hudson_model_FreeStyleProject");
         getDriver().findElement(By.id("jenkins-name-icon")).click();
 
-        getWait10()
-                .until(ExpectedConditions.visibilityOfElementLocated(
+        wait.until(ExpectedConditions.visibilityOfElementLocated(
                         By.xpath(String.format("//span[text()='%s']", PROJECT_NAME)))
                 )
                 .click();
@@ -193,7 +185,7 @@ public class FreestyleProjectTest extends BaseTest {
     }
 
     @Test
-    public void testMoveFreestyleProjectToFolder(){
+    public void testMoveFreestyleProjectToFolder() {
 
         String folderName = "My folder";
 
