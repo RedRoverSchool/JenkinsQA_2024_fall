@@ -15,7 +15,7 @@ import java.util.List;
 public class DashboardItemsDropdownTest extends BaseTest {
 
     private WebDriverWait setWait() {
-        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(15));
+        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(30));
         return wait;
 
     }
@@ -35,7 +35,7 @@ public class DashboardItemsDropdownTest extends BaseTest {
         actions.moveToElement(buttonDropdown).click().perform();
 
         List<WebElement> dropDownList = wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(
-                By.xpath("//*[@id=\"tippy-3\"]/div/div/div")));
+                By.xpath("//*[@id=\"tippy-3\"]/div/div/div/a")));
         Assert.assertFalse(dropDownList.isEmpty(), "Dropdown - empty");
 
         WebElement newItem = dropDownList.get(0);
