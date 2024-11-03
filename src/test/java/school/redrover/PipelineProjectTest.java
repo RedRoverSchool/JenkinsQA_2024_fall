@@ -97,22 +97,26 @@ public class PipelineProjectTest extends BaseTest {
         createProjectViaSidebar(PIPELINE_NAME);
         returnToHomePage();
 
-        WebElement projectElement = getDriver().findElement(
-                By.xpath("//a[@href='job/" + encodeSpacesForURL(PIPELINE_NAME) + "/']"));
+        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(5));
+
+        WebElement projectElement = wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//a[@href='job/" + encodeSpacesForURL(PIPELINE_NAME) + "/']")));
         Actions actions = new Actions(getDriver());
         actions.moveToElement(projectElement).perform();
 
-        WebElement chevron = getDriver().findElement(
-                By.xpath("//a[@href='job/" + encodeSpacesForURL(PIPELINE_NAME) + "/']//button[@class='jenkins-menu-dropdown-chevron']"));
+        actions.moveByOffset(10, 0).perform();
+        WebElement chevron = wait.until(ExpectedConditions.elementToBeClickable(
+                By.xpath("//a[@href='job/" + encodeSpacesForURL(PIPELINE_NAME) + "/']//button[@class='jenkins-menu-dropdown-chevron']")));
         actions.moveToElement(chevron).click().perform();
 
-        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(5));
-        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//a[@href='/job/" + encodeSpacesForURL(PIPELINE_NAME) + "/confirm-rename']"))).click();
+        WebElement confirmRenameLink = wait.until(ExpectedConditions.elementToBeClickable(
+                By.xpath("//a[@href='/job/" + encodeSpacesForURL(PIPELINE_NAME) + "/confirm-rename']")));
+        confirmRenameLink.click();
 
-       // getDriver().findElement(By.xpath("//a[@href='/job/" + encodeSpacesForURL(PIPELINE_NAME) + "/confirm-rename']")).click();
-
-        getDriver().findElement(By.xpath("//input[@checkdependson='newName']")).clear();
-        getDriver().findElement(By.xpath("//input[@checkdependson='newName']")).sendKeys(NEW_PROJECT_NAME);
+        WebElement nameInput = wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//input[@checkdependson='newName']")));
+        nameInput.clear();
+        nameInput.sendKeys(NEW_PROJECT_NAME);
         getDriver().findElement(By.xpath("//button[@name='Submit']")).click();
 
         returnToHomePage();
