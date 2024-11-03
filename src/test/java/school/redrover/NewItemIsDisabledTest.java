@@ -9,11 +9,10 @@ public class NewItemIsDisabledTest extends BaseTest {
 
     @Test
     public void testNewItemIsDisabledMessageOnJobPage() {
-        final String newJobName = "NewJob";
 
         getDriver().findElement(By.cssSelector("[href$='/newJob']")).click();
 
-        getDriver().findElement(By.id("name")).sendKeys(newJobName);
+        getDriver().findElement(By.id("name")).sendKeys("NewJob");
         getDriver().findElement(By.xpath("//span[text()='Pipeline']")).click();
         getDriver().findElement(By.id("ok-button")).click();
 
