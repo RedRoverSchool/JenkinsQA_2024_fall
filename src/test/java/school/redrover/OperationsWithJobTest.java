@@ -106,7 +106,7 @@ public class OperationsWithJobTest extends BaseTest {
     }
 
     @Test(description = "create and rename job")
-    public void tesRenameJob() {
+    public void testRenameJob() {
 
         createJob("TestBuild");
 
@@ -150,7 +150,6 @@ public class OperationsWithJobTest extends BaseTest {
         getDriver().findElement(By.xpath("//*[@id='breadcrumbs']/li[1]/a")).click();
 
     }
-
 
     private void deleteJob() {
 
