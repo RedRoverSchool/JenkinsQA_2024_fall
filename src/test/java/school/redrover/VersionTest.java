@@ -6,7 +6,6 @@ import org.openqa.selenium.interactions.Actions;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import school.redrover.runner.BaseTest;
-
 public class VersionTest extends BaseTest {
     @Test
     public void CheckVersionTest() {

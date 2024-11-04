@@ -32,9 +32,36 @@ public class CreatingNewItemTest extends BaseTest {
         WebElement dashboardButtonInBreadcrumbs = getDriver().findElement(By.xpath("//a[@class='model-link' and text()='Dashboard']"));
         dashboardButtonInBreadcrumbs.click();
 
+        ProjectUtils.log("Verifying the job name");
         String jobNameText = getDriver().findElement(By.xpath("//tr/td/a/span")).getText();
+        Assert.assertEquals(jobNameText, jobName);
+    }
+
+    @Test
+    public void testCreatePipeline() {
+        ProjectUtils.log("Create a new project");
+        WebElement newItemButton = getDriver().findElement(By.xpath("//a[@href='/view/all/newJob']"));
+        newItemButton.click();
+
+        ProjectUtils.log("Enter the name of the project");
+        String jobName = "Some name for Freestyle project";
+        WebElement itemNameField = getDriver().findElement(By.xpath("//input[@class='jenkins-input']"));
+        itemNameField.sendKeys(jobName);
+
+        ProjectUtils.log("Select the project type");
+        WebElement pipeline = getDriver().findElement(By.xpath("//li[@class='org_jenkinsci_plugins_workflow_job_WorkflowJob']"));
+        pipeline.click();
+
+        ProjectUtils.log("Push OK button to save the project");
+        WebElement okButton = getDriver().findElement(By.xpath("//button[@type='submit']"));
+        okButton.click();
+
+        ProjectUtils.log("Going to the main page");
+        WebElement dashboardButtonInBreadcrumbs = getDriver().findElement(By.xpath("//*[text()='Dashboard']"));
+        dashboardButtonInBreadcrumbs.click();
 
         ProjectUtils.log("Verifying the job name");
+        String jobNameText = getDriver().findElement(By.xpath("//td/a/span")).getText();
         Assert.assertEquals(jobNameText, jobName);
     }
 
@@ -64,6 +91,5 @@ public class CreatingNewItemTest extends BaseTest {
         ProjectUtils.log("Verifying the job name");
         String jobNameText = getDriver().findElement(By.xpath("//td/a/span")).getText();
         Assert.assertEquals(jobNameText, jobName);
-
     }
 }
