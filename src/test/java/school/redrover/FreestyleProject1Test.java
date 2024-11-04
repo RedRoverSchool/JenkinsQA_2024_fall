@@ -40,14 +40,17 @@ public class FreestyleProject1Test extends BaseTest {
         createFreestyleProject();
         getDriver().findElement(By.id("jenkins-name-icon")).click();
         Actions actions = new Actions(getDriver());
+        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(10));
+
         //hover over project title to activate menu dropdown
         WebElement element = getDriver().findElement(By
                 .xpath("//span[contains(text(),'New freestyle project')]"));
         actions.moveToElement(element).perform();
-        WebElement chevron = getDriver().findElement((By
-                .cssSelector("#job_New\\ freestyle\\ project > td:nth-child(3) > a > button")));
-        actions.moveToElement(element).perform();
-        chevron.click();
+        WebElement dropdownChevron = wait.until(ExpectedConditions.visibilityOfElementLocated(By
+                .xpath("//*[@id='job_New freestyle project']/td[3]/a/button")));
+        actions.moveToElement(dropdownChevron).click().perform();
+
+        getDriver().findElement((By.xpath("//*[@id='job_New freestyle project']/td[3]/a/button"))).click();
         getDriver().findElement((By.cssSelector("#tippy-6 > div > div > div > button:nth-child(5)"))).click();
         getDriver().findElement(By.xpath("//button[contains(text(),'Yes')]")).click();
         String emptyDashboardHeader = getDriver().findElement(By.cssSelector(".empty-state-block > h1")).getText();
