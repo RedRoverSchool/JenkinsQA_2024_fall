@@ -94,21 +94,24 @@ public class PipelineProjectTest extends BaseTest {
     }
 
     @Test
-    public void testRenameProjectViaDropdownMenu() {
+    public void testRenameProjectViaDropdownMenu() throws InterruptedException {
         createProjectViaSidebar(PIPELINE_NAME);
         returnToHomePage();
 
         WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(20));
         Actions actions = new Actions(getDriver());
 
+        WebElement chevronButton = getDriver().findElement(
+                By.xpath("//a[@href='job/" + encodeSpacesForURL(PIPELINE_NAME) + "/']//button[@class='jenkins-menu-dropdown-chevron']"));
         WebElement projectElement = wait.until(ExpectedConditions.visibilityOfElementLocated(
-                By.xpath("//a[@href='job/" + encodeSpacesForURL(PIPELINE_NAME) + "/']")));
-        actions.moveToElement(projectElement).perform();
+                By.xpath("//a[@href='job/Pipeline%20name/']/span")));
+        actions.moveToElement(projectElement).perform(); // Смещение на 20 пикселей вверх
+        actions.moveByOffset(5, 5).moveToElement(chevronButton).click().perform();
 
-        WebElement chevronButton = wait.until(ExpectedConditions.visibilityOfElementLocated(
-                By.xpath("//a[@href='job/" + encodeSpacesForURL(PIPELINE_NAME) + "/']//button[@class='jenkins-menu-dropdown-chevron']")));
+//        WebElement chevronButton = wait.until(ExpectedConditions.visibilityOfElementLocated(
+//                By.xpath("//a[@href='job/" + encodeSpacesForURL(PIPELINE_NAME) + "/']//button[@class='jenkins-menu-dropdown-chevron']")));
 
-        actions.moveToElement(chevronButton).pause(Duration.ofMillis(500)).click().perform();
+     //   actions.moveToElement(chevronButton).pause(Duration.ofMillis(500)).click().perform();
 
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@class='jenkins-dropdown']")));
 
