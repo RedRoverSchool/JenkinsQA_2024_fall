@@ -31,14 +31,16 @@ public class DashboardItemsDropdownTest extends BaseTest {
                 By.cssSelector("#breadcrumbs > li.jenkins-breadcrumbs__list-item > a > button")));
         actions.moveToElement(buttonDropdown).click().perform();
 
-        WebElement containerDD = getDriver().findElement(
-                By.cssSelector("#tippy-3"));
+        //Навожу на общий контейнер после клика
+        WebElement containerDD = wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.cssSelector("#tippy-3 > div > div ")));
         actions.moveToElement(containerDD).perform();
 
-        //проверяю что спиннер уже пропал чтобы перейти к видимости дропдауна.
+        //Ожидаю пока спиннер закроется
         wait.until(ExpectedConditions.invisibilityOfElementLocated(
                 By.cssSelector("#tippy-3 > div > div > p")));
 
+        //Чек элементов в дропдаун с задержкой теперь должно всё пройти в CI
         List<WebElement> listDD = wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(
                 By.cssSelector("#tippy-3 > div > div > div > a")));
         Assert.assertFalse(listDD.isEmpty(), "Dropdown - empty");
