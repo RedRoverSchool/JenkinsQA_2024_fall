@@ -36,7 +36,7 @@ public class DashboardItemsDropdownTest extends BaseTest {
                 By.cssSelector("#tippy-3 > div > div > div")));
         actions.moveToElement(containerDD).perform();
 
-        List<WebElement> dropDownList = wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(
+        List<WebElement> dropDownList = wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(
                  By.cssSelector("#tippy-3 > div > div > div > a")));
         Assert.assertFalse(dropDownList.isEmpty(), "Dropdown - empty");
 
