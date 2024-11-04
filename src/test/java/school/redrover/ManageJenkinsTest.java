@@ -59,26 +59,39 @@ public class ManageJenkinsTest extends BaseTest {
         Thread.sleep(1000);
 
         WebElement sectionSystemConfiguration = getDriver().findElement(
-                By.xpath("//h2[@class='jenkins-section__title' and contains(text(), 'System Configuration')]"));
+                By.xpath("//h2[@class='jenkins-section__title' and text()='System Configuration']"));
+
         Assert.assertEquals(sectionSystemConfiguration.getText(), "System Configuration");
 
         List<WebElement> systemConfigurationItems = getDriver().findElements(
-                By.xpath("//h2[@class='jenkins-section__title' and text()='System Configuration']/following-sibling::div[@class='jenkins-section__items']//div[@class='jenkins-section__item']"));
+                By.xpath("(//div[@class='jenkins-section__items'])[1]//dt"));
         Assert.assertEquals(systemConfigurationItems.size(), 6);
 
-        String expectedTextSystem = "System" + "\n" + "Configure global settings and paths.";
-        String expectedTextTools = "Tools" + "\n" + "Configure tools, their locations and automatic installers.";
-        String expectedTextPlugins = "Plugins" + "\n" + "Add, remove, disable or enable plugins that can extend the functionality of Jenkins.";
-        String expectedTextNodes = "Nodes" + "\n" + "Add, remove, control and monitor the various nodes that Jenkins runs jobs on.";
-        String expectedTextClouds = "Clouds" + "\n" + "Add, remove, and configure cloud instances to provision agents on-demand.";
-        String expectedTextAppearance = "Appearance" + "\n" + "Configure the look and feel of Jenkins";
+        List<WebElement> systemConfigurationItemsText = getDriver().findElements(
+                By.xpath("(//div[@class='jenkins-section__items'])[1]//dl"));
+        List<String> actualSystemConfigurationItemsText = systemConfigurationItemsText.stream().map(WebElement::getText).toList();
+        List<String> expectedSystemConfigurationItemsNames = List.of("System" + "\n" + "Configure global settings and paths.",
+                "Tools" + "\n" + "Configure tools, their locations and automatic installers.",
+                "Plugins" + "\n" + "Add, remove, disable or enable plugins that can extend the functionality of Jenkins.",
+                "Nodes" + "\n" + "Add, remove, control and monitor the various nodes that Jenkins runs jobs on.",
+                "Clouds" + "\n" + "Add, remove, and configure cloud instances to provision agents on-demand.",
+                "Appearance" + "\n" + "Configure the look and feel of Jenkins");
 
-        Assert.assertEquals(systemConfigurationItems.get(0).getText(), expectedTextSystem);
-        Assert.assertEquals(systemConfigurationItems.get(1).getText(), expectedTextTools);
-        Assert.assertEquals(systemConfigurationItems.get(2).getText(), expectedTextPlugins);
-        Assert.assertEquals(systemConfigurationItems.get(3).getText(), expectedTextNodes);
-        Assert.assertEquals(systemConfigurationItems.get(4).getText(), expectedTextClouds);
-        Assert.assertEquals(systemConfigurationItems.get(5).getText(), expectedTextAppearance);
+        Assert.assertEquals(actualSystemConfigurationItemsText, expectedSystemConfigurationItemsNames);
+
+//        String expectedTextSystem = "System" + "\n" + "Configure global settings and paths.";
+//        String expectedTextTools = "Tools" + "\n" + "Configure tools, their locations and automatic installers.";
+//        String expectedTextPlugins = "Plugins" + "\n" + "Add, remove, disable or enable plugins that can extend the functionality of Jenkins.";
+//        String expectedTextNodes = "Nodes" + "\n" + "Add, remove, control and monitor the various nodes that Jenkins runs jobs on.";
+//        String expectedTextClouds = "Clouds" + "\n" + "Add, remove, and configure cloud instances to provision agents on-demand.";
+//        String expectedTextAppearance = "Appearance" + "\n" + "Configure the look and feel of Jenkins";
+//
+//        Assert.assertEquals(systemConfigurationItems.get(0).getText(), expectedTextSystem);
+//        Assert.assertEquals(systemConfigurationItems.get(1).getText(), expectedTextTools);
+//        Assert.assertEquals(systemConfigurationItems.get(2).getText(), expectedTextPlugins);
+//        Assert.assertEquals(systemConfigurationItems.get(3).getText(), expectedTextNodes);
+//        Assert.assertEquals(systemConfigurationItems.get(4).getText(), expectedTextClouds);
+//        Assert.assertEquals(systemConfigurationItems.get(5).getText(), expectedTextAppearance);
 
 //        systemConfigurationItems.get(0).click();
 //        Thread.sleep(1000);
