@@ -33,12 +33,8 @@ public class DashboardItemsDropdownTest extends BaseTest {
 
         //Навожу на общий контейнер после клика
         WebElement containerDD = wait.until(ExpectedConditions.visibilityOfElementLocated(
-                By.cssSelector("#tippy-3 > div > div ")));
+                By.cssSelector("#tippy-3 > div > div")));
         actions.moveToElement(containerDD).perform();
-
-        //Ожидаю пока спиннер закроется
-        wait.until(ExpectedConditions.invisibilityOfElementLocated(
-                By.cssSelector("#tippy-3 > div > div > p")));
 
         //Чек элементов в дропдаун с задержкой теперь должно всё пройти в CI
         List<WebElement> listDD = wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(
