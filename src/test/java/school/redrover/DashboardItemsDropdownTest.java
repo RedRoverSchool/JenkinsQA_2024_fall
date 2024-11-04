@@ -31,8 +31,12 @@ public class DashboardItemsDropdownTest extends BaseTest {
                 By.cssSelector("#breadcrumbs > li.jenkins-breadcrumbs__list-item > a > button")));
         actions.moveToElement(buttonDropdown).click().perform();
 
+        WebElement containerDD = wait.until(ExpectedConditions.presenceOfElementLocated(
+                By.cssSelector("#tippy-3")));
+        actions.moveToElement(containerDD).perform();
+
         List<WebElement> dropDownList = wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(
-                 By.cssSelector("#tippy-3 > div > div > div > a")));
+                By.cssSelector("#tippy-3 > div > div > div > a")));
         Assert.assertFalse(dropDownList.isEmpty(), "Dropdown - empty");
 
         WebElement newItem = dropDownList.get(0);
