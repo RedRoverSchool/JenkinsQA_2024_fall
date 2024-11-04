@@ -105,21 +105,24 @@ public class PipelineProjectTest extends BaseTest {
         WebElement projectElement = wait.until(ExpectedConditions.visibilityOfElementLocated(
                 By.xpath("//a[@href='job/" + encodeSpacesForURL(PIPELINE_NAME) + "/']")));
 
-        int elementWidth = projectElement.getSize().getWidth();
-        int elementHeight = projectElement.getSize().getHeight();
 
-        Point elementLocation = projectElement.getLocation();
-        int x = elementLocation.getX();
-        int y = elementLocation.getY();
+        WebElement chevronButton = wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//a[@href='job/" + encodeSpacesForURL(PIPELINE_NAME) + "/']//button[@class='jenkins-menu-dropdown-chevron']")));
 
-        int clickX = x + elementWidth - 2;
-        int clickY = y + (elementHeight / 2);
 
-        actions.moveByOffset(clickX, clickY).click().perform();
+        int centerX = projectElement.getRect().getX() + projectElement.getRect().getWidth() / 2;
+        int centerY = projectElement.getRect().getY() + projectElement.getRect().getHeight() / 2;
+
+        actions.moveToElement(projectElement, centerX - projectElement.getRect().getX(), centerY - projectElement.getRect().getY()).perform();
+
+        actions.moveToElement(chevronButton).pause(Duration.ofMillis(500)).click().perform();
+
+        Thread.sleep(3000);
 
         WebElement confirmRenameLink = wait.until(ExpectedConditions.elementToBeClickable(
                 By.xpath("//div[@class='jenkins-dropdown']//a[@href='/job/" + encodeSpacesForURL(PIPELINE_NAME) + "/confirm-rename']")));
         confirmRenameLink.click();
+        Thread.sleep(3000);
 
         WebElement nameInput = wait.until(ExpectedConditions.visibilityOfElementLocated(
                 By.xpath("//input[@checkdependson='newName']")));
