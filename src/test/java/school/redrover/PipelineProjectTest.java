@@ -118,16 +118,17 @@ public class PipelineProjectTest extends BaseTest {
 
         WebElement projectElement = getWebDriverWait().until(ExpectedConditions.visibilityOfElementLocated(
                 By.xpath("//a[@href='job/" + encodeSpacesForURL(PIPELINE_NAME) + "/']")));
-        actions.moveToElement(projectElement).moveByOffset(10, 5).perform();
+        actions.moveToElement(projectElement).moveByOffset(15, 5).perform();
 
         //actions.moveByOffset(15, 5).click().perform();
 
        // ((JavascriptExecutor) getDriver()).executeScript("arguments[0].scrollIntoView(true);", projectElement);
 
-        WebElement chevronButton = getWebDriverWait().until(ExpectedConditions.elementToBeClickable(
-                By.xpath("//a[@href='job/" + encodeSpacesForURL(PIPELINE_NAME) + "/']//button[@class='jenkins-menu-dropdown-chevron']")));
-        actions.pause(1000).moveToElement(chevronButton).click().perform();
-        Thread.sleep(2000);
+        //WebElement chevronButton =
+                getWebDriverWait().until(ExpectedConditions.elementToBeClickable(
+               By.xpath("//a[@href='job/" + encodeSpacesForURL(PIPELINE_NAME) + "/']//button[@class='jenkins-menu-dropdown-chevron']"))).click();
+//        actions.pause(1000).moveToElement(chevronButton).click().perform();
+//        Thread.sleep(2000);
 
         WebElement confirmRenameLink = getWebDriverWait().until(ExpectedConditions.elementToBeClickable(
                 By.xpath("//a[@href='/job/" + encodeSpacesForURL(PIPELINE_NAME) + "/confirm-rename']")));
