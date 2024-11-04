@@ -45,24 +45,6 @@ public class MultibranchPipelineTest extends BaseTest {
                 .getText(), "Welcome to Jenkins!");
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     @Test
     public void testVerifyStatusToSwitchingEnableButton() {
         getDriver().findElement(By.xpath("//a[@href='newJob']")).click();
