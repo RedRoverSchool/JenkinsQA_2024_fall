@@ -104,10 +104,11 @@ public class PipelineProjectTest extends BaseTest {
                 By.xpath("//a[@href='job/" + encodeSpacesForURL(PIPELINE_NAME) + "/']")));
         actions.moveToElement(projectElement).perform();
 
-        actions.moveByOffset(15, 5).perform();
 
-        wait.until(ExpectedConditions.visibilityOfElementLocated(
-                By.xpath("//a[@href='job/" + encodeSpacesForURL(PIPELINE_NAME) + "/']//button[@class='jenkins-menu-dropdown-chevron']"))).click();
+        WebElement chevronButton = wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//a[@href='job/" + encodeSpacesForURL(PIPELINE_NAME) + "/']//button[@class='jenkins-menu-dropdown-chevron']")));
+
+        actions.moveToElement(chevronButton, -2, 0).click().perform();
 
         WebElement confirmRenameLink = wait.until(ExpectedConditions.elementToBeClickable(
                 By.xpath("//div[@class='jenkins-dropdown']//a[@href='/job/" + encodeSpacesForURL(PIPELINE_NAME) + "/confirm-rename']")));
@@ -118,7 +119,9 @@ public class PipelineProjectTest extends BaseTest {
         nameInput.clear();
         nameInput.sendKeys(NEW_PROJECT_NAME);
         getDriver().findElement(By.xpath("//button[@name='Submit']")).click();
+
         returnToHomePage();
+
         Assert.assertListContainsObject(getProjectList(), NEW_PROJECT_NAME, "Project is not renamed");
     }
 
