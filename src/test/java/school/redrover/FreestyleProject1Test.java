@@ -5,9 +5,12 @@ import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import school.redrover.runner.BaseTest;
+
+import java.time.Duration;
 
 public class FreestyleProject1Test extends BaseTest {
     private static final String NEW_FREESTYLE_PROJECT_NAME = "New freestyle project";
@@ -39,9 +42,9 @@ public class FreestyleProject1Test extends BaseTest {
         WebElement element = getDriver().findElement(By
                 .xpath("//span[contains(text(),'New freestyle project')]"));
         actions.moveToElement(element).perform();
-        WebElement buttonDelete = getDriver().findElement((By.cssSelector("td:nth-child(3) > a > button")));
-        actions.moveToElement(buttonDelete).perform();
-        buttonDelete.click();
+        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(10));
+        WebElement deleteButton = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("td:nth-child(3) > a > button")));
+        deleteButton.click();
         getDriver().findElement((By.cssSelector("#tippy-6 > div > div > div > button:nth-child(5)"))).click();
         getDriver().findElement(By.xpath("//button[contains(text(),'Yes')]")).click();
         String emptyDashboardHeader = getDriver().findElement(By.cssSelector(".empty-state-block > h1")).getText();
