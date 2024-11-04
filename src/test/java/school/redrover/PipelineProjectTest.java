@@ -114,19 +114,19 @@ public class PipelineProjectTest extends BaseTest {
         createProjectViaSidebar(PIPELINE_NAME);
         returnToHomePage();
 
+        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(10));
         Actions actions = new Actions(getDriver());
 
-        WebElement projectElement = getWebDriverWait().until(ExpectedConditions.visibilityOfElementLocated(
+        WebElement projectElement = wait.until(ExpectedConditions.visibilityOfElementLocated(
                 By.xpath("//a[@href='job/" + encodeSpacesForURL(PIPELINE_NAME) + "/']")));
-
         actions.moveToElement(projectElement).perform();
-
-        Thread.sleep(1000);
 
         WebElement chevronButton = getWebDriverWait().until(ExpectedConditions.elementToBeClickable(
                 By.xpath("//a[@href='job/" + encodeSpacesForURL(PIPELINE_NAME) + "/']//button[@class='jenkins-menu-dropdown-chevron']")));
 
-        actions.moveToElement(chevronButton).click().perform();
+        actions.moveByOffset(15, 5).pause(1000).moveToElement(chevronButton).click().perform();
+Thread.sleep(2000);
+       // actions.moveToElement(chevronButton).click().perform();
 
         WebElement confirmRenameLink = getWebDriverWait().until(ExpectedConditions.elementToBeClickable(
                 By.xpath("//a[@href='/job/" + encodeSpacesForURL(PIPELINE_NAME) + "/confirm-rename']")));
