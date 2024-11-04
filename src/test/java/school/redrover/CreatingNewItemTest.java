@@ -33,7 +33,7 @@ public class CreatingNewItemTest extends BaseTest {
 
     @Test
     public void testCreatePipeline() {
-        WebElement newItemButton = getDriver().findElement(By.xpath("//a[@it='hudson.model.Hudson@25c4e615']"));
+        WebElement newItemButton = getDriver().findElement(By.xpath("//a[@href='/view/all/newJob']"));
         newItemButton.click();
 
         WebElement itemNameField = getDriver().findElement(By.xpath("//input[@class='jenkins-input']"));
