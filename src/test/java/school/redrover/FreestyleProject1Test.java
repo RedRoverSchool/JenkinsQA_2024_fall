@@ -43,15 +43,16 @@ public class FreestyleProject1Test extends BaseTest {
         WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(10));
 
         //hover over project title to activate menu dropdown
-        WebElement element = getDriver().findElement(By
+        WebElement projectName = getDriver().findElement(By
                 .xpath("//span[contains(text(),'New freestyle project')]"));
-        actions.moveToElement(element).perform();
-        WebElement dropdownChevron = wait.until(ExpectedConditions.visibilityOfElementLocated(By
+        actions.moveToElement(projectName).perform();
+        Thread.sleep(2000);
+        WebElement dropdownChevron = wait.until(ExpectedConditions.elementToBeClickable(By
                 .xpath("//*[@id='job_New freestyle project']/td[3]/a/button")));
-        actions.moveToElement(dropdownChevron).click().perform();
+        ((JavascriptExecutor) getDriver()).executeScript("arguments[0].click();", dropdownChevron);
 
         getDriver().findElement((By.xpath("//*[@id='job_New freestyle project']/td[3]/a/button"))).click();
-        getDriver().findElement((By.cssSelector("#tippy-6 > div > div > div > button:nth-child(5)"))).click();
+        getDriver().findElement((By.xpath("//*[contains(@href,'doDelete')]"))).click();
         getDriver().findElement(By.xpath("//button[contains(text(),'Yes')]")).click();
         String emptyDashboardHeader = getDriver().findElement(By.cssSelector(".empty-state-block > h1")).getText();
         Assert.assertEquals(emptyDashboardHeader, "Welcome to Jenkins!");
