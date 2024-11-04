@@ -66,7 +66,7 @@ public class ManageJenkinsTest extends BaseTest {
     @Test
     public void testManageJenkinsSystemConfigurationItems(){
         final List <String> expectedItemsNames=List.of("System", "Tools", "Plugins",
-            "Nodes", "Clouds", "Appearance");
+             "Nodes", "Clouds", "Appearance");
 
         getDriver().findElement(By.xpath("//a[@href='/manage']")).click();
 
