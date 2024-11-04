@@ -15,9 +15,7 @@ import java.util.List;
 public class DashboardItemsDropdownTest extends BaseTest {
 
     private WebDriverWait setWait() {
-        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(30));
-        return wait;
-
+        return new WebDriverWait(getDriver(), Duration.ofSeconds(12));
     }
 
     @Test
@@ -26,26 +24,22 @@ public class DashboardItemsDropdownTest extends BaseTest {
 
         WebElement dashboardButton = getDriver().findElement(
                 By.cssSelector("#breadcrumbs > li.jenkins-breadcrumbs__list-item"));
-
         Actions actions = new Actions(getDriver());
         actions.moveToElement(dashboardButton).perform();
 
-        WebElement buttonOpen = getDriver().findElement(
+        WebElement buttonDropdown = getDriver().findElement(
                 By.cssSelector("#breadcrumbs > li.jenkins-breadcrumbs__list-item > a > button"));
-        actions.moveToElement(buttonOpen).click().perform();
+        buttonDropdown.click();
 
-        List<WebElement> dropDownVisible = wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(
-                By.xpath("//*[@id=\"tippy-3\"]/div/div/div")));
-        Assert.assertFalse(dropDownVisible.isEmpty(), "Dropdown - empty");
+        //проверяю что спиннер уже пропал чтобы перейти к видимости дропдауна
+        wait.until(ExpectedConditions.invisibilityOfElementLocated(
+                By.cssSelector("#tippy-3 > div > div > p")));
 
-        WebElement listFistSection = dropDownVisible.get(0);
-        actions.moveToElement(listFistSection).perform();
+        List<WebElement> dropDownList = getDriver().findElements(
+                By.cssSelector("#tippy-3 > div > div > div > a"));
+        Assert.assertFalse(dropDownList.isEmpty(), "Dropdown - empty");
 
-        List<WebElement> itemsList = wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(
-                By.xpath("//*[@id=\"tippy-3\"]/div/div/div/a")));
-        Assert.assertFalse(itemsList.isEmpty(), "Items not found");
-
-        WebElement newItem = itemsList.get(0);
+        WebElement newItem = wait.until(ExpectedConditions.elementToBeClickable(dropDownList.get(0)));
         newItem.click();
     }
 }
