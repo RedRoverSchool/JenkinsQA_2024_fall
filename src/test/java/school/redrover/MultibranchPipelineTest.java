@@ -45,6 +45,24 @@ public class MultibranchPipelineTest extends BaseTest {
                 .getText(), "Welcome to Jenkins!");
     }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     @Test
     public void testVerifyStatusToSwitchingEnableButton() {
         getDriver().findElement(By.xpath("//a[@href='newJob']")).click();
@@ -62,7 +80,7 @@ public class MultibranchPipelineTest extends BaseTest {
         js1.executeScript("window.scrollTo(0, document.body.scrollHeight);");
 
         getDriver().findElement(By.xpath("//*[@id='bottom-sticker']/div/button[1]")).click();
-        getDriver().findElement(By.name("Submit")).click();
+        getDriver().findElement(By.xpath("//*[@id='enable-project']/button")).click();
 
         String foundText = getDriver().findElement(By.cssSelector("#disable-project > button")).getText();
         Assert.assertEquals(foundText, "Disable Multibranch Pipeline");
