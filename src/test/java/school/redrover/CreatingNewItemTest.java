@@ -1,6 +1,7 @@
 package school.redrover;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
 import org.testng.Assert;
 import org.testng.annotations.Test;
@@ -25,8 +26,31 @@ public class CreatingNewItemTest extends BaseTest {
         WebElement dashboardButtonInBreadcrumbs = getDriver().findElement(By.xpath("//a[@class='model-link' and text()='Dashboard']"));
         dashboardButtonInBreadcrumbs.click();
 
-        String jobNameText = getDriver().findElement(By.xpath("//tr/td/a/span")).getText();
+        WebElement jobNameText = getDriver().findElement(By.xpath("//td/a/span[text()='Some name of Freestyle project']"));
 
-        Assert.assertEquals(jobNameText, "Some name of Freestyle project");
+        Assert.assertEquals(jobNameText.getText(), "Some name of Freestyle project");
     }
+
+    @Test
+    public void testCreatePipeline() {
+        WebElement newItemButton = getDriver().findElement(By.xpath("//a[@it='hudson.model.Hudson@25c4e615']"));
+        newItemButton.click();
+
+        WebElement itemNameField = getDriver().findElement(By.xpath("//input[@class='jenkins-input']"));
+        itemNameField.sendKeys("Some name of Pipeline project");
+
+        WebElement pipeline = getDriver().findElement(By.xpath("//li[@class='org_jenkinsci_plugins_workflow_job_WorkflowJob']"));
+        pipeline.click();
+
+        WebElement okButton = getDriver().findElement(By.xpath("//button[@type='submit']"));
+        okButton.click();
+
+        WebElement dashboardButtonInBreadcrumbs = getDriver().findElement(By.xpath("//*[text()='Dashboard']"));
+        dashboardButtonInBreadcrumbs.click();
+
+        WebElement jobNameText = getDriver().findElement(By.xpath("//td/a/span[text()='Some name of Pipeline project']"));
+
+        Assert.assertEquals(jobNameText.getText(), "Some name of Pipeline project");
+    }
+
 }
