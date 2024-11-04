@@ -27,7 +27,6 @@ public class DashboardItemsDropdownTest extends BaseTest {
         Actions actions = new Actions(getDriver());
         actions.moveToElement(dashboardButton).perform();
 
-
         WebElement buttonDropdown = wait.until(ExpectedConditions.visibilityOfElementLocated(
                 By.cssSelector("#breadcrumbs > li.jenkins-breadcrumbs__list-item > a > button")));
         actions.moveToElement(buttonDropdown).click().perform();
