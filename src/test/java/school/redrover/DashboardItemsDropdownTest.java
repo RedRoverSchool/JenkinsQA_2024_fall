@@ -27,19 +27,19 @@ public class DashboardItemsDropdownTest extends BaseTest {
         Actions actions = new Actions(getDriver());
         actions.moveToElement(dashboardButton).perform();
 
-        WebElement buttonDropdown = getDriver().findElement(
-                By.cssSelector("#breadcrumbs > li.jenkins-breadcrumbs__list-item > a > button"));
+        WebElement buttonDropdown = wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.cssSelector("#breadcrumbs > li.jenkins-breadcrumbs__list-item > a > button")));
         buttonDropdown.click();
 
         //проверяю что спиннер уже пропал чтобы перейти к видимости дропдауна
         wait.until(ExpectedConditions.invisibilityOfElementLocated(
                 By.cssSelector("#tippy-3 > div > div > p")));
 
-        List<WebElement> dropDownList = getDriver().findElements(
-                By.cssSelector("#tippy-3 > div > div > div > a"));
+        List<WebElement> dropDownList = wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(
+                By.cssSelector("#tippy-3 > div > div > div > a")));
         Assert.assertFalse(dropDownList.isEmpty(), "Dropdown - empty");
 
-        WebElement newItem = wait.until(ExpectedConditions.elementToBeClickable(dropDownList.get(0)));
+        WebElement newItem = dropDownList.get(0);
         newItem.click();
     }
 }
