@@ -60,7 +60,7 @@ public class FreestyleProject26Test extends BaseTest {
         WebElement linkByName = getDriver().findElement(By.linkText(freestyleProjectName));
         Actions action = new Actions(getDriver());
         action.moveToElement(linkByName).build().perform();
-
+        Thread.sleep(2000);
         WebElement dropDownButton = linkByName.findElement(By.cssSelector("button"));
         new WebDriverWait(getDriver(), Duration.ofMillis(2000L)).until(ExpectedConditions.elementToBeClickable(dropDownButton)).click();
 
