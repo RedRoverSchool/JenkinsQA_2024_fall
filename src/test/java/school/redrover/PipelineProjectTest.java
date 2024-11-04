@@ -112,7 +112,7 @@ public class PipelineProjectTest extends BaseTest {
         int x = elementLocation.getX();
         int y = elementLocation.getY();
 
-        int clickX = x + elementWidth - 1;
+        int clickX = x + elementWidth - 2;
         int clickY = y + (elementHeight / 2);
 
         actions.moveByOffset(clickX, clickY).click().perform();
