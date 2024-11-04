@@ -121,7 +121,9 @@ public class PipelineProjectTest extends BaseTest {
 
         WebElement confirmRenameLink = wait.until(ExpectedConditions.elementToBeClickable(
                 By.xpath("//div[@class='jenkins-dropdown']//a[@href='/job/" + encodeSpacesForURL(PIPELINE_NAME) + "/confirm-rename']")));
-        confirmRenameLink.click();
+        //confirmRenameLink.click();
+        JavascriptExecutor js = (JavascriptExecutor) getDriver();
+        js.executeScript("arguments[0].click();", confirmRenameLink);
         Thread.sleep(3000);
 
         WebElement nameInput = wait.until(ExpectedConditions.visibilityOfElementLocated(
