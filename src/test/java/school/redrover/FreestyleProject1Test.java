@@ -24,7 +24,7 @@ public class FreestyleProject1Test extends BaseTest {
         //Getting to the main page to ensure that newly created project is there
         getDriver().findElement(By.id("jenkins-name-icon")).click();
         WebElement element = getDriver().findElement(By
-                .xpath("//span[contains(text(),'" + NEW_FREESTYLE_PROJECT_NAME + "')]"));
+                .xpath("//span[contains(text(),'New freestyle project')]"));
         Assert.assertTrue(element.isDisplayed());
     }
 
@@ -35,9 +35,9 @@ public class FreestyleProject1Test extends BaseTest {
         Actions actions = new Actions(getDriver());
         //hover over project title to activate menu dropdown
         WebElement element = getDriver().findElement(By
-                .xpath("//span[contains(text(),'" + NEW_FREESTYLE_PROJECT_NAME + "')]"));
+                .xpath("//span[contains(text(),'New freestyle project')]"));
         actions.moveToElement(element).perform();
-        Thread.sleep(500);
+        Thread.sleep(1000);
         getDriver().findElement((By.cssSelector("td:nth-child(3) > a > button"))).click();
         getDriver().findElement((By.cssSelector("#tippy-6 > div > div > div > button:nth-child(5)"))).click();
         getDriver().findElement(By.xpath("//button[contains(text(),'Yes')]")).click();
