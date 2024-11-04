@@ -35,7 +35,7 @@ public class DashboardItemsDropdownTest extends BaseTest {
                 By.cssSelector("#tippy-3"));
         actions.moveToElement(containerDD).perform();
 
-        //проверяю что спиннер уже пропал чтобы перейти к видимости дропдауна
+        //проверяю что спиннер уже пропал чтобы перейти к видимости дропдауна.
         wait.until(ExpectedConditions.invisibilityOfElementLocated(
                 By.cssSelector("#tippy-3 > div > div > p")));
 
