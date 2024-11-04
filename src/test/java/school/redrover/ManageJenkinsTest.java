@@ -59,7 +59,7 @@ public class ManageJenkinsTest extends BaseTest {
         Thread.sleep(1000);
 
         WebElement sectionSystemConfiguration = getDriver().findElement(
-                By.xpath("//h2[@class='jenkins-section__title' and text()='System Configuration']"));
+                By.xpath("//h2[@class='jenkins-section__title' and contains(text(), 'System Configuration')]"));
         Assert.assertEquals(sectionSystemConfiguration.getText(), "System Configuration");
 
         List<WebElement> systemConfigurationItems = getDriver().findElements(
@@ -150,7 +150,7 @@ public class ManageJenkinsTest extends BaseTest {
 
         // Section "Security"
         WebElement sectionSecurity = getDriver().findElement(
-                By.xpath("//h2[@class='jenkins-section__title' and text()='Security']"));
+                By.xpath("//h2[@class='jenkins-section__title' and contains(text(), 'Security')]"));
         Assert.assertEquals(sectionSecurity.getText(), "Security");
 
         List<WebElement> securityItems = getDriver().findElements(
@@ -180,7 +180,7 @@ public class ManageJenkinsTest extends BaseTest {
 
         // Section "Status Information"
         WebElement sectionStatusInformation = getDriver().findElement(
-                By.xpath("//h2[@class='jenkins-section__title' and text()='Status Information']"));
+                By.xpath("//h2[@class='jenkins-section__title' and contains(text(), 'Status Information')]"));
         Assert.assertEquals(sectionStatusInformation.getText(), "Status Information");
 
         List<WebElement> statusInformationItems = getDriver().findElements(
@@ -210,7 +210,7 @@ public class ManageJenkinsTest extends BaseTest {
 
         // Section "Troubleshooting"
         WebElement sectionTroubleshooting = getDriver().findElement(
-                By.xpath("//h2[@class='jenkins-section__title' and text()='Troubleshooting']"));
+                By.xpath("//h2[@class='jenkins-section__title' and contains(text(), 'Troubleshooting')]"));
         Assert.assertEquals(sectionTroubleshooting.getText(), "Troubleshooting");
 
         List<WebElement> troubleshootingItems = getDriver().findElements(
@@ -220,9 +220,20 @@ public class ManageJenkinsTest extends BaseTest {
         String expectedTextManageOldData = "Manage Old Data" + "\n" + "Scrub configuration files to remove remnants from old plugins and earlier versions.";
         Assert.assertEquals(troubleshootingItems.get(0).getText(), expectedTextManageOldData);
 
+    }
+
+    @Test
+    public void testManageJenkinsTabSectionToolsAndActions() throws InterruptedException {
+
+        WebElement manageJenkinsTab = getDriver().findElement(
+                By.xpath("//a[span[text()='Manage Jenkins']]"));
+        manageJenkinsTab.click();
+
+        Thread.sleep(1000);
+
         // Section "Tools and Actions"
         WebElement sectionToolsAndActions = getDriver().findElement(
-                By.xpath("//h2[@class='jenkins-section__title' and text()='Tools and Actions']"));
+                By.xpath("//h2[@class='jenkins-section__title' and contains(text(), 'Tools and Actions')]\n"));
         Assert.assertEquals(sectionToolsAndActions.getText(), "Tools and Actions");
 
         List<WebElement> toolsAndActionsItems = getDriver().findElements(
