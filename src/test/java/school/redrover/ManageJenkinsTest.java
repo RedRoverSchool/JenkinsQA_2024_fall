@@ -50,5 +50,43 @@ public class ManageJenkinsTest extends BaseTest {
 
     }
 
+    @Test
+    public void testManageJenkinsSections(){
+        final List <String> expectedSectionsTitles=List.of("System Configuration", "Security", "Status Information",
+            "Troubleshooting", "Tools and Actions");
 
+        getDriver().findElement(By.xpath("//a[@href='/manage']")).click();
+
+        List<WebElement> sections = getDriver().findElements(By.xpath("//h2[@class='jenkins-section__title']"));
+        List<String> actualSectionsTitles = sections.stream().map(WebElement::getText).toList();
+
+        Assert.assertEquals(actualSectionsTitles, expectedSectionsTitles);
+    }
+
+    @Test
+    public void testManageJenkinsSystemConfigurationItems(){
+        final List <String> expectedItemsNames=List.of("System", "Tools", "Plugins",
+             "Nodes", "Clouds", "Appearance");
+
+        getDriver().findElement(By.xpath("//a[@href='/manage']")).click();
+
+        List<WebElement> systemConfigItems = getDriver()
+                                                 .findElements(By.xpath("(//div[@class='jenkins-section__items'])[1]//dt"));
+        List<String> actualItemsNames = systemConfigItems.stream().map(WebElement::getText).toList();
+
+        Assert.assertEquals(actualItemsNames, expectedItemsNames);
+    }
+
+    @Test
+    public void testManageJenkinsSystemConfigureBreadcrumbs(){
+        final String expectedBreadCrumbs = "Dashboard\nManage Jenkins\nSystem";
+
+        getDriver().findElement(By.xpath("//a[@href='/manage']")).click();
+
+        getDriver().findElement(By.cssSelector("a[href='configure']")).click();
+
+        String actualBreadCrumbs = getDriver().findElement(By.id("breadcrumbs")).getText();
+
+        Assert.assertEquals(actualBreadCrumbs, expectedBreadCrumbs);
+    }
 }
