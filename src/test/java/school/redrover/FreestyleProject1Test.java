@@ -37,6 +37,7 @@ public class FreestyleProject1Test extends BaseTest {
         WebElement element = getDriver().findElement(By
                 .xpath("//span[contains(text(),'" + NEW_FREESTYLE_PROJECT_NAME + "')]"));
         actions.moveToElement(element).perform();
+        Thread.sleep(500);
         getDriver().findElement((By.cssSelector("td:nth-child(3) > a > button"))).click();
         getDriver().findElement((By.cssSelector("#tippy-6 > div > div > div > button:nth-child(5)"))).click();
         getDriver().findElement(By.xpath("//button[contains(text(),'Yes')]")).click();
