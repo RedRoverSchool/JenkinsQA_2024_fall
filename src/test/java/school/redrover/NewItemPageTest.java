@@ -12,8 +12,8 @@ public class NewItemPageTest extends BaseTest {
     public void testCountItemTypes() {
 
         getDriver().findElement(By.xpath("//a[@href='/view/all/newJob']")).click();
-        int size = getDriver().findElements(By.xpath("//div[@id='items']//li")).size();
+        int items = getDriver().findElements(By.xpath("//div[@id='items']//li")).size();
 
-        Assert.assertEquals(size, 6);
+        Assert.assertEquals(items, 6);
     }
 }
