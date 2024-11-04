@@ -62,7 +62,7 @@ public class FreestyleProject26Test extends BaseTest {
         action.moveToElement(linkByName).build().perform();
 
         WebElement dropDownButton = linkByName.findElement(By.cssSelector("button"));
-        new WebDriverWait(getDriver(), Duration.ofMillis(300L)).until(ExpectedConditions.elementToBeClickable(dropDownButton)).click();
+        new WebDriverWait(getDriver(), Duration.ofMillis(2000L)).until(ExpectedConditions.elementToBeClickable(dropDownButton)).click();
 
         List<WebElement> jobItems = getDriver().findElements(By.xpath("//button[@class = 'jenkins-dropdown__item ']"));
         for (WebElement item : jobItems) {
@@ -71,6 +71,7 @@ public class FreestyleProject26Test extends BaseTest {
                 break;
             }
         }
+        Thread.sleep(2000);
         getDriver().findElement(By.xpath("//button[text() =  'Yes']")).click();
 
         List<WebElement> remainingItems = getDriver().findElements(By.xpath("//a[@class = 'jenkins-table__link model-link inside']/span"));
