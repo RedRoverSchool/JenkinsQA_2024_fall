@@ -2,6 +2,7 @@ package school.redrover;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.Point;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -104,17 +105,18 @@ public class PipelineProjectTest extends BaseTest {
         WebElement projectElement = wait.until(ExpectedConditions.visibilityOfElementLocated(
                 By.xpath("//a[@href='job/" + encodeSpacesForURL(PIPELINE_NAME) + "/']")));
 
-        actions.moveToElement(projectElement).pause(1000).perform(); // Wait for a second
+        int elementWidth = projectElement.getSize().getWidth();
+        int elementHeight = projectElement.getSize().getHeight();
 
-        WebElement chevronButton = wait.until(ExpectedConditions.elementToBeClickable(
-                By.xpath("//a[@href='job/" + encodeSpacesForURL(PIPELINE_NAME) + "/']//button[@class='jenkins-menu-dropdown-chevron']")));
+        Point elementLocation = projectElement.getLocation();
+        int x = elementLocation.getX();
+        int y = elementLocation.getY();
 
-        ((JavascriptExecutor) getDriver()).executeScript("arguments[0].scrollIntoView(true);", chevronButton);
+        int clickX = x + elementWidth - 1;
+        int clickY = y + (elementHeight / 2);
 
-        // Click the chevron button directly
-        actions.moveToElement(chevronButton).click().perform();
+        actions.moveByOffset(clickX, clickY).click().perform();
 
-        // Continue with the rest of your test
         WebElement confirmRenameLink = wait.until(ExpectedConditions.elementToBeClickable(
                 By.xpath("//div[@class='jenkins-dropdown']//a[@href='/job/" + encodeSpacesForURL(PIPELINE_NAME) + "/confirm-rename']")));
         confirmRenameLink.click();
