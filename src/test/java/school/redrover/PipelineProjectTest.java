@@ -110,6 +110,9 @@ public class PipelineProjectTest extends BaseTest {
 
         actions.moveToElement(chevronButton, -5, 0).click().perform();
 
+        wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//div[@class='jenkins-dropdown']")));
+
         WebElement confirmRenameLink = wait.until(ExpectedConditions.elementToBeClickable(
                 By.xpath("//div[@class='jenkins-dropdown']//a[@href='/job/" + encodeSpacesForURL(PIPELINE_NAME) + "/confirm-rename']")));
         confirmRenameLink.click();
