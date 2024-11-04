@@ -14,6 +14,7 @@ import java.time.Duration;
 
 public class FreestyleProject1Test extends BaseTest {
     private static final String NEW_FREESTYLE_PROJECT_NAME = "New freestyle project";
+
     private void createFreestyleProject() throws InterruptedException {
         getDriver().findElement(By.xpath("//*[@href='/view/all/newJob']")).click();
         getDriver().findElement(By.xpath("//*[@class='hudson_model_FreeStyleProject']")).click();
@@ -22,6 +23,7 @@ public class FreestyleProject1Test extends BaseTest {
         getDriver().findElement(By.name("Submit")).click();
 
     }
+
     @Test
     public void testCreateFreestyleProject() throws InterruptedException {
         createFreestyleProject();
@@ -42,9 +44,7 @@ public class FreestyleProject1Test extends BaseTest {
         WebElement element = getDriver().findElement(By
                 .xpath("//span[contains(text(),'New freestyle project')]"));
         actions.moveToElement(element).perform();
-        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(10));
-        WebElement deleteButton = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("td:nth-child(3) > a > button")));
-        deleteButton.click();
+        getDriver().findElement((By.xpath("//*[@id='job_New freestyle project']/td[3]/a/button"))).click();
         getDriver().findElement((By.cssSelector("#tippy-6 > div > div > div > button:nth-child(5)"))).click();
         getDriver().findElement(By.xpath("//button[contains(text(),'Yes')]")).click();
         String emptyDashboardHeader = getDriver().findElement(By.cssSelector(".empty-state-block > h1")).getText();
