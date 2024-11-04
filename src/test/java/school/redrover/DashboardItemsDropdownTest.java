@@ -23,13 +23,13 @@ public class DashboardItemsDropdownTest extends BaseTest {
         WebDriverWait wait = setWait();
 
         WebElement dashboardButton = getDriver().findElement(
-                By.cssSelector("#breadcrumbs > li.jenkins-breadcrumbs__list-item > a"));
+                By.cssSelector("#breadcrumbs > li.jenkins-breadcrumbs__list-item"));
         Actions actions = new Actions(getDriver());
         actions.moveToElement(dashboardButton).perform();
 
         WebElement buttonDropdown = wait.until(ExpectedConditions.visibilityOfElementLocated(
                 By.cssSelector("#breadcrumbs > li.jenkins-breadcrumbs__list-item > a > button")));
-        buttonDropdown.click();
+        actions.moveToElement(buttonDropdown).click().perform();
 
         //проверяю что спиннер уже пропал чтобы перейти к видимости дропдауна
         wait.until(ExpectedConditions.invisibilityOfElementLocated(
