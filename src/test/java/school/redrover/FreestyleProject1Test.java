@@ -1,8 +1,10 @@
 package school.redrover;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import school.redrover.runner.BaseTest;
@@ -37,8 +39,9 @@ public class FreestyleProject1Test extends BaseTest {
         WebElement element = getDriver().findElement(By
                 .xpath("//span[contains(text(),'New freestyle project')]"));
         actions.moveToElement(element).perform();
-        Thread.sleep(1000);
-        getDriver().findElement((By.cssSelector("td:nth-child(3) > a > button"))).click();
+        WebElement buttonDelete = getDriver().findElement((By.cssSelector("td:nth-child(3) > a > button")));
+        actions.moveToElement(buttonDelete).perform();
+        buttonDelete.click();
         getDriver().findElement((By.cssSelector("#tippy-6 > div > div > div > button:nth-child(5)"))).click();
         getDriver().findElement(By.xpath("//button[contains(text(),'Yes')]")).click();
         String emptyDashboardHeader = getDriver().findElement(By.cssSelector(".empty-state-block > h1")).getText();
