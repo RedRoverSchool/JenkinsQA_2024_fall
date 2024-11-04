@@ -119,23 +119,19 @@ public class PipelineProjectTest extends BaseTest {
         WebElement projectElement = getWebDriverWait().until(ExpectedConditions.visibilityOfElementLocated(
                 By.xpath("//a[@href='job/" + encodeSpacesForURL(PIPELINE_NAME) + "/']")));
 
-
-        int centerX = projectElement.getLocation().getX() + (projectElement.getSize().getWidth() / 2);
+        int offsetFromEnd = 10;
+        int endX = projectElement.getLocation().getX() + projectElement.getSize().getWidth() - offsetFromEnd;
         int centerY = projectElement.getLocation().getY() + (projectElement.getSize().getHeight() / 2);
 
+        actions.moveByOffset(endX, centerY).perform();
 
-        actions.moveByOffset(centerX, centerY).perform();
-
-
-        Thread.sleep(1000); // Adjust as needed
-
+        Thread.sleep(1000);
 
         WebElement chevronButton = getWebDriverWait().until(ExpectedConditions.elementToBeClickable(
                 By.xpath("//a[@href='job/" + encodeSpacesForURL(PIPELINE_NAME) + "/']//button[@class='jenkins-menu-dropdown-chevron']")));
 
-
         actions.moveToElement(chevronButton).click().perform();
-
+        Thread.sleep(1000);
         WebElement confirmRenameLink = getWebDriverWait().until(ExpectedConditions.elementToBeClickable(
                 By.xpath("//a[@href='/job/" + encodeSpacesForURL(PIPELINE_NAME) + "/confirm-rename']")));
         confirmRenameLink.click();
