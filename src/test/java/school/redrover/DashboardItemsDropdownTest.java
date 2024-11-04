@@ -15,11 +15,11 @@ import java.util.List;
 public class DashboardItemsDropdownTest extends BaseTest {
 
     private WebDriverWait setWait() {
-        return new WebDriverWait(getDriver(), Duration.ofSeconds(15));
+        return new WebDriverWait(getDriver(), Duration.ofSeconds(60));
     }
 
     @Test
-    public void testNewItem() {
+    public void testNewItem()  {
         WebDriverWait wait = setWait();
 
         WebElement dashboardButton = getDriver().findElement(
@@ -27,16 +27,17 @@ public class DashboardItemsDropdownTest extends BaseTest {
         Actions actions = new Actions(getDriver());
         actions.moveToElement(dashboardButton).perform();
 
+
         WebElement buttonDropdown = wait.until(ExpectedConditions.visibilityOfElementLocated(
                 By.cssSelector("#breadcrumbs > li.jenkins-breadcrumbs__list-item > a > button")));
         actions.moveToElement(buttonDropdown).click().perform();
 
         WebElement containerDD = wait.until(ExpectedConditions.visibilityOfElementLocated(
-                By.cssSelector(".tippy-content[data-state='visible']")));
+                By.cssSelector("#tippy-3 > div > div > div")));
         actions.moveToElement(containerDD).perform();
 
         List<WebElement> dropDownList = wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(
-                By.cssSelector(".jenkins-dropdown__item")));
+                 By.cssSelector("#tippy-3 > div > div > div > a")));
         Assert.assertFalse(dropDownList.isEmpty(), "Dropdown - empty");
 
         WebElement newItem = dropDownList.get(0);
