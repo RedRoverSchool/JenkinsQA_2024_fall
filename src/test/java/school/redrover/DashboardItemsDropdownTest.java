@@ -31,7 +31,7 @@ public class DashboardItemsDropdownTest extends BaseTest {
                 By.cssSelector("#breadcrumbs > li.jenkins-breadcrumbs__list-item > a > button")));
         actions.moveToElement(buttonDropdown).click().perform();
 
-        //проверяю что спиннер уже пропал чтобы перейти к дропдауну
+        //проверяю что спиннер уже пропал чтобы перейти к дропдаун1
         wait.until(ExpectedConditions.invisibilityOfElementLocated(
                 By.cssSelector("#tippy-3 > div > div > p")));
 
