@@ -23,7 +23,7 @@ public class DashboardItemsDropdownTest extends BaseTest {
         WebDriverWait wait = setWait();
 
         WebElement dashboardButton = getDriver().findElement(
-                By.cssSelector("#breadcrumbs > li.jenkins-breadcrumbs__list-item"));
+                By.cssSelector("#breadcrumbs > li.jenkins-breadcrumbs__list-item > a"));
         Actions actions = new Actions(getDriver());
         actions.moveToElement(dashboardButton).perform();
 
