@@ -31,17 +31,15 @@ public class DashboardItemsDropdownTest extends BaseTest {
                 By.cssSelector("#breadcrumbs > li.jenkins-breadcrumbs__list-item > a > button")));
         actions.moveToElement(buttonDropdown).click().perform();
 
-        //Навожу на общий контейнер после клика
         WebElement containerDD = wait.until(ExpectedConditions.visibilityOfElementLocated(
-                By.cssSelector("#tippy-3 > div > div")));
+                By.cssSelector(".tippy-content[data-state='visible']")));
         actions.moveToElement(containerDD).perform();
 
-        //Чек элементов в дропдаун с задержкой теперь должно всё пройти в CI
-        List<WebElement> listDD = wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(
-                By.cssSelector("#tippy-3 > div > div > div > a")));
-        Assert.assertFalse(listDD.isEmpty(), "Dropdown - empty");
+        List<WebElement> dropDownList = wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(
+                By.cssSelector(".jenkins-dropdown__item")));
+        Assert.assertFalse(dropDownList.isEmpty(), "Dropdown - empty");
 
-        WebElement newItem = listDD.get(0);
+        WebElement newItem = dropDownList.get(0);
         actions.moveToElement(newItem).click().perform();
     }
 }
