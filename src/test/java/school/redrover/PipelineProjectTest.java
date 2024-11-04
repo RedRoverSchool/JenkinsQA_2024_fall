@@ -110,7 +110,7 @@ public class PipelineProjectTest extends BaseTest {
     }
 
     @Test
-    public void testRenameProjectViaDropdownMenu() {
+    public void testRenameProjectViaDropdownMenu() throws InterruptedException {
         createProjectViaSidebar(PIPELINE_NAME);
         returnToHomePage();
 
@@ -118,11 +118,15 @@ public class PipelineProjectTest extends BaseTest {
 
         WebElement projectElement = getWebDriverWait().until(ExpectedConditions.visibilityOfElementLocated(
                 By.xpath("//a[@href='job/" + encodeSpacesForURL(PIPELINE_NAME) + "/']")));
-        actions.moveToElement(projectElement).pause(1000).perform();
+
+        actions.moveToElement(projectElement).perform();
+
+        Thread.sleep(1000);
 
         WebElement chevronButton = getWebDriverWait().until(ExpectedConditions.elementToBeClickable(
                 By.xpath("//a[@href='job/" + encodeSpacesForURL(PIPELINE_NAME) + "/']//button[@class='jenkins-menu-dropdown-chevron']")));
-        chevronButton.click();
+
+        actions.moveToElement(chevronButton).click().perform();
 
         WebElement confirmRenameLink = getWebDriverWait().until(ExpectedConditions.elementToBeClickable(
                 By.xpath("//a[@href='/job/" + encodeSpacesForURL(PIPELINE_NAME) + "/confirm-rename']")));
@@ -132,7 +136,6 @@ public class PipelineProjectTest extends BaseTest {
                 By.xpath("//input[@checkdependson='newName']")));
         nameInput.clear();
         nameInput.sendKeys(NEW_PROJECT_NAME);
-
         getDriver().findElement(By.xpath("//button[@name='Submit']")).click();
 
         returnToHomePage();
