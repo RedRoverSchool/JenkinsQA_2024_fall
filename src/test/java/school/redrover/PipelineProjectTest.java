@@ -118,9 +118,11 @@ public class PipelineProjectTest extends BaseTest {
 
         WebElement projectElement = getWebDriverWait().until(ExpectedConditions.visibilityOfElementLocated(
                 By.xpath("//a[@href='job/" + encodeSpacesForURL(PIPELINE_NAME) + "/']")));
-        actions.moveToElement(projectElement).perform();
+        actions.moveToElement(projectElement).moveByOffset(10, 5).perform();
 
-        ((JavascriptExecutor) getDriver()).executeScript("arguments[0].scrollIntoView(true);", projectElement);
+        //actions.moveByOffset(15, 5).click().perform();
+
+       // ((JavascriptExecutor) getDriver()).executeScript("arguments[0].scrollIntoView(true);", projectElement);
 
         WebElement chevronButton = getWebDriverWait().until(ExpectedConditions.elementToBeClickable(
                 By.xpath("//a[@href='job/" + encodeSpacesForURL(PIPELINE_NAME) + "/']//button[@class='jenkins-menu-dropdown-chevron']")));
