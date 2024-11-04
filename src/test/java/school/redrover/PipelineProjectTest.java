@@ -110,26 +110,19 @@ public class PipelineProjectTest extends BaseTest {
     }
 
     @Test
-    public void testRenameProjectViaDropdownMenu() throws InterruptedException {
+    public void testRenameProjectViaDropdownMenu() {
         createProjectViaSidebar(PIPELINE_NAME);
         returnToHomePage();
 
         Actions actions = new Actions(getDriver());
-        WebElement chevronButton =
-                getWebDriverWait().until(ExpectedConditions.elementToBeClickable(
-                        By.xpath("//a[@href='job/" + encodeSpacesForURL(PIPELINE_NAME) + "/']//button[@class='jenkins-menu-dropdown-chevron']")));
 
         WebElement projectElement = getWebDriverWait().until(ExpectedConditions.visibilityOfElementLocated(
                 By.xpath("//a[@href='job/" + encodeSpacesForURL(PIPELINE_NAME) + "/']")));
-        actions.moveToElement(projectElement).pause(1000).moveToElement(chevronButton).pause(1000).click().perform();
+        actions.moveToElement(projectElement).pause(1000).perform();
 
-        //actions.moveByOffset(15, 5).click().perform();
-
-       // ((JavascriptExecutor) getDriver()).executeScript("arguments[0].scrollIntoView(true);", projectElement);
-
-
-//        actions.pause(1000).moveToElement(chevronButton).click().perform();
-//        Thread.sleep(2000);
+        WebElement chevronButton = getWebDriverWait().until(ExpectedConditions.elementToBeClickable(
+                By.xpath("//a[@href='job/" + encodeSpacesForURL(PIPELINE_NAME) + "/']//button[@class='jenkins-menu-dropdown-chevron']")));
+        chevronButton.click();
 
         WebElement confirmRenameLink = getWebDriverWait().until(ExpectedConditions.elementToBeClickable(
                 By.xpath("//a[@href='/job/" + encodeSpacesForURL(PIPELINE_NAME) + "/confirm-rename']")));
@@ -139,6 +132,7 @@ public class PipelineProjectTest extends BaseTest {
                 By.xpath("//input[@checkdependson='newName']")));
         nameInput.clear();
         nameInput.sendKeys(NEW_PROJECT_NAME);
+
         getDriver().findElement(By.xpath("//button[@name='Submit']")).click();
 
         returnToHomePage();
