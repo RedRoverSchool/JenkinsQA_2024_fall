@@ -64,7 +64,7 @@ public class FreestyleProject3Test extends BaseTest {
     }
 
     @Test
-    public void addDescriptionOnProjectStatusPage() {
+    public void testAddDescriptionOnProjectStatusPage() {
         createProjectViaSidebarMenu(PROJECT_NAME);
 
         WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(5));
@@ -86,7 +86,7 @@ public class FreestyleProject3Test extends BaseTest {
     }
 
     @Test
-    public void editDescriptionOnProjectStatusPage() {
+    public void testEditDescriptionOnProjectStatusPage() {
         String newDescription = "New " + DESCRIPTION;
 
         createProjectViaSidebarMenu(PROJECT_NAME);
