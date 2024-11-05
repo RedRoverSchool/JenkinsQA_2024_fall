@@ -11,7 +11,6 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 import school.redrover.runner.BaseTest;
 
-import javax.swing.*;
 import java.time.Duration;
 
 public class FreestyleProjectTest extends BaseTest {
