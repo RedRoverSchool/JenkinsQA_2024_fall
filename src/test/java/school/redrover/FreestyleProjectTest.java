@@ -194,13 +194,13 @@ public class FreestyleProjectTest extends BaseTest {
 
         new Actions(getDriver())
                 .moveToElement(projectItem, 10, 10)
-                .moveToElement(chevronButton).click().pause(Duration.ofSeconds(2))
+                .moveToElement(chevronButton).click()
                 .perform();
 
         WebElement deleteButton = wait
                 .until(ExpectedConditions
                         .presenceOfElementLocated(
-                                By.xpath("//button[contains(., 'Delete Project')]"))
+                                By.xpath("//div[@class='jenkins-dropdown']//button[2]"))
                 );
         wait.until(ExpectedConditions.elementToBeClickable(deleteButton)).click();
 
