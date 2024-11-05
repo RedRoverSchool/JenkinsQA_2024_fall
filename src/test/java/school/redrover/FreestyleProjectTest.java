@@ -199,7 +199,7 @@ public class FreestyleProjectTest extends BaseTest {
 
         WebElement deleteButton = wait
                 .until(ExpectedConditions
-                        .presenceOfElementLocated(
+                        .visibilityOfElementLocated(
                                 By.xpath("//div[@class='jenkins-dropdown']//button[2]"))
                 );
 
