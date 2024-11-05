@@ -2,6 +2,7 @@ package school.redrover;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -217,6 +218,47 @@ public class FreestyleProjectTest extends BaseTest {
         Assert.assertEquals(getDriver()
                 .findElement(By.xpath(String.format("//span[text()='%s']", PROJECT_NAME)))
                 .getText(), PROJECT_NAME);
+    }
+
+    @Test
+    public void testRenameFreestyleProjectViaChevron() {
+        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(10));
+
+        String newProjectName = "My second freestyle project";
+
+        createItemUtils(PROJECT_NAME, ".hudson_model_FreeStyleProject");
+        getDriver().findElement(By.id("jenkins-name-icon")).click();
+
+        WebElement projectItem = wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath(String.format("//span[text()='%s']", PROJECT_NAME))));
+
+        WebElement chevronButton = getDriver()
+                .findElement(By.xpath(String.format("//span[text()='%s']/following-sibling::button", PROJECT_NAME)));
+
+
+        new Actions(getDriver())
+                .moveToElement(projectItem, 10, 10)
+                .moveToElement(chevronButton).click().pause(1000)
+                .perform();
+
+        WebElement renameButton = wait.until(ExpectedConditions
+                .visibilityOfElementLocated(
+                        By.xpath("//a[contains(@href, 'confirm-rename')]")));
+        renameButton.click();
+        WebElement itemName = getDriver()
+                .findElement(By.xpath("//input[@name='newName']"));
+        itemName.clear();
+        itemName.sendKeys(newProjectName);
+
+        getDriver()
+                .findElement(By.xpath("//button[@name='Submit']"))
+                .click();
+
+        getDriver().findElement(By.id("jenkins-name-icon")).click();
+
+        Assert.assertEquals(getDriver()
+                .findElement(By.xpath(String.format("//span[text()='%s']", newProjectName)))
+                .getText(), newProjectName);
     }
 
 }
