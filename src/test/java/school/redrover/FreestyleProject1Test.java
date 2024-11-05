@@ -40,18 +40,12 @@ public class FreestyleProject1Test extends BaseTest {
         createFreestyleProject();
         getDriver().findElement(By.id("jenkins-name-icon")).click();
         Actions actions = new Actions(getDriver());
-        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(10));
-
         //hover over project title to activate menu dropdown
-        WebElement projectName = getDriver().findElement(By
+        WebElement element = getDriver().findElement(By
                 .xpath("//span[contains(text(),'New freestyle project')]"));
-        actions.moveToElement(projectName).perform();
-        WebElement dropdownChevron = wait.until(ExpectedConditions.elementToBeClickable(By
-                .xpath("//*[@id='job_New freestyle project']/td[3]/a/button")));
-        ((JavascriptExecutor) getDriver()).executeScript("arguments[0].click();", dropdownChevron);
-        Thread.sleep(1000);
-        getDriver().findElement((By.xpath("//*[@id='job_New freestyle project']/td[3]/a/button"))).click();
-        getDriver().findElement((By.xpath("//*[contains(@href,'doDelete')]"))).click();
+        actions.moveToElement(element).perform();
+        getDriver().findElement((By.cssSelector("td:nth-child(3) > a > button"))).click();
+        getDriver().findElement((By.cssSelector("#tippy-6 > div > div > div > button:nth-child(5)"))).click();
         getDriver().findElement(By.xpath("//button[contains(text(),'Yes')]")).click();
         String emptyDashboardHeader = getDriver().findElement(By.cssSelector(".empty-state-block > h1")).getText();
         Assert.assertEquals(emptyDashboardHeader, "Welcome to Jenkins!");
