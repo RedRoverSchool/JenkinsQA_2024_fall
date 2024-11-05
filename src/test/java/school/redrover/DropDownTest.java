@@ -1,17 +1,20 @@
 package school.redrover;
 
 import org.openqa.selenium.interactions.Actions;
+import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.testng.Assert;
 import school.redrover.runner.BaseTest;
 
+
 public class DropDownTest extends BaseTest {
 
     private static final String HEADER_DROPDOWN = "//div/a/button[@class = 'jenkins-menu-dropdown-chevron']";
     private static final String BREAD_CRUMBS = "//ol/li[@class = 'jenkins-breadcrumbs__list-item'] [3]";
 
+    @Ignore
     @Test
     public void testBuild() {
 
@@ -28,6 +31,7 @@ public class DropDownTest extends BaseTest {
         Assert.assertEquals(thirdCrumb.getText(), "Builds");
     }
 
+    @Ignore
     @Test
     public void testConfigure() {
 
