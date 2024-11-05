@@ -94,7 +94,7 @@ public class PipelineProjectTest extends BaseTest {
     }
 
     @Test
-    public void testRenameProjectViaDropdownMenu() {
+    public void testRenameProjectViaDropdownMenu() throws InterruptedException {
         createProjectViaSidebar(PIPELINE_NAME);
         returnToHomePage();
 
@@ -103,12 +103,17 @@ public class PipelineProjectTest extends BaseTest {
 
         WebElement projectElement = wait.until(ExpectedConditions.visibilityOfElementLocated(
                 By.xpath("//a[@href='job/" + encodeSpacesForURL(PIPELINE_NAME) + "/']")));
-        actions.moveToElement(projectElement).perform();
+        actions.moveToElement(projectElement, projectElement.getSize().width / 2, projectElement.getSize().height / 2).perform();
 
-        actions.moveByOffset(15, 5).click().perform();
+        actions.moveByOffset(projectElement.getSize().width / 2 - 20, 0).perform();
+        Thread.sleep(500);
+
+        WebElement chevronButton = wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//a[@href='job/" + encodeSpacesForURL(PIPELINE_NAME) + "/']//button[@class='jenkins-menu-dropdown-chevron']")));
+        actions.moveToElement(chevronButton).click().perform();
 
         WebElement confirmRenameLink = wait.until(ExpectedConditions.elementToBeClickable(
-                By.xpath("//a[@href='/job/" + encodeSpacesForURL(PIPELINE_NAME) + "/confirm-rename']")));
+                By.xpath("//div[@class='jenkins-dropdown']//a[@href='/job/" + encodeSpacesForURL(PIPELINE_NAME) + "/confirm-rename']")));
         confirmRenameLink.click();
 
         WebElement nameInput = wait.until(ExpectedConditions.visibilityOfElementLocated(
@@ -119,7 +124,9 @@ public class PipelineProjectTest extends BaseTest {
 
         returnToHomePage();
 
+        // Проверяем, что проект был переименован
         Assert.assertListContainsObject(getProjectList(), NEW_PROJECT_NAME, "Project is not renamed");
+
     }
 
     @Test
