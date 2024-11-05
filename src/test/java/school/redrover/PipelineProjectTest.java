@@ -105,8 +105,8 @@ public class PipelineProjectTest extends BaseTest {
                 By.xpath("//a[@href='job/" + encodeSpacesForURL(PIPELINE_NAME) + "/']")));
         actions.moveToElement(projectElement, projectElement.getSize().width / 2, projectElement.getSize().height / 2).perform();
 
-        actions.moveByOffset(projectElement.getSize().width / 2 - 20, 0).perform();
-        Thread.sleep(500);
+        actions.moveByOffset(projectElement.getSize().width / 2 - 10, 0).perform();
+        Thread.sleep(1000);
 
         WebElement chevronButton = wait.until(ExpectedConditions.visibilityOfElementLocated(
                 By.xpath("//a[@href='job/" + encodeSpacesForURL(PIPELINE_NAME) + "/']//button[@class='jenkins-menu-dropdown-chevron']")));
