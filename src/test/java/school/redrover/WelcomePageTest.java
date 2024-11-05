@@ -9,7 +9,7 @@ import school.redrover.runner.BaseTest;
 public class WelcomePageTest extends BaseTest {
 
     @Test
-    public void createAJobTest() throws InterruptedException {
+    public void testCreateAJob() throws InterruptedException {
 
         WebElement createAJobField =
                 getDriver().findElement(By.cssSelector(
