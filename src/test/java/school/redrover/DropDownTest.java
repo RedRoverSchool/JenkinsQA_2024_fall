@@ -20,7 +20,8 @@ public class DropDownTest extends BaseTest {
         actions.moveToElement(dropdownChevron).click().perform();
 
         WebElement buildButton = getDriver().findElement(By.xpath("//div/a[@class = 'jenkins-dropdown__item '] [1]"));
-        buildButton.click();
+        actions.moveToElement(buildButton).click().perform();
+//        buildButton.click();
 
         WebElement thirdCrumb = getDriver().findElement(By.xpath(BREAD_CRUMBS));
 
