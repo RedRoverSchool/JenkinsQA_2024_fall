@@ -13,11 +13,13 @@ public class DropDownTest extends BaseTest {
     private static final String BREAD_CRUMBS = "//ol/li[@class = 'jenkins-breadcrumbs__list-item'] [3]";
 
     @Test
-    public void testBuild() {
+    public void testBuild() throws InterruptedException {
 
         WebElement dropdownChevron = getDriver().findElement(By.xpath(HEADER_DROPDOWN));
         Actions actions = new Actions(getDriver());
         actions.moveToElement(dropdownChevron).click().perform();
+
+        Thread.sleep(1000);
 
         WebElement buildButton = getDriver().findElement(By.xpath("//div/a[@class = 'jenkins-dropdown__item '] [1]"));
         buildButton.click();
@@ -28,11 +30,13 @@ public class DropDownTest extends BaseTest {
     }
 
     @Test
-    public void testConfigure() {
+    public void testConfigure() throws InterruptedException {
 
         WebElement dropdownChevron = getDriver().findElement(By.xpath(HEADER_DROPDOWN));
         Actions actions = new Actions(getDriver());
         actions.moveToElement(dropdownChevron).click().perform();
+
+        Thread.sleep(1000);
 
         WebElement configureButton = getDriver().findElement(By.xpath("//div/a[@class = 'jenkins-dropdown__item '] [2]"));
         configureButton.click();
