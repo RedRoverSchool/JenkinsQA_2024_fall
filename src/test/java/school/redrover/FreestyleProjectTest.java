@@ -197,8 +197,8 @@ public class FreestyleProjectTest extends BaseTest {
                 .moveToElement(chevronButton).click()
                 .perform();
 
-        wait.until(ExpectedConditions.visibilityOfElementLocated(
-                        By.xpath("//button[contains(., 'Delete Project')]")))
+        getDriver()
+                .findElement(By.xpath("//button[contains(., 'Delete Project')]"))
                 .click();
 
         getDriver()
