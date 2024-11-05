@@ -199,7 +199,7 @@ public class FreestyleProjectTest extends BaseTest {
 
         WebElement deleteButton = wait
                 .until(ExpectedConditions
-                        .visibilityOfElementLocated(
+                        .presenceOfElementLocated(
                                 By.xpath("//button[contains(., 'Delete Project')]"))
                 );
         wait.until(ExpectedConditions.elementToBeClickable(deleteButton)).click();
