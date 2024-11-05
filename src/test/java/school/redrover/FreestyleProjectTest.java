@@ -2,6 +2,7 @@ package school.redrover;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -10,6 +11,7 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 import school.redrover.runner.BaseTest;
 
+import javax.swing.*;
 import java.time.Duration;
 
 public class FreestyleProjectTest extends BaseTest {
@@ -45,8 +47,7 @@ public class FreestyleProjectTest extends BaseTest {
 
         WebElement freestyleProjectItem = wait.until(
                 ExpectedConditions.visibilityOfElementLocated(
-                        By.xpath(String.format("//span[text()='%s']", PROJECT_NAME))
-                )
+                        By.xpath(String.format("//span[text()='%s']", PROJECT_NAME)))
         );
 
         Assert.assertEquals(freestyleProjectItem.getText(), PROJECT_NAME);
@@ -71,10 +72,8 @@ public class FreestyleProjectTest extends BaseTest {
         createItemUtils(PROJECT_NAME, ".hudson_model_FreeStyleProject");
         getDriver().findElement(By.id("jenkins-name-icon")).click();
 
-        wait.until(
-                        ExpectedConditions.visibilityOfElementLocated(
-                                By.xpath("//a[@href='/view/all/newJob']"))
-                )
+        wait.until(ExpectedConditions.visibilityOfElementLocated(
+                        By.xpath("//a[@href='/view/all/newJob']")))
                 .click();
 
         getDriver().findElement(By.id("name")).sendKeys(PROJECT_NAME);
@@ -95,8 +94,7 @@ public class FreestyleProjectTest extends BaseTest {
         getDriver().findElement(By.id("jenkins-name-icon")).click();
 
         wait.until(ExpectedConditions.visibilityOfElementLocated(
-                        By.xpath(String.format("//span[text()='%s']", PROJECT_NAME)))
-                )
+                        By.xpath(String.format("//span[text()='%s']", PROJECT_NAME))))
                 .click();
 
         getDriver().findElement(By.id("description-link")).click();
@@ -133,8 +131,7 @@ public class FreestyleProjectTest extends BaseTest {
         getDriver().findElement(By.id("jenkins-name-icon")).click();
 
         wait.until(ExpectedConditions.visibilityOfElementLocated(
-                        By.xpath(String.format("//span[text()='%s']", PROJECT_NAME)))
-                )
+                        By.xpath(String.format("//span[text()='%s']", PROJECT_NAME))))
                 .click();
 
         getDriver()
@@ -165,12 +162,44 @@ public class FreestyleProjectTest extends BaseTest {
         getDriver().findElement(By.id("jenkins-name-icon")).click();
 
         wait.until(ExpectedConditions.visibilityOfElementLocated(
-                        By.xpath(String.format("//span[text()='%s']", PROJECT_NAME)))
-                )
+                        By.xpath(String.format("//span[text()='%s']", PROJECT_NAME))))
                 .click();
 
         getDriver()
                 .findElement(By.xpath("//a[contains(@data-url, 'doDelete')]"))
+                .click();
+
+        getDriver()
+                .findElement(By.xpath("//button[@data-id='ok']"))
+                .click();
+
+        boolean isElementPresent = getDriver()
+                .findElements(By.xpath(String.format("//span[text()='%s']", PROJECT_NAME)))
+                .isEmpty();
+
+        Assert.assertTrue(isElementPresent);
+    }
+
+    @Test
+    public void testDeleteFreestyleProjectViaChevron() {
+        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(10));
+
+        createItemUtils(PROJECT_NAME, ".hudson_model_FreeStyleProject");
+        getDriver().findElement(By.id("jenkins-name-icon")).click();
+
+        WebElement projectItem = wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath(String.format("//span[text()='%s']", PROJECT_NAME)))
+        );
+        WebElement chevronButton = getDriver()
+                .findElement(By.xpath(String.format("//span[text()='%s']/following-sibling::button", PROJECT_NAME)));
+
+        new Actions(getDriver())
+                .moveToElement(projectItem, 10, 10)
+                .moveToElement(chevronButton).click()
+                .perform();
+
+        wait.until(ExpectedConditions.visibilityOfElementLocated(
+                        By.xpath("//button[contains(., 'Delete Project')]")))
                 .click();
 
         getDriver()
