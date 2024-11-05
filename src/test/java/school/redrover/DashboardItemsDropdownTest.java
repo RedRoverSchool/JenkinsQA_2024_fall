@@ -15,11 +15,11 @@ import java.util.List;
 public class DashboardItemsDropdownTest extends BaseTest {
 
     private WebDriverWait setWait() {
-        return new WebDriverWait(getDriver(), Duration.ofSeconds(30));
+        return new WebDriverWait(getDriver(), Duration.ofSeconds(15));
     }
 
     @Test
-    public void testNewItem()  {
+    public void testNewItem() {
         WebDriverWait wait = setWait();
 
         WebElement dashboardButton = getDriver().findElement(
@@ -31,9 +31,13 @@ public class DashboardItemsDropdownTest extends BaseTest {
                 By.cssSelector("#breadcrumbs > li.jenkins-breadcrumbs__list-item > a > button")));
         actions.moveToElement(buttonDropdown).click().perform();
 
+        wait.until(ExpectedConditions.attributeContains(
+                By.cssSelector("#breadcrumbs > li.jenkins-breadcrumbs__list-item > a"),
+                "class", "model-link--open"));
+
         WebElement containerDD = wait.until(ExpectedConditions.visibilityOfElementLocated(
                 By.cssSelector("#tippy-3")));
-        actions.moveToElement(containerDD).perform();
+        Assert.assertTrue(containerDD.isDisplayed(), "Container tippy3 isn't visible");
 
         List<WebElement> dropDownList = wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(
                 By.cssSelector("#tippy-3 > div > div > div > a")));
@@ -41,5 +45,5 @@ public class DashboardItemsDropdownTest extends BaseTest {
 
         WebElement newItem = dropDownList.get(0);
         actions.moveToElement(newItem).click().perform();
-    }
+   }
 }
