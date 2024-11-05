@@ -43,14 +43,6 @@ public class PipelineTest extends BaseTest {
         Assert.assertFalse(buttonSubmit.isEnabled());
         Assert.assertEquals(actualErrorMessage.getText(), expectErrorMessage);
     }
-    @Test
-    public void testJenkinsVologda() {
-        WebElement logo = getDriver().findElement(By.xpath("//img[@id='jenkins-name-icon']"));
-        Assert.assertTrue(logo.isDisplayed(), "Jenkins logo is not displayed in the header.");
-
-    }
-
-}
 }
 
 
