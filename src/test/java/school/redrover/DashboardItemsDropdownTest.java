@@ -21,15 +21,20 @@ public class DashboardItemsDropdownTest extends BaseTest {
     @Test
     public void testNewItem() {
         WebDriverWait wait = setWait();
+        Actions actions = new Actions(getDriver());
 
         WebElement dashboardButton = getDriver().findElement(
                 By.cssSelector("#breadcrumbs > li.jenkins-breadcrumbs__list-item"));
-        Actions actions = new Actions(getDriver());
         actions.moveToElement(dashboardButton).perform();
 
         WebElement buttonDropdown = wait.until(ExpectedConditions.visibilityOfElementLocated(
                 By.cssSelector("#breadcrumbs > li.jenkins-breadcrumbs__list-item > a > button")));
         actions.moveToElement(buttonDropdown).click().perform();
+
+        wait.until(ExpectedConditions.attributeToBe(
+                By.cssSelector("#breadcrumbs > li.jenkins-breadcrumbs__list-item > a "),
+                "class",
+                "model-link model-link--open"));
 
         WebElement containerDD = wait.until(ExpectedConditions.visibilityOfElementLocated(
                 By.cssSelector("#tippy-3")));
