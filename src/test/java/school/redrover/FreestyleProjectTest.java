@@ -180,7 +180,7 @@ public class FreestyleProjectTest extends BaseTest {
     }
 
     @Test
-    public void testDeleteFreestyleProjectViaChevron() {
+    public void testDeleteFreestyleProjectViaChevron() throws InterruptedException {
         WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(10));
 
         createItemUtils(PROJECT_NAME, ".hudson_model_FreeStyleProject");
@@ -202,7 +202,10 @@ public class FreestyleProjectTest extends BaseTest {
                         .presenceOfElementLocated(
                                 By.xpath("//div[@class='jenkins-dropdown']//button[2]"))
                 );
-        wait.until(ExpectedConditions.elementToBeClickable(deleteButton)).click();
+
+        new Actions(getDriver())
+                .moveToElement(deleteButton, 10, 10).click().perform();
+        Thread.sleep(2000);
 
         getDriver()
                 .findElement(By.xpath("//button[@data-id='ok']"))
