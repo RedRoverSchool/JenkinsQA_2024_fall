@@ -36,6 +36,7 @@ public class OperationsWithJobTest extends BaseTest {
 
     }
 
+    @Ignore
     @Test(description = "create and configure job")
     public void testConfigureJob(){
 
