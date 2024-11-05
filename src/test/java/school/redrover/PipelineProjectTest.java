@@ -94,7 +94,7 @@ public class PipelineProjectTest extends BaseTest {
     }
 
     @Test
-    public void testRenameProjectViaDropdownMenu() throws InterruptedException {
+    public void testRenameProjectViaDropdownMenu() {
         createProjectViaSidebar(PIPELINE_NAME);
         returnToHomePage();
 
@@ -104,9 +104,8 @@ public class PipelineProjectTest extends BaseTest {
         WebElement projectElement = wait.until(ExpectedConditions.visibilityOfElementLocated(
                 By.xpath("//a[@href='job/" + encodeSpacesForURL(PIPELINE_NAME) + "/']")));
 
-        actions.moveToElement(projectElement).pause(1000).moveToElement(projectElement, projectElement.getSize().width - 15, projectElement.getSize().height / 2).click().perform();
-
-        Thread.sleep(1000);
+        actions.moveToElement(projectElement, projectElement.getSize().width / 2, projectElement.getSize().height / 2).pause(1000).moveToElement(getDriver().findElement(
+                By.xpath("//a[@href='job/" + encodeSpacesForURL(PIPELINE_NAME) + "/']//button[@class='jenkins-menu-dropdown-chevron']"))).click().perform();
 
         WebElement confirmRenameLink = wait.until(ExpectedConditions.elementToBeClickable(
                 By.xpath("//div[@class='jenkins-dropdown']//a[@href='/job/" + encodeSpacesForURL(PIPELINE_NAME) + "/confirm-rename']")));
