@@ -13,6 +13,6 @@ public class GetAllBuildsTest extends BaseTest {
 
         String title = getDriver().findElement(By.xpath("//div[@class='jenkins-app-bar__content']")).getText();
 
-        Assert.assertEquals(title, "Jenkins Build History");
+        Assert.assertEquals(title, "Build History of Jenkins");
     }
 }
