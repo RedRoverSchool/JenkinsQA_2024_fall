@@ -68,9 +68,9 @@ public class FreestyleProject3Test extends BaseTest {
         createProjectViaSidebarMenu(PROJECT_NAME);
 
         WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(5));
-        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//h2[text()='Permalinks']")));
 
-        WebElement addDescriptionButton = getDriver().findElement(By.id("description-link"));
+        WebElement addDescriptionButton = wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.id("description-link")));
         addDescriptionButton.click();
 
         WebElement descriptionTextField = getDriver().findElement(By.tagName("textarea"));
@@ -92,9 +92,8 @@ public class FreestyleProject3Test extends BaseTest {
         createProjectViaSidebarMenu(PROJECT_NAME);
 
         WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(5));
-        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//h2[text()='Permalinks']")));
-
-        WebElement addDescriptionButton = getDriver().findElement(By.id("description-link"));
+        WebElement addDescriptionButton = wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.id("description-link")));
         addDescriptionButton.click();
 
         WebElement descriptionTextField = getDriver().findElement(By.tagName("textarea"));
