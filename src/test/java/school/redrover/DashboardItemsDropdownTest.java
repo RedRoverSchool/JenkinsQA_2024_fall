@@ -15,7 +15,7 @@ import java.util.List;
 public class DashboardItemsDropdownTest extends BaseTest {
 
     private WebDriverWait setWait() {
-        return new WebDriverWait(getDriver(), Duration.ofSeconds(60));
+        return new WebDriverWait(getDriver(), Duration.ofSeconds(30));
     }
 
     @Test
@@ -31,7 +31,7 @@ public class DashboardItemsDropdownTest extends BaseTest {
                 By.cssSelector("#breadcrumbs > li.jenkins-breadcrumbs__list-item > a > button")));
         actions.moveToElement(buttonDropdown).click().perform();
 
-        WebElement containerDD = wait.until(ExpectedConditions.presenceOfElementLocated(
+        WebElement containerDD = wait.until(ExpectedConditions.visibilityOfElementLocated(
                 By.cssSelector("#tippy-3")));
         actions.moveToElement(containerDD).perform();
 
