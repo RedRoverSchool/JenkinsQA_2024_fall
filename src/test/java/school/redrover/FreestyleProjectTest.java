@@ -194,18 +194,14 @@ public class FreestyleProjectTest extends BaseTest {
 
         new Actions(getDriver())
                 .moveToElement(projectItem, 10, 10)
-                .moveToElement(chevronButton).click().pause(1000)
+                .moveToElement(chevronButton).click()
                 .perform();
 
-        WebElement deleteButton = wait
-                .until(ExpectedConditions
-                        .presenceOfElementLocated(
-                                By.xpath("//div[@id='tippy-6']//button[contains(@href, 'doDelete')]"))
-                );
-        System.out.println(deleteButton.isDisplayed());
+        wait.until(ExpectedConditions
+                .presenceOfElementLocated(
+                        By.xpath("//div[@id='tippy-6']//button[contains(@href, 'doDelete')]"))
+        ).click();
 
-        new Actions(getDriver())
-                .moveToElement(deleteButton, 10, 10).click().pause(1000).perform();
 
         getDriver()
                 .findElement(By.xpath("//button[@data-id='ok']"))
