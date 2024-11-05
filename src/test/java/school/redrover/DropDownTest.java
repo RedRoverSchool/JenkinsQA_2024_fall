@@ -19,8 +19,7 @@ public class DropDownTest extends BaseTest {
         Actions actions = new Actions(getDriver());
         actions.moveToElement(dropdownChevron).click().perform();
 
-       // WebElement buildButton = getDriver().findElement(By.xpath("//div/a[@class = 'jenkins-dropdown__item '] [1]"))
-        WebElement buildButton = getDriver().findElement(By.xpath("//*[@id=\"tippy-2\"]/div/div/div/a[1];"));
+        WebElement buildButton = getDriver().findElement(By.xpath("//div/a[@class = 'jenkins-dropdown__item '] [1]"));
         buildButton.click();
 
         WebElement thirdCrumb = getDriver().findElement(By.xpath(BREAD_CRUMBS));
@@ -35,7 +34,7 @@ public class DropDownTest extends BaseTest {
         Actions actions = new Actions(getDriver());
         actions.moveToElement(dropdownChevron).click().perform();
 
-        WebElement configureButton = getDriver().findElement(By.xpath("//*[@id=\"tippy-2\"]/div/div/div/a[2];"));
+        WebElement configureButton = getDriver().findElement(By.xpath("//div/a[@class = 'jenkins-dropdown__item '] [2]"));
         configureButton.click();
 
         WebElement thirdCrumb = getDriver().findElement(By.xpath(BREAD_CRUMBS));
