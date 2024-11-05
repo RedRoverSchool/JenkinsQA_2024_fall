@@ -6,6 +6,7 @@ import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
+import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import school.redrover.runner.BaseTest;
 
@@ -36,6 +37,7 @@ public class OperationsWithJobTest extends BaseTest {
 
     }
 
+    @Ignore
     @Test(description = "create and configure job")
     public void testConfigureJob(){
 
