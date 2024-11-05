@@ -104,17 +104,25 @@ public class PipelineProjectTest extends BaseTest {
         WebElement projectElement = wait.until(ExpectedConditions.visibilityOfElementLocated(
                 By.xpath("//a[@href='job/" + encodeSpacesForURL(PIPELINE_NAME) + "/']")));
 
-        actions.moveToElement(projectElement, projectElement.getSize().width / 2, projectElement.getSize().height / 2).pause(1000).moveToElement(getDriver().findElement(
-                By.xpath("//a[@href='job/" + encodeSpacesForURL(PIPELINE_NAME) + "/']//button[@class='jenkins-menu-dropdown-chevron']"))).click().perform();
+        actions.moveToElement(projectElement, projectElement.getSize().width / 2, projectElement.getSize().height / 2)
+                .pause(1000)
+                .perform();
+
+        WebElement chevronButton = wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//a[@href='job/" + encodeSpacesForURL(PIPELINE_NAME) + "/']//button[@class='jenkins-menu-dropdown-chevron']")));
+
+        actions.moveToElement(chevronButton).click().perform();
 
         WebElement confirmRenameLink = wait.until(ExpectedConditions.elementToBeClickable(
                 By.xpath("//div[@class='jenkins-dropdown']//a[@href='/job/" + encodeSpacesForURL(PIPELINE_NAME) + "/confirm-rename']")));
+
         confirmRenameLink.click();
 
         WebElement nameInput = wait.until(ExpectedConditions.visibilityOfElementLocated(
                 By.xpath("//input[@checkdependson='newName']")));
         nameInput.clear();
         nameInput.sendKeys(NEW_PROJECT_NAME);
+
         getDriver().findElement(By.xpath("//button[@name='Submit']")).click();
 
         returnToHomePage();
