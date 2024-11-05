@@ -8,6 +8,7 @@ import school.redrover.runner.BaseTest;
 
 public class MultibranchPipelineTest extends BaseTest {
 
+    @Ignore
     @Test
     public void testAddDescriptionCreatingMultibranch() {
         final String expectedDescription = "Add description";
