@@ -94,24 +94,19 @@ public class PipelineProjectTest extends BaseTest {
     }
 
     @Test
-    public void testRenameProjectViaDropdownMenu() {
+    public void testRenameProjectViaDropdownMenu() throws InterruptedException {
         createProjectViaSidebar(PIPELINE_NAME);
         returnToHomePage();
 
         WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(10));
         Actions actions = new Actions(getDriver());
 
-        WebElement chevronButton = wait.until(ExpectedConditions.visibilityOfElementLocated(
-                By.xpath("//a[@href='job/" + encodeSpacesForURL(PIPELINE_NAME) + "/']//button[@class='jenkins-menu-dropdown-chevron']")));
-
         WebElement projectElement = wait.until(ExpectedConditions.visibilityOfElementLocated(
                 By.xpath("//a[@href='job/" + encodeSpacesForURL(PIPELINE_NAME) + "/']")));
-        actions.moveToElement(projectElement, projectElement.getSize().width / 2, projectElement.getSize().height / 2).perform();
-        actions.moveToElement(chevronButton).pause(1000).click().perform();
 
-//        WebElement chevronButton = wait.until(ExpectedConditions.visibilityOfElementLocated(
-//                By.xpath("//a[@href='job/" + encodeSpacesForURL(PIPELINE_NAME) + "/']//button[@class='jenkins-menu-dropdown-chevron']")));
-//        chevronButton.click();
+        actions.moveToElement(projectElement).pause(1000).moveToElement(projectElement, projectElement.getSize().width - 15, projectElement.getSize().height / 2).click().perform();
+
+        Thread.sleep(1000);
 
         WebElement confirmRenameLink = wait.until(ExpectedConditions.elementToBeClickable(
                 By.xpath("//div[@class='jenkins-dropdown']//a[@href='/job/" + encodeSpacesForURL(PIPELINE_NAME) + "/confirm-rename']")));
@@ -124,7 +119,6 @@ public class PipelineProjectTest extends BaseTest {
         getDriver().findElement(By.xpath("//button[@name='Submit']")).click();
 
         returnToHomePage();
-
         Assert.assertListContainsObject(getProjectList(), NEW_PROJECT_NAME, "Project is not renamed");
     }
 
