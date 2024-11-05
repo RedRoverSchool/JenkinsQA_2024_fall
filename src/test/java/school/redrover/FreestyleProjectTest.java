@@ -181,7 +181,7 @@ public class FreestyleProjectTest extends BaseTest {
 
     @Test
     public void testDeleteFreestyleProjectViaChevron() {
-        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(15));
+        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(10));
 
         createItemUtils(PROJECT_NAME, ".hudson_model_FreeStyleProject");
         getDriver().findElement(By.id("jenkins-name-icon")).click();
@@ -194,12 +194,15 @@ public class FreestyleProjectTest extends BaseTest {
 
         new Actions(getDriver())
                 .moveToElement(projectItem, 10, 10)
-                .moveToElement(chevronButton).click()
+                .moveToElement(chevronButton).click().pause(Duration.ofSeconds(2))
                 .perform();
 
-        wait.until(ExpectedConditions.presenceOfElementLocated(
-                        By.xpath("//button[contains(., 'Delete Project')]")))
-                .click();
+        WebElement deleteButton = wait
+                .until(ExpectedConditions
+                        .visibilityOfElementLocated(
+                                By.xpath("//button[contains(., 'Delete Project')]"))
+                );
+        wait.until(ExpectedConditions.elementToBeClickable(deleteButton)).click();
 
         getDriver()
                 .findElement(By.xpath("//button[@data-id='ok']"))
