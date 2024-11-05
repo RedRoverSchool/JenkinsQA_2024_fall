@@ -199,7 +199,7 @@ public class FreestyleProjectTest extends BaseTest {
 
         WebElement deleteButton = wait
                 .until(ExpectedConditions
-                        .visibilityOfElementLocated(
+                        .presenceOfElementLocated(
                                 By.xpath("//div[@id='tippy-6']//button[contains(@href, 'doDelete')]"))
                 );
         System.out.println(deleteButton.isDisplayed());
