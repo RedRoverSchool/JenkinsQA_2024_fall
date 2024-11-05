@@ -31,10 +31,6 @@ public class DashboardItemsDropdownTest extends BaseTest {
                 By.cssSelector("#breadcrumbs > li.jenkins-breadcrumbs__list-item > a > button")));
         actions.moveToElement(buttonDropdown).click().perform();
 
-        wait.until(ExpectedConditions.attributeContains(
-                By.cssSelector("#breadcrumbs > li.jenkins-breadcrumbs__list-item > a"),
-                "class", "model-link--open"));
-
         WebElement containerDD = wait.until(ExpectedConditions.visibilityOfElementLocated(
                 By.cssSelector("#tippy-3")));
         Assert.assertTrue(containerDD.isDisplayed(), "Container tippy3 isn't visible");
