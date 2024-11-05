@@ -44,7 +44,10 @@ public class FreestyleProject1Test extends BaseTest {
         WebElement element = getDriver().findElement(By
                 .xpath("//span[contains(text(),'New freestyle project')]"));
         actions.moveToElement(element).perform();
-        getDriver().findElement((By.cssSelector("td:nth-child(3) > a > button"))).click();
+        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(10));
+        WebElement chevron = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[@id='job_New freestyle project']/td[3]/a/button")));
+        actions.moveToElement(chevron).perform();
+        ((JavascriptExecutor) getDriver()).executeScript("arguments[0].dispatchEvent(new MouseEvent('click', {bubbles: true, cancelable: true, view: window, clientX: arguments[0].getBoundingClientRect().x + 5, clientY: arguments[0].getBoundingClientRect().y + 5}));", chevron);
         getDriver().findElement((By.cssSelector("#tippy-6 > div > div > div > button:nth-child(5)"))).click();
         getDriver().findElement(By.xpath("//button[contains(text(),'Yes')]")).click();
         String emptyDashboardHeader = getDriver().findElement(By.cssSelector(".empty-state-block > h1")).getText();
