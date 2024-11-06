@@ -30,11 +30,6 @@ public class DashboardItemsDropdownTest extends BaseTest {
                 By.cssSelector("#breadcrumbs > li.jenkins-breadcrumbs__list-item > a > button")));
         actions.moveToElement(buttonDropdown).click().perform();
 
-        wait.until(ExpectedConditions.attributeToBe(
-                By.cssSelector("#breadcrumbs > li.jenkins-breadcrumbs__list-item > a "),
-                "class",
-                "model-link model-link--open"));
-
         List<WebElement> dropDownList = wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(
                 By.cssSelector("#tippy-3 > div > div > div > a")));
 
