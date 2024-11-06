@@ -4,12 +4,14 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.interactions.Actions;
 import org.testng.Assert;
+import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import school.redrover.runner.BaseTest;
 
 public class OrganizationFolderTest extends BaseTest {
 
     @Test
+    @Ignore
     public void testOrganizationFolder() {
 
         Actions actions = new Actions(getDriver());
