@@ -109,4 +109,29 @@ public class ManageJenkinsTest extends BaseTest {
         Assert.assertEquals(searchField.getAttribute("placeholder"), "Search settings");
 
     }
+
+    @Test
+    public void testSearchSystemConfigurationItems() {
+
+        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(10));
+        WebElement manageJenkinsTab = wait.until(
+                ExpectedConditions.elementToBeClickable(By.xpath("//a[span[text()='Manage Jenkins']]")));
+        manageJenkinsTab.click();
+
+        WebElement searchField = getDriver().findElement(
+                By.xpath("//input[@id='settings-search-bar']"));
+
+        List<String> itemsSystemConfiguration = Arrays.asList(
+                "System", "Tools", "Plugins", "Nodes", "Clouds", "Appearance");
+        for (String itemsSystemConfigurations : itemsSystemConfiguration) {
+            searchField.clear();
+            searchField.sendKeys(itemsSystemConfigurations);
+
+            WebElement searchDropdown = wait.until(
+                    ExpectedConditions.presenceOfElementLocated(By.xpath("//div[@class='jenkins-search__results']")));
+
+            Assert.assertNotNull(searchDropdown, "Item '" + itemsSystemConfigurations + "' not found in dropdown.");
+
+        }
+    }
 }
