@@ -24,6 +24,13 @@ public class FreestyleProject3Test extends BaseTest {
         getDriver().findElement(By.xpath("//button[@name='Submit']")).click();
     }
 
+    private void addDescriptionOnProjectStatusPage(String description) {
+        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(5));
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("description-link"))).click();
+        getDriver().findElement(By.tagName("textarea")).sendKeys(description);
+        getDriver().findElement(By.xpath("//button[@name='Submit']")).click();
+    }
+
     @Test
     public void testCreateProjectViaCreateJobButton() {
         WebElement createJobButton = getDriver().findElement(By.xpath("//a[@href='newJob']"));
@@ -67,27 +74,17 @@ public class FreestyleProject3Test extends BaseTest {
     public void testAddDescriptionOnProjectStatusPage() {
         createProjectViaSidebarMenu(PROJECT_NAME);
 
-        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(5));
+        addDescriptionOnProjectStatusPage(DESCRIPTION);
 
-        WebElement addDescriptionButton = wait.until(ExpectedConditions.visibilityOfElementLocated(
-                By.id("description-link")));
-        addDescriptionButton.click();
+        String projectDescriptionOnStatusPage = getDriver().findElement(
+                By.xpath("//div[@id='description']//div")).getText();
 
-        WebElement descriptionTextField = getDriver().findElement(By.tagName("textarea"));
-        descriptionTextField.sendKeys(DESCRIPTION);
-
-        WebElement submitButton = getDriver().findElement(By.xpath("//button[@name='Submit']"));
-        submitButton.click();
-
-        WebElement projectDescriptionOnStatusPage = getDriver().findElement(
-                By.xpath("//div[@id='description']//div"));
-
-        Assert.assertTrue(projectDescriptionOnStatusPage.getText().contains(DESCRIPTION));
+        Assert.assertTrue(projectDescriptionOnStatusPage.contains(DESCRIPTION));
     }
 
     @Test
     public void testEditDescriptionOnProjectStatusPage() {
-        String newDescription = "New " + DESCRIPTION;
+        final String newDescription = "New " + DESCRIPTION;
 
         createProjectViaSidebarMenu(PROJECT_NAME);
 
