@@ -106,7 +106,12 @@ public class PipelineProjectTest extends BaseTest {
         WebElement chevronButton = wait.until(ExpectedConditions.visibilityOfElementLocated(
                 By.xpath("//a[@href='job/" + PIPELINE_NAME + "/']//button[@class='jenkins-menu-dropdown-chevron']")));
 
-        actions.moveToElement(chevronButton).click().perform();
+        int chevronWidth = chevronButton.getSize().width;
+        int chevronHeight = chevronButton.getSize().height;
+
+        actions.moveToElement(chevronButton, chevronWidth / 2, chevronHeight / 2)
+                .click()
+                .perform();
 
         wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath("//*[@class='jenkins-dropdown__item ']")));
 
