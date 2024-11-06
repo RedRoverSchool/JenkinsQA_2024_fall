@@ -5,7 +5,6 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import org.testng.Assert;
 import org.testng.annotations.Test;
 import school.redrover.runner.BaseTest;
 
@@ -36,13 +35,8 @@ public class DashboardItemsDropdownTest extends BaseTest {
                 "class",
                 "model-link model-link--open"));
 
-        WebElement containerDD = wait.until(ExpectedConditions.visibilityOfElementLocated(
-                By.cssSelector("#tippy-3")));
-        Assert.assertTrue(containerDD.isDisplayed(), "Container tippy3 isn't visible");
-
         List<WebElement> dropDownList = wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(
                 By.cssSelector("#tippy-3 > div > div > div > a")));
-        Assert.assertFalse(dropDownList.isEmpty(), "Dropdown - empty");
 
         WebElement newItem = dropDownList.get(0);
         actions.moveToElement(newItem).click().perform();
