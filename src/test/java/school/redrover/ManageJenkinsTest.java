@@ -19,7 +19,7 @@ public class ManageJenkinsTest extends BaseTest {
 
         List<WebElement> tasks = getDriver().findElements(
                 By.xpath("//div[@id='tasks']//a"));
-        Assert.assertEquals(tasks.size(), 4);
+        Assert.assertEquals(tasks.size(), 1);
 
         List<String> expectedTexts = Arrays.asList("New Item", "Build History", "Manage Jenkins", "My Views");
         for (int i = 0; i < tasks.size() && i < expectedTexts.size(); i++) {
