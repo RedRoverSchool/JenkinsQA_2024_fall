@@ -94,4 +94,19 @@ public class ManageJenkinsTest extends BaseTest {
 
         Assert.assertEquals(actualBreadCrumbs, expectedBreadCrumbs);
     }
+
+    @Test
+    public void testManageJenkinsTabSearch() {
+
+        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(10));
+        WebElement manageJenkinsTab = wait.until(
+                ExpectedConditions.elementToBeClickable(By.xpath("//a[span[text()='Manage Jenkins']]"))
+        );
+        manageJenkinsTab.click();
+
+        WebElement searchField = getDriver().findElement(
+                By.xpath("//input[@id='settings-search-bar']"));
+        Assert.assertEquals(searchField.getAttribute("placeholder"), "Search settings");
+
+    }
 }
