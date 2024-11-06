@@ -33,7 +33,7 @@ public class VerifyingDashboardBreadcrumbsTest extends BaseTest {
         WebElement dropdownIcon = getDriver().findElement(By.xpath("//ol/li/a[@href='/']/button[@class='jenkins-menu-dropdown-chevron']"));
         dropdownIcon.click();
 
-        Thread.sleep(2000);
+        Thread.sleep(3000);
 
         ProjectUtils.log("Create list of dropdown elements");
         List<WebElement> dashboardDropdownMenuElements = getDriver().findElements(By.xpath("//a[@class='jenkins-dropdown__item ']"));
