@@ -10,7 +10,7 @@ import school.redrover.runner.BaseTest;
 public class FreestyleProjectUITest extends BaseTest {
 
     @Test
-    public void freestyleProjectUITest()  {
+    public void testFreestyleProjectUI()  {
         getDriver().findElement(By.xpath("/html/body/div[2]/div[1]/div[1]/div[1]/span/a")).click();
 
         getDriver().findElement(By.id("name")).sendKeys("FreestyleProject");
@@ -30,8 +30,8 @@ public class FreestyleProjectUITest extends BaseTest {
 
         WebElement projectLink = getDriver().findElement(By.xpath("//*[@id='main-panel']/div[1]/div[1]/h1"));
         String actualText = projectLink.getText();
-        String expectedText = "FreestyleProject";
-        Assert.assertEquals(expectedText, actualText);
+
+        Assert.assertEquals(actualText, "FreestyleProject");
     }
 }
 
