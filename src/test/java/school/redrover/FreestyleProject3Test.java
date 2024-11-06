@@ -87,31 +87,15 @@ public class FreestyleProject3Test extends BaseTest {
         final String newDescription = "New " + DESCRIPTION;
 
         createProjectViaSidebarMenu(PROJECT_NAME);
-
-        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(5));
-        WebElement addDescriptionButton = wait.until(ExpectedConditions.visibilityOfElementLocated(
-                By.id("description-link")));
-        addDescriptionButton.click();
-
-        WebElement descriptionTextField = getDriver().findElement(By.tagName("textarea"));
-        descriptionTextField.sendKeys(DESCRIPTION);
-
-        WebElement submitButton = getDriver().findElement(By.xpath("//button[@name='Submit']"));
-        submitButton.click();
+        addDescriptionOnProjectStatusPage(DESCRIPTION);
 
         WebElement editDescriptionButton = getDriver().findElement(By.id("description-link"));
         editDescriptionButton.click();
 
-        try {
-            descriptionTextField.clear();
-        } catch (StaleElementReferenceException e) {
-            descriptionTextField = getDriver().findElement(By.tagName("textarea"));
-        }
-
+        WebElement descriptionTextField = getDriver().findElement(By.tagName("textarea"));
         descriptionTextField.clear();
         descriptionTextField.sendKeys(newDescription);
-        submitButton = getDriver().findElement(By.xpath("//button[@name='Submit']"));
-        submitButton.click();
+        getDriver().findElement(By.xpath("//button[@name='Submit']")).click();
 
         String projectDescriptionOnStatusPage = getDriver().findElement(
                 By.xpath("//div[@id='description']//div")).getText();
