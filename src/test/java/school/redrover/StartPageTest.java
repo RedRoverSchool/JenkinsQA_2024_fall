@@ -1,12 +1,9 @@
 package school.redrover;
-
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.interactions.Actions;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import school.redrover.runner.BaseTest;
-
 import java.util.List;
 
 public class StartPageTest extends BaseTest {
@@ -14,9 +11,9 @@ public class StartPageTest extends BaseTest {
     @Test
     public void testStartPageMainPanelContent(){
 
-        List<WebElement> startPageMainContent = getDriver().findElements(By.xpath("//li[@class = 'content-block']"));
-        Assert.assertEquals(startPageMainContent.size(), 4);
+        List<WebElement> startPageMainContent = getDriver().findElements(By.className("content-block"));
 
+        Assert.assertEquals(startPageMainContent.size(), 4);
         Assert.assertEquals(startPageMainContent.get(0).getText(), "Create a job");
         Assert.assertEquals(startPageMainContent.get(1).getText(), "Set up an agent");
         Assert.assertEquals(startPageMainContent.get(2).getText(), "Configure a cloud");
@@ -26,9 +23,9 @@ public class StartPageTest extends BaseTest {
     @Test
     public void testStartPageSidePanelTaskContent(){
 
-        List<WebElement> startPageSideContent = getDriver().findElements(By.xpath("//div[@class = 'task ']"));
-        Assert.assertEquals(startPageSideContent.size(), 4);
+        List<WebElement> startPageSideContent = getDriver().findElements(By.xpath("//div[contains(@class, 'task')]"));
 
+        Assert.assertEquals(startPageSideContent.size(), 4);
         Assert.assertEquals(startPageSideContent.get(0).getText(), "New Item");
         Assert.assertEquals(startPageSideContent.get(1).getText(), "Build History");
         Assert.assertEquals(startPageSideContent.get(2).getText(), "Manage Jenkins");
@@ -38,9 +35,9 @@ public class StartPageTest extends BaseTest {
     @Test
     public void testCheckLinksSidePanel(){
 
-        List<WebElement> startPageSideContent = getDriver().findElements(By.xpath("//a[@class = 'task-link task-link-no-confirm ']"));
-        Assert.assertEquals(startPageSideContent.size(), 4);
+        List<WebElement> startPageSideContent = getDriver().findElements(By.xpath("//a[contains(@class, 'task-link-no-confirm')]"));
 
+        Assert.assertEquals(startPageSideContent.size(), 4);
         Assert.assertEquals(startPageSideContent.get(0).getAttribute("href"), "http://localhost:8080/view/all/newJob");
         Assert.assertEquals(startPageSideContent.get(1).getAttribute("href"), "http://localhost:8080/view/all/builds");
         Assert.assertEquals(startPageSideContent.get(2).getAttribute("href"), "http://localhost:8080/manage");
@@ -50,13 +47,13 @@ public class StartPageTest extends BaseTest {
     @Test
     public void testCreateDescription() throws InterruptedException {
 
-        WebElement buttonAddDescriptions = getDriver().findElement(By.xpath("//a[@id='description-link']"));
+        WebElement buttonAddDescriptions = getDriver().findElement(By.id("description-link"));
         buttonAddDescriptions.click();
 
-        WebElement descriptionField = getDriver().findElement(By.xpath("//textarea[@class='jenkins-input   ']"));
+        WebElement descriptionField = getDriver().findElement(By.xpath("//textarea[contains(@class, 'jenkins-input')]"));
         descriptionField.sendKeys("Hello World!!");
 
-        WebElement buttonSave = getDriver().findElement(By.xpath("//button[@name='Submit']"));
+        WebElement buttonSave = getDriver().findElement(By.name("Submit"));
         buttonSave.click();
         Thread.sleep(1000);
 
