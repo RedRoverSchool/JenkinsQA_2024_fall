@@ -13,13 +13,15 @@ public class PipelineProject2Test extends BaseTest {
 
     private static final String PROJECT_NAME = "MyPipelineProject";
 
-    private void createItemUtils(String name, String locator) {
-
+    private void createItemUtils(String nameItem, String locator) {
         getDriver().findElement(By.xpath("//a[@href='/view/all/newJob']")).click();
-        getDriver().findElement(By.id("name")).sendKeys(name);
+        getDriver().findElement(By.id("name")).sendKeys(nameItem);
         getDriver().findElement(By.xpath(locator)).click();
         getDriver().findElement(By.id("ok-button")).click();
+    }
 
+    private void getMainPageUtils() {
+        getDriver().findElement(By.id("jenkins-name-icon")).click();
     }
 
     @Test
@@ -27,7 +29,7 @@ public class PipelineProject2Test extends BaseTest {
         WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(10));
 
         createItemUtils(PROJECT_NAME, "//span[text()='Pipeline']");
-        getDriver().findElement(By.id("jenkins-name-icon")).click();
+        getMainPageUtils();
 
         String pipelineProjectName = wait.until(
                         ExpectedConditions.visibilityOfElementLocated(
@@ -44,9 +46,11 @@ public class PipelineProject2Test extends BaseTest {
 
         getDriver().findElement(By.xpath("//span[text()='Pipeline']")).click();
 
-        Assert.assertEquals(getDriver()
+        String errorMessage = getDriver()
                 .findElement(By.id("itemname-required"))
-                .getText(), "» This field cannot be empty, please enter a valid name");
+                .getText();
+
+        Assert.assertEquals(errorMessage, "» This field cannot be empty, please enter a valid name");
     }
 
     @Test
@@ -54,7 +58,7 @@ public class PipelineProject2Test extends BaseTest {
         WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(10));
 
         createItemUtils(PROJECT_NAME, "//span[text()='Pipeline']");
-        getDriver().findElement(By.id("jenkins-name-icon")).click();
+        getMainPageUtils();
 
         wait.until(ExpectedConditions.visibilityOfElementLocated(
                 By.xpath("//a[@href='/view/all/newJob']"))
@@ -63,9 +67,11 @@ public class PipelineProject2Test extends BaseTest {
         getDriver().findElement(By.id("name")).sendKeys(PROJECT_NAME);
         getDriver().findElement(By.xpath("//span[text()='Pipeline']")).click();
 
-        Assert.assertEquals(getDriver()
+        String errorMessage = getDriver()
                 .findElement(By.id("itemname-invalid"))
-                .getText(), String.format("» A job already exists with the name ‘%s’", PROJECT_NAME));
+                .getText();
+
+        Assert.assertEquals(errorMessage, String.format("» A job already exists with the name ‘%s’", PROJECT_NAME));
     }
 
     @Test
@@ -75,7 +81,7 @@ public class PipelineProject2Test extends BaseTest {
         String description = "Description pipeline project.";
 
         createItemUtils(PROJECT_NAME, "//span[text()='Pipeline']");
-        getDriver().findElement(By.id("jenkins-name-icon")).click();
+        getMainPageUtils();
 
         wait.until(ExpectedConditions.visibilityOfElementLocated(
                         By.xpath(String.format("//span[text()='%s']", PROJECT_NAME))))
@@ -87,9 +93,11 @@ public class PipelineProject2Test extends BaseTest {
                 .sendKeys(description);
         getDriver().findElement(By.xpath("//button[@name='Submit']")).click();
 
-        Assert.assertEquals(getDriver()
+        String actualDescription = getDriver()
                 .findElement(By.xpath("//div[@id='description']/div"))
-                .getText(), description);
+                .getText();
+
+        Assert.assertEquals(actualDescription, description);
     }
 
 
