@@ -186,9 +186,6 @@ public class FreestyleProjectTest extends BaseTest {
 
     @Test
     public void testMoveFreestyleProjectToFolder() {
-
-        String folderName = "My folder";
-
         createItemUtils(FOLDER_NAME, ".com_cloudbees_hudson_plugins_folder_Folder");
         getDriver().findElement(By.id("jenkins-name-icon")).click();
 
@@ -204,14 +201,14 @@ public class FreestyleProjectTest extends BaseTest {
                 .click();
 
         Select dropdown = new Select(getDriver().findElement(By.xpath("//select[@name='destination']")));
-        dropdown.selectByValue("/" + folderName);
+        dropdown.selectByValue("/" + FOLDER_NAME);
         getDriver()
                 .findElement(By.xpath("//button[@name='Submit']"))
                 .click();
         getDriver().findElement(By.id("jenkins-name-icon")).click();
 
         getDriver()
-                .findElement(By.xpath(String.format("//span[text()='%s']", folderName)))
+                .findElement(By.xpath(String.format("//span[text()='%s']", FOLDER_NAME)))
                 .click();
 
         Assert.assertEquals(getDriver()
