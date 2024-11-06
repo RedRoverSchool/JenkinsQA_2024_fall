@@ -2,6 +2,7 @@ package school.redrover;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.Test;
@@ -12,15 +13,16 @@ import java.time.Duration;
 public class PipelineProject2Test extends BaseTest {
 
     private static final String PROJECT_NAME = "MyPipelineProject";
+    private static final String FOLDER_NAME = "MyFolder";
 
-    private void createItemUtils(String nameItem, String locator) {
+    private void createItem(String nameItem, String locator) {
         getDriver().findElement(By.xpath("//a[@href='/view/all/newJob']")).click();
         getDriver().findElement(By.id("name")).sendKeys(nameItem);
         getDriver().findElement(By.xpath(locator)).click();
         getDriver().findElement(By.id("ok-button")).click();
     }
 
-    private void getMainPageUtils() {
+    private void goToMainPage() {
         getDriver().findElement(By.id("jenkins-name-icon")).click();
     }
 
@@ -28,13 +30,11 @@ public class PipelineProject2Test extends BaseTest {
     public void testCreatePipelineProjectWithValidName() {
         WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(10));
 
-        createItemUtils(PROJECT_NAME, "//span[text()='Pipeline']");
-        getMainPageUtils();
+        createItem(PROJECT_NAME, "//span[text()='Pipeline']");
+        goToMainPage();
 
-        String pipelineProjectName = wait.until(
-                        ExpectedConditions.visibilityOfElementLocated(
-                                By.xpath(String.format("//span[text()='%s']", PROJECT_NAME))))
-                .getText();
+        String pipelineProjectName = wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath(String.format("//span[text()='%s']", PROJECT_NAME)))).getText();
 
         Assert.assertEquals(pipelineProjectName, PROJECT_NAME);
     }
@@ -47,8 +47,7 @@ public class PipelineProject2Test extends BaseTest {
         getDriver().findElement(By.xpath("//span[text()='Pipeline']")).click();
 
         String errorMessage = getDriver()
-                .findElement(By.id("itemname-required"))
-                .getText();
+                .findElement(By.id("itemname-required")).getText();
 
         Assert.assertEquals(errorMessage, "» This field cannot be empty, please enter a valid name");
     }
@@ -57,19 +56,17 @@ public class PipelineProject2Test extends BaseTest {
     public void testCreatePipelineProjectWithDuplicateName() {
         WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(10));
 
-        createItemUtils(PROJECT_NAME, "//span[text()='Pipeline']");
-        getMainPageUtils();
+        createItem(PROJECT_NAME, "//span[text()='Pipeline']");
+        goToMainPage();
 
         wait.until(ExpectedConditions.visibilityOfElementLocated(
-                By.xpath("//a[@href='/view/all/newJob']"))
-        ).click();
+                By.xpath("//a[@href='/view/all/newJob']"))).click();
 
         getDriver().findElement(By.id("name")).sendKeys(PROJECT_NAME);
         getDriver().findElement(By.xpath("//span[text()='Pipeline']")).click();
 
         String errorMessage = getDriver()
-                .findElement(By.id("itemname-invalid"))
-                .getText();
+                .findElement(By.id("itemname-invalid")).getText();
 
         Assert.assertEquals(errorMessage, String.format("» A job already exists with the name ‘%s’", PROJECT_NAME));
     }
@@ -80,8 +77,8 @@ public class PipelineProject2Test extends BaseTest {
 
         String description = "Description pipeline project.";
 
-        createItemUtils(PROJECT_NAME, "//span[text()='Pipeline']");
-        getMainPageUtils();
+        createItem(PROJECT_NAME, "//span[text()='Pipeline']");
+        goToMainPage();
 
         wait.until(ExpectedConditions.visibilityOfElementLocated(
                         By.xpath(String.format("//span[text()='%s']", PROJECT_NAME))))
@@ -100,5 +97,40 @@ public class PipelineProject2Test extends BaseTest {
         Assert.assertEquals(actualDescription, description);
     }
 
+    @Test
+    public void testMovePipelineProjectToFolder() {
+
+        createItem(FOLDER_NAME, "//span[text()='Folder']");
+        goToMainPage();
+
+        createItem(PROJECT_NAME, "//span[text()='Pipeline']");
+        goToMainPage();
+
+        getDriver()
+                .findElement(By.xpath(String.format("//span[text()='%s']", PROJECT_NAME)))
+                .click();
+
+        getDriver()
+                .findElement(By.xpath("//a[contains(@href, 'move')]"))
+                .click();
+
+        new Select(getDriver().findElement(By.xpath("//select[@name='destination']")))
+                .selectByValue("/" + FOLDER_NAME);
+
+        getDriver()
+                .findElement(By.xpath("//button[@name='Submit']"))
+                .click();
+        goToMainPage();
+
+        getDriver()
+                .findElement(By.xpath(String.format("//span[text()='%s']", FOLDER_NAME)))
+                .click();
+
+        String movedPipelineProjectName = getDriver()
+                .findElement(By.xpath(String.format("//span[text()='%s']", PROJECT_NAME)))
+                .getText();
+
+        Assert.assertEquals(movedPipelineProjectName, PROJECT_NAME);
+    }
 
 }
