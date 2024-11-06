@@ -1,9 +1,14 @@
 package school.redrover.runner;
 
+import org.apache.commons.io.FileUtils;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.testng.ITestResult;
 import org.testng.annotations.*;
 
+import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.Method;
 
 @Listeners({FilterForTests.class})
@@ -33,7 +38,8 @@ public abstract class BaseTest {
         if (ProjectUtils.isServerRun() || testResult.isSuccess() || ProjectUtils.closeBrowserIfError()) {
             try {
                 JenkinsUtils.logout(driver);
-            } catch (Exception ignore) {}
+            } catch (Exception ignore) {
+            }
             driver.quit();
             ProjectUtils.log("Browser closed");
         }
@@ -41,6 +47,16 @@ public abstract class BaseTest {
         ProjectUtils.logf(
                 "Execution time is %.3f sec",
                 (testResult.getEndMillis() - testResult.getStartMillis()) / 1000.0);
+
+        if (!testResult.isSuccess()) {
+            File screenshot = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
+            File destinationPath = new File("screenshots", testResult.getName() + ".png");
+            try {
+                FileUtils.copyFile(screenshot, destinationPath);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     protected WebDriver getDriver() {
