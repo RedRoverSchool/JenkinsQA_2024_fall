@@ -118,4 +118,17 @@ public class FreestyleProject3Test extends BaseTest {
 
         Assert.assertEquals(newDescription, projectDescriptionOnStatusPage);
     }
+
+    @Test
+    public void testDeleteDescriptionOnProjectStatusPage() {
+        createProjectViaSidebarMenu(PROJECT_NAME);
+        addDescriptionOnProjectStatusPage(DESCRIPTION);
+
+        getDriver().findElement(By.id("description-link")).click();
+        getDriver().findElement(By.tagName("textarea")).clear();
+        getDriver().findElement(By.xpath("//button[@name='Submit']")).click();
+
+        Assert.assertFalse(getDriver().findElement(By.xpath("//div[@id='description']//div")).getText()
+                .contains(DESCRIPTION));
+    }
 }
