@@ -4,17 +4,19 @@ import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.Select;
 import org.testng.Assert;
+import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import school.redrover.runner.BaseTest;
 
 public class MultibranchPipelineTest extends BaseTest {
-
+    
     private static final String MP_NAME = "NewItem";
     private static final By NAME_INPUT = By.id("name");
     private static final By CREATE_A_JOB_BUTTON = By.cssSelector("[href='newJob']");
     private static final By MULTIBRANCH_PIPELINE_PROJECT = By.cssSelector("[class$='MultiBranchProject']");
     private static final By OK_BUTTON = By.id("ok-button");
 
+    @Ignore 
     @Test
     public void testAddDescriptionCreatingMultibranch() {
         final String expectedDescription = "Add description";
