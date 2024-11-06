@@ -109,6 +109,7 @@ public class StartPageTest extends BaseTest {
 
         WebElement folderChevron = wait.until(ExpectedConditions.elementToBeClickable(getDriver().findElement(By.xpath(
                 "//tr[@id='job_NewFolder']//button[@class = 'jenkins-menu-dropdown-chevron']"))));
+        actions.moveToElement(folderChevron);
         folderChevron.click();
 
         WebElement buttonDelete = wait.until(ExpectedConditions.elementToBeClickable(getDriver().findElement(By.xpath(
