@@ -10,6 +10,8 @@ import org.testng.annotations.*;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Method;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 @Listeners({FilterForTests.class})
 public abstract class BaseTest {
@@ -52,6 +54,7 @@ public abstract class BaseTest {
             File screenshot = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
             File destinationPath = new File("screenshots", testResult.getName() + ".png");
             try {
+                Files.createDirectories(Paths.get("screenshots"));
                 FileUtils.copyFile(screenshot, destinationPath);
             } catch (IOException e) {
                 e.printStackTrace();
