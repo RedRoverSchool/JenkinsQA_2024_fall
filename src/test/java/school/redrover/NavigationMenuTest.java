@@ -27,9 +27,9 @@ public class NavigationMenuTest extends BaseTest {
     }
     @Test
     public void testBuildHistoryEnabled () {
+        String urlBeforeClick = getDriver().getCurrentUrl();
         getDriver().findElement(By.cssSelector("#tasks > div:nth-child(2) > span > a")).click();
-        String actualEndUrl = getDriver().getCurrentUrl().substring(getDriver().getCurrentUrl().length() - 16);
-        Assert.assertEquals(actualEndUrl,"/view/all/builds");
+        Assert.assertEquals(getDriver().getCurrentUrl(),urlBeforeClick+"view/all/builds");
     }
     @Test
     public void testMyViewExists () {
@@ -38,9 +38,9 @@ public class NavigationMenuTest extends BaseTest {
     }
     @Test
     public void testMyViewEnabled () {
+        String urlBeforeClick = getDriver().getCurrentUrl();
         getDriver().findElement(By.xpath("//a[@href ='/me/my-views']")).click();
-        String actualEndUrl = getDriver().getCurrentUrl().substring(getDriver().getCurrentUrl().length() - 22);
-        Assert.assertEquals(actualEndUrl,"/me/my-views/view/all/");
+        Assert.assertEquals(getDriver().getCurrentUrl(), urlBeforeClick+"me/my-views/view/all/");
     }
     @Test
     public void testManageJenkinsExists () {
@@ -49,8 +49,8 @@ public class NavigationMenuTest extends BaseTest {
     }
     @Test
     public void testManageJenkinsEnabled () {
+        String urlBeforeClick = getDriver().getCurrentUrl();
         getDriver().findElement(By.xpath("//a[@href ='/manage']")).click();
-        String actualEndUrl = getDriver().getCurrentUrl().substring(getDriver().getCurrentUrl().length() - 8);
-        Assert.assertEquals(actualEndUrl,"/manage/");
+        Assert.assertEquals(getDriver().getCurrentUrl(),urlBeforeClick+"manage/");
     }
 }
