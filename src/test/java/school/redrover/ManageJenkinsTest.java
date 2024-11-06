@@ -2,33 +2,35 @@ package school.redrover;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
-import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import school.redrover.runner.BaseTest;
 
+import java.time.Duration;
+import java.util.Arrays;
 import java.util.List;
 
 public class ManageJenkinsTest extends BaseTest {
 
     @Test
-    @Ignore
-    public void testManageJenkinsTab() throws InterruptedException {
+    public void testManageJenkinsTab() {
 
         List<WebElement> tasks = getDriver().findElements(
                 By.xpath("//div[@id='tasks']//a"));
         Assert.assertEquals(tasks.size(), 4);
 
-        Assert.assertEquals(tasks.get(0).getText(), "New Item");
-        Assert.assertEquals(tasks.get(1).getText(), "Build History");
-        Assert.assertEquals(tasks.get(2).getText(), "Manage Jenkins");
-        Assert.assertEquals(tasks.get(3).getText(), "My Views");
+        List<String> expectedTexts = Arrays.asList("New Item", "Build History", "Manage Jenkins", "My Views");
+        for (int i = 0; i < tasks.size() && i < expectedTexts.size(); i++) {
+            Assert.assertEquals(tasks.get(i).getText(), expectedTexts.get(i));
+        }
 
-        Thread.sleep(2000);
-
-        WebElement manageJenkinsTask = getDriver().findElement(
-                By.xpath("//a[span[text()='Manage Jenkins']]"));
+        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(10));
+        WebElement manageJenkinsTask = wait.until(
+                ExpectedConditions.elementToBeClickable(By.xpath("//a[span[text()='Manage Jenkins']]")));
         manageJenkinsTask.click();
+
     }
 
     @Test
