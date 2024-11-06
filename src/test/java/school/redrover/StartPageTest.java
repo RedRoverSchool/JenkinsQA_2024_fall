@@ -105,15 +105,10 @@ public class StartPageTest extends BaseTest {
 
         Actions actions = new Actions(getDriver());
         actions.moveToElement(getDriver().findElement(By.xpath(
-                "//span[text()='NewFolder']"))).perform();
-
-        WebElement button = wait.until(ExpectedConditions.elementToBeClickable(By.xpath(
-                "//button[@data-href = 'http://localhost:8080/job/NewFolder/']")));
-        button.click();
+                "//span[text()='NewFolder']"))).click().perform();
 
         WebElement buttonDelete = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(
-                "//button[@href='/job/NewFolder/doDelete']//div")));
-                actions.moveToElement(buttonDelete);
+                "//span[text()='Delete Folder']")));
                 buttonDelete.click();
 
         WebElement buttonOk = wait.until(ExpectedConditions.elementToBeClickable(getDriver().findElement(By.xpath(
