@@ -79,5 +79,4 @@ public class FreestyleProject5Test extends BaseTest {
         Assert.assertEquals(period, "minute");
     }
 
-
 }
