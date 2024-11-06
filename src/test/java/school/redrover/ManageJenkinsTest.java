@@ -2,54 +2,57 @@ package school.redrover;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
-import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import school.redrover.runner.BaseTest;
 
+import java.time.Duration;
+import java.util.Arrays;
 import java.util.List;
 
 public class ManageJenkinsTest extends BaseTest {
 
     @Test
-    @Ignore
-    public void testManageJenkinsTab() throws InterruptedException {
+    public void testManageJenkinsTab() {
 
         List<WebElement> tasks = getDriver().findElements(
                 By.xpath("//div[@id='tasks']//a"));
         Assert.assertEquals(tasks.size(), 4);
 
-        Assert.assertEquals(tasks.get(0).getText(), "New Item");
-        Assert.assertEquals(tasks.get(1).getText(), "Build History");
-        Assert.assertEquals(tasks.get(2).getText(), "Manage Jenkins");
-        Assert.assertEquals(tasks.get(3).getText(), "My Views");
+        List<String> expectedTexts = Arrays.asList("New Item", "Build History", "Manage Jenkins", "My Views");
+        for (int i = 0; i < tasks.size() && i < expectedTexts.size(); i++) {
+            Assert.assertEquals(tasks.get(i).getText(), expectedTexts.get(i));
+        }
 
-        Thread.sleep(2000);
-
-        WebElement manageJenkinsTask = getDriver().findElement(
-                By.xpath("//a[span[text()='Manage Jenkins']]"));
+        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(10));
+        WebElement manageJenkinsTask = wait.until(
+                ExpectedConditions.elementToBeClickable(By.xpath("//a[span[text()='Manage Jenkins']]")));
         manageJenkinsTask.click();
+
     }
 
     @Test
-    public void testManageJenkinsTabSections() throws InterruptedException {
+    public void testManageJenkinsTabSections() {
 
-        WebElement manageJenkinsTab = getDriver().findElement(
-                By.xpath("//a[span[text()='Manage Jenkins']]"));
+        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(10));
+        WebElement manageJenkinsTab = wait.until(
+                ExpectedConditions.elementToBeClickable(By.xpath("//a[span[text()='Manage Jenkins']]"))
+        );
         manageJenkinsTab.click();
-
-        Thread.sleep(1000);
 
         List<WebElement> sections = getDriver().findElements(
                 By.xpath("//h2[@class='jenkins-section__title']"));
         Assert.assertEquals(sections.size(), 5);
 
-        Assert.assertEquals(sections.get(0).getText(), "System Configuration");
-        Assert.assertEquals(sections.get(1).getText(), "Security");
-        Assert.assertEquals(sections.get(2). getText(), "Status Information");
-        Assert.assertEquals(sections.get(3).getText(), "Troubleshooting");
-        Assert.assertEquals(sections.get(4).getText(), "Tools and Actions");
+        List<String> expectedSectionTitles = Arrays.asList(
+                "System Configuration", "Security", "Status Information", "Troubleshooting", "Tools and Actions"
+        );
+        for (int i = 0; i < expectedSectionTitles.size(); i++) {
+            Assert.assertEquals(sections.get(i).getText(), expectedSectionTitles.get(i));
 
+        }
     }
 
     @Test
@@ -90,5 +93,20 @@ public class ManageJenkinsTest extends BaseTest {
         String actualBreadCrumbs = getDriver().findElement(By.id("breadcrumbs")).getText();
 
         Assert.assertEquals(actualBreadCrumbs, expectedBreadCrumbs);
+    }
+
+    @Test
+    public void testManageJenkinsTabSearch() {
+
+        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(10));
+        WebElement manageJenkinsTab = wait.until(
+                ExpectedConditions.elementToBeClickable(By.xpath("//a[span[text()='Manage Jenkins']]"))
+        );
+        manageJenkinsTab.click();
+
+        WebElement searchField = getDriver().findElement(
+                By.xpath("//input[@id='settings-search-bar']"));
+        Assert.assertEquals(searchField.getAttribute("placeholder"), "Search settings");
+
     }
 }
