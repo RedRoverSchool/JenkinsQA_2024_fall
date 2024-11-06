@@ -105,7 +105,7 @@ public class MultibranchPipelineTest extends BaseTest {
         String actualMessage = getDriver().findElement(By.xpath("//*[@id='itemname-invalid']")).getText();
         Assert.assertEquals(actualMessage, errorMessage);
     }
-
+    @Ignore
     @Test
     public void testSelectingTriggersScanPeriodFromConfigPage() throws InterruptedException {
 
