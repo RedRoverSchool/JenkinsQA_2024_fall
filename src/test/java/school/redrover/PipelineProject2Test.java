@@ -49,5 +49,24 @@ public class PipelineProject2Test extends BaseTest {
                 .getText(), "» This field cannot be empty, please enter a valid name");
     }
 
+    @Test
+    public void testCreatePipelineProjectWithDuplicateName() {
+        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(10));
+
+        createItemUtils(PROJECT_NAME, "//span[text()='Pipeline']");
+        getDriver().findElement(By.id("jenkins-name-icon")).click();
+
+        wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//a[@href='/view/all/newJob']"))
+        ).click();
+
+        getDriver().findElement(By.id("name")).sendKeys(PROJECT_NAME);
+        getDriver().findElement(By.xpath("//span[text()='Pipeline']")).click();
+
+        Assert.assertEquals(getDriver()
+                .findElement(By.id("itemname-invalid"))
+                .getText(), String.format("» A job already exists with the name ‘%s’", PROJECT_NAME));
+    }
+
 
 }
