@@ -65,7 +65,6 @@ public class FreestyleProject5Test extends BaseTest {
     public void testCreateFreestyleProjectCheckbox() {
         getDriver().findElement(By.xpath("//div[@id='tasks']//div[1]//span[1]//a[1]")).click();
         WebElement name = getDriver().findElement(By.xpath("//input[@id='name']"));
-        name.click();
         name.sendKeys("Project 3");
 
         getDriver().findElement(By.xpath("//*[@id=\"j-add-item-type-standalone-projects\"]/ul/li[1]")).click();
@@ -76,10 +75,10 @@ public class FreestyleProject5Test extends BaseTest {
         builds.selectByVisibleText("Minute");
 
         getDriver().findElement(By.xpath("//button[@name='Submit']")).click();
+        getDriver().findElement(By.xpath("//div[5]//span[1]//a[1]")).click();
 
-        Assert.assertEquals(getDriver()
-                .findElement(By.xpath("//h1[@class='job-index-headline page-headline']"))
-                .getText(), "Project 3");
+        String period = getDriver().findElement(By.cssSelector("select[value='minute']")).getText();
+        Assert.assertEquals(period, "Minute");
 
 
 
