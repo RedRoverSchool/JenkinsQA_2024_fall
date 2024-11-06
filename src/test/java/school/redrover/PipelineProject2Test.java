@@ -68,5 +68,29 @@ public class PipelineProject2Test extends BaseTest {
                 .getText(), String.format("» A job already exists with the name ‘%s’", PROJECT_NAME));
     }
 
+    @Test
+    public void testAddDescriptionForPipelineProject() {
+        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(10));
+
+        String description = "Description pipeline project.";
+
+        createItemUtils(PROJECT_NAME, "//span[text()='Pipeline']");
+        getDriver().findElement(By.id("jenkins-name-icon")).click();
+
+        wait.until(ExpectedConditions.visibilityOfElementLocated(
+                        By.xpath(String.format("//span[text()='%s']", PROJECT_NAME))))
+                .click();
+
+        getDriver().findElement(By.id("description-link")).click();
+        getDriver()
+                .findElement(By.xpath("//textarea[@name='description']"))
+                .sendKeys(description);
+        getDriver().findElement(By.xpath("//button[@name='Submit']")).click();
+
+        Assert.assertEquals(getDriver()
+                .findElement(By.xpath("//div[@id='description']/div"))
+                .getText(), description);
+    }
+
 
 }
