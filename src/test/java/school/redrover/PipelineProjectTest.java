@@ -1,6 +1,7 @@
 package school.redrover;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.Point;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -103,21 +104,28 @@ public class PipelineProjectTest extends BaseTest {
                 .pause(1000)
                 .perform();
 
-        WebElement chevronButton = wait.until(ExpectedConditions.visibilityOfElementLocated(
-                By.xpath("//a[@href='job/" + PIPELINE_NAME + "/']//button[@class='jenkins-menu-dropdown-chevron']")));
+        WebElement chevronButton = wait.until(driver -> {
+            WebElement element = driver.findElement(
+                    By.xpath("//a[@href='job/" + PIPELINE_NAME + "/']//button[@class='jenkins-menu-dropdown-chevron']"));
+            Point initialLocation = element.getLocation();
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+            return initialLocation.equals(element.getLocation()) ? element : null;
+        });
 
-        int chevronWidth = chevronButton.getSize().width;
-        int chevronHeight = chevronButton.getSize().height;
+        chevronButton = wait.until(ExpectedConditions.elementToBeClickable(chevronButton));
 
-        actions.moveToElement(chevronButton, chevronWidth / 2, chevronHeight / 2)
+        actions.moveToElement(chevronButton, chevronButton.getSize().width / 2, chevronButton.getSize().height / 2)
                 .click()
                 .perform();
 
-        wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath("//*[@class='jenkins-dropdown__item ']")));
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@class='jenkins-dropdown']")));
 
         WebElement confirmRenameLink = wait.until(ExpectedConditions.elementToBeClickable(
                 By.xpath("//div[@class='jenkins-dropdown']//a[@href='/job/" + PIPELINE_NAME + "/confirm-rename']")));
-
         confirmRenameLink.click();
 
         WebElement nameInput = wait.until(ExpectedConditions.visibilityOfElementLocated(
