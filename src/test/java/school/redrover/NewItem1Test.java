@@ -47,13 +47,13 @@ public class NewItem1Test extends BaseTest {
         Assert.assertEquals(getDriver().findElement(By.xpath("//*[@id='description']/div[1]"))
                 .getText(),enterProjectDescription);
     }
-/*
+
     @Test
     public void testDeleteProjectInDropdownMenu() {
         createProjectInPage(Project_Name);
         returnToHomePage();
 
-        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(10));
+        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(30));
         Actions actions = new Actions(getDriver());
 
         WebElement projectElement = wait.until(ExpectedConditions.visibilityOfElementLocated(
@@ -74,7 +74,7 @@ public class NewItem1Test extends BaseTest {
 
         Assert.assertEquals(getDriver().findElement(By.tagName("h1")).getText(), "Welcome to Jenkins!");
     }
-*/
+
     @Test
     public void testDeleteProjeckInSidebar() {
         createProjectInPage(Project_Name);
