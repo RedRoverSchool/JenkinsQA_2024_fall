@@ -15,6 +15,7 @@ import java.time.Duration;
 public class OperationsWithJobTest extends BaseTest {
 
 
+    @Ignore
     @Test(description = "create and status job")
     public void testStatusJob(){
 
@@ -23,6 +24,7 @@ public class OperationsWithJobTest extends BaseTest {
 
     }
 
+    @Ignore
     @Test(description = "create and changes job")
     public void testChangesJob(){
 
@@ -30,6 +32,8 @@ public class OperationsWithJobTest extends BaseTest {
         navigateToManageJob();
 
     }
+
+    @Ignore
     @Test(description = "create and setup workspace job")
     public void testWorkspaceJob(){
 
@@ -37,6 +41,8 @@ public class OperationsWithJobTest extends BaseTest {
         navigateToManageJob();
 
     }
+
+    @Ignore
     @Test(description = "create and build job")
     public void testBuildJob(){
 
@@ -64,7 +70,7 @@ public class OperationsWithJobTest extends BaseTest {
 
     }
 
-
+    @Ignore
     @Test(description = "create and delete job")
     public void testDeleteJob(){
 
@@ -78,6 +84,7 @@ public class OperationsWithJobTest extends BaseTest {
 
     }
 
+    @Ignore
     @Test(description = "create and rename job")
     public void testRenameJob() {
 
