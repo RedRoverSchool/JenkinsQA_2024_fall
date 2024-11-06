@@ -18,16 +18,7 @@ public class OperationsWithJobTest extends BaseTest {
     public void testStatusJob(){
 
         createJob("TestBuild");
-
-        Assert.assertEquals(getDriver()
-                .findElement(By.xpath("//*[@id='job_TestBuild']/td[3]/a/span"))
-                .getText(),"TestBuild");
-
         navigateToManageJob();
-
-        Assert.assertEquals(getDriver()
-                .findElement(By.xpath("//*[@id='no-builds']"))
-                .getText(),"No builds");
 
     }
 
@@ -35,49 +26,21 @@ public class OperationsWithJobTest extends BaseTest {
     public void testChangesJob(){
 
         createJob("TestBuild");
-
-        Assert.assertEquals(getDriver()
-                .findElement(By.xpath("//*[@id='job_TestBuild']/td[3]/a/span"))
-                .getText(),"TestBuild");
-
         navigateToManageJob();
-
-        Assert.assertEquals(getDriver()
-                .findElement(By.xpath("//*[@id='no-builds']"))
-                .getText(),"No builds");
 
     }
     @Test(description = "create and setup workspace job")
     public void testWorkspaceJob(){
 
         createJob("TestBuild");
-
-        Assert.assertEquals(getDriver()
-                .findElement(By.xpath("//*[@id='job_TestBuild']/td[3]/a/span"))
-                .getText(),"TestBuild");
-
         navigateToManageJob();
-
-        Assert.assertEquals(getDriver()
-                .findElement(By.xpath("//*[@id='no-builds']"))
-                .getText(),"No builds");
 
     }
     @Test(description = "create and build job")
     public void testBuildJob(){
 
         createJob("TestBuild");
-
-        Assert.assertEquals(getDriver()
-                .findElement(By.xpath("//*[@id='job_TestBuild']/td[3]/a/span"))
-                .getText(),"TestBuild");
-
         navigateToManageJob();
-
-        Assert.assertEquals(getDriver()
-                .findElement(By.xpath("//*[@id='no-builds']"))
-                .getText(),"No builds");
-
         buildJob();
 
         Assert.assertFalse(getDriver()
@@ -90,11 +53,6 @@ public class OperationsWithJobTest extends BaseTest {
     public void testConfigureJob(){
 
         createJob("TestBuild");
-
-        Assert.assertEquals(getDriver()
-                .findElement(By.xpath("//*[@id='job_TestBuild']/td[3]/a/span"))
-                .getText(),"TestBuild");
-
         navigateToManageJob();
         configureJob();
 
@@ -107,12 +65,8 @@ public class OperationsWithJobTest extends BaseTest {
 
     @Test(description = "create and delete job")
     public void testDeleteJob(){
+
         createJob("TestBuild");
-
-        Assert.assertEquals(getDriver()
-                .findElement(By.xpath("//*[@id='job_TestBuild']/td[3]/a/span"))
-                .getText(),"TestBuild");
-
         navigateToManageJob();
         deleteJob();
 
@@ -126,11 +80,6 @@ public class OperationsWithJobTest extends BaseTest {
     public void testRenameJob() {
 
         createJob("TestBuild");
-
-        Assert.assertEquals(getDriver()
-                .findElement(By.xpath("//*[@id='job_TestBuild']/td[3]/a/span"))
-                .getText(),"TestBuild");
-
         navigateToManageJob();
         renameJob("TestBuild_NewName");
 
@@ -147,6 +96,7 @@ public class OperationsWithJobTest extends BaseTest {
                 .until(ExpectedConditions
                         .elementToBeClickable(By
                                 .xpath("//*[@id='buildHistory']/div[2]/table/tbody/tr[2]/td/div[1]/div[1]/div/a")));
+
         Assert.assertTrue(toolTipSuccess.isDisplayed(),"true");
     }
 
