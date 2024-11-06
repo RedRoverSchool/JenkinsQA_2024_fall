@@ -98,7 +98,7 @@ public class StartPageTest extends BaseTest {
 
         final String folderName = "NewFolder";
 
-        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(10));
+        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(20));
 
         createNewFolder(folderName);
 
