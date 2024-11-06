@@ -40,7 +40,7 @@ public class AddJenkinsPipelineTest extends BaseTest {
          linkGitHub.click();
          String actualUrl = getDriver().getCurrentUrl();
 
-         Assert.assertEquals("Multi project", actualText);
-         Assert.assertEquals(actualUrl,"https://github.com/dema28/DenisNovicov/", "The link conversion did not lead to the expected URL.");
+         Assert.assertEquals(actualText, "Multi project");
+         Assert.assertEquals(actualUrl, "https://github.com/dema28/DenisNovicov/", "The link conversion did not lead to the expected URL.");
     }
 }
