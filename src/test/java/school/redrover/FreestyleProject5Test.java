@@ -61,7 +61,6 @@ public class FreestyleProject5Test extends BaseTest {
 
     }
 
-    private static final String SELECT = "Minute";
 
     @Test
     public void testCreateFreestyleProjectCheckbox() {
@@ -74,13 +73,13 @@ public class FreestyleProject5Test extends BaseTest {
 
         getDriver().findElement(By.xpath("//label[normalize-space()='Throttle builds']")).click();
         Select builds = new Select(getDriver().findElement(By.xpath("//select[@name='_.durationName']")));
-        builds.selectByVisibleText(SELECT);
+        builds.selectByVisibleText("Minute");
 
         getDriver().findElement(By.xpath("//button[@name='Submit']")).click();
         getDriver().findElement(By.xpath("//div[5]//span[1]//a[1]")).click();
 
-        String period = getDriver().findElement(By.xpath("//option[@value='minute']")).getText();
-        Assert.assertEquals(period, SELECT);
+        var period = getDriver().findElement(By.xpath("//*[@name='_.durationName']")).getAttribute("value");
+        Assert.assertEquals(period, "minute");
         }
 
 }
