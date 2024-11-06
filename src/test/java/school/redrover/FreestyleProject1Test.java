@@ -54,7 +54,9 @@ public class FreestyleProject1Test extends BaseTest {
                         "{bubbles: true, cancelable: true, view: window, clientX: " +
                         "arguments[0].getBoundingClientRect().x + 5, " +
                         "clientY: arguments[0].getBoundingClientRect().y + 5}));", chevron);
-        getDriver().findElement((By.xpath("//*[@class='icon-edit-delete icon-md']"))).click();
+        WebElement deleteOption = wait.until(ExpectedConditions.elementToBeClickable(
+                By.xpath("//*[contains(@href,'doDelete')]")));
+        deleteOption.click();
         getDriver().findElement(By.xpath("//button[contains(text(),'Yes')]")).click();
         String emptyDashboardHeader = getDriver().findElement(By.cssSelector(".empty-state-block > h1")).getText();
         Assert.assertEquals(emptyDashboardHeader, "Welcome to Jenkins!");
