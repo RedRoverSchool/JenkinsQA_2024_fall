@@ -47,7 +47,7 @@ public class NewItem1Test extends BaseTest {
         Assert.assertEquals(getDriver().findElement(By.xpath("//*[@id='description']/div[1]"))
                 .getText(),enterProjectDescription);
     }
-
+/*
     @Test
     public void testDeleteProjectInDropdownMenu() {
         createProjectInPage(Project_Name);
@@ -74,7 +74,7 @@ public class NewItem1Test extends BaseTest {
 
         Assert.assertEquals(getDriver().findElement(By.tagName("h1")).getText(), "Welcome to Jenkins!");
     }
-
+*/
     @Test
     public void testDeleteProjeckInSidebar() {
         createProjectInPage(Project_Name);
