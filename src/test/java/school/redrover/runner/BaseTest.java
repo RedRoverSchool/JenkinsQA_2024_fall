@@ -54,7 +54,9 @@ public abstract class BaseTest {
             File screenshot = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
             File destinationPath = new File("screenshots", testResult.getName() + ".png");
             try {
-                Files.createDirectories(Paths.get("screenshots"));
+                if (!destinationPath.getParentFile().exists()) {
+                    Files.createDirectories(Paths.get("screenshots"));
+                }
                 FileUtils.copyFile(screenshot, destinationPath);
             } catch (IOException e) {
                 e.printStackTrace();
