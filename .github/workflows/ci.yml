@@ -46,7 +46,9 @@ jobs:
         run: ./.github/wait-for-jenkins.sh
 
       - name: Create screenshots directory
-        run: mkdir -p screenshots
+        run: |
+          mkdir -p screenshots
+          chmod -R 666 screenshots
 
       - name: Maven test
         run: mvn test
