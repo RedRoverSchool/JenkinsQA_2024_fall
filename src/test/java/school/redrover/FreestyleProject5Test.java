@@ -77,6 +77,7 @@ public class FreestyleProject5Test extends BaseTest {
 
         var period = getDriver().findElement(By.xpath("//*[@name='_.durationName']")).getAttribute("value");
         Assert.assertEquals(period, "minute");
+
     }
 
 }
