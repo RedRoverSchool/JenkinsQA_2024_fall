@@ -8,6 +8,7 @@ import school.redrover.runner.BaseTest;
 import static java.sql.DriverManager.getDriver;
 
 public class WelcomeTest extends BaseTest {
+
     @Test
     public void testWelcome() {
         String welcomeStr = getDriver().findElement(By.cssSelector(".empty-state-block > h1")).getText();
