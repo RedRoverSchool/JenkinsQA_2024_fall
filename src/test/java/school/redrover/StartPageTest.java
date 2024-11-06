@@ -1,5 +1,6 @@
 package school.redrover;
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -104,17 +105,16 @@ public class StartPageTest extends BaseTest {
 
         Actions actions = new Actions(getDriver());
         actions.moveToElement(getDriver().findElement(By.xpath(
-                "//tr[@id='job_NewFolder']//button[@class = 'jenkins-menu-dropdown-chevron']"))).perform();
+                "//span[text()='NewFolder']"))).perform();
 
+        WebElement button = wait.until(ExpectedConditions.visibilityOfElementLocated(By.
+                xpath("//button[@data-href = 'http://localhost:8080/job/NewFolder/']")));
+                button.click();
 
-        WebElement folderChevron = wait.until(ExpectedConditions.elementToBeClickable(getDriver().findElement(By.xpath(
-                "//tr[@id='job_NewFolder']//button[@class = 'jenkins-menu-dropdown-chevron']"))));
-        actions.moveToElement(folderChevron);
-        folderChevron.click();
-
-        WebElement buttonDelete = wait.until(ExpectedConditions.elementToBeClickable(getDriver().findElement(By.xpath(
-                "//button[@href='/job/NewFolder/doDelete']"))));
-        buttonDelete.click();
+        WebElement buttonDelete = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(
+                "//button[@href='/job/NewFolder/doDelete']//div")));
+                actions.moveToElement(buttonDelete);
+                buttonDelete.click();
 
         WebElement buttonOk = wait.until(ExpectedConditions.elementToBeClickable(getDriver().findElement(By.xpath(
                 "//button[@data-id= 'ok']"))));
