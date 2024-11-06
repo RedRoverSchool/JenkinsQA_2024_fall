@@ -23,11 +23,7 @@ public class RenameJobDropdownTest extends BaseTest {
 
         createJob(jobName);
 
-        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(5));
-
-        Actions actionJobName = new Actions(getDriver());
-        actionJobName
-                .moveToElement(getDriver().findElement(By.xpath("//*[@id='job_TestBuild']/td[3]/a/span")));
+        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(60));
 
         Actions actionDropdownChevron = new Actions(getDriver());
         actionDropdownChevron
