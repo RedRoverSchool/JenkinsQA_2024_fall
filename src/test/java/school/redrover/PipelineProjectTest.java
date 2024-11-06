@@ -1,6 +1,7 @@
 package school.redrover;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Point;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
@@ -117,10 +118,11 @@ public class PipelineProjectTest extends BaseTest {
         });
 
         chevronButton = wait.until(ExpectedConditions.elementToBeClickable(chevronButton));
-
-        actions.moveToElement(chevronButton, chevronButton.getSize().width / 2, chevronButton.getSize().height / 2)
-                .click()
-                .perform();
+        ((JavascriptExecutor) getDriver()).executeScript("arguments[0].click();", chevronButton);
+//
+//        actions.moveToElement(chevronButton, chevronButton.getSize().width / 2, chevronButton.getSize().height / 2)
+//                .click()
+//                .perform();
 
         wait.until(ExpectedConditions.visibilityOfElementLocated(
                 By.xpath("//a[@href='job/" + PIPELINE_NAME + "/']//button[@class='jenkins-menu-dropdown-chevron']")));
