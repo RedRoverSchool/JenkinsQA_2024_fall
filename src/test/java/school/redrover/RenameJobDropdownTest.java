@@ -20,7 +20,36 @@ public class RenameJobDropdownTest extends BaseTest {
         final String jobName = "TestBuild";
         final String jobNewName = "TestBuild_NewName";
 
+
+
         createJob(jobName);
+        findEndClickLinkInDropdown(jobName, "Rename");
+        renameJob(jobNewName);
+
+        Assert.assertEquals(getDriver().findElement(By
+                        .xpath("//*[@class='jenkins-table__link model-link inside']"))
+                .getText(), jobNewName);
+
+    }
+
+    private void renameJob(String jobNewName) {
+        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(10));
+
+        WebElement inputFieldNewName = wait
+                .until(ExpectedConditions.elementToBeClickable(By.xpath("//input[@name='newName']")));
+        inputFieldNewName.clear();
+        inputFieldNewName.sendKeys(jobNewName);
+
+        Actions actionsRenameButton = new Actions(getDriver());
+        actionsRenameButton.moveToElement(getDriver().findElement(By.xpath("//*[@id='bottom-sticker']/div/button")))
+                .click()
+                .perform();
+
+        getDriver().findElement(By.id("jenkins-home-link")).click();
+
+    }
+
+    private void findEndClickLinkInDropdown(String jobName, String linkName ) {
 
         WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(10));
 
@@ -35,28 +64,20 @@ public class RenameJobDropdownTest extends BaseTest {
         List<WebElement> dropdownLinks = getDriver().findElements(By.xpath("//div[@class='tippy-content']//a"));
         List<WebElement> dropdownButtons = getDriver().findElements(By.xpath("//div[@class='tippy-content']//button"));
 
+
         for (WebElement dropdownLink : dropdownLinks) {
-            if (dropdownLink.getText().equals("Rename")) {
-                dropdownLink.click();
-                break;
+            if (dropdownLink.getText().equals(linkName )) {
+                clickLinkInDropdown(dropdownLink);
             }
         }
+    }
 
-        WebElement inputFieldNewName = wait
-                .until(ExpectedConditions.elementToBeClickable(By.xpath("//input[@name='newName']")));
-        inputFieldNewName.clear();
-        inputFieldNewName.sendKeys(jobNewName);
+    private void clickLinkInDropdown(WebElement dropdownLink) {
 
-        Actions actionsRenameButton = new Actions(getDriver());
-        actionsRenameButton.moveToElement(getDriver().findElement(By.xpath("//*[@id='bottom-sticker']/div/button")))
+        Actions actionsDropdownLink = new Actions(getDriver());
+        actionsDropdownLink.moveToElement(dropdownLink)
                 .click()
                 .perform();
-
-        getDriver().findElement(By.id("jenkins-home-link")).click();
-
-        Assert.assertEquals(getDriver().findElement(By
-                        .xpath("//*[@class='jenkins-table__link model-link inside']"))
-                .getText(), jobNewName);
 
     }
 
