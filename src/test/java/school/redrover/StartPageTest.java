@@ -1,6 +1,5 @@
 package school.redrover;
 import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -61,6 +60,10 @@ public class StartPageTest extends BaseTest {
     public void testCheckLinksSidePanel() {
 
         List<WebElement> startPageSideContent = getDriver().findElements(By.xpath("//a[contains(@class, 'task-link-no-confirm')]"));
+
+        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(20));
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(
+                "//span[contains(text(), 'My Views')]")));
 
         Assert.assertEquals(startPageSideContent.size(), 4);
         Assert.assertEquals(startPageSideContent.get(0).getAttribute("href"), "http://localhost:8080/view/all/newJob");
