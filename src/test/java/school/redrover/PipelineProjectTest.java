@@ -18,7 +18,7 @@ import java.util.List;
 
 public class PipelineProjectTest extends BaseTest {
 
-    private static final String PIPELINE_NAME = "Name";
+    private static final String PIPELINE_NAME = "Pipeline_name";
     private static final String NEW_PROJECT_NAME = "New_Pipeline_name";
 
     private void createProjectViaSidebar(String projectName) {
@@ -106,31 +106,20 @@ public class PipelineProjectTest extends BaseTest {
         WebElement projectElement = wait.until(ExpectedConditions.visibilityOfElementLocated(
                 By.xpath("//a[@href='job/" + PIPELINE_NAME + "/']")));
 
-
-        actions.moveToElement(projectElement).pause(1000).perform();
-
-
-//        JavascriptExecutor js = (JavascriptExecutor) getDriver();
-//        js.executeScript("arguments[0].style.visibility='hidden';", projectElement);
-
+        actions.moveToElement(projectElement, projectElement.getSize().width / 2, projectElement.getSize().height / 2)
+                .pause(1000)
+                .perform();
 
         WebElement chevronButton = wait.until(ExpectedConditions.visibilityOfElementLocated(
                 By.xpath("//a[@href='job/" + PIPELINE_NAME + "/']//button[@class='jenkins-menu-dropdown-chevron']")));
 
-
-        Point projectLocation = projectElement.getLocation();
-        Point chevronLocation = chevronButton.getLocation();
-
-        int offsetX = chevronLocation.getX() - projectLocation.getX();
-        int offsetY = chevronLocation.getY() - projectLocation.getY();
-
-
-        actions.moveByOffset(offsetX, offsetY).click().perform();
+        actions.scrollToElement(chevronButton).click().perform();
 
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@class='jenkins-dropdown']")));
 
         WebElement confirmRenameLink = wait.until(ExpectedConditions.elementToBeClickable(
                 By.xpath("//div[@class='jenkins-dropdown']//a[@href='/job/" + PIPELINE_NAME + "/confirm-rename']")));
+
         confirmRenameLink.click();
 
         WebElement nameInput = wait.until(ExpectedConditions.visibilityOfElementLocated(
@@ -143,6 +132,7 @@ public class PipelineProjectTest extends BaseTest {
         returnToHomePage();
         Assert.assertListContainsObject(getProjectList(), NEW_PROJECT_NAME, "Project is not renamed");
     }
+
 
     @Test
     public void testDeleteProjectViaSidebar() {
