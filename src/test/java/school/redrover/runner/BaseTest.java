@@ -28,20 +28,20 @@ public abstract class BaseTest {
         JenkinsUtils.login(driver);
     }
 
-//    @AfterMethod
-//    protected void afterMethod(Method method, ITestResult testResult) {
-//        if (ProjectUtils.isServerRun() || testResult.isSuccess() || ProjectUtils.closeBrowserIfError()) {
-//            try {
-//                JenkinsUtils.logout(driver);
-//            } catch (Exception ignore) {}
-//            driver.quit();
-//            ProjectUtils.log("Browser closed");
-//        }
-//
-//        ProjectUtils.logf(
-//                "Execution time is %.3f sec",
-//                (testResult.getEndMillis() - testResult.getStartMillis()) / 1000.0);
-//    }
+    @AfterMethod
+    protected void afterMethod(Method method, ITestResult testResult) {
+        if (ProjectUtils.isServerRun() || testResult.isSuccess() || ProjectUtils.closeBrowserIfError()) {
+            try {
+                JenkinsUtils.logout(driver);
+            } catch (Exception ignore) {}
+            driver.quit();
+            ProjectUtils.log("Browser closed");
+        }
+
+        ProjectUtils.logf(
+                "Execution time is %.3f sec",
+                (testResult.getEndMillis() - testResult.getStartMillis()) / 1000.0);
+    }
 
     protected WebDriver getDriver() {
         return driver;
