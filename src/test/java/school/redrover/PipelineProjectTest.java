@@ -99,46 +99,41 @@ public class PipelineProjectTest extends BaseTest {
         createProjectViaSidebar(PIPELINE_NAME);
         returnToHomePage();
 
-
         WebElement projectElement = getWait(getDriver()).until(ExpectedConditions.visibilityOfElementLocated(
                 By.xpath("//a[@href='job/" + PIPELINE_NAME + "/']")));
 
         Actions actions = new Actions(getDriver());
-        actions.moveToElement(projectElement)
-                .pause(1000).perform();
-
+        actions.moveToElement(projectElement).pause(1000).perform();
 
         WebElement chevronElement = getWait(getDriver()).until(
                 ExpectedConditions.presenceOfElementLocated(
                         By.cssSelector(String.format("a[href='job/%s/'] .jenkins-menu-dropdown-chevron", PIPELINE_NAME))));
 
-
         JavascriptExecutor js = (JavascriptExecutor) getDriver();
+        js.executeScript("arguments[0].scrollIntoView(true);", chevronElement);
+
+        js.executeScript("arguments[0].style.visibility='hidden';", getDriver().findElement(By.xpath("//tr[@id='job_" + PIPELINE_NAME + "']//td/a")));
+
         js.executeScript(
                 "var chevron = arguments[0]; " +
                         "chevron.classList.add('model-link--open');",
                 chevronElement
         );
 
-
         chevronElement.click();
 
-
         getWait(getDriver()).until(ExpectedConditions.elementToBeClickable(
-                By.xpath("//div[@class='jenkins-dropdown']/a[@href='/job/" + PIPELINE_NAME +"/confirm-rename']"))).click();
-
+                By.xpath("//div[@class='jenkins-dropdown']/a[@href='/job/" + PIPELINE_NAME + "/confirm-rename']"))).click();
 
         WebElement nameInput = getWait(getDriver()).until(ExpectedConditions.visibilityOfElementLocated(
                 By.xpath("//input[@checkdependson='newName']")));
         nameInput.clear();
         nameInput.sendKeys(NEW_PROJECT_NAME);
 
-
         getDriver().findElement(By.xpath("//button[@name='Submit']")).click();
+        returnToHomePage();
 
-            returnToHomePage();
-
-                Assert.assertListContainsObject(getProjectList(), NEW_PROJECT_NAME, "Project is not renamed");
+        Assert.assertListContainsObject(getProjectList(), NEW_PROJECT_NAME, "Project is not renamed");
     }
 
     @Test
