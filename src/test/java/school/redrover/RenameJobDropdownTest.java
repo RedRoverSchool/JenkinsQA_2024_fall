@@ -42,8 +42,6 @@ public class RenameJobDropdownTest extends BaseTest {
             }
         }
 
-        getDriver().get("http://localhost:8080/job/TestBuild/confirm-rename");
-
         WebElement inputFieldNewName = wait
                 .until(ExpectedConditions.elementToBeClickable(By.xpath("//input[@name='newName']")));
         inputFieldNewName.clear();
