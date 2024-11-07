@@ -109,8 +109,13 @@ public class PipelineProjectTest extends BaseTest {
                 .pause(1000)
                 .perform();
 
+        JavascriptExecutor js = (JavascriptExecutor) getDriver();
+        js.executeScript("arguments[0].style.visibility='hidden';", projectElement);
+
         WebElement chevronButton = wait.until(ExpectedConditions.visibilityOfElementLocated(
                 By.xpath("//a[@href='job/" + PIPELINE_NAME + "/']//button[@class='jenkins-menu-dropdown-chevron']")));
+
+        js.executeScript("arguments[0].style.visibility='visible'; arguments[0].style.zIndex='1000'; arguments[0].setAttribute('aria-expanded', 'true');", chevronButton);
 
         actions.moveToElement(chevronButton).click().perform();
 
@@ -131,7 +136,6 @@ public class PipelineProjectTest extends BaseTest {
         returnToHomePage();
         Assert.assertListContainsObject(getProjectList(), NEW_PROJECT_NAME, "Project is not renamed");
     }
-
 
     @Test
     public void testDeleteProjectViaSidebar() {
