@@ -45,7 +45,7 @@ public class FreestyleProject1Test extends BaseTest {
                 .xpath("//span[contains(text(),'New freestyle project')]"));
         actions.moveToElement(element).perform();
         WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(10));
-        WebElement chevron = wait.until(ExpectedConditions.visibilityOfElementLocated(By
+        WebElement chevron = wait.until(ExpectedConditions.elementToBeClickable(By
                 .xpath("//*[@id='job_New freestyle project']/td[3]/a/button")));
         actions.moveToElement(chevron).perform();
         //using js to click the middle of the element
@@ -56,7 +56,11 @@ public class FreestyleProject1Test extends BaseTest {
                         "clientY: arguments[0].getBoundingClientRect().y + 5}));", chevron);
         WebElement deleteOption = wait.until(ExpectedConditions.elementToBeClickable(
                 By.xpath("//*[contains(@href,'doDelete')]")));
-        deleteOption.click();
+        ((JavascriptExecutor) getDriver())
+                .executeScript("arguments[0].dispatchEvent(new MouseEvent('click', " +
+                        "{bubbles: true, cancelable: true, view: window, clientX: " +
+                        "arguments[0].getBoundingClientRect().x + 5, " +
+                        "clientY: arguments[0].getBoundingClientRect().y + 5}));", deleteOption);
         getDriver().findElement(By.xpath("//button[contains(text(),'Yes')]")).click();
         String emptyDashboardHeader = getDriver().findElement(By.cssSelector(".empty-state-block > h1")).getText();
         Assert.assertEquals(emptyDashboardHeader, "Welcome to Jenkins!");
