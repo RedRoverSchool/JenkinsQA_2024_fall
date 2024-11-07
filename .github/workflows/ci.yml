@@ -51,7 +51,7 @@ jobs:
           chmod -R 777 ${{ github.workspace }}/screenshots
 
       - name: List files in workspace
-        run: ls -R ${{ github.workspace }}/screenshots
+        run: ls -R ${{ github.workspace }}
 
       - name: Maven test
         run: mvn test
