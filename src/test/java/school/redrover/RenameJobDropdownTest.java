@@ -55,11 +55,24 @@ public class RenameJobDropdownTest extends BaseTest {
 
         Actions actionDropdownChevron = new Actions(getDriver());
         actionDropdownChevron
-                .moveToElement(wait
-                        .until(ExpectedConditions.visibilityOfElementLocated(By
-                                .xpath("//*[@id='job_" + jobName + "']/td[3]/a/button"))))
+//                .moveToElement(wait
+//                        .until(ExpectedConditions.visibilityOfElementLocated(By
+//                                .xpath("//*[@id='job_" + jobName + "']/td[3]/a/button"))))
+                .moveToElement(getDriver().findElement(By.xpath("//*[@id='job_" + jobName + "']/td[3]/a/button")))
+                .pause(1000)
+                .scrollToElement(getDriver().findElement(
+                       By.xpath("//a[@href='job/TestBuild/']//button[@class='jenkins-menu-dropdown-chevron']")))
+                       //By.xpath("//a[@href='job/" + jobName + "/']//button[@class='jenkins-menu-dropdown-chevron']")))
                 .click()
                 .perform();
+
+//        Actions actions = new Actions(getDriver());
+//        actions.moveToElement(projectElement)
+//                .pause(1000)
+//                .scrollToElement(getDriver().findElement(
+//                        By.xpath("//a[@href='job/" + PIPELINE_NAME + "/']//button[@class='jenkins-menu-dropdown-chevron']")))
+//                .click()
+//                .perform();
 
         List<WebElement> dropdownLinks = getDriver().findElements(By.xpath("//div[@class='tippy-content']//a"));
         List<WebElement> dropdownButtons = getDriver().findElements(By.xpath("//div[@class='tippy-content']//button"));
