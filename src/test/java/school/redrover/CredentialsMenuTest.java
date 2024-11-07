@@ -76,7 +76,7 @@ public class CredentialsMenuTest extends BaseTest {
         new Actions(getDriver()).moveToElement(userAdmin, xOffset, yOffset).click().perform();
 
         WebElement addDomainElement = new WebDriverWait(getDriver(), Duration.ofSeconds(30))
-                .until(ExpectedConditions.visibilityOfElementLocated(By.className("jenkins-dropdown__item__icon")));
+                .until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//a[@href='/user/admin/credentials/store/user/newDomain']")));
 
         assertTrue(addDomainElement.isDisplayed());
 
