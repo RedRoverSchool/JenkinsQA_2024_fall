@@ -95,28 +95,32 @@ public class PipelineProjectTest extends BaseTest {
     }
 
     @Test
-    public void testRenameProjectViaDropdownMenu() {
+    public void testRenameProjectViaDropdownMenu() throws InterruptedException {
         createProjectViaSidebar(PIPELINE_NAME);
         returnToHomePage();
 
-        WebElement projectElement = getWait(getDriver()).until(ExpectedConditions.visibilityOfElementLocated(
-                By.xpath("//a[@href='job/" + PIPELINE_NAME + "/']")));
+
+        WebElement projectElement = getWait(getDriver()).until(
+                ExpectedConditions.visibilityOfElementLocated(
+                        By.xpath("//a[@href='job/" + PIPELINE_NAME + "/']")));
+
+
+        Actions actions = new Actions(getDriver());
+        actions.moveToElement(projectElement).perform();
+
 
         WebElement chevronElement = getWait(getDriver()).until(
-                ExpectedConditions.presenceOfElementLocated(By.cssSelector(String.format("a[href='job/%s/'] .jenkins-menu-dropdown-chevron", PIPELINE_NAME))));
+                ExpectedConditions.presenceOfElementLocated(By.cssSelector(String.format("a[href='job/%s/'] .jenkins-menu-dropdown-chevron[aria-expanded='false']", PIPELINE_NAME))));
+
 
         JavascriptExecutor js = (JavascriptExecutor) getDriver();
         js.executeScript(
-                "var chevron = arguments[0]; " +
-                        "chevron.classList.add('model-link--open');",
+                "arguments[0].setAttribute('aria-expanded', 'true');",  // Меняем aria-expanded на true
                 chevronElement
         );
 
-        js.executeScript(
-                "var parent = arguments[0].parentNode; " +
-                        "parent.classList.add('model-link--open');",
-                chevronElement
-        );
+        getWait(getDriver()).until(ExpectedConditions.elementToBeClickable(chevronElement));
+
 
         chevronElement.click();
 
@@ -127,9 +131,9 @@ public class PipelineProjectTest extends BaseTest {
                 By.xpath("//input[@checkdependson='newName']")));
         nameInput.clear();
         nameInput.sendKeys(NEW_PROJECT_NAME);
-
         getDriver().findElement(By.xpath("//button[@name='Submit']")).click();
         returnToHomePage();
+
 
         Assert.assertListContainsObject(getProjectList(), NEW_PROJECT_NAME, "Project is not renamed");
     }
