@@ -113,6 +113,8 @@ public class PipelineProjectTest extends BaseTest {
                 .click()
                 .perform();
 
+        wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//button[@aria-expanded='true']")));
+
 //        wait.until(ExpectedConditions.visibilityOfElementLocated(
 //                By.xpath("//a[@href='job/" + PIPELINE_NAME + "/']//button[@class='jenkins-menu-dropdown-chevron']")));
 
