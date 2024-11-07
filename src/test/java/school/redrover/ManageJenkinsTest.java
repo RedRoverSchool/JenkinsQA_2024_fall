@@ -58,9 +58,9 @@ public class ManageJenkinsTest extends BaseTest {
     }
 
     @Test
-    public void testManageJenkinsSections(){
-        final List <String> expectedSectionsTitles=List.of("System Configuration", "Security", "Status Information",
-            "Troubleshooting", "Tools and Actions");
+    public void testManageJenkinsSections() {
+        final List<String> expectedSectionsTitles = List.of("System Configuration", "Security", "Status Information",
+                "Troubleshooting", "Tools and Actions");
 
         getDriver().findElement(By.xpath("//a[@href='/manage']")).click();
 
@@ -71,21 +71,21 @@ public class ManageJenkinsTest extends BaseTest {
     }
 
     @Test
-    public void testManageJenkinsSystemConfigurationItems(){
-        final List <String> expectedItemsNames=List.of("System", "Tools", "Plugins",
-             "Nodes", "Clouds", "Appearance");
+    public void testManageJenkinsSystemConfigurationItems() {
+        final List<String> expectedItemsNames = List.of("System", "Tools", "Plugins",
+                "Nodes", "Clouds", "Appearance");
 
         getDriver().findElement(By.xpath("//a[@href='/manage']")).click();
 
         List<WebElement> systemConfigItems = getDriver()
-                                                 .findElements(By.xpath("(//div[@class='jenkins-section__items'])[1]//dt"));
+                .findElements(By.xpath("(//div[@class='jenkins-section__items'])[1]//dt"));
         List<String> actualItemsNames = systemConfigItems.stream().map(WebElement::getText).toList();
 
         Assert.assertEquals(actualItemsNames, expectedItemsNames);
     }
 
     @Test
-    public void testManageJenkinsSystemConfigureBreadcrumbs(){
+    public void testManageJenkinsSystemConfigureBreadcrumbs() {
         final String expectedBreadCrumbs = "Dashboard\nManage Jenkins\nSystem";
 
         getDriver().findElement(By.xpath("//a[@href='/manage']")).click();
@@ -110,5 +110,30 @@ public class ManageJenkinsTest extends BaseTest {
                 By.xpath("//input[@id='settings-search-bar']"));
         Assert.assertEquals(searchField.getAttribute("placeholder"), "Search settings");
 
+    }
+
+    @Test
+    public void testSearchSystemConfigurationItems() {
+
+        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(10));
+        WebElement manageJenkinsTab = wait.until(
+                ExpectedConditions.elementToBeClickable(By.xpath("//a[span[text()='Manage Jenkins']]")));
+        manageJenkinsTab.click();
+
+        WebElement searchField = getDriver().findElement(
+                By.xpath("//input[@id='settings-search-bar']"));
+
+        List<String> itemsSystemConfiguration = Arrays.asList(
+                "System", "Tools", "Plugins", "Nodes", "Clouds", "Appearance");
+        for (String itemsSystemConfigurations : itemsSystemConfiguration) {
+            wait.until(ExpectedConditions.elementToBeClickable(searchField)).clear();
+            wait.until(ExpectedConditions.visibilityOf(searchField)).sendKeys(itemsSystemConfigurations);
+
+            WebElement searchDropdown = wait.until(
+                    ExpectedConditions.presenceOfElementLocated(By.xpath("//div[@class='jenkins-search__results']")));
+
+            Assert.assertNotNull(searchDropdown, "Item '" + itemsSystemConfigurations + "' not found in dropdown.");
+
+        }
     }
 }

@@ -3,15 +3,19 @@ package school.redrover;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import school.redrover.runner.BaseTest;
 import school.redrover.runner.ProjectUtils;
 
+import java.time.Duration;
+
 public class CreateNewViewTest extends BaseTest {
 
     @Test
-    public void testCreateNewView(){
+    public void testCreateNewView() {
         final String expectedNewViewName = "NewView";
         final String expectedNewViewUrl = ProjectUtils.getUrl() + "view/" + expectedNewViewName + "/";
 
@@ -41,7 +45,7 @@ public class CreateNewViewTest extends BaseTest {
     }
 
     @Test
-    public void testCreateNewViewForm(){
+    public void testCreateNewViewForm() {
         getDriver().findElement(By.xpath("//a[@href='newJob']")).click();
 
         getDriver().findElement(By.id("name")).sendKeys("Project");
@@ -64,8 +68,11 @@ public class CreateNewViewTest extends BaseTest {
     }
 
     @Test
-    public void testCreateNewViewInvalidInput() throws InterruptedException {
+    public void testCreateNewViewInvalidInput() {
         final String expectedErrorMessage = "is an unsafe character";
+
+        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(10));
+
         getDriver().findElement(By.xpath("//a[@href='newJob']")).click();
 
         getDriver().findElement(By.id("name")).sendKeys("Project");
@@ -79,8 +86,10 @@ public class CreateNewViewTest extends BaseTest {
         getDriver().findElement(By.id("name")).sendKeys("$%^");
         getDriver().findElement(By.id("name")).sendKeys(Keys.ENTER);
 
-        Thread.sleep(1000);
-        String actualErrorMessage = getDriver().findElement(By.xpath("//div[@class='error']")).getText().substring(4);
+        WebElement errorMessage = wait.until(
+            ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@class='error']")));
+
+        String actualErrorMessage = errorMessage.getText().substring(4);
 
         Assert.assertEquals(actualErrorMessage, expectedErrorMessage);
     }
