@@ -7,7 +7,7 @@ import org.testng.annotations.Test;
 import school.redrover.runner.BaseTest;
 import school.redrover.runner.ProjectUtils;
 
-public class CreatingNewItemTest extends BaseTest {
+public class CreateNewItem2Test extends BaseTest {
 
     @Test
     public void testCreateFreestyleProject() throws InterruptedException {
