@@ -1,6 +1,7 @@
 package school.redrover;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
@@ -16,7 +17,7 @@ import java.util.List;
 
 public class PipelineProjectTest extends BaseTest {
 
-    private static final String PIPELINE_NAME = "Pipeline_name";
+    private static final String PIPELINE_NAME = "Pipeline";
     private static final String NEW_PROJECT_NAME = "New_Pipeline_name";
 
     private void createProjectViaSidebar(String projectName) {
@@ -103,14 +104,17 @@ public class PipelineProjectTest extends BaseTest {
 
         Actions actions = new Actions(getDriver());
         actions.moveToElement(projectElement)
-                .pause(1000)
-                .scrollToElement(getDriver().findElement(
-                        By.xpath("//a[@href='job/" + PIPELINE_NAME + "/']//button[@class='jenkins-menu-dropdown-chevron']")))
-                .click()
-                .perform();
+                .pause(1000).perform();
+//                .moveToElement(getDriver().findElement(
+//                        By.cssSelector(String.format("a[href='job/%s/'] .jenkins-menu-dropdown-chevron", PIPELINE_NAME))))
+ WebElement chevronElement = getWait(getDriver()).until(
+         ExpectedConditions.presenceOfElementLocated(By.cssSelector(String.format("a[href='job/%s/'] .jenkins-menu-dropdown-chevron", PIPELINE_NAME))));
+        JavascriptExecutor js = (JavascriptExecutor) getDriver();
+        js.executeScript("arguments[0].style.display = 'block';", chevronElement);
+                chevronElement.click();
 
         getWait(getDriver()).until(ExpectedConditions.elementToBeClickable(
-                By.xpath("//a[@href='/job/Pipeline_name/confirm-rename']"))).click();
+                By.xpath("//div[@class='jenkins-dropdown']/a[@href='/job/" + PIPELINE_NAME +"/confirm-rename']"))).click();
 
         WebElement nameInput = getWait(getDriver()).until(ExpectedConditions.visibilityOfElementLocated(
                 By.xpath("//input[@checkdependson='newName']")));
