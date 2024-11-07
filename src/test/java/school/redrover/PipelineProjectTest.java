@@ -95,37 +95,43 @@ public class PipelineProjectTest extends BaseTest {
     }
 
     @Test
-    public void testRenameProjectViaDropdownMenu() throws InterruptedException {
+    public void testRenameProjectViaDropdownMenu() {
         createProjectViaSidebar(PIPELINE_NAME);
         returnToHomePage();
 
-              WebElement projectElement = getWait(getDriver()).until(ExpectedConditions.visibilityOfElementLocated(
+        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(10));
+        Actions actions = new Actions(getDriver());
+
+        WebElement projectElement = wait.until(ExpectedConditions.visibilityOfElementLocated(
                 By.xpath("//a[@href='job/" + PIPELINE_NAME + "/']")));
 
+        actions.moveToElement(projectElement)
+                .pause(1000)
+                .perform();
 
-        Actions actions = new Actions(getDriver());
-        actions.moveToElement(projectElement).pause(1000).perform();
+        WebElement chevronButton = wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//a[@href='job/" + PIPELINE_NAME + "/']//button[@class='jenkins-menu-dropdown-chevron']")));
 
+        actions.moveToElement(chevronButton).click().perform();
 
-        WebElement chevronElement = getWait(getDriver()).until(
-                ExpectedConditions.presenceOfElementLocated(By.cssSelector(String.format("a[href='job/%s/'] .jenkins-menu-dropdown-chevron", PIPELINE_NAME))));
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@class='jenkins-dropdown']")));
 
-        JavascriptExecutor js = (JavascriptExecutor) getDriver();
-        js.executeScript("arguments[0].style.pointerEvents = 'none';", projectElement);
+        WebElement confirmRenameLink = wait.until(ExpectedConditions.elementToBeClickable(
+                By.xpath("//div[@class='jenkins-dropdown']//a[@href='/job/" + PIPELINE_NAME + "/confirm-rename']")));
 
+        confirmRenameLink.click();
 
-        js.executeScript("arguments[0].setAttribute('aria-expanded', 'true');", chevronElement);
+        WebElement nameInput = wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//input[@checkdependson='newName']")));
+        nameInput.clear();
+        nameInput.sendKeys(NEW_PROJECT_NAME);
 
+        getDriver().findElement(By.xpath("//button[@name='Submit']")).click();
 
-        getWait(getDriver()).until(ExpectedConditions.elementToBeClickable(chevronElement));
-
-
-        chevronElement.click();
-
-
-        getWait(getDriver()).until(ExpectedConditions.elementToBeClickable(
-                By.xpath("//div[@class='jenkins-dropdown']/a[@href='/job/" + PIPELINE_NAME + "/confirm-rename']"))).click();
+        returnToHomePage();
+        Assert.assertListContainsObject(getProjectList(), NEW_PROJECT_NAME, "Project is not renamed");
     }
+
 
     @Test
     public void testDeleteProjectViaSidebar() {
