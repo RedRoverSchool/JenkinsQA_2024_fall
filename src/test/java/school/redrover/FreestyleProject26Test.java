@@ -63,6 +63,7 @@ public class FreestyleProject26Test extends BaseTest {
         Thread.sleep(2000);
         WebElement dropDownButton = linkByName.findElement(By.cssSelector("button"));
         new WebDriverWait(getDriver(), Duration.ofMillis(2000L)).until(ExpectedConditions.elementToBeClickable(dropDownButton)).click();
+        Thread.sleep(5000);
 
         List<WebElement> jobItems = getDriver().findElements(By.xpath("//button[@class = 'jenkins-dropdown__item ']"));
         for (WebElement item : jobItems) {
