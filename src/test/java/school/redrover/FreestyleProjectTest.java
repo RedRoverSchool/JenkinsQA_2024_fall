@@ -49,7 +49,7 @@ public class FreestyleProjectTest extends BaseTest {
                 )
         );
 
-        Assert.assertEquals(freestyleProjectItem.getText(), PROJECT_NAME);
+        Assert.assertEquals(freestyleProjectItem.getText(), PROJECT_NAME+1);
     }
 
     @Test
@@ -61,7 +61,7 @@ public class FreestyleProjectTest extends BaseTest {
 
         Assert.assertEquals(getDriver()
                 .findElement(By.id("itemname-required"))
-                .getText(), "» This field cannot be empty, please enter a valid name");
+                .getText(), "» This field cannot be empty, please enter a valid name-");
     }
 
     @Test
@@ -215,5 +215,4 @@ public class FreestyleProjectTest extends BaseTest {
                 .findElement(By.xpath(String.format("//span[text()='%s']", PROJECT_NAME)))
                 .getText(), PROJECT_NAME);
     }
-
 }
