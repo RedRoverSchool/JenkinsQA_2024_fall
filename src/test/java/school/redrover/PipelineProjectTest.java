@@ -1,9 +1,7 @@
 package school.redrover;
 
 import org.openqa.selenium.By;
-import org.openqa.selenium.ElementNotInteractableException;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.Point;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -46,6 +44,10 @@ public class PipelineProjectTest extends BaseTest {
                 .stream()
                 .map(WebElement::getText)
                 .toList();
+    }
+
+    private static WebDriverWait getWait(WebDriver driver) {
+        return new WebDriverWait(driver, Duration.ofSeconds(20));
     }
 
     @Test
@@ -92,66 +94,29 @@ public class PipelineProjectTest extends BaseTest {
     }
 
     @Test
-    public void testRenameProjectViaDropdownMenu() throws InterruptedException {
+    public void testRenameProjectViaDropdownMenu() {
         createProjectViaSidebar(PIPELINE_NAME);
         returnToHomePage();
 
-        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(20));
-        Actions actions = new Actions(getDriver());
-
-        WebElement projectElement = wait.until(ExpectedConditions.visibilityOfElementLocated(
+        WebElement projectElement = getWait(getDriver()).until(ExpectedConditions.visibilityOfElementLocated(
                 By.xpath("//a[@href='job/" + PIPELINE_NAME + "/']")));
 
-        actions
-                .moveToElement(getDriver().findElement(
-                        By.xpath("//a[@href='job/" + PIPELINE_NAME + "/']")))
+        Actions actions = new Actions(getDriver());
+        actions.moveToElement(projectElement)
                 .pause(1000)
-                .moveToElement(getDriver().findElement(
-                        By.cssSelector("a[href='job/" + PIPELINE_NAME + "/'] button.jenkins-menu-dropdown-chevron")))
+                .scrollToElement(getDriver().findElement(
+                        By.xpath("//a[@href='job/" + PIPELINE_NAME + "/']//button[@class='jenkins-menu-dropdown-chevron']")))
                 .click()
                 .perform();
 
-//        actions.moveToElement(projectElement, projectElement.getSize().width / 2, projectElement.getSize().height / 2)
-//                .pause(1000)
-//                .perform();
-//
-//        WebElement chevronButton = wait.until(ExpectedConditions.elementToBeClickable(
-//                By.xpath("//a[@href='job/" + PIPELINE_NAME + "/']//button[@class='jenkins-menu-dropdown-chevron']")));
-//
-//        wait.until(ExpectedConditions.attributeToBe(chevronButton, "aria-expanded", "false"));
-//
-//        if (chevronButton.isDisplayed() && chevronButton.isEnabled()) {
-//            actions.moveToElement(chevronButton, chevronButton.getSize().width / 2, chevronButton.getSize().height / 2)
-//                    .pause(2000)
-//                    .click()
-//                    .perform();
-//        } else {
-//            throw new ElementNotInteractableException("Chevron button is not interactable");
-//        }
-////
-////        actions.moveToElement(chevronButton, chevronButton.getSize().width / 2, chevronButton.getSize().height / 2)
-////                .pause(1000)
-////                .click()
-////                .perform();
-//
-//  //      wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//button[@aria-expanded='true']")));
-//
-////        wait.until(ExpectedConditions.visibilityOfElementLocated(
-////                By.xpath("//a[@href='job/" + PIPELINE_NAME + "/']//button[@class='jenkins-menu-dropdown-chevron']")));
-//
-//        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@class='jenkins-dropdown']")));
+        getWait(getDriver()).until(ExpectedConditions.elementToBeClickable(
+                By.xpath("//a[@href='/job/Pipeline_name/confirm-rename']"))).click();
 
-        WebElement confirmRenameLink = wait.until(ExpectedConditions.elementToBeClickable(
-                By.xpath("//a[@href='/job/Pipeline_name/confirm-rename']")));
-        confirmRenameLink.click();
-
-        WebElement nameInput = wait.until(ExpectedConditions.visibilityOfElementLocated(
+        WebElement nameInput = getWait(getDriver()).until(ExpectedConditions.visibilityOfElementLocated(
                 By.xpath("//input[@checkdependson='newName']")));
         nameInput.clear();
         nameInput.sendKeys(NEW_PROJECT_NAME);
-
         getDriver().findElement(By.xpath("//button[@name='Submit']")).click();
-
         returnToHomePage();
         Assert.assertListContainsObject(getProjectList(), NEW_PROJECT_NAME, "Project is not renamed");
     }
