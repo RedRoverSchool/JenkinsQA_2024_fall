@@ -57,8 +57,10 @@ jobs:
           APP_OPTIONS: host=localhost;port=8080;admin.username=${{ secrets.ADMIN_USERNAME }};admin.password=${{ secrets.ADMIN_PASSWORD }}
           CI_RUN: true
 
+      - name: List files in workspace
+        run: ls -R ${{ github.workspace }}
+
       - name: Attach screenshots
-        if: failure()
         uses: actions/upload-artifact@v4
         with:
           name: screenshots
