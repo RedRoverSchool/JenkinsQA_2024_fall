@@ -112,7 +112,7 @@ public class PipelineProjectTest extends BaseTest {
         JavascriptExecutor js = (JavascriptExecutor) getDriver();
         js.executeScript("arguments[0].scrollIntoView(true);", chevronElement);
 
-        js.executeScript("arguments[0].style.visibility='hidden';", getDriver().findElement(By.xpath("//tr[@id='job_" + PIPELINE_NAME + "']//td/a")));
+        js.executeScript("arguments[0].style.visibility='hidden';", getDriver().findElement(By.xpath("//tr[@id='job_" + PIPELINE_NAME + "']//td")));
 
         js.executeScript(
                 "var chevron = arguments[0]; " +
