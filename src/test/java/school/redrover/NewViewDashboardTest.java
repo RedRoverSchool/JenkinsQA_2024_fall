@@ -29,8 +29,9 @@ public class NewViewDashboardTest extends BaseTest {
         getDriver().findElement(By.cssSelector(".hudson_model_FreeStyleProject")).click();
         getDriver().findElement(By.id("ok-button")).click();
 
-        Thread.sleep(2000);
-        getDriver().findElement(By.name("Submit")).click();
+        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofMillis(2000));
+        WebElement submitButton = wait.until(ExpectedConditions.visibilityOfElementLocated(By.name("Submit")));
+        submitButton.click();
         getDriver().findElement(By.xpath("//a[text() = 'Dashboard']")).click();
 
         getDriver().findElement(By.linkText("My Views")).click();
