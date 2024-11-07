@@ -1,6 +1,7 @@
 package school.redrover;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -47,6 +48,24 @@ public class MultiConfigurationProjectTest extends BaseTest {
 
         Assert.assertEquals(getDriver().findElement(By.xpath("//div[@id='description']/div[1]")).getText(), DESCRIPTIONS);
 
-
     }
+
+    @Test
+    public void testCreateProjectWithoutName() {
+        final String errorMessage = "This field cannot be empty";
+
+        getDriver().findElement(By.xpath("//a[@href='/view/all/newJob']")).click();
+        getDriver().findElement(By.className("hudson_matrix_MatrixProject")).click();
+
+        String actualErrorMessage = getDriver().findElement(By.id("itemname-required")).getText();
+
+        JavascriptExecutor js = (JavascriptExecutor) getDriver();
+        js.executeScript("window.scrollTo(0, document.body.scrollHeight);");
+
+        WebElement okButton = getDriver().findElement(By.id("ok-button"));
+
+        Assert.assertTrue(actualErrorMessage.contains(errorMessage));
+        Assert.assertFalse(okButton.isEnabled());
+    }
+
 }
