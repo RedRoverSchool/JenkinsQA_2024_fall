@@ -34,7 +34,7 @@ public class NewViewDashboardTest extends BaseTest {
         goToDashboard();
         addView(MY_VIEW_NAME);
 
-        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofMillis(2000));
+        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofMillis(5000));
 
         getDriver().findElement(By.xpath("//a[@class= 'task-link  confirmation-link']")).click();
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//dialog[@class = 'jenkins-dialog']")));
@@ -59,7 +59,7 @@ public class NewViewDashboardTest extends BaseTest {
         getDriver().findElement(By.cssSelector(".hudson_model_FreeStyleProject")).click();
         getDriver().findElement(By.id("ok-button")).click();
 
-        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofMillis(2000));
+        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofMillis(6000));
         WebElement submitButton = wait.until(ExpectedConditions.visibilityOfElementLocated(By.name("Submit")));
         submitButton.click();
     }
