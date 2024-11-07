@@ -49,7 +49,7 @@ public class FreestyleProjectTest extends BaseTest {
                 )
         );
 
-        Assert.assertEquals(freestyleProjectItem.getText(), PROJECT_NAME+1);
+        Assert.assertEquals(freestyleProjectItem.getText(), PROJECT_NAME);
     }
 
     @Test
