@@ -102,35 +102,44 @@ public class PipelineProjectTest extends BaseTest {
         WebElement projectElement = wait.until(ExpectedConditions.visibilityOfElementLocated(
                 By.xpath("//a[@href='job/" + PIPELINE_NAME + "/']")));
 
-        actions.moveToElement(projectElement, projectElement.getSize().width / 2, projectElement.getSize().height / 2)
+        actions
+                .moveToElement(getDriver().findElement(
+                        By.xpath("//a[@href='job/" + PIPELINE_NAME + "/']")))
                 .pause(1000)
+                .scrollToElement(getDriver().findElement(
+                        By.xpath("//a[@href='job/" + PIPELINE_NAME + "/']//button[@class='jenkins-menu-dropdown-chevron']")))
+                .click()
                 .perform();
 
-        WebElement chevronButton = wait.until(ExpectedConditions.elementToBeClickable(
-                By.xpath("//a[@href='job/" + PIPELINE_NAME + "/']//button[@class='jenkins-menu-dropdown-chevron']")));
-
-        wait.until(ExpectedConditions.attributeToBe(chevronButton, "aria-expanded", "false"));
-
-        if (chevronButton.isDisplayed() && chevronButton.isEnabled()) {
-            actions.moveToElement(chevronButton, chevronButton.getSize().width / 2, chevronButton.getSize().height / 2)
-                    .pause(2000)
-                    .click()
-                    .perform();
-        } else {
-            throw new ElementNotInteractableException("Chevron button is not interactable");
-        }
-//
-//        actions.moveToElement(chevronButton, chevronButton.getSize().width / 2, chevronButton.getSize().height / 2)
+//        actions.moveToElement(projectElement, projectElement.getSize().width / 2, projectElement.getSize().height / 2)
 //                .pause(1000)
-//                .click()
 //                .perform();
-
-  //      wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//button[@aria-expanded='true']")));
-
-//        wait.until(ExpectedConditions.visibilityOfElementLocated(
+//
+//        WebElement chevronButton = wait.until(ExpectedConditions.elementToBeClickable(
 //                By.xpath("//a[@href='job/" + PIPELINE_NAME + "/']//button[@class='jenkins-menu-dropdown-chevron']")));
-
-        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@class='jenkins-dropdown']")));
+//
+//        wait.until(ExpectedConditions.attributeToBe(chevronButton, "aria-expanded", "false"));
+//
+//        if (chevronButton.isDisplayed() && chevronButton.isEnabled()) {
+//            actions.moveToElement(chevronButton, chevronButton.getSize().width / 2, chevronButton.getSize().height / 2)
+//                    .pause(2000)
+//                    .click()
+//                    .perform();
+//        } else {
+//            throw new ElementNotInteractableException("Chevron button is not interactable");
+//        }
+////
+////        actions.moveToElement(chevronButton, chevronButton.getSize().width / 2, chevronButton.getSize().height / 2)
+////                .pause(1000)
+////                .click()
+////                .perform();
+//
+//  //      wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//button[@aria-expanded='true']")));
+//
+////        wait.until(ExpectedConditions.visibilityOfElementLocated(
+////                By.xpath("//a[@href='job/" + PIPELINE_NAME + "/']//button[@class='jenkins-menu-dropdown-chevron']")));
+//
+//        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@class='jenkins-dropdown']")));
 
         WebElement confirmRenameLink = wait.until(ExpectedConditions.elementToBeClickable(
                 By.xpath("//a[@href='/job/Pipeline_name/confirm-rename']")));
