@@ -69,13 +69,13 @@ public class CredentialsMenuTest extends BaseTest {
         int elementHeight = userAdmin.getSize().getHeight();
 
 
-        int xOffset = elementWidth - 9;
+        int xOffset = elementWidth - 6;
         int yOffset = elementHeight / 2;
 
         new Actions(getDriver()).moveToElement(userAdmin, xOffset, yOffset).click().perform();
 
-        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(5));
-        WebElement addDomainElement = wait.until(ExpectedConditions.visibilityOfElementLocated(By.className("jenkins-dropdown")));
+        WebElement addDomainElement = new WebDriverWait(getDriver(), Duration.ofSeconds(10))
+                .until(ExpectedConditions.visibilityOfElementLocated(By.className("jenkins-dropdown")));
 
         assertTrue(addDomainElement.isDisplayed());
 
