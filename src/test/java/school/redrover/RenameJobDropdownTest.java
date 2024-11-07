@@ -62,7 +62,7 @@ public class RenameJobDropdownTest extends BaseTest {
 
         WebElement inputFieldNewName = wait
                 .until(ExpectedConditions
-                        .visibilityOfElementLocated(By.xpath("//input[@name='newName']")));
+                        .elementToBeClickable(By.xpath("//input[@name='newName']")));
         inputFieldNewName.clear();
         inputFieldNewName.sendKeys(jobNewName);
 
