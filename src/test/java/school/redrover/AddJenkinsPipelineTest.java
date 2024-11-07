@@ -12,7 +12,7 @@ import school.redrover.runner.BaseTest;
 public class AddJenkinsPipelineTest extends BaseTest {
 
     @Test
-    public void createMultiConfigProjectTest() {
+    public void testCreateMultiConfigProject() {
          getDriver().findElement(By.linkText("New Item")).click();
 
          getDriver().findElement(By.id("name")).sendKeys("Multi project");
@@ -35,13 +35,12 @@ public class AddJenkinsPipelineTest extends BaseTest {
 
          WebElement nameLink = getDriver().findElement(By.xpath("//*[@id='main-panel']/div[1]/div[1]/h1"));
          String actualText = nameLink.getText();
-         String expectedText = "Multi project";
-         Assert.assertEquals(expectedText, actualText);
 
          WebElement linkGitHub = getDriver().findElement(By.cssSelector("#tasks > div:nth-child(7) > span > a"));
          linkGitHub.click();
          String actualUrl = getDriver().getCurrentUrl();
-         String expectedUrl = "https://github.com/dema28/DenisNovicov/";
-         Assert.assertEquals(actualUrl,expectedUrl, "The link conversion did not lead to the expected URL.");
+
+         Assert.assertEquals(actualText, "Multi project");
+         Assert.assertEquals(actualUrl, "https://github.com/dema28/DenisNovicov/", "The link conversion did not lead to the expected URL.");
     }
 }

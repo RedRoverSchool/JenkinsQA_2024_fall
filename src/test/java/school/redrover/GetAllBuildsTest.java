@@ -9,10 +9,10 @@ public class GetAllBuildsTest extends BaseTest {
 
     @Test
     public void testButtonBuilds() {
-        getDriver().findElement(By.xpath("//div[@class='task '][2]/span/a")).click();
+        getDriver().findElement(By.xpath("//a[contains(@href, '/view/all/builds')]")).click();
 
-        String title = getDriver().findElement(By.xpath("//div[@class='jenkins-app-bar__content']")).getText();
+        String header = getDriver().findElement(By.xpath("//h1")).getText();
 
-        Assert.assertEquals(title, "Build History of Jenkins");
+        Assert.assertEquals(header, "Build History of Jenkins");
     }
 }
