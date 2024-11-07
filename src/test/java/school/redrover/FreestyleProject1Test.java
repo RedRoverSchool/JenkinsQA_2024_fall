@@ -39,21 +39,25 @@ public class FreestyleProject1Test extends BaseTest {
     public void testDeleteFreestyleProject() throws InterruptedException {
         createFreestyleProject();
         getDriver().findElement(By.id("jenkins-name-icon")).click();
+//        Thread.sleep(3000);
         Actions actions = new Actions(getDriver());
         //hover over project title to activate menu dropdown
         WebElement element = getDriver().findElement(By
                 .xpath("//span[contains(text(),'New freestyle project')]"));
         actions.moveToElement(element).perform();
+//        Thread.sleep(3000);
         WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(10));
         WebElement chevron = wait.until(ExpectedConditions.elementToBeClickable(By
                 .xpath("//*[@id='job_New freestyle project']/td[3]/a/button")));
         actions.moveToElement(chevron).perform();
+//        Thread.sleep(3000);
         //using js to click the middle of the element
         ((JavascriptExecutor) getDriver())
                 .executeScript("arguments[0].dispatchEvent(new MouseEvent('click', " +
                         "{bubbles: true, cancelable: true, view: window, clientX: " +
                         "arguments[0].getBoundingClientRect().x + 5, " +
                         "clientY: arguments[0].getBoundingClientRect().y + 5}));", chevron);
+        Thread.sleep(3000);
         WebElement deleteOption = wait.until(ExpectedConditions.elementToBeClickable(
                 By.xpath("//*[contains(@href,'doDelete')]")));
         ((JavascriptExecutor) getDriver())
@@ -61,7 +65,9 @@ public class FreestyleProject1Test extends BaseTest {
                         "{bubbles: true, cancelable: true, view: window, clientX: " +
                         "arguments[0].getBoundingClientRect().x + 5, " +
                         "clientY: arguments[0].getBoundingClientRect().y + 5}));", deleteOption);
+//        Thread.sleep(3000);
         getDriver().findElement(By.xpath("//button[contains(text(),'Yes')]")).click();
+//        Thread.sleep(3000);
         String emptyDashboardHeader = getDriver().findElement(By.cssSelector(".empty-state-block > h1")).getText();
         Assert.assertEquals(emptyDashboardHeader, "Welcome to Jenkins!");
     }
