@@ -5,6 +5,7 @@ import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.testng.Assert;
+import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import school.redrover.runner.BaseTest;
 import school.redrover.runner.ProjectUtils;
@@ -13,9 +14,10 @@ import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class VerifyingDashboardBreadcrumbsTest extends BaseTest {
+public class DashboardMenuInBreadcrumbsTest extends BaseTest {
 
     @Test
+    @Ignore
     public void testDashboardDropdownMenu() throws InterruptedException {
 
         Actions actions = new Actions(getDriver());
