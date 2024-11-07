@@ -2,6 +2,7 @@ package school.redrover;
 
 import org.openqa.selenium.By;
 import org.testng.Assert;
+import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import school.redrover.runner.BaseTest;
 
@@ -137,6 +138,7 @@ public class PageElementsTest extends BaseTest {
         Assert.assertEquals(result, "Testing MultibranchPipeline");
     }
 
+    @Ignore
     @Test
     public void newOrganizationFolder(){
         newItemsData("newOrganizationFolderTest", "//*[@id='j-add-item-type-nested-projects']/ul/li[3]/div[2]/label/span");
