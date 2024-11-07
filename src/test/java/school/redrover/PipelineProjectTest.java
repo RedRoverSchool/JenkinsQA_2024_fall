@@ -106,8 +106,8 @@ public class PipelineProjectTest extends BaseTest {
                 .moveToElement(getDriver().findElement(
                         By.xpath("//a[@href='job/" + PIPELINE_NAME + "/']")))
                 .pause(1000)
-                .scrollToElement(getDriver().findElement(
-                        By.xpath("//a[@href='job/" + PIPELINE_NAME + "/']//button[@class='jenkins-menu-dropdown-chevron']")))
+                .moveToElement(getDriver().findElement(
+                        By.cssSelector("a[href='job/" + PIPELINE_NAME + "/'] button.jenkins-menu-dropdown-chevron")))
                 .click()
                 .perform();
 
