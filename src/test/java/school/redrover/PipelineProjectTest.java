@@ -95,39 +95,50 @@ public class PipelineProjectTest extends BaseTest {
     }
 
     @Test
-    public void testRenameProjectViaDropdownMenu() throws InterruptedException {
+    public void testRenameProjectViaDropdownMenu() {
         createProjectViaSidebar(PIPELINE_NAME);
         returnToHomePage();
+
 
         WebElement projectElement = getWait(getDriver()).until(ExpectedConditions.visibilityOfElementLocated(
                 By.xpath("//a[@href='job/" + PIPELINE_NAME + "/']")));
 
         Actions actions = new Actions(getDriver());
         actions.moveToElement(projectElement)
-                .pause(1000)
-                .perform();
+                .pause(1000).perform();
+
 
         WebElement chevronElement = getWait(getDriver()).until(
-                ExpectedConditions.presenceOfElementLocated(By.cssSelector(String.format("a[href='job/%s/'] .jenkins-menu-dropdown-chevron", PIPELINE_NAME))));
+                ExpectedConditions.presenceOfElementLocated(
+                        By.cssSelector(String.format("a[href='job/%s/'] .jenkins-menu-dropdown-chevron", PIPELINE_NAME))));
 
 
         JavascriptExecutor js = (JavascriptExecutor) getDriver();
-        js.executeScript("arguments[0].style.visibility = 'visible'; arguments[0].style.display = 'block';", chevronElement);
+        js.executeScript(
+                "var chevron = arguments[0]; " +
+                        "chevron.classList.add('model-link--open');",
+                chevronElement
+        );
 
-        Thread.sleep(1000);
 
         chevronElement.click();
 
+
         getWait(getDriver()).until(ExpectedConditions.elementToBeClickable(
-                By.xpath("//div[@class='jenkins-dropdown']/a[@href='/job/" + PIPELINE_NAME + "/confirm-rename']"))).click();
+                By.xpath("//div[@class='jenkins-dropdown']/a[@href='/job/" + PIPELINE_NAME +"/confirm-rename']"))).click();
+
 
         WebElement nameInput = getWait(getDriver()).until(ExpectedConditions.visibilityOfElementLocated(
                 By.xpath("//input[@checkdependson='newName']")));
         nameInput.clear();
         nameInput.sendKeys(NEW_PROJECT_NAME);
+
+
         getDriver().findElement(By.xpath("//button[@name='Submit']")).click();
-        returnToHomePage();
-        Assert.assertListContainsObject(getProjectList(), NEW_PROJECT_NAME, "Project is not renamed");
+
+            returnToHomePage();
+
+                Assert.assertListContainsObject(getProjectList(), NEW_PROJECT_NAME, "Project is not renamed");
     }
 
     @Test
