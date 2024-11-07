@@ -119,6 +119,9 @@ public class PipelineProjectTest extends BaseTest {
             throw new AssertionError("Chevron is not visible!");
         }
 
+        JavascriptExecutor js = (JavascriptExecutor) getDriver();
+        js.executeScript("document.querySelector('tr#job_" + PIPELINE_NAME + " td:nth-child(3)').style.visibility = 'hidden';");
+
         actions.scrollToElement(chevronButton).click().perform();
 
        wait.until(ExpectedConditions.visibilityOfElementLocated(
