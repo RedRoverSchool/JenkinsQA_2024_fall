@@ -2,6 +2,7 @@ package school.redrover;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.Point;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
@@ -105,25 +106,31 @@ public class PipelineProjectTest extends BaseTest {
         WebElement projectElement = wait.until(ExpectedConditions.visibilityOfElementLocated(
                 By.xpath("//a[@href='job/" + PIPELINE_NAME + "/']")));
 
-        actions.moveToElement(projectElement)
-                .pause(1000)
-                .perform();
 
-        JavascriptExecutor js = (JavascriptExecutor) getDriver();
-        js.executeScript("arguments[0].style.visibility='hidden';", projectElement);
+        actions.moveToElement(projectElement).pause(1000).perform();
+
+
+//        JavascriptExecutor js = (JavascriptExecutor) getDriver();
+//        js.executeScript("arguments[0].style.visibility='hidden';", projectElement);
+
 
         WebElement chevronButton = wait.until(ExpectedConditions.visibilityOfElementLocated(
                 By.xpath("//a[@href='job/" + PIPELINE_NAME + "/']//button[@class='jenkins-menu-dropdown-chevron']")));
 
-        js.executeScript("arguments[0].style.visibility='visible'; arguments[0].style.zIndex='1000'; arguments[0].setAttribute('aria-expanded', 'true');", chevronButton);
 
-        actions.moveToElement(chevronButton).click().perform();
+        Point projectLocation = projectElement.getLocation();
+        Point chevronLocation = chevronButton.getLocation();
+
+        int offsetX = chevronLocation.getX() - projectLocation.getX();
+        int offsetY = chevronLocation.getY() - projectLocation.getY();
+
+
+        actions.moveByOffset(offsetX, offsetY).click().perform();
 
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@class='jenkins-dropdown']")));
 
         WebElement confirmRenameLink = wait.until(ExpectedConditions.elementToBeClickable(
                 By.xpath("//div[@class='jenkins-dropdown']//a[@href='/job/" + PIPELINE_NAME + "/confirm-rename']")));
-
         confirmRenameLink.click();
 
         WebElement nameInput = wait.until(ExpectedConditions.visibilityOfElementLocated(
