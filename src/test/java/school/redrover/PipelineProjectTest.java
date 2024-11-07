@@ -95,7 +95,7 @@ public class PipelineProjectTest extends BaseTest {
     }
 
     @Test
-    public void testRenameProjectViaDropdownMenu() {
+    public void testRenameProjectViaDropdownMenu() throws InterruptedException {
         createProjectViaSidebar(PIPELINE_NAME);
         returnToHomePage();
 
@@ -110,15 +110,13 @@ public class PipelineProjectTest extends BaseTest {
         WebElement chevronElement = getWait(getDriver()).until(
                 ExpectedConditions.presenceOfElementLocated(By.cssSelector(String.format("a[href='job/%s/'] .jenkins-menu-dropdown-chevron", PIPELINE_NAME))));
 
+
         JavascriptExecutor js = (JavascriptExecutor) getDriver();
-        WebElement coveringElement = getDriver().findElement(By.xpath("//a[@href='job/" + PIPELINE_NAME + "/']")); // Укажите локатор для перекрывающего элемента
-        js.executeScript("arguments[0].style.visibility='hidden';", coveringElement); // Или используйте 'display: none'
+        js.executeScript("arguments[0].style.visibility = 'visible'; arguments[0].style.display = 'block';", chevronElement);
 
-        js.executeScript("arguments[0].style.display = 'block';", chevronElement);
+        Thread.sleep(1000);
 
-        getWait(getDriver()).until(ExpectedConditions.elementToBeClickable(chevronElement));
-
-        js.executeScript("arguments[0].click();", chevronElement);
+        chevronElement.click();
 
         getWait(getDriver()).until(ExpectedConditions.elementToBeClickable(
                 By.xpath("//div[@class='jenkins-dropdown']/a[@href='/job/" + PIPELINE_NAME + "/confirm-rename']"))).click();
