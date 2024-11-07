@@ -175,5 +175,6 @@ public class OrganizationFolderTest extends BaseTest {
         System.out.println(getDriver().findElement(By.xpath("//div/h1")).getText());
 
         Assert.assertEquals(getDriver().findElement(By.xpath("//div/h1")).getText(), newName);
+
     }
 }
