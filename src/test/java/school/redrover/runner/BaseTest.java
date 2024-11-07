@@ -40,19 +40,6 @@ public abstract class BaseTest {
 
         final String screenshotsDir = System.getProperty("user.dir") + "/screenshots";
 
-        if (ProjectUtils.isServerRun() || testResult.isSuccess() || ProjectUtils.closeBrowserIfError()) {
-            try {
-                JenkinsUtils.logout(driver);
-            } catch (Exception ignore) {
-            }
-            driver.quit();
-            ProjectUtils.log("Browser closed");
-        }
-
-        ProjectUtils.logf(
-                "Execution time is %.3f sec",
-                (testResult.getEndMillis() - testResult.getStartMillis()) / 1000.0);
-
         if (!testResult.isSuccess()) {
             File screenshot = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
             File destinationPath = new File(screenshotsDir, testResult.getName() + ".png");
@@ -66,6 +53,19 @@ public abstract class BaseTest {
                 e.printStackTrace();
             }
         }
+
+        if (ProjectUtils.isServerRun() || testResult.isSuccess() || ProjectUtils.closeBrowserIfError()) {
+            try {
+                JenkinsUtils.logout(driver);
+            } catch (Exception ignore) {
+            }
+            driver.quit();
+            ProjectUtils.log("Browser closed");
+        }
+
+        ProjectUtils.logf(
+                "Execution time is %.3f sec",
+                (testResult.getEndMillis() - testResult.getStartMillis()) / 1000.0);
 
     }
 
