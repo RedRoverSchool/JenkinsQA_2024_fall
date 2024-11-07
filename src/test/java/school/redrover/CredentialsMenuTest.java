@@ -24,30 +24,61 @@ public class CredentialsMenuTest extends BaseTest {
                 .click();
     }
 
+    public WebElement moveToUserAdmin() {
+
+        WebElement userAdmin = getDriver().findElement(By.cssSelector(".model-link.inside.jenkins-table__link"));
+        Actions actions = new Actions(getDriver());
+        actions.moveToElement(userAdmin).perform();
+
+        return userAdmin;
+    }
+
+
     @Test
     public void testNavigateCredentialsMenu() {
 
         getCredentialsPage();
 
-        Assert.assertEquals(getDriver().findElement(By.tagName("h1")).getText(),"Credentials");
+        Assert.assertEquals(getDriver().findElement(By.tagName("h1")).getText(), "Credentials");
     }
 
     @Test
-    public  void  testAddDomainArrow() {
+    public void testAddDomainArrow() {
 
         getCredentialsPage();
+        moveToUserAdmin();
 
-        WebElement userAdmin = getDriver().findElement(By.cssSelector(".model-link.inside.jenkins-table__link"));
-
-        Actions actions = new Actions(getDriver());
-        actions.moveToElement(userAdmin).perform();
+        WebElement userAdmin = moveToUserAdmin();
 
         JavascriptExecutor js = (JavascriptExecutor) getDriver();
         String arrowContent = (String) js.executeScript("return window.getComputedStyle(arguments[0], '::before').getPropertyValue('content');", userAdmin);
 
-
         assertTrue(!arrowContent.equals("none") && !arrowContent.isEmpty());
+
     }
 
+    @Test
+    public void testisDisplayedDomainElementDropdown() {
+
+        getCredentialsPage();
+        moveToUserAdmin();
+
+        WebElement userAdmin = moveToUserAdmin();
+
+        int elementWidth = userAdmin.getSize().getWidth();
+        int elementHeight = userAdmin.getSize().getHeight();
+
+
+        int xOffset = elementWidth - 9;
+        int yOffset = elementHeight / 2;
+
+        new Actions(getDriver()).moveToElement(userAdmin, xOffset, yOffset).click().perform();
+
+        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(5));
+        WebElement addDomainElement = wait.until(ExpectedConditions.visibilityOfElementLocated(By.className("jenkins-dropdown")));
+
+        assertTrue(addDomainElement.isDisplayed());
+
+    }
 
 }
