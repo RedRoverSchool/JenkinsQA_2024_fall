@@ -121,7 +121,6 @@ public class PipelineProjectTest extends BaseTest {
         Assert.assertListContainsObject(getProjectList(), NEW_PROJECT_NAME, "Project is not renamed");
     }
 
-
     @Test
     public void testDeleteProjectViaSidebar() {
         createProjectViaSidebar(PIPELINE_NAME);
