@@ -63,7 +63,7 @@ public class StartPageTest extends BaseTest {
 
         WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(20));
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(
-                "//span[contains(text(),'Learn more about distributed')]")));
+                "//span[contains(text(), 'My Views')]")));
 
         Assert.assertEquals(startPageSideContent.size(), 4);
         Assert.assertEquals(startPageSideContent.get(0).getAttribute("href"), "http://localhost:8080/view/all/newJob");
