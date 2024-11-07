@@ -58,15 +58,17 @@ public class RenameJobDropdownTest extends BaseTest {
         Actions actionDropdownChevron = new Actions(getDriver());
         actionDropdownChevron
                 .moveToElement(jobNameLink)
-                .pause(Duration.ofSeconds(1))
+                .pause(Duration.ofSeconds(2))
 //                .moveToElement(getDriver().findElement(
                 .scrollToElement(getDriver().findElement(
                        By.xpath("//a[@href='job/" + jobName + "/']//button[@class='jenkins-menu-dropdown-chevron']")))
 //                       By.xpath("//*[@id='job_TestBuild']/td[3]/a/button")))
+                .pause(Duration.ofSeconds(2))
                 .moveToElement(getDriver().findElement(
                         By.xpath("//a[@href='job/" + jobName + "/']//button[@class='jenkins-menu-dropdown-chevron']")))
-//                .pause(Duration.ofSeconds(1))
+                .pause(Duration.ofSeconds(2))
                 .click()
+                .pause(Duration.ofSeconds(2))
                 .perform();
 
         List<WebElement> dropdownLinks = getDriver().findElements(By.xpath("//div[@class='tippy-content']//a"));
