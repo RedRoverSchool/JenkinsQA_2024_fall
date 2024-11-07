@@ -1,7 +1,6 @@
 package school.redrover;
 
 import org.openqa.selenium.By;
-import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -11,8 +10,6 @@ import org.testng.annotations.Test;
 import school.redrover.runner.BaseTest;
 
 import java.util.List;
-
-import java.security.Key;
 import java.time.Duration;
 
 public class RenameJobDropdownTest extends BaseTest {
@@ -47,7 +44,14 @@ public class RenameJobDropdownTest extends BaseTest {
         for (WebElement item : items2) {
             if (item.getText().equals("Rename")) {
                 item.click();
+                break;
             }
+        }
+
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
         }
 
 //        Actions actionRenameLink = new Actions(getDriver());
@@ -58,7 +62,7 @@ public class RenameJobDropdownTest extends BaseTest {
 
         WebElement inputFieldNewName = wait
                 .until(ExpectedConditions
-                        .visibilityOfElementLocated(By.xpath("//*[@id='main-panel']/form/div[1]/div[1]/div[2]/input")));
+                        .visibilityOfElementLocated(By.xpath("//input[@name='newName']")));
         inputFieldNewName.clear();
         inputFieldNewName.sendKeys(jobNewName);
 
