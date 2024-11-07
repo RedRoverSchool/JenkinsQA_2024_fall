@@ -49,17 +49,18 @@ public class RenameJobDropdownTest extends BaseTest {
 
     private void findEndClickLinkInDropdown(String jobName, String linkName ) {
 
-        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(10));
+        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(1));
 
         Actions actionDropdownChevron = new Actions(getDriver());
         actionDropdownChevron
                 .moveToElement(wait
                         .until(ExpectedConditions.visibilityOfElementLocated(By
                                 .xpath("//a[@href='job/" + jobName + "/']"))))
-                .pause(1000)
+//                .pause(Duration.ofSeconds(1))
                 .moveToElement(getDriver().findElement(
+//                .scrollToElement(getDriver().findElement(
                        By.xpath("//a[@href='job/" + jobName + "/']//button[@class='jenkins-menu-dropdown-chevron']")))
-                .pause(1000)
+//                .pause(Duration.ofSeconds(1))
                 .click()
                 .perform();
 
@@ -68,7 +69,7 @@ public class RenameJobDropdownTest extends BaseTest {
 
         for (WebElement dropdownLink : dropdownLinks) {
             if (dropdownLink.getText().equals(linkName )) {
-                clickLinkInDropdown(dropdownLink);
+                getDriver().get(dropdownLink.getAttribute("href"));
             }
         }
     }
