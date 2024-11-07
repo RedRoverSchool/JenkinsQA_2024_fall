@@ -12,6 +12,7 @@ import school.redrover.runner.BaseTest;
 
 import java.time.Duration;
 
+import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertTrue;
 
 public class CredentialsMenuTest extends BaseTest {
@@ -75,10 +76,9 @@ public class CredentialsMenuTest extends BaseTest {
         new Actions(getDriver()).moveToElement(userAdmin, xOffset, yOffset).click().perform();
 
         WebElement addDomainElement = new WebDriverWait(getDriver(), Duration.ofSeconds(30))
-                .until(ExpectedConditions.visibilityOfElementLocated(By.className("jenkins-dropdown")));
+                .until(ExpectedConditions.visibilityOfElementLocated(By.className("jenkins-dropdown__item__icon")));
 
         assertTrue(addDomainElement.isDisplayed());
 
     }
-
 }
