@@ -59,7 +59,7 @@ public class FreestyleProject1Test extends BaseTest {
                         "clientY: arguments[0].getBoundingClientRect().y + 5}));", chevron);
         Thread.sleep(3000);
         WebElement deleteOption = wait.until(ExpectedConditions.elementToBeClickable(
-                By.xpath("//button[contains(@href,'doDelete')]")));
+                By.xpath("//*[@class='icon-edit-delete icon-md']")));
         ((JavascriptExecutor) getDriver())
                 .executeScript("arguments[0].dispatchEvent(new MouseEvent('click', " +
                         "{bubbles: true, cancelable: true, view: window, clientX: " +
