@@ -20,8 +20,6 @@ public class RenameJobDropdownTest extends BaseTest {
         final String jobName = "TestBuild";
         final String jobNewName = "TestBuild_NewName";
 
-
-
         createJob(jobName);
         findEndClickLinkInDropdown(jobName, "Rename");
         renameJob(jobNewName);
@@ -59,23 +57,14 @@ public class RenameJobDropdownTest extends BaseTest {
                         .until(ExpectedConditions.visibilityOfElementLocated(By
                                 .xpath("//a[@href='job/" + jobName + "/']"))))
                 .pause(1000)
-                .scrollToElement(getDriver().findElement(
-                       By.xpath("//a[@href='job/TestBuild/']//button[@class='jenkins-menu-dropdown-chevron']")))
-                       //By.xpath("//a[@href='job/" + jobName + "/']//button[@class='jenkins-menu-dropdown-chevron']")))
+                .moveToElement(getDriver().findElement(
+                       By.xpath("//a[@href='job/" + jobName + "/']//button[@class='jenkins-menu-dropdown-chevron']")))
+                .pause(1000)
                 .click()
                 .perform();
 
-//        Actions actions = new Actions(getDriver());
-//        actions.moveToElement(projectElement)
-//                .pause(1000)
-//                .scrollToElement(getDriver().findElement(
-//                        By.xpath("//a[@href='job/" + PIPELINE_NAME + "/']//button[@class='jenkins-menu-dropdown-chevron']")))
-//                .click()
-//                .perform();
-
         List<WebElement> dropdownLinks = getDriver().findElements(By.xpath("//div[@class='tippy-content']//a"));
         List<WebElement> dropdownButtons = getDriver().findElements(By.xpath("//div[@class='tippy-content']//button"));
-
 
         for (WebElement dropdownLink : dropdownLinks) {
             if (dropdownLink.getText().equals(linkName )) {
