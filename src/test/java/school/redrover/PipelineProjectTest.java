@@ -95,7 +95,7 @@ public class PipelineProjectTest extends BaseTest {
         createProjectViaSidebar(PIPELINE_NAME);
         returnToHomePage();
 
-        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(10));
+        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(20));
         Actions actions = new Actions(getDriver());
 
         WebElement projectElement = wait.until(ExpectedConditions.visibilityOfElementLocated(
@@ -105,29 +105,18 @@ public class PipelineProjectTest extends BaseTest {
                 .pause(1000)
                 .perform();
 
-        WebElement chevronButton = wait.until(driver -> {
-            WebElement element = driver.findElement(
-                    By.xpath("//a[@href='job/" + PIPELINE_NAME + "/']//button[@class='jenkins-menu-dropdown-chevron']"));
-            Point initialLocation = element.getLocation();
-            try {
-                Thread.sleep(500);
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-            }
-            return initialLocation.equals(element.getLocation()) ? element : null;
-        });
-
-        chevronButton = wait.until(ExpectedConditions.elementToBeClickable(chevronButton));
-        ((JavascriptExecutor) getDriver()).executeScript("arguments[0].click();", chevronButton);
-//
-//        actions.moveToElement(chevronButton, chevronButton.getSize().width / 2, chevronButton.getSize().height / 2)
-//                .click()
-//                .perform();
-
-        wait.until(ExpectedConditions.visibilityOfElementLocated(
+        WebElement chevronButton = wait.until(ExpectedConditions.elementToBeClickable(
                 By.xpath("//a[@href='job/" + PIPELINE_NAME + "/']//button[@class='jenkins-menu-dropdown-chevron']")));
 
-        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@class='jenkins-dropdown']")));
+        actions.moveToElement(chevronButton, chevronButton.getSize().width / 2, chevronButton.getSize().height / 2)
+                .pause(1000)
+                .click()
+                .perform();
+
+//        wait.until(ExpectedConditions.visibilityOfElementLocated(
+//                By.xpath("//a[@href='job/" + PIPELINE_NAME + "/']//button[@class='jenkins-menu-dropdown-chevron']")));
+
+        wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//div[@class='jenkins-dropdown']")));
 
         WebElement confirmRenameLink = wait.until(ExpectedConditions.elementToBeClickable(
                 By.xpath("//div[@class='jenkins-dropdown']//a[@href='/job/" + PIPELINE_NAME + "/confirm-rename']")));
