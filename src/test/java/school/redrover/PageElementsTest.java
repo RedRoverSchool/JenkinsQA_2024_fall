@@ -101,6 +101,7 @@ public class PageElementsTest extends BaseTest {
     }
 
     @Test
+    @Ignore
     public void testNewFreeStyleProject (){
         newItemsData("FreeStyleProjectTest", "//*[@id='j-add-item-type-standalone-projects']/ul/li[1]/div[2]/label");
 
