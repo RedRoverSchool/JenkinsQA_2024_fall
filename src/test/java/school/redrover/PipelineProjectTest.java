@@ -100,7 +100,7 @@ public class PipelineProjectTest extends BaseTest {
         createProjectViaSidebar(PIPELINE_NAME);
         returnToHomePage();
 
-        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(10));
+        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(20));
         Actions actions = new Actions(getDriver());
 
         WebElement projectElement = wait.until(ExpectedConditions.visibilityOfElementLocated(
@@ -113,7 +113,17 @@ public class PipelineProjectTest extends BaseTest {
         WebElement chevronButton = wait.until(ExpectedConditions.visibilityOfElementLocated(
                 By.cssSelector(String.format("[data-href*='/job/%s/']", PIPELINE_NAME))));
 
+        Boolean isChevronVisible = (Boolean) ((JavascriptExecutor) getDriver())
+                .executeScript("return arguments[0].offsetWidth > 0 && arguments[0].offsetHeight > 0;", chevronButton);
+        if (!isChevronVisible) {
+            throw new AssertionError("Chevron is not visible!");
+        }
+
         actions.scrollToElement(chevronButton).click().perform();
+
+       wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//div[@class='jenkins-dropdown']")));
+        wait.until(ExpectedConditions.attributeToBe(chevronButton, "aria-expanded", "true"));
 
         //wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@class='jenkins-dropdown']")));
 
