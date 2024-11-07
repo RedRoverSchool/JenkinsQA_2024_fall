@@ -59,6 +59,9 @@ public class RenameJobDropdownTest extends BaseTest {
 //                .moveToElement(wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//div[3]/div/div/div/a[4]"))))
 //                .click()
 //                .perform();
+        getDriver().get("http://localhost:8080/job/TestBuild/confirm-rename");
+
+//          System.out.println("Адрес: " + getDriver().getCurrentUrl());
 
         WebElement inputFieldNewName = wait
                 .until(ExpectedConditions
