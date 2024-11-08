@@ -54,16 +54,13 @@ public class FreestyleProject1Test extends BaseTest {
                         "{bubbles: true, cancelable: true, view: window, clientX: " +
                         "arguments[0].getBoundingClientRect().x + 5, " +
                         "clientY: arguments[0].getBoundingClientRect().y + 5}));", chevron);
-        WebElement deleteOption = wait.until(ExpectedConditions.visibilityOfElementLocated(
-                By.xpath("//*[@class='icon-edit-delete icon-md']")));
-        wait.until(ExpectedConditions.elementToBeClickable(deleteOption));
-        actions.moveToElement(deleteOption).click().perform();
-
-//        ((JavascriptExecutor) getDriver())
-//                .executeScript("arguments[0].dispatchEvent(new MouseEvent('click', " +
-//                        "{bubbles: true, cancelable: true, view: window, clientX: " +
-//                        "arguments[0].getBoundingClientRect().x + 5, " +
-//                        "clientY: arguments[0].getBoundingClientRect().y + 5}));", deleteOption);
+        WebElement deleteOption = wait.until(ExpectedConditions.elementToBeClickable(
+                By.xpath("//*[contains(@href,'doDelete')]")));
+        ((JavascriptExecutor) getDriver())
+                .executeScript("arguments[0].dispatchEvent(new MouseEvent('click', " +
+                        "{bubbles: true, cancelable: true, view: window, clientX: " +
+                        "arguments[0].getBoundingClientRect().x + 5, " +
+                        "clientY: arguments[0].getBoundingClientRect().y + 5}));", deleteOption);
         getDriver().findElement(By.xpath("//button[contains(text(),'Yes')]")).click();
         String emptyDashboardHeader = getDriver().findElement(By.cssSelector(".empty-state-block > h1")).getText();
         Assert.assertEquals(emptyDashboardHeader, "Welcome to Jenkins!");
