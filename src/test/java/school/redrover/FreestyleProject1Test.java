@@ -44,22 +44,22 @@ public class FreestyleProject1Test extends BaseTest {
         Actions actions = new Actions(getDriver());
         WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(10));
 
-        // Step 3: Hover over project title to activate the menu dropdown
+        // Hover over project title to activate the menu dropdown
         WebElement projectTitle = wait.until(ExpectedConditions.visibilityOfElementLocated(
                 By.xpath("//span[contains(text(),'New freestyle project')]")));
         actions.moveToElement(projectTitle).perform();
 
-        // Step 4: Wait for the chevron button to be clickable and move to it
+        // Wait for the chevron button to be clickable and move to it
         WebElement chevron = wait.until(ExpectedConditions.elementToBeClickable(By
                 .xpath("//*[@id='job_New freestyle project']/td[3]/a/button")));
-        actions.moveToElement(chevron).click().perform();
+        actions.moveToElement(chevron).perform();
 
-        // Step 5: Use JavaScript to click on the chevron (handles potential overlay issues)
-//        ((JavascriptExecutor) getDriver()).executeScript(
-//                "arguments[0].dispatchEvent(new MouseEvent('click', " +
-//                        "{bubbles: true, cancelable: true, view: window, clientX: " +
-//                        "arguments[0].getBoundingClientRect().x + 5, " +
-//                        "clientY: arguments[0].getBoundingClientRect().y + 5}));", chevron);
+        // Use JavaScript to click on the chevron (handles potential overlay issues)
+        ((JavascriptExecutor) getDriver()).executeScript(
+                "arguments[0].dispatchEvent(new MouseEvent('click', " +
+                        "{bubbles: true, cancelable: true, view: window, clientX: " +
+                        "arguments[0].getBoundingClientRect().x + 5, " +
+                        "clientY: arguments[0].getBoundingClientRect().y + 5}));", chevron);
 
         // Wait for the entire dropdown container to load and settle
         WebElement dropdownContainer = wait.until(ExpectedConditions.visibilityOfElementLocated(
