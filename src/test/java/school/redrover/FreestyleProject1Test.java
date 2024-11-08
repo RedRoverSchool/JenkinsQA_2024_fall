@@ -54,10 +54,11 @@ public class FreestyleProject1Test extends BaseTest {
                         "{bubbles: true, cancelable: true, view: window, clientX: " +
                         "arguments[0].getBoundingClientRect().x + 5, " +
                         "clientY: arguments[0].getBoundingClientRect().y + 5}));", chevron);
-        WebElement deleteOption = wait.until(ExpectedConditions.elementToBeClickable(
+        WebElement deleteOption = wait.until(ExpectedConditions.visibilityOfElementLocated(
                 By.xpath("//*[@class='icon-edit-delete icon-md']")));
-        actions.moveToElement(deleteOption).perform();
-        getDriver().findElement(By.xpath("//button[@href='/job/New%20freestyle%20project/doDelete']")).click();
+        wait.until(ExpectedConditions.elementToBeClickable(deleteOption));
+        actions.moveToElement(deleteOption).click().perform();
+
 //        ((JavascriptExecutor) getDriver())
 //                .executeScript("arguments[0].dispatchEvent(new MouseEvent('click', " +
 //                        "{bubbles: true, cancelable: true, view: window, clientX: " +
