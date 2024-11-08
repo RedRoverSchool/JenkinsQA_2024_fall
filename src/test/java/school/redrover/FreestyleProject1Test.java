@@ -60,6 +60,8 @@ public class FreestyleProject1Test extends BaseTest {
         Thread.sleep(3000);
         WebElement deleteOption = wait.until(ExpectedConditions.elementToBeClickable(
                 By.xpath("//*[@class='icon-edit-delete icon-md']")));
+        actions.moveToElement(deleteOption).perform();
+        Thread.sleep(3000);
         ((JavascriptExecutor) getDriver())
                 .executeScript("arguments[0].dispatchEvent(new MouseEvent('click', " +
                         "{bubbles: true, cancelable: true, view: window, clientX: " +
