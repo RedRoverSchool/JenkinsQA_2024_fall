@@ -52,14 +52,14 @@ public class FreestyleProject1Test extends BaseTest {
         // Step 4: Wait for the chevron button to be clickable and move to it
         WebElement chevron = wait.until(ExpectedConditions.elementToBeClickable(By
                 .xpath("//*[@id='job_New freestyle project']/td[3]/a/button")));
-        actions.moveToElement(chevron).perform();
+        actions.moveToElement(chevron).click().perform();
 
         // Step 5: Use JavaScript to click on the chevron (handles potential overlay issues)
-        ((JavascriptExecutor) getDriver()).executeScript(
-                "arguments[0].dispatchEvent(new MouseEvent('click', " +
-                        "{bubbles: true, cancelable: true, view: window, clientX: " +
-                        "arguments[0].getBoundingClientRect().x + 5, " +
-                        "clientY: arguments[0].getBoundingClientRect().y + 5}));", chevron);
+//        ((JavascriptExecutor) getDriver()).executeScript(
+//                "arguments[0].dispatchEvent(new MouseEvent('click', " +
+//                        "{bubbles: true, cancelable: true, view: window, clientX: " +
+//                        "arguments[0].getBoundingClientRect().x + 5, " +
+//                        "clientY: arguments[0].getBoundingClientRect().y + 5}));", chevron);
 
         // Wait for the entire dropdown container to load and settle
         WebElement dropdownContainer = wait.until(ExpectedConditions.visibilityOfElementLocated(
