@@ -50,7 +50,6 @@ public class DropDawnChevronTest extends BaseTest {
         getDriver().findElement(By.xpath("//*[@id='jenkins']/dialog/div[3]/button[1]")).click();
 
         boolean isElementInvisible = wait.until(ExpectedConditions.invisibilityOfElementLocated(By.xpath("//*[@id='tippy-6']/div/div/div/button[2]")));
-
         Assert.assertTrue(isElementInvisible, "Элемент все еще присутствует после клика, хотя должен был исчезнуть");
     }
 }
