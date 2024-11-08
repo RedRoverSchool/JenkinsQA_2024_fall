@@ -178,9 +178,9 @@ public class PipelineProject2Test extends BaseTest {
 
         new Actions(getDriver())
                 .moveToElement(projectItem)
-                .moveToElement(chevronButton).click()
+                .moveToElement(chevronButton).click().pause(10000)
                 .perform();
-
+        System.out.println(chevronButton.isDisplayed());
         wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//div[@id='tippy-6']")));
 
         wait.until(ExpectedConditions.elementToBeClickable(
