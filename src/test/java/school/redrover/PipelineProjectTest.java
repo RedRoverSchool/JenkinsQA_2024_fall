@@ -127,9 +127,10 @@ public class PipelineProjectTest extends BaseTest {
         wait.until(driver -> js.executeScript(
                 "return window.getComputedStyle(arguments[0]).getPropertyValue('opacity')", tippyBox).equals("1"));
 
+        Thread.sleep(2000);
         WebElement confirmRenameLink = wait.until(ExpectedConditions.elementToBeClickable(
                 By.xpath("//div[@class='jenkins-dropdown']//a[@href='/job/" + PIPELINE_NAME + "/confirm-rename']")));
-        Thread.sleep(2000);
+
 
         confirmRenameLink.click();
 
