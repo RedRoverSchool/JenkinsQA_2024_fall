@@ -128,20 +128,19 @@ actions.moveToElement(chevronButton).click().perform();
         wait.until(driver -> js.executeScript(
                 "return window.getComputedStyle(arguments[0]).getPropertyValue('opacity')", tippyBox).equals("1"));
 
-        Thread.sleep(2000);
+               Thread.sleep(2000);
         WebElement confirmRenameLink = wait.until(ExpectedConditions.elementToBeClickable(
-                By.xpath("//a[@href='/job/" + PIPELINE_NAME + "/confirm-rename']")));
+                By.xpath("//div[@class='jenkins-dropdown']//a[@href='/job/" + PIPELINE_NAME + "/confirm-rename']")));
 
 
-        confirmRenameLink.click();
+
+        js.executeScript("arguments[0].click();", confirmRenameLink);
 
         WebElement nameInput = wait.until(ExpectedConditions.visibilityOfElementLocated(
                 By.xpath("//input[@checkdependson='newName']")));
         nameInput.clear();
         nameInput.sendKeys(NEW_PROJECT_NAME);
-
         getDriver().findElement(By.xpath("//button[@name='Submit']")).click();
-
         returnToHomePage();
         Assert.assertListContainsObject(getProjectList(), NEW_PROJECT_NAME, "Project is not renamed");
     }
