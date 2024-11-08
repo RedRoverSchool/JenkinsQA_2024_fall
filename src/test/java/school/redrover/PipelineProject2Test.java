@@ -1,6 +1,8 @@
 package school.redrover;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -153,6 +155,46 @@ public class PipelineProject2Test extends BaseTest {
                         By.xpath("//button[@data-id='ok']"))
                 )
                 .click();
+
+        boolean isElementPresent = getDriver()
+                .findElements(By.xpath(String.format("//span[text()='%s']", PROJECT_NAME)))
+                .isEmpty();
+
+        Assert.assertTrue(isElementPresent);
+    }
+
+    @Test
+    public void testDeleteFreestyleProjectViaChevron() {
+        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(10));
+
+        createItem(PROJECT_NAME, "//span[text()='Pipeline']");
+        goToMainPage();
+
+        WebElement projectItem = wait.until(ExpectedConditions.presenceOfElementLocated(
+                By.xpath(String.format("//span[text()='%s']", PROJECT_NAME)))
+        );
+        WebElement chevronButton = wait.until(ExpectedConditions.elementToBeClickable(
+                By.xpath(String.format("//span[text()='%s']/following-sibling::button", PROJECT_NAME))));
+
+        new Actions(getDriver())
+                .moveToElement(projectItem)
+                .moveToElement(chevronButton).click()
+                .perform();
+
+        WebElement deleteButton = wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//div[@id='tippy-6']//button[contains(@href, 'doDelete')]")));
+
+        new Actions(getDriver())
+                .moveToElement(deleteButton).click()
+                .perform();
+
+        WebElement applyDeleteButton = wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//button[@data-id='ok']"))
+        );
+
+        new Actions(getDriver())
+                .moveToElement(applyDeleteButton).click()
+                .perform();
 
         boolean isElementPresent = getDriver()
                 .findElements(By.xpath(String.format("//span[text()='%s']", PROJECT_NAME)))
