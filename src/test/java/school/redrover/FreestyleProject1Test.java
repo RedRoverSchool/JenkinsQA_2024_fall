@@ -37,32 +37,52 @@ public class FreestyleProject1Test extends BaseTest {
 
     @Test
     public void testDeleteFreestyleProject() throws InterruptedException {
+        // Step 1: Create the freestyle project
         createFreestyleProject();
+
+        // Step 2: Navigate to the Jenkins home page
         getDriver().findElement(By.id("jenkins-name-icon")).click();
+
         Actions actions = new Actions(getDriver());
-        //hover over project title to activate menu dropdown
-        WebElement element = getDriver().findElement(By
-                .xpath("//span[contains(text(),'New freestyle project')]"));
-        actions.moveToElement(element).perform();
         WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(20));
+
+        // Step 3: Hover over project title to activate the menu dropdown
+        WebElement projectTitle = wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//span[contains(text(),'New freestyle project')]")));
+        actions.moveToElement(projectTitle).perform();
+
+        // Step 4: Wait for the chevron button to be clickable and move to it
         WebElement chevron = wait.until(ExpectedConditions.elementToBeClickable(By
                 .xpath("//*[@id='job_New freestyle project']/td[3]/a/button")));
         actions.moveToElement(chevron).perform();
-        //using js to click the middle of the element
-        ((JavascriptExecutor) getDriver())
-                .executeScript("arguments[0].dispatchEvent(new MouseEvent('click', " +
+
+        // Step 5: Use JavaScript to click on the chevron (handles potential overlay issues)
+        ((JavascriptExecutor) getDriver()).executeScript(
+                "arguments[0].dispatchEvent(new MouseEvent('click', " +
                         "{bubbles: true, cancelable: true, view: window, clientX: " +
                         "arguments[0].getBoundingClientRect().x + 5, " +
                         "clientY: arguments[0].getBoundingClientRect().y + 5}));", chevron);
-        WebElement deleteOption = wait.until(ExpectedConditions.elementToBeClickable(
+
+        // Step 6: Wait for the delete option to appear and be clickable
+        WebElement deleteOption = wait.until(ExpectedConditions.visibilityOfElementLocated(
                 By.xpath("//*[contains(@href,'doDelete')]")));
-        ((JavascriptExecutor) getDriver())
-                .executeScript("arguments[0].dispatchEvent(new MouseEvent('click', " +
+
+        // Step 7: Use JavaScript to click the delete option
+        ((JavascriptExecutor) getDriver()).executeScript(
+                "arguments[0].dispatchEvent(new MouseEvent('click', " +
                         "{bubbles: true, cancelable: true, view: window, clientX: " +
                         "arguments[0].getBoundingClientRect().x + 5, " +
                         "clientY: arguments[0].getBoundingClientRect().y + 5}));", deleteOption);
-        getDriver().findElement(By.xpath("//button[contains(text(),'Yes')]")).click();
-        String emptyDashboardHeader = getDriver().findElement(By.cssSelector(".empty-state-block > h1")).getText();
-        Assert.assertEquals(emptyDashboardHeader, "Welcome to Jenkins!");
+
+        // Step 8: Confirm deletion by clicking "Yes"
+        WebElement confirmDelete = wait.until(ExpectedConditions.elementToBeClickable(
+                By.xpath("//button[contains(text(),'Yes')]")));
+        confirmDelete.click();
+
+        // Step 9: Verify that the project is deleted by checking the dashboard text
+        WebElement emptyDashboardHeader = wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.cssSelector(".empty-state-block > h1")));
+        Assert.assertEquals(emptyDashboardHeader.getText(), "Welcome to Jenkins!");
     }
+
 }
