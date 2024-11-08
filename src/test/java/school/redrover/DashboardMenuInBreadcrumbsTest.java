@@ -33,18 +33,18 @@ public class DashboardMenuInBreadcrumbsTest extends BaseTest {
         ProjectUtils.log("Click on the dropdown icon");
         WebElement dropdownIcon = getDriver().findElement(By.xpath("//a[@href='/']/button[@class='jenkins-menu-dropdown-chevron']"));
 
-        wait.until(ExpectedConditions.elementToBeClickable(dropdownIcon));
+        wait.until(ExpectedConditions.elementToBeClickable(dropdownIcon)).click();
         /*
         wait for CSS property "right" to change, i.e. wait for the animation to finish
         */
-        wait.until(new ExpectedCondition<Boolean>() {
-            public Boolean apply(WebDriver driver) {
-                String right = dropdownIcon.getCssValue("right");
-                System.out.println("Меняющееся CSS свойство right: " + right);
-                return "-22px".equals(right);
-            }
-        });
-        dropdownIcon.click();
+//        wait.until(new ExpectedCondition<Boolean>() {
+//            public Boolean apply(WebDriver driver) {
+//                String right = dropdownIcon.getCssValue("right");
+//                System.out.println("Меняющееся CSS свойство right: " + right);
+//                return "-22px".equals(right);
+//            }
+//        });
+//        dropdownIcon.click();
 
         ProjectUtils.log("Create list of dropdown elements");
         List<WebElement> dashboardDropdownMenuElements = getDriver().findElements(By.xpath("//*[@data-placement='bottom-start']/div/div/a[@class='jenkins-dropdown__item ']"));
