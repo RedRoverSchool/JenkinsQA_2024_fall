@@ -48,9 +48,7 @@ public class DashboardMenuInBreadcrumbsTest extends BaseTest {
         });
         actions.moveToElement(dropdownIcon).click().perform();
 
-        ProjectUtils.log("Wait animation of whole dropdown menu");
-        WebElement dropdownMenu = getDriver().findElement(By.xpath("//div[@class='tippy-content']"));
-        wait.until(ExpectedConditions.attributeToBe(dropdownMenu,"data-state", "visible"));
+        actions.moveToElement(getDriver().findElement(By.xpath("//div/a[@href='/me/my-views']"))).pause(3).perform();
 
         ProjectUtils.log("Create list of dropdown elements");
         List<WebElement> dashboardDropdownMenuElements = getDriver().findElements(By.xpath("//*[@data-placement='bottom-start']/div/div/a[@class='jenkins-dropdown__item ']"));
