@@ -30,7 +30,7 @@ public class DashboardMenuInBreadcrumbsTest extends BaseTest {
         WebElement dashboardInBreadcrumbs = getDriver().findElement(By.xpath("//li/a[@href='/']"));
 
         ProjectUtils.log("Hover over 'Dashboard' in breadcrumbs");
-        actions.moveToElement(dashboardInBreadcrumbs).perform();
+        actions.moveToElement(dashboardInBreadcrumbs).pause(3).perform();
 
         ProjectUtils.log("Click on the dropdown icon");
         WebElement dropdownIcon = getDriver().findElement(By.xpath("//a[@href='/']/button[@class='jenkins-menu-dropdown-chevron']"));
@@ -47,6 +47,10 @@ public class DashboardMenuInBreadcrumbsTest extends BaseTest {
             }
         });
         actions.moveToElement(dropdownIcon).click().perform();
+
+        ProjectUtils.log("Wait animation of whole dropdown menu");
+        WebElement dropdownMenu = getDriver().findElement(By.xpath("//div[@class='tippy-content']"));
+        wait.until(ExpectedConditions.attributeToBe(dropdownMenu,"data-state", "visible"));
 
         ProjectUtils.log("Create list of dropdown elements");
         List<WebElement> dashboardDropdownMenuElements = getDriver().findElements(By.xpath("//*[@data-placement='bottom-start']/div/div/a[@class='jenkins-dropdown__item ']"));
