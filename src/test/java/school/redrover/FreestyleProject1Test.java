@@ -37,10 +37,8 @@ public class FreestyleProject1Test extends BaseTest {
 
     @Test
     public void testDeleteFreestyleProject() throws InterruptedException {
-        // Step 1: Create the freestyle project
         createFreestyleProject();
 
-        // Step 2: Navigate to the Jenkins home page
         getDriver().findElement(By.id("jenkins-name-icon")).click();
 
         Actions actions = new Actions(getDriver());
@@ -63,17 +61,20 @@ public class FreestyleProject1Test extends BaseTest {
                         "arguments[0].getBoundingClientRect().x + 5, " +
                         "clientY: arguments[0].getBoundingClientRect().y + 5}));", chevron);
 
-        // Step 6: Wait for the delete option to appear and be clickable
+        // Wait for the entire dropdown container to load and settle
+        WebElement dropdownContainer = wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.id("tippy-6")));
+        wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(@href,'doDelete')]")));
+
+        // Wait for the delete option to appear and be clickable
         WebElement deleteOption = wait.until(ExpectedConditions.visibilityOfElementLocated(
-                By.xpath("//*[@id=\"tippy-6\"]/div/div/div/button[2]")));
+                By.xpath("//*[contains(@href,'doDelete')]")));
         actions.moveToElement(deleteOption).click().perform();
 
-        // Step 8: Confirm deletion by clicking "Yes"
         WebElement confirmDelete = wait.until(ExpectedConditions.elementToBeClickable(
                 By.xpath("//button[contains(text(),'Yes')]")));
         confirmDelete.click();
 
-        // Step 9: Verify that the project is deleted by checking the dashboard text
         WebElement emptyDashboardHeader = wait.until(ExpectedConditions.visibilityOfElementLocated(
                 By.cssSelector(".empty-state-block > h1")));
         Assert.assertEquals(emptyDashboardHeader.getText(), "Welcome to Jenkins!");
