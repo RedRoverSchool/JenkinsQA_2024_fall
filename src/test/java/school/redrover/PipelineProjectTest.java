@@ -106,20 +106,20 @@ public class PipelineProjectTest extends BaseTest {
         WebElement projectElement = wait.until(ExpectedConditions.visibilityOfElementLocated(
                 By.xpath("//a[@href='job/" + PIPELINE_NAME + "/']")));
 
-//        actions.moveToElement(projectElement, projectElement.getSize().width / 2, projectElement.getSize().height / 2)
-//                .perform();
-        actions.moveToElement(projectElement).perform();
+        WebElement chevron = projectElement.findElement(By.cssSelector("[class $= 'chevron']"));
 
-        WebElement chevronButton = wait.until(ExpectedConditions.elementToBeClickable(
-                By.cssSelector(String.format("[data-href*='/job/%s/']", PIPELINE_NAME))));
-        actions.moveToElement(chevronButton).click().perform();
+        int centerX = chevron.getSize().width / 2;
+        int centerY = chevron.getSize().height / 2;
 
+        actions.moveToElement(chevron, centerX, centerY).pause(1000).click().perform();
 
+        wait.until(ExpectedConditions.attributeToBe(chevron, "aria-expanded", "true"));
         WebElement tippyBox = getDriver().findElement(By.cssSelector(".tippy-box"));
+        wait.until(ExpectedConditions.visibilityOf(tippyBox));
         wait.until(ExpectedConditions.attributeToBe(tippyBox, "data-state", "visible"));
 
 
-        actions.moveToElement(tippyBox);
+        actions.moveToElement(tippyBox).pause(1000).perform();
 
        // JavascriptExecutor js = (JavascriptExecutor) getDriver();
 
@@ -127,7 +127,7 @@ public class PipelineProjectTest extends BaseTest {
    //     wait.until(ExpectedConditions.attributeToBe(chevronButton, "aria-expanded", "true"));
    //     WebElement tippyBox = getDriver().findElement(By.cssSelector(".tippy-box"));
        // wait.until(ExpectedConditions.attributeToBe(tippyBox, "data-state", "visible"));
-        wait.until(ExpectedConditions.visibilityOf(tippyBox));
+
         WebElement confirmRenameLink = wait.until(ExpectedConditions.presenceOfElementLocated(
                 By.xpath("//div[@class='jenkins-dropdown']//a[@href='/job/" + PIPELINE_NAME + "/confirm-rename']")));
         wait.until(ExpectedConditions.elementToBeClickable(confirmRenameLink));
