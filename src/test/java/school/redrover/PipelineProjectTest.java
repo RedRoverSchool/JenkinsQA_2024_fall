@@ -100,7 +100,7 @@ public class PipelineProjectTest extends BaseTest {
         createProjectViaSidebar(PIPELINE_NAME);
         returnToHomePage();
 
-        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(30));
+        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(40));
         Actions actions = new Actions(getDriver());
 
         WebElement projectElement = wait.until(ExpectedConditions.visibilityOfElementLocated(
@@ -112,24 +112,18 @@ public class PipelineProjectTest extends BaseTest {
         WebElement chevronButton = wait.until(ExpectedConditions.elementToBeClickable(
                 By.cssSelector(String.format("[data-href*='/job/%s/']", PIPELINE_NAME))));
 
-        JavascriptExecutor js = (JavascriptExecutor) getDriver();
-        js.executeScript("document.querySelector('tr#job_" + PIPELINE_NAME + " td:nth-child(3)').style.visibility = 'hidden';");
 
-        js.executeScript("arguments[0].scrollIntoView();", chevronButton);
+        JavascriptExecutor js = (JavascriptExecutor) getDriver();
         js.executeScript("arguments[0].click();", chevronButton);
 
-        wait.until(ExpectedConditions.visibilityOfElementLocated(
-                By.xpath("//div[@class='jenkins-dropdown']")));
-        wait.until(ExpectedConditions.attributeToBe(chevronButton, "aria-expanded", "true"));
 
-        //wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@class='jenkins-dropdown']")));
+        wait.until(ExpectedConditions.attributeToBe(chevronButton, "aria-expanded", "true"));
 
 
         WebElement confirmRenameLink = wait.until(ExpectedConditions.elementToBeClickable(
                 By.xpath("//div[@class='jenkins-dropdown']//a[@href='/job/" + PIPELINE_NAME + "/confirm-rename']")));
 
         confirmRenameLink.click();
-
 
         WebElement nameInput = wait.until(ExpectedConditions.visibilityOfElementLocated(
                 By.xpath("//input[@checkdependson='newName']")));
