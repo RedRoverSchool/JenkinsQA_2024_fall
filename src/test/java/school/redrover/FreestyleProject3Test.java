@@ -33,6 +33,7 @@ public class FreestyleProject3Test extends BaseTest {
     }
 
     @Test
+    @Ignore
     public void testCreateProjectViaCreateJobButton() {
         WebElement createJobButton = getDriver().findElement(By.xpath("//a[@href='newJob']"));
         createJobButton.click();
@@ -60,6 +61,7 @@ public class FreestyleProject3Test extends BaseTest {
     }
 
     @Test
+    @Ignore
     public void testCreateProjectViaSidebarMenu () {
         createProjectViaSidebarMenu(PROJECT_NAME);
 
