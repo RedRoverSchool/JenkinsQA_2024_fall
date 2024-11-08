@@ -65,14 +65,8 @@ public class FreestyleProject1Test extends BaseTest {
 
         // Step 6: Wait for the delete option to appear and be clickable
         WebElement deleteOption = wait.until(ExpectedConditions.visibilityOfElementLocated(
-                By.xpath("//*[contains(@href,'doDelete')]")));
-
-        // Step 7: Use JavaScript to click the delete option
-        ((JavascriptExecutor) getDriver()).executeScript(
-                "arguments[0].dispatchEvent(new MouseEvent('click', " +
-                        "{bubbles: true, cancelable: true, view: window, clientX: " +
-                        "arguments[0].getBoundingClientRect().x + 5, " +
-                        "clientY: arguments[0].getBoundingClientRect().y + 5}));", deleteOption);
+                By.xpath("//*[@id=\"tippy-6\"]/div/div/div/button[2]")));
+        actions.moveToElement(deleteOption).click().perform();
 
         // Step 8: Confirm deletion by clicking "Yes"
         WebElement confirmDelete = wait.until(ExpectedConditions.elementToBeClickable(
