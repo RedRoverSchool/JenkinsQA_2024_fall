@@ -136,7 +136,7 @@ public class PipelineProject2Test extends BaseTest {
     }
 
     @Test
-    public void testDeleteFreestyleProjectViaSidePanel() {
+    public void testDeletePipelineProjectViaSidePanel() {
         WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(10));
 
         createItem(PROJECT_NAME, "//span[text()='Pipeline']");
@@ -164,7 +164,7 @@ public class PipelineProject2Test extends BaseTest {
     }
 
     @Test
-    public void testDeleteFreestyleProjectViaChevron() {
+    public void testDeletePipelineProjectViaChevron() {
         WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(10));
 
         createItem(PROJECT_NAME, "//span[text()='Pipeline']");
