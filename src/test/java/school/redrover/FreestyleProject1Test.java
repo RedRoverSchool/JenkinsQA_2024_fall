@@ -44,7 +44,7 @@ public class FreestyleProject1Test extends BaseTest {
         getDriver().findElement(By.id("jenkins-name-icon")).click();
 
         Actions actions = new Actions(getDriver());
-        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(20));
+        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(10));
 
         // Step 3: Hover over project title to activate the menu dropdown
         WebElement projectTitle = wait.until(ExpectedConditions.visibilityOfElementLocated(
