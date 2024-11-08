@@ -40,7 +40,7 @@ public class NewItemFromOtherExistingTest extends BaseTest {
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("name")));
     }
 
-    public WebElement createNewItemFromExistingOne(String itemTypeXpath) {
+    private WebElement createNewItemFromExistingOne(String itemTypeXpath) {
         createNewItem(itemTypeXpath);
 
         WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(10));
