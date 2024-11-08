@@ -178,8 +178,14 @@ public class PipelineProject2Test extends BaseTest {
 
         new Actions(getDriver())
                 .moveToElement(projectItem)
-                .moveToElement(chevronButton).click().pause(2000)
                 .perform();
+
+        wait.until(driver -> {
+            String transformValue = chevronButton.getCssValue("transform");
+            return !transformValue.isEmpty();
+        });
+
+        chevronButton.click();
 
         System.out.println(getDriver().getPageSource());
 
