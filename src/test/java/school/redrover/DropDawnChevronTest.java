@@ -42,7 +42,7 @@ public class DropDawnChevronTest extends BaseTest {
         actions.moveToElement(hiddenButton)
                 .pause(java.time.Duration.ofSeconds(1)).click().perform();
 
-        WebElement dropdown = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[@id='tippy-6']/div/div/div")));
+        WebElement dropdown = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[@id='tippy-6']/div/div/div/button[2]")));
         actions.moveToElement(dropdown)
                 .pause(java.time.Duration.ofSeconds(1)).perform();
 
