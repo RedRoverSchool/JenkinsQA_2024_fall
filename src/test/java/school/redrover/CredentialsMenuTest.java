@@ -84,7 +84,7 @@ public class CredentialsMenuTest extends BaseTest {
 
         try {
             WebElement addDomainElement = new WebDriverWait(getDriver(), Duration.ofSeconds(10), Duration.ofMillis(200))
-                    .until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[@id='tippy-7']//a")));
+                    .until(ExpectedConditions.elementToBeClickable(By.xpath("//*[@id='tippy-7']//a")));
             addDomainElement.click();
         } catch (Exception e) {
             // Резервный клик через JavaScript, если обычный клик не сработал
