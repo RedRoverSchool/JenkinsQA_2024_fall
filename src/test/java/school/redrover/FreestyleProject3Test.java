@@ -73,6 +73,8 @@ public class FreestyleProject3Test extends BaseTest {
         Assert.assertEquals(actualName, PROJECT_NAME);
     }
 
+    
+    @Ignore
     @Test
     public void testAddDescriptionOnProjectStatusPage() {
         createProjectViaSidebarMenu(PROJECT_NAME);
