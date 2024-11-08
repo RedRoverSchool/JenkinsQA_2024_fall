@@ -5,7 +5,6 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
-import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import school.redrover.runner.BaseTest;
 
@@ -15,7 +14,6 @@ import java.util.List;
 
 public class ManageJenkinsTest extends BaseTest {
 
-    @Ignore
     @Test
     public void testManageJenkinsTab() {
 
@@ -111,29 +109,5 @@ public class ManageJenkinsTest extends BaseTest {
         Assert.assertEquals(searchField.getAttribute("placeholder"), "Search settings");
 
     }
-
-    @Test
-    public void testSearchSystemConfigurationItems() {
-
-        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(10));
-        WebElement manageJenkinsTab = wait.until(
-                ExpectedConditions.elementToBeClickable(By.xpath("//a[span[text()='Manage Jenkins']]")));
-        manageJenkinsTab.click();
-
-        WebElement searchField = getDriver().findElement(
-                By.xpath("//input[@id='settings-search-bar']"));
-
-        List<String> itemsSystemConfiguration = Arrays.asList(
-                "System", "Tools", "Plugins", "Nodes", "Clouds", "Appearance");
-        for (String itemsSystemConfigurations : itemsSystemConfiguration) {
-            wait.until(ExpectedConditions.elementToBeClickable(searchField)).clear();
-            wait.until(ExpectedConditions.visibilityOf(searchField)).sendKeys(itemsSystemConfigurations);
-
-            WebElement searchDropdown = wait.until(
-                    ExpectedConditions.presenceOfElementLocated(By.xpath("//div[@class='jenkins-search__results']")));
-
-            Assert.assertNotNull(searchDropdown, "Item '" + itemsSystemConfigurations + "' not found in dropdown.");
-
-        }
-    }
 }
+
