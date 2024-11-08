@@ -133,4 +133,32 @@ public class PipelineProject2Test extends BaseTest {
         Assert.assertEquals(movedPipelineProjectName, PROJECT_NAME);
     }
 
+    @Test
+    public void testDeleteFreestyleProjectViaSidePanel() {
+        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(10));
+
+        createItem(PROJECT_NAME, "//span[text()='Pipeline']");
+        goToMainPage();
+
+        wait.until(ExpectedConditions.visibilityOfElementLocated(
+                        By.xpath(String.format("//span[text()='%s']", PROJECT_NAME)))
+                )
+                .click();
+
+        getDriver()
+                .findElement(By.xpath("//a[contains(@data-url, 'doDelete')]"))
+                .click();
+
+        wait.until(ExpectedConditions.visibilityOfElementLocated(
+                        By.xpath("//button[@data-id='ok']"))
+                )
+                .click();
+
+        boolean isElementPresent = getDriver()
+                .findElements(By.xpath(String.format("//span[text()='%s']", PROJECT_NAME)))
+                .isEmpty();
+
+        Assert.assertTrue(isElementPresent);
+    }
+
 }
