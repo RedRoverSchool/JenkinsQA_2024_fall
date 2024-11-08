@@ -32,6 +32,8 @@ public class DashboardMenuInBreadcrumbsTest extends BaseTest {
 
         ProjectUtils.log("Click on the dropdown icon");
         WebElement dropdownIcon = getDriver().findElement(By.xpath("//a[@href='/']/button[@class='jenkins-menu-dropdown-chevron']"));
+
+        wait.until(ExpectedConditions.elementToBeClickable(dropdownIcon));
         /*
         wait for CSS property "right" to change, i.e. wait for the animation to finish
         */
