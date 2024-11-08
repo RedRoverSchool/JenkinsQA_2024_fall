@@ -14,7 +14,7 @@ import java.time.Duration;
 
 public class RenameJobDropdownTest extends BaseTest {
 
-    @Test(description = "rename job with dropdown")
+    @Test(description = "rename job with dropdown", invocationCount = 10)
     public void testRenameJobDropdown() {
 
         final String jobName = "TestBuild";
@@ -78,32 +78,32 @@ public class RenameJobDropdownTest extends BaseTest {
          * 2- move > pause > move > pause > click > pause >
          */
 
-        Actions actionDropdownChevron = new Actions(getDriver());
-        actionDropdownChevron
-                .moveToElement(jobNameLink)
-                .pause(Duration.ofSeconds(1))
-                .moveToElement(getDriver().findElement(
-                        By.xpath("//a[@href='job/" + jobName + "/']//button[@class='jenkins-menu-dropdown-chevron']")))
-                .pause(Duration.ofSeconds(1))
-                .click()
-                .pause(Duration.ofSeconds(1))
-                .perform();
-        /**
-         * ********************************************************************************************************************
-         * 3 - move > pause > 2X move > pause > click > pause >
-         */
 //        Actions actionDropdownChevron = new Actions(getDriver());
 //        actionDropdownChevron
 //                .moveToElement(jobNameLink)
 //                .pause(Duration.ofSeconds(1))
-//                .moveToElement(getDriver().findElement
-//                                (By.xpath("//a[@href='job/" + jobName + "/']//button[@class='jenkins-menu-dropdown-chevron']")))
-//                .moveToElement(getDriver().findElement
-//                        (By.xpath("//a[@href='job/" + jobName + "/']//button[@class='jenkins-menu-dropdown-chevron']")))
+//                .moveToElement(getDriver().findElement(
+//                        By.xpath("//a[@href='job/" + jobName + "/']//button[@class='jenkins-menu-dropdown-chevron']")))
 //                .pause(Duration.ofSeconds(1))
 //                .click()
 //                .pause(Duration.ofSeconds(1))
 //                .perform();
+        /**
+         * ********************************************************************************************************************
+         * 3 - move > pause > 2X move > pause > click > pause >
+         */
+        Actions actionDropdownChevron = new Actions(getDriver());
+        actionDropdownChevron
+                .moveToElement(jobNameLink)
+                .pause(Duration.ofSeconds(1))
+                .moveToElement(getDriver().findElement
+                                (By.xpath("//a[@href='job/" + jobName + "/']//button[@class='jenkins-menu-dropdown-chevron']")))
+                .moveToElement(getDriver().findElement
+                        (By.xpath("//a[@href='job/" + jobName + "/']//button[@class='jenkins-menu-dropdown-chevron']")))
+                .pause(Duration.ofSeconds(1))
+                .click()
+                .pause(Duration.ofSeconds(1))
+                .perform();
         /**
          * ********************************************************************************************************************
          *
@@ -118,7 +118,6 @@ public class RenameJobDropdownTest extends BaseTest {
 //                .click()
 //                .pause(Duration.ofSeconds(1))
 //                .perform();
-
         /**
          * ********************************************************************************************************************
          *
@@ -129,8 +128,8 @@ public class RenameJobDropdownTest extends BaseTest {
 
         for (WebElement dropdownLink : dropdownLinks) {
             if (dropdownLink.getText().equals(linkName )) {
-//                getDriver().get(dropdownLink.getAttribute("href"));
-                dropdownLink.click();
+                getDriver().get(dropdownLink.getAttribute("href"));
+//                dropdownLink.click();
 //                System.out.println(getDriver().getTitle());
                 break;
             }
