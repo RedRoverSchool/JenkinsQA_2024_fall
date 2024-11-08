@@ -6,14 +6,14 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import school.redrover.runner.BaseTest;
 
 import java.time.Duration;
 
-import static org.testng.Assert.assertNotNull;
-import static org.testng.Assert.assertTrue;
+import static org.testng.Assert.*;
 
 public class CredentialsMenuTest extends BaseTest {
 
@@ -40,7 +40,7 @@ public class CredentialsMenuTest extends BaseTest {
 
         getCredentialsPage();
 
-        Assert.assertEquals(getDriver().findElement(By.tagName("h1")).getText(), "Credentials");
+        assertEquals(getDriver().findElement(By.tagName("h1")).getText(), "Credentials");
     }
 
     @Test
@@ -54,7 +54,7 @@ public class CredentialsMenuTest extends BaseTest {
         JavascriptExecutor js = (JavascriptExecutor) getDriver();
         String arrowContent = (String) js.executeScript("return window.getComputedStyle(arguments[0], '::before').getPropertyValue('content');", userAdmin);
 
-        assertTrue(!arrowContent.equals("none") && !arrowContent.isEmpty());
+        Assert.assertTrue(!arrowContent.equals("none") && !arrowContent.isEmpty());
 
     }
 
@@ -75,10 +75,14 @@ public class CredentialsMenuTest extends BaseTest {
 
         new Actions(getDriver()).moveToElement(userAdmin, xOffset, yOffset).click().perform();
 
-        WebElement addDomainElement = new WebDriverWait(getDriver(), Duration.ofSeconds(5))
+        WebElement addDomainElement = new WebDriverWait(getDriver(), Duration.ofSeconds(10), Duration.ofMillis(200))
                 .until(ExpectedConditions.elementToBeClickable(By.xpath("//a[@href='/user/admin/credentials/store/user/newDomain']")));
+        addDomainElement.click();
 
-        assertTrue(addDomainElement.isDisplayed());
+        String newDomain = getDriver().findElement(By.xpath("//h1[text()='New domain']")).getText();
+
+
+        Assert.assertEquals(newDomain, "New domain" );
 
     }
 }
