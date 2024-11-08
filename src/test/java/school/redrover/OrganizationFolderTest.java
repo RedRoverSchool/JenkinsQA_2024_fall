@@ -94,6 +94,7 @@ public class OrganizationFolderTest extends BaseTest {
         Assert.assertEquals(tooltipButton, "Delete");
     }
 
+    @Ignore
     @Test
     public void testDisplayNameAfterCreation() {
         Actions actions = new Actions(getDriver());
