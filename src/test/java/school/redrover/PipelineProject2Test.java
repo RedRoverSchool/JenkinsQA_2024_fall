@@ -181,22 +181,13 @@ public class PipelineProject2Test extends BaseTest {
                 .moveToElement(chevronButton).click()
                 .perform();
 
-        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@id='tippy-6']")));
+        wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//div[@id='tippy-6']")));
 
-        WebElement deleteButton = wait.until(ExpectedConditions.elementToBeClickable(
-                By.xpath("//button[contains(@href, 'doDelete')]")));
+        wait.until(ExpectedConditions.elementToBeClickable(
+                By.xpath("//button[contains(@href, 'doDelete')]"))).click();
 
-        new Actions(getDriver())
-                .moveToElement(deleteButton).click()
-                .perform();
-
-        WebElement applyDeleteButton = wait.until(ExpectedConditions.visibilityOfElementLocated(
-                By.xpath("//button[@data-id='ok']"))
-        );
-
-        new Actions(getDriver())
-                .moveToElement(applyDeleteButton).click()
-                .perform();
+        wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//button[@data-id='ok']"))).click();
 
         boolean isElementPresent = getDriver()
                 .findElements(By.xpath(String.format("//span[text()='%s']", PROJECT_NAME)))
