@@ -18,7 +18,7 @@ import java.util.List;
 
 public class PipelineProjectTest extends BaseTest {
 
-    private static final String PIPELINE_NAME = "Pipeline";
+    private static final String PIPELINE_NAME = "Pipeline_name";
     private static final String NEW_PROJECT_NAME = "New_Pipeline_name";
 
     private void createProjectViaSidebar(String projectName) {
@@ -106,30 +106,42 @@ public class PipelineProjectTest extends BaseTest {
         WebElement projectElement = wait.until(ExpectedConditions.visibilityOfElementLocated(
                 By.xpath("//a[@href='job/" + PIPELINE_NAME + "/']")));
 
-        actions.moveToElement(projectElement, projectElement.getSize().width / 2, projectElement.getSize().height / 2)
-                .perform();
+//        actions.moveToElement(projectElement, projectElement.getSize().width / 2, projectElement.getSize().height / 2)
+//                .perform();
+        actions.moveToElement(projectElement).perform();
 
         WebElement chevronButton = wait.until(ExpectedConditions.elementToBeClickable(
                 By.cssSelector(String.format("[data-href*='/job/%s/']", PIPELINE_NAME))));
         actions.moveToElement(chevronButton).click().perform();
 
-        JavascriptExecutor js = (JavascriptExecutor) getDriver();
 
-        wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//div[@id='tippy-6']")));
-        wait.until(ExpectedConditions.attributeToBe(chevronButton, "aria-expanded", "true"));
         WebElement tippyBox = getDriver().findElement(By.cssSelector(".tippy-box"));
         wait.until(ExpectedConditions.attributeToBe(tippyBox, "data-state", "visible"));
+
+
+        actions.moveToElement(tippyBox);
+
+       // JavascriptExecutor js = (JavascriptExecutor) getDriver();
+
+      //  wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//div[@id='tippy-6']")));
+   //     wait.until(ExpectedConditions.attributeToBe(chevronButton, "aria-expanded", "true"));
+   //     WebElement tippyBox = getDriver().findElement(By.cssSelector(".tippy-box"));
+       // wait.until(ExpectedConditions.attributeToBe(tippyBox, "data-state", "visible"));
         wait.until(ExpectedConditions.visibilityOf(tippyBox));
-
-        wait.until(driver -> js.executeScript(
-                "return window.getComputedStyle(arguments[0]).getPropertyValue('opacity')", tippyBox).equals("1"));
-
         WebElement confirmRenameLink = wait.until(ExpectedConditions.presenceOfElementLocated(
                 By.xpath("//div[@class='jenkins-dropdown']//a[@href='/job/" + PIPELINE_NAME + "/confirm-rename']")));
         wait.until(ExpectedConditions.elementToBeClickable(confirmRenameLink));
+        actions.moveToElement(confirmRenameLink).click().perform();
 
+//        wait.until(driver -> js.executeScript(
+//                "return window.getComputedStyle(arguments[0]).getPropertyValue('opacity')", tippyBox).equals("1"));
 
-        js.executeScript("arguments[0].click();", confirmRenameLink);
+//        WebElement confirmRenameLink = wait.until(ExpectedConditions.presenceOfElementLocated(
+//                By.xpath("//div[@class='jenkins-dropdown']//a[@href='/job/" + PIPELINE_NAME + "/confirm-rename']")));
+//        wait.until(ExpectedConditions.elementToBeClickable(confirmRenameLink));
+//
+//
+//        js.executeScript("arguments[0].click();", confirmRenameLink);
 
         WebElement nameInput = wait.until(ExpectedConditions.visibilityOfElementLocated(
                 By.xpath("//input[@checkdependson='newName']")));
