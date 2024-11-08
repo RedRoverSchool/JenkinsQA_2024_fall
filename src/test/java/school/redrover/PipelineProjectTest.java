@@ -109,19 +109,13 @@ public class PipelineProjectTest extends BaseTest {
         actions.moveToElement(projectElement, projectElement.getSize().width / 2, projectElement.getSize().height / 2)
                 .perform();
 
-        WebElement chevronButton = wait.until(ExpectedConditions.visibilityOfElementLocated(
+        WebElement chevronButton = wait.until(ExpectedConditions.elementToBeClickable(
                 By.cssSelector(String.format("[data-href*='/job/%s/']", PIPELINE_NAME))));
-
-        Boolean isChevronVisible = (Boolean) ((JavascriptExecutor) getDriver())
-                .executeScript("return arguments[0].offsetWidth > 0 && arguments[0].offsetHeight > 0;", chevronButton);
-        if (!isChevronVisible) {
-            throw new AssertionError("Chevron is not visible!");
-        }
 
         JavascriptExecutor js = (JavascriptExecutor) getDriver();
         js.executeScript("document.querySelector('tr#job_" + PIPELINE_NAME + " td:nth-child(3)').style.visibility = 'hidden';");
 
-        js = (JavascriptExecutor) getDriver();
+        js.executeScript("arguments[0].scrollIntoView();", chevronButton);
         js.executeScript("arguments[0].click();", chevronButton);
 
         wait.until(ExpectedConditions.visibilityOfElementLocated(
