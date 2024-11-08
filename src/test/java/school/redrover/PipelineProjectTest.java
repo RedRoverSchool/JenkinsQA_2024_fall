@@ -118,6 +118,10 @@ public class PipelineProjectTest extends BaseTest {
 
 
         wait.until(ExpectedConditions.attributeToBe(chevronButton, "aria-expanded", "true"));
+        wait.until(ExpectedConditions.attributeToBe(
+                getDriver().findElement(By.cssSelector(".tippy-box")),
+                "data-state",
+                "visible"));
 
 
         WebElement confirmRenameLink = wait.until(ExpectedConditions.elementToBeClickable(
