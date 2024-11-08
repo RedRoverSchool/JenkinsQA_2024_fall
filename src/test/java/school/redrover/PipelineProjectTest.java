@@ -116,6 +116,7 @@ public class PipelineProjectTest extends BaseTest {
         JavascriptExecutor js = (JavascriptExecutor) getDriver();
         js.executeScript("arguments[0].click();", chevronButton);
 
+        wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//div[@id='tippy-6']")));
         wait.until(ExpectedConditions.attributeToBe(chevronButton, "aria-expanded", "true"));
         WebElement tippyBox = getDriver().findElement(By.cssSelector(".tippy-box"));
         wait.until(ExpectedConditions.attributeToBe(tippyBox, "data-state", "visible"));
@@ -128,6 +129,7 @@ public class PipelineProjectTest extends BaseTest {
 
         WebElement confirmRenameLink = wait.until(ExpectedConditions.elementToBeClickable(
                 By.xpath("//div[@class='jenkins-dropdown']//a[@href='/job/" + PIPELINE_NAME + "/confirm-rename']")));
+        Thread.sleep(2000);
 
         confirmRenameLink.click();
 
