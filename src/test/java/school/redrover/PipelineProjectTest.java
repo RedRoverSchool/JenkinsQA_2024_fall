@@ -106,15 +106,16 @@ public class PipelineProjectTest extends BaseTest {
         WebElement projectElement = wait.until(ExpectedConditions.visibilityOfElementLocated(
                 By.xpath("//a[@href='job/" + PIPELINE_NAME + "/']")));
 
-        actions.moveToElement(projectElement, projectElement.getSize().width / 2, projectElement.getSize().height / 2)
+        actions.moveToElement(projectElement)
+                .pause(1000)
                 .perform();
 
         WebElement chevronButton = wait.until(ExpectedConditions.elementToBeClickable(
                 By.cssSelector(String.format("[data-href*='/job/%s/']", PIPELINE_NAME))));
+actions.moveToElement(chevronButton).click().perform();
 
-
-        JavascriptExecutor js = (JavascriptExecutor) getDriver();
-        js.executeScript("arguments[0].click();", chevronButton);
+      JavascriptExecutor js = (JavascriptExecutor) getDriver();
+//        js.executeScript("arguments[0].click();", chevronButton);
 
         wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//div[@id='tippy-6']")));
         wait.until(ExpectedConditions.attributeToBe(chevronButton, "aria-expanded", "true"));
@@ -129,7 +130,7 @@ public class PipelineProjectTest extends BaseTest {
 
         Thread.sleep(2000);
         WebElement confirmRenameLink = wait.until(ExpectedConditions.elementToBeClickable(
-                By.xpath("//div[@class='jenkins-dropdown']//a[@href='/job/" + PIPELINE_NAME + "/confirm-rename']")));
+                By.xpath("//a[@href='/job/" + PIPELINE_NAME + "/confirm-rename']")));
 
 
         confirmRenameLink.click();
