@@ -75,9 +75,26 @@ public class CredentialsMenuTest extends BaseTest {
 
         new Actions(getDriver()).moveToElement(userAdmin, xOffset, yOffset).click().perform();
 
-        WebElement addDomainElement = new WebDriverWait(getDriver(), Duration.ofSeconds(10), Duration.ofMillis(200))
+        /*WebElement addDomainElement = new WebDriverWait(getDriver(), Duration.ofSeconds(10), Duration.ofMillis(200))
                 .until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[@id='tippy-7']//a")));
-        addDomainElement.click();
+        addDomainElement.click();*/
+
+
+
+
+        try {
+            WebElement addDomainElement = new WebDriverWait(getDriver(), Duration.ofSeconds(10), Duration.ofMillis(200))
+                    .until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[@id='tippy-7']//a")));
+            addDomainElement.click();
+        } catch (Exception e) {
+            // Резервный клик через JavaScript, если обычный клик не сработал
+            WebElement addDomainElement = getDriver().findElement(By.xpath("//*[@id='tippy-7']//a"));
+            ((JavascriptExecutor) getDriver()).executeScript("arguments[0].click();", addDomainElement);
+        }
+
+
+
+
 
         String newDomain = getDriver().findElement(By.xpath("//h1[text()='New domain']")).getText();
 
