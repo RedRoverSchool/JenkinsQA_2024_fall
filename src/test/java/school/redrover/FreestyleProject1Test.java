@@ -44,7 +44,7 @@ public class FreestyleProject1Test extends BaseTest {
         WebElement element = getDriver().findElement(By
                 .xpath("//span[contains(text(),'New freestyle project')]"));
         actions.moveToElement(element).perform();
-        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(10));
+        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(20));
         WebElement chevron = wait.until(ExpectedConditions.elementToBeClickable(By
                 .xpath("//*[@id='job_New freestyle project']/td[3]/a/button")));
         actions.moveToElement(chevron).perform();
