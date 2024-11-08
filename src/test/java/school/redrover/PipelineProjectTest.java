@@ -116,13 +116,15 @@ public class PipelineProjectTest extends BaseTest {
         JavascriptExecutor js = (JavascriptExecutor) getDriver();
         js.executeScript("arguments[0].click();", chevronButton);
 
-
         wait.until(ExpectedConditions.attributeToBe(chevronButton, "aria-expanded", "true"));
-        wait.until(ExpectedConditions.attributeToBe(
-                getDriver().findElement(By.cssSelector(".tippy-box")),
-                "data-state",
-                "visible"));
+        WebElement tippyBox = getDriver().findElement(By.cssSelector(".tippy-box"));
+        wait.until(ExpectedConditions.attributeToBe(tippyBox, "data-state", "visible"));
 
+
+        wait.until(ExpectedConditions.visibilityOf(tippyBox));
+
+        wait.until(driver -> js.executeScript(
+                "return window.getComputedStyle(arguments[0]).getPropertyValue('opacity')", tippyBox).equals("1"));
 
         WebElement confirmRenameLink = wait.until(ExpectedConditions.elementToBeClickable(
                 By.xpath("//div[@class='jenkins-dropdown']//a[@href='/job/" + PIPELINE_NAME + "/confirm-rename']")));
