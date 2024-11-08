@@ -59,7 +59,7 @@ public class CredentialsMenuTest extends BaseTest {
     }
 
     @Test
-    public void testisDisplayedDomainElementDropdown() {
+    public void testisDisplayedDomainElementDropdown() throws InterruptedException {
 
         getCredentialsPage();
         moveToUserAdmin();
@@ -73,33 +73,29 @@ public class CredentialsMenuTest extends BaseTest {
         int xOffset = elementWidth - 8;
         int yOffset = elementHeight / 2;
 
-        new Actions(getDriver()).moveToElement(userAdmin, xOffset, yOffset).click().perform();
+        //new Actions(getDriver()).moveToElement(userAdmin, xOffset, yOffset).click().perform();
+
+        new Actions(getDriver())
+                .moveToElement(userAdmin, xOffset, yOffset)
+                .pause(Duration.ofMillis(500)) // Задержка 0.5 секунды
+                .click()
+                .perform();
 
 
 
-        new WebDriverWait(getDriver(), Duration.ofSeconds(5)).until(
-                webDriver -> ((JavascriptExecutor) webDriver).executeScript("return document.readyState").equals("complete"));
 
-       /* WebElement addDomainElement = new WebDriverWait(getDriver(), Duration.ofSeconds(10), Duration.ofMillis(200))
+
+
+        WebElement addDomainElement = new WebDriverWait(getDriver(), Duration.ofSeconds(10), Duration.ofMillis(200))
                 .until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[@id='tippy-7']//a")));
         //addDomainElement.click();
-        new Actions(getDriver()).moveToElement(addDomainElement).click().perform();*/
-
-        WebElement addDomainElement = getDriver().findElement(By.xpath("//*[@id='tippy-7']//a"));
         new Actions(getDriver()).moveToElement(addDomainElement).click().perform();
 
+       /* WebElement addDomainElement = getDriver().findElement(By.xpath("//*[@id='tippy-7']//a"));
+        new Actions(getDriver()).moveToElement(addDomainElement).click().perform();*/
 
 
 
-        /*try {
-            WebElement addDomainElement = new WebDriverWait(getDriver(), Duration.ofSeconds(10), Duration.ofMillis(200))
-                    .until(ExpectedConditions.elementToBeClickable(By.xpath("//*[@id='tippy-7']//a")));
-            addDomainElement.click();
-        } catch (Exception e) {
-            // Резервный клик через JavaScript, если обычный клик не сработал
-            WebElement addDomainElement = getDriver().findElement(By.xpath("//*[@id='tippy-7']//a"));
-            ((JavascriptExecutor) getDriver()).executeScript("arguments[0].click();", addDomainElement);
-        }*/
 
 
 
