@@ -181,8 +181,10 @@ public class PipelineProject2Test extends BaseTest {
                 .moveToElement(chevronButton).click()
                 .perform();
 
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@id='tippy-6']")));
+
         WebElement deleteButton = wait.until(ExpectedConditions.elementToBeClickable(
-                By.xpath("//div[@id='tippy-6']//button[contains(@href, 'doDelete')]")));
+                By.xpath("//button[contains(@href, 'doDelete')]")));
 
         new Actions(getDriver())
                 .moveToElement(deleteButton).click()
