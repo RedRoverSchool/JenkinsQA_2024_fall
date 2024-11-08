@@ -63,7 +63,7 @@ public class FreestyleProject1Test extends BaseTest {
 
         // Wait for the entire dropdown container to load and settle
         WebElement dropdownContainer = wait.until(ExpectedConditions.visibilityOfElementLocated(
-                By.id("tippy-6")));
+                By.xpath("//*[@class='jenkins-dropdown']")));
         wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(@href,'doDelete')]")));
 
         // Wait for the delete option to appear and be clickable
