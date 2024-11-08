@@ -76,7 +76,7 @@ public class CredentialsMenuTest extends BaseTest {
         new Actions(getDriver()).moveToElement(userAdmin, xOffset, yOffset).click().perform();
 
         WebElement addDomainElement = new WebDriverWait(getDriver(), Duration.ofSeconds(10), Duration.ofMillis(200))
-                .until(ExpectedConditions.elementToBeClickable(By.xpath("//*[@id='tippy-7']//a")));
+                .until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[@id='tippy-7']//a")));
         addDomainElement.click();
 
         String newDomain = getDriver().findElement(By.xpath("//h1[text()='New domain']")).getText();
