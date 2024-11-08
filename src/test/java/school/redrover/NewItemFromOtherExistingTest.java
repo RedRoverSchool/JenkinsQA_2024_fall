@@ -21,7 +21,7 @@ public class NewItemFromOtherExistingTest extends BaseTest {
 
         WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(10));
 
-        WebElement newItemButton = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//a[@it='hudson.model.Hudson@32028caf']")));
+        WebElement newItemButton = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//a[@href='/view/all/newJob']")));
         newItemButton.click();
 
         WebElement inputItemNameField = wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("name")));
