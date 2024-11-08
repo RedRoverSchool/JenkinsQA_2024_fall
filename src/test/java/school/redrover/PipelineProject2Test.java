@@ -180,11 +180,13 @@ public class PipelineProject2Test extends BaseTest {
                 .moveToElement(projectItem)
                 .moveToElement(chevronButton).click().pause(10000)
                 .perform();
-        System.out.println(chevronButton.isDisplayed());
-        wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//div[@id='tippy-6']")));
 
-        wait.until(ExpectedConditions.elementToBeClickable(
-                By.xpath("//button[contains(@href, 'doDelete')]"))).click();
+        WebElement deleteButton = wait.until(ExpectedConditions.presenceOfElementLocated(
+                By.xpath("//button[contains(@href, 'doDelete')]")));
+
+        System.out.println(deleteButton.isDisplayed());
+
+        deleteButton.click();
 
         wait.until(ExpectedConditions.visibilityOfElementLocated(
                 By.xpath("//button[@data-id='ok']"))).click();
