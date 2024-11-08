@@ -8,6 +8,7 @@ import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
+import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import school.redrover.runner.BaseTest;
 import school.redrover.runner.ProjectUtils;
@@ -19,6 +20,7 @@ import java.util.List;
 public class DashboardMenuInBreadcrumbsTest extends BaseTest {
 
     @Test
+//    @Ignore
     public void testDashboardDropdownMenu() throws InterruptedException {
 
         Actions actions = new Actions(getDriver());
@@ -33,18 +35,18 @@ public class DashboardMenuInBreadcrumbsTest extends BaseTest {
         ProjectUtils.log("Click on the dropdown icon");
         WebElement dropdownIcon = getDriver().findElement(By.xpath("//a[@href='/']/button[@class='jenkins-menu-dropdown-chevron']"));
 
-        wait.until(ExpectedConditions.elementToBeClickable(dropdownIcon)).click();
+//        wait.until(ExpectedConditions.elementToBeClickable(dropdownIcon)).click();
         /*
         wait for CSS property "right" to change, i.e. wait for the animation to finish
         */
-//        wait.until(new ExpectedCondition<Boolean>() {
-//            public Boolean apply(WebDriver driver) {
-//                String right = dropdownIcon.getCssValue("right");
-//                System.out.println("Меняющееся CSS свойство right: " + right);
-//                return "-22px".equals(right);
-//            }
-//        });
-//        dropdownIcon.click();
+        wait.until(new ExpectedCondition<Boolean>() {
+            public Boolean apply(WebDriver driver) {
+                String right = dropdownIcon.getCssValue("right");
+                System.out.println("Меняющееся CSS свойство right: " + right);
+                return "-22px".equals(right);
+            }
+        });
+        actions.moveToElement(dropdownIcon).click().perform();
 
         ProjectUtils.log("Create list of dropdown elements");
         List<WebElement> dashboardDropdownMenuElements = getDriver().findElements(By.xpath("//*[@data-placement='bottom-start']/div/div/a[@class='jenkins-dropdown__item ']"));
