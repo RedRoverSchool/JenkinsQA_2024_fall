@@ -13,13 +13,12 @@ import school.redrover.runner.BaseTest;
 import java.time.Duration;
 
 public class MultibranchPipelineTest extends BaseTest {
-    
+
     private static final String MP_NAME = "NewItem";
     private static final By NAME_INPUT = By.id("name");
     private static final By CREATE_A_JOB_BUTTON = By.cssSelector("[href='newJob']");
     private static final By MULTIBRANCH_PIPELINE_PROJECT = By.cssSelector("[class$='MultiBranchProject']");
     private static final By OK_BUTTON = By.id("ok-button");
-
 
     @Test
     public void testAddDescriptionCreatingMultibranch() {
