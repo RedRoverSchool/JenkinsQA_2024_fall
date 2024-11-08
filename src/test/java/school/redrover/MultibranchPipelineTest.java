@@ -2,11 +2,15 @@ package school.redrover;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import school.redrover.runner.BaseTest;
+
+import java.time.Duration;
 
 public class MultibranchPipelineTest extends BaseTest {
     
@@ -16,10 +20,12 @@ public class MultibranchPipelineTest extends BaseTest {
     private static final By MULTIBRANCH_PIPELINE_PROJECT = By.cssSelector("[class$='MultiBranchProject']");
     private static final By OK_BUTTON = By.id("ok-button");
 
-    @Ignore 
+
     @Test
     public void testAddDescriptionCreatingMultibranch() {
-        final String expectedDescription = "Add description";
+        final String expectedDescription = "AddedDescription";
+
+        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(2));
 
         getDriver().findElement(By.cssSelector("[href$='/newJob']")).click();
 
@@ -30,7 +36,7 @@ public class MultibranchPipelineTest extends BaseTest {
         getDriver().findElement(By.cssSelector("[name$='description']")).sendKeys(expectedDescription);
         getDriver().findElement(By.name("Submit")).click();
 
-        String actualDescription = getDriver().findElement(By.id("view-message")).getText();
+        String actualDescription = wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("view-message"))).getText();
 
         Assert.assertEquals(actualDescription, expectedDescription);
     }
