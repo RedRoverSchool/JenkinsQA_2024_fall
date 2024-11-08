@@ -75,12 +75,17 @@ public class CredentialsMenuTest extends BaseTest {
 
         new Actions(getDriver()).moveToElement(userAdmin, xOffset, yOffset).click().perform();
 
+
+
         new WebDriverWait(getDriver(), Duration.ofSeconds(5)).until(
                 webDriver -> ((JavascriptExecutor) webDriver).executeScript("return document.readyState").equals("complete"));
 
-        WebElement addDomainElement = new WebDriverWait(getDriver(), Duration.ofSeconds(10), Duration.ofMillis(200))
+       /* WebElement addDomainElement = new WebDriverWait(getDriver(), Duration.ofSeconds(10), Duration.ofMillis(200))
                 .until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[@id='tippy-7']//a")));
         //addDomainElement.click();
+        new Actions(getDriver()).moveToElement(addDomainElement).click().perform();*/
+
+        WebElement addDomainElement = getDriver().findElement(By.xpath("//*[@id='tippy-7']//a"));
         new Actions(getDriver()).moveToElement(addDomainElement).click().perform();
 
 
