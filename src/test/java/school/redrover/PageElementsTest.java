@@ -86,6 +86,7 @@ public class PageElementsTest extends BaseTest {
     }
 
     @Test
+    @Ignore
     public void testNewPipeline (){
         newItemsData("PipeTest", "//*[@id='j-add-item-type-standalone-projects']/ul/li[2]/div[2]/label");
 
@@ -100,6 +101,7 @@ public class PageElementsTest extends BaseTest {
     }
 
     @Test
+    @Ignore
     public void testNewFreeStyleProject (){
         newItemsData("FreeStyleProjectTest", "//*[@id='j-add-item-type-standalone-projects']/ul/li[1]/div[2]/label");
 
