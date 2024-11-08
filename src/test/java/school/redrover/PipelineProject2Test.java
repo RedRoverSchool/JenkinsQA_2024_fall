@@ -173,12 +173,13 @@ public class PipelineProject2Test extends BaseTest {
         WebElement projectItem = wait.until(ExpectedConditions.presenceOfElementLocated(
                 By.xpath(String.format("//span[text()='%s']", PROJECT_NAME)))
         );
-        WebElement chevronButton = wait.until(ExpectedConditions.elementToBeClickable(
-                By.xpath(String.format("//span[text()='%s']/following-sibling::button", PROJECT_NAME))));
 
         new Actions(getDriver())
                 .moveToElement(projectItem)
                 .perform();
+
+        WebElement chevronButton = wait.until(ExpectedConditions.elementToBeClickable(
+                By.xpath(String.format("//span[text()='%s']/following-sibling::button", PROJECT_NAME))));
 
         wait.until(driver -> {
             String transformValue = chevronButton.getCssValue("transform");
