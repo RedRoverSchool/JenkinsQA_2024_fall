@@ -3,11 +3,15 @@ package school.redrover;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import school.redrover.runner.BaseTest;
+
+import java.time.Duration;
 
 public class OrganizationFolderTest extends BaseTest {
     private static final String ITEM_NAME = "Item Name";
@@ -190,6 +194,56 @@ public class OrganizationFolderTest extends BaseTest {
 
         String organizationFolderCurrentIcon = getDriver().findElement(By.cssSelector("h1 > svg")).getAttribute("title");
         Assert.assertEquals(organizationFolderCurrentIcon, "Folder");
+    }
+
+    @Test
+    public void testChevron() {
+        getDriver().findElement(By.xpath("//span/a[@href='/view/all/newJob']")).click();
+        getDriver().findElement(By.xpath("//div/input[@class='jenkins-input']")).sendKeys(ITEM_NAME);
+        JavascriptExecutor js = (JavascriptExecutor) getDriver();
+        js.executeScript("window.scrollTo(0, document.body.scrollHeight);");
+        getDriver().findElement(By.className("jenkins_branch_OrganizationFolder")).click();
+        getDriver().findElement(By.xpath("//div/button[@type='submit']")).click();
+        getDriver().findElement(By.xpath("//div/button[@class='jenkins-button jenkins-submit-button jenkins-button--primary ']")).click();
+        getDriver().findElement(By.id("jenkins-home-link")).click();
+        Actions actions = new Actions(getDriver());
+        actions.moveToElement(getDriver().findElement(By.xpath("//tbody/tr/td/a/span[contains(text(),ITEM_NAME)]"))).perform();
+        WebDriverWait driverWait = new WebDriverWait(getDriver(), Duration.ofSeconds(3));
+        driverWait.until(ExpectedConditions.elementToBeClickable(getDriver().findElement(
+                By.xpath("//a[contains(@class, 'jenkins-table__link model-link inside')]/button[contains(@class, 'jenkins-menu-dropdown-chevron')]")))).click();
+        driverWait.until(ExpectedConditions.elementToBeClickable(getDriver().findElement(
+                By.xpath("//body/div[3]/div/div/div/a[1]")))).click();
+
+        Assert.assertEquals(getDriver().findElement(By.xpath("//div[contains(@class, 'jenkins-app-bar__content')]/h1")).getText(), "Configuration");
+    }
+
+    @Test
+    public void testFolderIcon() {
+        getDriver().findElement(By.xpath("//span/a[@href='/view/all/newJob']")).click();
+        getDriver().findElement(By.xpath("//div/input[@class='jenkins-input']")).sendKeys(ITEM_NAME);
+        JavascriptExecutor js = (JavascriptExecutor) getDriver();
+        js.executeScript("window.scrollTo(0, document.body.scrollHeight);");
+        getDriver().findElement(By.className("jenkins_branch_OrganizationFolder")).click();
+        getDriver().findElement(By.xpath("//div/button[@type='submit']")).click();
+        getDriver().findElement(By.xpath("//div/button[@class='jenkins-button jenkins-submit-button jenkins-button--primary ']")).click();
+        getDriver().findElement(By.id("jenkins-home-link")).click();
+        Actions actions = new Actions(getDriver());
+        actions.moveToElement(getDriver().findElement(By.xpath("//tbody/tr/td/a/span[contains(text(),ITEM_NAME)]"))).perform();
+        WebDriverWait driverWait = new WebDriverWait(getDriver(), Duration.ofSeconds(3));
+        driverWait.until(ExpectedConditions.elementToBeClickable(getDriver().findElement(
+                By.xpath("//a[contains(@class, 'jenkins-table__link model-link inside')]/button[contains(@class, 'jenkins-menu-dropdown-chevron')]")))).click();
+        driverWait.until(ExpectedConditions.elementToBeClickable(getDriver().findElement(
+                By.xpath("//body/div[3]/div/div/div/a[1]")))).click();
+        driverWait.until(ExpectedConditions.elementToBeClickable(getDriver().findElement(
+                By.xpath("//span[contains(@id, 'toggle-switch-enable-disable-project')]/label")))).click();
+        getDriver().findElement(By.xpath("//div/button[@class='jenkins-button jenkins-submit-button jenkins-button--primary ']")).click();
+        getDriver().findElement(By.id("jenkins-home-link")).click();
+        String url = getDriver().findElement(
+                By.xpath("//td[contains(@class, 'jenkins-table__cell--tight jenkins-table__icon')]/div/img")).getAttribute("src");
+        int index = url.indexOf("/static");
+        url = url.substring(index);
+
+        Assert.assertEquals(url, "/static/5a4fca83/plugin/cloudbees-folder/images/svgs/folder-disabled.svg");
     }
 
 }
