@@ -12,7 +12,7 @@ import java.util.List;
 public class Node2Test extends BaseTest {
 
     @Test
-    public void testСreationAndDisplayNewNameOnNodesPage() {
+    public void testCreationAndDisplayNewNameOnNodesPage() {
         final String myNodeName = "My name of node";
         getDriver().findElement(By.xpath("//a[@href='/manage']")).click();
 
