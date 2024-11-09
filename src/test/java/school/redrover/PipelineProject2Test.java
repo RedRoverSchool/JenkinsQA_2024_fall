@@ -170,21 +170,15 @@ public class PipelineProject2Test extends BaseTest {
         createItem(PROJECT_NAME, "//span[text()='Pipeline']");
         goToMainPage();
 
+        WebElement projectItem = wait.until(ExpectedConditions.presenceOfElementLocated(
+                By.xpath(String.format("//span[text()='%s']", PROJECT_NAME))));
+
         Actions actions = new Actions(getDriver());
+        actions.moveToElement(projectItem).perform();
 
-        WebElement projectItem =
-                wait.until(ExpectedConditions.visibilityOfElementLocated(
-                        By.xpath(String.format("//a[@href='job/%s/']", PROJECT_NAME))));
-
-        WebElement chevronButton = getDriver().findElement(By.xpath(
-                String.format("//button[contains(@data-href,'/job/%s/')]", PROJECT_NAME)));
-
-        actions
-                .moveToElement(projectItem)
-                .pause(2000)
-                .moveByOffset(projectItem.getSize().getWidth() / 2 + chevronButton.getSize().getWidth() / 2, 0)
-                .click()
-                .perform();
+        WebElement chevronButton = wait.until(ExpectedConditions.elementToBeClickable(
+                By.xpath(String.format("//span[text()='%s']/following-sibling::button", PROJECT_NAME))));
+        actions.moveToElement(chevronButton).click().perform();
 
         wait.until(ExpectedConditions.attributeToBe(chevronButton, "aria-expanded", "true"));
 
