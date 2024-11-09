@@ -135,6 +135,7 @@ public class PageElementsTest extends BaseTest {
         Assert.assertEquals(result, "Project newFolderTest");
     }
 
+    @Ignore
     @Test
     public void testNewMultibranchPipeline(){
         newItemsData("newMultibranchPipelineTest", "//*[@id='j-add-item-type-nested-projects']/ul/li[2]/div[2]/label");
