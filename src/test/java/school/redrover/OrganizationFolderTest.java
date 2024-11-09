@@ -2,12 +2,18 @@ package school.redrover;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import school.redrover.runner.BaseTest;
+
+import java.time.Duration;
+import java.util.List;
 
 public class OrganizationFolderTest extends BaseTest {
     private static final String ITEM_NAME = "Item Name";
@@ -191,6 +197,54 @@ public class OrganizationFolderTest extends BaseTest {
 
         String organizationFolderCurrentIcon = getDriver().findElement(By.cssSelector("h1 > svg")).getAttribute("title");
         Assert.assertEquals(organizationFolderCurrentIcon, "Folder");
+    }
+
+    @Test
+    public void testFolderDelete() {
+
+        getDriver().findElement(By.xpath("//span/a[@href='/view/all/newJob']")).click();
+        getDriver().findElement(By.xpath("//div/input[@class='jenkins-input']")).sendKeys(ITEM_NAME);
+        JavascriptExecutor js = (JavascriptExecutor) getDriver();
+        js.executeScript("window.scrollTo(0, document.body.scrollHeight);");
+        getDriver().findElement(By.className("jenkins_branch_OrganizationFolder")).click();
+        getDriver().findElement(By.xpath("//div/button[@type='submit']")).click();
+        getDriver().findElement(By.xpath("//div/button[@class='jenkins-button jenkins-submit-button jenkins-button--primary ']")).click();
+        getDriver().findElement(By.id("jenkins-home-link")).click();
+        getDriver().findElement(By.xpath("//tbody/tr/td/a/span[contains(text(),ITEM_NAME)]")).click();
+        getDriver().findElement(By.xpath("//div[5]/span/a")).click(); // Кликаем на кнопку Удалить
+        WebDriverWait driverWait = new WebDriverWait(getDriver(), Duration.ofSeconds(3));
+        driverWait.until(ExpectedConditions.elementToBeClickable(By.xpath("//button[@ data-id='ok']"))).click(); //ждем появления кнопки Yes
+        List<WebElement> existingInstancesList = getDriver().findElements(By.xpath("//table[@id='projectstatus']/tbody")); //записываем существующие сущности в лист
+        Assert.assertTrue(existingInstancesList.isEmpty());
+    }
+
+    @Test
+    public void testSecondInstanceExistsAfterRemoving() {
+//создаем первую сущность
+        getDriver().findElement(By.xpath("//span/a[@href='/view/all/newJob']")).click();
+        getDriver().findElement(By.xpath("//div/input[@class='jenkins-input']")).sendKeys(ITEM_NAME);
+        JavascriptExecutor js = (JavascriptExecutor) getDriver();
+        js.executeScript("window.scrollTo(0, document.body.scrollHeight);");
+        getDriver().findElement(By.className("jenkins_branch_OrganizationFolder")).click();
+        getDriver().findElement(By.xpath("//div/button[@type='submit']")).click();
+        getDriver().findElement(By.xpath("//div/button[@class='jenkins-button jenkins-submit-button jenkins-button--primary ']")).click();
+        getDriver().findElement(By.id("jenkins-home-link")).click();
+//создаем вторую сущность
+        getDriver().findElement(By.xpath("//span/a[@href='/view/all/newJob']")).click();
+        getDriver().findElement(By.xpath("//div/input[@class='jenkins-input']")).sendKeys(ITEM_NAME + " Second");
+        js.executeScript("window.scrollTo(0, document.body.scrollHeight);");
+        getDriver().findElement(By.className("jenkins_branch_OrganizationFolder")).click();
+        getDriver().findElement(By.xpath("//div/button[@type='submit']")).click();
+        getDriver().findElement(By.xpath("//div/button[@class='jenkins-button jenkins-submit-button jenkins-button--primary ']")).click();
+        getDriver().findElement(By.id("jenkins-home-link")).click();
+//удаляем первую сущность
+        getDriver().findElement(By.xpath("//tbody/tr/td/a/span[contains(text(),ITEM_NAME)]")).click();
+        getDriver().findElement(By.xpath("//div[5]/span/a")).click(); // Кликаем на кнопку Удалить
+        WebDriverWait driverWait = new WebDriverWait(getDriver(), Duration.ofSeconds(3));
+        driverWait.until(ExpectedConditions.elementToBeClickable(By.xpath("//button[@ data-id='ok']"))).click(); //ждем появления кнопки Yes
+
+        List<WebElement> existingInstancesList = getDriver().findElements(By.xpath("//table[@id='projectstatus']/tbody")); //записываем существующие сущности в лист
+        Assert.assertFalse(existingInstancesList.isEmpty());
     }
 
 }
