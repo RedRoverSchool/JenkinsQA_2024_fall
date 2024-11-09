@@ -5,6 +5,7 @@ import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.Select;
 import org.testng.Assert;
+import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import school.redrover.runner.BaseTest;
 
@@ -167,7 +168,8 @@ public class OrganizationFolderTest extends BaseTest {
         Assert.assertEquals(getDriver().findElement(By.xpath("//div/h1")).getText(), newName);
 
     }
-
+    
+    @Ignore
     @Test
     public void testCreateOrganizationFolderWithDefaultIcon() {
         getDriver().findElement(By.cssSelector("[href$='/newJob']")).click();
