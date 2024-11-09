@@ -190,9 +190,8 @@ public class PipelineProject2Test extends BaseTest {
                 .click()
                 .perform();
 
-        wait.until(ExpectedConditions.presenceOfElementLocated(By.id("tippy-6")));
+        wait.until(ExpectedConditions.attributeToBe(chevronButton, "aria-expanded", "true"));
 
-        // Ожидаем кнопку удаления и кликаем по ней
         wait.until(ExpectedConditions.visibilityOfElementLocated(
                 By.xpath("//button[contains(@href, 'doDelete')]"))).click();
 
