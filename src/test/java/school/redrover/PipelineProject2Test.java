@@ -1,6 +1,7 @@
 package school.redrover;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -170,20 +171,26 @@ public class PipelineProject2Test extends BaseTest {
         createItem(PROJECT_NAME, "//span[text()='Pipeline']");
         goToMainPage();
 
-        WebElement projectItem = wait.until(ExpectedConditions.presenceOfElementLocated(
-                By.xpath(String.format("//span[text()='%s']", PROJECT_NAME)))
-        );
-
         Actions actions = new Actions(getDriver());
 
-        actions.moveToElement(projectItem).perform();
+        actions
+                .moveToElement(wait.until(ExpectedConditions.visibilityOfElementLocated(
+                        By.xpath(String.format("//a[@href='job/%s/']", PROJECT_NAME)))))
+                .pause(1000)
+                .perform();
 
-        WebElement chevronButton = wait.until(ExpectedConditions.elementToBeClickable(
-                By.xpath(String.format("//span[text()='%s']/following-sibling::button", PROJECT_NAME))));
+        WebElement chevronButton = wait.until(ExpectedConditions.presenceOfElementLocated(
+                By.xpath(String.format("//button[contains(@data-href,'/job/%s/')]", PROJECT_NAME)))
+        );
 
-        wait.until(driver -> !chevronButton.getCssValue("transform").isEmpty());
+        ((JavascriptExecutor) getDriver()).executeScript("arguments[0].scrollIntoView(true);", chevronButton);
 
-        actions.moveToElement(chevronButton).click().perform();
+        actions
+                .moveToElement(wait.until(ExpectedConditions.presenceOfElementLocated(
+                        By.xpath(String.format("//button[contains(@data-href,'/job/%s/')]", PROJECT_NAME)))
+                ))
+                .click()
+                .perform();
 
         wait.until(ExpectedConditions.presenceOfElementLocated(
                 By.xpath("//button[contains(@href, 'doDelete')]"))).click();
