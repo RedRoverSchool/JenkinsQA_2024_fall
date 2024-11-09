@@ -183,7 +183,10 @@ public class PipelineProject2Test extends BaseTest {
                 By.xpath(String.format("//button[contains(@data-href,'/job/%s/')]", PROJECT_NAME)))
         );
 
-        ((JavascriptExecutor) getDriver()).executeScript("arguments[0].scrollIntoView(true);", chevronButton);
+        wait.until(driver -> {
+            String transformValue = chevronButton.getCssValue("transform");
+            return transformValue != null && !transformValue.equals("none");
+        });
 
         actions
                 .moveToElement(chevronButton)
