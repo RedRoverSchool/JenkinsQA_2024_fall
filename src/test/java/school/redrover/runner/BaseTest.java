@@ -54,14 +54,14 @@ public abstract class BaseTest {
             }
         }
 
-//        if (ProjectUtils.isServerRun() || testResult.isSuccess() || ProjectUtils.closeBrowserIfError()) {
-//            try {
-//                JenkinsUtils.logout(driver);
-//            } catch (Exception ignore) {
-//            }
-//            driver.quit();
-//            ProjectUtils.log("Browser closed");
-//        }
+        if (ProjectUtils.isServerRun() || testResult.isSuccess() || ProjectUtils.closeBrowserIfError()) {
+            try {
+                JenkinsUtils.logout(driver);
+            } catch (Exception ignore) {
+            }
+            driver.quit();
+            ProjectUtils.log("Browser closed");
+        }
 
         ProjectUtils.logf(
                 "Execution time is %.3f sec",
