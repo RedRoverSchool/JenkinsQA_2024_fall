@@ -179,20 +179,21 @@ public class PipelineProject2Test extends BaseTest {
                 .pause(1000)
                 .perform();
 
-        WebElement chevronButton = wait.until(ExpectedConditions.presenceOfElementLocated(
+        WebElement chevronButton = wait.until(ExpectedConditions.visibilityOfElementLocated(
                 By.xpath(String.format("//button[contains(@data-href,'/job/%s/')]", PROJECT_NAME)))
         );
 
         ((JavascriptExecutor) getDriver()).executeScript("arguments[0].scrollIntoView(true);", chevronButton);
 
         actions
-                .moveToElement(wait.until(ExpectedConditions.presenceOfElementLocated(
-                        By.xpath(String.format("//button[contains(@data-href,'/job/%s/')]", PROJECT_NAME)))
-                ))
+                .moveToElement(chevronButton)
                 .click()
                 .perform();
 
-        wait.until(ExpectedConditions.presenceOfElementLocated(
+        wait.until(ExpectedConditions.presenceOfElementLocated(By.id("tippy-6")));
+
+        // Ожидаем кнопку удаления и кликаем по ней
+        wait.until(ExpectedConditions.visibilityOfElementLocated(
                 By.xpath("//button[contains(@href, 'doDelete')]"))).click();
 
         wait.until(ExpectedConditions.visibilityOfElementLocated(
