@@ -121,7 +121,7 @@ public class StartPageTest extends BaseTest {
         Assert.assertEquals(secondText.getText(), "This page is where your Jenkins jobs will be displayed. To get started, you can set up distributed builds or start building a software project.");
     }
 
-    @Test
+    @Test (invocationCount = 20)
     public void testDeleteNewFolderViaChevron() {
 
         WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(5));
@@ -132,9 +132,9 @@ public class StartPageTest extends BaseTest {
         actions.moveToElement(getDriver().findElement(By.xpath(
                 "//span[contains(text(), 'NewFolder')]"))).perform();
 
-        WebElement chevron = getDriver().findElement(By.xpath("//button[@data-href='http://localhost:8080/job/NewFolder/']"));
+        WebElement chevron = wait.until(ExpectedConditions.elementToBeClickable
+                (getDriver().findElement(By.xpath("//button[@data-href='http://localhost:8080/job/NewFolder/']"))));
         actions.moveToElement(chevron);
-
         wait.until(ExpectedConditions.elementToBeClickable(chevron));
         chevron.click();
         wait.until(ExpectedConditions.attributeToBe(chevron,"aria-expanded", "true"));
