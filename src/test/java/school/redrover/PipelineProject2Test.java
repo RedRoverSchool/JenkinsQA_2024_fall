@@ -1,7 +1,6 @@
 package school.redrover;
 
 import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -180,12 +179,10 @@ public class PipelineProject2Test extends BaseTest {
         WebElement chevronButton = getDriver().findElement(By.xpath(
                 String.format("//button[contains(@data-href,'/job/%s/')]", PROJECT_NAME)));
 
-        int xOffset = chevronButton.getLocation().getX() + (chevronButton.getSize().getWidth() / 2);
-
         actions
                 .moveToElement(projectItem)
-                .pause(1000)
-                .moveToElement(projectItem, xOffset, 0)
+                .pause(2000)
+                .moveByOffset(projectItem.getSize().getWidth() / 2 + chevronButton.getSize().getWidth() / 2, 0)
                 .click()
                 .perform();
 
