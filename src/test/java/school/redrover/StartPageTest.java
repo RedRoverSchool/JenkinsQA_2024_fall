@@ -100,11 +100,9 @@ public class StartPageTest extends BaseTest {
     @Test
     public void testDeleteNewFolder() {
 
-        final String folderName = "NewFolder";
-
         WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(20));
 
-        createNewFolder(folderName);
+        createNewFolder("NewFolder");
 
         Actions actions = new Actions(getDriver());
         actions.moveToElement(getDriver().findElement(By.xpath(
@@ -113,6 +111,37 @@ public class StartPageTest extends BaseTest {
         WebElement buttonDelete = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(
                 "//span[text()='Delete Folder']")));
                 buttonDelete.click();
+
+        WebElement buttonOk = wait.until(ExpectedConditions.elementToBeClickable(getDriver().findElement(By.xpath(
+                "//button[@data-id= 'ok']"))));
+        buttonOk.click();
+
+        WebElement secondText = getDriver().findElement(By.xpath("//p[contains(text(), 'This page is where')]"));
+
+        Assert.assertEquals(secondText.getText(), "This page is where your Jenkins jobs will be displayed. To get started, you can set up distributed builds or start building a software project.");
+    }
+
+    @Test
+    public void testDeleteNewFolderViaChevron() {
+
+        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(5));
+
+        createNewFolder("NewFolder");
+
+        Actions actions = new Actions(getDriver());
+        actions.moveToElement(getDriver().findElement(By.xpath(
+                "//span[contains(text(), 'NewFolder')]"))).perform();
+
+        WebElement chevron = getDriver().findElement(By.xpath("//button[@data-href='http://localhost:8080/job/NewFolder/']"));
+        actions.moveToElement(chevron);
+
+        wait.until(ExpectedConditions.elementToBeClickable(chevron));
+        chevron.click();
+        wait.until(ExpectedConditions.attributeToBe(chevron,"aria-expanded", "true"));
+
+        actions.moveToElement(getDriver().findElement(By.xpath("//button[@href='/job/NewFolder/doDelete']")))
+                .click()
+                .perform();
 
         WebElement buttonOk = wait.until(ExpectedConditions.elementToBeClickable(getDriver().findElement(By.xpath(
                 "//button[@data-id= 'ok']"))));
