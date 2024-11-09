@@ -2,6 +2,7 @@ package school.redrover;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import school.redrover.runner.BaseTest;
@@ -19,10 +20,25 @@ public class FreestyleProject1Test extends BaseTest {
     @Test
     public void testCreateFreestyleProject() throws InterruptedException {
         createFreestyleProject();
-        
+
         getDriver().findElement(By.id("jenkins-name-icon")).click();
         WebElement element = getDriver().findElement(By
                 .xpath("//span[contains(text(),'" + NEW_FREESTYLE_PROJECT_NAME + "')]"));
         Assert.assertTrue(element.isDisplayed());
+    }
+
+    @Test
+    public void testDeleteFreestyleProject() throws InterruptedException {
+        createFreestyleProject();
+        getDriver().findElement(By.id("jenkins-name-icon")).click();
+        Actions actions = new Actions(getDriver());
+        //hover over project title to activate menu dropdown
+        WebElement element = getDriver().findElement(By
+                .xpath("//span[contains(text(),'" + NEW_FREESTYLE_PROJECT_NAME + "')]"));
+        actions.moveToElement(element).click().perform();
+        getDriver().findElement((By.xpath("//*[@data-title='Delete Project']"))).click();
+        getDriver().findElement(By.xpath("//button[@data-id='ok']")).click();
+        String emptyDashboardHeader = getDriver().findElement(By.cssSelector(".empty-state-block > h1")).getText();
+        Assert.assertEquals(emptyDashboardHeader, "Welcome to Jenkins!");
     }
 }
