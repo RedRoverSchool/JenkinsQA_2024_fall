@@ -16,7 +16,7 @@ import java.time.Duration;
 public class DropDawnChevronTest extends BaseTest {
 
     @Test
-    public void testDropDawnNewItem () throws InterruptedException {
+    public void testDropDawnNewItem () {
         WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(5));
 
         getDriver().findElement(By.linkText("New Item")).click();
