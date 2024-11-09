@@ -17,7 +17,7 @@ public class DropDawnChevronTest extends BaseTest {
 
     @Test
     public void testDropDawnNewItem () throws InterruptedException {
-        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(10));
+        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(5));
 
         getDriver().findElement(By.linkText("New Item")).click();
 
@@ -40,20 +40,18 @@ public class DropDawnChevronTest extends BaseTest {
 
         WebElement hiddenButton = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//*[@id='job_TestDropDawnChevron']/td[3]/a/button")));
         actions.moveToElement(hiddenButton)
-                .pause(java.time.Duration.ofSeconds(3)).click().perform();
+                .pause(java.time.Duration.ofSeconds(1)).click().perform();
 
-        WebElement dropdown = getDriver().findElement(By.xpath("//button[@href='/job/TestDropDawnChevron/doDelete']"));
+        WebElement dropdown = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[@id='tippy-6']/div/div/div")));
         actions.moveToElement(dropdown)
-                .pause(java.time.Duration.ofSeconds(3)).click().perform();
+                .pause(java.time.Duration.ofSeconds(1)).click().perform();
 
         WebElement modal = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[@id='jenkins']/dialog")));
+        actions.moveToElement(modal).pause(java.time.Duration.ofSeconds(2)).perform();
         WebElement yesButton = modal.findElement(By.xpath("//*[@id='jenkins']/dialog/div[3]/button[1]"));
         yesButton.click();
 
-        boolean isDeleted = getDriver().findElements(By.xpath("//*[@id='job_TestDropDawnChevron']")).isEmpty();
-        Assert.assertTrue(isDeleted);
+        boolean isElementInvisible = wait.until(ExpectedConditions.invisibilityOfElementLocated(By.xpath("//*[@id='tippy-6']/div/div/div/button[2]")));
+        Assert.assertTrue(isElementInvisible);
     }
 }
-
-
-
