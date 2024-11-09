@@ -1,5 +1,6 @@
 package school.redrover;
 
+import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
@@ -15,7 +16,7 @@ import java.time.Duration;
 public class DropDawnChevronTest extends BaseTest {
 
     @Test
-    public void testDropDawnNewItem () {
+    public void testDropDawnNewItem () throws InterruptedException {
         WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(10));
 
         getDriver().findElement(By.linkText("New Item")).click();
@@ -25,7 +26,6 @@ public class DropDawnChevronTest extends BaseTest {
         getDriver().findElement(By.id("ok-button")).click();
 
         getDriver().findElement(By.name("description")).sendKeys("TestDropDawnChevron");
-
 
         JavascriptExecutor js = (JavascriptExecutor) getDriver();
         js.executeScript("window.scrollBy(0, 2000);");
@@ -42,16 +42,15 @@ public class DropDawnChevronTest extends BaseTest {
         actions.moveToElement(hiddenButton)
                 .pause(java.time.Duration.ofSeconds(1)).click().perform();
 
-        WebElement dropdown = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[@id='tippy-6']/div/div/div/button[2]")));
-        actions.moveToElement(dropdown)
-                .pause(java.time.Duration.ofSeconds(1)).perform();
+        WebElement dropdown = getDriver().findElement(By.xpath("//*[@href='/job/TestDropDawnChevron/doDelete']"));
+        actions.moveToElement(dropdown).pause(java.time.Duration.ofSeconds(2)).click().perform();
 
-        getDriver().findElement(By.xpath("//*[@id='tippy-6']/div/div/div/button[2]")).click();
-        getDriver().findElement(By.xpath("//*[@id='jenkins']/dialog/div[3]/button[1]")).click();
+        WebElement modal = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[@id='jenkins']/dialog")));
+        WebElement yesButton = modal.findElement(By.xpath("//*[@id='jenkins']/dialog/div[3]/button[1]"));
+        yesButton.click();
 
-//        boolean isElementInvisible = wait.until(ExpectedConditions.invisibilityOfElementLocated(By.xpath("//*[@id='tippy-6']/div/div/div/button[2]")));
-//
-//        Assert.assertTrue(isElementInvisible, "Элемент все еще присутствует после клика, хотя должен был исчезнуть");
+        boolean isDeleted = getDriver().findElements(By.xpath("//*[@id='job_TestDropDawnChevron']")).isEmpty();
+        Assert.assertTrue(isDeleted);
     }
 }
 
