@@ -42,7 +42,7 @@ public class DropDawnChevronTest extends BaseTest {
         actions.moveToElement(hiddenButton)
                 .pause(java.time.Duration.ofSeconds(1)).click().perform();
 
-        WebElement dropdown = getDriver().findElement(By.xpath("//*[@href='/job/TestDropDawnChevron/doDelete']"));
+        WebElement dropdown = getDriver().findElement(By.xpath("/html/body/div[3]/div/div/div/button[2]"));
         actions.moveToElement(dropdown).pause(java.time.Duration.ofSeconds(2)).click().perform();
 
         WebElement modal = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[@id='jenkins']/dialog")));
