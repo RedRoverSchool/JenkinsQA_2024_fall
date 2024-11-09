@@ -121,8 +121,8 @@ public class StartPageTest extends BaseTest {
         Assert.assertEquals(secondText.getText(), "This page is where your Jenkins jobs will be displayed. To get started, you can set up distributed builds or start building a software project.");
     }
 
-    @Test (invocationCount = 20)
-    public void testDeleteNewFolderViaChevron() {
+    @Test
+    public void testDeleteNewFolderViaChevron() throws InterruptedException {
 
         WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(5));
 
@@ -131,10 +131,10 @@ public class StartPageTest extends BaseTest {
         Actions actions = new Actions(getDriver());
         actions.moveToElement(getDriver().findElement(By.xpath(
                 "//span[contains(text(), 'NewFolder')]"))).perform();
+        Thread.sleep(1000);
 
-        WebElement chevron = wait.until(ExpectedConditions.elementToBeClickable
-                (getDriver().findElement(By.xpath("//button[@data-href='http://localhost:8080/job/NewFolder/']"))));
-        actions.moveToElement(chevron);
+        WebElement chevron = wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//button[@data-href='http://localhost:8080/job/NewFolder/']")));
         wait.until(ExpectedConditions.elementToBeClickable(chevron));
         chevron.click();
         wait.until(ExpectedConditions.attributeToBe(chevron,"aria-expanded", "true"));
