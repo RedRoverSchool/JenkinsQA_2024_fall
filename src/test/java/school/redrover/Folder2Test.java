@@ -4,16 +4,13 @@ import org.openqa.selenium.By;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import school.redrover.runner.BaseTest;
-import school.redrover.runner.ProjectUtils;
 
-public class CreateAndDeleteFolderTest extends BaseTest {
+public class Folder2Test extends BaseTest {
 
-    @Test
-    public void testDeleteFolder() {
+    private void createFolder() {
 
-        ProjectUtils.log("Create folder");
         getDriver()
-                .findElement(By.xpath("//*[@id=\"tasks\"]/div[1]"))
+                .findElement(By.xpath("//*[@id='tasks']/div[1]"))
                 .click();
 
         getDriver()
@@ -43,34 +40,45 @@ public class CreateAndDeleteFolderTest extends BaseTest {
         getDriver()
                 .findElement(By.cssSelector("li.jenkins-breadcrumbs__list-item:nth-child(1) > a:nth-child(1)"))
                 .click();
+    }
 
-        String firstFolder = getDriver()
+    @Test(description = "Create folder")
+    public void testCreateFolder() {
+
+        createFolder();
+
+        String folder = getDriver()
                 .findElement(By.xpath("//a[@href='job/Some%20folder%20name/']"))
                 .getText();
 
-        Assert.assertEquals(firstFolder, "Your advertisement could be in this field");
+        Assert.assertEquals(folder, "Your advertisement could be in this field");
 
+    }
 
-        ProjectUtils.log("Delete folder");
+    @Test(description = "Delete folder")
+    public void testDeleteFolder() {
+
+        createFolder();
+
         getDriver()
-                .findElement(By.xpath("//*[@id=\"job_Some folder name\"]/td[3]/a"))
+                .findElement(By.xpath("//*[@id='job_Some folder name']/td[3]/a"))
                 .click();
 
         getDriver()
-                .findElement(By.xpath("//*[@id=\"tasks\"]/div[4]"))
+                .findElement(By.xpath("//*[@id='tasks']/div[4]"))
                 .click();
 
         getDriver()
-                .findElement(By.xpath("//*[@id=\"jenkins\"]/dialog/div[3]/button[1]"))
+                .findElement(By.xpath("//*[@id='jenkins']/dialog/div[3]/button[1]"))
                 .click();
-
-        Assert.assertTrue(getDriver()
-                .findElements(By.xpath("//*[@id=\"job_Some folder name\"]/td[3]/a"))
-                .isEmpty());
 
         String welcomeStr = getDriver()
                 .findElement(By.cssSelector(".empty-state-block > h1"))
                 .getText();
+
+        Assert.assertTrue(getDriver()
+                .findElements(By.xpath("//*[@id='job_Some folder name']/td[3]/a"))
+                .isEmpty());
 
         Assert.assertEquals(welcomeStr, "Welcome to Jenkins!");
     }
