@@ -2,31 +2,40 @@ package school.redrover;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import school.redrover.runner.BaseTest;
 
+import java.time.Duration;
+
 public class CreateNewJobTest extends BaseTest {
 
+    private WebElement waitForElementVisibility(By locator) {
+        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(10));
+        WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(locator));
+        return element;
+    }
+
     @Test
-    public void testCreateNewPipeline() throws InterruptedException {
-        WebElement createJobButton = getDriver().findElement(By.xpath("//a[@href='newJob']"));
+    public void testCreateNewPipeline() {
+        WebElement createJobButton = waitForElementVisibility(By.xpath("//a[@href='newJob']"));
         createJobButton.click();
 
-        WebElement inputField = getDriver().findElement(By.id("name"));
+        WebElement inputField = waitForElementVisibility(By.id("name"));
         inputField.sendKeys("CodeBrew");
-        Thread.sleep(1000);
 
-        WebElement pipelineButton = getDriver().findElement(By.xpath("//span[text()='Pipeline']"));
+        WebElement pipelineButton = waitForElementVisibility(By.xpath("//span[text()='Pipeline']"));
         pipelineButton.click();
 
-        WebElement okButton = getDriver().findElement(By.id("ok-button"));
+        WebElement okButton = waitForElementVisibility(By.id("ok-button"));
         okButton.click();
 
-        WebElement dashBoardButton = getDriver().findElement(By.xpath("//a[text()='Dashboard']"));
+        WebElement dashBoardButton = waitForElementVisibility(By.xpath("//a[text()='Dashboard']"));
         dashBoardButton.click();
 
-        String actualPipeLineName = getDriver().findElement(By.xpath("//span[text()='CodeBrew']")).getText().toLowerCase();
+        String actualPipeLineName = waitForElementVisibility(By.xpath("//span[text()='CodeBrew']")).getText().toLowerCase();
 
         Assert.assertEquals(actualPipeLineName, "codebrew", "Actual result doesn't meet expectation");
 
