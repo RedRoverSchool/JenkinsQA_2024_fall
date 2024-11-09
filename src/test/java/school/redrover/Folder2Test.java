@@ -42,7 +42,7 @@ public class Folder2Test extends BaseTest {
                 .click();
     }
 
-    @Test(description = "Create folder")
+    @Test
     public void testCreateFolder() {
 
         createFolder();
@@ -55,7 +55,7 @@ public class Folder2Test extends BaseTest {
 
     }
 
-    @Test(description = "Delete folder")
+    @Test
     public void testDeleteFolder() {
 
         createFolder();
