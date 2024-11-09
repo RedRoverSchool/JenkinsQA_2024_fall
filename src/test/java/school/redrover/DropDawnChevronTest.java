@@ -40,10 +40,11 @@ public class DropDawnChevronTest extends BaseTest {
 
         WebElement hiddenButton = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//*[@id='job_TestDropDawnChevron']/td[3]/a/button")));
         actions.moveToElement(hiddenButton)
-                .pause(java.time.Duration.ofSeconds(1)).click().perform();
+                .pause(java.time.Duration.ofSeconds(3)).click().perform();
 
-        WebElement dropdown = getDriver().findElement(By.cssSelector("#tippy-6 > div > div > div > button:nth-child(4)"));
-        actions.moveToElement(dropdown).pause(java.time.Duration.ofSeconds(2)).click().perform();
+        WebElement dropdown = getDriver().findElement(By.xpath("//button[@href='/job/TestDropDawnChevron/doDelete']"));
+        actions.moveToElement(dropdown)
+                .pause(java.time.Duration.ofSeconds(3)).click().perform();
 
         WebElement modal = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[@id='jenkins']/dialog")));
         WebElement yesButton = modal.findElement(By.xpath("//*[@id='jenkins']/dialog/div[3]/button[1]"));
