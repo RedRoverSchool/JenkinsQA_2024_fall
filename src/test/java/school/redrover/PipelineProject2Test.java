@@ -173,23 +173,15 @@ public class PipelineProject2Test extends BaseTest {
 
         Actions actions = new Actions(getDriver());
 
+        WebElement chevronButton = getDriver().findElement(By.xpath(
+                String.format("//button[contains(@data-href,'/job/%s/')]", PROJECT_NAME)));
+
         actions
                 .moveToElement(wait.until(ExpectedConditions.visibilityOfElementLocated(
                         By.xpath(String.format("//a[@href='job/%s/']", PROJECT_NAME)))))
                 .pause(1000)
-                .perform();
-
-        WebElement chevronButton = wait.until(ExpectedConditions.visibilityOfElementLocated(
-                By.xpath(String.format("//button[contains(@data-href,'/job/%s/')]", PROJECT_NAME)))
-        );
-
-        wait.until(driver -> {
-            String transformValue = chevronButton.getCssValue("transform");
-            return transformValue != null && !transformValue.equals("none");
-        });
-
-        actions
-                .moveToElement(chevronButton)
+                .moveToElement(getDriver().findElement(By.xpath(
+                        String.format("//button[contains(@data-href,'/job/%s/')]", PROJECT_NAME))), 2,2)
                 .click()
                 .perform();
 
