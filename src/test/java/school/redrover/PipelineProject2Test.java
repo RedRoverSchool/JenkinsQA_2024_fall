@@ -173,15 +173,19 @@ public class PipelineProject2Test extends BaseTest {
 
         Actions actions = new Actions(getDriver());
 
+        WebElement projectItem =
+                wait.until(ExpectedConditions.visibilityOfElementLocated(
+                        By.xpath(String.format("//a[@href='job/%s/']", PROJECT_NAME))));
+
         WebElement chevronButton = getDriver().findElement(By.xpath(
                 String.format("//button[contains(@data-href,'/job/%s/')]", PROJECT_NAME)));
 
+        int xOffset = chevronButton.getLocation().getX() + (chevronButton.getSize().getWidth() / 2);
+
         actions
-                .moveToElement(wait.until(ExpectedConditions.visibilityOfElementLocated(
-                        By.xpath(String.format("//a[@href='job/%s/']", PROJECT_NAME)))))
+                .moveToElement(projectItem)
                 .pause(1000)
-                .moveToElement(getDriver().findElement(By.xpath(
-                        String.format("//button[contains(@data-href,'/job/%s/')]", PROJECT_NAME))), 2,2)
+                .moveToElement(projectItem, xOffset, 0)
                 .click()
                 .perform();
 
