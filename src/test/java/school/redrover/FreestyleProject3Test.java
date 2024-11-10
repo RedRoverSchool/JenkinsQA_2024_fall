@@ -1,12 +1,10 @@
 package school.redrover;
 
 import org.openqa.selenium.By;
-import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
-import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import school.redrover.runner.BaseTest;
 import java.time.Duration;
@@ -26,14 +24,13 @@ public class FreestyleProject3Test extends BaseTest {
     }
 
     private void addDescriptionOnProjectStatusPage(String description) {
-        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(5));
+        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(10));
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("description-link"))).click();
         getDriver().findElement(By.tagName("textarea")).sendKeys(description);
         getDriver().findElement(By.xpath("//button[@name='Submit']")).click();
     }
 
     @Test
-    @Ignore
     public void testCreateProjectViaCreateJobButton() {
         WebElement createJobButton = getDriver().findElement(By.xpath("//a[@href='newJob']"));
         createJobButton.click();
@@ -61,7 +58,6 @@ public class FreestyleProject3Test extends BaseTest {
     }
 
     @Test
-    @Ignore
     public void testCreateProjectViaSidebarMenu () {
         createProjectViaSidebarMenu(PROJECT_NAME);
 
@@ -74,7 +70,6 @@ public class FreestyleProject3Test extends BaseTest {
     }
 
     
-    @Ignore
     @Test
     public void testAddDescriptionOnProjectStatusPage() {
         createProjectViaSidebarMenu(PROJECT_NAME);
