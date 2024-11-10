@@ -30,6 +30,11 @@ public class FreestyleProject3Test extends BaseTest {
         getDriver().findElement(By.xpath("//button[@name='Submit']")).click();
     }
 
+    private void verifyYouAreOnProjectStatusPage() {
+        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(5));
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//h2[text()='Permalinks']")));
+    }
+
     @Test
     public void testCreateProjectViaCreateJobButton() {
         WebElement createJobButton = getDriver().findElement(By.xpath("//a[@href='newJob']"));
@@ -50,7 +55,7 @@ public class FreestyleProject3Test extends BaseTest {
                 By.xpath("//button[@name='Submit']")));
         saveButton.click();
 
-        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//h2[text()='Permalinks']")));
+        verifyYouAreOnProjectStatusPage();
 
         String actualName = getDriver().findElement(By.tagName("h1")).getText();
 
@@ -61,8 +66,7 @@ public class FreestyleProject3Test extends BaseTest {
     public void testCreateProjectViaSidebarMenu () {
         createProjectViaSidebarMenu(PROJECT_NAME);
 
-        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(5));
-        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//h2[text()='Permalinks']")));
+        verifyYouAreOnProjectStatusPage();
 
         String actualName = getDriver().findElement(By.tagName("h1")).getText();
 
@@ -131,7 +135,7 @@ public class FreestyleProject3Test extends BaseTest {
         newNameTextField.sendKeys(newName);
         getDriver().findElement(By.xpath("//button[@name='Submit']")).click();
 
-        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//h2[text()='Permalinks']")));
+        verifyYouAreOnProjectStatusPage();
 
         Assert.assertEquals(getDriver().findElement(By.tagName("h1")).getText(), newName);
     }
