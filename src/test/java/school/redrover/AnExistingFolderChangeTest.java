@@ -25,6 +25,9 @@ public class AnExistingFolderChangeTest extends BaseTest {
     public void testNoChangesWarning () {
         createNewFolder();
 
+        WebDriverWait webDriverWait = new WebDriverWait(getDriver(), Duration.ofSeconds(3));
+        webDriverWait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[@id='main-panel']/form/div[1]/div[1]/div[3]/div")));
+
         Assert.assertEquals(getDriver().findElement(By.xpath("//*[@id='main-panel']/form/div[1]/div[1]/div[3]/div")).getText(),
                 "The new name is the same as the current name.");
     }
