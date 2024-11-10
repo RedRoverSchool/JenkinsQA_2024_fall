@@ -32,7 +32,9 @@ public class DashboardMenuInBreadcrumbsTest extends BaseTest {
         ProjectUtils.log("Hover over 'Dashboard' in breadcrumbs, move to chevron and click");
         actions
                 .moveToElement(dashboard)
+                .pause(1000)
                 .moveByOffset(55, 0)
+                .pause(1000)
                 .click()
                 .perform();
         System.out.println(dashboard.getSize());
