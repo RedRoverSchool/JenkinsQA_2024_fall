@@ -15,7 +15,7 @@ import java.util.List;
 public class NegativeNewItemTest extends BaseTest {
 
     @Test
-    public void testCreateNewItemWithEmptyNameField() throws InterruptedException {
+    public void testCreateNewItemWithEmptyNameField() {
         getDriver().findElement(By.xpath("//a[@href='newJob']")).click();
 
         List<WebElement> items = getDriver().findElements(By.xpath("//div[@class='desc']"));
