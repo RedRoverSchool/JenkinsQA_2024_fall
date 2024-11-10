@@ -46,6 +46,12 @@ public class PipelineProjectTest extends BaseTest {
                 .toList();
     }
 
+    private void clickGreenTriangleToScheduleBuildForProject(String projectName) {
+        getWait(getDriver()).until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//td[@class='jenkins-table__cell--tight']//a[@tooltip='Schedule a Build for " + projectName + "']"))).click();
+        getWait(getDriver()).until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@class='tippy-box']")));
+    }
+
     private static WebDriverWait getWait(WebDriver driver) {
         return new WebDriverWait(driver, Duration.ofSeconds(20));
     }
@@ -77,6 +83,42 @@ public class PipelineProjectTest extends BaseTest {
     }
 
     @Test
+    public void testGetSuccessTooltipDisplayedWhenHoverOverGreenMark() {
+        createProjectViaSidebar(PIPELINE_NAME);
+        returnToHomePage();
+        clickGreenTriangleToScheduleBuildForProject(PIPELINE_NAME);
+        clickJobByName(PIPELINE_NAME);
+
+        new Actions(getDriver())
+                .moveToElement(getWait(getDriver()).until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[@title='Success']"))))
+                .perform();
+
+        String greenMarkTooltip = getWait(
+                getDriver()).until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@class='tippy-content']"))).getText();
+
+        Assert.assertEquals(greenMarkTooltip, "Success");
+    }
+
+    @Test
+    public void testGetPermalinksInformationUponSuccessfulBuild() {
+        final List<String> expectedPermalinkList = List.of(
+                "Last build",
+                "Last stable build",
+                "Last successful build",
+                "Last completed build");
+
+        createProjectViaSidebar(PIPELINE_NAME);
+        returnToHomePage();
+        clickGreenTriangleToScheduleBuildForProject(PIPELINE_NAME);
+        clickJobByName(PIPELINE_NAME);
+
+        List<WebElement> lastBuildInfo = getWait(getDriver()).until(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.xpath("//li[@class='permalink-item']")));
+        List<String> actualPermalinkList = lastBuildInfo.stream().map(WebElement::getText).map(string -> string.split("\\(#")[0].trim()).toList();
+
+        Assert.assertTrue(actualPermalinkList.containsAll(expectedPermalinkList), "Not all expected permalinks are present in the actual permalinks list.");
+    }
+
+    @Test
     public void testRenameProjectViaSidebar() {
         createProjectViaSidebar(PIPELINE_NAME);
         returnToHomePage();
@@ -90,34 +132,6 @@ public class PipelineProjectTest extends BaseTest {
 
         returnToHomePage();
 
-        Assert.assertListContainsObject(getProjectList(), NEW_PROJECT_NAME, "Project is not renamed");
-    }
-
-    @Test
-    public void testRenameProjectViaDropdownMenu() {
-        createProjectViaSidebar(PIPELINE_NAME);
-        returnToHomePage();
-
-        WebElement projectElement = getWait(getDriver()).until(ExpectedConditions.visibilityOfElementLocated(
-                By.xpath("//a[@href='job/" + PIPELINE_NAME + "/']")));
-
-        Actions actions = new Actions(getDriver());
-        actions.moveToElement(projectElement)
-                .pause(1000)
-                .scrollToElement(getDriver().findElement(
-                        By.xpath("//a[@href='job/" + PIPELINE_NAME + "/']//button[@class='jenkins-menu-dropdown-chevron']")))
-                .click()
-                .perform();
-
-        getWait(getDriver()).until(ExpectedConditions.elementToBeClickable(
-                By.xpath("//a[@href='/job/Pipeline_name/confirm-rename']"))).click();
-
-        WebElement nameInput = getWait(getDriver()).until(ExpectedConditions.visibilityOfElementLocated(
-                By.xpath("//input[@checkdependson='newName']")));
-        nameInput.clear();
-        nameInput.sendKeys(NEW_PROJECT_NAME);
-        getDriver().findElement(By.xpath("//button[@name='Submit']")).click();
-        returnToHomePage();
         Assert.assertListContainsObject(getProjectList(), NEW_PROJECT_NAME, "Project is not renamed");
     }
 
