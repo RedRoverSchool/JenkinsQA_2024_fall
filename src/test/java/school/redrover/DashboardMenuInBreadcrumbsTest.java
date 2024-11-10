@@ -32,15 +32,17 @@ public class DashboardMenuInBreadcrumbsTest extends BaseTest {
         ProjectUtils.log("Hover over 'Dashboard' in breadcrumbs, move to chevron and click");
         actions
                 .moveToElement(dashboard)
-                .pause(500)
+                .pause(2000)
                 .perform();
         System.out.println(dashboard.getSize());
 
         ProjectUtils.log("Click on the dropdown icon");
         WebElement dropdownIcon = getDriver().findElement(By.xpath("//ol/li/a[@href='/']/button[@class='jenkins-menu-dropdown-chevron']"));
-        dropdownIcon.click();
         actions
-                .pause(Duration.ofSeconds(10))
+                .moveToElement(dropdownIcon)
+                .pause(Duration.ofSeconds(3))
+                .click()
+                .pause(Duration.ofSeconds(5))
                 .perform();
 
 //        try {
