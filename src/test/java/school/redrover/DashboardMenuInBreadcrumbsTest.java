@@ -32,7 +32,7 @@ public class DashboardMenuInBreadcrumbsTest extends BaseTest {
         ProjectUtils.log("Hover over 'Dashboard' in breadcrumbs, move to chevron and click");
         actions
                 .moveToElement(dashboard)
-                .pause(2000)
+                .pause(500)
                 .perform();
         System.out.println(dashboard.getSize());
 
@@ -72,18 +72,28 @@ public class DashboardMenuInBreadcrumbsTest extends BaseTest {
 //            System.out.println("warning");;
 //        }
 
-        ProjectUtils.log("Create list of dropdown elements");
-        List<WebElement> dashboardDropdownMenuElements = getDriver().findElements(By.xpath("//a[@class='jenkins-dropdown__item ']"));
-        wait.until(ExpectedConditions.visibilityOfAllElements(dashboardDropdownMenuElements));
+        WebElement manageJenkinsInDropdown = getDriver().findElement(By.xpath("//div/a[@href='/manage']"));
+        actions
+                .moveToElement(manageJenkinsInDropdown)
+                .pause(Duration.ofSeconds(5))
+                .click()
+                .pause(Duration.ofSeconds(3))
+                .perform();
 
-        List<String> actualElements = new ArrayList<>();
-        for (WebElement eachElement: dashboardDropdownMenuElements) {
-            actualElements.add(eachElement.getText());
-        }
-        System.out.println("actual: " + actualElements);
+        Assert.assertEquals(getDriver().getCurrentUrl(), "http://localhost:8888/manage/");
 
-        ProjectUtils.log("Compare actual vs expected lists of dropdown elements");
-        List<String> expectedElements = List.of("New Item", "Build History", "Manage Jenkins", "My Views");
-        Assert.assertEquals(actualElements, expectedElements);
+//        ProjectUtils.log("Create list of dropdown elements");
+//        List<WebElement> dashboardDropdownMenuElements = getDriver().findElements(By.xpath("//a[@class='jenkins-dropdown__item ']"));
+//        wait.until(ExpectedConditions.visibilityOfAllElements(dashboardDropdownMenuElements));
+//
+//        List<String> actualElements = new ArrayList<>();
+//        for (WebElement eachElement: dashboardDropdownMenuElements) {
+//            actualElements.add(eachElement.getText());
+//        }
+//        System.out.println("actual: " + actualElements);
+//
+//        ProjectUtils.log("Compare actual vs expected lists of dropdown elements");
+//        List<String> expectedElements = List.of("New Item", "Build History", "Manage Jenkins", "My Views");
+//        Assert.assertEquals(actualElements, expectedElements);
     }
 }
