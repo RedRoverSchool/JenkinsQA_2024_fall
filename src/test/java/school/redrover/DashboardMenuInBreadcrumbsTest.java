@@ -4,6 +4,8 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
@@ -11,6 +13,7 @@ import school.redrover.runner.BaseTest;
 import school.redrover.runner.ProjectUtils;
 
 import javax.swing.*;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,12 +23,13 @@ public class DashboardMenuInBreadcrumbsTest extends BaseTest {
     public void testDashboardDropdownMenu() throws InterruptedException {
 
         Actions actions = new Actions(getDriver());
+        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(10));
 
         ProjectUtils.log("Find 'Dashboard' element");
         WebElement dashboard = getDriver().findElement(By.xpath("//li[@class='jenkins-breadcrumbs__list-item']"));
         System.out.println(dashboard.getSize());
 
-        ProjectUtils.log("Hover over 'Dashboard' in breadcrumbs");
+        ProjectUtils.log("Hover over 'Dashboard' in breadcrumbs, move to chevron and click");
         actions
                 .moveToElement(dashboard)
                 .moveByOffset(55, 0)
@@ -67,6 +71,8 @@ public class DashboardMenuInBreadcrumbsTest extends BaseTest {
 
         ProjectUtils.log("Create list of dropdown elements");
         List<WebElement> dashboardDropdownMenuElements = getDriver().findElements(By.xpath("//a[@class='jenkins-dropdown__item ']"));
+        wait.until(ExpectedConditions.visibilityOfAllElements(dashboardDropdownMenuElements));
+
         List<String> actualElements = new ArrayList<>();
         for (WebElement eachElement: dashboardDropdownMenuElements) {
             actualElements.add(eachElement.getText());
