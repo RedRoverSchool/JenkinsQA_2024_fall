@@ -1,5 +1,6 @@
 package school.redrover;
 
+import com.beust.ah.A;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
@@ -56,5 +57,20 @@ public class FreestyleProject1Test extends BaseTest {
         getDriver().findElement(By.name("Submit")).click();
         String projectName = getDriver().findElement(By.xpath("//*[@class='job-index-headline page-headline']")).getText();
         Assert.assertEquals(projectName, "Renamed freestyle project");
+    }
+
+    @Test
+    public void testAddFreestyleProjectDescription() {
+        createFreestyleProject();
+        getDriver().findElement(By.id("jenkins-name-icon")).click();
+        Actions actions = new Actions(getDriver());
+        WebElement element = getDriver().findElement(By
+                .xpath("//span[contains(text(),'" + NEW_FREESTYLE_PROJECT_NAME + "')]"));
+        actions.moveToElement(element).click().perform();
+        getDriver().findElement(By.id("description-link")).click();
+        getDriver().findElement(By.name("description")).sendKeys("Some description");
+        getDriver().findElement(By.name("Submit")).click();
+        String description = getDriver().findElement(By.id("description")).getText();
+        Assert.assertEquals(description, "Some description");
     }
 }
