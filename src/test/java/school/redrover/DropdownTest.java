@@ -25,11 +25,7 @@ public class DropdownTest extends BaseTest {
 
         WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(3));
 
-        WebElement content = wait.until(ExpectedConditions
-                .visibilityOfElementLocated(
-                        By.xpath("//div[@class = 'tippy-content']")));
-
-        actions.moveToElement(content);
+        wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//div[@class = 'tippy-content']")));
 
         WebElement buildButton = getDriver().findElement(By.xpath("//*[@class = 'jenkins-dropdown']/a[1]"));
         actions.moveToElement(buildButton)
@@ -51,11 +47,7 @@ public class DropdownTest extends BaseTest {
 
         WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(3));
 
-        WebElement content = wait.until(ExpectedConditions
-                .visibilityOfElementLocated(
-                        By.xpath("//div[@class = 'tippy-content']")));
-
-        actions.moveToElement(content);
+        wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//div[@class = 'tippy-content']")));
 
         WebElement configureButton = getDriver().findElement(By.xpath("//*[@class = 'jenkins-dropdown']/a[2]"));
         actions.moveToElement(configureButton)
