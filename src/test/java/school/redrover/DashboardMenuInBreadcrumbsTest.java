@@ -38,10 +38,8 @@ public class DashboardMenuInBreadcrumbsTest extends BaseTest {
 
         ProjectUtils.log("Click on the dropdown icon");
         WebElement dropdownIcon = getDriver().findElement(By.xpath("//ol/li/a[@href='/']/button[@class='jenkins-menu-dropdown-chevron']"));
-////        dropdownIcon.click();
+        dropdownIcon.click();
         actions
-                .moveToElement(dropdownIcon)
-                .click()
                 .pause(Duration.ofSeconds(10))
                 .perform();
 
