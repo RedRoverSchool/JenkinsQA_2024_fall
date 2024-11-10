@@ -88,4 +88,19 @@ public class FreestyleProject1Test extends BaseTest {
         String description = getDriver().findElement(By.id("description")).getText();
         Assert.assertEquals(description, "");
     }
+
+    @Test
+    public void testFreestyleProjectDescriptionPreview() {
+        createFreestyleProject();
+        getDriver().findElement(By.id("jenkins-name-icon")).click();
+        Actions actions = new Actions(getDriver());
+        WebElement element = getDriver().findElement(By
+                .xpath("//span[contains(text(),'" + NEW_FREESTYLE_PROJECT_NAME + "')]"));
+        actions.moveToElement(element).click().perform();
+        getDriver().findElement(By.id("description-link")).click();
+        getDriver().findElement(By.name("description")).sendKeys(DESCRIPTION);
+        getDriver().findElement(By.className("textarea-show-preview")).click();
+        String preview = getDriver().findElement(By.className("textarea-preview")).getText();
+        Assert.assertEquals(preview, DESCRIPTION);
+    }
 }
