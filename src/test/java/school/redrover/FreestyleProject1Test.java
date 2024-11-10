@@ -32,7 +32,6 @@ public class FreestyleProject1Test extends BaseTest {
         createFreestyleProject();
         getDriver().findElement(By.id("jenkins-name-icon")).click();
         Actions actions = new Actions(getDriver());
-        //hover over project title to activate menu dropdown
         WebElement element = getDriver().findElement(By
                 .xpath("//span[contains(text(),'" + NEW_FREESTYLE_PROJECT_NAME + "')]"));
         actions.moveToElement(element).click().perform();
@@ -40,5 +39,22 @@ public class FreestyleProject1Test extends BaseTest {
         getDriver().findElement(By.xpath("//button[@data-id='ok']")).click();
         String emptyDashboardHeader = getDriver().findElement(By.cssSelector(".empty-state-block > h1")).getText();
         Assert.assertEquals(emptyDashboardHeader, "Welcome to Jenkins!");
+    }
+
+    @Test
+    public void testRenameFreestyleProject() throws InterruptedException {
+        createFreestyleProject();
+        getDriver().findElement(By.id("jenkins-name-icon")).click();
+        Actions actions = new Actions(getDriver());
+        WebElement element = getDriver().findElement(By
+                .xpath("//span[contains(text(),'" + NEW_FREESTYLE_PROJECT_NAME + "')]"));
+        actions.moveToElement(element).click().perform();
+        getDriver().findElement((By.xpath("//*[contains(@href,'confirm-rename')]"))).click();
+        getDriver().findElement(By.xpath("//input[@name='newName']")).clear();
+        Thread.sleep(200);
+        getDriver().findElement(By.xpath("//input[@name='newName']")).sendKeys("Renamed freestyle project");
+        getDriver().findElement(By.name("Submit")).click();
+        String projectName = getDriver().findElement(By.xpath("//*[@class='job-index-headline page-headline']")).getText();
+        Assert.assertEquals(projectName, "Renamed freestyle project");
     }
 }
