@@ -10,11 +10,24 @@ import school.redrover.runner.BaseTest;
 
 public class FreestyleProject1Test extends BaseTest {
     private static final String NEW_FREESTYLE_PROJECT_NAME = "New freestyle project";
+    private static final String DESCRIPTION = "Some description";
     private void createFreestyleProject() {
         getDriver().findElement(By.xpath("//*[@href='/view/all/newJob']")).click();
-        getDriver().findElement(By.xpath("//*[@class='hudson_model_FreeStyleProject']")).click();
+        getDriver().findElement(By.className("hudson_model_FreeStyleProject")).click();
         getDriver().findElement(By.name("name")).sendKeys(NEW_FREESTYLE_PROJECT_NAME);
         getDriver().findElement(By.id("ok-button")).click();
+        getDriver().findElement(By.name("Submit")).click();
+
+    }
+    private void createFreestyleProjectWithDescription() {
+        createFreestyleProject();
+        getDriver().findElement(By.id("jenkins-name-icon")).click();
+        Actions actions = new Actions(getDriver());
+        WebElement element = getDriver().findElement(By
+                .xpath("//span[contains(text(),'" + NEW_FREESTYLE_PROJECT_NAME + "')]"));
+        actions.moveToElement(element).click().perform();
+        getDriver().findElement(By.id("description-link")).click();
+        getDriver().findElement(By.name("description")).sendKeys(DESCRIPTION);
         getDriver().findElement(By.name("Submit")).click();
 
     }
@@ -61,16 +74,18 @@ public class FreestyleProject1Test extends BaseTest {
 
     @Test
     public void testAddFreestyleProjectDescription() {
-        createFreestyleProject();
-        getDriver().findElement(By.id("jenkins-name-icon")).click();
-        Actions actions = new Actions(getDriver());
-        WebElement element = getDriver().findElement(By
-                .xpath("//span[contains(text(),'" + NEW_FREESTYLE_PROJECT_NAME + "')]"));
-        actions.moveToElement(element).click().perform();
+        createFreestyleProjectWithDescription();
+        String description = getDriver().findElement(By.id("description")).getText();
+        Assert.assertEquals(description, DESCRIPTION);
+    }
+
+    @Test
+    public void testDeleteFreestyleProjectDescription() {
+        createFreestyleProjectWithDescription();
         getDriver().findElement(By.id("description-link")).click();
-        getDriver().findElement(By.name("description")).sendKeys("Some description");
+        getDriver().findElement(By.name("description")).clear();
         getDriver().findElement(By.name("Submit")).click();
         String description = getDriver().findElement(By.id("description")).getText();
-        Assert.assertEquals(description, "Some description");
+        Assert.assertEquals(description, "");
     }
 }
