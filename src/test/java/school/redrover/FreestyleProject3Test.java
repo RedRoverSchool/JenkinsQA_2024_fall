@@ -30,6 +30,11 @@ public class FreestyleProject3Test extends BaseTest {
         getDriver().findElement(By.xpath("//button[@name='Submit']")).click();
     }
 
+    private void verifyYouAreOnProjectStatusPage() {
+        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(5));
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//h2[text()='Permalinks']")));
+    }
+
     @Test
     public void testCreateProjectViaCreateJobButton() {
         WebElement createJobButton = getDriver().findElement(By.xpath("//a[@href='newJob']"));
@@ -50,7 +55,7 @@ public class FreestyleProject3Test extends BaseTest {
                 By.xpath("//button[@name='Submit']")));
         saveButton.click();
 
-        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//h2[text()='Permalinks']")));
+        verifyYouAreOnProjectStatusPage();
 
         String actualName = getDriver().findElement(By.tagName("h1")).getText();
 
@@ -61,8 +66,7 @@ public class FreestyleProject3Test extends BaseTest {
     public void testCreateProjectViaSidebarMenu () {
         createProjectViaSidebarMenu(PROJECT_NAME);
 
-        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(5));
-        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//h2[text()='Permalinks']")));
+        verifyYouAreOnProjectStatusPage();
 
         String actualName = getDriver().findElement(By.tagName("h1")).getText();
 
@@ -114,5 +118,25 @@ public class FreestyleProject3Test extends BaseTest {
 
         Assert.assertFalse(getDriver().findElement(By.xpath("//div[@id='description']//div")).getText()
                 .contains(DESCRIPTION));
+    }
+
+    @Test
+    public void testRenameProject() {
+        final String newName = "New " + PROJECT_NAME;
+        createProjectViaSidebarMenu(PROJECT_NAME);
+
+        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(5));
+        WebElement renameSidebarMenu = wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//a[@href='/job/" + PROJECT_NAME.replace(" ", "%20") + "/confirm-rename']")));
+        renameSidebarMenu.click();
+
+        WebElement newNameTextField = getDriver().findElement(By.xpath("//input[@checkdependson ='newName']"));
+        newNameTextField.clear();
+        newNameTextField.sendKeys(newName);
+        getDriver().findElement(By.xpath("//button[@name='Submit']")).click();
+
+        verifyYouAreOnProjectStatusPage();
+
+        Assert.assertEquals(getDriver().findElement(By.tagName("h1")).getText(), newName);
     }
 }
