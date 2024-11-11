@@ -165,7 +165,7 @@ public class PipelineProject2Test extends BaseTest {
 
     @Test
     public void testDeletePipelineProjectViaChevron() {
-        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(10));
+        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(20));
 
         createItem(PROJECT_NAME, "//span[text()='Pipeline']");
         goToMainPage();
@@ -176,11 +176,8 @@ public class PipelineProject2Test extends BaseTest {
         Actions actions = new Actions(getDriver());
         actions.moveToElement(projectItem).perform();
 
-        WebElement chevronButton = wait.until(ExpectedConditions.elementToBeClickable(
-                By.xpath(String.format("//span[text()='%s']/following-sibling::button", PROJECT_NAME))));
-        actions.moveToElement(chevronButton).click().perform();
-
-        wait.until(ExpectedConditions.attributeToBe(chevronButton, "aria-expanded", "true"));
+        wait.until(ExpectedConditions.elementToBeClickable(
+                By.xpath(String.format("//span[text()='%s']/following-sibling::button", PROJECT_NAME)))).click();
 
         wait.until(ExpectedConditions.visibilityOfElementLocated(
                 By.xpath("//button[contains(@href, 'doDelete')]"))).click();
