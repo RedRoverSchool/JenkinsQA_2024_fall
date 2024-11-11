@@ -71,7 +71,9 @@ public class DeleteFolder1Test extends BaseTest {
 
         new Actions(getDriver())
                 .moveToElement(chevronMenu)
+                .pause(1000)
                 .click(chevronMenu)
+                .pause(1500)
                 .perform();
 
         chevronMenu = wait
