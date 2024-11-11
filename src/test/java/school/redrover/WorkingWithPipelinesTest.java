@@ -2,6 +2,7 @@ package school.redrover;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
@@ -65,5 +66,35 @@ public class WorkingWithPipelinesTest extends BaseTest {
                 nameFreestyleProject, "Freestyle Project не найден на главной странице или текст не совпадает");
 
         System.out.println("Freestyle Project создан и находится в списке на главной странице");
+    }
+
+    @Test
+    public void OpenRenameViaDropDown() {
+        final String namePipeLine = "Regression";
+
+        createItemUtils(namePipeLine, ".org_jenkinsci_plugins_workflow_job_WorkflowJob");
+
+        returnToHomePage();
+
+        WebElement regressionLink = getDriver().findElement(By.xpath("//a[@href='job/Regression/']"));
+
+        Actions actions = new Actions(getDriver());
+        actions.moveToElement(regressionLink)
+                .perform();
+
+        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(10));
+        WebElement chevronButton = wait.until(ExpectedConditions.elementToBeClickable(
+                By.xpath("//button[@class='jenkins-menu-dropdown-chevron' and @data-href='http://localhost:8080/job/Regression/']")));
+
+        chevronButton.click();
+
+        WebElement renameOptionButton = wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//a[@class='jenkins-dropdown__item ' and @href='/job/Regression/confirm-rename']")));
+        renameOptionButton.click();
+
+        WebElement inputElement = getDriver().findElement(By.name("newName"));
+        String value = inputElement.getAttribute("value");
+
+        Assert.assertEquals(namePipeLine, value);
     }
 }
