@@ -1,8 +1,10 @@
 package school.redrover;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import org.testng.Assert;
@@ -11,6 +13,7 @@ import org.testng.annotations.Test;
 import school.redrover.runner.BaseTest;
 
 import java.time.Duration;
+import java.util.function.Function;
 
 public class DeleteFolder1Test extends BaseTest {
 
@@ -59,15 +62,21 @@ public class DeleteFolder1Test extends BaseTest {
                 ".com_cloudbees_hudson_plugins_folder_Folder"
         );
 
-        WebElement folderName = getDriver()
-                .findElement(By.xpath("//*[@id=\"job_Some folder name\"]/td[3]/a/span"));
+        WebElement folderName = wait.until(
+                ExpectedConditions.visibilityOfElementLocated(
+                        By.xpath("//*[@id=\"job_Some folder name\"]/td[3]/a/span")
+                )
+        );
 
         new Actions(getDriver())
                 .moveToElement(folderName)
                 .perform();
 
-        WebElement chevronMenu = getDriver()
-                .findElement(By.xpath("//*[@id=\"job_Some folder name\"]/td[3]/a/button"));
+        WebElement chevronMenu = wait.until(
+                ExpectedConditions.elementToBeClickable(
+                        By.xpath("//*[@id=\"job_Some folder name\"]/td[3]/a/button")
+                )
+        );
 
         new Actions(getDriver())
                 .moveToElement(chevronMenu)
@@ -76,13 +85,24 @@ public class DeleteFolder1Test extends BaseTest {
                 .pause(1500)
                 .perform();
 
-        chevronMenu = wait
-                .until(driver -> driver.findElement(By.xpath("//*[@id='tippy-6']/div/div/div/button")));
+        WebElement deleteFolderButton = wait.until(
+                ExpectedConditions.elementToBeClickable(
+                        By.xpath("//button[normalize-space()='Delete Folder']")
+                )
+        );
+        deleteFolderButton.click();
 
-        chevronMenu.click();
+
 
         WebElement yesButton = wait
-                .until(driver -> driver.findElement(By.xpath("//*[@id='jenkins']/dialog/div[3]/button[1]")));
+                .until(new Function<WebDriver, WebElement>() {
+                           @Override
+                           public WebElement apply(WebDriver driver) {
+                               return driver.findElement(
+                                       By.xpath("//*[@id='jenkins']/dialog/div[3]/button[1]"));
+                           }
+                       }
+                );
         yesButton.click();
 
         String welcomeStr = getDriver()
