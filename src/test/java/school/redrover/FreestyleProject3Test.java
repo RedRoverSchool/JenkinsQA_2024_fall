@@ -153,31 +153,16 @@ public class FreestyleProject3Test extends BaseTest {
         Actions actions = new Actions(getDriver());
         actions.moveToElement(projectToDelete).pause(2).perform();
 
-        WebElement chevron = getDriver().findElement(
-                By.xpath("//a[@href='job/"+ PROJECT_NAME.replace(" ", "%20") + "/']//button"));
+        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(60));
+        WebElement chevron = wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//a[@href='job/"+ PROJECT_NAME.replace(" ", "%20") + "/']//button")));
         if (chevron.getDomProperty("offsetLeft").equals("141")) {
-            actions.moveToElement(projectToDelete).pause(3).perform();
-            WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(20));
+            actions.moveToElement(projectToDelete).pause(5).perform();
             wait.until(ExpectedConditions.domPropertyToBe(chevron, "offsetLeft", "163"));
         }
-        WebElement parentLink = getDriver().findElement(By.xpath("(//a[contains(@href, 'job')])[1]"));
-        System.out.println("parentLink " + parentLink.getAttribute("class"));
         actions.moveToElement(chevron).pause(3).click().perform();
-        System.out.println("After click chevron");
 
-        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(60));
-        //WebElement parentLink = getDriver().findElement(By.xpath("(//a[contains(@href, 'job')])[1]"));
-        System.out.println("parentLink " + parentLink.getAttribute("class"));
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//a[contains(@class, 'model-link--open')]")));
-
-
-//        wait.until(webDriver -> ((JavascriptExecutor) webDriver)
-//                .executeScript("return document.readyState").equals("complete"));
-
-//        System.out.println("aria-expanded до: " + chevron.getAttribute("aria-expanded"));
-//        wait.until(ExpectedConditions.attributeToBe(chevron, "aria-expanded", "true"));
-//        System.out.println("aria-expanded после: " + chevron.getAttribute("aria-expanded"));
-
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@class='jenkins-dropdown']")));
 
         WebElement deleteButton = wait.until(ExpectedConditions.visibilityOfElementLocated(
