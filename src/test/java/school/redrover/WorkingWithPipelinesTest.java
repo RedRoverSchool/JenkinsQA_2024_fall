@@ -69,7 +69,7 @@ public class WorkingWithPipelinesTest extends BaseTest {
     }
 
     @Test
-    public void OpenRenameViaDropDown() {
+    public void testOpenRenameViaDropDown() {
         final String namePipeLine = "Regression";
 
         createItemUtils(namePipeLine, ".org_jenkinsci_plugins_workflow_job_WorkflowJob");
