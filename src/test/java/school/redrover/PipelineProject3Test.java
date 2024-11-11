@@ -31,7 +31,7 @@ public class PipelineProject3Test extends BaseTest {
 
     @Test
     public void testCreatePipeline() {
-        final String namePipeline = randomWord(new Random().nextInt(20));
+        final String namePipeline = randomWord(new Random().nextInt(25));
 
         getDriver().findElement(By.xpath("//a[@href='newJob']")).click();
 
