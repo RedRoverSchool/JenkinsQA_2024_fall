@@ -159,10 +159,11 @@ public class FreestyleProject3Test extends BaseTest {
             WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(15));
             wait.until(ExpectedConditions.domPropertyToBe(chevron, "offsetLeft", "163"));
         }
-        actions.moveToElement(chevron).pause(2).click().perform();
+        actions.moveToElement(chevron).pause(3).click().perform();
 
-        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(30));
+        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(60));
         wait.until(ExpectedConditions.attributeToBe(chevron, "aria-expanded", "true"));
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@class='jenkins-dropdown']")));
 
         WebElement deleteButton = wait.until(ExpectedConditions.visibilityOfElementLocated(
                 By.xpath("//button[contains(@href, 'doDelete')]")));
