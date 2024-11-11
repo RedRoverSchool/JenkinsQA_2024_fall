@@ -2,6 +2,7 @@ package school.redrover;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.Point;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -151,16 +152,14 @@ public class FreestyleProject3Test extends BaseTest {
         WebElement projectToDelete = getDriver().findElement(
                 By.xpath("//a[@href='job/" + PROJECT_NAME.replace(" ", "%20") + "/']"));
         Actions actions = new Actions(getDriver());
-        actions.moveToElement(projectToDelete).pause(2).perform();
+        actions.moveToElement(projectToDelete).pause(5).perform();
 
         WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(60));
         WebElement chevron = wait.until(ExpectedConditions.visibilityOfElementLocated(
                 By.xpath("//a[@href='job/"+ PROJECT_NAME.replace(" ", "%20") + "/']//button")));
-        if (chevron.getDomProperty("offsetLeft").equals("141")) {
-            actions.moveToElement(projectToDelete).pause(5).perform();
-            wait.until(ExpectedConditions.domPropertyToBe(chevron, "offsetLeft", "163"));
-        }
-        actions.moveToElement(chevron).pause(3).click().perform();
+
+
+        actions.moveToElement(chevron).pause(5).click().perform();
 
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//a[contains(@class, 'model-link--open')]")));
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@class='jenkins-dropdown']")));
