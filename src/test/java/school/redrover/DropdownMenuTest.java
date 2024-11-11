@@ -29,7 +29,7 @@ public class DropdownMenuTest extends BaseTest {
         createItem();
 
         Actions actions = new Actions(getDriver());
-        WebElement dropdownButton = getDriver().findElement(By.xpath("//*[@id=\"job_first\"]/td[3]/a"));
+        WebElement dropdownButton = getDriver().findElement(By.xpath("//*[@data-href='http://localhost:8080/job/first/']"));
         actions.moveToElement(dropdownButton)
                 .perform();
 
