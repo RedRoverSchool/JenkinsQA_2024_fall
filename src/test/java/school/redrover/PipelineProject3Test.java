@@ -67,5 +67,4 @@ public class PipelineProject3Test extends BaseTest {
         String actualTooltip = getDriver().findElement(By.xpath("//*[contains(text(), '" + labelText + "')]//a")).getAttribute("tooltip");
         Assert.assertEquals(actualTooltip, tooltipText);
     }
-
 }
