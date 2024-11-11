@@ -11,7 +11,9 @@ import org.testng.annotations.Test;
 import school.redrover.runner.BaseTest;
 
 import java.time.Duration;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 public class PipelineProjectTest extends BaseTest {
@@ -62,6 +64,38 @@ public class PipelineProjectTest extends BaseTest {
         returnToHomePage();
 
         Assert.assertListContainsObject(getProjectList(), PIPELINE_NAME, "Project is not found");
+    }
+
+    @Test
+    public void testVerifySidebarOptionsOnProjectPage() {
+        final List<String> expectedSidebarOptionList =
+                List.of("Status", "Changes", "Build Now", "Configure", "Delete Pipeline", "Stages", "Rename", "Pipeline Syntax");
+
+        createProjectViaSidebar(PIPELINE_NAME);
+        returnToHomePage();
+        clickJobByName(PIPELINE_NAME);
+
+        List<WebElement> sidebarList = getWait(getDriver()).until(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.xpath("//div[@class='task ']//span[2]")));
+        List<String> actualSideBarOptionList = sidebarList.stream().map(WebElement::getText).toList();
+
+        Assert.assertEquals(actualSideBarOptionList, expectedSidebarOptionList, "Sidebar options on Project page do not match expected list.");
+    }
+
+    @Test
+    public void testVerifySidebarOptionsOnConfigurationPage() {
+        final List<String> expectedSidebarOptionList =
+                List.of("General", "Advanced Project Options", "Pipeline");
+
+        createProjectViaSidebar(PIPELINE_NAME);
+        returnToHomePage();
+        clickJobByName(PIPELINE_NAME);
+
+        getWait(getDriver()).until(ExpectedConditions.elementToBeClickable(By.xpath("//a[@href='/job/" + PIPELINE_NAME + "/configure']"))).click();
+
+        List<WebElement> sidebarLst = getWait(getDriver()).until(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.xpath("//div[@class='task']//span[2]")));
+        List<String> actualSideBarOptionList = sidebarLst.stream().map(WebElement::getText).toList();
+
+        Assert.assertEquals(actualSideBarOptionList, expectedSidebarOptionList, "Sidebar options on Configuration page do not match expected list.");
     }
 
     @Test
@@ -116,6 +150,47 @@ public class PipelineProjectTest extends BaseTest {
         List<String> actualPermalinkList = lastBuildInfo.stream().map(WebElement::getText).map(string -> string.split("\\(#")[0].trim()).toList();
 
         Assert.assertTrue(actualPermalinkList.containsAll(expectedPermalinkList), "Not all expected permalinks are present in the actual permalinks list.");
+    }
+
+    @Test
+    public void testVerifyCheckboxTooltipsContainCorrectText() {
+        getDriver().findElement(By.xpath("//a[@href='/view/all/newJob']")).click();
+        getDriver().findElement(By.xpath("//input[@name='name']")).sendKeys(PIPELINE_NAME);
+        getDriver().findElement(By.xpath("//li[@class='org_jenkinsci_plugins_workflow_job_WorkflowJob']")).click();
+        getDriver().findElement(By.xpath("//button[@type='submit']")).click();
+
+        List<WebElement> checkboxWithQuestionMarkList = getDriver().findElements(By.xpath("//div[@hashelp = 'true']//label[@class='attach-previous ']"));
+        List<WebElement> questionMarkList = getDriver().findElements(By.xpath("//div[@hashelp = 'true']//a[@class='jenkins-help-button']"));
+
+        Map<String, String> labelToTooltipTextMap = new HashMap<>();
+        for (int i = 0; i < checkboxWithQuestionMarkList.size(); i++) {
+            String checkboxText = checkboxWithQuestionMarkList.get(i).getText();
+            String tooltipText = questionMarkList.get(i).getAttribute("tooltip");
+            labelToTooltipTextMap.put(checkboxText, tooltipText);
+        }
+
+        labelToTooltipTextMap.forEach((checkbox, tooltip) ->
+                Assert.assertTrue(tooltip.contains("Help for feature: " + checkbox),
+                        "Tooltip for feature '" + checkbox + "' does not contain the correct text"));
+    }
+
+    @Test
+    public void testKeepBuildForever() {
+        createProjectViaSidebar(PIPELINE_NAME);
+        returnToHomePage();
+        clickGreenTriangleToScheduleBuildForProject(PIPELINE_NAME);
+        clickJobByName(PIPELINE_NAME);
+
+        getWait(getDriver()).until(ExpectedConditions.elementToBeClickable(By.xpath("//*[@title='Success']"))).click();
+        getWait(getDriver()).until(ExpectedConditions.elementToBeClickable(By.xpath("//button[@name='Submit']"))).click();
+
+        List<WebElement> sidebarTaskList = getWait(getDriver()).until(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.xpath("//div[@id='tasks']/div")));
+
+        boolean isDeleteBuildOptionPresent = sidebarTaskList.stream()
+                .anyMatch(element -> element.getAttribute("href") != null &&
+                        element.getAttribute("href").contains("/job/" + PIPELINE_NAME + "/1/confirmDelete"));
+
+        Assert.assertFalse(isDeleteBuildOptionPresent, "Delete build sidebar option is displayed, but it should not be.");
     }
 
     @Test
