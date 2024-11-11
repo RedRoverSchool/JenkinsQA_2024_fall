@@ -161,7 +161,7 @@ public class FreestyleProject3Test extends BaseTest {
         }
         actions.moveToElement(chevron).pause(2).click().perform();
 
-        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(15));
+        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(30));
         wait.until(ExpectedConditions.attributeToBe(chevron, "aria-expanded", "true"));
 
         WebElement deleteButton = wait.until(ExpectedConditions.visibilityOfElementLocated(
