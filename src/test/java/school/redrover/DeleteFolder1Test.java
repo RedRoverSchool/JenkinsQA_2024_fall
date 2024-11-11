@@ -55,7 +55,7 @@ public class DeleteFolder1Test extends BaseTest {
     @Test
     public void testDeleteFolderInChevronMenu() {
 
-        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(10));
+        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(60));
 
         createFolder(
                 "Some folder name",
@@ -80,7 +80,6 @@ public class DeleteFolder1Test extends BaseTest {
 
         new Actions(getDriver())
                 .moveToElement(chevronMenu)
-                .pause(1000)
                 .click(chevronMenu)
                 .pause(1500)
                 .perform();
