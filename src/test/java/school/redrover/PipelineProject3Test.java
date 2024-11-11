@@ -45,10 +45,6 @@ public class PipelineProject3Test extends BaseTest {
         getDriver().findElement(By.xpath("//textarea[@name='description']"))
                 .sendKeys("I love RedRoverSchool");
 
-        getDriver().findElement(By.xpath("//label[contains(text(),'controller restarts')]")).click();
-
-        getDriver().findElement(By.xpath("//label[contains(text(),'GitHub hook')]")).click();
-
         getDriver().findElement(By.xpath("//button[@name='Submit']")).click();
 
         Assert.assertTrue(getDriver()
