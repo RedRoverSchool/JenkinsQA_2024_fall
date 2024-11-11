@@ -1,8 +1,6 @@
 package school.redrover;
 
 import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.Point;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -157,17 +155,16 @@ public class FreestyleProject3Test extends BaseTest {
         WebElement projectToDelete = getDriver().findElement(
                 By.xpath("//a[@href='job/" + PROJECT_NAME.replace(" ", "%20") + "/']"));
         Actions actions = new Actions(getDriver());
-        actions.moveToElement(projectToDelete).pause(5).perform();
-
+        actions.moveToElement(projectToDelete).pause(10).perform();
 
         if (chevron.getLocation().getX() == initialLocation) {
             actions.moveToElement(chevron).moveByOffset(14, 0).pause(5).click().perform();
         } else {
-            actions.moveToElement(chevron).pause(5).click().perform();
+            actions.moveToElement(chevron).pause(100).click().perform();
         }
 
-        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//a[contains(@class, 'model-link--open')]")));
-        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@class='jenkins-dropdown']")));
+        //wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//a[contains(@class, 'model-link--open')]")));
+        //wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@class='jenkins-dropdown']")));
 
         WebElement deleteButton = wait.until(ExpectedConditions.visibilityOfElementLocated(
                 By.xpath("//button[contains(@href, 'doDelete')]")));
