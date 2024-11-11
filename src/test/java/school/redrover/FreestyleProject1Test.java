@@ -2,11 +2,16 @@ package school.redrover;
 
 import com.beust.ah.A;
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import school.redrover.runner.BaseTest;
+
+import java.time.Duration;
 
 public class FreestyleProject1Test extends BaseTest {
     private static final String NEW_FREESTYLE_PROJECT_NAME = "New freestyle project";
@@ -102,5 +107,32 @@ public class FreestyleProject1Test extends BaseTest {
         getDriver().findElement(By.className("textarea-show-preview")).click();
         String preview = getDriver().findElement(By.className("textarea-preview")).getText();
         Assert.assertEquals(preview, DESCRIPTION);
+    }
+
+    @Test
+    public void testChevronDeleteFreestyleProject() throws InterruptedException {
+        createFreestyleProject();
+        getDriver().findElement(By.id("jenkins-name-icon")).click();
+        Actions actions = new Actions(getDriver());
+        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(10));
+
+        //hover over project title to activate menu dropdown
+        WebElement projectName = getDriver().findElement(By
+                .xpath("//span[contains(text(),'New freestyle project')]"));
+        actions.moveToElement(projectName).perform();
+        // Wait for the chevron button to be clickable and move to it
+        WebElement chevron = wait.until(ExpectedConditions.elementToBeClickable(By
+                .xpath("//*[@id='job_New freestyle project']/td[3]/a/button")));
+        actions.moveToElement(chevron).perform();
+        // Use JavaScript to click on the chevron (handles potential overlay issues)
+        ((JavascriptExecutor) getDriver()).executeScript(
+                "arguments[0].dispatchEvent(new MouseEvent('click', " +
+                        "{bubbles: true, cancelable: true, view: window, clientX: " +
+                        "arguments[0].getBoundingClientRect().x + 5, " +
+                        "clientY: arguments[0].getBoundingClientRect().y + 5}));", chevron);
+        getDriver().findElement((By.xpath("//*[contains(@href,'doDelete')]"))).click();
+        getDriver().findElement(By.xpath("//button[contains(text(),'Yes')]")).click();
+        String emptyDashboardHeader = getDriver().findElement(By.cssSelector(".empty-state-block > h1")).getText();
+        Assert.assertEquals(emptyDashboardHeader, "Welcome to Jenkins!");
     }
 }
