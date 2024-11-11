@@ -2,8 +2,12 @@ package school.redrover;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.ui.ExpectedCondition;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
@@ -21,72 +25,41 @@ public class DashboardMenuInBreadcrumbsTest extends BaseTest {
     public void testDashboardDropdownMenu() throws InterruptedException {
 
         Actions actions = new Actions(getDriver());
+        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofMinutes(5));
 
         ProjectUtils.log("Find 'Dashboard' element");
         WebElement dashboard = getDriver().findElement(By.xpath("//ol/li/a[@href='/']"));
 
-        WebElement dropdownIcon = getDriver().findElement(By.xpath("//ol/li/a[@href='/']/button[@class='jenkins-menu-dropdown-chevron']"));
-        System.out.println("first location: " + dropdownIcon.getLocation());
-
         ProjectUtils.log("Hover over 'Dashboard' in breadcrumbs");
         actions
                 .moveToElement(dashboard)
-                .pause(Duration.ofSeconds(1))
                 .perform();
 
-        System.out.println("second location: " + dropdownIcon.getLocation());
+        ProjectUtils.log("Wait animation of the dropdown chevron icon and click");
+        WebElement dropdownIcon = getDriver().findElement(By.xpath("//ol/li/a[@href='/']/button[@class='jenkins-menu-dropdown-chevron']"));
+        wait.until(new ExpectedCondition<Boolean>() {
+            public Boolean apply(WebDriver driver) {
+                String initialCssValue = dropdownIcon.getCssValue("right");
+                ProjectUtils.log(initialCssValue);
+                return "-22px".equals(initialCssValue);
+            }
+        });
+        dropdownIcon.click();
 
-        ProjectUtils.log("Click on the dropdown icon");
-//        WebElement dropdownIcon = getDriver().findElement(By.xpath("//ol/li/a[@href='/']/button[@class='jenkins-menu-dropdown-chevron']"));
-//        dropdownIcon.click();
-        actions
-                .moveToElement(dropdownIcon)
-                .pause(Duration.ofSeconds(5))
-                .click()
-                .pause(Duration.ofSeconds(5))
-                .perform();
+        ProjectUtils.log("Wait animation of dropdown menu");
+        WebElement parentOfDropdownMenu = getDriver().findElement(By.xpath("//div[@class='tippy-content']"));
+        WebElement nestedDropdownMenu = wait.until(ExpectedConditions.presenceOfNestedElementLocatedBy(parentOfDropdownMenu, By.className("jenkins-dropdown")));
 
-        Assert.assertEquals(dropdownIcon.getLocation().toString(), "(95, 72)");
+        ProjectUtils.log("Create list of dropdown elements");
+        List<WebElement> dashboardDropdownMenuElements = getDriver().findElements(By.xpath("//a[@class='jenkins-dropdown__item ']"));
+        List<String> actualElements = new ArrayList<>();
+        for (WebElement eachElement: dashboardDropdownMenuElements) {
+            actualElements.add(eachElement.getText());
+        }
+        System.out.println("actual: " + actualElements);
 
-//        try {
-//            // JavaScript для визуализации нажатия
-//            String script = "function visualizeClick(x, y) {" +
-//                    "var indicator = document.createElement('div');" +
-//                    "indicator.style.position = 'absolute';" +
-//                    "indicator.style.width = '5px';" +
-//                    "indicator.style.height = '5px';" +
-//                    "indicator.style.backgroundColor = 'red';" +
-//                    "indicator.style.borderRadius = '150%';" +
-//                    "indicator.style.left = x + 'px';" +
-//                    "indicator.style.top = y + 'px';" +
-//                    "indicator.style.zIndex = 1000;" +
-//                    "document.body.appendChild(indicator);" +
-//                    "setTimeout(function() { document.body.removeChild(indicator); }, 2000);" +
-//                    "}" +
-//                    "visualizeClick(100, 79);";
-//            // Выполнение JavaScript через Selenium
-//            JavascriptExecutor js = (JavascriptExecutor) getDriver();
-//            js.executeScript(script);
-//            Thread.sleep(10000);
-//        }
-//        catch (InterruptedException e) {
-//            e.printStackTrace();
-//        } finally {
-//            System.out.println("warning");;
-//        }
-//
-//        Thread.sleep(3000);
-
-//        ProjectUtils.log("Create list of dropdown elements");
-//        List<WebElement> dashboardDropdownMenuElements = getDriver().findElements(By.xpath("//a[@class='jenkins-dropdown__item ']"));
-//        List<String> actualElements = new ArrayList<>();
-//        for (WebElement eachElement: dashboardDropdownMenuElements) {
-//            actualElements.add(eachElement.getText());
-//        }
-//        System.out.println("actual: " + actualElements);
-//
-//        ProjectUtils.log("Compare actual vs expected lists of dropdown elements");
-//        List<String> expectedElements = List.of("New Item", "Build History", "Manage Jenkins", "My Views");
-//        Assert.assertEquals(actualElements, expectedElements);
+        ProjectUtils.log("Compare actual vs expected lists of dropdown elements");
+        List<String> expectedElements = List.of("New Item", "Build History", "Manage Jenkins", "My Views");
+        Assert.assertEquals(actualElements, expectedElements);
     }
 }
