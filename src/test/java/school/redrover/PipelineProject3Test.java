@@ -14,6 +14,7 @@ import java.time.Duration;
 
 public class PipelineProject3Test extends BaseTest {
 
+    private static final String PIPELINE_NAME = "Pipeline_name";
     private static final By ADVANCED_PROJECT_OPTIONS_MENU = By.xpath("//button[@data-section-id='advanced-project-options']");
 
     private void createPipelineProject(String projectName) {
@@ -55,7 +56,6 @@ public class PipelineProject3Test extends BaseTest {
     public void testVerifySectionHasTooltip() {
         String labelText = "Display Name";
         String tooltipText = "Help for feature: Display Name";
-        String PIPELINE_NAME = "Pipeline_name";
 
         createPipelineProject(PIPELINE_NAME);
         returnToHomePage();
