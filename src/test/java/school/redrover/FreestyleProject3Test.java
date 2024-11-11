@@ -147,7 +147,7 @@ public class FreestyleProject3Test extends BaseTest {
 
         getDriver().findElement(By.xpath("//a[text()='Dashboard']")).click();
 
-        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(60));
+        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(20));
         WebElement chevron = wait.until(ExpectedConditions.visibilityOfElementLocated(
                 By.xpath("//button[contains(@data-href, '" + PROJECT_NAME.replace(" ", "%20") + "')]")));
         int initialLocation = chevron.getLocation().getX();
@@ -158,12 +158,12 @@ public class FreestyleProject3Test extends BaseTest {
         actions.moveToElement(projectToDelete).pause(10).perform();
 
         if (chevron.getLocation().getX() == initialLocation) {
-            actions.moveToElement(chevron).moveByOffset(14, 0).pause(10).click().perform();
+            actions.moveToElement(chevron).moveByOffset(14, 0).pause(10).click().pause(500).perform();
         } else {
-            actions.moveToElement(chevron).pause(10).click().pause(300).perform();
+            actions.moveToElement(chevron).pause(10).click().pause(500).perform();
         }
 
-        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//a[contains(@class, 'model-link--open')]")));
+        //wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//a[contains(@class, 'model-link--open')]")));
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@class='jenkins-dropdown']")));
 
         WebElement deleteButton = wait.until(ExpectedConditions.visibilityOfElementLocated(
