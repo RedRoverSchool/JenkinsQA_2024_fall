@@ -149,17 +149,20 @@ public class FreestyleProject3Test extends BaseTest {
 
         getDriver().findElement(By.xpath("//a[text()='Dashboard']")).click();
 
+        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(60));
+        WebElement chevron = wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//button[contains(@data-href, '" + PROJECT_NAME.replace(" ", "%20") + "')]")));
+        int initialLocation = chevron.getLocation().getX();
+
         WebElement projectToDelete = getDriver().findElement(
                 By.xpath("//a[@href='job/" + PROJECT_NAME.replace(" ", "%20") + "/']"));
         Actions actions = new Actions(getDriver());
         actions.moveToElement(projectToDelete).pause(5).perform();
 
-        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(60));
-        WebElement chevron = wait.until(ExpectedConditions.visibilityOfElementLocated(
-                //By.xpath("//a[@href='job/"+ PROJECT_NAME.replace(" ", "%20") + "/']//button")));
-        By.xpath("//button[contains(@data-href, '" + PROJECT_NAME.replace(" ", "%20") + "')]")));
 
-
+        if (chevron.getLocation().getX() == initialLocation) {
+            actions.moveToElement(chevron).moveByOffset(14, 0).pause(5).click().perform();
+        }
         actions.moveToElement(chevron).pause(5).click().perform();
 
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//a[contains(@class, 'model-link--open')]")));
