@@ -158,14 +158,14 @@ public class FreestyleProject3Test extends BaseTest {
         actions.moveToElement(projectToDelete).pause(10).perform();
 
         if (chevron.getLocation().getX() == initialLocation) {
-            actions.moveToElement(chevron).moveByOffset(14, 0).pause(10).click().pause(800).perform();
+            actions.moveToElement(chevron).moveByOffset(14, 0).pause(10).click().pause(1000).perform();
         } else {
-            actions.moveToElement(chevron).pause(10).click().pause(800).perform();
+            actions.moveToElement(chevron).pause(10).click().pause(1000).perform();
         }
 
-        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@class='jenkins-dropdown']")));
+        //wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@class='jenkins-dropdown']")));
 
-        WebElement deleteButton = wait.until(ExpectedConditions.visibilityOfElementLocated(
+        WebElement deleteButton = wait.until(ExpectedConditions.elementToBeClickable(
                 By.xpath("//button[contains(@href, 'doDelete')]")));
         deleteButton.click();
 
