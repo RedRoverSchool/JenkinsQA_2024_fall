@@ -147,25 +147,37 @@ public class FreestyleProject3Test extends BaseTest {
 
         getDriver().findElement(By.xpath("//a[text()='Dashboard']")).click();
 
-        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(20));
+        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(10));
         WebElement chevron = wait.until(ExpectedConditions.visibilityOfElementLocated(
                 By.xpath("//button[contains(@data-href, '" + PROJECT_NAME.replace(" ", "%20") + "')]")));
         int initialLocation = chevron.getLocation().getX();
 
-        WebElement projectToDelete = getDriver().findElement(
-                By.xpath("//a[@href='job/" + PROJECT_NAME.replace(" ", "%20") + "/']"));
+        WebElement projectToDelete = wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//a[@href='job/" + PROJECT_NAME.replace(" ", "%20") + "/']")));
         Actions actions = new Actions(getDriver());
-        actions.moveToElement(projectToDelete).pause(100).perform();
+        actions.moveToElement(projectToDelete)
+                .pause(20)
+                .perform();
         System.out.println("hover over project");
 
         System.out.println("fact: " + chevron.getLocation().getX());
         System.out.println("initial " + initialLocation);
         if (chevron.getLocation().getX() == initialLocation) {
-            actions.moveToElement(chevron).pause(20).moveByOffset(22, 0).pause(100).click().pause(1500).perform();
+            actions.moveToElement(chevron)
+                    .pause(20)
+                    .moveByOffset(22, 0)
+                    .pause(20)
+                    .click()
+                    .pause(500)
+                    .perform();
             System.out.println("if");
             System.out.println("location after if" + chevron.getLocation().getX());
         } else {
-            actions.moveToElement(chevron).pause(100).click().pause(1500).perform();
+            actions.moveToElement(chevron)
+                    .pause(20)
+                    .click()
+                    .pause(500)
+                    .perform();
         }
         System.out.println("chevron clicked after else");
 
