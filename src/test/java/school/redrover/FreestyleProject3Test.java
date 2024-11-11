@@ -156,7 +156,8 @@ public class FreestyleProject3Test extends BaseTest {
 
         WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(60));
         WebElement chevron = wait.until(ExpectedConditions.visibilityOfElementLocated(
-                By.xpath("//a[@href='job/"+ PROJECT_NAME.replace(" ", "%20") + "/']//button")));
+                //By.xpath("//a[@href='job/"+ PROJECT_NAME.replace(" ", "%20") + "/']//button")));
+        By.xpath("//button[contains(@data-href, '" + PROJECT_NAME.replace(" ", "%20") + "')]")));
 
 
         actions.moveToElement(chevron).pause(5).click().perform();
