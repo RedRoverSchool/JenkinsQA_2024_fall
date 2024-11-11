@@ -44,7 +44,10 @@ public class DashboardMenuInBreadcrumbsTest extends BaseTest {
                 return "-22px".equals(initialCssValue);
             }
         });
-        dropdownIcon.click();
+        actions
+                .moveToElement(dropdownIcon)
+                .click()
+                .perform();
 
         ProjectUtils.log("Wait animation of dropdown menu");
         WebElement parentOfDropdownMenu = getDriver().findElement(By.xpath("//div[@class='tippy-content']"));
