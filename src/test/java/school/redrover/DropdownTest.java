@@ -27,9 +27,8 @@ public class DropdownTest extends BaseTest {
 
         wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//div[@class = 'tippy-content']")));
 
-        WebElement buildButton = getDriver().findElement(By.xpath("//*[@class = 'jenkins-dropdown']/a[1]"));
+        WebElement buildButton = getDriver().findElement(By.xpath("//a[normalize-space()='Builds']"));
         actions.moveToElement(buildButton)
-                .moveByOffset(-5, 0)
                 .click()
                 .perform();
 
@@ -49,9 +48,8 @@ public class DropdownTest extends BaseTest {
 
         wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//div[@class = 'tippy-content']")));
 
-        WebElement configureButton = getDriver().findElement(By.xpath("//*[@class = 'jenkins-dropdown']/a[2]"));
+        WebElement configureButton = getDriver().findElement(By.xpath("//a[normalize-space()='Configure']"));
         actions.moveToElement(configureButton)
-                .moveByOffset(-5, 0)
                 .click()
                 .perform();
 
