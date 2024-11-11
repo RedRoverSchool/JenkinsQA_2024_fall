@@ -87,13 +87,13 @@ public class WorkingWithPipelinesTest extends BaseTest {
                 .perform();
 
         WebDriverWait wait = new WebDriverWait(getDriver(),Duration.ofSeconds(10));
-        WebElement renameOptionButton = wait.until(ExpectedConditions.visibilityOfElementLocated(
+        WebElement renameOptionButton = wait.until(ExpectedConditions.elementToBeClickable(
                 By.xpath("//a[@class='jenkins-dropdown__item ' and @href='/job/Regression/confirm-rename']")));
         renameOptionButton.click();
 
-        WebElement inputElement = getDriver().findElement(By.name("newName"));
+        WebElement inputElement = wait.until(ExpectedConditions.visibilityOfElementLocated(By.name("newName")));
         String value = inputElement.getAttribute("value");
 
-        Assert.assertEquals(namePipeLine, value);
+        Assert.assertEquals(namePipeLine, value, "Имя PipeLine не совпадает с value");
     }
 }
