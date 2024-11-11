@@ -160,7 +160,6 @@ public class FreestyleProject3Test extends BaseTest {
             WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(15));
             wait.until(ExpectedConditions.domPropertyToBe(chevron, "offsetLeft", "163"));
         }
-        System.out.println("Before click chevron");
         actions.moveToElement(chevron).pause(3).click().perform();
         System.out.println("After click chevron");
 
@@ -172,6 +171,14 @@ public class FreestyleProject3Test extends BaseTest {
         System.out.println("aria-expanded до: " + chevron.getAttribute("aria-expanded"));
         wait.until(ExpectedConditions.attributeToBe(chevron, "aria-expanded", "true"));
         System.out.println("aria-expanded после: " + chevron.getAttribute("aria-expanded"));
+
+        if(!chevron.getAttribute("aria-expanded").equals("true")) {
+            System.out.println("Retry click chevron");
+            actions.moveToElement(chevron).pause(3).click().perform();
+            wait.until(ExpectedConditions.attributeToBe(chevron, "aria-expanded", "true"));
+            System.out.println("после повторного клика по шеврону: " + chevron.getAttribute("aria-expanded"));
+        }
+
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@class='jenkins-dropdown']")));
 
         WebElement deleteButton = wait.until(ExpectedConditions.visibilityOfElementLocated(
