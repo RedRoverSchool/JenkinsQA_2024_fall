@@ -163,8 +163,8 @@ public class FreestyleProject3Test extends BaseTest {
             actions.moveToElement(chevron).pause(100).click().perform();
         }
 
-        //wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//a[contains(@class, 'model-link--open')]")));
-        //wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@class='jenkins-dropdown']")));
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//a[contains(@class, 'model-link--open')]")));
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@class='jenkins-dropdown']")));
 
         WebElement deleteButton = wait.until(ExpectedConditions.visibilityOfElementLocated(
                 By.xpath("//button[contains(@href, 'doDelete')]")));
