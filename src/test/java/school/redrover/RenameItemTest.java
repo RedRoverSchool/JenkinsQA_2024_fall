@@ -31,8 +31,8 @@ public class RenameItemTest extends BaseTest {
         final String enteredName = "MyNewName";
         createItem();
 
-        WebElement renameButton = wait.until(ExpectedConditions.elementToBeClickable
-                (By.xpath("//a[@href='/job/first/confirm-rename']")));
+        WebElement renameButton = getDriver().findElement
+                (By.xpath("//div[7]"));
         renameButton.click();
 
         WebElement newNameField = getDriver()
