@@ -2,6 +2,7 @@ package school.redrover;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
@@ -138,5 +139,39 @@ public class FreestyleProject3Test extends BaseTest {
         verifyYouAreOnProjectStatusPage();
 
         Assert.assertEquals(getDriver().findElement(By.tagName("h1")).getText(), newName);
+    }
+
+    @Test
+    public void testDeleteProjectViaChevron() {
+        createProjectViaSidebarMenu(PROJECT_NAME);
+
+        getDriver().findElement(By.xpath("//a[text()='Dashboard']")).click();
+
+        WebElement projectToDelete = getDriver().findElement(
+                By.xpath("//a[@href='job/" + PROJECT_NAME.replace(" ", "%20") + "/']"));
+        Actions actions = new Actions(getDriver());
+        actions.moveToElement(projectToDelete).pause(2).perform();
+
+        WebElement chevron = getDriver().findElement(
+                By.xpath("//a[@href='job/"+ PROJECT_NAME.replace(" ", "%20") + "/']//button"));
+        if (chevron.getDomProperty("offsetLeft").equals("141")) {
+            actions.moveToElement(projectToDelete).pause(3).perform();
+            WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(15));
+            wait.until(ExpectedConditions.domPropertyToBe(chevron, "offsetLeft", "163"));
+        }
+        actions.moveToElement(chevron).pause(2).click().perform();
+
+        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(15));
+        wait.until(ExpectedConditions.attributeToBe(chevron, "aria-expanded", "true"));
+
+        WebElement deleteButton = wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//button[contains(@href, 'doDelete')]")));
+        deleteButton.click();
+
+        WebElement deleteAlert = wait.until(ExpectedConditions.elementToBeClickable(
+                By.xpath("//button[@data-id='ok']")));
+        deleteAlert.click();
+
+        Assert.assertFalse(getDriver().findElement(By.id("main-panel")).getText().contains(PROJECT_NAME));
     }
 }
