@@ -20,9 +20,7 @@ public class DropdownTest extends BaseTest {
         actions.moveToElement(dropdownChevron).click().perform();
 
         WebElement buildButton = getDriver().findElement(By.xpath("//a[normalize-space()='Builds']"));
-        actions.moveToElement(buildButton)
-                .click()
-                .perform();
+        actions.moveToElement(buildButton).click().perform();
 
         WebElement thirdCrumb = getDriver().findElement(By.xpath(BREAD_CRUMBS));
 
@@ -37,9 +35,7 @@ public class DropdownTest extends BaseTest {
         actions.moveToElement(dropdownChevron).click().perform();
 
         WebElement configureButton = getDriver().findElement(By.xpath("//a[normalize-space()='Configure']"));
-        actions.moveToElement(configureButton)
-                .click()
-                .perform();
+        actions.moveToElement(configureButton).click().perform();
 
         WebElement thirdCrumb = getDriver().findElement(By.xpath(BREAD_CRUMBS));
 
