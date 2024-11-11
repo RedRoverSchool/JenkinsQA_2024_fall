@@ -1,6 +1,7 @@
 package school.redrover;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -181,8 +182,10 @@ public class PipelineProject2Test extends BaseTest {
         WebElement chevronButton = wait.until(ExpectedConditions.visibilityOfElementLocated(
                 By.xpath(String.format("//span[text()='%s']/following-sibling::button", PROJECT_NAME))));
 
-        actions.moveToElement(chevronButton)
-                .click().pause(2000).perform();
+        ((JavascriptExecutor) getDriver()).executeScript(
+                "arguments[0].dispatchEvent(new Event('mouseenter'));", chevronButton);
+        ((JavascriptExecutor) getDriver()).executeScript(
+                "arguments[0].dispatchEvent(new Event('click'));", chevronButton);
 
         wait.until(ExpectedConditions.presenceOfElementLocated(
                 By.xpath("//button[contains(@href, 'doDelete')]"))).click();
