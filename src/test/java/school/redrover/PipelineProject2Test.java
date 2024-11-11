@@ -171,7 +171,9 @@ public class PipelineProject2Test extends BaseTest {
         goToMainPage();
 
         WebElement projectItem = wait.until(ExpectedConditions.presenceOfElementLocated(
-                By.xpath(String.format("//span[text()='%s']", PROJECT_NAME))));
+                By.xpath(String.format(
+                        "//a[contains(@href, 'job/%s') and contains(@class, 'model-link')]",
+                        PROJECT_NAME))));
 
         Actions actions = new Actions(getDriver());
         actions.moveToElement(projectItem).perform();
@@ -179,12 +181,10 @@ public class PipelineProject2Test extends BaseTest {
         WebElement chevronButton = wait.until(ExpectedConditions.visibilityOfElementLocated(
                 By.xpath(String.format("//span[text()='%s']/following-sibling::button", PROJECT_NAME))));
 
-        actions.moveToElement(chevronButton,
-                        chevronButton.getSize().getWidth() / 2,
-                        chevronButton.getSize().getHeight() / 2)
-                .click().perform();
+        actions.moveToElement(chevronButton)
+                .click().pause(2000).perform();
 
-        wait.until(ExpectedConditions.visibilityOfElementLocated(
+        wait.until(ExpectedConditions.presenceOfElementLocated(
                 By.xpath("//button[contains(@href, 'doDelete')]"))).click();
 
         wait.until(ExpectedConditions.visibilityOfElementLocated(
