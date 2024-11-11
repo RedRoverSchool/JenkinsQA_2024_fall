@@ -176,8 +176,13 @@ public class PipelineProject2Test extends BaseTest {
         Actions actions = new Actions(getDriver());
         actions.moveToElement(projectItem).perform();
 
-        wait.until(ExpectedConditions.elementToBeClickable(
-                By.xpath(String.format("//span[text()='%s']/following-sibling::button", PROJECT_NAME)))).click();
+        WebElement chevronButton = wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath(String.format("//span[text()='%s']/following-sibling::button", PROJECT_NAME))));
+
+        actions.moveToElement(chevronButton,
+                        chevronButton.getSize().getWidth() / 2,
+                        chevronButton.getSize().getHeight() / 2)
+                .click().perform();
 
         wait.until(ExpectedConditions.visibilityOfElementLocated(
                 By.xpath("//button[contains(@href, 'doDelete')]"))).click();
