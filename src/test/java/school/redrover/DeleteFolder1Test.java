@@ -1,6 +1,7 @@
 package school.redrover;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
@@ -55,6 +56,8 @@ public class DeleteFolder1Test extends BaseTest {
     @Test
     public void testDeleteFolderInChevronMenu() {
 
+        JavascriptExecutor js = (JavascriptExecutor)getDriver();
+
         WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(30));
 
         createFolder(
@@ -78,12 +81,8 @@ public class DeleteFolder1Test extends BaseTest {
                 )
         );
 
-        new Actions(getDriver())
-                .moveToElement(chevronMenu)
-                .pause(2000)
-                .click(chevronMenu)
-                .pause(2000)
-                .perform();
+        js.executeScript("arguments[0].dispatchEvent(new Event('moveCursor'));", chevronMenu);
+        js.executeScript("arguments[0].dispatchEvent(new Event('click'));", chevronMenu);
 
         WebElement deleteFolderButton = wait.until(
                 ExpectedConditions.visibilityOfElementLocated(
@@ -91,8 +90,6 @@ public class DeleteFolder1Test extends BaseTest {
                 )
         );
         deleteFolderButton.click();
-
-
 
         WebElement yesButton = wait
                 .until(new Function<WebDriver, WebElement>() {
