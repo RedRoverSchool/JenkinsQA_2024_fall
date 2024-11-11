@@ -55,7 +55,7 @@ public class DeleteFolder1Test extends BaseTest {
     @Test
     public void testDeleteFolderInChevronMenu() {
 
-        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(60));
+        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(30));
 
         createFolder(
                 "Some folder name",
@@ -73,19 +73,20 @@ public class DeleteFolder1Test extends BaseTest {
                 .perform();
 
         WebElement chevronMenu = wait.until(
-                ExpectedConditions.elementToBeClickable(
+                ExpectedConditions.visibilityOfElementLocated(
                         By.xpath("//*[@id=\"job_Some folder name\"]/td[3]/a/button")
                 )
         );
 
         new Actions(getDriver())
                 .moveToElement(chevronMenu)
+                .pause(2000)
                 .click(chevronMenu)
-                .pause(1500)
+                .pause(2000)
                 .perform();
 
         WebElement deleteFolderButton = wait.until(
-                ExpectedConditions.elementToBeClickable(
+                ExpectedConditions.visibilityOfElementLocated(
                         By.xpath("//button[normalize-space()='Delete Folder']")
                 )
         );
