@@ -56,7 +56,7 @@ public class DeleteFolder1Test extends BaseTest {
     @Test
     public void testDeleteFolderInChevronMenu() {
 
-        JavascriptExecutor js = (JavascriptExecutor)getDriver();
+        JavascriptExecutor js = (JavascriptExecutor) getDriver();
 
         WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(30));
 
@@ -81,8 +81,14 @@ public class DeleteFolder1Test extends BaseTest {
                 )
         );
 
-        js.executeScript("arguments[0].dispatchEvent(new Event('moveCursor'));", chevronMenu);
-        js.executeScript("arguments[0].dispatchEvent(new Event('click'));", chevronMenu);
+        new Actions(getDriver())
+                .moveToElement(chevronMenu)
+                .pause(500)
+                .click(chevronMenu)
+                .perform();
+
+        js.executeScript("arguments[0].dispatchEvent(new Event('mouseenter'));", chevronMenu);
+        js.executeScript("arguments[0].click();", chevronMenu);
 
         WebElement deleteFolderButton = wait.until(
                 ExpectedConditions.visibilityOfElementLocated(
