@@ -22,19 +22,18 @@ public class RenameJobDropdownTest extends BaseTest {
 
         createJob(jobName);
         findEndClickLinkInDropdown(jobName, "Rename");
+        renameJob(jobNewName);
 
-//        renameJob(jobNewName);
-//
-//        Assert.assertEquals(getDriver().findElement(By
-//                        .xpath("//*[@class='jenkins-table__link model-link inside']"))
-//                .getText(), jobNewName);
+        Assert.assertEquals(getDriver().findElement(By
+                        .xpath("//*[@class='jenkins-table__link model-link inside']"))
+                .getText(), jobNewName);
 
-        Assert.assertEquals(getDriver().getTitle(), "Rename [Jenkins]");
+//        Assert.assertEquals(getDriver().getTitle(), "Rename [Jenkins]");
 
     }
 
     private void renameJob(String jobNewName) {
-        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(10));
+        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(20));
 
         WebElement inputFieldNewName = wait
                 .until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//input[@name='newName']")));
@@ -51,10 +50,9 @@ public class RenameJobDropdownTest extends BaseTest {
     }
 
 
-    private void findEndClickLinkInDropdown(String jobName, String linkName ) {
+    private void findEndClickLinkInDropdown(String jobName, String linkName) {
 
-
-        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(1));
+        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(20));
 
         WebElement jobNameLink = wait
                 .until(ExpectedConditions.visibilityOfElementLocated(By
@@ -97,7 +95,7 @@ public class RenameJobDropdownTest extends BaseTest {
                 .moveToElement(jobNameLink)
                 .pause(Duration.ofSeconds(1))
                 .moveToElement(getDriver().findElement
-                                (By.xpath("//a[@href='job/" + jobName + "/']//button[@class='jenkins-menu-dropdown-chevron']")))
+                        (By.xpath("//a[@href='job/" + jobName + "/']//button[@class='jenkins-menu-dropdown-chevron']")))
                 .moveToElement(getDriver().findElement
                         (By.xpath("//a[@href='job/" + jobName + "/']//button[@class='jenkins-menu-dropdown-chevron']")))
                 .pause(Duration.ofSeconds(1))
@@ -127,13 +125,24 @@ public class RenameJobDropdownTest extends BaseTest {
         List<WebElement> dropdownButtons = getDriver().findElements(By.xpath("//div[@class='tippy-content']//button"));
 
         for (WebElement dropdownLink : dropdownLinks) {
-            if (dropdownLink.getText().equals(linkName )) {
-                getDriver().get(dropdownLink.getAttribute("href"));
+            if (dropdownLink.getText().equals(linkName)) {
+//                getDriver().get(dropdownLink.getAttribute("href"));
 //                dropdownLink.click();
+//                wait.until(ExpectedConditions.elementToBeClickable(dropdownLink)).click();
+
+                Actions actionDropdownLink = new Actions(getDriver());
+                actionDropdownLink
+                        .moveToElement(dropdownLink)
+                        .pause(Duration.ofSeconds(1))
+                        .click()
+                        .pause(Duration.ofSeconds(1))
+                        .perform();
 //                System.out.println(getDriver().getTitle());
                 break;
             }
         }
+
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("bottom-sticker")));
 
     }
 
