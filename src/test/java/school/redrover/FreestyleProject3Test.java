@@ -162,8 +162,9 @@ public class FreestyleProject3Test extends BaseTest {
 
         if (chevron.getLocation().getX() == initialLocation) {
             actions.moveToElement(chevron).moveByOffset(14, 0).pause(5).click().perform();
+        } else {
+            actions.moveToElement(chevron).pause(5).click().perform();
         }
-        actions.moveToElement(chevron).pause(5).click().perform();
 
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//a[contains(@class, 'model-link--open')]")));
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@class='jenkins-dropdown']")));
