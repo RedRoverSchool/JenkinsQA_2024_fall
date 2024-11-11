@@ -27,11 +27,12 @@ public class RenameItemTest extends BaseTest {
     @Test
     public void testRenameItem() {
 
+        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(10));
         final String enteredName = "MyNewName";
         createItem();
 
-        WebElement renameButton = getDriver()
-                .findElement(By.xpath("//a[@href='/job/first/confirm-rename']"));
+        WebElement renameButton = wait.until(ExpectedConditions.elementToBeClickable
+                (By.xpath("//a[@href='/job/first/confirm-rename']")));
         renameButton.click();
 
         WebElement newNameField = getDriver()
@@ -39,7 +40,6 @@ public class RenameItemTest extends BaseTest {
         newNameField.clear();
         newNameField.sendKeys(enteredName);
 
-        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(10));
         WebElement renameSubmitButton = wait.until(ExpectedConditions.elementToBeClickable
                 (By.xpath("//button[normalize-space()='Rename']")));
         renameSubmitButton.click();
