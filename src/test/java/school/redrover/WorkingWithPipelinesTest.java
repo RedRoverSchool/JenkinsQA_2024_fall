@@ -80,14 +80,13 @@ public class WorkingWithPipelinesTest extends BaseTest {
 
         Actions actions = new Actions(getDriver());
         actions.moveToElement(regressionLink)
+                .pause(1000)
+                .moveToElement(getDriver().findElement(
+                        By.xpath("//button[@class='jenkins-menu-dropdown-chevron' and @data-href='http://localhost:8080/job/Regression/']")))
+                .click()
                 .perform();
 
-        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(10));
-        WebElement chevronButton = wait.until(ExpectedConditions.elementToBeClickable(
-                By.xpath("//button[@class='jenkins-menu-dropdown-chevron' and @data-href='http://localhost:8080/job/Regression/']")));
-
-        chevronButton.click();
-
+        WebDriverWait wait = new WebDriverWait(getDriver(),Duration.ofSeconds(10));
         WebElement renameOptionButton = wait.until(ExpectedConditions.visibilityOfElementLocated(
                 By.xpath("//a[@class='jenkins-dropdown__item ' and @href='/job/Regression/confirm-rename']")));
         renameOptionButton.click();
