@@ -162,7 +162,7 @@ public class FreestyleProject3Test extends BaseTest {
         System.out.println("fact: " + chevron.getLocation().getX());
         System.out.println("initial " + initialLocation);
         if (chevron.getLocation().getX() == initialLocation) {
-            actions.moveToElement(chevron).moveByOffset(14, 0).pause(20).click().pause(1500).perform();
+            actions.moveToElement(chevron).moveByOffset(22, 0).pause(20).click().pause(1500).perform();
             System.out.println("if");
             System.out.println("location after if" + chevron.getLocation().getX());
         } else {
