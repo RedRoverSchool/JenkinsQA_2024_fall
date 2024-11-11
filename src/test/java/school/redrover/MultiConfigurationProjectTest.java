@@ -5,7 +5,6 @@ import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.FluentWait;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.Test;
@@ -71,7 +70,7 @@ public class MultiConfigurationProjectTest extends BaseTest {
     }
 
     @Test
-    public void testDragAndDropConfigMatrixBlock() {
+    public void testDragAndDropConfigurationMatrixBlock() {
         WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(5));
 
         final String axisNameFirst = "config1";
@@ -92,8 +91,8 @@ public class MultiConfigurationProjectTest extends BaseTest {
 
         getDriver().findElement(By.cssSelector("button[suffix='axis']")).click();
 
-        WebElement dropdownList = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("button[class='jenkins-dropdown__item ']")));
-        dropdownList.click();
+        WebElement dropdownList1 = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("button[class='jenkins-dropdown__item ']")));
+        dropdownList1.click();
 
         getDriver().findElement(By.cssSelector("input.jenkins-input.validated[name='_.name']")).sendKeys(axisNameFirst);
         getDriver().findElement(By.cssSelector(".jenkins-input[name='_.valueString']")).sendKeys(axisValueFirst);
