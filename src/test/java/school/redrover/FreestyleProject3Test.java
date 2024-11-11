@@ -147,24 +147,32 @@ public class FreestyleProject3Test extends BaseTest {
 
         getDriver().findElement(By.xpath("//a[text()='Dashboard']")).click();
 
-        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(20));
+        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(30));
         WebElement chevron = wait.until(ExpectedConditions.visibilityOfElementLocated(
                 By.xpath("//button[contains(@data-href, '" + PROJECT_NAME.replace(" ", "%20") + "')]")));
         int initialLocation = chevron.getLocation().getX();
+        System.out.println("initial " + initialLocation);
 
         WebElement projectToDelete = getDriver().findElement(
                 By.xpath("//a[@href='job/" + PROJECT_NAME.replace(" ", "%20") + "/']"));
         Actions actions = new Actions(getDriver());
         actions.moveToElement(projectToDelete).pause(10).perform();
+        System.out.println("hover over project");
 
+        System.out.println("fact: " + chevron.getLocation().getX());
+        System.out.println("initial " + initialLocation);
         if (chevron.getLocation().getX() == initialLocation) {
             actions.moveToElement(chevron).moveByOffset(14, 0).pause(10).click().pause(1500).perform();
+            System.out.println("if");
+            System.out.println("location after if" + chevron.getLocation().getX());
         } else {
             actions.moveToElement(chevron).pause(10).click().pause(1500).perform();
         }
+        System.out.println("chevron clicked after else");
 
         //wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@class='jenkins-dropdown']")));
 
+        System.out.println("waiting for delete");
         WebElement deleteButton = wait.until(ExpectedConditions.elementToBeClickable(
                 By.xpath("//button[contains(@href, 'doDelete')]")));
         deleteButton.click();
