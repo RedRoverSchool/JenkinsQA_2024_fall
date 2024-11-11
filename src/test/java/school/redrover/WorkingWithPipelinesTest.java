@@ -79,17 +79,19 @@ public class WorkingWithPipelinesTest extends BaseTest {
         WebElement regressionLink = getDriver().findElement(By.xpath("//a[@href='job/Regression/']"));
 
         Actions actions = new Actions(getDriver());
-        actions.moveToElement(regressionLink)
-                .pause(1000)
-                .moveToElement(getDriver().findElement(
-                        By.xpath("//button[@class='jenkins-menu-dropdown-chevron' and @data-href='http://localhost:8080/job/Regression/']")))
-                .click()
-                .perform();
 
-        WebDriverWait wait = new WebDriverWait(getDriver(),Duration.ofSeconds(10));
-        WebElement renameOptionButton = wait.until(ExpectedConditions.elementToBeClickable(
-                By.xpath("//a[@class='jenkins-dropdown__item ' and @href='/job/Regression/confirm-rename']")));
-        renameOptionButton.click();
+        actions.moveToElement(regressionLink).perform();
+
+        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(10));
+        WebElement chevronButton = wait.until(ExpectedConditions.elementToBeClickable(
+                By.xpath("//button[@class='jenkins-menu-dropdown-chevron' and @data-href='http://localhost:8080/job/Regression/']")));
+
+        chevronButton.click();
+
+        WebElement renameOption = wait.until(ExpectedConditions.elementToBeClickable(
+                By.xpath("//a[@href='/job/Regression/confirm-rename']")));
+
+        renameOption.click();
 
         WebElement inputElement = wait.until(ExpectedConditions.visibilityOfElementLocated(By.name("newName")));
         String value = inputElement.getAttribute("value");
