@@ -87,7 +87,7 @@ public class DeleteFolder1Test extends BaseTest {
 
         WebElement deleteFolderButton = wait.until(
                 ExpectedConditions.visibilityOfElementLocated(
-                        By.xpath("//button[normalize-space()='Delete Folder']")
+                        By.xpath("//button[@href='/job/Some%20folder%20name/doDelete']")
                 )
         );
         deleteFolderButton.click();
