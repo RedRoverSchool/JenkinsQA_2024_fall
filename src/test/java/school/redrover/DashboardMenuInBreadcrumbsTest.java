@@ -38,35 +38,35 @@ public class DashboardMenuInBreadcrumbsTest extends BaseTest {
 
         ProjectUtils.log("Find 'Dashboard' element");
         WebElement dashboard = getDriver().findElement(By.xpath("//ol/li/a[@href='/']"));
-
         WebElement dropdownIcon = getDriver().findElement(By.xpath("//ol/li/a[@href='/']/button[@class='jenkins-menu-dropdown-chevron']"));
-        ProjectUtils.log("Top left chevron corner location: " + dropdownIcon.getLocation().toString());
+
         ProjectUtils.log("Chevron size: " + dropdownIcon.getSize());
-        String initialPositionCssValue = dropdownIcon.getCssValue("right");
-        ProjectUtils.log(initialPositionCssValue);
+        ProjectUtils.log("Top left chevron corner location before hovering: " + dropdownIcon.getLocation().toString());
+        ProjectUtils.log("Css value before hovering: " + dropdownIcon.getCssValue("right"));
 
         ProjectUtils.log("Hover over 'Dashboard' in breadcrumbs");
         actions
                 .moveToElement(dashboard)
                 .perform();
 
+        ProjectUtils.log("Top left chevron corner location during hovering: " + dropdownIcon.getLocation().toString());
+        ProjectUtils.log("Css value during hovering: " + dropdownIcon.getCssValue("right"));
+
         ProjectUtils.log("Wait animation of the dropdown chevron icon and click");
-//        WebElement dropdownIcon = getDriver().findElement(By.xpath("//ol/li/a[@href='/']/button[@class='jenkins-menu-dropdown-chevron']"));
-//        wait.until(new ExpectedCondition<Boolean>() {
-//            public Boolean apply(WebDriver driver) {
-//                String initialPositionCssValue = dropdownIcon.getCssValue("right");
-//                ProjectUtils.log(initialPositionCssValue);
-//                return "-22px".equals(initialPositionCssValue);
-//            }
-//        });
+        wait.until(new ExpectedCondition<Boolean>() {
+            public Boolean apply(WebDriver driver) {
+                String initialPositionCssValue = dropdownIcon.getCssValue("right");
+                ProjectUtils.log(initialPositionCssValue);
+                return "-22px".equals(initialPositionCssValue);
+            }
+        });
 
 //        wait.until(ExpectedConditions.visibilityOf(dropdownIcon));
 //        wait.until(ExpectedConditions.elementToBeClickable(dropdownIcon));
 
-        ProjectUtils.log("Top left chevron corner location: " + dropdownIcon.getLocation().toString());
         ProjectUtils.log("Chevron size: " + dropdownIcon.getSize());
-        ProjectUtils.log(initialPositionCssValue);
-
+        ProjectUtils.log("Top left chevron corner location after hovering: " + dropdownIcon.getLocation().toString());
+        ProjectUtils.log(dropdownIcon.getCssValue("Css value after hovering: " + "right"));
         dropdownIcon.click();
 
         ProjectUtils.log("Wait animation of dropdown menu");
