@@ -53,7 +53,8 @@ public class DashboardMenuInBreadcrumbsTest extends BaseTest {
                 return "-22px".equals(initialPositionCssValue);
             }
         });
-        ProjectUtils.log(dropdownIcon.getLocation().toString());
+        ProjectUtils.log("Top left chevron corner location: " + dropdownIcon.getLocation().toString());
+        ProjectUtils.log("Chevron size: " + dropdownIcon.getSize());
         dropdownIcon.click();
 
         ProjectUtils.log("Wait animation of dropdown menu");
