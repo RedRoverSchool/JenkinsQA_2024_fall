@@ -135,15 +135,10 @@ public class StartPageTest extends BaseTest {
                 .perform();
 
 
-        WebElement chevron = wait.until(ExpectedConditions.visibilityOfElementLocated(
+        WebElement chevron = wait.until(ExpectedConditions.elementToBeClickable(
                 By.xpath("//button[@class='jenkins-menu-dropdown-chevron' and @data-href='http://localhost:8080/job/NewFolder/']")));
-        wait.until(ExpectedConditions.elementToBeClickable(chevron));
 
-        actions.moveToElement(chevron).pause(2000).perform();
-
-        JavascriptExecutor javaScriptExecutor = (JavascriptExecutor)getDriver();
-        javaScriptExecutor.executeScript("arguments[0].click()", chevron);
-
+        actions.moveToElement(chevron).pause(2000).click().perform();
 
         WebElement deleteButton = wait.until(ExpectedConditions.presenceOfElementLocated(
                 By.xpath("//button[@class='jenkins-dropdown__item ' and @href='/job/NewFolder/doDelete']")));
