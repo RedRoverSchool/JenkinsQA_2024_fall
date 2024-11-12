@@ -130,7 +130,7 @@ public class FreestyleProject1Test extends BaseTest {
                         "{bubbles: true, cancelable: true, view: window, clientX: " +
                         "arguments[0].getBoundingClientRect().x + 5, " +
                         "clientY: arguments[0].getBoundingClientRect().y + 5}));", chevron);
-        WebElement delete = wait.until(ExpectedConditions.elementToBeClickable((By
+        WebElement delete = wait.until(ExpectedConditions.visibilityOfElementLocated((By
                 .xpath("//*[contains(@href,'doDelete')]"))));
         delete.click();
         getDriver().findElement(By.xpath("//button[contains(text(),'Yes')]")).click();
