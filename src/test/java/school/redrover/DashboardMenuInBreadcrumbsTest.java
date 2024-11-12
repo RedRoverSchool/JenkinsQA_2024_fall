@@ -121,7 +121,17 @@ public class DashboardMenuInBreadcrumbsTest extends BaseTest {
         WebElement chevron = getDriver().findElement(By.xpath("//td/a/button[@class='jenkins-menu-dropdown-chevron']"));
         actions
                 .moveToElement(chevron)
-                .pause(1500)
+                .perform();
+
+        wait.until(new ExpectedCondition<Boolean>() {
+            public Boolean apply(WebDriver driver) {
+                String initialPositionCssValue = chevron.getCssValue("right");
+                ProjectUtils.log("Css value during animation: " + initialPositionCssValue);
+                return "-22px".equals(initialPositionCssValue);
+            }
+        });
+
+        actions
                 .moveToElement(chevron)
                 .click(chevron)
                 .perform();
