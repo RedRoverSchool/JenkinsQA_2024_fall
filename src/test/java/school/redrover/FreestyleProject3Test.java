@@ -1,6 +1,7 @@
 package school.redrover;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -144,21 +145,28 @@ public class FreestyleProject3Test extends BaseTest {
     @Test
     public void testDeleteProjectViaChevron() {
         createProjectViaSidebarMenu(PROJECT_NAME);
+
         getDriver().findElement(By.xpath("//a[text()='Dashboard']")).click();
 
-        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(20));
-        WebElement chevron = wait.until(ExpectedConditions.visibilityOfElementLocated(
-                By.xpath("//button[contains(@data-href, '" + PROJECT_NAME.replace(" ", "%20") + "')]")));
-
+        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(10));
+        WebElement projectToDelete = wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//a[@href='job/" + PROJECT_NAME.replace(" ", "%20") + "/']")));
         Actions actions = new Actions(getDriver());
-        actions.moveToElement(chevron)
-                .pause(10000)
-                .moveToElement(chevron)
-                .click()
-                .pause(40000)
+        actions.moveToElement(projectToDelete)
+                .pause(100)
                 .perform();
 
-        WebElement deleteButton = wait.until(ExpectedConditions.elementToBeClickable(
+        WebElement chevron = getDriver().findElement(
+                By.xpath("//a[@href='job/"+ PROJECT_NAME.replace(" ", "%20") + "/']//button"));
+        actions.moveToElement(chevron)
+                .pause(100)
+                .moveToElement(chevron)
+                .perform();
+        ((JavascriptExecutor) getDriver()).executeScript("arguments[0].click();",chevron);
+
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@class='jenkins-dropdown']")));
+
+        WebElement deleteButton = wait.until(ExpectedConditions.visibilityOfElementLocated(
                 By.xpath("//button[contains(@href, 'doDelete')]")));
         deleteButton.click();
 
