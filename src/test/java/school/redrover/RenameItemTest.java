@@ -21,7 +21,7 @@ public class RenameItemTest extends BaseTest {
         getDriver().findElement(By.id("ok-button")).click();
         WebElement saveButton = getDriver().findElement(By.xpath("//button[@name='Submit']"));
         Actions actions = new Actions(getDriver());
-        actions.moveToElement(saveButton).click().perform();
+        actions.moveToElement(saveButton).pause(Duration.ofSeconds(3)).click().perform();
     }
 
     @Test
