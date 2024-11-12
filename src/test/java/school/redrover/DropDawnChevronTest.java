@@ -15,61 +15,56 @@ import java.time.Duration;
 public class DropDawnChevronTest extends BaseTest {
 
     @Test
-    public void testDropDawnNewItem () {
-        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(5));
+    public void testDropDawnNewItem() {
+        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(10));
+        Actions actions = new Actions(getDriver());
+        JavascriptExecutor js = (JavascriptExecutor) getDriver();
 
+        // Переход к странице создания нового элемента и ввод его имени
         getDriver().findElement(By.linkText("New Item")).click();
-
         getDriver().findElement(By.id("name")).sendKeys("TestDropDawnChevron");
         getDriver().findElement(By.cssSelector("#jenkins")).click();
         getDriver().findElement(By.id("ok-button")).click();
 
+        // Ввод описания и сохранение
         getDriver().findElement(By.name("description")).sendKeys("TestDropDawnChevron");
-
-        JavascriptExecutor js = (JavascriptExecutor) getDriver();
-        js.executeScript("window.scrollBy(0, 2000);");
+        js.executeScript("window.scrollBy(0, 2000);");  // Скроллинг вниз страницы
         getDriver().findElement(By.name("Submit")).click();
 
+        // Возвращение к главной странице
         getDriver().findElement(By.xpath("//*[@id='breadcrumbs']/li[1]/a")).click();
 
-        Actions actions = new Actions(getDriver());
-
+        // Наведение на основную кнопку и раскрытие выпадающего меню
         WebElement mainButton = getDriver().findElement(By.xpath("//*[@id='job_TestDropDawnChevron']/td[3]/a/span"));
         actions.moveToElement(mainButton).perform();
 
         WebElement hiddenButton = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//*[@id='job_TestDropDawnChevron']/td[3]/a/button")));
-        actions.moveToElement(hiddenButton)
-                .pause(java.time.Duration.ofSeconds(1)).click().perform();
+        actions.moveToElement(hiddenButton).pause(Duration.ofSeconds(1)).click().perform();
 
-        String searchText = "\"\n" +
-                "          Delete Pipeline\n" +
-                "                    \n" +
-                "          \n" +
-                "      \"";
+        // Текст для поиска элемента в выпадающем меню
+        String searchText = "Delete Pipeline";
 
-        WebElement dropdown = (WebElement) js.executeScript(
-                "return Array.from(document.querySelectorAll('*')).find(element => " +
-                        "element.textContent.trim().replace(/\\s+/g, ' ') === arguments[0]);", searchText);
+        // Поиск и клик по элементу в выпадающем списке с помощью JavaScript
+        WebElement dropdownItem = (WebElement) js.executeScript(
+                "return Array.from(document.querySelectorAll(arguments[0])).find(element => " +
+                        "element.textContent.trim().replace(/\\s+/g, ' ') === arguments[1]);",
+                "*", searchText
+        );
 
-        if (dropdown != null) {
-            actions.moveToElement(dropdown)
-                    .pause(java.time.Duration.ofSeconds(1))
-                    .click()
-                    .perform();
+        // Проверка наличия элемента и клик
+        if (dropdownItem != null) {
+            actions.moveToElement(dropdownItem).pause(Duration.ofSeconds(2)).click().perform();
         } else {
-            System.out.println("Элемент с текстом '" + searchText + "' не найден.");
+            Assert.fail("Элемент с текстом '" + searchText + "' не найден.");
         }
 
-////        WebElement dropDownDel = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[@id='tippy-6']/div/div/div")));
-////        actions.moveToElement(dropDownDel)
-////                .pause(java.time.Duration.ofSeconds(2)).click().perform();
-//
-//        WebElement modalWin = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[@id='jenkins']/dialog")));
-//        actions.moveToElement(modalWin).pause(java.time.Duration.ofSeconds(2)).perform();
-//        WebElement yesButton = modalWin.findElement(By.xpath("//*[@id='jenkins']/dialog/div[3]/button[1]"));
-//        yesButton.click();
-//
-//        boolean isElementInvisible = wait.until(ExpectedConditions.invisibilityOfElementLocated(By.xpath("//*[@id='tippy-6']/div/div/div/button[2]")));
-//        Assert.assertTrue(isElementInvisible);
+        // Ожидание появления окна подтверждения удаления и клик по кнопке подтверждения
+        WebElement modalWin = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[@id='jenkins']/dialog")));
+        WebElement yesButton = modalWin.findElement(By.xpath(".//button[1]"));
+        yesButton.click();
+
+        // Проверка, что элемент в меню стал невидимым после удаления
+        boolean isElementInvisible = wait.until(ExpectedConditions.invisibilityOfElementLocated(By.xpath("//*[@id='tippy-6']/div/div/div/button[2]")));
+        Assert.assertTrue(isElementInvisible, "Элемент с подтверждением удаления все еще видим.");
     }
 }
