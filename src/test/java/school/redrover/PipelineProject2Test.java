@@ -1,6 +1,9 @@
 package school.redrover;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -131,6 +134,70 @@ public class PipelineProject2Test extends BaseTest {
                 .getText();
 
         Assert.assertEquals(movedPipelineProjectName, PROJECT_NAME);
+    }
+
+    @Test
+    public void testDeletePipelineProjectViaSidePanel() {
+        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(10));
+
+        createItem(PROJECT_NAME, "//span[text()='Pipeline']");
+        goToMainPage();
+
+        wait.until(ExpectedConditions.visibilityOfElementLocated(
+                        By.xpath(String.format("//span[text()='%s']", PROJECT_NAME)))
+                )
+                .click();
+
+        getDriver()
+                .findElement(By.xpath("//a[contains(@data-url, 'doDelete')]"))
+                .click();
+
+        wait.until(ExpectedConditions.visibilityOfElementLocated(
+                        By.xpath("//button[@data-id='ok']"))
+                )
+                .click();
+
+        boolean isElementPresent = getDriver()
+                .findElements(By.xpath(String.format("//span[text()='%s']", PROJECT_NAME)))
+                .isEmpty();
+
+        Assert.assertTrue(isElementPresent);
+    }
+
+    @Test
+    public void testDeletePipelineProjectViaChevron() {
+        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(20));
+
+        createItem(PROJECT_NAME, "//span[text()='Pipeline']");
+        goToMainPage();
+
+        WebElement projectItem = wait.until(ExpectedConditions.presenceOfElementLocated(
+                By.xpath(String.format(
+                        "//a[contains(@href, 'job/%s') and contains(@class, 'model-link')]",
+                        PROJECT_NAME))));
+
+        Actions actions = new Actions(getDriver());
+        actions.moveToElement(projectItem).perform();
+
+        WebElement chevronButton = wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath(String.format("//span[text()='%s']/following-sibling::button", PROJECT_NAME))));
+
+        ((JavascriptExecutor) getDriver()).executeScript(
+                "arguments[0].dispatchEvent(new Event('mouseenter'));", chevronButton);
+        ((JavascriptExecutor) getDriver()).executeScript(
+                "arguments[0].dispatchEvent(new Event('click'));", chevronButton);
+
+        wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//button[contains(@href, 'doDelete')]"))).click();
+
+        wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//button[@data-id='ok']"))).click();
+
+        boolean isElementPresent = getDriver()
+                .findElements(By.xpath(String.format("//span[text()='%s']", PROJECT_NAME)))
+                .isEmpty();
+
+        Assert.assertTrue(isElementPresent);
     }
 
 }
