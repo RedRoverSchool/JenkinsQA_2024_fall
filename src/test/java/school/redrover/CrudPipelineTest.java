@@ -107,7 +107,7 @@ public class CrudPipelineTest extends BaseTest {
                 pointerElement.getSize().height / 2).click().perform();
 
         WebElement deletePipeline = getDriver().findElement(By.xpath(
-                "//*[@class='tippy-content']/div/button[2]"));
+                "//*[@class='icon-edit-delete icon-md']"));
         deletePipeline.click();
 
         WebElement buttonYesDeletePipeline = getDriver().findElement(By.cssSelector("[class$='jenkins-button--primary ']"));
