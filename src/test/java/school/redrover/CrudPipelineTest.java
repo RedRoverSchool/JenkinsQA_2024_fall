@@ -112,7 +112,7 @@ public class CrudPipelineTest extends BaseTest {
 
         WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(10));
 
-        WebElement deletePipeline = wait.until(ExpectedConditions.elementToBeClickable(By.xpath(
+        WebElement deletePipeline = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(
                 "//div[@id='tippy-6']//button[contains(@href, 'doDelete')]")));
         actions.click(deletePipeline).perform();
 
