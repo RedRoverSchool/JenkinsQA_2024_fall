@@ -127,6 +127,7 @@ public class DashboardMenuInBreadcrumbsTest extends BaseTest {
 
         List<WebElement> dropdownMenuElements = getDriver().findElements(By.xpath("//*[@class='jenkins-dropdown__item ']"));
         ProjectUtils.log(dropdownMenuElements.size() + "");
+        Assert.assertEquals(dropdownMenuElements.size(), 6);
     }
 }
 
