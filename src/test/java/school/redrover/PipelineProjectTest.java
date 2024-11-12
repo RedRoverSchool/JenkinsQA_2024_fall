@@ -259,29 +259,11 @@ public class PipelineProjectTest extends BaseTest {
         returnToHomePage();
 
         WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(20));
+        WebElement chevron = getDriver().findElement(By.cssSelector("[data-href*='/job/" + PIPELINE_NAME + "/']"));
         Actions actions = new Actions(getDriver());
+        actions.moveToElement(chevron).pause(500).moveToElement(chevron).pause(500).click().perform();
 
-        WebElement projectElement = wait.until(ExpectedConditions.visibilityOfElementLocated(
-                By.xpath("//a[@href='job/" + PIPELINE_NAME + "/']")));
-
-        int elementWidth = projectElement.getSize().getWidth();
-        int xOffset = 0;
-        boolean chevronClicked = false;
-
-        while (xOffset < elementWidth && !chevronClicked) {
-            actions.moveToElement(projectElement, xOffset, 0).perform();
-
-            if (isChevronVisible()) {
-                WebElement chevron = getDriver().findElement(By.cssSelector("[data-href*='/job/" + PIPELINE_NAME + "/']"));
-                actions.moveToElement(chevron).pause(500).click().perform();
-                chevronClicked = true;
-            }
-
-            xOffset += 5;
-        }
-        getDriver().findElement(By.cssSelector("[data-href*='/job/" + PIPELINE_NAME + "/']")).click();
-
-        wait.until(ExpectedConditions.attributeToBe(projectElement.findElement(By.cssSelector("[data-href*='/job/" + PIPELINE_NAME + "/']")),
+        wait.until(ExpectedConditions.attributeToBe((By.cssSelector("[data-href*='/job/" + PIPELINE_NAME + "/']")),
                 "aria-expanded", "true"));
         wait.until(ExpectedConditions.visibilityOf(getDriver().findElement(By.cssSelector(".tippy-box"))));
         wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//div[@class='tippy-content']")));
