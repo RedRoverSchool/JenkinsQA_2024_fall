@@ -135,7 +135,7 @@ public class StartPageTest extends BaseTest {
 
         WebElement chevron = getDriver().findElement(By.xpath("//button[@data-href='http://localhost:8080/job/NewFolder/']"));
 
-        wait.until(ExpectedConditions.elementToBeClickable(chevron));
+        wait.until(ExpectedConditions.visibilityOfAllElements(chevron));
         actions.moveToElement(chevron).click().perform();
 
         wait.until(ExpectedConditions.attributeToBe(chevron, "aria-expanded", "true"));
