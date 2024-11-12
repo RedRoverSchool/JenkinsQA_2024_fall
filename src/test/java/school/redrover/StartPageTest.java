@@ -136,7 +136,7 @@ public class StartPageTest extends BaseTest {
 
 
         WebElement chevron = wait.until(ExpectedConditions.visibilityOfElementLocated(
-                By.xpath("//button[@data-href='http://localhost:8080/job/NewFolder/']")));
+                By.xpath("//button[contains(@data-href, 'http://localhost:8080/job/NewFolder/')]")));
         wait.until(ExpectedConditions.elementToBeClickable(chevron));
 
         actions.moveToElement(chevron).pause(500).perform();
@@ -144,8 +144,11 @@ public class StartPageTest extends BaseTest {
         JavascriptExecutor javaScriptExecutor = (JavascriptExecutor)getDriver();
         javaScriptExecutor.executeScript("arguments[0].click()", chevron);
 
+
+        WebElement deleteButton = wait.until(ExpectedConditions.elementToBeClickable(
+                By.xpath("//button[contains(@href, '/job/NewFolder/doDelete')]")));
         actions
-                .moveToElement(getDriver().findElement(By.xpath("//button[@href='/job/NewFolder/doDelete']")))
+                .moveToElement(deleteButton)
                 .click()
                 .perform();
 
