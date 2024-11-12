@@ -49,13 +49,14 @@ public class PipelineProjectTest extends BaseTest {
     }
 
     private void clickGreenTriangleToScheduleBuildForProject(String projectName) {
-        getWait(getDriver()).until(ExpectedConditions.visibilityOfElementLocated(
+        getWait(getDriver()).until(ExpectedConditions.elementToBeClickable(
                 By.xpath("//td[@class='jenkins-table__cell--tight']//a[@tooltip='Schedule a Build for " + projectName + "']"))).click();
-        getWait(getDriver()).until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@class='tippy-box']")));
+
+        getWait(getDriver()).until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@class='tippy-content']")));
     }
 
     private static WebDriverWait getWait(WebDriver driver) {
-        return new WebDriverWait(driver, Duration.ofSeconds(20));
+        return new WebDriverWait(driver, Duration.ofSeconds(15));
     }
 
     @Test
@@ -114,6 +115,47 @@ public class PipelineProjectTest extends BaseTest {
         String actualDescription = getDriver().findElement(By.id("description")).getText();
 
         Assert.assertEquals(actualDescription, expectedProjectDescription, "Expected description for the project is not found");
+    }
+
+    @Test
+    public void testGetWarningMessageWhenDisableProject() {
+        createProjectViaSidebar(PIPELINE_NAME);
+        returnToHomePage();
+        clickJobByName(PIPELINE_NAME);
+
+        getWait(getDriver()).until(ExpectedConditions.elementToBeClickable(By.xpath("//a[@href='/job/" + PIPELINE_NAME + "/configure']"))).click();
+        getWait(getDriver()).until(ExpectedConditions.elementToBeClickable(By.xpath("//label[@data-title='Disabled']"))).click();
+        getDriver().findElement(By.xpath("//button[@name='Submit']")).click();
+
+        String actualWarningMessage = getWait(getDriver()).until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//form[@id='enable-project']"))).getText().split("\n")[0];
+        String buttonText = getWait(getDriver()).until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//form[@id='enable-project']/button[@name='Submit']"))).getText();
+
+        Assert.assertEquals(actualWarningMessage, "This project is currently disabled");
+        Assert.assertEquals(buttonText, "Enable");
+    }
+
+    @Test
+    public void testDisableProject() {
+        createProjectViaSidebar(PIPELINE_NAME);
+        returnToHomePage();
+        clickJobByName(PIPELINE_NAME);
+
+        getWait(getDriver()).until(ExpectedConditions.elementToBeClickable(By.xpath("//a[@href='/job/" + PIPELINE_NAME + "/configure']"))).click();
+        getWait(getDriver()).until(ExpectedConditions.elementToBeClickable(By.xpath("//label[@data-title='Disabled']"))).click();
+        getDriver().findElement(By.xpath("//button[@name='Submit']")).click();
+
+        returnToHomePage();
+        WebElement disableCircleSign = getWait(getDriver()).until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//tr[@id='job_Pipeline_name']//*[@tooltip='Disabled']")));
+
+        boolean isGreenScheduleBuildTrianglePresent = !getDriver().findElements(
+                        By.xpath("//td[@class='jenkins-table__cell--tight']//a[@tooltip='Schedule a Build for " + PIPELINE_NAME + "']"))
+                .isEmpty();
+
+        Assert.assertTrue(disableCircleSign.isDisplayed());
+        Assert.assertFalse(isGreenScheduleBuildTrianglePresent);
     }
 
     @Test
