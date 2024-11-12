@@ -114,7 +114,7 @@ public class FreestyleProject1Test extends BaseTest {
         createFreestyleProject();
         getDriver().findElement(By.id("jenkins-name-icon")).click();
         Actions actions = new Actions(getDriver());
-        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(30));
+        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(10));
 
         //hover over project title to activate menu dropdown
         WebElement projectName = getDriver().findElement(By
@@ -130,8 +130,9 @@ public class FreestyleProject1Test extends BaseTest {
                         "{bubbles: true, cancelable: true, view: window, clientX: " +
                         "arguments[0].getBoundingClientRect().x + 5, " +
                         "clientY: arguments[0].getBoundingClientRect().y + 5}));", chevron);
+        Thread.sleep(1000);
         WebElement delete = wait.until(ExpectedConditions.visibilityOfElementLocated((By
-                .xpath("//button[contains(@href,'doDelete')]"))));
+                .xpath("//*[contains(@href,'doDelete')]"))));
         delete.click();
         getDriver().findElement(By.xpath("//button[contains(text(),'Yes')]")).click();
         String emptyDashboardHeader = getDriver().findElement(By.cssSelector(".empty-state-block > h1")).getText();
