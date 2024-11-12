@@ -136,7 +136,7 @@ public class StartPageTest extends BaseTest {
 
 
         WebElement chevron = wait.until(ExpectedConditions.visibilityOfElementLocated(
-                By.xpath("//button[contains(@data-href, '/job/NewFolder/')]")));
+                By.xpath("//button[@class='jenkins-menu-dropdown-chevron' and @data-href='http://localhost:8080/job/NewFolder/']")));
         wait.until(ExpectedConditions.elementToBeClickable(chevron));
 
         actions.moveToElement(chevron).pause(2000).perform();
@@ -146,7 +146,7 @@ public class StartPageTest extends BaseTest {
 
 
         WebElement deleteButton = wait.until(ExpectedConditions.presenceOfElementLocated(
-                By.xpath("//button[contains(@href, '/job/NewFolder/doDelete')]")));
+                By.xpath("//button[@class='jenkins-dropdown__item ' and @href='/job/NewFolder/doDelete']")));
         actions
                 .moveToElement(deleteButton)
                 .pause(1000)
