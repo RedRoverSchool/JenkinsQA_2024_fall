@@ -14,8 +14,8 @@ import school.redrover.runner.BaseTest;
 import java.time.Duration;
 
 public class FreestyleProject1Test extends BaseTest {
-    private static final String NEW_FREESTYLE_PROJECT_NAME = "New_freestyle_project";
-    private static final String DESCRIPTION = "Some_description";
+    private static final String NEW_FREESTYLE_PROJECT_NAME = "New freestyle project";
+    private static final String DESCRIPTION = "Some description";
     private void createFreestyleProject() {
         getDriver().findElement(By.xpath("//*[@href='/view/all/newJob']")).click();
         getDriver().findElement(By.className("hudson_model_FreeStyleProject")).click();
