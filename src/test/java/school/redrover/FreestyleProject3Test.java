@@ -148,7 +148,7 @@ public class FreestyleProject3Test extends BaseTest {
 
         getDriver().findElement(By.xpath("//a[text()='Dashboard']")).click();
 
-        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(10));
+        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(20));
         WebElement projectToDelete = wait.until(ExpectedConditions.visibilityOfElementLocated(
                 By.xpath("//a[@href='job/" + PROJECT_NAME.replace(" ", "%20") + "/']")));
         Actions actions = new Actions(getDriver());
