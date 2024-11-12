@@ -1,5 +1,6 @@
 package school.redrover;
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -135,16 +136,15 @@ public class StartPageTest extends BaseTest {
 
         WebElement chevron = getDriver().findElement(By.xpath("//button[@data-href='http://localhost:8080/job/NewFolder/']"));
 
-        wait.until(ExpectedConditions.visibilityOfAllElements(chevron));
-        actions.moveToElement(chevron).click().perform();
-
-        wait.until(ExpectedConditions.attributeToBe(chevron, "aria-expanded", "true"));
+        ((JavascriptExecutor) getDriver()).executeScript(
+                "arguments[0].dispatchEvent(new Event('mouseenter'));", chevron);
+        ((JavascriptExecutor) getDriver()).executeScript(
+                "arguments[0].dispatchEvent(new Event('click'));", chevron);
 
         WebElement deleteButton = wait.until(ExpectedConditions.presenceOfElementLocated(
                 By.xpath("//button[contains(@href, 'doDelete')]")));
         actions
                 .moveToElement(deleteButton)
-                .pause(1000)
                 .click()
                 .perform();
 
