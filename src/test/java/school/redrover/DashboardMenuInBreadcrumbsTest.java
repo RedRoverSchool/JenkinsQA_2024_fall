@@ -49,14 +49,14 @@ public class DashboardMenuInBreadcrumbsTest extends BaseTest {
                 .moveToElement(dashboard)
                 .perform();
 
-        ProjectUtils.log("Top left chevron corner location during hovering: " + dropdownIcon.getLocation().toString());
-        ProjectUtils.log("Css value during hovering: " + dropdownIcon.getCssValue("right"));
+        ProjectUtils.log("Wait animation of the dropdown chevron icon");
+        ProjectUtils.log("Top left chevron corner location during animation: " + dropdownIcon.getLocation().toString());
+        ProjectUtils.log("Css value during animation: " + dropdownIcon.getCssValue("right"));
 
-        ProjectUtils.log("Wait animation of the dropdown chevron icon and click");
         wait.until(new ExpectedCondition<Boolean>() {
             public Boolean apply(WebDriver driver) {
                 String initialPositionCssValue = dropdownIcon.getCssValue("right");
-                ProjectUtils.log(initialPositionCssValue);
+                ProjectUtils.log("Css value during animation: " + initialPositionCssValue);
                 return "-22px".equals(initialPositionCssValue);
             }
         });
@@ -65,8 +65,10 @@ public class DashboardMenuInBreadcrumbsTest extends BaseTest {
 //        wait.until(ExpectedConditions.elementToBeClickable(dropdownIcon));
 
         ProjectUtils.log("Chevron size: " + dropdownIcon.getSize());
-        ProjectUtils.log("Top left chevron corner location after hovering: " + dropdownIcon.getLocation().toString());
-        ProjectUtils.log(dropdownIcon.getCssValue("Css value after hovering: " + "right"));
+        ProjectUtils.log("Top left chevron corner location after animation: " + dropdownIcon.getLocation().toString());
+        ProjectUtils.log("Css value after animation: " + dropdownIcon.getCssValue("right"));
+
+        ProjectUtils.log("Click on the dropdown chevron icon");
         dropdownIcon.click();
 
         ProjectUtils.log("Wait animation of dropdown menu");
