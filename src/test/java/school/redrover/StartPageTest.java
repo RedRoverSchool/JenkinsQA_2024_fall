@@ -123,7 +123,7 @@ public class StartPageTest extends BaseTest {
     }
 
     @Test
-    public void testDeleteNewFolderViaChevron() throws InterruptedException {
+    public void testDeleteNewFolderViaChevron() {
 
         WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(5));
 
