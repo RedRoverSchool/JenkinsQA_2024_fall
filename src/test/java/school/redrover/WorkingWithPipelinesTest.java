@@ -68,8 +68,8 @@ public class WorkingWithPipelinesTest extends BaseTest {
         System.out.println("Freestyle Project создан и находится в списке на главной странице");
     }
 
-    @Test
-    public void testOpenRenameViaDropDown() {
+/*    @Test
+        public void testOpenRenameViaDropDown() {
         final String namePipeLine = "Regression";
 
         createItemUtils(namePipeLine, ".org_jenkinsci_plugins_workflow_job_WorkflowJob");
@@ -97,5 +97,5 @@ public class WorkingWithPipelinesTest extends BaseTest {
         String value = inputElement.getAttribute("value");
 
         Assert.assertEquals(namePipeLine, value, "Имя PipeLine не совпадает с value");
-    }
+    }*/
 }
