@@ -26,12 +26,12 @@ public class FreestyleProject2Test extends BaseTest {
 
     @Test
     public void testEditDescription(){
-        final String PROJECT_DESCRIPTION = "my new build";
+        final String projectDescription = "my new build";
         final String editDescribe = "Create one more build apps";
 
         createFreestyleProject(FREESTYLE_NAME);
 
-        getDriver().findElement(By.xpath("//*[@id=\"main-panel\"]/form/div[1]/div[2]/div/div[2]/textarea")).sendKeys(PROJECT_DESCRIPTION);
+        getDriver().findElement(By.xpath("//*[@id=\"main-panel\"]/form/div[1]/div[2]/div/div[2]/textarea")).sendKeys(projectDescription);
         getDriver().findElement(By.name("Submit")).click();
         getDriver().findElement(By.xpath("//*[@id='jenkins-home-link']")).click();
 
