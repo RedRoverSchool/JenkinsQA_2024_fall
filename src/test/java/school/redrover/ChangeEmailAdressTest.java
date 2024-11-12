@@ -11,7 +11,7 @@ import school.redrover.runner.BaseTest;
 
 import java.time.Duration;
 
-public class changeEmailAdressTest extends BaseTest {
+public class ChangeEmailAdressTest extends BaseTest {
     @Test
     public void openAccountPage() {
         WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(10));
