@@ -144,7 +144,7 @@ public class FreestyleProject1Test extends BaseTest {
 
         //hover over project title to activate menu dropdown
         WebElement projectName = getDriver().findElement(By
-                .xpath("//*[@href='job/" + NEW_FREESTYLE_PROJECT_NAME + "/']/span"));
+                .xpath("//span[contains(text(),'" + NEW_FREESTYLE_PROJECT_NAME + "')]"));
         actions.moveToElement(projectName).perform();
         // Wait for the chevron button to be clickable and move to it
         WebElement chevron = wait.until(ExpectedConditions.elementToBeClickable(By
