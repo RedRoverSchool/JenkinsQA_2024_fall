@@ -7,14 +7,14 @@ import school.redrover.runner.BaseTest;
 import school.redrover.runner.ProjectUtils;
 
 public class CreateNewItem2Test extends BaseTest {
-    final String projectName = "Some name for project or folder";
+    final String PROJECT_NAME = "Some_name_for_project_or_folder";
 
     public void createAndEnterProjectName() {
         ProjectUtils.log("Create a new project");
         getDriver().findElement(By.cssSelector("[href='/view/all/newJob']")).click();
 
         ProjectUtils.log("Enter the name of the project");
-        getDriver().findElement(By.className("jenkins-input")).sendKeys(projectName);
+        getDriver().findElement(By.className("jenkins-input")).sendKeys(PROJECT_NAME);
     }
 
     @Test
@@ -33,7 +33,7 @@ public class CreateNewItem2Test extends BaseTest {
         ProjectUtils.log("Verifying the job name");
         String actualProjectName = getDriver().findElement(By.xpath("//tr/td/a/span")).getText();
 
-        Assert.assertEquals(actualProjectName, projectName);
+        Assert.assertEquals(actualProjectName, PROJECT_NAME);
     }
 
     @Test
@@ -52,7 +52,7 @@ public class CreateNewItem2Test extends BaseTest {
         ProjectUtils.log("Verifying the job name");
         String actualProjectName = getDriver().findElement(By.xpath("//td/a/span")).getText();
 
-        Assert.assertEquals(actualProjectName, projectName);
+        Assert.assertEquals(actualProjectName, PROJECT_NAME);
     }
 
     @Test
@@ -71,6 +71,6 @@ public class CreateNewItem2Test extends BaseTest {
         ProjectUtils.log("Verifying the job name");
         String actualProjectName = getDriver().findElement(By.xpath("//td/a/span")).getText();
 
-        Assert.assertEquals(actualProjectName, projectName);
+        Assert.assertEquals(actualProjectName, PROJECT_NAME);
     }
 }

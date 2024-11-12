@@ -7,12 +7,10 @@ import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
-import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import school.redrover.runner.BaseTest;
 import school.redrover.runner.ProjectUtils;
 
-import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
 import java.time.Duration;
@@ -20,6 +18,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DashboardMenuInBreadcrumbsTest extends BaseTest {
+
+    final String PROJECT_NAME = "Some_name_for_project_or_folder";
+
+    public void createAndEnterProjectName() {
+        ProjectUtils.log("Create a new project");
+        getDriver().findElement(By.cssSelector("[href='/view/all/newJob']")).click();
+
+        ProjectUtils.log("Enter the name of the project");
+        getDriver().findElement(By.className("jenkins-input")).sendKeys(PROJECT_NAME);
+    }
+
     // Метод для создания скриншотов
     public static void takeScreenshot(WebDriver driver, String fileName) {
         File screenshot = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
@@ -79,7 +88,7 @@ public class DashboardMenuInBreadcrumbsTest extends BaseTest {
 
         ProjectUtils.log("Wait animation of dropdown menu");
         WebElement parentOfDropdownMenu = getDriver().findElement(By.xpath("//div[@class='tippy-content']"));
-        WebElement nestedDropdownMenu = wait.until(ExpectedConditions.presenceOfNestedElementLocatedBy(parentOfDropdownMenu, By.className("jenkins-dropdown")));
+        wait.until(ExpectedConditions.presenceOfNestedElementLocatedBy(parentOfDropdownMenu, By.className("jenkins-dropdown")));
 
         ProjectUtils.log("Create list of dropdown elements");
         List<WebElement> dashboardDropdownMenuElements = getDriver().findElements(By.xpath("//a[@class='jenkins-dropdown__item ']"));
@@ -93,4 +102,31 @@ public class DashboardMenuInBreadcrumbsTest extends BaseTest {
         List<String> expectedElements = List.of("New Item", "Build History", "Manage Jenkins", "My Views");
         Assert.assertEquals(actualElements, expectedElements);
     }
+
+    @Test
+    public void testJobNameChevron() throws InterruptedException {
+
+        createAndEnterProjectName();
+
+        ProjectUtils.log("Select project type");
+        getDriver().findElement(By.cssSelector(".hudson_model_FreeStyleProject")).click();
+        ProjectUtils.log("Push OK button to save the project");
+        getDriver().findElement(By.cssSelector("#ok-button")).click();
+        ProjectUtils.log("Going to the main page");
+        getDriver().findElement(By.xpath("//a[@id='jenkins-home-link']")).click();
+
+        Actions actions = new Actions(getDriver());
+
+        WebElement chevron = getDriver().findElement(By.xpath("//td/a/button[@class='jenkins-menu-dropdown-chevron']"));
+        actions
+                .moveToElement(chevron)
+                .pause(500)
+                .moveToElement(chevron)
+                .click(chevron)
+                .perform();
+
+        List<WebElement> dropdownMenuElements = getDriver().findElements(By.xpath("//*[@class='jenkins-dropdown__item ']"));
+        ProjectUtils.log(dropdownMenuElements.size() + "");
+    }
 }
+
