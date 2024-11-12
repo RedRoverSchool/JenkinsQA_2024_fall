@@ -1,6 +1,7 @@
 package school.redrover;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
@@ -259,11 +260,33 @@ public class PipelineProjectTest extends BaseTest {
         returnToHomePage();
 
         WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(20));
-        WebElement chevron = getDriver().findElement(By.cssSelector("[data-href*='/job/" + PIPELINE_NAME + "/']"));
         Actions actions = new Actions(getDriver());
-        actions.moveToElement(chevron).pause(500).moveToElement(chevron).pause(500).click().perform();
 
-        wait.until(ExpectedConditions.attributeToBe((By.cssSelector("[data-href*='/job/" + PIPELINE_NAME + "/']")),
+        WebElement projectElement = wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//a[@href='job/" + PIPELINE_NAME + "/']")));
+
+        int elementWidth = projectElement.getSize().getWidth();
+        int xOffset = 0;
+        boolean chevronClicked = false;
+
+        while (xOffset < elementWidth && !chevronClicked) {
+            actions.moveToElement(projectElement, xOffset, 0).pause(Duration.ofMillis(200)).perform();
+
+            if (isChevronVisibleAndClickable(wait)) {
+                WebElement chevron = getDriver().findElement(By.cssSelector("[data-href*='/job/" + PIPELINE_NAME + "/']"));
+                try {
+                    actions.moveToElement(chevron).pause(Duration.ofMillis(500)).click().perform();
+                } catch (Exception e) {
+                    ((JavascriptExecutor) getDriver()).executeScript("arguments[0].click();", chevron);
+                }
+                chevronClicked = true;
+            }
+
+            xOffset += 10;
+        }
+
+        wait.until(ExpectedConditions.attributeToBe(
+                projectElement.findElement(By.cssSelector("[data-href*='/job/" + PIPELINE_NAME + "/']")),
                 "aria-expanded", "true"));
         wait.until(ExpectedConditions.visibilityOf(getDriver().findElement(By.cssSelector(".tippy-box"))));
         wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//div[@class='tippy-content']")));
@@ -285,11 +308,11 @@ public class PipelineProjectTest extends BaseTest {
         Assert.assertListContainsObject(getProjectList(), NEW_PROJECT_NAME, "Project is not renamed");
     }
 
-    private boolean isChevronVisible() {
+    private boolean isChevronVisibleAndClickable(WebDriverWait wait) {
         try {
-            WebElement chevron = getWait(getDriver()).until(ExpectedConditions.elementToBeClickable(
-                    By.cssSelector("[data-href*='/job/" + PIPELINE_NAME + "/']")));
-            return chevron.isDisplayed();
+            WebElement chevron = getDriver().findElement(By.cssSelector("[data-href*='/job/" + PIPELINE_NAME + "/']"));
+            return wait.until(ExpectedConditions.visibilityOf(chevron)).isDisplayed() &&
+                    wait.until(ExpectedConditions.elementToBeClickable(chevron)) != null;
         } catch (NoSuchElementException e) {
             return false;
         }
