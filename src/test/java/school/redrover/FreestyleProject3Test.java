@@ -1,7 +1,9 @@
 package school.redrover;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
@@ -140,5 +142,36 @@ public class FreestyleProject3Test extends BaseTest {
         verifyYouAreOnProjectStatusPage();
 
         Assert.assertEquals(getDriver().findElement(By.tagName("h1")).getText(), newName);
+    }
+
+    @Test
+    public void testDeleteProjectViaChevron() {
+        createProjectViaSidebarMenu(PROJECT_NAME);
+
+        getDriver().findElement(By.xpath("//a[text()='Dashboard']")).click();
+
+        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(15));
+        WebElement projectToDelete = wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//a[@href='job/" + PROJECT_NAME.replace(" ", "%20") + "/']")));
+        Actions actions = new Actions(getDriver());
+        actions.moveToElement(projectToDelete)
+                .pause(100)
+                .perform();
+
+        WebElement chevron = wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//a[@href='job/"+ PROJECT_NAME.replace(" ", "%20") + "/']//button")));
+
+        ((JavascriptExecutor) getDriver()).executeScript("arguments[0].dispatchEvent(new Event('mouseenter'));", chevron);
+        ((JavascriptExecutor) getDriver()).executeScript("arguments[0].click();", chevron);
+
+        WebElement deleteButton = wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//button[contains(@href, 'doDelete')]")));
+        deleteButton.click();
+
+        WebElement deleteAlert = wait.until(ExpectedConditions.elementToBeClickable(
+                By.xpath("//button[@data-id='ok']")));
+        deleteAlert.click();
+
+        Assert.assertFalse(getDriver().findElement(By.id("main-panel")).getText().contains(PROJECT_NAME));
     }
 }
