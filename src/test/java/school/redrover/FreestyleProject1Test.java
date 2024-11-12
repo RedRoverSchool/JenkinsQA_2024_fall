@@ -131,7 +131,7 @@ public class FreestyleProject1Test extends BaseTest {
                         "arguments[0].getBoundingClientRect().x + 5, " +
                         "clientY: arguments[0].getBoundingClientRect().y + 5}));", chevron);
         WebElement delete = wait.until(ExpectedConditions.visibilityOfElementLocated((By
-                .xpath("//*[contains(@href,'doDelete')]"))));
+                .xpath("//button[contains(@href,'doDelete')]"))));
         delete.click();
         getDriver().findElement(By.xpath("//button[contains(text(),'Yes')]")).click();
         String emptyDashboardHeader = getDriver().findElement(By.cssSelector(".empty-state-block > h1")).getText();
