@@ -61,7 +61,7 @@ public class DashboardMenuInBreadcrumbsTest extends BaseTest {
                 .moveToElement(dropdownIcon)
                 .pause(Duration.ofSeconds(3))
                 .moveToElement(dropdownIcon)
-                .click()
+                .click(dropdownIcon)
                 .perform();
 
         ProjectUtils.log("Wait animation of the dropdown chevron icon");
@@ -116,14 +116,17 @@ public class DashboardMenuInBreadcrumbsTest extends BaseTest {
         getDriver().findElement(By.xpath("//a[@id='jenkins-home-link']")).click();
 
         Actions actions = new Actions(getDriver());
+        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(60));
 
         WebElement chevron = getDriver().findElement(By.xpath("//td/a/button[@class='jenkins-menu-dropdown-chevron']"));
         actions
                 .moveToElement(chevron)
-                .pause(500)
+                .pause(1500)
                 .moveToElement(chevron)
                 .click(chevron)
                 .perform();
+
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("tippy-6")));
 
         List<WebElement> dropdownMenuElements = getDriver().findElements(By.xpath("//*[@class='jenkins-dropdown__item ']"));
         ProjectUtils.log(dropdownMenuElements.size() + "");
