@@ -113,7 +113,7 @@ public class CrudPipelineTest extends BaseTest {
         WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(10));
 
         WebElement deletePipeline = wait.until(ExpectedConditions.elementToBeClickable(By.xpath(
-                "//*[@class='icon-edit-delete icon-md']")));
+                "//div[@id='tippy-6']//button[contains(@href, 'doDelete')]")));
         actions.click(deletePipeline).perform();
 
         WebElement buttonYesDeletePipeline = getDriver().findElement(By.cssSelector("[class$='jenkins-button--primary ']"));
