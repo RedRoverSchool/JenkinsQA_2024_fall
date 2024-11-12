@@ -146,33 +146,17 @@ public class FreestyleProject3Test extends BaseTest {
         createProjectViaSidebarMenu(PROJECT_NAME);
         getDriver().findElement(By.xpath("//a[text()='Dashboard']")).click();
 
-        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(20));
+        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(15));
         WebElement chevron = wait.until(ExpectedConditions.visibilityOfElementLocated(
                 By.xpath("//button[contains(@data-href, '" + PROJECT_NAME.replace(" ", "%20") + "')]")));
-        int initialLocation = chevron.getLocation().getX();
 
-        WebElement projectToDelete = wait.until(ExpectedConditions.visibilityOfElementLocated(
-                By.xpath("//a[@href='job/" + PROJECT_NAME.replace(" ", "%20") + "/']")));
         Actions actions = new Actions(getDriver());
-        actions.moveToElement(projectToDelete)
-                .pause(30)
+        actions.moveToElement(chevron)
+                .pause(200)
+                .moveToElement(chevron)
+                .click()
+                .pause(1000)
                 .perform();
-
-        if (chevron.getLocation().getX() == initialLocation) {
-            actions.moveToElement(chevron)
-                    .pause(20)
-                    .moveByOffset(22, 0)
-                    .pause(50)
-                    .click()
-                    .pause(500)
-                    .perform();
-        } else {
-            actions.moveToElement(chevron)
-                    .pause(50)
-                    .click()
-                    .pause(500)
-                    .perform();
-        }
 
         WebElement deleteButton = wait.until(ExpectedConditions.elementToBeClickable(
                 By.xpath("//button[contains(@href, 'doDelete')]")));
