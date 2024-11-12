@@ -45,8 +45,14 @@ public class DashboardMenuInBreadcrumbsTest extends BaseTest {
         ProjectUtils.log("Css value before hovering: " + dropdownIcon.getCssValue("right"));
 
         ProjectUtils.log("Hover over 'Dashboard' in breadcrumbs");
+//        actions
+//                .moveToElement(dashboard)
+//                .perform();
         actions
-                .moveToElement(dashboard)
+                .moveToElement(dropdownIcon)
+                .pause(Duration.ofSeconds(3))
+                .moveToElement(dropdownIcon)
+                .click()
                 .perform();
 
         ProjectUtils.log("Wait animation of the dropdown chevron icon");
@@ -69,7 +75,7 @@ public class DashboardMenuInBreadcrumbsTest extends BaseTest {
         ProjectUtils.log("Css value after animation: " + dropdownIcon.getCssValue("right"));
 
         ProjectUtils.log("Click on the dropdown chevron icon");
-        dropdownIcon.click();
+//        dropdownIcon.click();
 
         ProjectUtils.log("Wait animation of dropdown menu");
         WebElement parentOfDropdownMenu = getDriver().findElement(By.xpath("//div[@class='tippy-content']"));
