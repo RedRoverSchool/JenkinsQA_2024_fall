@@ -130,16 +130,18 @@ public class StartPageTest extends BaseTest {
 
         Actions actions = new Actions(getDriver());
         actions.moveToElement(getDriver().findElement(By.xpath(
-                "//span[contains(text(), 'NewFolder')]"))).perform();
-        Thread.sleep(1000);
+                "//span[contains(text(), 'NewFolder')]")))
+                .perform();
+
 
         WebElement chevron = wait.until(ExpectedConditions.visibilityOfElementLocated(
                 By.xpath("//button[@data-href='http://localhost:8080/job/NewFolder/']")));
         wait.until(ExpectedConditions.elementToBeClickable(chevron));
-        chevron.click();
-        wait.until(ExpectedConditions.attributeToBe(chevron,"aria-expanded", "true"));
 
-        actions.moveToElement(getDriver().findElement(By.xpath("//button[@href='/job/NewFolder/doDelete']")))
+        actions.moveToElement(chevron).pause(500).click().perform();
+
+        actions
+                .moveToElement(getDriver().findElement(By.xpath("//button[@href='/job/NewFolder/doDelete']")))
                 .click()
                 .perform();
 
