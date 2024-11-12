@@ -152,10 +152,10 @@ public class FreestyleProject3Test extends BaseTest {
 
         Actions actions = new Actions(getDriver());
         actions.moveToElement(chevron)
-                .pause(1000)
+                .pause(10000)
                 .moveToElement(chevron)
                 .click()
-                .pause(2000)
+                .pause(20000)
                 .perform();
 
         WebElement deleteButton = wait.until(ExpectedConditions.elementToBeClickable(
