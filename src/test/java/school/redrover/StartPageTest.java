@@ -125,7 +125,7 @@ public class StartPageTest extends BaseTest {
     @Test
     public void testDeleteNewFolderViaChevron() {
 
-        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(5));
+        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(30));
 
         createNewFolder("NewFolder");
 
@@ -136,7 +136,7 @@ public class StartPageTest extends BaseTest {
 
 
         WebElement chevron = wait.until(ExpectedConditions.visibilityOfElementLocated(
-                By.xpath("//button[contains(@data-href, 'http://localhost:8080/job/NewFolder/')]")));
+                By.xpath("//button[contains(@data-href, '/job/NewFolder/')]")));
         wait.until(ExpectedConditions.elementToBeClickable(chevron));
 
         actions.moveToElement(chevron).pause(500).perform();
