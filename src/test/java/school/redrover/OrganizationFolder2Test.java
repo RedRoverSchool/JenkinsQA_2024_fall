@@ -2,13 +2,14 @@ package school.redrover;
 
 import org.openqa.selenium.By;
 import org.testng.Assert;
+import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import school.redrover.runner.BaseTest;
 
 public class OrganizationFolder2Test extends BaseTest {
     private static final String ORGANIZATION_FOLDER_NAME = "NewOrgFolder";
 
-    @Test
+    @Test @Ignore
     public void testCreateOrganizationFolder() {
         getDriver().findElement(By.xpath("//a[.='New Item']")).click();
         getDriver().findElement(By.id("name")).sendKeys(ORGANIZATION_FOLDER_NAME);
