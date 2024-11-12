@@ -124,7 +124,7 @@ public class StartPageTest extends BaseTest {
     @Test
     public void testDeleteNewFolderViaChevron() {
 
-        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(30));
+        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(10));
 
         createNewFolder("NewFolder");
 
@@ -133,14 +133,15 @@ public class StartPageTest extends BaseTest {
                 "//span[contains(text(), 'NewFolder')]")))
                 .perform();
 
+        WebElement chevron = getDriver().findElement(By.xpath("//button[@data-href='http://localhost:8080/job/NewFolder/']"));
 
-        WebElement chevron = wait.until(ExpectedConditions.elementToBeClickable(
-                By.xpath("//button[@class='jenkins-menu-dropdown-chevron' and @data-href='http://localhost:8080/job/NewFolder/']")));
+        wait.until(ExpectedConditions.elementToBeClickable(chevron));
+        actions.moveToElement(chevron).click().perform();
 
-        actions.moveToElement(chevron).pause(2000).click().perform();
+        wait.until(ExpectedConditions.attributeToBe(chevron, "aria-expanded", "true"));
 
         WebElement deleteButton = wait.until(ExpectedConditions.presenceOfElementLocated(
-                By.xpath("//button[@class='jenkins-dropdown__item ' and @href='/job/NewFolder/doDelete']")));
+                By.xpath("//button[contains(@href, 'doDelete')]")));
         actions
                 .moveToElement(deleteButton)
                 .pause(1000)
