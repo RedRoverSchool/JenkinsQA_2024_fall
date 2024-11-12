@@ -4,9 +4,13 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import school.redrover.runner.BaseTest;
+
+import java.time.Duration;
 
 public class CrudPipelineTest extends BaseTest {
 
@@ -106,9 +110,11 @@ public class CrudPipelineTest extends BaseTest {
         actions.moveToElement(pointerElement, pointerElement.getSize().width / 2,
                 pointerElement.getSize().height / 2).click().perform();
 
-        WebElement deletePipeline = getDriver().findElement(By.xpath(
-                "//*[@class='icon-edit-delete icon-md']"));
-        deletePipeline.click();
+        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(10));
+
+        WebElement deletePipeline = wait.until(ExpectedConditions.elementToBeClickable(By.xpath(
+                "//*[@class='icon-edit-delete icon-md']")));
+        actions.click(deletePipeline).perform();
 
         WebElement buttonYesDeletePipeline = getDriver().findElement(By.cssSelector("[class$='jenkins-button--primary ']"));
         buttonYesDeletePipeline.click();
