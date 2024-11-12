@@ -12,7 +12,7 @@ public class CreateNewItem3Test extends BaseTest {
     public void testCreateNewItemErrorMessage () {
 
 
-        getDriver().findElement(By.xpath("//a[@it= 'hudson.model.Hudson@ff12418']")).click();
+        getDriver().findElement(By.xpath("//a[@href='/view/all/newJob']")).click();
         getDriver().findElement(By.className("com_cloudbees_hudson_plugins_folder_Folder")).click();
         WebElement inputField = getDriver().findElement(By.className("jenkins-input"));
         WebElement errorMessageWebElement = getDriver().findElement(By.className("input-validation-message"));
