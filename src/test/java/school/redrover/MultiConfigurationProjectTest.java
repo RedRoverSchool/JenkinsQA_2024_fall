@@ -73,11 +73,6 @@ public class MultiConfigurationProjectTest extends BaseTest {
     public void testDragAndDropConfigurationMatrixBlock() {
         WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(5));
 
-        final String axisNameFirst = "config1";
-        final String axisValueFirst = "value1";
-        final String axisNameSecond = "config2";
-        final String axisValueSecond = "value2";
-
         getDriver().findElement(By.cssSelector("[href$='newJob']")).click();
         getDriver().findElement(By.id("name")).sendKeys("MultiConfigProject");
         getDriver().findElement(By.xpath("//span[text()='Multi-configuration project']")).click();
@@ -94,16 +89,16 @@ public class MultiConfigurationProjectTest extends BaseTest {
         WebElement dropdownList1 = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("button[class='jenkins-dropdown__item ']")));
         dropdownList1.click();
 
-        getDriver().findElement(By.cssSelector("input.jenkins-input.validated[name='_.name']")).sendKeys(axisNameFirst);
-        getDriver().findElement(By.cssSelector(".jenkins-input[name='_.valueString']")).sendKeys(axisValueFirst);
+        getDriver().findElement(By.cssSelector("input.jenkins-input.validated[name='_.name']")).sendKeys("config1");
+        getDriver().findElement(By.cssSelector(".jenkins-input[name='_.valueString']")).sendKeys("value1");
 
         getDriver().findElement(By.cssSelector("button[suffix='axis']")).click();
 
         WebElement dropdownList2 = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("button[class='jenkins-dropdown__item ']")));
         dropdownList2.click();
 
-        getDriver().findElement(By.xpath("(//input[@name='_.name' and @class='jenkins-input validated  '])[2]")).sendKeys(axisNameSecond);
-        getDriver().findElement(By.xpath("(//input[contains(@name, 'valueString')])[2]")).sendKeys(axisValueSecond);
+        getDriver().findElement(By.xpath("(//input[@name='_.name' and @class='jenkins-input validated  '])[2]")).sendKeys("config2");
+        getDriver().findElement(By.xpath("(//input[contains(@name, 'valueString')])[2]")).sendKeys("value2");
 
         WebElement firstAxis = getDriver().findElement(By.xpath("(//div[@class='dd-handle'])[1]"));
         WebElement secondAxis = getDriver().findElement(By.xpath("(//div[@class='dd-handle'])[2]"));
