@@ -21,21 +21,33 @@ public class DropDawnChevronTest extends BaseTest {
         JavascriptExecutor js = (JavascriptExecutor) getDriver();
 
         // Переход к странице создания нового элемента и ввод его имени
-        getDriver().findElement(By.linkText("New Item")).click();
-        getDriver().findElement(By.id("name")).sendKeys("TestDropDawnChevron");
-        getDriver().findElement(By.cssSelector("#jenkins")).click();
-        getDriver().findElement(By.id("ok-button")).click();
+        WebElement newItemLink = wait.until(ExpectedConditions.elementToBeClickable(By.linkText("New Item")));
+        newItemLink.click();
+
+        WebElement nameInput = wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("name")));
+        nameInput.sendKeys("TestDropDawnChevron");
+
+        WebElement jenkinsLogo = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("#jenkins")));
+        jenkinsLogo.click();
+
+        WebElement okButton = wait.until(ExpectedConditions.elementToBeClickable(By.id("ok-button")));
+        okButton.click();
 
         // Ввод описания и сохранение
-        getDriver().findElement(By.name("description")).sendKeys("TestDropDawnChevron");
+        WebElement descriptionInput = wait.until(ExpectedConditions.visibilityOfElementLocated(By.name("description")));
+        descriptionInput.sendKeys("TestDropDawnChevron");
+
         js.executeScript("window.scrollBy(0, 2000);");  // Скроллинг вниз страницы
-        getDriver().findElement(By.name("Submit")).click();
+
+        WebElement submitButton = wait.until(ExpectedConditions.elementToBeClickable(By.name("Submit")));
+        submitButton.click();
 
         // Возвращение к главной странице
-        getDriver().findElement(By.xpath("//*[@id='breadcrumbs']/li[1]/a")).click();
+        WebElement breadcrumbsLink = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//*[@id='breadcrumbs']/li[1]/a")));
+        breadcrumbsLink.click();
 
         // Наведение на основную кнопку и раскрытие выпадающего меню
-        WebElement mainButton = getDriver().findElement(By.xpath("//*[@id='job_TestDropDawnChevron']/td[3]/a/span"));
+        WebElement mainButton = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[@id='job_TestDropDawnChevron']/td[3]/a/span")));
         actions.moveToElement(mainButton).perform();
 
         WebElement hiddenButton = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//*[@id='job_TestDropDawnChevron']/td[3]/a/button")));
