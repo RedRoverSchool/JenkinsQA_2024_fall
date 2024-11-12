@@ -107,8 +107,10 @@ public class CrudPipelineTest extends BaseTest {
         WebElement pointerElement = getDriver().findElement(By.xpath(
                 "//a[@href='job/Liza/']//button[@class='jenkins-menu-dropdown-chevron']"));
 
-        actions.moveToElement(pointerElement, pointerElement.getSize().width / 2,
-                pointerElement.getSize().height / 2).click().perform();
+        ((JavascriptExecutor) getDriver()).executeScript(
+                "arguments[0].dispatchEvent(new Event('mouseenter'));", pointerElement);
+        ((JavascriptExecutor) getDriver()).executeScript(
+                "arguments[0].dispatchEvent(new Event('click'));", pointerElement);
 
         WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(10));
 
