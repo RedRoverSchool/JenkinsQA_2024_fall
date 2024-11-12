@@ -277,7 +277,7 @@ public class PipelineProjectTest extends BaseTest {
                 chevronClicked = true;
             }
 
-            xOffset += 10;
+            xOffset += 5;
         }
 
         wait.until(ExpectedConditions.attributeToBe(projectElement.findElement(By.cssSelector("[data-href*='/job/" + PIPELINE_NAME + "/']")),
@@ -304,7 +304,8 @@ public class PipelineProjectTest extends BaseTest {
 
     private boolean isChevronVisible() {
         try {
-            WebElement chevron = getDriver().findElement(By.cssSelector("[data-href*='/job/" + PIPELINE_NAME + "/']"));
+            WebElement chevron = getWait(getDriver()).until(ExpectedConditions.elementToBeClickable(
+                    By.cssSelector("[data-href*='/job/" + PIPELINE_NAME + "/']")));
             return chevron.isDisplayed();
         } catch (NoSuchElementException e) {
             return false;
