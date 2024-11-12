@@ -279,6 +279,7 @@ public class PipelineProjectTest extends BaseTest {
 
             xOffset += 5;
         }
+        getDriver().findElement(By.cssSelector("[data-href*='/job/" + PIPELINE_NAME + "/']"));
 
         wait.until(ExpectedConditions.attributeToBe(projectElement.findElement(By.cssSelector("[data-href*='/job/" + PIPELINE_NAME + "/']")),
                 "aria-expanded", "true"));
