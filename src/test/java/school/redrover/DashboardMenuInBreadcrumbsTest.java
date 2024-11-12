@@ -1,9 +1,7 @@
 package school.redrover;
 
-import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.apache.commons.io.FileUtils;
+import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -15,11 +13,22 @@ import school.redrover.runner.BaseTest;
 import school.redrover.runner.ProjectUtils;
 
 import javax.swing.*;
+import java.io.File;
+import java.io.IOException;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 
 public class DashboardMenuInBreadcrumbsTest extends BaseTest {
+    // Метод для создания скриншотов
+    public static void takeScreenshot(WebDriver driver, String fileName) {
+        File screenshot = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
+        try {
+            FileUtils.copyFile(screenshot, new File(fileName));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     @Test
     public void testDashboardDropdownMenu() throws InterruptedException {
@@ -44,6 +53,7 @@ public class DashboardMenuInBreadcrumbsTest extends BaseTest {
                 return "-22px".equals(initialPositionCssValue);
             }
         });
+        ProjectUtils.log(dropdownIcon.getLocation().toString());
         dropdownIcon.click();
 
         ProjectUtils.log("Wait animation of dropdown menu");
