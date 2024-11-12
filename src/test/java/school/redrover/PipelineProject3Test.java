@@ -67,4 +67,17 @@ public class PipelineProject3Test extends BaseTest {
         String actualTooltip = getDriver().findElement(By.xpath("//*[contains(text(), '" + labelText + "')]//a")).getAttribute("tooltip");
         Assert.assertEquals(actualTooltip, tooltipText);
     }
+
+    @Test
+    public void testDeleteFromInsideProject() {
+        createPipelineProject(PIPELINE_NAME);
+        returnToHomePage();
+        clickJobByName(PIPELINE_NAME);
+
+        getDriver().findElement(By.xpath("//a[@data-title='Delete Pipeline']")).click();
+        getDriver().findElement(By.xpath("//button[@data-id='ok']")).click();
+
+        String emptyHeader = getDriver().findElement(By.cssSelector(".empty-state-block > h1")).getText();
+        Assert.assertEquals(emptyHeader, "Welcome to Jenkins!");
+    }
 }
