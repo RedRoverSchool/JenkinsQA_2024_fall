@@ -148,7 +148,7 @@ public class FreestyleProject3Test extends BaseTest {
 
         getDriver().findElement(By.xpath("//a[text()='Dashboard']")).click();
 
-        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(20));
+        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(15));
         WebElement projectToDelete = wait.until(ExpectedConditions.visibilityOfElementLocated(
                 By.xpath("//a[@href='job/" + PROJECT_NAME.replace(" ", "%20") + "/']")));
         Actions actions = new Actions(getDriver());
@@ -156,15 +156,11 @@ public class FreestyleProject3Test extends BaseTest {
                 .pause(100)
                 .perform();
 
-        WebElement chevron = getDriver().findElement(
-                By.xpath("//a[@href='job/"+ PROJECT_NAME.replace(" ", "%20") + "/']//button"));
-        actions.moveToElement(chevron)
-                .pause(100)
-                .moveToElement(chevron)
-                .perform();
-        ((JavascriptExecutor) getDriver()).executeScript("arguments[0].click();",chevron);
+        WebElement chevron = wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//a[@href='job/"+ PROJECT_NAME.replace(" ", "%20") + "/']//button")));
 
-        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@class='jenkins-dropdown']")));
+        ((JavascriptExecutor) getDriver()).executeScript("arguments[0].dispatchEvent(new Event('mouseenter'));", chevron);
+        ((JavascriptExecutor) getDriver()).executeScript("arguments[0].click();", chevron);
 
         WebElement deleteButton = wait.until(ExpectedConditions.visibilityOfElementLocated(
                 By.xpath("//button[contains(@href, 'doDelete')]")));
