@@ -44,19 +44,18 @@ public class DashboardMenuInBreadcrumbsTest extends BaseTest {
                 .moveToElement(dashboard)
                 .perform();
 
-
-
         ProjectUtils.log("Wait animation of the dropdown chevron icon and click");
         WebElement dropdownIcon = getDriver().findElement(By.xpath("//ol/li/a[@href='/']/button[@class='jenkins-menu-dropdown-chevron']"));
-        wait.until(new ExpectedCondition<Boolean>() {
-            public Boolean apply(WebDriver driver) {
-                String initialPositionCssValue = dropdownIcon.getCssValue("right");
-                ProjectUtils.log(initialPositionCssValue);
-                return "-22px".equals(initialPositionCssValue);
-            }
-        });
+//        wait.until(new ExpectedCondition<Boolean>() {
+//            public Boolean apply(WebDriver driver) {
+//                String initialPositionCssValue = dropdownIcon.getCssValue("right");
+//                ProjectUtils.log(initialPositionCssValue);
+//                return "-22px".equals(initialPositionCssValue);
+//            }
+//        });
 
-        wait.until(ExpectedConditions.visibilityOf(dropdownIcon));
+//        wait.until(ExpectedConditions.visibilityOf(dropdownIcon));
+        wait.until(ExpectedConditions.elementToBeClickable(dropdownIcon));
 
         ProjectUtils.log("Top left chevron corner location: " + dropdownIcon.getLocation().toString());
         ProjectUtils.log("Chevron size: " + dropdownIcon.getSize());
