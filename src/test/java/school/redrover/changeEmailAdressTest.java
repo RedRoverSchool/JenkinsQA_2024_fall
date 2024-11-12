@@ -13,7 +13,7 @@ import java.time.Duration;
 
 public class changeEmailAdressTest extends BaseTest {
     @Test
-    public void openAccountPage() throws InterruptedException {
+    public void openAccountPage() {
         WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(10));
         Actions actions = new Actions(getDriver());
 
@@ -30,7 +30,7 @@ public class changeEmailAdressTest extends BaseTest {
     }
 
     @Test
-    public void enterNewMailInAccountSettings() throws InterruptedException {
+    public void enterNewMailInAccountSettings() {
         WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(10));
         Actions actions = new Actions(getDriver());
 
