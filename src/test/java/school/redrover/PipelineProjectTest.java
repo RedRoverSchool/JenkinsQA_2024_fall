@@ -20,7 +20,7 @@ import java.util.NoSuchElementException;
 
 public class PipelineProjectTest extends BaseTest {
 
-    private static final String PIPELINE_NAME = "Pipeline_name";
+    private static final String PIPELINE_NAME = "name";
     private static final String NEW_PROJECT_NAME = "New_Pipeline_name";
 
     private void createProjectViaSidebar(String projectName) {
@@ -285,8 +285,7 @@ public class PipelineProjectTest extends BaseTest {
             xOffset += 10;
         }
 
-        wait.until(ExpectedConditions.attributeToBe(
-                projectElement.findElement(By.cssSelector("[data-href*='/job/" + PIPELINE_NAME + "/']")),
+        wait.until(ExpectedConditions.attributeToBe(By.cssSelector("[data-href*='/job/" + PIPELINE_NAME + "/']"),
                 "aria-expanded", "true"));
         wait.until(ExpectedConditions.visibilityOf(getDriver().findElement(By.cssSelector(".tippy-box"))));
         wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//div[@class='tippy-content']")));
