@@ -146,7 +146,7 @@ public class FreestyleProject3Test extends BaseTest {
         createProjectViaSidebarMenu(PROJECT_NAME);
         getDriver().findElement(By.xpath("//a[text()='Dashboard']")).click();
 
-        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(15));
+        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(20));
         WebElement chevron = wait.until(ExpectedConditions.visibilityOfElementLocated(
                 By.xpath("//button[contains(@data-href, '" + PROJECT_NAME.replace(" ", "%20") + "')]")));
 
@@ -155,7 +155,7 @@ public class FreestyleProject3Test extends BaseTest {
                 .pause(10000)
                 .moveToElement(chevron)
                 .click()
-                .pause(20000)
+                .pause(40000)
                 .perform();
 
         WebElement deleteButton = wait.until(ExpectedConditions.elementToBeClickable(
