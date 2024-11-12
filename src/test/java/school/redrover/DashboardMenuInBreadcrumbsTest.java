@@ -46,6 +46,7 @@ public class DashboardMenuInBreadcrumbsTest extends BaseTest {
         });
         actions
                 .moveToElement(dropdownIcon)
+                .pause(Duration.ofSeconds(3))
                 .click()
                 .perform();
 
