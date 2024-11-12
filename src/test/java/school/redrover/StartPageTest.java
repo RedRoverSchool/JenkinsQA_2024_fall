@@ -145,10 +145,11 @@ public class StartPageTest extends BaseTest {
         javaScriptExecutor.executeScript("arguments[0].click()", chevron);
 
 
-        WebElement deleteButton = wait.until(ExpectedConditions.elementToBeClickable(
+        WebElement deleteButton = wait.until(ExpectedConditions.presenceOfElementLocated(
                 By.xpath("//button[contains(@href, '/job/NewFolder/doDelete')]")));
         actions
                 .moveToElement(deleteButton)
+                .pause(1000)
                 .click()
                 .perform();
 
