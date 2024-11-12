@@ -14,6 +14,7 @@ import java.time.Duration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 
 
 public class PipelineProjectTest extends BaseTest {
@@ -49,13 +50,14 @@ public class PipelineProjectTest extends BaseTest {
     }
 
     private void clickGreenTriangleToScheduleBuildForProject(String projectName) {
-        getWait(getDriver()).until(ExpectedConditions.visibilityOfElementLocated(
+        getWait(getDriver()).until(ExpectedConditions.elementToBeClickable(
                 By.xpath("//td[@class='jenkins-table__cell--tight']//a[@tooltip='Schedule a Build for " + projectName + "']"))).click();
-        getWait(getDriver()).until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@class='tippy-box']")));
+
+        getWait(getDriver()).until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@class='tippy-content']")));
     }
 
     private static WebDriverWait getWait(WebDriver driver) {
-        return new WebDriverWait(driver, Duration.ofSeconds(20));
+        return new WebDriverWait(driver, Duration.ofSeconds(15));
     }
 
     @Test
@@ -114,6 +116,47 @@ public class PipelineProjectTest extends BaseTest {
         String actualDescription = getDriver().findElement(By.id("description")).getText();
 
         Assert.assertEquals(actualDescription, expectedProjectDescription, "Expected description for the project is not found");
+    }
+
+    @Test
+    public void testGetWarningMessageWhenDisableProject() {
+        createProjectViaSidebar(PIPELINE_NAME);
+        returnToHomePage();
+        clickJobByName(PIPELINE_NAME);
+
+        getWait(getDriver()).until(ExpectedConditions.elementToBeClickable(By.xpath("//a[@href='/job/" + PIPELINE_NAME + "/configure']"))).click();
+        getWait(getDriver()).until(ExpectedConditions.elementToBeClickable(By.xpath("//label[@data-title='Disabled']"))).click();
+        getDriver().findElement(By.xpath("//button[@name='Submit']")).click();
+
+        String actualWarningMessage = getWait(getDriver()).until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//form[@id='enable-project']"))).getText().split("\n")[0];
+        String buttonText = getWait(getDriver()).until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//form[@id='enable-project']/button[@name='Submit']"))).getText();
+
+        Assert.assertEquals(actualWarningMessage, "This project is currently disabled");
+        Assert.assertEquals(buttonText, "Enable");
+    }
+
+    @Test
+    public void testDisableProject() {
+        createProjectViaSidebar(PIPELINE_NAME);
+        returnToHomePage();
+        clickJobByName(PIPELINE_NAME);
+
+        getWait(getDriver()).until(ExpectedConditions.elementToBeClickable(By.xpath("//a[@href='/job/" + PIPELINE_NAME + "/configure']"))).click();
+        getWait(getDriver()).until(ExpectedConditions.elementToBeClickable(By.xpath("//label[@data-title='Disabled']"))).click();
+        getDriver().findElement(By.xpath("//button[@name='Submit']")).click();
+
+        returnToHomePage();
+        WebElement disableCircleSign = getWait(getDriver()).until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//tr[@id='job_Pipeline_name']//*[@tooltip='Disabled']")));
+
+        boolean isGreenScheduleBuildTrianglePresent = !getDriver().findElements(
+                        By.xpath("//td[@class='jenkins-table__cell--tight']//a[@tooltip='Schedule a Build for " + PIPELINE_NAME + "']"))
+                .isEmpty();
+
+        Assert.assertTrue(disableCircleSign.isDisplayed());
+        Assert.assertFalse(isGreenScheduleBuildTrianglePresent);
     }
 
     @Test
@@ -208,6 +251,64 @@ public class PipelineProjectTest extends BaseTest {
         returnToHomePage();
 
         Assert.assertListContainsObject(getProjectList(), NEW_PROJECT_NAME, "Project is not renamed");
+    }
+
+    @Test
+    public void testRenameProjectViaDropdownMenu() {
+        createProjectViaSidebar(PIPELINE_NAME);
+        returnToHomePage();
+
+        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(20));
+        Actions actions = new Actions(getDriver());
+
+        WebElement projectElement = wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//a[@href='job/" + PIPELINE_NAME + "/']")));
+
+        int elementWidth = projectElement.getSize().getWidth();
+        int xOffset = 0;
+        boolean chevronClicked = false;
+
+        while (xOffset < elementWidth && !chevronClicked) {
+            actions.moveToElement(projectElement, xOffset, 0).perform();
+
+            if (isChevronVisible()) {
+                WebElement chevron = getDriver().findElement(By.cssSelector("[data-href*='/job/" + PIPELINE_NAME + "/']"));
+                actions.moveToElement(chevron).pause(500).click().perform();
+                chevronClicked = true;
+            }
+
+            xOffset += 10;
+        }
+
+        wait.until(ExpectedConditions.attributeToBe(projectElement.findElement(By.cssSelector("[data-href*='/job/" + PIPELINE_NAME + "/']")),
+                "aria-expanded", "true"));
+        wait.until(ExpectedConditions.visibilityOf(getDriver().findElement(By.cssSelector(".tippy-box"))));
+        wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//div[@class='tippy-content']")));
+        wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//div[@class='jenkins-dropdown']")));
+
+        WebElement confirmRenameLink = wait.until(ExpectedConditions.presenceOfElementLocated(
+                By.xpath("//div[@class='jenkins-dropdown']//a[@href='/job/" + PIPELINE_NAME + "/confirm-rename']")));
+        wait.until(ExpectedConditions.elementToBeClickable(confirmRenameLink));
+        actions.moveToElement(confirmRenameLink).click().perform();
+
+        WebElement nameInput = wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//input[@checkdependson='newName']")));
+        nameInput.clear();
+        nameInput.sendKeys(NEW_PROJECT_NAME);
+        getDriver().findElement(By.xpath("//button[@name='Submit']")).click();
+
+        returnToHomePage();
+
+        Assert.assertListContainsObject(getProjectList(), NEW_PROJECT_NAME, "Project is not renamed");
+    }
+
+    private boolean isChevronVisible() {
+        try {
+            WebElement chevron = getDriver().findElement(By.cssSelector("[data-href*='/job/" + PIPELINE_NAME + "/']"));
+            return chevron.isDisplayed();
+        } catch (NoSuchElementException e) {
+            return false;
+        }
     }
 
     @Test
