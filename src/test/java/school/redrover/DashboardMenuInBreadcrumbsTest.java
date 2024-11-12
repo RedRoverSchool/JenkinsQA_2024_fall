@@ -36,22 +36,15 @@ public class DashboardMenuInBreadcrumbsTest extends BaseTest {
                 .perform();
 
         ProjectUtils.log("Wait animation of the dropdown chevron icon and click");
-//        WebElement dropdownIcon = getDriver().findElement(By.xpath("//ol/li/a[@href='/']/button[@class='jenkins-menu-dropdown-chevron']"));
-//        wait.until(new ExpectedCondition<Boolean>() {
-//            public Boolean apply(WebDriver driver) {
-//                String initialPositionCssValue = dropdownIcon.getCssValue("right");
-//                ProjectUtils.log(initialPositionCssValue);
-//                String initialPointerCssValue = dropdownIcon.getCssValue("pointer-events");
-//                ProjectUtils.log(initialPointerCssValue);
-//                return "-22px".equals(initialPositionCssValue) && "all".equals(initialPointerCssValue);
-//            }
-//        });
-
-        WebElement dropdownIcon = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//ol/li/a[@href='/']/button[@class='jenkins-menu-dropdown-chevron']")));
-        actions
-                .moveToElement(dropdownIcon)
-                .click()
-                .perform();
+        WebElement dropdownIcon = getDriver().findElement(By.xpath("//ol/li/a[@href='/']/button[@class='jenkins-menu-dropdown-chevron']"));
+        wait.until(new ExpectedCondition<Boolean>() {
+            public Boolean apply(WebDriver driver) {
+                String initialPositionCssValue = dropdownIcon.getCssValue("right");
+                ProjectUtils.log(initialPositionCssValue);
+                return "-22px".equals(initialPositionCssValue);
+            }
+        });
+        dropdownIcon.click();
 
         ProjectUtils.log("Wait animation of dropdown menu");
         WebElement parentOfDropdownMenu = getDriver().findElement(By.xpath("//div[@class='tippy-content']"));
