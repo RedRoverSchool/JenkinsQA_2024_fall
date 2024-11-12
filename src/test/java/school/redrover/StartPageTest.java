@@ -139,7 +139,7 @@ public class StartPageTest extends BaseTest {
                 By.xpath("//button[contains(@data-href, '/job/NewFolder/')]")));
         wait.until(ExpectedConditions.elementToBeClickable(chevron));
 
-        actions.moveToElement(chevron).pause(500).perform();
+        actions.moveToElement(chevron).pause(2000).perform();
 
         JavascriptExecutor javaScriptExecutor = (JavascriptExecutor)getDriver();
         javaScriptExecutor.executeScript("arguments[0].click()", chevron);
