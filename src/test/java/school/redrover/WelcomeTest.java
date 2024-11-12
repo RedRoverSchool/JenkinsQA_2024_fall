@@ -13,7 +13,7 @@ public class WelcomeTest extends BaseTest {
 
         Thread.sleep(2000);
 
-        Assert.assertEquals(welcomeStr, "Добро пожаловать в Jenkins!");
+        Assert.assertEquals(welcomeStr, "Welcome to Jenkins!");
     }
 }
 
