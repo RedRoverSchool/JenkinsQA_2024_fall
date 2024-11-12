@@ -35,10 +35,11 @@ public class PipelineProject4Test extends BaseTest {
         actions.moveToElement(createdPipeline)
                 .pause(Duration.ofMillis(2000))
                 .moveToElement(chevron)
+                .pause(Duration.ofMillis(2000))
                 .click()
                 .perform();
 
-        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(20));
+        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(3));
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//a[contains(@href, 'rename')]"))).click();
 
         getDriver().findElement(By.name("newName")).clear();
