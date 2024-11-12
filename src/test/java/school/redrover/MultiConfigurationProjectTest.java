@@ -3,6 +3,7 @@ package school.redrover;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
@@ -68,4 +69,56 @@ public class MultiConfigurationProjectTest extends BaseTest {
         Assert.assertFalse(okButton.isEnabled());
     }
 
+    @Test
+    public void testDragAndDropConfigurationMatrixBlock() {
+        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(5));
+
+        getDriver().findElement(By.cssSelector("[href$='newJob']")).click();
+        getDriver().findElement(By.id("name")).sendKeys("MultiConfigProject");
+        getDriver().findElement(By.xpath("//span[text()='Multi-configuration project']")).click();
+        getDriver().findElement(By.id("ok-button")).click();
+
+        getDriver().findElement(By.xpath("//button[@data-section-id='configuration-matrix']")).click();
+
+        Actions act = new Actions(getDriver());
+        WebElement postBuildActionsTitle = getDriver().findElement(By.cssSelector("[id='post-build-actions']"));
+        act.scrollToElement(postBuildActionsTitle).perform();
+
+        getDriver().findElement(By.cssSelector("button[suffix='axis']")).click();
+
+        WebElement dropdownList1 = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("button[class='jenkins-dropdown__item ']")));
+        dropdownList1.click();
+
+        getDriver().findElement(By.cssSelector("input.jenkins-input.validated[name='_.name']")).sendKeys("config1");
+        getDriver().findElement(By.cssSelector(".jenkins-input[name='_.valueString']")).sendKeys("value1");
+
+        getDriver().findElement(By.cssSelector("button[suffix='axis']")).click();
+
+        WebElement dropdownList2 = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("button[class='jenkins-dropdown__item ']")));
+        dropdownList2.click();
+
+        getDriver().findElement(By.xpath("(//input[@name='_.name' and @class='jenkins-input validated  '])[2]")).sendKeys("config2");
+        getDriver().findElement(By.xpath("(//input[contains(@name, 'valueString')])[2]")).sendKeys("value2");
+
+        WebElement firstAxis = getDriver().findElement(By.xpath("(//div[@class='dd-handle'])[1]"));
+        WebElement secondAxis = getDriver().findElement(By.xpath("(//div[@class='dd-handle'])[2]"));
+
+        Actions actions = new Actions(getDriver());
+        actions.moveToElement(firstAxis)
+            .clickAndHold()
+            .moveByOffset(0, 10)
+            .moveToElement(secondAxis)
+            .release()
+            .perform();
+
+        String actualFirstAxisName = getDriver()
+                                         .findElement(By.xpath("(//input[@name='_.name' and @class='jenkins-input validated  '])[1]"))
+                                         .getAttribute("value");
+        String actualSecondAxisName = getDriver()
+                                          .findElement(By.xpath("(//input[@name='_.name' and @class='jenkins-input validated  '])[2]"))
+                                          .getAttribute("value");
+
+        Assert.assertEquals(actualFirstAxisName, "config2");
+        Assert.assertEquals(actualSecondAxisName, "config1");
+    }
 }
