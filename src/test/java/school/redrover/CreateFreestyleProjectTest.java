@@ -1,6 +1,7 @@
 package school.redrover;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import school.redrover.runner.BaseTest;
@@ -24,8 +25,8 @@ public class CreateFreestyleProjectTest extends BaseTest {
     }
 
     @Test
-    public void testVerifyFreeStyleProjectInMyViewsPage () throws InterruptedException {
-        final String expectedFreeStyleProjectName ="My First Free Style Project";
+    public void testVerifyFreeStyleProjectInMyViewsPage () {
+        final String expectedFreeStyleProjectName = "My First Free Style Project";
 
         getDriver().findElement(By.cssSelector(".task-link-wrapper")).click();
 
@@ -36,13 +37,11 @@ public class CreateFreestyleProjectTest extends BaseTest {
         getDriver().findElement(By.cssSelector("textarea[name='description']")).sendKeys("Lorem ipsum dolor sit amet");
         getDriver().findElement(By.cssSelector("button[name='Submit']")).click();
 
-        Thread.sleep(2000);
-
-        getDriver().findElement(By.cssSelector(".jenkins-breadcrumbs__list-item")).click();
+        getWait2().until(ExpectedConditions.elementToBeClickable(By.cssSelector(".jenkins-breadcrumbs__list-item"))).click();
         getDriver().findElement(By.xpath("//a[@href='/me/my-views']"));
 
-        String actualFreeStyleProjectName = getDriver().findElement(By.cssSelector("a[href='job/My%20First%20Free%20Style%20Project/']")).getText();
-
-        Assert.assertEquals(expectedFreeStyleProjectName, actualFreeStyleProjectName);
+        Assert.assertEquals(
+                getDriver().findElement(By.cssSelector("a[href='job/My%20First%20Free%20Style%20Project/']")).getText(),
+                expectedFreeStyleProjectName);
     }
 }
