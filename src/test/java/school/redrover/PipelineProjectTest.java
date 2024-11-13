@@ -263,11 +263,10 @@ public class PipelineProjectTest extends BaseTest {
                 By.xpath("//a[@href='job/" + PIPELINE_NAME + "/']")));
 
         new Actions(getDriver()).moveToElement(projectElement).perform();
+        WebElement chevron = getDriver().findElement(By.cssSelector("[data-href*='/job/" + PIPELINE_NAME + "/']"));
         getWait10().until(TestUtils.ExpectedConditions.elementIsNotMoving(projectElement));
 
-        WebElement chevron = getDriver().findElement(By.cssSelector("[data-href*='/job/" + PIPELINE_NAME + "/']"));
         chevron.click();
-
 
         wait.until(ExpectedConditions.attributeToBe(getDriver().findElement(By.cssSelector("[data-href*='/job/" + PIPELINE_NAME + "/']")),
                 "aria-expanded", "true"));

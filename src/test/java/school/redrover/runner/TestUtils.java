@@ -8,7 +8,7 @@ public class TestUtils {
     public static class ExpectedConditions {
         public static ExpectedCondition<WebElement> elementIsNotMoving(final By locator) {
             return new ExpectedCondition<>() {
-                private Point location = null;
+                private Point lastLocation = null; // Инициализируем здесь
 
                 @Override
                 public WebElement apply(WebDriver driver) {
@@ -20,17 +20,18 @@ public class TestUtils {
                     }
 
                     if (element.isDisplayed()) {
-                        Point location = element.getLocation();
-                        if (location.equals(this.location)) {
-                            return element;
+                        Point currentLocation = element.getLocation();
+                        if (currentLocation.equals(lastLocation)) { // Сравниваем текущее положение с предыдущим
+                            return element; // Элемент перестал двигаться
                         }
-                        this.location = location;
+                        lastLocation = currentLocation; // Обновляем положение элемента
                     }
 
                     return null;
                 }
             };
         }
+
 
         public static ExpectedCondition<WebElement> elementIsNotMoving(final WebElement element) {
             return new ExpectedCondition<>() {
