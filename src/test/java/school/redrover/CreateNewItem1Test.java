@@ -51,7 +51,7 @@ public class CreateNewItem1Test extends BaseTest {
 
         getDriver().findElement(By.xpath("//input[@name='name']")).sendKeys(ITEM_NAME);
 
-        String itemNameInvalid = getWait2().until(ExpectedConditions.visibilityOfElementLocated(By.id("itemname-invalid"))).getText();
+        String itemNameInvalid = getWait5().until(ExpectedConditions.visibilityOfElementLocated(By.id("itemname-invalid"))).getText();
 
         Assert.assertEquals(itemNameInvalid, "» A job already exists with the name ‘%s’".formatted(ITEM_NAME));
     }
