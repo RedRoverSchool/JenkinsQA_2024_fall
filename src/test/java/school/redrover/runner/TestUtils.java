@@ -52,4 +52,11 @@ public class TestUtils {
         }
     }
 
+    public static void moveAndClickWithJavaScript(WebDriver driver, WebElement element) {
+        ((JavascriptExecutor) driver)
+                .executeScript("arguments[0].dispatchEvent(new Event('mouseenter'));", element);
+        ((JavascriptExecutor) driver)
+                .executeScript("arguments[0].dispatchEvent(new Event('click'));", element);
+    }
+
 }
