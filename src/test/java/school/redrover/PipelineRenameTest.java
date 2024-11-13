@@ -15,7 +15,7 @@ public class PipelineRenameTest extends BaseTest {
     private final static String NAME_OF_PROJECT = RandomString.make(10);
     private final static String NEW_NAME_OF_PROJECT = RandomString.make(5);
 
-    private void createPipelineProject(String name) {
+    private void createPipelineProjectAndBackToHomePage(String name) {
 
         getDriver().findElement(By.xpath("//a[@href='/view/all/newJob']")).click();
         getDriver().findElement(By.id("name")).sendKeys(name);
@@ -24,13 +24,10 @@ public class PipelineRenameTest extends BaseTest {
         getDriver().findElement(By.id("jenkins-name-icon")).click();
     }
 
-    @Test
-    public void testRenamePipelineViaChevron() {
-
-        createPipelineProject(NAME_OF_PROJECT);
+    private void goToRenamePageAndInputNewProjectName(String currentProjectName, String newProjectName) {
 
         WebElement chevronButton = getDriver().findElement(By.xpath("//td//button[@aria-expanded='false']"));
-        WebElement pipelineProject = getWait5().until(ExpectedConditions.elementToBeClickable(By.xpath("//a[@href='job/%s/']".formatted(NAME_OF_PROJECT))));
+        WebElement pipelineProject = getWait5().until(ExpectedConditions.elementToBeClickable(By.xpath("//a[@href='job/%s/']".formatted(currentProjectName))));
 
         new Actions(getDriver()).moveToElement(pipelineProject)
                 .pause(500)
@@ -39,17 +36,41 @@ public class PipelineRenameTest extends BaseTest {
         TestUtils.moveAndClickWithJavaScript(getDriver(), chevronButton);
 
         getWait5().until(ExpectedConditions.attributeToBe(chevronButton, "aria-expanded", "true"));
-        getWait5().until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//a[@href='/job/%s/confirm-rename']".formatted(NAME_OF_PROJECT)))).click();
+        getWait5().until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//a[@href='/job/%s/confirm-rename']".formatted(currentProjectName)))).click();
 
         WebElement renameField = getDriver().findElement(By.xpath("//input[@checkdependson='newName']"));
         renameField.clear();
-        renameField.sendKeys(NEW_NAME_OF_PROJECT);
-
+        renameField.sendKeys(newProjectName);
         getDriver().findElement(By.name("Submit")).click();
+
+    }
+
+    @Test
+    public void testRenamePipelineProjectViaChevron() {
+
+        createPipelineProjectAndBackToHomePage(NAME_OF_PROJECT);
+
+        goToRenamePageAndInputNewProjectName(NAME_OF_PROJECT, NEW_NAME_OF_PROJECT);
+
         getDriver().findElement(By.id("jenkins-name-icon")).click();
 
-        String actualPipeLineName = getDriver().findElement(By.xpath("//span[text()='%s']".formatted(NEW_NAME_OF_PROJECT))).getText();
+        String actualPipeLineName = getDriver().findElement(
+                By.xpath("//span[text()='%s']".formatted(NEW_NAME_OF_PROJECT))).getText();
 
         Assert.assertEquals(actualPipeLineName, NEW_NAME_OF_PROJECT);
+    }
+
+    @Test
+    public void testShouldNotRenamePipelineProjectWithDuplicateName() {
+
+    createPipelineProjectAndBackToHomePage(NAME_OF_PROJECT);
+
+    goToRenamePageAndInputNewProjectName(NAME_OF_PROJECT, NAME_OF_PROJECT);
+
+    String actualErrorMessage = getDriver().findElement(
+            By.xpath("//p[contains(text(), 'The new name is the same as the current name')]")).getText();
+
+    Assert.assertEquals(actualErrorMessage, "The new name is the same as the current name.");
+
     }
 }
