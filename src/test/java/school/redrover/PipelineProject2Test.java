@@ -39,7 +39,7 @@ public class PipelineProject2Test extends BaseTest {
         String pipelineProjectName = wait.until(ExpectedConditions.visibilityOfElementLocated(
                 By.xpath(String.format("//span[text()='%s']", PROJECT_NAME)))).getText();
 
-        Assert.assertEquals(pipelineProjectName, PROJECT_NAME);
+        Assert.assertEquals(pipelineProjectName, PROJECT_NAME+1);
     }
 
     @Test
