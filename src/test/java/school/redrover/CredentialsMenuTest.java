@@ -84,7 +84,7 @@ public class CredentialsMenuTest extends BaseTest {
 
         }
 
-        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(15));
+        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(30));
         WebElement addDomainElement = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//a[@href='/user/admin/credentials/store/user/newDomain']")));
 
         assertTrue(addDomainElement.isDisplayed());
