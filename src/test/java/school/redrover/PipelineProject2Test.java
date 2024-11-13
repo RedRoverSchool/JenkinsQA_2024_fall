@@ -179,7 +179,7 @@ public class PipelineProject2Test extends BaseTest {
 //        WebElement chevronButton = getWait10().until(ExpectedConditions.visibilityOfElementLocated(
 //                By.xpath(String.format("//span[text()='%s']/following-sibling::button", PROJECT_NAME))));
 
-        WebElement chevronButton = getWait10().until(TestUtils.ExpectedConditions.elementIsNotMoving(
+        WebElement chevronButton = getWait10().until(ExpectedConditions.elementToBeClickable(
                 By.xpath(String.format("//span[text()='%s']/following-sibling::button", PROJECT_NAME))));
         chevronButton.click();
 
