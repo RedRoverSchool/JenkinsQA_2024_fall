@@ -225,10 +225,10 @@ public class ManageJenkinsTest extends BaseTest {
 
         getDriver().findElement(By.cssSelector("input[id='settings-search-bar']")).sendKeys("sy");
 
-        getWait5().until(ExpectedConditions
-                             .visibilityOfElementLocated(By.cssSelector("[class$='jenkins-search__results-container--visible']")));
+        List<WebElement> searchResultElements = getWait5()
+                                                    .until(ExpectedConditions.visibilityOfAllElementsLocatedBy(
+                                                        By.xpath("//div[@class='jenkins-search__results']//a")));
 
-        List<WebElement> searchResultElements = getDriver().findElements(By.xpath("//div[@class='jenkins-search__results']//a"));
         List<String> actualSearchResults = searchResultElements.stream().map(WebElement::getText).toList();
 
         Assert.assertEquals(actualSearchResults, expectedSearchResults);
@@ -241,10 +241,9 @@ public class ManageJenkinsTest extends BaseTest {
 
         getDriver().findElement(By.cssSelector("input[id='settings-search-bar']")).sendKeys("cr");
 
-        getWait5().until(ExpectedConditions
-                             .visibilityOfElementLocated(By.cssSelector("[class$='jenkins-search__results-container--visible']")));
-
-        getDriver().findElement(By.cssSelector("a[href$='configureCredentials']")).click();
+        WebElement configureCredentialsItem = getWait5().until(ExpectedConditions
+                             .visibilityOfElementLocated(By.cssSelector("a[href$='configureCredentials']")));
+        configureCredentialsItem.click();
 
         Assert.assertTrue(getDriver().getCurrentUrl().endsWith("/manage/configureCredentials/"));
     }
