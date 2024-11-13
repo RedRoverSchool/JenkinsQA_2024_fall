@@ -49,7 +49,8 @@ public abstract class BaseTest {
     protected void afterMethod(Method method, ITestResult testResult) throws IOException {
 
         if (!testResult.isSuccess() && ProjectUtils.isServerRun()) {
-            String screenshotName = testResult.getTestClass().getName() + "." + testResult.getName() + ".png";
+            String screenshotName = testResult.getTestClass().getRealClass().getSimpleName()
+                    + "." + testResult.getName() + ".png";
             try (FileOutputStream fos = new FileOutputStream(new File("screenshots", screenshotName))) {
                 fos.write(((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES));
             }
