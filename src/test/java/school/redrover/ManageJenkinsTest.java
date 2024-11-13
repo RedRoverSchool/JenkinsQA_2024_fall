@@ -225,7 +225,7 @@ public class ManageJenkinsTest extends BaseTest {
 
         getDriver().findElement(By.cssSelector("input[id='settings-search-bar']")).sendKeys("sy");
 
-        getWait2().until(ExpectedConditions
+        getWait5().until(ExpectedConditions
                              .visibilityOfElementLocated(By.cssSelector("[class$='jenkins-search__results-container--visible']")));
 
         List<WebElement> searchResultElements = getDriver().findElements(By.xpath("//div[@class='jenkins-search__results']//a"));
@@ -241,7 +241,7 @@ public class ManageJenkinsTest extends BaseTest {
 
         getDriver().findElement(By.cssSelector("input[id='settings-search-bar']")).sendKeys("cr");
 
-        getWait2().until(ExpectedConditions
+        getWait5().until(ExpectedConditions
                              .visibilityOfElementLocated(By.cssSelector("[class$='jenkins-search__results-container--visible']")));
 
         getDriver().findElement(By.cssSelector("a[href$='configureCredentials']")).click();
