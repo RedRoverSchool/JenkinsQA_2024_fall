@@ -4,6 +4,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
@@ -11,6 +12,8 @@ import org.testng.annotations.Test;
 import school.redrover.runner.BaseTest;
 
 import java.time.Duration;
+
+import static org.testng.AssertJUnit.assertTrue;
 
 public class PipelineProject3Test extends BaseTest {
 
@@ -66,5 +69,35 @@ public class PipelineProject3Test extends BaseTest {
 
         String actualTooltip = getDriver().findElement(By.xpath("//*[contains(text(), '" + labelText + "')]//a")).getAttribute("tooltip");
         Assert.assertEquals(actualTooltip, tooltipText);
+    }
+
+    @Test
+    public void testDeleteFromInsideProject() {
+        createPipelineProject(PIPELINE_NAME);
+        returnToHomePage();
+        clickJobByName(PIPELINE_NAME);
+
+        getDriver().findElement(By.xpath("//a[@data-title='Delete Pipeline']")).click();
+        getDriver().findElement(By.xpath("//button[@data-id='ok']")).click();
+
+        String emptyHeader = getDriver().findElement(By.cssSelector(".empty-state-block > h1")).getText();
+        Assert.assertEquals(emptyHeader, "Welcome to Jenkins!");
+    }
+
+    @Test
+    public void testRenameProjectWithSameName() {
+        createPipelineProject(PIPELINE_NAME);
+        returnToHomePage();
+        clickJobByName(PIPELINE_NAME);
+
+        getDriver().findElement(By.xpath("//a[contains(., 'Rename')]")).click();
+
+        Actions myAction = new Actions(getDriver());
+        myAction.doubleClick(getDriver().findElement(By.name("newName"))).perform();
+
+        getDriver().findElement(By.name("newName")).sendKeys(PIPELINE_NAME);
+        getDriver().findElement(By.name("Submit")).click();
+
+        assertTrue(getDriver().findElement(By.xpath("//*[text()='Error']")).isDisplayed());
     }
 }

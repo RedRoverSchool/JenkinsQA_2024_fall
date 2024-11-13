@@ -1,5 +1,6 @@
 package school.redrover;
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -100,11 +101,9 @@ public class StartPageTest extends BaseTest {
     @Test
     public void testDeleteNewFolder() {
 
-        final String folderName = "NewFolder";
-
         WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(20));
 
-        createNewFolder(folderName);
+        createNewFolder("NewFolder");
 
         Actions actions = new Actions(getDriver());
         actions.moveToElement(getDriver().findElement(By.xpath(
@@ -113,6 +112,41 @@ public class StartPageTest extends BaseTest {
         WebElement buttonDelete = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(
                 "//span[text()='Delete Folder']")));
                 buttonDelete.click();
+
+        WebElement buttonOk = wait.until(ExpectedConditions.elementToBeClickable(getDriver().findElement(By.xpath(
+                "//button[@data-id= 'ok']"))));
+        buttonOk.click();
+
+        WebElement secondText = getDriver().findElement(By.xpath("//p[contains(text(), 'This page is where')]"));
+
+        Assert.assertEquals(secondText.getText(), "This page is where your Jenkins jobs will be displayed. To get started, you can set up distributed builds or start building a software project.");
+    }
+
+    @Test
+    public void testDeleteNewFolderViaChevron() {
+
+        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(10));
+
+        createNewFolder("NewFolder");
+
+        Actions actions = new Actions(getDriver());
+        actions.moveToElement(getDriver().findElement(By.xpath(
+                "//span[contains(text(), 'NewFolder')]")))
+                .perform();
+
+        WebElement chevron = getDriver().findElement(By.xpath("//button[@data-href='http://localhost:8080/job/NewFolder/']"));
+
+        ((JavascriptExecutor) getDriver()).executeScript(
+                "arguments[0].dispatchEvent(new Event('mouseenter'));", chevron);
+        ((JavascriptExecutor) getDriver()).executeScript(
+                "arguments[0].dispatchEvent(new Event('click'));", chevron);
+
+        WebElement deleteButton = wait.until(ExpectedConditions.presenceOfElementLocated(
+                By.xpath("//button[contains(@href, 'doDelete')]")));
+        actions
+                .moveToElement(deleteButton)
+                .click()
+                .perform();
 
         WebElement buttonOk = wait.until(ExpectedConditions.elementToBeClickable(getDriver().findElement(By.xpath(
                 "//button[@data-id= 'ok']"))));
