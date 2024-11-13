@@ -2,13 +2,13 @@ package school.redrover;
 
 import net.bytebuddy.utility.RandomString;
 import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import school.redrover.runner.BaseTest;
+import school.redrover.runner.TestUtils;
 
 public class PipelineRenameTest extends BaseTest {
 
@@ -34,14 +34,11 @@ public class PipelineRenameTest extends BaseTest {
 
         new Actions(getDriver()).moveToElement(pipelineProject)
                 .pause(500)
-                .moveToElement(chevronButton)
                 .perform();
 
-        ((JavascriptExecutor) getDriver()).executeScript("arguments[0].dispatchEvent(new Event('mouseenter'));", chevronButton);
-        ((JavascriptExecutor) getDriver()).executeScript("arguments[0].click();", chevronButton);
+        TestUtils.moveAndClickWithJavaScript(getDriver(), chevronButton);
 
         getWait5().until(ExpectedConditions.attributeToBe(chevronButton, "aria-expanded", "true"));
-
         getWait5().until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//a[@href='/job/%s/confirm-rename']".formatted(NAME_OF_PROJECT)))).click();
 
         WebElement renameField = getDriver().findElement(By.xpath("//input[@checkdependson='newName']"));
