@@ -38,7 +38,6 @@ public class PipelineRenameTest extends BaseTest {
         new Actions(getDriver()).moveToElement(pipelineProject)
                 .pause(2000)
                 .moveToElement(chevronButton)
-                .pause(1000)
                 .moveToElement(chevronButton)
                 .click()
                 .perform();
