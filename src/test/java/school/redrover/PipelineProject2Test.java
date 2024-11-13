@@ -117,8 +117,7 @@ public class PipelineProject2Test extends BaseTest {
         getDriver().findElement(By.xpath(ITEM_NAME_LOCATOR.formatted(FOLDER_NAME))).click();
 
         Assert.assertEquals(
-                getDriver().findElement(By.xpath(ITEM_NAME_LOCATOR.formatted(PROJECT_NAME))).getText(),
-                PROJECT_NAME);
+                getDriver().findElement(By.xpath(ITEM_NAME_LOCATOR.formatted(PROJECT_NAME))).getText(), PROJECT_NAME);
     }
 
     @Test
@@ -133,8 +132,7 @@ public class PipelineProject2Test extends BaseTest {
         getWait5().until(ExpectedConditions.visibilityOfElementLocated(
                 By.xpath("//button[@data-id='ok']"))).click();
 
-        Assert.assertTrue(getDriver()
-                .findElements(By.xpath(ITEM_NAME_LOCATOR.formatted(PROJECT_NAME))).isEmpty());
+        Assert.assertTrue(getDriver().findElements(By.xpath(ITEM_NAME_LOCATOR.formatted(PROJECT_NAME))).isEmpty());
     }
 
     @Test
@@ -156,8 +154,7 @@ public class PipelineProject2Test extends BaseTest {
         getWait10().until(ExpectedConditions.visibilityOfElementLocated(
                 By.xpath("//button[@data-id='ok']"))).click();
 
-        Assert.assertTrue(getDriver()
-                .findElements(By.xpath(String.format(ITEM_NAME_LOCATOR, PROJECT_NAME))).isEmpty());
+        Assert.assertTrue(getDriver().findElements(By.xpath(String.format(ITEM_NAME_LOCATOR, PROJECT_NAME))).isEmpty());
     }
 
 }
