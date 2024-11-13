@@ -65,9 +65,10 @@ public class SearchNewTest extends BaseTest {
         Wait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(2));
 
         final WebElement buttonAdmin = getDriver().findElement(By.cssSelector("li:nth-child(3) a:nth-child(1)"));
-        final WebElement chevron = getDriver().findElement(By.cssSelector(".jenkins-menu-dropdown-chevron[data-href='http://localhost:8080/user/admin/']"));
 
         actions.moveToElement(buttonAdmin).perform();
+
+        final WebElement chevron = getDriver().findElement(By.xpath("(//button[@class='jenkins-menu-dropdown-chevron'])[3]"));
 
         wait.until(d -> chevron.isDisplayed());
 
