@@ -32,7 +32,18 @@ public class PipelineRenameTest extends BaseTest {
         WebElement pipelineProject = getWait5().until(ExpectedConditions.elementToBeClickable(By.xpath("//a[@href='job/%s/']".formatted(NAME_OF_PROJECT))));
 
         new Actions(getDriver()).moveToElement(pipelineProject)
-                .pause(1000)
+                .pause(500)
+                .moveToElement(chevronButton)
+                .perform();
+
+        ((JavascriptExecutor) getDriver()).executeScript(
+                "arguments[0].dispatchEvent(new MouseEvent('click', {bubbles: true, cancelable: true, view: window}));",
+                chevronButton);
+
+        new Actions(getDriver()).moveByOffset(0, -10).click().perform();
+
+        new Actions(getDriver()).moveToElement(pipelineProject)
+                .pause(500)
                 .moveToElement(chevronButton)
                 .perform();
 
@@ -42,7 +53,7 @@ public class PipelineRenameTest extends BaseTest {
 
         getWait5().until(ExpectedConditions.attributeToBe(chevronButton, "aria-expanded", "true"));
 
-        getWait5().until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//a[@href='/job/%s/confirm-rename']".formatted(NAME_OF_PROJECT)))).click();
+        getWait10().until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//a[@href='/job/%s/confirm-rename']".formatted(NAME_OF_PROJECT)))).click();
 
         WebElement renameField = getDriver().findElement(By.xpath("//input[@checkdependson='newName']"));
         renameField.clear();
