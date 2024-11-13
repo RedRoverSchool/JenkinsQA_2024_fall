@@ -141,20 +141,19 @@ public class FreestyleProject1Test extends BaseTest {
 
         Actions actions = new Actions(getDriver());
         WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(10));
+        JavascriptExecutor js = (JavascriptExecutor) getDriver();
 
-        //hover over project title to activate menu dropdown
         WebElement projectName = getDriver().findElement(By
                 .xpath("//span[contains(text(),'" + NEW_FREESTYLE_PROJECT_NAME + "')]"));
-        actions.moveToElement(projectName).perform();
-        // Wait for the chevron button to be clickable and move to it
-        WebElement chevron = wait.until(ExpectedConditions.elementToBeClickable(By
-                .xpath("//*[@id='job_" + NEW_FREESTYLE_PROJECT_NAME + "']/td[3]/a/button")));
         actions
-                .moveToElement(chevron)
-                .pause(500)
-                .moveToElement(chevron)
-                .click()
+                .moveToElement(projectName)
                 .perform();
+
+        WebElement chevron = getDriver().findElement(By
+                .xpath("//*[@id='job_" + NEW_FREESTYLE_PROJECT_NAME + "']/td[3]/a/button"));
+
+        js.executeScript("arguments[0].dispatchEvent(new Event('mouseenter'));", chevron);
+        js.executeScript("arguments[0].click();", chevron);
 
         wait.until(ExpectedConditions.attributeToBe(chevron, "aria-expanded", "true"));
 
