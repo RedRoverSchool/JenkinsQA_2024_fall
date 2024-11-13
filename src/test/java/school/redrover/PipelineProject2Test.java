@@ -10,6 +10,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import school.redrover.runner.BaseTest;
+import school.redrover.runner.TestUtils;
 
 import java.time.Duration;
 
@@ -166,31 +167,31 @@ public class PipelineProject2Test extends BaseTest {
 
     @Test
     public void testDeletePipelineProjectViaChevron() {
-        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(20));
 
         createItem(PROJECT_NAME, "//span[text()='Pipeline']");
         goToMainPage();
 
-        WebElement projectItem = wait.until(ExpectedConditions.presenceOfElementLocated(
-                By.xpath(String.format(
-                        "//a[contains(@href, 'job/%s') and contains(@class, 'model-link')]",
-                        PROJECT_NAME))));
+        WebElement projectItem = getWait10().until(ExpectedConditions.presenceOfElementLocated(
+                By.xpath(String.format("//a[contains(@href, 'job/%s') and contains(@class, 'model-link')]", PROJECT_NAME))));
 
-        Actions actions = new Actions(getDriver());
-        actions.moveToElement(projectItem).perform();
+        new Actions(getDriver()).moveToElement(projectItem).perform();
 
-        WebElement chevronButton = wait.until(ExpectedConditions.visibilityOfElementLocated(
+//        WebElement chevronButton = getWait10().until(ExpectedConditions.visibilityOfElementLocated(
+//                By.xpath(String.format("//span[text()='%s']/following-sibling::button", PROJECT_NAME))));
+
+        WebElement chevronButton = getWait10().until(TestUtils.ExpectedConditions.elementIsNotMoving(
                 By.xpath(String.format("//span[text()='%s']/following-sibling::button", PROJECT_NAME))));
+        chevronButton.click();
 
-        ((JavascriptExecutor) getDriver()).executeScript(
-                "arguments[0].dispatchEvent(new Event('mouseenter'));", chevronButton);
-        ((JavascriptExecutor) getDriver()).executeScript(
-                "arguments[0].dispatchEvent(new Event('click'));", chevronButton);
+//        ((JavascriptExecutor) getDriver()).executeScript(
+//                "arguments[0].dispatchEvent(new Event('mouseenter'));", chevronButton);
+//        ((JavascriptExecutor) getDriver()).executeScript(
+//                "arguments[0].dispatchEvent(new Event('click'));", chevronButton);
 
-        wait.until(ExpectedConditions.visibilityOfElementLocated(
+        getWait10().until(ExpectedConditions.visibilityOfElementLocated(
                 By.xpath("//button[contains(@href, 'doDelete')]"))).click();
 
-        wait.until(ExpectedConditions.visibilityOfElementLocated(
+        getWait10().until(ExpectedConditions.visibilityOfElementLocated(
                 By.xpath("//button[@data-id='ok']"))).click();
 
         boolean isElementPresent = getDriver()
