@@ -50,7 +50,7 @@ public class CredentialsMenuTest extends BaseTest {
     }
 
     @Test
-    public void testisDisplayedDomainElementDropdown() {
+    public void testisDisplayedDomainElementDropdown() throws Exception {
 
         getCredentialsPage();
 
@@ -73,29 +73,22 @@ public class CredentialsMenuTest extends BaseTest {
             WebDriverWait shortWait = new WebDriverWait(getDriver(), Duration.ofMillis(500));
             shortWait.until(ExpectedConditions.visibilityOf(element));
 
-            try {
-                // Переходим к нужным координатам и кликаем
-                new Actions(getDriver())
-                        .moveToElement(element, xOffset, yOffset)
-                        .pause(Duration.ofMillis(200)) // Короткая пауза перед кликом
-                        .click()
-                        .perform();
+            // Переходим к нужным координатам и кликаем
+            new Actions(getDriver())
+                    .moveToElement(element, xOffset, yOffset)
+                    .pause(Duration.ofMillis(200)) // Короткая пауза перед кликом
+                    .click()
+                    .perform();
 
-                arrowClicked = true;
+            arrowClicked = true;
 
-            } catch (Exception e) {
-                // Если не удалось кликнуть, увеличиваем количество попыток
-                attempts++;
-            }
         }
 
-
-        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(5));
+        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(15));
         WebElement addDomainElement = wait.until(ExpectedConditions.visibilityOfElementLocated(By.className("jenkins-dropdown")));
 
         assertTrue(addDomainElement.isDisplayed());
     }
-
 
 }
 
