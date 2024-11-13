@@ -70,5 +70,6 @@ public class CredentialsMenuTest extends BaseTest {
 
         assertTrue(addDomainElement.isDisplayed());
 
+
     }
 }
