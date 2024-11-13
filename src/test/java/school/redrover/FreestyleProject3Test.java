@@ -19,12 +19,12 @@ public class FreestyleProject3Test extends BaseTest {
 
     private void createProjectViaSidebarMenu(String projectName) {
         getDriver().findElement(By.xpath("//a[@href='/view/all/newJob']")).click();
+
         getDriver().findElement(By.id("name")).sendKeys(projectName);
         getDriver().findElement(By.xpath("//li[contains(@class, 'FreeStyleProject')]")).click();
         getDriver().findElement(By.id("ok-button")).click();
 
-        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(5));
-        wait.until(ExpectedConditions.visibilityOfElementLocated(
+        getWait5().until(ExpectedConditions.visibilityOfElementLocated(
                 By.xpath("//button[@name='Submit']"))).click();
     }
 
