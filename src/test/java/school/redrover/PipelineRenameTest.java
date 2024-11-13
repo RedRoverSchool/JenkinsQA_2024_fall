@@ -30,23 +30,21 @@ public class PipelineRenameTest extends BaseTest {
     public void testRenamePipelineViaChevron() {
         createPipelineProject(NAME_OF_PROJECT);
 
-        WebElement chevronButton = getDriver().findElement(By.xpath("//td//button[@aria-expanded='false']"));
-        WebElement pipelineProject = getWait5().until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//a[@href='job/" + NAME_OF_PROJECT + "/']")));
+        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(10));
+
+        WebElement chevronButton = getDriver().findElement(By.xpath("//table[@id='projectstatus']//button"));
+        WebElement pipelineProject = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//a[@href='job/" + NAME_OF_PROJECT + "/']")));
 
         new Actions(getDriver()).moveToElement(pipelineProject)
                 .pause(2000)
+                .moveToElement(chevronButton)
+                .moveToElement(chevronButton)
+                .click()
                 .perform();
 
-        new Actions(getDriver()).moveToElement(chevronButton)
-                        .pause(1000)
-                        .moveToElement(chevronButton)
-                        .pause(1000)
-                        .click()
-                        .perform();
+        wait.until(ExpectedConditions.attributeToBe(chevronButton, "aria-expanded", "true"));
 
-        getWait5().until(ExpectedConditions.attributeToBe(chevronButton, "aria-expanded", "true"));
-
-        getWait5().until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[@id=\"tippy-6\"]/div/div/div/a[4]"))).click();
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[@id=\"tippy-6\"]/div/div/div/a[4]"))).click();
 
         WebElement renameField = getDriver().findElement(By.xpath("//input[@checkdependson='newName']"));
         renameField.clear();
