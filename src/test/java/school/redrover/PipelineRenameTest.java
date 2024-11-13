@@ -36,20 +36,8 @@ public class PipelineRenameTest extends BaseTest {
                 .moveToElement(chevronButton)
                 .perform();
 
-        ((JavascriptExecutor) getDriver()).executeScript(
-                "arguments[0].dispatchEvent(new MouseEvent('click', {bubbles: true, cancelable: true, view: window}));",
-                chevronButton);
-
-        new Actions(getDriver()).moveByOffset(0, -10).click().perform();
-
-        new Actions(getDriver()).moveToElement(pipelineProject)
-                .pause(500)
-                .moveToElement(chevronButton)
-                .perform();
-
-        ((JavascriptExecutor) getDriver()).executeScript(
-                "arguments[0].dispatchEvent(new MouseEvent('click', {bubbles: true, cancelable: true, view: window}));",
-                chevronButton);
+        ((JavascriptExecutor) getDriver()).executeScript("arguments[0].dispatchEvent(new Event('mouseenter'));", chevronButton);
+        ((JavascriptExecutor) getDriver()).executeScript("arguments[0].click();", chevronButton);
 
         getWait5().until(ExpectedConditions.attributeToBe(chevronButton, "aria-expanded", "true"));
 
