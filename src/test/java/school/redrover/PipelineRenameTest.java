@@ -36,9 +36,9 @@ public class PipelineRenameTest extends BaseTest {
         WebElement pipelineProject = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//a[@href='job/" + NAME_OF_PROJECT + "/']")));
 
         new Actions(getDriver()).moveToElement(pipelineProject)
-                .pause(2000)
+                .pause(4000)
                 .moveToElement(chevronButton)
-                .moveToElement(chevronButton)
+                .pause(3000)
                 .click()
                 .perform();
 
