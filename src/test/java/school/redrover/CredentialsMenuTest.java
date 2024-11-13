@@ -63,6 +63,7 @@ public class CredentialsMenuTest extends BaseTest {
         int xOffset = elementWidth - 9;
         int yOffset = elementHeight / 2;
 
+        new Actions(getDriver()).moveToElement(element, xOffset, yOffset).perform();
         new Actions(getDriver()).moveToElement(element, xOffset, yOffset).click().perform();
 
         WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(5));
