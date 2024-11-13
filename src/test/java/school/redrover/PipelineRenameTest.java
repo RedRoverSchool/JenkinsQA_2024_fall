@@ -26,6 +26,7 @@ public class PipelineRenameTest extends BaseTest {
 
     @Test
     public void testRenamePipelineViaChevron() {
+
         createPipelineProject(NAME_OF_PROJECT);
 
         WebElement chevronButton = getDriver().findElement(By.xpath("//td//button[@aria-expanded='false']"));
@@ -41,7 +42,7 @@ public class PipelineRenameTest extends BaseTest {
 
         getWait5().until(ExpectedConditions.attributeToBe(chevronButton, "aria-expanded", "true"));
 
-        getWait10().until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//a[@href='/job/%s/confirm-rename']".formatted(NAME_OF_PROJECT)))).click();
+        getWait5().until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//a[@href='/job/%s/confirm-rename']".formatted(NAME_OF_PROJECT)))).click();
 
         WebElement renameField = getDriver().findElement(By.xpath("//input[@checkdependson='newName']"));
         renameField.clear();
@@ -54,5 +55,4 @@ public class PipelineRenameTest extends BaseTest {
 
         Assert.assertEquals(actualPipeLineName, NEW_NAME_OF_PROJECT);
     }
-
 }
