@@ -4,10 +4,14 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
+import org.testng.ITestResult;
 import org.testng.annotations.Test;
 import school.redrover.runner.BaseTest;
 
+import java.lang.reflect.Method;
 import java.time.Duration;
+import java.util.ArrayList;
+import java.util.List;
 
 public class AnExistingFolderChangeTest extends BaseTest {
 
@@ -52,4 +56,20 @@ public class AnExistingFolderChangeTest extends BaseTest {
 
         Assert.assertEquals(getDriver().findElement(By.xpath("//*[@id='main-panel']/h1")).getText(), "TestFolder2");
     }
+
+    @Test
+    public void testNotAllowedSymbols () {
+        createNewFolder();
+        //List<String> setOfSymbols = new ArrayList<>(List.of("$", "%", "#", "&", "[", "]", "@", "!", "~", "^", ",", "/", ":", "*", "?", "<", ">", "|"));
+
+        getDriver().findElement(By.name("newName")).sendKeys("$");
+        getDriver().findElement(By.name("Submit")).click();
+
+        WebDriverWait webDriverWait = new WebDriverWait(getDriver(), Duration.ofSeconds(3));
+        webDriverWait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("#main-panel > p")));
+
+        Assert.assertEquals(getDriver().findElement(By.xpath("//*[@id='main-panel']/p")).getText(),
+                "‘$’ is an unsafe character");
+    }
+
 }
