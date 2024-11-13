@@ -63,14 +63,39 @@ public class CredentialsMenuTest extends BaseTest {
         int xOffset = elementWidth - 9;
         int yOffset = elementHeight / 2;
 
-        new Actions(getDriver()).moveToElement(element, xOffset, yOffset).perform();
-        new Actions(getDriver()).moveToElement(element, xOffset, yOffset).click().perform();
+        int attempts = 0;
+        boolean arrowClicked = false;
+
+        while (!arrowClicked && attempts < 3) {
+
+            new Actions(getDriver()).moveToElement(element).perform();
+
+            WebDriverWait shortWait = new WebDriverWait(getDriver(), Duration.ofMillis(500));
+            shortWait.until(ExpectedConditions.visibilityOf(element));
+
+            try {
+                // Переходим к нужным координатам и кликаем
+                new Actions(getDriver())
+                        .moveToElement(element, xOffset, yOffset)
+                        .pause(Duration.ofMillis(200)) // Короткая пауза перед кликом
+                        .click()
+                        .perform();
+
+                arrowClicked = true;
+
+            } catch (Exception e) {
+                // Если не удалось кликнуть, увеличиваем количество попыток
+                attempts++;
+            }
+        }
+
 
         WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(5));
         WebElement addDomainElement = wait.until(ExpectedConditions.visibilityOfElementLocated(By.className("jenkins-dropdown")));
 
         assertTrue(addDomainElement.isDisplayed());
-
-
     }
+
+
 }
+
