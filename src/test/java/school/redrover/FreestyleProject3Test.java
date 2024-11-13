@@ -39,8 +39,9 @@ public class FreestyleProject3Test extends BaseTest {
         getWait5().until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//h2[text()='Permalinks']")));
     }
 
-    public void scrollToBottom() {
-        ((JavascriptExecutor) getDriver()).executeScript("window.scrollTo(0, document.body.scrollHeight);");
+    private void clickConfigureInSidebarMenu() {
+        getWait2().until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//a[contains(@href, 'configure')]"))).click();
     }
 
     @Test
@@ -171,16 +172,13 @@ public class FreestyleProject3Test extends BaseTest {
 
         createProjectViaSidebarMenu(PROJECT_NAME);
 
-        WebElement configureSidebarMenu = getWait2().until(ExpectedConditions.visibilityOfElementLocated(
-                By.xpath("//a[contains(@href, 'configure')]")));
-        configureSidebarMenu.click();
+        clickConfigureInSidebarMenu();
 
-        scrollToBottom();
+        TestUtils.scrollToBottom(getDriver());
 
         getWait10().until(ExpectedConditions.elementToBeClickable(
                 By.xpath("//button[contains(text(), 'Add build step')]"))).click();
 
-        getWait10().until(ExpectedConditions.visibilityOfElementLocated(By.id("tippy-5")));
         getWait2().until(ExpectedConditions.elementToBeClickable(
                 By.xpath("//button[contains(text(), 'Execute shell')]"))).click();
 
@@ -194,14 +192,12 @@ public class FreestyleProject3Test extends BaseTest {
         }
         actions.build().perform();
 
-        scrollToBottom();
-
+        TestUtils.scrollToBottom(getDriver());
         getWait2().until(ExpectedConditions.elementToBeClickable(By.name("Submit"))).click();
 
-        getWait2().until(ExpectedConditions.visibilityOfElementLocated(
-                By.xpath("//a[contains(@href, 'configure')]"))).click();
+        clickConfigureInSidebarMenu();
 
-        scrollToBottom();
+        TestUtils.scrollToBottom(getDriver());
 
         String extractedText = (String) js.executeScript(
                 "return arguments[0].CodeMirror.getValue();", getDriver().findElement(CODE_MIRROR_EDITOR));
