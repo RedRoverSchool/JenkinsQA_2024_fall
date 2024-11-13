@@ -29,11 +29,11 @@ public class CredentialsMenuTest extends BaseTest {
 
         getCredentialsPage();
 
-        Assert.assertEquals(getDriver().findElement(By.tagName("h1")).getText(),"Credentials");
+        Assert.assertEquals(getDriver().findElement(By.tagName("h1")).getText(), "Credentials");
     }
 
     @Test
-    public  void  testAddDomainArrow() {
+    public void testAddDomainArrow() {
 
         getCredentialsPage();
 
@@ -49,5 +49,26 @@ public class CredentialsMenuTest extends BaseTest {
         assertTrue(!arrowContent.equals("none") && !arrowContent.isEmpty());
     }
 
+    @Test
+    public void testisDisplayedDomainElementDropdown() {
 
+        getCredentialsPage();
+
+        WebElement element = getDriver().findElement(By.cssSelector(".model-link.inside.jenkins-table__link"));
+        new Actions(getDriver()).moveToElement(element).perform();
+
+        int elementWidth = element.getSize().getWidth();
+        int elementHeight = element.getSize().getHeight();
+
+        int xOffset = elementWidth - 9;
+        int yOffset = elementHeight / 2;
+
+        new Actions(getDriver()).moveToElement(element, xOffset, yOffset).click().perform();
+
+        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(5));
+        WebElement addDomainElement = wait.until(ExpectedConditions.visibilityOfElementLocated(By.className("jenkins-dropdown")));
+
+        assertTrue(addDomainElement.isDisplayed());
+
+    }
 }
