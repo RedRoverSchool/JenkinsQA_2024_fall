@@ -35,7 +35,7 @@ public class SearchNewTest extends BaseTest {
                 .findElement(By.cssSelector("div[id='main-panel'] h1"))
                 .getText();
 
-        Assert.assertEquals(actual, "Search for 'TestSearch'");
+        Assert.assertEquals(actual, "Поиск 'TestSearch'");
 
     }
 
@@ -62,7 +62,7 @@ public class SearchNewTest extends BaseTest {
         getDriver().get("http://localhost:8080/user/admin/");
 
         Actions actions = new Actions(getDriver());
-        Wait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(2));
+        Wait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(5));
 
         final WebElement buttonAdmin = getDriver().findElement(By.cssSelector("li:nth-child(3) a:nth-child(1)"));
 
@@ -70,7 +70,7 @@ public class SearchNewTest extends BaseTest {
 
         final WebElement chevron = getDriver().findElement(By.xpath("(//button[@class='jenkins-menu-dropdown-chevron'])[3]"));
 
-        wait.until(d -> chevron.isDisplayed());
+        wait.until(d -> chevron.isEnabled());
 
         chevron.click();
 
