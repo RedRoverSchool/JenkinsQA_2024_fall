@@ -35,7 +35,7 @@ public class SearchNewTest extends BaseTest {
                 .findElement(By.cssSelector("div[id='main-panel'] h1"))
                 .getText();
 
-        Assert.assertEquals(actual, "Поиск 'TestSearch'");
+        Assert.assertEquals(actual, "Search for 'TestSearch'");
 
     }
 
