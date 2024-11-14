@@ -18,6 +18,11 @@ import java.util.List;
 
 public class ManageJenkinsTest extends BaseTest {
 
+    private void openManageJenkinsPage() {
+
+        getDriver().findElement(By.xpath("//a[@href='/manage']")).click();
+    }
+
     @Ignore
     @Test
     public void testManageJenkinsTab() {
@@ -65,7 +70,7 @@ public class ManageJenkinsTest extends BaseTest {
         final List<String> expectedSectionsTitles = List.of("System Configuration", "Security", "Status Information",
             "Troubleshooting", "Tools and Actions");
 
-        getDriver().findElement(By.xpath("//a[@href='/manage']")).click();
+        openManageJenkinsPage();
 
         List<WebElement> sections = getDriver().findElements(By.xpath("//h2[@class='jenkins-section__title']"));
         List<String> actualSectionsTitles = sections.stream().map(WebElement::getText).toList();
@@ -78,7 +83,7 @@ public class ManageJenkinsTest extends BaseTest {
         final List<String> expectedItemsNames = List.of("System", "Tools", "Plugins",
             "Nodes", "Clouds", "Appearance");
 
-        getDriver().findElement(By.xpath("//a[@href='/manage']")).click();
+        openManageJenkinsPage();
 
         List<WebElement> systemConfigItems = getDriver()
                                                  .findElements(By.xpath("(//div[@class='jenkins-section__items'])[1]//dt"));
@@ -91,7 +96,7 @@ public class ManageJenkinsTest extends BaseTest {
     public void testManageJenkinsSystemConfigureBreadcrumbs() {
         final String expectedBreadCrumbs = "Dashboard\nManage Jenkins\nSystem";
 
-        getDriver().findElement(By.xpath("//a[@href='/manage']")).click();
+        openManageJenkinsPage();
 
         getDriver().findElement(By.cssSelector("a[href='configure']")).click();
 
@@ -142,13 +147,12 @@ public class ManageJenkinsTest extends BaseTest {
 
     @Test
     public void testSearchSettingsWithNoResult() {
-        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(5));
 
-        getDriver().findElement(By.xpath("//a[@href='/manage']")).click();
+        openManageJenkinsPage();
 
         getDriver().findElement(By.cssSelector("input[id=settings-search-bar]")).sendKeys("1333");
 
-        WebElement noResultLabel = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("[class$='no-results-label']")));
+        WebElement noResultLabel = getWait5().until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("[class$='no-results-label']")));
 
         String actualNoResultText = noResultLabel.getText();
 
@@ -158,15 +162,13 @@ public class ManageJenkinsTest extends BaseTest {
     @Test
     public void testRedirectToFirstItemAfterPressEnter() {
 
-        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(5));
-
-        getDriver().findElement(By.xpath("//a[@href='/manage']")).click();
+        openManageJenkinsPage();
 
         WebElement searchSettingInput = getDriver().findElement(By.cssSelector("input[id=settings-search-bar]"));
 
         searchSettingInput.sendKeys("c");
 
-        wait.until(ExpectedConditions.visibilityOfElementLocated(By.className("jenkins-search__results-item--selected")));
+        getWait5().until(ExpectedConditions.visibilityOfElementLocated(By.className("jenkins-search__results-item--selected")));
 
         searchSettingInput.sendKeys(Keys.ENTER);
 
@@ -178,16 +180,14 @@ public class ManageJenkinsTest extends BaseTest {
     @Test
     public void testSearchSettingTooltip() {
 
-        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(5));
-
-        getDriver().findElement(By.xpath("//a[@href='/manage']")).click();
+        openManageJenkinsPage();
 
         WebElement tooltip = getDriver().findElement(By.cssSelector("[class='jenkins-search__shortcut']"));
 
         Actions actions = new Actions(getDriver());
         actions.moveToElement(tooltip).perform();
 
-        WebElement tooltipHiddenAttribute = wait.until(ExpectedConditions
+        WebElement tooltipHiddenAttribute = getWait5().until(ExpectedConditions
                                                            .visibilityOfElementLocated(By.xpath("//div[@aria-describedby='tippy-6']")));
 
         Assert.assertTrue(tooltipHiddenAttribute.isDisplayed());
@@ -197,13 +197,54 @@ public class ManageJenkinsTest extends BaseTest {
     public void testShortcutMovesFocusToSearchSettingsField() {
         final String expectedTextInSearchSettingsField = "123456";
 
-        getDriver().findElement(By.xpath("//a[@href='/manage']")).click();
+        openManageJenkinsPage();
 
         Actions actions = new Actions(getDriver());
         actions.sendKeys(Keys.chord("/", expectedTextInSearchSettingsField)).perform();
 
-        String actualTextInSearchSettingsField = getDriver().findElement(By.cssSelector("input[id = 'settings-search-bar']")).getAttribute("value");
+        String actualTextInSearchSettingsField = getDriver()
+                                                     .findElement(By.cssSelector("input[id='settings-search-bar']"))
+                                                     .getAttribute("value");
 
         Assert.assertEquals(actualTextInSearchSettingsField, expectedTextInSearchSettingsField);
+    }
+
+    @Test
+    public void testSearchSettingsFieldIsDisplayed() {
+
+        openManageJenkinsPage();
+
+        Assert.assertTrue(getDriver().findElement(By.cssSelector("input[id='settings-search-bar']")).isDisplayed());
+    }
+
+    @Test
+    public void testSearchResultsList() {
+        final List<String> expectedSearchResults = List.of("System", "System Information", "System Log");
+
+        openManageJenkinsPage();
+
+        getDriver().findElement(By.cssSelector("input[id='settings-search-bar']")).sendKeys("sy");
+
+        List<WebElement> searchResultElements = getWait5()
+                                                    .until(ExpectedConditions.visibilityOfAllElementsLocatedBy(
+                                                        By.xpath("//div[@class='jenkins-search__results']//a")));
+
+        List<String> actualSearchResults = searchResultElements.stream().map(WebElement::getText).toList();
+
+        Assert.assertEquals(actualSearchResults, expectedSearchResults);
+    }
+
+    @Test
+    public void testRedirectToSelectedItemFromResultList() {
+
+        openManageJenkinsPage();
+
+        getDriver().findElement(By.cssSelector("input[id='settings-search-bar']")).sendKeys("cr");
+
+        WebElement configureCredentialsItem = getWait5().until(ExpectedConditions
+                             .visibilityOfElementLocated(By.cssSelector("a[href$='configureCredentials']")));
+        configureCredentialsItem.click();
+
+        Assert.assertTrue(getDriver().getCurrentUrl().endsWith("/manage/configureCredentials/"));
     }
 }
