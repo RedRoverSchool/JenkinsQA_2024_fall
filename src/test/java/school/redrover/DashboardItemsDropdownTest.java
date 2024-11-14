@@ -29,7 +29,6 @@ public class DashboardItemsDropdownTest extends BaseTest {
                 By.cssSelector("#breadcrumbs > li.jenkins-breadcrumbs__list-item > a > button")));
         actions.moveToElement(buttonDropdown).click().perform();
 
-
-
+        wait.until(ExpectedConditions.attributeToBe(buttonDropdown, "aria-expanded", "true"));
    }
 }
