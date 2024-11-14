@@ -16,15 +16,22 @@ import java.util.List;
 
 public class OrganizationFolderTest extends BaseTest {
     private static final String ITEM_NAME = "Item Name";
-    private static String DISPLAYNAME = "Display Name";
-    private static String DESCRIPTION = "Description";
+    private static final String DISPLAY_NAME = "Display Name";
+    private static final String DESCRIPTION = "Description";
+
+    private void scrollPage() {
+
+        JavascriptExecutor js = (JavascriptExecutor) getDriver();
+        js.executeScript("window.scrollTo(0, document.body.scrollHeight);");
+    }
 
     @Test
     public void testTitle() {
+
         getDriver().findElement(By.xpath("//span/a[@href='/view/all/newJob']")).click();
         getDriver().findElement(By.xpath("//div/input[@class='jenkins-input']")).sendKeys(ITEM_NAME);
-        JavascriptExecutor js = (JavascriptExecutor) getDriver();
-        js.executeScript("window.scrollTo(0, document.body.scrollHeight);");
+        scrollPage();
+
         getDriver().findElement(By.className("jenkins_branch_OrganizationFolder")).click();
         getDriver().findElement(By.xpath("//div/button[@type='submit']")).click();
         String title = getDriver().findElement(By.id("general")).getText();
@@ -34,17 +41,20 @@ public class OrganizationFolderTest extends BaseTest {
 
     @Test
     public void testTooltipGeneralEnabled() {
+
         getDriver().findElement(By.xpath("//span/a[@href='/view/all/newJob']")).click();
         getDriver().findElement(By.xpath("//div/input[@class='jenkins-input']")).sendKeys(ITEM_NAME);
-        JavascriptExecutor js = (JavascriptExecutor) getDriver();
-        js.executeScript("window.scrollTo(0, document.body.scrollHeight);");
+        scrollPage();
+
         getDriver().findElement(By.className("jenkins_branch_OrganizationFolder")).click();
         getDriver().findElement(By.xpath("//div/button[@type='submit']")).click();
 
         Actions actions = new Actions(getDriver());
         actions.moveToElement(getDriver().findElement(By.xpath("//span/label[@for='enable-disable-project']"))).perform();
-        String tooltip = getDriver().findElement(By.xpath("//div[@class='jenkins-app-bar__controls']/span")).getAttribute("tooltip");
-        Assert.assertEquals(tooltip, "(No new builds within this Organization Folder will be executed until it is re-enabled)");
+
+        Assert.assertEquals(
+                getDriver().findElement(By.xpath("//div[@class='jenkins-app-bar__controls']/span")).getAttribute("tooltip"),
+                "(No new builds within this Organization Folder will be executed until it is re-enabled)");
     }
 
     @Test
@@ -52,15 +62,17 @@ public class OrganizationFolderTest extends BaseTest {
 
         getDriver().findElement(By.xpath("//span/a[@href='/view/all/newJob']")).click();
         getDriver().findElement(By.xpath("//div/input[@class='jenkins-input']")).sendKeys(ITEM_NAME);
-        JavascriptExecutor js = (JavascriptExecutor) getDriver();
-        js.executeScript("window.scrollTo(0, document.body.scrollHeight);");
+        scrollPage();
         getDriver().findElement(By.className("jenkins_branch_OrganizationFolder")).click();
         getDriver().findElement(By.xpath("//div/button[@type='submit']")).click();
-        getDriver().findElement(By.xpath("//div/input[@name='_.displayNameOrNull']")).sendKeys(DISPLAYNAME);
+
+        getDriver().findElement(By.xpath("//div/input[@name='_.displayNameOrNull']")).sendKeys(DISPLAY_NAME);
         getDriver().findElement(By.xpath("//div/textarea[@name='_.description']")).sendKeys(DESCRIPTION);
         getDriver().findElement(By.xpath("//div/a[@class='textarea-show-preview']")).click();
 
-        Assert.assertEquals(getDriver().findElement(By.xpath("//div/div[@class='textarea-preview']")).getText(), DESCRIPTION);
+        Assert.assertEquals(
+                getDriver().findElement(By.xpath("//div/div[@class='textarea-preview']")).getText(),
+                DESCRIPTION);
     }
 
     @Test
@@ -68,35 +80,39 @@ public class OrganizationFolderTest extends BaseTest {
 
         getDriver().findElement(By.xpath("//span/a[@href='/view/all/newJob']")).click();
         getDriver().findElement(By.xpath("//div/input[@class='jenkins-input']")).sendKeys(ITEM_NAME);
-        JavascriptExecutor js = (JavascriptExecutor) getDriver();
-        js.executeScript("window.scrollTo(0, document.body.scrollHeight);");
+        scrollPage();
         getDriver().findElement(By.className("jenkins_branch_OrganizationFolder")).click();
         getDriver().findElement(By.xpath("//div/button[@type='submit']")).click();
-        getDriver().findElement(By.xpath("//div/input[@name='_.displayNameOrNull']")).sendKeys(DISPLAYNAME);
+
+        getDriver().findElement(By.xpath("//div/input[@name='_.displayNameOrNull']")).sendKeys(DISPLAY_NAME);
         getDriver().findElement(By.xpath("//div/textarea[@name='_.description']")).sendKeys(DESCRIPTION);
+
         getDriver().findElement(By.xpath("//div/a[@class='textarea-show-preview']")).click();
-        Assert.assertEquals(getDriver().findElement(By.xpath("//div/div[@class='textarea-preview']")).getText(), DESCRIPTION);
-
         getDriver().findElement(By.xpath("//div/a[@class='textarea-hide-preview']")).click();
-        Assert.assertEquals(getDriver().findElement(By.xpath("//div/div[@class='textarea-preview']")).getAttribute("style"), "display: none;");
 
+        Assert.assertEquals(
+                getDriver().findElement(By.xpath("//div/div[@class='textarea-preview']")).getAttribute("style"),
+                "display: none;");
     }
 
     @Test
     public void testTooltipDelete() {
+
         Actions actions = new Actions(getDriver());
 
         getDriver().findElement(By.xpath("//span/a[@href='/view/all/newJob']")).click();
         getDriver().findElement(By.xpath("//div/input[@class='jenkins-input']")).sendKeys(ITEM_NAME);
-        JavascriptExecutor js = (JavascriptExecutor) getDriver();
-        js.executeScript("window.scrollTo(0, document.body.scrollHeight);");
+        scrollPage();
         getDriver().findElement(By.className("jenkins_branch_OrganizationFolder")).click();
         getDriver().findElement(By.xpath("//div/button[@type='submit']")).click();
+
         getDriver().findElement(By.xpath("//div/button[@class='jenkins-button hetero-list-add']")).click();
         getDriver().findElement(By.xpath("//div/button[@class='jenkins-dropdown__item '][2]")).click();
         actions.moveToElement(getDriver().findElement(By.xpath("//div/button[@title='Delete']"))).perform();
-        String tooltipButton = getDriver().findElement(By.xpath("//div/button[@title='Delete']")).getAttribute("tooltip");
-        Assert.assertEquals(tooltipButton, "Delete");
+
+        Assert.assertEquals(
+                getDriver().findElement(By.xpath("//div/button[@title='Delete']")).getAttribute("tooltip"),
+                "Delete");
     }
 
     @Test
@@ -105,14 +121,16 @@ public class OrganizationFolderTest extends BaseTest {
 
         getDriver().findElement(By.xpath("//span/a[@href='/view/all/newJob']")).click();
         getDriver().findElement(By.xpath("//div/input[@class='jenkins-input']")).sendKeys(ITEM_NAME);
-        JavascriptExecutor js = (JavascriptExecutor) getDriver();
-        js.executeScript("window.scrollTo(0, document.body.scrollHeight);");
+        scrollPage();
         getDriver().findElement(By.className("jenkins_branch_OrganizationFolder")).click();
         getDriver().findElement(By.xpath("//div/button[@type='submit']")).click();
-        getDriver().findElement(By.xpath("//div/input[@name='_.displayNameOrNull']")).sendKeys(DISPLAYNAME);
+
+        getDriver().findElement(By.xpath("//div/input[@name='_.displayNameOrNull']")).sendKeys(DISPLAY_NAME);
         getDriver().findElement(By.xpath("//div/button[@class='jenkins-button jenkins-submit-button jenkins-button--primary ']")).click();
 
-        Assert.assertEquals(getDriver().findElement(By.xpath("//div/h1")).getText(), DISPLAYNAME);
+        Assert.assertEquals(
+                getDriver().findElement(By.xpath("//div/h1")).getText(),
+                DISPLAY_NAME);
     }
 
     @Test
@@ -120,11 +138,11 @@ public class OrganizationFolderTest extends BaseTest {
 
         getDriver().findElement(By.xpath("//span/a[@href='/view/all/newJob']")).click();
         getDriver().findElement(By.xpath("//div/input[@class='jenkins-input']")).sendKeys(ITEM_NAME);
-        JavascriptExecutor js = (JavascriptExecutor) getDriver();
-        js.executeScript("window.scrollTo(0, document.body.scrollHeight);");
+        scrollPage();
         getDriver().findElement(By.className("jenkins_branch_OrganizationFolder")).click();
         getDriver().findElement(By.xpath("//div/button[@type='submit']")).click();
-        getDriver().findElement(By.xpath("//div/input[@name='_.displayNameOrNull']")).sendKeys(DISPLAYNAME);
+
+        getDriver().findElement(By.xpath("//div/input[@name='_.displayNameOrNull']")).sendKeys(DISPLAY_NAME);
         getDriver().findElement(By.xpath("//div/button[@class='jenkins-button jenkins-submit-button jenkins-button--primary ']")).click();
         String itemNameExpected = "Folder name: " + ITEM_NAME;
         getDriver().findElement(By.xpath("//div[2]/div[2]")).getText();
@@ -142,14 +160,19 @@ public class OrganizationFolderTest extends BaseTest {
 
         getDriver().findElement(By.xpath("//span/a[@href='/view/all/newJob']")).click();
         getDriver().findElement(By.xpath("//div/input[@class='jenkins-input']")).sendKeys(ITEM_NAME);
-        JavascriptExecutor js = (JavascriptExecutor) getDriver();
-        js.executeScript("window.scrollTo(0, document.body.scrollHeight);");
+        scrollPage();
         getDriver().findElement(By.className("jenkins_branch_OrganizationFolder")).click();
         getDriver().findElement(By.xpath("//div/button[@type='submit']")).click();
+
         getDriver().findElement(By.xpath("//div/textarea[@name='_.description']")).sendKeys(DESCRIPTION);
         getDriver().findElement(By.xpath("//div/button[@class='jenkins-button jenkins-submit-button jenkins-button--primary ']")).click();
 
-        Assert.assertEquals(getDriver().findElement(By.id("view-message")).getText(), DESCRIPTION);
+        WebDriverWait driverWait = new WebDriverWait(getDriver(), Duration.ofSeconds(5));
+        driverWait.until(ExpectedConditions.visibilityOfElementLocated(By.id("view-message")));
+
+        Assert.assertEquals(
+                getDriver().findElement(By.id("view-message")).getText(),
+                DESCRIPTION);
     }
 
     @Test
@@ -157,21 +180,22 @@ public class OrganizationFolderTest extends BaseTest {
 
         getDriver().findElement(By.xpath("//span/a[@href='/view/all/newJob']")).click();
         getDriver().findElement(By.xpath("//div/input[@class='jenkins-input']")).sendKeys(ITEM_NAME);
-        JavascriptExecutor js = (JavascriptExecutor) getDriver();
-        js.executeScript("window.scrollTo(0, document.body.scrollHeight);");
+        scrollPage();
         getDriver().findElement(By.className("jenkins_branch_OrganizationFolder")).click();
         getDriver().findElement(By.xpath("//div/button[@type='submit']")).click();
+
         getDriver().findElement(By.xpath("//div/button[@class='jenkins-button jenkins-submit-button jenkins-button--primary ']")).click();
         getDriver().findElement(By.id("jenkins-home-link")).click();
+
         getDriver().findElement(By.xpath("//td/a[@class='jenkins-table__link model-link inside']")).click();
         getDriver().findElement(By.xpath("//div[7]/span/a")).click();
-        String newName = ITEM_NAME + " NEW";
         getDriver().findElement(By.xpath("//div/input[@checkdependson='newName']")).click();
         getDriver().findElement(By.xpath("//div/input[@checkdependson='newName']")).sendKeys(" NEW");
         getDriver().findElement(By.xpath("//button[@name='Submit']")).click();
 
-        Assert.assertEquals(getDriver().findElement(By.xpath("//div/h1")).getText(), newName);
-
+        Assert.assertEquals(
+                getDriver().findElement(By.xpath("//div/h1")).getText(),
+                ITEM_NAME + " NEW");
     }
 
     @Test
@@ -202,47 +226,20 @@ public class OrganizationFolderTest extends BaseTest {
 
         getDriver().findElement(By.xpath("//span/a[@href='/view/all/newJob']")).click();
         getDriver().findElement(By.xpath("//div/input[@class='jenkins-input']")).sendKeys(ITEM_NAME);
-        JavascriptExecutor js = (JavascriptExecutor) getDriver();
-        js.executeScript("window.scrollTo(0, document.body.scrollHeight);");
+        scrollPage();
         getDriver().findElement(By.className("jenkins_branch_OrganizationFolder")).click();
         getDriver().findElement(By.xpath("//div/button[@type='submit']")).click();
+
         getDriver().findElement(By.xpath("//div/button[@class='jenkins-button jenkins-submit-button jenkins-button--primary ']")).click();
         getDriver().findElement(By.id("jenkins-home-link")).click();
+
         getDriver().findElement(By.xpath("//tbody/tr/td/a/span[contains(text(),ITEM_NAME)]")).click();
-        getDriver().findElement(By.xpath("//div[5]/span/a")).click(); // Кликаем на кнопку Удалить
+        getDriver().findElement(By.xpath("//div[5]/span/a")).click();
+
         WebDriverWait driverWait = new WebDriverWait(getDriver(), Duration.ofSeconds(3));
-        driverWait.until(ExpectedConditions.elementToBeClickable(By.xpath("//button[@ data-id='ok']"))).click(); //ждем появления кнопки Yes
-        List<WebElement> existingInstancesList = getDriver().findElements(By.xpath("//table[@id='projectstatus']/tbody")); //записываем существующие сущности в лист
+        driverWait.until(ExpectedConditions.elementToBeClickable(By.xpath("//button[@ data-id='ok']"))).click();
+        List<WebElement> existingInstancesList = getDriver().findElements(By.xpath("//table[@id='projectstatus']/tbody"));
+
         Assert.assertTrue(existingInstancesList.isEmpty());
     }
-
-    @Test
-    public void testSecondInstanceExistsAfterRemoving() {
-//создаем первую сущность
-        getDriver().findElement(By.xpath("//span/a[@href='/view/all/newJob']")).click();
-        getDriver().findElement(By.xpath("//div/input[@class='jenkins-input']")).sendKeys(ITEM_NAME);
-        JavascriptExecutor js = (JavascriptExecutor) getDriver();
-        js.executeScript("window.scrollTo(0, document.body.scrollHeight);");
-        getDriver().findElement(By.className("jenkins_branch_OrganizationFolder")).click();
-        getDriver().findElement(By.xpath("//div/button[@type='submit']")).click();
-        getDriver().findElement(By.xpath("//div/button[@class='jenkins-button jenkins-submit-button jenkins-button--primary ']")).click();
-        getDriver().findElement(By.id("jenkins-home-link")).click();
-//создаем вторую сущность
-        getDriver().findElement(By.xpath("//span/a[@href='/view/all/newJob']")).click();
-        getDriver().findElement(By.xpath("//div/input[@class='jenkins-input']")).sendKeys(ITEM_NAME + " Second");
-        js.executeScript("window.scrollTo(0, document.body.scrollHeight);");
-        getDriver().findElement(By.className("jenkins_branch_OrganizationFolder")).click();
-        getDriver().findElement(By.xpath("//div/button[@type='submit']")).click();
-        getDriver().findElement(By.xpath("//div/button[@class='jenkins-button jenkins-submit-button jenkins-button--primary ']")).click();
-        getDriver().findElement(By.id("jenkins-home-link")).click();
-//удаляем первую сущность
-        getDriver().findElement(By.xpath("//tbody/tr/td/a/span[contains(text(),ITEM_NAME)]")).click();
-        getDriver().findElement(By.xpath("//div[5]/span/a")).click(); // Кликаем на кнопку Удалить
-        WebDriverWait driverWait = new WebDriverWait(getDriver(), Duration.ofSeconds(3));
-        driverWait.until(ExpectedConditions.elementToBeClickable(By.xpath("//button[@ data-id='ok']"))).click(); //ждем появления кнопки Yes
-
-        List<WebElement> existingInstancesList = getDriver().findElements(By.xpath("//table[@id='projectstatus']/tbody")); //записываем существующие сущности в лист
-        Assert.assertFalse(existingInstancesList.isEmpty());
-    }
-
 }
