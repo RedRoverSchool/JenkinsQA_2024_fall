@@ -2,6 +2,7 @@ package school.redrover;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -13,6 +14,7 @@ import school.redrover.runner.BaseTest;
 import java.time.Duration;
 
 import static org.testng.Assert.assertTrue;
+import static org.testng.AssertJUnit.assertNotNull;
 
 public class CredentialsMenuTest extends BaseTest {
 
@@ -84,11 +86,26 @@ public class CredentialsMenuTest extends BaseTest {
 
         }
 
-        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(30));
+        /* WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(30));
         WebElement addDomainElement = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//a[@href='/user/admin/credentials/store/user/newDomain']")));
+
+        assertTrue(addDomainElement.isDisplayed());*/
+        WebElement addDomainElement = null;
+        attempts = 0;
+        while (addDomainElement == null && attempts < 3) {
+            try {
+                WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(10));
+                addDomainElement = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//a[@href='/user/admin/credentials/store/user/newDomain']")));
+            } catch (TimeoutException e) {
+                attempts++;
+            }
+        }
+
 
         assertTrue(addDomainElement.isDisplayed());
     }
 
-}
+    }
+
+
 
