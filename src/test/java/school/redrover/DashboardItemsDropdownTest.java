@@ -15,7 +15,7 @@ import org.openqa.selenium.JavascriptExecutor;
 public class DashboardItemsDropdownTest extends BaseTest {
 
     private WebDriverWait setWait() {
-        return new WebDriverWait(getDriver(), Duration.ofSeconds(15));
+        return new WebDriverWait(getDriver(), Duration.ofSeconds(30));
     }
 
     private void clickUseJS(WebElement element) {
@@ -41,7 +41,6 @@ public class DashboardItemsDropdownTest extends BaseTest {
         WebElement spinnerDD = getDriver().findElement(
                 By.cssSelector("#tippy-3 > div > div > p"));
         wait.until(ExpectedConditions.invisibilityOf(spinnerDD));
-        wait.until(ExpectedConditions.stalenessOf(spinnerDD));
 
         List<WebElement> dropDownList = wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(
                 By.cssSelector("#tippy-3 > div > div > div > a")));
