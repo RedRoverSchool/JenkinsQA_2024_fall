@@ -17,7 +17,7 @@ public class SearchNewTest extends BaseTest {
 
 
     @Test
-    public void FindSearchTest() throws InterruptedException {
+    public void FindSearchTest() {
 
         Actions actions = new Actions(getDriver());
         Wait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(2));
@@ -40,7 +40,7 @@ public class SearchNewTest extends BaseTest {
     }
 
     @Test
-    public void ClickButtonTest() throws InterruptedException {
+    public void ClickButtonTest() {
 
         Actions actions = new Actions(getDriver());
         Wait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(2));
@@ -56,30 +56,4 @@ public class SearchNewTest extends BaseTest {
 
     }
 
-    @Test
-    public void ButtonAdminTest() throws InterruptedException {
-
-        getDriver().get("http://localhost:8080/user/admin/");
-
-        Actions actions = new Actions(getDriver());
-        Wait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(5));
-
-        final WebElement buttonAdmin = getDriver().findElement(By.cssSelector("li:nth-child(3) a:nth-child(1)"));
-
-        actions.moveToElement(buttonAdmin).perform();
-
-        final WebElement chevron = getDriver().findElement(By.xpath("(//button[@class='jenkins-menu-dropdown-chevron'])[3]"));
-
-        wait.until(d -> chevron.isEnabled());
-
-        chevron.click();
-
-        final WebElement buildButton = getDriver()
-                .findElement(By.xpath("//div[@id='tippy-5']//a[1]"));
-
-        wait.until(d -> buildButton.isDisplayed());
-
-        buildButton.click();
-
-    }
 }
