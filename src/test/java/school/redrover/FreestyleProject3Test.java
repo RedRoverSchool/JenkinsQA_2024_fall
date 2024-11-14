@@ -1,113 +1,207 @@
 package school.redrover;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import school.redrover.runner.BaseTest;
-import java.time.Duration;
+import school.redrover.runner.TestUtils;
 
 public class FreestyleProject3Test extends BaseTest {
 
+    private static final String PROJECT_NAME = "FreestyleProject fall2024";
+
+    private static final String DESCRIPTION = "Bla-bla-bla project";
+
+    private static final By CODE_MIRROR_EDITOR = By.cssSelector(".CodeMirror");
+
+    private void createProjectViaSidebarMenu(String projectName) {
+        getDriver().findElement(By.xpath("//a[@href='/view/all/newJob']")).click();
+
+        getDriver().findElement(By.id("name")).sendKeys(projectName);
+        getDriver().findElement(By.xpath("//li[contains(@class, 'FreeStyleProject')]")).click();
+        getDriver().findElement(By.id("ok-button")).click();
+
+        getWait5().until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//button[@name='Submit']"))).click();
+    }
+
+    private void addDescriptionOnProjectStatusPage(String description) {
+        getWait10().until(ExpectedConditions.visibilityOfElementLocated(By.id("description-link"))).click();
+        getDriver().findElement(By.tagName("textarea")).sendKeys(description);
+        getDriver().findElement(By.xpath("//button[@name='Submit']")).click();
+    }
+
+    private void verifyYouAreOnProjectStatusPage() {
+        getWait5().until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//h2[text()='Permalinks']")));
+    }
+
+    private void clickConfigureInSidebarMenu() {
+        getWait2().until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//a[contains(@href, 'configure')]"))).click();
+    }
+
     @Test
     public void testCreateProjectViaCreateJobButton() {
+        getDriver().findElement(By.xpath("//a[@href='newJob']")).click();
 
-        String newFreestyleProjectName = "FreestyleProject fall2024";
+        getWait5().until(ExpectedConditions.visibilityOfElementLocated(By.id("name"))).sendKeys(PROJECT_NAME);
+        getDriver().findElement(By.xpath("//li[contains(@class, 'FreeStyleProject')]")).click();
+        getDriver().findElement(By.id("ok-button")).click();
 
-        WebElement createJobButton = getDriver().findElement(By.xpath("//a[@href='newJob']"));
-        createJobButton.click();
+        getWait5().until(ExpectedConditions.elementToBeClickable(By.xpath("//button[@name='Submit']")))
+                .click();
 
-        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(5));
-        WebElement newItemNameField = wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("name")));
-        newItemNameField.sendKeys(newFreestyleProjectName);
+        verifyYouAreOnProjectStatusPage();
 
-        WebElement freestyleProjectItemType = getDriver().findElement(
-                By.xpath("//li[contains(@class, 'FreeStyleProject')]"));
-        freestyleProjectItemType.click();
-
-        WebElement okButton = getDriver().findElement(By.id("ok-button"));
-        okButton.click();
-
-        WebElement saveButton = wait.until(ExpectedConditions.elementToBeClickable(
-                By.xpath("//button[@name='Submit']")));
-        saveButton.click();
-
-        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//h2[text()='Permalinks']")));
-
-        String actualName = getDriver().findElement(By.tagName("h1")).getText();
-
-        Assert.assertEquals(actualName, newFreestyleProjectName);
+        Assert.assertEquals(getDriver().findElement(By.tagName("h1")).getText(), PROJECT_NAME);
     }
 
     @Test
-    public void testCreateProjectViaSidebarMenu () {
+    public void testCreateProjectViaSidebarMenu() {
+        createProjectViaSidebarMenu(PROJECT_NAME);
 
-        String newFreestyleProjectName = "FreestyleProject fall2024";
-
-        WebElement newItemSidebarMenu = getDriver().findElement(By.xpath("//a[@href='/view/all/newJob']"));
-        newItemSidebarMenu.click();
-
-        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(5));
-        WebElement newItemNameField = wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("name")));
-        newItemNameField.sendKeys(newFreestyleProjectName);
-
-        WebElement freestyleProjectItemType = getDriver().findElement(
-                By.xpath("//li[contains(@class, 'FreeStyleProject')]"));
-        freestyleProjectItemType.click();
-
-        WebElement okButton = getDriver().findElement(By.id("ok-button"));
-        okButton.click();
-
-        WebElement saveButton = wait.until(ExpectedConditions.elementToBeClickable(
-                By.xpath("//button[@name='Submit']")));
-        saveButton.click();
-
-        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//h2[text()='Permalinks']")));
+        verifyYouAreOnProjectStatusPage();
 
         String actualName = getDriver().findElement(By.tagName("h1")).getText();
 
-        Assert.assertEquals(actualName, newFreestyleProjectName);
+        Assert.assertEquals(actualName, PROJECT_NAME);
     }
 
     @Test
-    public void addDescriptionOnProjectStatusPage() {
-        String newFreestyleProjectName = "FreestyleProject fall2024";
-        String projectDescription = "Bla-bla-bla project";
+    public void testAddDescriptionOnProjectStatusPage() {
+        createProjectViaSidebarMenu(PROJECT_NAME);
 
-        WebElement newItemSidebarMenu = getDriver().findElement(By.xpath("//a[@href='/view/all/newJob']"));
-        newItemSidebarMenu.click();
+        addDescriptionOnProjectStatusPage(DESCRIPTION);
 
-        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(5));
-        WebElement newItemNameField = wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("name")));
-        newItemNameField.sendKeys(newFreestyleProjectName);
+        String projectDescriptionOnStatusPage = getDriver().findElement(
+                By.xpath("//div[@id='description']//div")).getText();
 
-        WebElement freestyleProjectItemType = getDriver().findElement(
-                By.xpath("//li[contains(@class, 'FreeStyleProject')]"));
-        freestyleProjectItemType.click();
+        Assert.assertTrue(projectDescriptionOnStatusPage.contains(DESCRIPTION));
+    }
 
-        WebElement okButton = getDriver().findElement(By.id("ok-button"));
-        okButton.click();
+    @Test
+    public void testEditDescriptionOnProjectStatusPage() {
+        final String newDescription = "New " + DESCRIPTION;
 
-        WebElement saveButton = wait.until(ExpectedConditions.elementToBeClickable(
-                By.xpath("//button[@name='Submit']")));
-        saveButton.click();
+        createProjectViaSidebarMenu(PROJECT_NAME);
+        addDescriptionOnProjectStatusPage(DESCRIPTION);
 
-        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//h2[text()='Permalinks']")));
-
-        WebElement addDescriptionButtton = getDriver().findElement(By.id("description-link"));
-        addDescriptionButtton.click();
+        WebElement editDescriptionButton = getDriver().findElement(By.id("description-link"));
+        editDescriptionButton.click();
 
         WebElement descriptionTextField = getDriver().findElement(By.tagName("textarea"));
-        descriptionTextField.sendKeys(projectDescription);
+        descriptionTextField.clear();
+        descriptionTextField.sendKeys(newDescription);
+        getDriver().findElement(By.xpath("//button[@name='Submit']")).click();
 
-        WebElement submitButton = getDriver().findElement(By.xpath("//button[@name='Submit']"));
-        submitButton.click();
+        String projectDescriptionOnStatusPage = getDriver().findElement(
+                By.xpath("//div[@id='description']//div")).getText();
 
-        WebElement projectDescriptionOnStatusPage = getDriver().findElement(
-                By.xpath("//div[@id='description']//div"));
+        Assert.assertEquals(projectDescriptionOnStatusPage, newDescription);
+    }
 
-        Assert.assertTrue(projectDescriptionOnStatusPage.getText().contains(projectDescription));
+    @Test
+    public void testDeleteDescriptionOnProjectStatusPage() {
+        createProjectViaSidebarMenu(PROJECT_NAME);
+        addDescriptionOnProjectStatusPage(DESCRIPTION);
+
+        getDriver().findElement(By.id("description-link")).click();
+        getDriver().findElement(By.tagName("textarea")).clear();
+        getDriver().findElement(By.xpath("//button[@name='Submit']")).click();
+
+        Assert.assertFalse(getDriver().findElement(By.xpath("//div[@id='description']//div")).getText()
+                .contains(DESCRIPTION));
+    }
+
+    @Test
+    public void testRenameProject() {
+        final String newName = "New " + PROJECT_NAME;
+        createProjectViaSidebarMenu(PROJECT_NAME);
+
+        WebElement renameSidebarMenu = getWait5().until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//a[@href='/job/" + PROJECT_NAME.replace(" ", "%20") + "/confirm-rename']")));
+        renameSidebarMenu.click();
+
+        WebElement newNameTextField = getDriver().findElement(By.xpath("//input[@checkdependson ='newName']"));
+        newNameTextField.clear();
+        newNameTextField.sendKeys(newName);
+
+        getDriver().findElement(By.xpath("//button[@name='Submit']")).click();
+
+        verifyYouAreOnProjectStatusPage();
+
+        Assert.assertEquals(getDriver().findElement(By.tagName("h1")).getText(), newName);
+    }
+
+    @Test
+    public void testDeleteProjectViaChevron() {
+        createProjectViaSidebarMenu(PROJECT_NAME);
+
+        getDriver().findElement(By.xpath("//a[text()='Dashboard']")).click();
+
+        WebElement projectToDelete = getWait10().until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//a[@href='job/" + PROJECT_NAME.replace(" ", "%20") + "/']")));
+        Actions actions = new Actions(getDriver());
+        actions.moveToElement(projectToDelete)
+                .pause(100)
+                .perform();
+
+        WebElement chevron = getWait10().until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//a[@href='job/" + PROJECT_NAME.replace(" ", "%20") + "/']//button")));
+
+        TestUtils.moveAndClickWithJavaScript(getDriver(), chevron);
+
+        WebElement deleteButton = getWait10().until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//button[contains(@href, 'doDelete')]")));
+        deleteButton.click();
+
+        WebElement deleteAlert = getWait10().until(ExpectedConditions.elementToBeClickable(
+                By.xpath("//button[@data-id='ok']")));
+        deleteAlert.click();
+
+        Assert.assertFalse(getDriver().findElement(By.id("main-panel")).getText().contains(PROJECT_NAME));
+    }
+
+    @Test
+    public void testAddBuildStepsExecuteShellCommandWhenConfigureProject() {
+        final String testCommand = "echo \"TEST! Hello Jenkins!\"";
+
+        createProjectViaSidebarMenu(PROJECT_NAME);
+
+        clickConfigureInSidebarMenu();
+
+        TestUtils.scrollToBottom(getDriver());
+
+        getWait10().until(ExpectedConditions.elementToBeClickable(
+                By.xpath("//button[contains(text(), 'Add build step')]"))).click();
+
+        getWait2().until(ExpectedConditions.elementToBeClickable(
+                By.xpath("//button[contains(text(), 'Execute shell')]"))).click();
+
+        JavascriptExecutor js = (JavascriptExecutor) getDriver();
+        js.executeScript("arguments[0].CodeMirror.focus();", getDriver().findElement(CODE_MIRROR_EDITOR));
+
+        Actions actions = new Actions(getDriver());
+        actions.click(getDriver().findElement(CODE_MIRROR_EDITOR));
+        for (char c : testCommand.toCharArray()) {
+            actions.sendKeys(String.valueOf(c));
+        }
+        actions.build().perform();
+
+        TestUtils.scrollToBottom(getDriver());
+        getWait2().until(ExpectedConditions.elementToBeClickable(By.name("Submit"))).click();
+
+        clickConfigureInSidebarMenu();
+
+        TestUtils.scrollToBottom(getDriver());
+
+        String extractedText = (String) js.executeScript(
+                "return arguments[0].CodeMirror.getValue();", getDriver().findElement(CODE_MIRROR_EDITOR));
+
+        Assert.assertEquals(extractedText, testCommand);
     }
 }
