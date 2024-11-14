@@ -37,7 +37,8 @@ public class DropDawnChevronTest extends BaseTest {
         WebElement descriptionInput = wait.until(ExpectedConditions.visibilityOfElementLocated(By.name("description")));
         descriptionInput.sendKeys("TestDropDawnChevron");
 
-        js.executeScript("window.scrollBy(0, 2000);");  // Скроллинг вниз страницы
+        // Скроллинг вниз страницы
+        js.executeScript("window.scrollBy(0, 2000);");
 
         WebElement submitButton = wait.until(ExpectedConditions.elementToBeClickable(By.name("Submit")));
         submitButton.click();
@@ -48,10 +49,10 @@ public class DropDawnChevronTest extends BaseTest {
 
         // Наведение на основную кнопку и раскрытие выпадающего меню
         WebElement mainButton = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[@id='job_TestDropDawnChevron']/td[3]/a/span")));
-        actions.moveToElement(mainButton).perform();
+        actions.moveToElement(mainButton).pause(5000).perform();
 
         WebElement hiddenButton = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//*[@id='job_TestDropDawnChevron']/td[3]/a/button")));
-        actions.moveToElement(hiddenButton).pause(Duration.ofSeconds(1)).click().perform();
+        actions.moveToElement(hiddenButton).pause(Duration.ofSeconds(3)).click().perform();
 
         // Текст для поиска элемента в выпадающем меню
         String searchText = "Delete Pipeline";
