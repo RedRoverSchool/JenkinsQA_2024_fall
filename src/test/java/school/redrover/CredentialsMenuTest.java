@@ -86,23 +86,11 @@ public class CredentialsMenuTest extends BaseTest {
 
         }
 
-        /* WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(30));
-        WebElement addDomainElement = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//a[@href='/user/admin/credentials/store/user/newDomain']")));
+         WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(30));
+         wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//a[@href='/user/admin/credentials/store/user/newDomain']"))).click();
 
-        assertTrue(addDomainElement.isDisplayed());*/
-        WebElement addDomainElement = null;
-        attempts = 0;
-        while (addDomainElement == null && attempts < 3) {
-            try {
-                WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(10));
-                addDomainElement = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//a[@href='/user/admin/credentials/store/user/newDomain']")));
-            } catch (TimeoutException e) {
-                attempts++;
-            }
-        }
+        //assertTrue(addDomainElement.isDisplayed());
 
-
-        assertTrue(addDomainElement.isDisplayed());
     }
 
     }
