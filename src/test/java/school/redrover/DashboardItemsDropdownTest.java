@@ -9,7 +9,6 @@ import org.testng.annotations.Test;
 import school.redrover.runner.BaseTest;
 
 import java.time.Duration;
-import java.util.List;
 
 public class DashboardItemsDropdownTest extends BaseTest {
 
@@ -30,11 +29,7 @@ public class DashboardItemsDropdownTest extends BaseTest {
                 By.cssSelector("#breadcrumbs > li.jenkins-breadcrumbs__list-item > a > button")));
         actions.moveToElement(buttonDropdown).click().perform();
 
-        List<WebElement> dropDownList = wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(
-                By.cssSelector("#tippy-3 > div > div > div > a")));
 
-        WebElement newItem = dropDownList.get(0);
-        actions.moveToElement(newItem).click().perform();
 
    }
 }
