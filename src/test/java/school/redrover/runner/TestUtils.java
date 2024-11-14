@@ -59,4 +59,8 @@ public class TestUtils {
                 .executeScript("arguments[0].dispatchEvent(new Event('click'));", element);
     }
 
+    public static void scrollToBottom(WebDriver driver) {
+        ((JavascriptExecutor) driver).executeScript("window.scrollTo(0, document.body.scrollHeight);");
+    }
+
 }
