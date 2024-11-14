@@ -9,18 +9,18 @@ import school.redrover.runner.BaseTest;
 
 public class ValidationFieldTest extends BaseTest {
 
-    private static final String CREATE_BUTTON = "//div[@class = 'task '] [1]";
-    private static final String SUBMIT_BUTTON = "//button[@type = 'submit']";
-    private static final String INPUT_FIELD = "//input[@class = 'jenkins-input']";
-    private static final String SET_FOLDER_TYPE = "//div/ul/li[@class = 'com_cloudbees_hudson_plugins_folder_Folder']";
+    private static final By CREATE_BUTTON = By.xpath("//div[@class = 'task '] [1]");
+    private static final By SUBMIT_BUTTON = By.xpath("//button[@type = 'submit']");
+    private static final By INPUT_FIELD = By.xpath("//input[@class = 'jenkins-input']");
+    private static final By SET_FOLDER_TYPE = By.xpath("//div/ul/li[@class = 'com_cloudbees_hudson_plugins_folder_Folder']");
 
     @Test
     public void testFieldIsEmpty() {
 
-        getDriver().findElement(By.xpath(CREATE_BUTTON))
+        getDriver().findElement((CREATE_BUTTON))
                 .click();
 
-        getDriver().findElement(By.xpath(SUBMIT_BUTTON))
+        getDriver().findElement((SUBMIT_BUTTON))
                 .click();
 
         WebElement validationMessage = getDriver().findElement(By.xpath("//div[@class = \"input-validation-message\"]"));
@@ -31,10 +31,10 @@ public class ValidationFieldTest extends BaseTest {
     @Test
     public void testInvalidCharacters() {
 
-        getDriver().findElement(By.xpath(CREATE_BUTTON))
+        getDriver().findElement((CREATE_BUTTON))
                 .click();
 
-        getDriver().findElement(By.xpath(INPUT_FIELD))
+        getDriver().findElement((INPUT_FIELD))
                 .sendKeys("#!@$!%");
 
         WebElement invalidMessage = getDriver().findElement(By.xpath("//div[@id = \"itemname-invalid\"]"));
@@ -45,18 +45,18 @@ public class ValidationFieldTest extends BaseTest {
     @Test
     public void testMaxCharacters() {
 
-        getDriver().findElement(By.xpath(CREATE_BUTTON))
+        getDriver().findElement((CREATE_BUTTON))
                 .click();
 
-        getDriver().findElement(By.xpath(INPUT_FIELD))
+        getDriver().findElement((INPUT_FIELD))
                 .sendKeys("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis auctor nisl eu est viverra, " +
                         "quis molestie nibh blandit. In lectus felis, iaculis mauris Lorem ipsum dolor sit amet, consectetur adipiscing elit " +
                         "est Lorem ipsum dolor sit amet, consectetur adipiscing elit est");
 
-        getDriver().findElement(By.xpath(SET_FOLDER_TYPE))
+        getDriver().findElement((SET_FOLDER_TYPE))
                 .click();
 
-        getDriver().findElement(By.xpath(SUBMIT_BUTTON))
+        getDriver().findElement((SUBMIT_BUTTON))
                 .click();
 
         WebElement errorDescription = getDriver().findElement(By.xpath("//div/h2"));
@@ -68,16 +68,16 @@ public class ValidationFieldTest extends BaseTest {
     @Test
     public void testExistedProject() {
 
-        getDriver().findElement(By.xpath(CREATE_BUTTON))
+        getDriver().findElement((CREATE_BUTTON))
                 .click();
 
-        getDriver().findElement(By.xpath(INPUT_FIELD))
+        getDriver().findElement((INPUT_FIELD))
                 .sendKeys("Folder");
 
-        getDriver().findElement(By.xpath(SET_FOLDER_TYPE))
+        getDriver().findElement((SET_FOLDER_TYPE))
                 .click();
 
-        getDriver().findElement(By.xpath(SUBMIT_BUTTON))
+        getDriver().findElement((SUBMIT_BUTTON))
                 .click();
 
         WebElement applyButton = getDriver().findElement(By.xpath("//button[@name = 'Apply']"));
@@ -86,10 +86,10 @@ public class ValidationFieldTest extends BaseTest {
         WebElement jenkinsLogo = getDriver().findElement(By.xpath("//div/a[@id = 'jenkins-home-link']"));
         jenkinsLogo.click();
 
-        getDriver().findElement(By.xpath(CREATE_BUTTON))
+        getDriver().findElement((CREATE_BUTTON))
                 .click();
 
-        getDriver().findElement(By.xpath(INPUT_FIELD))
+        getDriver().findElement((INPUT_FIELD))
                 .sendKeys("Folder");
 
         WebElement validationMessage = getDriver().findElement(By.xpath("//div[@id = 'itemname-invalid']"));
