@@ -38,6 +38,10 @@ public class DashboardItemsDropdownTest extends BaseTest {
 
         wait.until(ExpectedConditions.attributeToBe(buttonDropdown, "aria-expanded", "true"));
 
+        WebElement spinnerDD = getDriver().findElement(
+                By.cssSelector("#tippy-3 > div > div > p"));
+        wait.until(ExpectedConditions.invisibilityOf(spinnerDD));
+
         List<WebElement> dropDownList = wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(
                 By.cssSelector("#tippy-3 > div > div > div > a")));
 
