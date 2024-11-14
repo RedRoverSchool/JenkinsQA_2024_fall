@@ -218,10 +218,25 @@ public class FreestyleProject3Test extends BaseTest {
                 By.xpath("//span[contains(text(), 'Rename')]")));
 
         List<WebElement> sidebarMenuItems = getWait10().until(ExpectedConditions.visibilityOfAllElementsLocatedBy(
-                By.xpath("//span[@class='task-icon-link']/following-sibling::span")));
+                By.xpath("//span[contains(@class,'task-icon-link')]/following-sibling::span")));
 
         List<String> sidebarMenuForCheck = sidebarMenuItems.stream().map(WebElement::getText).toList();
 
         Assert.assertEquals(sidebarMenuForCheck, benchmarkSidebarMenuItems);
+    }
+
+    @Test
+    public void testBuildProjectViaSidebarMenuOnProjectStatusPage() {
+
+        createProjectViaSidebarMenu(PROJECT_NAME);
+
+        getWait2().until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//a[@data-build-success='Build scheduled']"))).click();
+        getWait10().until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//a[@tooltip='Success > Console Output']"))).click();
+
+        Assert.assertTrue(
+                getWait2().until(ExpectedConditions.visibilityOfElementLocated(By.id("out"))).getText()
+                        .contains("Finished: SUCCESS"));
     }
 }
