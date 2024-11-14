@@ -10,6 +10,8 @@ import org.testng.annotations.Test;
 import school.redrover.runner.BaseTest;
 import school.redrover.runner.TestUtils;
 
+import java.util.List;
+
 public class FreestyleProject3Test extends BaseTest {
 
     private static final String PROJECT_NAME = "FreestyleProject fall2024";
@@ -203,5 +205,23 @@ public class FreestyleProject3Test extends BaseTest {
                 "return arguments[0].CodeMirror.getValue();", getDriver().findElement(CODE_MIRROR_EDITOR));
 
         Assert.assertEquals(extractedText, testCommand);
+    }
+
+    @Test
+    public void testCheckSidebarMenuItemsOnProjectStatusPage() {
+        final List<String> benchmarkSidebarMenuItems = List.of(
+                "Status", "Changes", "Workspace", "Build Now", "Configure", "Delete Project", "Rename");
+
+        createProjectViaSidebarMenu(PROJECT_NAME);
+
+        getWait10().until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//span[contains(text(), 'Rename')]")));
+
+        List<WebElement> sidebarMenuItems = getWait10().until(ExpectedConditions.visibilityOfAllElementsLocatedBy(
+                By.xpath("//span[@class='task-icon-link']/following-sibling::span")));
+
+        List<String> sidebarMenuForCheck = sidebarMenuItems.stream().map(WebElement::getText).toList();
+
+        Assert.assertEquals(sidebarMenuForCheck, benchmarkSidebarMenuItems);
     }
 }
