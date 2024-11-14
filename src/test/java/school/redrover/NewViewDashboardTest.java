@@ -26,24 +26,23 @@ public class NewViewDashboardTest extends BaseTest {
     }
 
     private static final String PROJECT_NAME = "New Freestyle Project";
-    private static final String MY_VIEW_NAME = "My View";
 
     @Test
     public void testAddNewMyView() {
 
         addProjectOnDashboard(PROJECT_NAME);
         goToDashboard();
-        addView(MY_VIEW_NAME);
+        addView(ViewType.MyView);
 
         List<WebElement> listOfViews = getDriver().findElements(By.xpath("//div[@class = 'tabBar']//a"));
-        Assert.assertTrue(listOfViews.stream().anyMatch(item -> MY_VIEW_NAME.equals(item.getText())));
+        Assert.assertTrue(listOfViews.stream().anyMatch(item -> ViewType.MyView.getViewName().equals(item.getText())));
     }
 
     @Test
     public void testDeleteView() {
         addProjectOnDashboard(PROJECT_NAME);
         goToDashboard();
-        addView(MY_VIEW_NAME);
+        addView(ViewType.MyView);
 
 
         getDriver().findElement(By.xpath("//a[@class= 'task-link  confirmation-link']")).click();
@@ -53,7 +52,7 @@ public class NewViewDashboardTest extends BaseTest {
         getWait5().until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@class = 'tabBar']")));
         List<WebElement> listOfViews = getDriver().findElements(By.xpath("//div[@class = 'tabBar']//a"));
 
-        Assert.assertTrue(listOfViews.stream().anyMatch(item -> !MY_VIEW_NAME.equals(item.getText())));
+        Assert.assertTrue(listOfViews.stream().anyMatch(item -> !ViewType.MyView.getViewName().equals(item.getText())));
     }
 
     private void addProjectOnDashboard(String nameProject) {
@@ -76,11 +75,11 @@ public class NewViewDashboardTest extends BaseTest {
         getDriver().findElement(By.xpath("//a[text() = 'Dashboard']")).click();
     }
 
-    private void addView(String nameView) {
+    private void addView(ViewType nameView) {
         getDriver().findElement(By.linkText("My Views")).click();
         getDriver().findElement(By.xpath("//a[@class = 'addTab']")).click();
 
-        getDriver().findElement(By.id("name")).sendKeys(nameView);
+        getDriver().findElement(By.id("name")).sendKeys(nameView.getViewName());
 
         WebElement button  = getDriver().findElement(By.xpath("//input[@id = 'hudson.model.MyView']"));
         new Actions(getDriver()).moveToElement(button).click().build().perform();
