@@ -8,6 +8,8 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.annotations.Test;
 import school.redrover.runner.BaseTest;
 import java.time.Duration;
+import java.util.List;
+
 import org.openqa.selenium.JavascriptExecutor;
 
 public class DashboardItemsDropdownTest extends BaseTest {
@@ -35,5 +37,11 @@ public class DashboardItemsDropdownTest extends BaseTest {
         clickUseJS(buttonDropdown);
 
         wait.until(ExpectedConditions.attributeToBe(buttonDropdown, "aria-expanded", "true"));
+
+        List<WebElement> dropDownList = wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(
+                By.cssSelector("#tippy-3 > div > div > div > a")));
+
+        WebElement newItem = dropDownList.get(0);
+        actions.moveToElement(newItem).click().perform();
    }
 }
