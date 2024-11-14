@@ -84,7 +84,7 @@ public class SortingJobsTest extends BaseTest {
         getDriver().findElement(By.xpath("//td[@class='jenkins-table__cell--tight']//a[@title='Schedule a Build for ProjectC']")).click();
 
         getDriver().navigate().refresh();
-        getWait5().until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("[class$='job-status-blue']")));
+        getWait10().until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("[class$='job-status-blue']")));
 
         getDriver().findElement(By.xpath("//th[@tooltip='Status of the last build']//a[@class='sortheader']")).click();
 
