@@ -13,6 +13,17 @@ import java.time.Duration;
 import java.util.List;
 
 public class NewViewDashboardTest extends BaseTest {
+    private enum ViewType {
+        ListView("List View"),
+        MyView("My View");
+        private final String viewName;
+        ViewType(String viewName) {
+            this.viewName = viewName;
+        }
+        public String getViewName() {
+            return viewName;
+        }
+    }
 
     private static final String PROJECT_NAME = "New Freestyle Project";
     private static final String MY_VIEW_NAME = "My View";
@@ -34,17 +45,15 @@ public class NewViewDashboardTest extends BaseTest {
         goToDashboard();
         addView(MY_VIEW_NAME);
 
-        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofMillis(5000));
 
         getDriver().findElement(By.xpath("//a[@class= 'task-link  confirmation-link']")).click();
-        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//dialog[@class = 'jenkins-dialog']")));
+        getWait5().until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//dialog[@class = 'jenkins-dialog']")));
         getDriver().findElement(By.xpath("//button[@data-id = 'ok']")).click();
 
-        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@class = 'tabBar']")));
+        getWait5().until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@class = 'tabBar']")));
         List<WebElement> listOfViews = getDriver().findElements(By.xpath("//div[@class = 'tabBar']//a"));
 
         Assert.assertTrue(listOfViews.stream().anyMatch(item -> !MY_VIEW_NAME.equals(item.getText())));
-
     }
 
     private void addProjectOnDashboard(String nameProject) {
@@ -59,8 +68,7 @@ public class NewViewDashboardTest extends BaseTest {
         getDriver().findElement(By.cssSelector(".hudson_model_FreeStyleProject")).click();
         getDriver().findElement(By.id("ok-button")).click();
 
-        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofMillis(6000));
-        WebElement submitButton = wait.until(ExpectedConditions.visibilityOfElementLocated(By.name("Submit")));
+        WebElement submitButton = getWait10().until(ExpectedConditions.visibilityOfElementLocated(By.name("Submit")));
         submitButton.click();
     }
 
@@ -79,5 +87,4 @@ public class NewViewDashboardTest extends BaseTest {
 
         getDriver().findElement(By.xpath("//button[@id = 'ok']")).click();
     }
-
 }
