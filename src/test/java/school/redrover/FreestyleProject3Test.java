@@ -1,6 +1,7 @@
 package school.redrover;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -14,6 +15,8 @@ public class FreestyleProject3Test extends BaseTest {
     private static final String PROJECT_NAME = "FreestyleProject fall2024";
 
     private static final String DESCRIPTION = "Bla-bla-bla project";
+
+    private static final By CODE_MIRROR_EDITOR = By.cssSelector(".CodeMirror");
 
     private void createProjectViaSidebarMenu(String projectName) {
         getDriver().findElement(By.xpath("//a[@href='/view/all/newJob']")).click();
@@ -36,6 +39,11 @@ public class FreestyleProject3Test extends BaseTest {
         getWait5().until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//h2[text()='Permalinks']")));
     }
 
+    private void clickConfigureInSidebarMenu() {
+        getWait2().until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//a[contains(@href, 'configure')]"))).click();
+    }
+
     @Test
     public void testCreateProjectViaCreateJobButton() {
         getDriver().findElement(By.xpath("//a[@href='newJob']")).click();
@@ -53,7 +61,7 @@ public class FreestyleProject3Test extends BaseTest {
     }
 
     @Test
-    public void testCreateProjectViaSidebarMenu () {
+    public void testCreateProjectViaSidebarMenu() {
         createProjectViaSidebarMenu(PROJECT_NAME);
 
         verifyYouAreOnProjectStatusPage();
@@ -143,7 +151,7 @@ public class FreestyleProject3Test extends BaseTest {
                 .perform();
 
         WebElement chevron = getWait10().until(ExpectedConditions.visibilityOfElementLocated(
-                By.xpath("//a[@href='job/"+ PROJECT_NAME.replace(" ", "%20") + "/']//button")));
+                By.xpath("//a[@href='job/" + PROJECT_NAME.replace(" ", "%20") + "/']//button")));
 
         TestUtils.moveAndClickWithJavaScript(getDriver(), chevron);
 
@@ -156,5 +164,44 @@ public class FreestyleProject3Test extends BaseTest {
         deleteAlert.click();
 
         Assert.assertFalse(getDriver().findElement(By.id("main-panel")).getText().contains(PROJECT_NAME));
+    }
+
+    @Test
+    public void testAddBuildStepsExecuteShellCommandWhenConfigureProject() {
+        final String testCommand = "echo \"TEST! Hello Jenkins!\"";
+
+        createProjectViaSidebarMenu(PROJECT_NAME);
+
+        clickConfigureInSidebarMenu();
+
+        TestUtils.scrollToBottom(getDriver());
+
+        getWait10().until(ExpectedConditions.elementToBeClickable(
+                By.xpath("//button[contains(text(), 'Add build step')]"))).click();
+
+        getWait2().until(ExpectedConditions.elementToBeClickable(
+                By.xpath("//button[contains(text(), 'Execute shell')]"))).click();
+
+        JavascriptExecutor js = (JavascriptExecutor) getDriver();
+        js.executeScript("arguments[0].CodeMirror.focus();", getDriver().findElement(CODE_MIRROR_EDITOR));
+
+        Actions actions = new Actions(getDriver());
+        actions.click(getDriver().findElement(CODE_MIRROR_EDITOR));
+        for (char c : testCommand.toCharArray()) {
+            actions.sendKeys(String.valueOf(c));
+        }
+        actions.build().perform();
+
+        TestUtils.scrollToBottom(getDriver());
+        getWait2().until(ExpectedConditions.elementToBeClickable(By.name("Submit"))).click();
+
+        clickConfigureInSidebarMenu();
+
+        TestUtils.scrollToBottom(getDriver());
+
+        String extractedText = (String) js.executeScript(
+                "return arguments[0].CodeMirror.getValue();", getDriver().findElement(CODE_MIRROR_EDITOR));
+
+        Assert.assertEquals(extractedText, testCommand);
     }
 }
