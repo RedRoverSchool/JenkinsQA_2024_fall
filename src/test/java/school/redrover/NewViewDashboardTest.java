@@ -29,7 +29,6 @@ public class NewViewDashboardTest extends BaseTest {
 
     @Test
     public void testAddNewMyView() {
-
         addProjectOnDashboard(PROJECT_NAME);
         goToDashboard();
         addView(ViewType.MyView);
@@ -56,13 +55,7 @@ public class NewViewDashboardTest extends BaseTest {
     }
 
     private void addProjectOnDashboard(String nameProject) {
-        List<WebElement> sideBarElements = getDriver().findElements(By.xpath("//span[@class = 'task-link-wrapper ']//a"));
-        for (WebElement element : sideBarElements) {
-            if(element.getText().contains("New Item")) {
-                element.click();
-                break;
-            }
-        }
+        getDriver().findElement(By.linkText("New Item")).click();
         getDriver().findElement(By.xpath("//input[@id = 'name']")).sendKeys(nameProject);
         getDriver().findElement(By.cssSelector(".hudson_model_FreeStyleProject")).click();
         getDriver().findElement(By.id("ok-button")).click();
