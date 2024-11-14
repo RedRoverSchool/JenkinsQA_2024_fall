@@ -17,11 +17,9 @@ public class ValidationFieldTest extends BaseTest {
     @Test
     public void testFieldIsEmpty() {
 
-        getDriver().findElement((CREATE_BUTTON))
-                .click();
+        getDriver().findElement((CREATE_BUTTON)).click();
 
-        getDriver().findElement((SUBMIT_BUTTON))
-                .click();
+        getDriver().findElement((SUBMIT_BUTTON)).click();
 
         WebElement validationMessage = getDriver().findElement(By.xpath("//div[@class = \"input-validation-message\"]"));
 
@@ -31,11 +29,9 @@ public class ValidationFieldTest extends BaseTest {
     @Test
     public void testInvalidCharacters() {
 
-        getDriver().findElement((CREATE_BUTTON))
-                .click();
+        getDriver().findElement((CREATE_BUTTON)).click();
 
-        getDriver().findElement((INPUT_FIELD))
-                .sendKeys("#!@$!%");
+        getDriver().findElement((INPUT_FIELD)).sendKeys("#!@$!%");
 
         WebElement invalidMessage = getDriver().findElement(By.xpath("//div[@id = \"itemname-invalid\"]"));
 
@@ -45,19 +41,16 @@ public class ValidationFieldTest extends BaseTest {
     @Test
     public void testMaxCharacters() {
 
-        getDriver().findElement((CREATE_BUTTON))
-                .click();
+        getDriver().findElement((CREATE_BUTTON)).click();
 
         getDriver().findElement((INPUT_FIELD))
                 .sendKeys("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis auctor nisl eu est viverra, " +
                         "quis molestie nibh blandit. In lectus felis, iaculis mauris Lorem ipsum dolor sit amet, consectetur adipiscing elit " +
                         "est Lorem ipsum dolor sit amet, consectetur adipiscing elit est");
 
-        getDriver().findElement((SET_FOLDER_TYPE))
-                .click();
+        getDriver().findElement((SET_FOLDER_TYPE)).click();
 
-        getDriver().findElement((SUBMIT_BUTTON))
-                .click();
+        getDriver().findElement((SUBMIT_BUTTON)).click();
 
         WebElement errorDescription = getDriver().findElement(By.xpath("//div/h2"));
 
@@ -68,17 +61,13 @@ public class ValidationFieldTest extends BaseTest {
     @Test
     public void testExistedProject() {
 
-        getDriver().findElement((CREATE_BUTTON))
-                .click();
+        getDriver().findElement((CREATE_BUTTON)).click();
 
-        getDriver().findElement((INPUT_FIELD))
-                .sendKeys("Folder");
+        getDriver().findElement((INPUT_FIELD)).sendKeys("Folder");
 
-        getDriver().findElement((SET_FOLDER_TYPE))
-                .click();
+        getDriver().findElement((SET_FOLDER_TYPE)).click();
 
-        getDriver().findElement((SUBMIT_BUTTON))
-                .click();
+        getDriver().findElement((SUBMIT_BUTTON)).click();
 
         WebElement applyButton = getDriver().findElement(By.xpath("//button[@name = 'Apply']"));
         applyButton.click();
@@ -86,11 +75,9 @@ public class ValidationFieldTest extends BaseTest {
         WebElement jenkinsLogo = getDriver().findElement(By.xpath("//div/a[@id = 'jenkins-home-link']"));
         jenkinsLogo.click();
 
-        getDriver().findElement((CREATE_BUTTON))
-                .click();
+        getDriver().findElement((CREATE_BUTTON)).click();
 
-        getDriver().findElement((INPUT_FIELD))
-                .sendKeys("Folder");
+        getDriver().findElement((INPUT_FIELD)).sendKeys("Folder");
 
         WebElement validationMessage = getDriver().findElement(By.xpath("//div[@id = 'itemname-invalid']"));
 
