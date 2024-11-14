@@ -271,14 +271,10 @@ public class FreestyleProject3Test extends BaseTest {
         getWait5().until(ExpectedConditions.elementToBeClickable(
                 By.xpath("//button[@data-id='ok']"))).click();
 
-        if (getWait2().until(ExpectedConditions.visibilityOfElementLocated(By.id("main-panel"))).getText().contains("Welcome to Jenkins!")) {
-            Assert.assertFalse(
-                    getWait2().until(ExpectedConditions.visibilityOfElementLocated(By.id("main-panel"))).getText()
-                            .contains(PROJECT_NAME), "There were more than one project on Dashboard");
-        } else if (getWait2().until(ExpectedConditions.visibilityOfElementLocated(By.id("projectstatus"))).isDisplayed()) {
-            Assert.assertFalse(
-                    getDriver().findElements(By.xpath("//tbody//a[contains(@href, 'job')]//span")).stream()
-                    .allMatch(w -> w.getText().equals(PROJECT_NAME) && w.getText().length() == PROJECT_NAME.length()));
-        }
+        getWait2().until(ExpectedConditions.visibilityOfElementLocated(By.id("projectstatus"))).isDisplayed();
+
+        Assert.assertFalse(
+                getDriver().findElements(By.xpath("//tbody//a[contains(@href, 'job')]//span")).stream()
+                        .allMatch(w -> w.getText().equals(PROJECT_NAME) && w.getText().length() == PROJECT_NAME.length()));
     }
 }
