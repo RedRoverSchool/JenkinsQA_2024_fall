@@ -7,13 +7,18 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.annotations.Test;
 import school.redrover.runner.BaseTest;
-
 import java.time.Duration;
+import org.openqa.selenium.JavascriptExecutor;
 
 public class DashboardItemsDropdownTest extends BaseTest {
 
     private WebDriverWait setWait() {
         return new WebDriverWait(getDriver(), Duration.ofSeconds(20));
+    }
+
+    private void clickUseJS(WebElement element) {
+        JavascriptExecutor clickJS = (JavascriptExecutor) getDriver();
+        clickJS.executeScript("arguments[0].click();", element);
     }
 
     @Test
@@ -27,7 +32,7 @@ public class DashboardItemsDropdownTest extends BaseTest {
 
         WebElement buttonDropdown = wait.until(ExpectedConditions.visibilityOfElementLocated(
                 By.cssSelector("#breadcrumbs > li.jenkins-breadcrumbs__list-item > a > button")));
-        actions.moveToElement(buttonDropdown).click().perform();
+        clickUseJS(buttonDropdown);
 
         wait.until(ExpectedConditions.attributeToBe(buttonDropdown, "aria-expanded", "true"));
    }
