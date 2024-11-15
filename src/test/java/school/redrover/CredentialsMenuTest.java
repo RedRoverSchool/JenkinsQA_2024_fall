@@ -85,10 +85,11 @@ public class CredentialsMenuTest extends BaseTest {
             arrowClicked = true;
 
         }
+        Thread.sleep(100);
 
-        new Actions(getDriver())
-                .moveToElement(getDriver().findElement(By.xpath("//a[@href='/user/admin/credentials/store/user/newDomain']"))).click().perform();
-
+        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(10));
+        WebElement element1 = getDriver().findElement(By.xpath("//a[@href='/user/admin/credentials/store/user/newDomain']"));
+        ((JavascriptExecutor) getDriver()).executeScript("arguments[0].click();", element1);
         //assertTrue(addDomainElement.isDisplayed());
 
     }
