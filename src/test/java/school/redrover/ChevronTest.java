@@ -33,8 +33,7 @@ public class ChevronTest extends BaseTest {
         ProjectUtils.log(chevronDashboard.getCssValue("opacity"));
         ProjectUtils.log(chevronDashboard.getLocation().toString());
         actions
-                .moveToElement(chevronDashboard)
-                .click()
+                .click(chevronDashboard)
                 .perform();
 
         WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(60));
