@@ -6,6 +6,7 @@ import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.testng.Assert;
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 import school.redrover.runner.BaseTest;
 import school.redrover.runner.TestUtils;
@@ -32,6 +33,16 @@ public class PipelineProject2Test extends BaseTest {
     private static final String FOLDER_NAME = "MyFolder";
 
     private static final String ITEM_NAME_LOCATOR = "//span[text()='%s']";
+
+    @DataProvider
+    public Object[][] providerUnsafeCharacters() {
+
+        return new Object[][]{
+                {"\\"}, {"]"}, {":"}, {"#"}, {"&"}, {"?"}, {"!"}, {"@"},
+                {"$"}, {"%"}, {"^"}, {"*"}, {"|"}, {"/"}, {"<"}, {">"},
+                {"["}, {";"}
+        };
+    }
 
     private void createItemAndGoToMainPage(ItemTypes itemType, String itemName) {
         getDriver().findElement(By.xpath("//a[@href='/view/all/newJob']")).click();
@@ -117,7 +128,8 @@ public class PipelineProject2Test extends BaseTest {
         getDriver().findElement(By.xpath(ITEM_NAME_LOCATOR.formatted(FOLDER_NAME))).click();
 
         Assert.assertEquals(
-                getDriver().findElement(By.xpath(ITEM_NAME_LOCATOR.formatted(PROJECT_NAME))).getText(), PROJECT_NAME);
+                getDriver().findElement(By.xpath(ITEM_NAME_LOCATOR.formatted(PROJECT_NAME))).getText(),
+                PROJECT_NAME);
     }
 
     @Test
@@ -156,5 +168,17 @@ public class PipelineProject2Test extends BaseTest {
 
         Assert.assertTrue(getDriver().findElements(By.xpath(String.format(ITEM_NAME_LOCATOR, PROJECT_NAME))).isEmpty());
     }
+
+    @Test(dataProvider = "providerUnsafeCharacters")
+    public void testCreateWithUnsafeCharactersInName(String unsafeCharacter) {
+        getDriver().findElement(By.xpath("//a[@href='/view/all/newJob']")).click();
+
+        getDriver().findElement(By.id("name")).sendKeys(unsafeCharacter);
+
+        Assert.assertEquals(getDriver()
+                .findElement(By.id("itemname-invalid"))
+                .getText(), "» ‘" + unsafeCharacter + "’ is an unsafe character");
+    }
+
 
 }
