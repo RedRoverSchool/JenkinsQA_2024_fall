@@ -6,10 +6,9 @@ import org.testng.annotations.Test;
 import school.redrover.runner.BaseTest;
 import school.redrover.runner.ProjectUtils;
 
-public class CreateNewItem2Test extends BaseTest {
+public class CreateNewProject2Test extends BaseTest {
 
     private static final String EXPECTED_PROJECT_NAME = "Some_name_for_project_or_folder";
-    private final String ACTUAL_PROJECT_NAME = getDriver().findElement(By.xpath("//tr/td/a/span")).getText();
 
     private void createProject(String projectName) {
 
@@ -25,13 +24,13 @@ public class CreateNewItem2Test extends BaseTest {
         ProjectUtils.log("Push OK button to save the project");
         getDriver().findElement(By.xpath("//button[@type='submit']")).click();
 
-        ProjectUtils.log("Going to the main page");
+        ProjectUtils.log("Go to the main page");
         getDriver().findElement(By.xpath("//*[text()='Dashboard']")).click();
 
     }
 
     @Test
-    public void testCreateFreestyleProject() {
+    public void testFreestyleProject() {
 
         createProject(EXPECTED_PROJECT_NAME);
 
@@ -40,12 +39,14 @@ public class CreateNewItem2Test extends BaseTest {
 
         saveProjectAndGoToMainPage();
 
-        ProjectUtils.log("Verifying the job name");
-        Assert.assertEquals(ACTUAL_PROJECT_NAME, EXPECTED_PROJECT_NAME);
+        ProjectUtils.log("Verify the project name");
+        Assert.assertEquals(
+                getDriver().findElement(By.xpath("//tr/td/a/span")).getText(),
+                EXPECTED_PROJECT_NAME);
     }
 
     @Test
-    public void testCreatePipeline() {
+    public void testPipelineProject() {
 
         createProject(EXPECTED_PROJECT_NAME);
 
@@ -54,8 +55,10 @@ public class CreateNewItem2Test extends BaseTest {
 
         saveProjectAndGoToMainPage();
 
-        ProjectUtils.log("Verifying the job name");
-        Assert.assertEquals(ACTUAL_PROJECT_NAME, EXPECTED_PROJECT_NAME);
+        ProjectUtils.log("Verify the project name");
+        Assert.assertEquals(
+                getDriver().findElement(By.xpath("//tr/td/a/span")).getText(),
+                EXPECTED_PROJECT_NAME);
     }
 
     @Test
@@ -68,7 +71,9 @@ public class CreateNewItem2Test extends BaseTest {
 
         saveProjectAndGoToMainPage();
 
-        ProjectUtils.log("Verifying the job name");
-        Assert.assertEquals(ACTUAL_PROJECT_NAME, EXPECTED_PROJECT_NAME);
+        ProjectUtils.log("Verify the project name");
+        Assert.assertEquals(
+                getDriver().findElement(By.xpath("//tr/td/a/span")).getText(),
+                EXPECTED_PROJECT_NAME);
     }
 }
