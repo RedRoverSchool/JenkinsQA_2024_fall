@@ -14,7 +14,7 @@ import java.util.List;
 public class FreestyleProject26Test extends BaseTest {
 
     private static final String PROJECT_NAME = "New Freestyle Project";
-    @Testgit
+    @Test
     public void testCreateProject() {
 
         addProjectOnDashboard(PROJECT_NAME);
