@@ -1,6 +1,7 @@
 package school.redrover;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -14,11 +15,30 @@ import java.util.List;
 
 public class WorkingWithPipelinesTest extends BaseTest {
 
-    private void createItemUtils(String name, String locator) {
+    private enum ItemType {
+        FREESTYLE_PROJECT(".hudson_model_FreeStyleProject"),
+        PIPELINE(".org_jenkinsci_plugins_workflow_job_WorkflowJob"),
+        MULTI_CONFIG_PROJECT(".hudson_matrix_MatrixProject"),
+        FOLDER(".com_cloudbees_hudson_plugins_folder_Folder"),
+        MULTIBRANCH_PIPELINE(".org_jenkinsci_plugins_workflow_multibranch_WorkflowMultiBranchProject"),
+        ORGANIZATION_FOLDER(".jenkins_branch_OrganizationFolder");
+
+        private final String cssSelector;
+
+        ItemType(String cssSelector) {
+            this.cssSelector = cssSelector;
+        }
+
+        public String getCssSelector() {
+            return cssSelector;
+        }
+    }
+
+    private void createItemUtils(String itemName, ItemType itemType) {
 
         getDriver().findElement(By.xpath("//a[@href='/view/all/newJob']")).click();
-        getDriver().findElement(By.id("name")).sendKeys(name);
-        getDriver().findElement(By.cssSelector(locator)).click();
+        getDriver().findElement(By.id("name")).sendKeys(itemName);
+        getDriver().findElement(By.cssSelector(itemType.getCssSelector())).click();
         getDriver().findElement(By.id("ok-button")).click();
 
     }
@@ -43,7 +63,7 @@ public class WorkingWithPipelinesTest extends BaseTest {
 
         final String namePipeLine = "Regression";
 
-        createItemUtils(namePipeLine, ".org_jenkinsci_plugins_workflow_job_WorkflowJob");
+        createItemUtils(namePipeLine,ItemType.PIPELINE);
 
         returnToHomePage();
 
@@ -58,7 +78,7 @@ public class WorkingWithPipelinesTest extends BaseTest {
 
         final  String nameFreestyleProject = "Freestyle";
 
-        createItemUtils(nameFreestyleProject,".hudson_model_FreeStyleProject");
+        createItemUtils(nameFreestyleProject,ItemType.FREESTYLE_PROJECT);
 
         returnToHomePage();
 
@@ -68,34 +88,41 @@ public class WorkingWithPipelinesTest extends BaseTest {
         System.out.println("Freestyle Project создан и находится в списке на главной странице");
     }
 
-/*    @Test
-        public void testOpenRenameViaDropDown() {
+    @Test
+        public void testRenameViaChevron() {
+
         final String namePipeLine = "Regression";
 
-        createItemUtils(namePipeLine, ".org_jenkinsci_plugins_workflow_job_WorkflowJob");
-
+        createItemUtils(namePipeLine, ItemType.PIPELINE);
         returnToHomePage();
 
         WebElement regressionLink = getDriver().findElement(By.xpath("//a[@href='job/Regression/']"));
 
-        Actions actions = new Actions(getDriver());
+        new Actions(getDriver())
+            .moveToElement(regressionLink).perform();
 
-        actions.moveToElement(regressionLink).perform();
+        WebElement chevron = getDriver().findElement(By.xpath("//button[@data-href='http://localhost:8080/job/Regression/']"));
 
-        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(10));
-        WebElement chevronButton = wait.until(ExpectedConditions.elementToBeClickable(
-                By.xpath("//button[@class='jenkins-menu-dropdown-chevron' and @data-href='http://localhost:8080/job/Regression/']")));
+        ((JavascriptExecutor) getDriver()).executeScript(
+                "arguments[0].dispatchEvent(new Event('mouseenter'));", chevron);
+        ((JavascriptExecutor) getDriver()).executeScript(
+                "arguments[0].dispatchEvent(new Event('click'));", chevron);
 
-        chevronButton.click();
+        getWait5().until(ExpectedConditions.elementToBeClickable(
+                By.xpath("//a[@href='/job/Regression/confirm-rename']")))
+                .click();
 
-        WebElement renameOption = wait.until(ExpectedConditions.elementToBeClickable(
-                By.xpath("//a[@href='/job/Regression/confirm-rename']")));
+        WebElement inputRename = getWait10().until(ExpectedConditions.elementToBeClickable(By.name("newName")));
 
-        renameOption.click();
+        new Actions(getDriver()).doubleClick(inputRename).sendKeys("NewRegression").perform();
 
-        WebElement inputElement = wait.until(ExpectedConditions.visibilityOfElementLocated(By.name("newName")));
-        String value = inputElement.getAttribute("value");
+        getDriver().findElement(By.xpath("//button[@class='jenkins-button jenkins-submit-button jenkins-button--primary ']"))
+                .click();
 
-        Assert.assertEquals(namePipeLine, value, "Имя PipeLine не совпадает с value");
-    }*/
+        returnToHomePage();
+
+        Assert.assertListContainsObject(getProjectList(),
+                "NewRegression", "Пайплайн не найден на главной странице или текст не совпадает");
+    }
 }
+
