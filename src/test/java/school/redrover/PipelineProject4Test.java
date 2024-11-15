@@ -10,7 +10,7 @@ public class PipelineProject4Test extends BaseTest {
 
     @Test
     public void testCreate() {
-        final String projectName = "New Pipeline Project";
+        final String projectName = "NewPipelineProject";
 
         WebElement createButton = getDriver().findElement(
                 By.xpath("//*[@id=\"main-panel\"]/div[2]/div/section[1]/ul/li/a"));
