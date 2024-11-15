@@ -9,7 +9,7 @@ import org.testng.annotations.Test;
 import school.redrover.runner.BaseTest;
 
 
-public class SearchBoxTest extends BaseTest {
+public class SearchBox1Test extends BaseTest {
 
     private static final String ITEM_NAME = "Item Name";
 
