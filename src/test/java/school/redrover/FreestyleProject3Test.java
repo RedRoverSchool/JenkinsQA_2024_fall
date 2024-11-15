@@ -10,6 +10,8 @@ import org.testng.annotations.Test;
 import school.redrover.runner.BaseTest;
 import school.redrover.runner.TestUtils;
 
+import java.util.List;
+
 public class FreestyleProject3Test extends BaseTest {
 
     private static final String PROJECT_NAME = "FreestyleProject fall2024";
@@ -39,7 +41,7 @@ public class FreestyleProject3Test extends BaseTest {
         getWait5().until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//h2[text()='Permalinks']")));
     }
 
-    private void clickConfigureInSidebarMenu() {
+    private void clickConfigureInSidebarMenuOnProjectStatusPage() {
         getWait2().until(ExpectedConditions.visibilityOfElementLocated(
                 By.xpath("//a[contains(@href, 'configure')]"))).click();
     }
@@ -172,7 +174,7 @@ public class FreestyleProject3Test extends BaseTest {
 
         createProjectViaSidebarMenu(PROJECT_NAME);
 
-        clickConfigureInSidebarMenu();
+        clickConfigureInSidebarMenuOnProjectStatusPage();
 
         TestUtils.scrollToBottom(getDriver());
 
@@ -195,7 +197,7 @@ public class FreestyleProject3Test extends BaseTest {
         TestUtils.scrollToBottom(getDriver());
         getWait2().until(ExpectedConditions.elementToBeClickable(By.name("Submit"))).click();
 
-        clickConfigureInSidebarMenu();
+        clickConfigureInSidebarMenuOnProjectStatusPage();
 
         TestUtils.scrollToBottom(getDriver());
 
@@ -203,5 +205,76 @@ public class FreestyleProject3Test extends BaseTest {
                 "return arguments[0].CodeMirror.getValue();", getDriver().findElement(CODE_MIRROR_EDITOR));
 
         Assert.assertEquals(extractedText, testCommand);
+    }
+
+    @Test
+    public void testCheckSidebarMenuItemsOnProjectStatusPage() {
+        final List<String> benchmarkSidebarMenuItems = List.of(
+                "Status", "Changes", "Workspace", "Build Now", "Configure", "Delete Project", "Rename");
+
+        createProjectViaSidebarMenu(PROJECT_NAME);
+
+        getWait10().until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//span[contains(text(), 'Rename')]")));
+
+        List<WebElement> sidebarMenuItems = getWait10().until(ExpectedConditions.visibilityOfAllElementsLocatedBy(
+                By.xpath("//span[contains(@class,'task-icon-link')]/following-sibling::span")));
+
+        List<String> sidebarMenuForCheck = sidebarMenuItems.stream().map(WebElement::getText).toList();
+
+        Assert.assertEquals(sidebarMenuForCheck, benchmarkSidebarMenuItems);
+    }
+
+    @Test
+    public void testBuildProjectViaSidebarMenuOnProjectStatusPage() {
+
+        createProjectViaSidebarMenu(PROJECT_NAME);
+
+        getWait2().until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//a[@data-build-success='Build scheduled']"))).click();
+        getWait10().until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//a[@tooltip='Success > Console Output']"))).click();
+
+        Assert.assertTrue(
+                getWait2().until(ExpectedConditions.visibilityOfElementLocated(By.id("out"))).getText()
+                        .contains("Finished: SUCCESS"));
+    }
+
+    @Test
+    public void testDeleteProjectViaSidebarMenuOnProjectStatusPage() {
+        createProjectViaSidebarMenu(PROJECT_NAME);
+
+        getWait2().until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//a[@data-title='Delete Project']"))).click();
+
+        getWait5().until(ExpectedConditions.elementToBeClickable(
+                By.xpath("//button[@data-id='ok']"))).click();
+
+        Assert.assertEquals(
+                getWait2().until(ExpectedConditions.visibilityOfElementLocated(By.tagName("h1"))).getText(),
+                "Welcome to Jenkins!",
+                "There were more than one project on Dashboard");
+    }
+
+    @Test
+    public void testDeleteProjectViaSidebarMenuOnProjectStatusPageWhenSeveralProjectsExist() {
+        createProjectViaSidebarMenu(PROJECT_NAME + 2);
+
+        getWait2().until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//a[contains(text(), 'Dashboard')]"))).click();
+
+        createProjectViaSidebarMenu(PROJECT_NAME);
+
+        getWait2().until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//a[@data-title='Delete Project']"))).click();
+
+        getWait5().until(ExpectedConditions.elementToBeClickable(
+                By.xpath("//button[@data-id='ok']"))).click();
+
+        getWait2().until(ExpectedConditions.visibilityOfElementLocated(By.id("projectstatus"))).isDisplayed();
+
+        Assert.assertFalse(
+                getDriver().findElements(By.xpath("//tbody//a[contains(@href, 'job')]//span")).stream()
+                        .allMatch(w -> w.getText().equals(PROJECT_NAME) && w.getText().length() == PROJECT_NAME.length()));
     }
 }

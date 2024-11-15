@@ -1,6 +1,5 @@
 package school.redrover;
 import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -8,6 +7,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import school.redrover.runner.BaseTest;
+import school.redrover.runner.TestUtils;
 import java.time.Duration;
 import java.util.List;
 
@@ -134,12 +134,8 @@ public class StartPageTest extends BaseTest {
                 "//span[contains(text(), 'NewFolder')]")))
                 .perform();
 
-        WebElement chevron = getDriver().findElement(By.xpath("//button[@data-href='http://localhost:8080/job/NewFolder/']"));
-
-        ((JavascriptExecutor) getDriver()).executeScript(
-                "arguments[0].dispatchEvent(new Event('mouseenter'));", chevron);
-        ((JavascriptExecutor) getDriver()).executeScript(
-                "arguments[0].dispatchEvent(new Event('click'));", chevron);
+        TestUtils.moveAndClickWithJavaScript(getDriver(),
+                getDriver().findElement(By.xpath("//button[@data-href='http://localhost:8080/job/NewFolder/']")) );
 
         WebElement deleteButton = wait.until(ExpectedConditions.presenceOfElementLocated(
                 By.xpath("//button[contains(@href, 'doDelete')]")));
