@@ -175,9 +175,9 @@ public class PipelineProject2Test extends BaseTest {
 
         getDriver().findElement(By.id("name")).sendKeys(unsafeCharacter);
 
-        Assert.assertEquals(getDriver()
-                .findElement(By.id("itemname-invalid"))
-                .getText(), "» ‘" + unsafeCharacter + "’ is an unsafe character");
+        Assert.assertEquals(
+                getDriver().findElement(By.id("itemname-invalid")).getText(),
+                "» ‘%s’ is an unsafe character".formatted(unsafeCharacter));
     }
 
 
