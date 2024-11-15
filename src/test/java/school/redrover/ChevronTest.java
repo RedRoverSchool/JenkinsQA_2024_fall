@@ -5,10 +5,13 @@ import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import school.redrover.runner.BaseTest;
 import school.redrover.runner.ProjectUtils;
+
+import java.time.Duration;
 
 public class ChevronTest extends BaseTest {
 
@@ -31,7 +34,13 @@ public class ChevronTest extends BaseTest {
         ProjectUtils.log(chevronDashboard.getLocation().toString());
         actions
                 .moveToElement(chevronDashboard)
-                .click();
+                .click()
+                .perform();
+
+        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(60));
+        wait.until(ExpectedConditions.presenceOfNestedElementLocatedBy(
+                By.xpath("//div[@class='tippy-content']"),
+                By.xpath("//div[@class='tippy-content']/div")));
 
         Assert.assertEquals(
                 getDriver().findElement(By.xpath("//div/a[@href='/view/all/builds']")).getText(),
