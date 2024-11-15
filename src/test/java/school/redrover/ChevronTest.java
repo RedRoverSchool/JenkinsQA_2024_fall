@@ -3,6 +3,7 @@ package school.redrover;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import school.redrover.runner.BaseTest;
@@ -15,14 +16,19 @@ public class ChevronTest extends BaseTest {
 
         Actions actions = new Actions(getDriver());
 
+        WebElement dashboard = getDriver().findElement(By.xpath("//li/a[@href='/']"));
         WebElement chevronDashboard = getDriver().findElement(By.xpath("//li/a/button[@class='jenkins-menu-dropdown-chevron']"));
+        ProjectUtils.log(chevronDashboard.getCssValue("opacity"));
+        ProjectUtils.log(chevronDashboard.getLocation().toString());
+
         actions
-                .moveToElement(chevronDashboard)
-                .pause(1000)
-                .moveToElement(chevronDashboard)
-                .click(chevronDashboard)
-                .pause(2000)
+                .moveToElement(dashboard)
                 .perform();
+
+//        WebElement chevronDashboard = getDriver().findElement(By.xpath("//li/a/button[@class='jenkins-menu-dropdown-chevron']"));
+        ProjectUtils.log(chevronDashboard.getCssValue("opacity"));
+        ProjectUtils.log(chevronDashboard.getLocation().toString());
+        chevronDashboard.click();
 
         Assert.assertEquals(
                 getDriver().findElement(By.xpath("//div/a[@href='/view/all/builds']")).getText(),
