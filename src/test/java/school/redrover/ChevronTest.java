@@ -16,6 +16,9 @@ public class ChevronTest extends BaseTest {
     public void testDropdownChevron() {
 
         Actions actions = new Actions(getDriver());
+        JavascriptExecutor js = (JavascriptExecutor) getDriver();
+        String browserVersion = (String) js.executeScript("return navigator.userAgent;");
+        ProjectUtils.log(browserVersion);
 
         WebElement dashboard = getDriver().findElement(By.xpath("//li/a[@href='/']"));
         WebElement chevronDashboard = getDriver().findElement(By.xpath("//li/a/button[@class='jenkins-menu-dropdown-chevron']"));
@@ -36,10 +39,6 @@ public class ChevronTest extends BaseTest {
                 "Build History");
 
         ProjectUtils.log(getDriver().findElement(By.xpath("//div/a[@href='/view/all/builds']")).getText());
-
-        JavascriptExecutor js = (JavascriptExecutor) getDriver();
-        String browserVersion = (String) js.executeScript("return navigator.userAgent;");
-        ProjectUtils.log(browserVersion);
 
     }
 
