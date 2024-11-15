@@ -11,7 +11,7 @@ import school.redrover.runner.BaseTest;
 
 public class SearchBoxTest extends BaseTest {
 
-    private final static By SEARCH_FIELD = (By.xpath("//input[@role = 'searchbox']"));
+    private final static By SEARCH_FIELD = By.xpath("//input[@role = 'searchbox']");
 
     @Test
     public void testReadDocumentation() {
