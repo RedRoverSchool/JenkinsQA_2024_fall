@@ -30,6 +30,7 @@ public class PipelineProject2Test extends BaseTest {
     }
 
     private static final String PROJECT_NAME = "MyPipelineProject";
+    private static final String NEW_PROJECT_NAME = "NewMyPipelineProject";
     private static final String FOLDER_NAME = "MyFolder";
 
     private static final String ITEM_NAME_LOCATOR = "//span[text()='%s']";
@@ -178,6 +179,58 @@ public class PipelineProject2Test extends BaseTest {
         Assert.assertEquals(
                 getDriver().findElement(By.id("itemname-invalid")).getText(),
                 "» ‘%s’ is an unsafe character".formatted(unsafeCharacter));
+    }
+
+    @Test
+    public void testRenameViaSidePanel() {
+        createItemAndGoToMainPage(ItemTypes.PIPELINE, PROJECT_NAME);
+
+        getWait10().until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath(ITEM_NAME_LOCATOR.formatted(PROJECT_NAME)))).click();
+
+        getDriver()
+                .findElement(By.xpath("//a[contains(@href, 'confirm-rename')]"))
+                .click();
+
+        WebElement itemName = getDriver().findElement(By.xpath("//input[@name='newName']"));
+        itemName.clear();
+        itemName.sendKeys(NEW_PROJECT_NAME);
+        getDriver().findElement(By.xpath("//button[@name='Submit']")).click();
+
+        goToMainPage();
+
+        Assert.assertEquals(getDriver()
+                .findElement(By.xpath("//span[text()='%s']".formatted(NEW_PROJECT_NAME)))
+                .getText(), NEW_PROJECT_NAME);
+    }
+
+    @Test
+    public void testRenameViaChevron() {
+        createItemAndGoToMainPage(ItemTypes.PIPELINE, PROJECT_NAME);
+
+        WebElement projectItem = getWait10().until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath(ITEM_NAME_LOCATOR.formatted(PROJECT_NAME))));
+        new Actions(getDriver()).moveToElement(projectItem).perform();
+
+        WebElement chevronButton = getWait5().until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//span[text()='%s']/following-sibling::button".formatted(PROJECT_NAME))));
+
+        TestUtils.moveAndClickWithJavaScript(getDriver(), chevronButton);
+
+        getWait10().until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//a[contains(@href, 'confirm-rename')]"))).click();
+
+        WebElement itemName = getDriver().findElement(By.xpath("//input[@name='newName']"));
+        itemName.clear();
+        itemName.sendKeys(NEW_PROJECT_NAME);
+
+        getDriver().findElement(By.xpath("//button[@name='Submit']")).click();
+
+        goToMainPage();
+
+        Assert.assertEquals(getDriver()
+                .findElement(By.xpath("//span[text()='%s']".formatted(NEW_PROJECT_NAME)))
+                .getText(), NEW_PROJECT_NAME);
     }
 
 
