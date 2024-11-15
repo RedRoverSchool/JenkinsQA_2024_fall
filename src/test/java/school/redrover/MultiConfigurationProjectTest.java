@@ -5,6 +5,7 @@ import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.Test;
@@ -17,6 +18,13 @@ import java.util.stream.Collectors;
 public class MultiConfigurationProjectTest extends BaseTest {
     private static final String NAME_OF_PROJECT = " project";
     private static final String DESCRIPTIONS = "Descriptions of project";
+
+    private void createMultiConfigProject() {
+        getDriver().findElement(By.cssSelector("[href$='newJob']")).click();
+        getDriver().findElement(By.id("name")).sendKeys("MultiConfigProject");
+        getDriver().findElement(By.xpath("//span[text()='Multi-configuration project']")).click();
+        getDriver().findElement(By.id("ok-button")).click();
+    }
 
     public WebDriverWait wait2() {
         return new WebDriverWait(getDriver(), Duration.ofSeconds(2));
@@ -71,12 +79,8 @@ public class MultiConfigurationProjectTest extends BaseTest {
 
     @Test
     public void testDragAndDropConfigurationMatrixBlock() {
-        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(5));
 
-        getDriver().findElement(By.cssSelector("[href$='newJob']")).click();
-        getDriver().findElement(By.id("name")).sendKeys("MultiConfigProject");
-        getDriver().findElement(By.xpath("//span[text()='Multi-configuration project']")).click();
-        getDriver().findElement(By.id("ok-button")).click();
+        createMultiConfigProject();
 
         getDriver().findElement(By.xpath("//button[@data-section-id='configuration-matrix']")).click();
 
@@ -86,7 +90,7 @@ public class MultiConfigurationProjectTest extends BaseTest {
 
         getDriver().findElement(By.cssSelector("button[suffix='axis']")).click();
 
-        WebElement dropdownList1 = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("button[class='jenkins-dropdown__item ']")));
+        WebElement dropdownList1 = getWait5().until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("button[class='jenkins-dropdown__item ']")));
         dropdownList1.click();
 
         getDriver().findElement(By.cssSelector("input.jenkins-input.validated[name='_.name']")).sendKeys("config1");
@@ -94,7 +98,7 @@ public class MultiConfigurationProjectTest extends BaseTest {
 
         getDriver().findElement(By.cssSelector("button[suffix='axis']")).click();
 
-        WebElement dropdownList2 = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("button[class='jenkins-dropdown__item ']")));
+        WebElement dropdownList2 = getWait5().until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("button[class='jenkins-dropdown__item ']")));
         dropdownList2.click();
 
         getDriver().findElement(By.xpath("(//input[@name='_.name' and @class='jenkins-input validated  '])[2]")).sendKeys("config2");
@@ -120,5 +124,22 @@ public class MultiConfigurationProjectTest extends BaseTest {
 
         Assert.assertEquals(actualFirstAxisName, "config2");
         Assert.assertEquals(actualSecondAxisName, "config1");
+    }
+
+    @Test
+    public void testSelectTimePeriodThrottleBuilds() {
+
+        createMultiConfigProject();
+
+        getDriver().findElement(By.xpath("//span[@class='jenkins-checkbox']/label[text()='Throttle builds']")).click();
+
+        WebElement durationItemsSelect = getDriver().findElement(By.xpath("//select[@name='_.durationName']"));
+
+        Select select = new Select(durationItemsSelect);
+        select.selectByValue("month");
+
+        String actualSelectedItemName = select.getFirstSelectedOption().getText();
+
+        Assert.assertEquals(actualSelectedItemName, "Month");
     }
 }
