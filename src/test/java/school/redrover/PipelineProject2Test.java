@@ -6,6 +6,7 @@ import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.testng.Assert;
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 import school.redrover.runner.BaseTest;
 import school.redrover.runner.TestUtils;
@@ -29,15 +30,37 @@ public class PipelineProject2Test extends BaseTest {
     }
 
     private static final String PROJECT_NAME = "MyPipelineProject";
+    private static final String NEW_PROJECT_NAME = "NewMyPipelineProject";
     private static final String FOLDER_NAME = "MyFolder";
 
     private static final String ITEM_NAME_LOCATOR = "//span[text()='%s']";
+
+    @DataProvider
+    public Object[][] providerUnsafeCharacters() {
+
+        return new Object[][]{
+                {"\\"}, {"]"}, {":"}, {"#"}, {"&"}, {"?"}, {"!"}, {"@"},
+                {"$"}, {"%"}, {"^"}, {"*"}, {"|"}, {"/"}, {"<"}, {">"},
+                {"["}, {";"}
+        };
+    }
 
     private void createItemAndGoToMainPage(ItemTypes itemType, String itemName) {
         getDriver().findElement(By.xpath("//a[@href='/view/all/newJob']")).click();
         getDriver().findElement(By.id("name")).sendKeys(itemName);
         getDriver().findElement(By.xpath(ITEM_NAME_LOCATOR.formatted(itemType.getHtmlTest()))).click();
         getDriver().findElement(By.id("ok-button")).click();
+        getDriver().findElement(By.id("jenkins-name-icon")).click();
+    }
+
+    private void createDisableItemAndGoToMainPage(ItemTypes itemType, String itemName) {
+        getDriver().findElement(By.xpath("//a[@href='/view/all/newJob']")).click();
+        getDriver().findElement(By.id("name")).sendKeys(itemName);
+        getDriver().findElement(By.xpath(ITEM_NAME_LOCATOR.formatted(itemType.getHtmlTest()))).click();
+        getDriver().findElement(By.id("ok-button")).click();
+        getWait10().until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//span[@id='toggle-switch-enable-disable-project']"))).click();
+        getDriver().findElement(By.xpath("//button[@name='Submit']")).click();
         getDriver().findElement(By.id("jenkins-name-icon")).click();
     }
 
@@ -117,7 +140,8 @@ public class PipelineProject2Test extends BaseTest {
         getDriver().findElement(By.xpath(ITEM_NAME_LOCATOR.formatted(FOLDER_NAME))).click();
 
         Assert.assertEquals(
-                getDriver().findElement(By.xpath(ITEM_NAME_LOCATOR.formatted(PROJECT_NAME))).getText(), PROJECT_NAME);
+                getDriver().findElement(By.xpath(ITEM_NAME_LOCATOR.formatted(PROJECT_NAME))).getText(),
+                PROJECT_NAME);
     }
 
     @Test
@@ -155,6 +179,116 @@ public class PipelineProject2Test extends BaseTest {
                 By.xpath("//button[@data-id='ok']"))).click();
 
         Assert.assertTrue(getDriver().findElements(By.xpath(String.format(ITEM_NAME_LOCATOR, PROJECT_NAME))).isEmpty());
+    }
+
+    @Test(dataProvider = "providerUnsafeCharacters")
+    public void testCreateWithUnsafeCharactersInName(String unsafeCharacter) {
+        getDriver().findElement(By.xpath("//a[@href='/view/all/newJob']")).click();
+
+        getDriver().findElement(By.id("name")).sendKeys(unsafeCharacter);
+
+        Assert.assertEquals(
+                getDriver().findElement(By.id("itemname-invalid")).getText(),
+                "» ‘%s’ is an unsafe character".formatted(unsafeCharacter));
+    }
+
+    @Test
+    public void testRenameViaSidePanel() {
+        createItemAndGoToMainPage(ItemTypes.PIPELINE, PROJECT_NAME);
+
+        getWait10().until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath(ITEM_NAME_LOCATOR.formatted(PROJECT_NAME)))).click();
+
+        getDriver().findElement(By.xpath("//a[contains(@href, 'confirm-rename')]")).click();
+
+        WebElement itemName = getDriver().findElement(By.xpath("//input[@name='newName']"));
+        itemName.clear();
+        itemName.sendKeys(NEW_PROJECT_NAME);
+        getDriver().findElement(By.xpath("//button[@name='Submit']")).click();
+
+        goToMainPage();
+
+        Assert.assertEquals(getDriver()
+                .findElement(By.xpath("//span[text()='%s']".formatted(NEW_PROJECT_NAME)))
+                .getText(), NEW_PROJECT_NAME);
+    }
+
+    @Test
+    public void testRenameViaChevron() {
+        createItemAndGoToMainPage(ItemTypes.PIPELINE, PROJECT_NAME);
+
+        WebElement projectItem = getWait10().until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath(ITEM_NAME_LOCATOR.formatted(PROJECT_NAME))));
+        new Actions(getDriver()).moveToElement(projectItem).perform();
+
+        WebElement chevronButton = getWait5().until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//span[text()='%s']/following-sibling::button".formatted(PROJECT_NAME))));
+        TestUtils.moveAndClickWithJavaScript(getDriver(), chevronButton);
+
+        getWait10().until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//a[contains(@href, 'confirm-rename')]"))).click();
+
+        WebElement itemName = getDriver().findElement(By.xpath("//input[@name='newName']"));
+        itemName.clear();
+        itemName.sendKeys(NEW_PROJECT_NAME);
+
+        getDriver().findElement(By.xpath("//button[@name='Submit']")).click();
+
+        goToMainPage();
+
+        Assert.assertEquals(getDriver()
+                .findElement(By.xpath("//span[text()='%s']".formatted(NEW_PROJECT_NAME)))
+                .getText(), NEW_PROJECT_NAME);
+    }
+
+
+    @Test
+    public void testDisabledProjectViaSidePanel() {
+        createItemAndGoToMainPage(ItemTypes.PIPELINE, PROJECT_NAME);
+
+        getWait10().until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath(ITEM_NAME_LOCATOR.formatted(PROJECT_NAME)))).click();
+
+        getDriver().findElement(By.xpath("//a[contains(@href, 'configure')]")).click();
+
+        new Actions(getDriver())
+                .moveToElement(getWait5().until(ExpectedConditions.visibilityOfElementLocated(
+                        By.xpath("//input[@id='enable-disable-project']")))).click()
+                .moveToElement(getDriver().findElement(By.xpath("//button[@name='Submit']"))).click()
+                .perform();
+
+        goToMainPage();
+
+        Assert.assertTrue(getWait5().until(ExpectedConditions.invisibilityOfElementLocated(
+                By.xpath("//tr[contains(@id,'%s')]//a[@tooltip='Schedule a Build for %s']".formatted(PROJECT_NAME, PROJECT_NAME)))));
+    }
+
+    @Test
+    public void testEnableProjectAfterDisabledViaChevron() {
+        createDisableItemAndGoToMainPage(ItemTypes.PIPELINE, PROJECT_NAME);
+
+        WebElement projectItem = getWait10().until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath(ITEM_NAME_LOCATOR.formatted(PROJECT_NAME))));
+        new Actions(getDriver()).moveToElement(projectItem).perform();
+
+        WebElement chevronButton = getWait5().until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//span[text()='%s']/following-sibling::button".formatted(PROJECT_NAME))));
+        TestUtils.moveAndClickWithJavaScript(getDriver(), chevronButton);
+
+        getWait10().until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//a[contains(@href, 'configure')]"))).click();
+
+        new Actions(getDriver())
+                .moveToElement(getWait5().until(ExpectedConditions.visibilityOfElementLocated(
+                        By.xpath("//input[@id='enable-disable-project']")))).click()
+                .moveToElement(getDriver().findElement(By.xpath("//button[@name='Submit']"))).click()
+                .perform();
+
+        goToMainPage();
+
+        Assert.assertTrue(getWait5().until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//tr[contains(@id,'%s')]//a[@tooltip='Schedule a Build for %s']".formatted(PROJECT_NAME, PROJECT_NAME))))
+                .isDisplayed());
     }
 
 }

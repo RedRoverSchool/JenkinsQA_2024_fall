@@ -43,4 +43,5 @@ build/
 local.properties
 /.allure/
 /log/
+
 /screenshots
