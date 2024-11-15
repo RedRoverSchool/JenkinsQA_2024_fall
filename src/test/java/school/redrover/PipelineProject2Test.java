@@ -53,6 +53,17 @@ public class PipelineProject2Test extends BaseTest {
         getDriver().findElement(By.id("jenkins-name-icon")).click();
     }
 
+    private void createDisableItemAndGoToMainPage(ItemTypes itemType, String itemName) {
+        getDriver().findElement(By.xpath("//a[@href='/view/all/newJob']")).click();
+        getDriver().findElement(By.id("name")).sendKeys(itemName);
+        getDriver().findElement(By.xpath(ITEM_NAME_LOCATOR.formatted(itemType.getHtmlTest()))).click();
+        getDriver().findElement(By.id("ok-button")).click();
+        getWait10().until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//span[@id='toggle-switch-enable-disable-project']"))).click();
+        getDriver().findElement(By.xpath("//button[@name='Submit']")).click();
+        getDriver().findElement(By.id("jenkins-name-icon")).click();
+    }
+
     private void goToMainPage() {
         getDriver().findElement(By.id("jenkins-name-icon")).click();
     }
@@ -188,9 +199,7 @@ public class PipelineProject2Test extends BaseTest {
         getWait10().until(ExpectedConditions.visibilityOfElementLocated(
                 By.xpath(ITEM_NAME_LOCATOR.formatted(PROJECT_NAME)))).click();
 
-        getDriver()
-                .findElement(By.xpath("//a[contains(@href, 'confirm-rename')]"))
-                .click();
+        getDriver().findElement(By.xpath("//a[contains(@href, 'confirm-rename')]")).click();
 
         WebElement itemName = getDriver().findElement(By.xpath("//input[@name='newName']"));
         itemName.clear();
@@ -214,7 +223,6 @@ public class PipelineProject2Test extends BaseTest {
 
         WebElement chevronButton = getWait5().until(ExpectedConditions.visibilityOfElementLocated(
                 By.xpath("//span[text()='%s']/following-sibling::button".formatted(PROJECT_NAME))));
-
         TestUtils.moveAndClickWithJavaScript(getDriver(), chevronButton);
 
         getWait10().until(ExpectedConditions.visibilityOfElementLocated(
@@ -233,5 +241,54 @@ public class PipelineProject2Test extends BaseTest {
                 .getText(), NEW_PROJECT_NAME);
     }
 
+
+    @Test
+    public void testDisabledProjectViaSidePanel() {
+        createItemAndGoToMainPage(ItemTypes.PIPELINE, PROJECT_NAME);
+
+        getWait10().until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath(ITEM_NAME_LOCATOR.formatted(PROJECT_NAME)))).click();
+
+        getDriver().findElement(By.xpath("//a[contains(@href, 'configure')]")).click();
+
+        new Actions(getDriver())
+                .moveToElement(getWait5().until(ExpectedConditions.visibilityOfElementLocated(
+                        By.xpath("//input[@id='enable-disable-project']")))).click()
+                .moveToElement(getDriver().findElement(By.xpath("//button[@name='Submit']"))).click()
+                .perform();
+
+        goToMainPage();
+
+        Assert.assertTrue(getWait5().until(ExpectedConditions.invisibilityOfElementLocated(
+                By.xpath("//tr[contains(@id,'%s')]//a[@tooltip='Schedule a Build for %s']".formatted(PROJECT_NAME, PROJECT_NAME)))));
+    }
+
+    @Test
+    public void testEnableProjectAfterDisabledViaChevron() {
+        createDisableItemAndGoToMainPage(ItemTypes.PIPELINE, PROJECT_NAME);
+
+        WebElement projectItem = getWait10().until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath(ITEM_NAME_LOCATOR.formatted(PROJECT_NAME))));
+        new Actions(getDriver()).moveToElement(projectItem).perform();
+
+        WebElement chevronButton = getWait5().until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//span[text()='%s']/following-sibling::button".formatted(PROJECT_NAME))));
+        TestUtils.moveAndClickWithJavaScript(getDriver(), chevronButton);
+
+        getWait10().until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//a[contains(@href, 'configure')]"))).click();
+
+        new Actions(getDriver())
+                .moveToElement(getWait5().until(ExpectedConditions.visibilityOfElementLocated(
+                        By.xpath("//input[@id='enable-disable-project']")))).click()
+                .moveToElement(getDriver().findElement(By.xpath("//button[@name='Submit']"))).click()
+                .perform();
+
+        goToMainPage();
+
+        Assert.assertTrue(getWait5().until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//tr[contains(@id,'%s')]//a[@tooltip='Schedule a Build for %s']".formatted(PROJECT_NAME, PROJECT_NAME))))
+                .isDisplayed());
+    }
 
 }
