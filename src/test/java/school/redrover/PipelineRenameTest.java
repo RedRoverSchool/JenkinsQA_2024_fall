@@ -24,10 +24,11 @@ public class PipelineRenameTest extends BaseTest {
         getDriver().findElement(By.id("jenkins-name-icon")).click();
     }
 
-    private void goToRenamePageAndInputNewProjectName(String currentProjectName, String newProjectName) {
+    private void goToRenamePageViaChevron(String currentProjectName) {
 
         WebElement chevronButton = getDriver().findElement(By.xpath("//td//button[@aria-expanded='false']"));
-        WebElement pipelineProject = getWait5().until(ExpectedConditions.elementToBeClickable(By.xpath("//a[@href='job/%s/']".formatted(currentProjectName))));
+        WebElement pipelineProject = getWait5().until(ExpectedConditions.elementToBeClickable(
+                By.xpath("//a[@href='job/%s/']".formatted(currentProjectName))));
 
         new Actions(getDriver()).moveToElement(pipelineProject)
                 .pause(500)
@@ -36,13 +37,22 @@ public class PipelineRenameTest extends BaseTest {
         TestUtils.moveAndClickWithJavaScript(getDriver(), chevronButton);
 
         getWait5().until(ExpectedConditions.attributeToBe(chevronButton, "aria-expanded", "true"));
-        getWait5().until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//a[@href='/job/%s/confirm-rename']".formatted(currentProjectName)))).click();
+        getWait5().until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//a[@href='/job/%s/confirm-rename']".formatted(currentProjectName)))).click();
+    }
+
+    private void goToRenamePageViaTaskMenu(String currentProjectName) {
+
+        getDriver().findElement(By.xpath("//a[@href='job/%s/']".formatted(currentProjectName))).click();
+        getDriver().findElement(By.xpath("//a[contains(@href, 'rename')]")).click();
+    }
+
+    private void clearFieldAndSendNewProjectName(String newProjectName) {
 
         WebElement renameField = getDriver().findElement(By.xpath("//input[@checkdependson='newName']"));
         renameField.clear();
         renameField.sendKeys(newProjectName);
         getDriver().findElement(By.name("Submit")).click();
-
     }
 
     @Test
@@ -50,7 +60,9 @@ public class PipelineRenameTest extends BaseTest {
 
         createPipelineProjectAndBackToHomePage(NAME_OF_PROJECT);
 
-        goToRenamePageAndInputNewProjectName(NAME_OF_PROJECT, NEW_NAME_OF_PROJECT);
+        goToRenamePageViaChevron(NAME_OF_PROJECT);
+
+        clearFieldAndSendNewProjectName(NEW_NAME_OF_PROJECT);
 
         getDriver().findElement(By.id("jenkins-name-icon")).click();
 
@@ -61,16 +73,53 @@ public class PipelineRenameTest extends BaseTest {
     }
 
     @Test
+    public void testRenamePipelineProjectViaTaskMenu() {
+
+        createPipelineProjectAndBackToHomePage(NAME_OF_PROJECT);
+
+        goToRenamePageViaTaskMenu(NAME_OF_PROJECT);
+
+        clearFieldAndSendNewProjectName(NEW_NAME_OF_PROJECT);
+
+        String actualProjectNameOnTaskPage = getDriver().findElement(
+                By.xpath("//div[@id='main-panel']//h1[text()='%s']".formatted(NEW_NAME_OF_PROJECT))).getText();
+
+        getDriver().findElement(By.id("jenkins-name-icon")).click();
+
+        String actualProjectNameOnHomePage = getDriver().findElement(
+                By.xpath("//span[text()='%s']".formatted(NEW_NAME_OF_PROJECT))).getText();
+
+        Assert.assertEquals(actualProjectNameOnTaskPage, NEW_NAME_OF_PROJECT);
+        Assert.assertEquals(actualProjectNameOnHomePage, NEW_NAME_OF_PROJECT);
+    }
+
+    @Test
     public void testShouldNotRenamePipelineProjectWithDuplicateName() {
 
-    createPipelineProjectAndBackToHomePage(NAME_OF_PROJECT);
+        createPipelineProjectAndBackToHomePage(NAME_OF_PROJECT);
 
-    goToRenamePageAndInputNewProjectName(NAME_OF_PROJECT, NAME_OF_PROJECT);
+        goToRenamePageViaChevron(NAME_OF_PROJECT);
 
-    String actualErrorMessage = getDriver().findElement(
-            By.xpath("//p[contains(text(), 'The new name is the same as the current name')]")).getText();
+        clearFieldAndSendNewProjectName(NAME_OF_PROJECT);
 
-    Assert.assertEquals(actualErrorMessage, "The new name is the same as the current name.");
+        String actualErrorMessage = getDriver().findElement(
+                By.xpath("//p[contains(text(), 'The new name is the same as the current name')]")).getText();
 
+        Assert.assertEquals(actualErrorMessage, "The new name is the same as the current name.");
+    }
+
+    @Test
+    public void testShouldNotRenamePipelineProjectWithEmptyName() {
+
+        createPipelineProjectAndBackToHomePage(NAME_OF_PROJECT);
+
+        goToRenamePageViaChevron(NAME_OF_PROJECT);
+
+        clearFieldAndSendNewProjectName("");
+
+        String actualErrorMessage = getDriver().findElement(
+                By.xpath("//p[contains(text(), 'No name is specified')]")).getText();
+
+        Assert.assertEquals(actualErrorMessage, "No name is specified");
     }
 }
