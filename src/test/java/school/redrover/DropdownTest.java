@@ -16,11 +16,14 @@ public class DropdownTest extends BaseTest {
     public void testBuild() {
 
         WebElement dropdownChevron = getDriver().findElement(By.xpath(HEADER_DROPDOWN));
-        Actions actions = new Actions(getDriver());
-        actions.moveToElement(dropdownChevron).click().perform();
+
+        new Actions(getDriver())
+                .moveToElement(dropdownChevron).click().perform();
 
         WebElement buildButton = getDriver().findElement(By.xpath("//a[normalize-space()='Builds']"));
-        actions.moveToElement(buildButton).click().perform();
+
+        new Actions(getDriver())
+                .moveToElement(buildButton).click().perform();
 
         WebElement thirdCrumb = getDriver().findElement(By.xpath(BREAD_CRUMBS));
 
@@ -31,11 +34,14 @@ public class DropdownTest extends BaseTest {
     public void testConfigure() {
 
         WebElement dropdownChevron = getDriver().findElement(By.xpath(HEADER_DROPDOWN));
-        Actions actions = new Actions(getDriver());
-        actions.moveToElement(dropdownChevron).click().perform();
+
+        new Actions(getDriver())
+                .moveToElement(dropdownChevron).click().perform();
 
         WebElement configureButton = getDriver().findElement(By.xpath("//a[normalize-space()='Configure']"));
-        actions.moveToElement(configureButton).click().perform();
+
+        new Actions(getDriver())
+                .moveToElement(configureButton).click().perform();
 
         WebElement thirdCrumb = getDriver().findElement(By.xpath(BREAD_CRUMBS));
 
