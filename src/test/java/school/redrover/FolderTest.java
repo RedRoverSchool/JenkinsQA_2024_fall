@@ -85,7 +85,8 @@ public class FolderTest extends BaseTest {
                 By.xpath("//a[@class='jenkins-table__link model-link inside']//button[@class='jenkins-menu-dropdown-chevron']"));
 
         new Actions(getDriver()).moveToElement(getDriver().findElement(By.xpath(ITEM_LOCATOR_BY_NAME.formatted(FIRST_FOLDER_NANE))))
-                .moveToElement(chevron).click().perform();
+                .perform();
+        TestUtils.moveAndClickWithJavaScript(getDriver(), chevron);
 
         getWait10().until(ExpectedConditions.visibilityOfElementLocated(
                 By.xpath("//a[@class='jenkins-dropdown__item '][1]"))).click();
