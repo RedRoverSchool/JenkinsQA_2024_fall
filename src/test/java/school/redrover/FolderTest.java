@@ -28,13 +28,23 @@ public class FolderTest extends BaseTest {
         }
     }
 
+    private enum FolderMenu {
+
+        CONFIGURE("1");
+
+        private final String menuNumber;
+
+        FolderMenu(String menuNumber){
+            this.menuNumber = menuNumber;
+        }
+
+        public String getMenuNumber(){
+            return menuNumber;
+        }
+    }
+
     private static final String ITEM_LOCATOR_BY_NAME = "//span[text()='%s']";
     private static final String FIRST_FOLDER_NANE = "Freestyle projects";
-    private static final String LINK_LOCATOR = "//a[contains(text(),'%s')]";
-
-    private WebElement getLinkElementByName(String elementName){
-        return getDriver().findElement(By.xpath("//a[contains(text(),'%s')]".formatted(elementName)));
-    }
 
     private void nameItemType(String name){
 
@@ -54,6 +64,21 @@ public class FolderTest extends BaseTest {
         getDriver().findElement(By.xpath("//a[contains(text(),'Dashboard')]")).click();
     }
 
+    private void selectFolderMenuByChevron(String folderName, FolderMenu folderMenuName){
+
+        WebElement chevron = getDriver().findElement(
+                By.xpath("//a[@class='jenkins-table__link model-link inside']//button[@class='jenkins-menu-dropdown-chevron']"));
+
+        new Actions(getDriver()).moveToElement(getDriver().findElement(By.xpath(ITEM_LOCATOR_BY_NAME
+                        .formatted(folderName)))).perform();
+        TestUtils.moveAndClickWithJavaScript(getDriver(), chevron);
+
+        getWait10().until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//a[@class='jenkins-dropdown__item '][%s]"
+                        .formatted(FolderMenu.CONFIGURE.getMenuNumber())))).click();
+
+    }
+
     @Test
     public void testCreateWithoutConfiguration(){
 
@@ -71,36 +96,51 @@ public class FolderTest extends BaseTest {
     }
 
     @Test
-    public void configureFolder() throws InterruptedException {
+    public void configureNameByChevron() {
 
         nameItemType(FIRST_FOLDER_NANE);
         TestUtils.scrollToBottom(getDriver());
         selectItemType(ItemType.FOLDER);
 
         getDriver().findElement(By.xpath("//button[contains(@name, 'Submit')]")).click();
-
         goToDashboard();
 
-        WebElement chevron = getDriver().findElement(
-                By.xpath("//a[@class='jenkins-table__link model-link inside']//button[@class='jenkins-menu-dropdown-chevron']"));
-
-        new Actions(getDriver()).moveToElement(getDriver().findElement(By.xpath(ITEM_LOCATOR_BY_NAME.formatted(FIRST_FOLDER_NANE))))
-                .perform();
-        TestUtils.moveAndClickWithJavaScript(getDriver(), chevron);
-
-        getWait10().until(ExpectedConditions.visibilityOfElementLocated(
-                By.xpath("//a[@class='jenkins-dropdown__item '][1]"))).click();
+        selectFolderMenuByChevron(FIRST_FOLDER_NANE, FolderMenu.CONFIGURE);
 
         getDriver().findElement(By.xpath("//div[contains(text(),'Display Name')]/following-sibling::div[1]/input"))
-                .sendKeys(FIRST_FOLDER_NANE);
-
-        getDriver().findElement(By.xpath("//div[contains(text(),'Description')]/following-sibling::div[1]/textarea"))
-                .sendKeys("description");
+                .sendKeys(FIRST_FOLDER_NANE + 1);
 
         getDriver().findElement(By.name("Submit")).click();
         goToDashboard();
 
-        Thread.sleep(5000);
+        Assert.assertEquals(getDriver().findElement(By.xpath("//a[@class='jenkins-table__link model-link inside']")).getText(),
+                FIRST_FOLDER_NANE + 1);
+
+    }
+
+    @Test
+    public void configureDescriptionByChevron() {
+
+        nameItemType(FIRST_FOLDER_NANE);
+        TestUtils.scrollToBottom(getDriver());
+        selectItemType(ItemType.FOLDER);
+
+        getDriver().findElement(By.xpath("//button[contains(@name, 'Submit')]")).click();
+        goToDashboard();
+
+        selectFolderMenuByChevron(FIRST_FOLDER_NANE, FolderMenu.CONFIGURE);
+
+        getDriver().findElement(By.xpath("//div[contains(text(),'Description')]/following-sibling::div[1]/textarea"))
+                .sendKeys("This is folder description");
+
+        getDriver().findElement(By.name("Submit")).click();
+        goToDashboard();
+
+        getDriver().findElement(By.xpath(ITEM_LOCATOR_BY_NAME.formatted(FIRST_FOLDER_NANE))).click();
+
+        Assert.assertEquals(getDriver().findElement(By.id("view-message")).getText(),
+                "This is folder description");
+
     }
 
 
