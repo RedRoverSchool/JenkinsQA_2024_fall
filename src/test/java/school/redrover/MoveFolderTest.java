@@ -9,6 +9,7 @@ import org.openqa.selenium.support.ui.Select;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import school.redrover.runner.BaseTest;
+import school.redrover.runner.TestUtils;
 
 
 public class MoveFolderTest extends BaseTest {
@@ -44,9 +45,10 @@ public class MoveFolderTest extends BaseTest {
                 "//a[contains(@href, 'job/%s') and contains(@class, 'model-link')]".formatted(CHILD_FOLDER)
                 ))).perform();
 
-        new Actions(getDriver()).moveToElement(getDriver().findElement(By.xpath(
-                "//span[text()='%s']/following-sibling::button".formatted(CHILD_FOLDER)
-                ))).pause(2).click().perform();
+        WebElement chevron = getDriver().findElement(By.xpath(
+                "//span[text()='%s']/following-sibling::button".formatted(CHILD_FOLDER)));
+
+        TestUtils.moveAndClickWithJavaScript(getDriver(), chevron);
 
         getWait5().until(ExpectedConditions.visibilityOfElementLocated(
                 By.xpath("//a[contains(@href, 'move')]"
