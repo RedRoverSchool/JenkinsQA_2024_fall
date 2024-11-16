@@ -97,7 +97,6 @@ public class FolderTest extends BaseTest {
                 .sendKeys("description");
 
         getDriver().findElement(By.name("Submit")).click();
-
         goToDashboard();
 
         Thread.sleep(5000);
