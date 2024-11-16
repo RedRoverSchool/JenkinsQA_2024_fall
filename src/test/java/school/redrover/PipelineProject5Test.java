@@ -8,7 +8,7 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 import school.redrover.runner.BaseTest;
 
-public class PipelineProject4Test extends BaseTest {
+public class PipelineProject5Test extends BaseTest {
 
     private static final String PROJECT_NAME = "MyProjectPipeline";
 
