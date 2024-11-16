@@ -1,13 +1,10 @@
 package school.redrover;
-
 import org.openqa.selenium.By;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import school.redrover.runner.BaseTest;
 
-import java.time.Duration;
 
 public class WelcomePageTest extends BaseTest {
 
@@ -16,8 +13,7 @@ public class WelcomePageTest extends BaseTest {
         getDriver().findElement(By.cssSelector("#main-panel > div:nth-child(3) > div > section:nth-child(3) > ul > li > a")).click();
         getDriver().findElement(By.id("name")).sendKeys("Freestyle project 1");
 
-        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(2));
-        wait.until(ExpectedConditions.elementToBeClickable(
+        getWait2().until(ExpectedConditions.elementToBeClickable(
                 By.cssSelector("#j-add-item-type-standalone-projects > ul > li.hudson_model_FreeStyleProject"))).click();
 
         getDriver().findElement(By.cssSelector("#ok-button")).click();
