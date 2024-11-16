@@ -15,6 +15,10 @@ import java.util.List;
 
 public class WorkingWithPipelinesTest extends BaseTest {
 
+    private static final String PIPELINE_NAME = "Regression";
+    private static final String FREESTYLE_PROJECT_NAME = "Freestyle";
+
+
     private enum ItemType {
         FREESTYLE_PROJECT(".hudson_model_FreeStyleProject"),
         PIPELINE(".org_jenkinsci_plugins_workflow_job_WorkflowJob"),
@@ -61,29 +65,23 @@ public class WorkingWithPipelinesTest extends BaseTest {
     @Test
     public void testSearchPipelineOnMainPage() {
 
-        final String namePipeLine = "Regression";
-
-        createItemUtils(namePipeLine,ItemType.PIPELINE);
+        createItemUtils(PIPELINE_NAME,ItemType.PIPELINE);
 
         returnToHomePage();
 
         Assert.assertListContainsObject(getProjectList(),
-                namePipeLine, "Пайплайн не найден на главной странице или текст не совпадает");
-
-        System.out.println("Пайплайн создан и находится в списке на главной странице");
+                PIPELINE_NAME, "Пайплайн не найден на главной странице или текст не совпадает");
     }
 
     @Test
     public void testSearchFreestyleProjectOnMainPage() {
 
-        final  String nameFreestyleProject = "Freestyle";
-
-        createItemUtils(nameFreestyleProject,ItemType.FREESTYLE_PROJECT);
+        createItemUtils(FREESTYLE_PROJECT_NAME,ItemType.FREESTYLE_PROJECT);
 
         returnToHomePage();
 
         Assert.assertListContainsObject(getProjectList(),
-                nameFreestyleProject, "Freestyle Project не найден на главной странице или текст не совпадает");
+                FREESTYLE_PROJECT_NAME, "Freestyle Project не найден на главной странице или текст не совпадает");
 
         System.out.println("Freestyle Project создан и находится в списке на главной странице");
     }
@@ -91,9 +89,7 @@ public class WorkingWithPipelinesTest extends BaseTest {
     @Test
         public void testRenameViaChevron() {
 
-        final String namePipeLine = "Regression";
-
-        createItemUtils(namePipeLine, ItemType.PIPELINE);
+        createItemUtils(PIPELINE_NAME, ItemType.PIPELINE);
         returnToHomePage();
 
         WebElement regressionLink = getDriver().findElement(By.xpath("//a[@href='job/Regression/']"));
@@ -123,6 +119,41 @@ public class WorkingWithPipelinesTest extends BaseTest {
 
         Assert.assertListContainsObject(getProjectList(),
                 "NewRegression", "Пайплайн не найден на главной странице или текст не совпадает");
+    }
+
+    @Test
+    public void testDeleteViaChevron() {
+
+        createItemUtils(PIPELINE_NAME, ItemType.PIPELINE);
+        returnToHomePage();
+        createItemUtils("SecondPipeline", ItemType.PIPELINE);
+        returnToHomePage();
+
+        WebElement regressionLink = getDriver().findElement(By.xpath("//a[@href='job/Regression/']"));
+
+        new Actions(getDriver())
+                .moveToElement(regressionLink).perform();
+
+        WebElement chevron = getDriver().findElement(
+                By.xpath("//button[@data-href='http://localhost:8080/job/Regression/']"));
+
+        ((JavascriptExecutor) getDriver()).executeScript(
+                "arguments[0].dispatchEvent(new Event('mouseenter'));", chevron);
+        ((JavascriptExecutor) getDriver()).executeScript(
+                "arguments[0].dispatchEvent(new Event('click'));", chevron);
+
+        getWait5().until(ExpectedConditions.elementToBeClickable(
+                        By.xpath("//button[@href='/job/Regression/doDelete']")))
+                .click();
+
+        getWait5().until(ExpectedConditions.elementToBeClickable(
+                        By.xpath("//button[@class='jenkins-button jenkins-button--primary ']")))
+                .click();
+
+        returnToHomePage();
+
+        Assert.assertListNotContainsObject(getProjectList(), PIPELINE_NAME,
+                "Пайплайн не найден на главной странице или текст не совпадает");
     }
 }
 
