@@ -31,7 +31,9 @@ public class MoveFolderTest extends BaseTest {
         jsExecutor.executeScript("arguments[0].click();", saveButton);
     }
 
-    private void backToMainPage() {getDriver().findElement(By.id("jenkins-name-icon")).click();}
+    private void backToMainPage() {
+        getDriver().findElement(By.id("jenkins-name-icon")).click();
+    }
 
     @Test
     public void moveFolderFromDropdownMenu (){
