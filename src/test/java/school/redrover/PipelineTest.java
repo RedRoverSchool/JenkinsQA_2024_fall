@@ -17,7 +17,7 @@ public class PipelineTest extends BaseTest {
     @Test
     public void testCreatePipeline() {
 
-        createNewProject(PROJECT_NAME + 1, "Pipeline");
+        createNewProject(PROJECT_NAME + 1, ProjectType.Pipeline);
 
         getDriver().findElement(By.cssSelector(".jenkins-submit-button")).click();
         getDriver().findElement(By.id("jenkins-home-link")).click();
@@ -44,7 +44,7 @@ public class PipelineTest extends BaseTest {
     @Test
     public void testRenameJob() {
 
-        createNewProject(PROJECT_NAME + 2,"Pipeline");
+        createNewProject(PROJECT_NAME + 2, ProjectType.Pipeline);
 
         getDriver().findElement(By.cssSelector(".jenkins-submit-button")).click();
         getDriver().findElement(By.id("jenkins-home-link")).click();
@@ -69,7 +69,7 @@ public class PipelineTest extends BaseTest {
     @Test
     public void testDeleteJob() {
 
-        createNewProject(PROJECT_NAME + 3, "Pipeline");
+        createNewProject(PROJECT_NAME + 3, ProjectType.Pipeline);
 
         getDriver().findElement(By.cssSelector(".jenkins-submit-button")).click();
         getDriver().findElement(By.id("jenkins-home-link")).click();
@@ -85,17 +85,35 @@ public class PipelineTest extends BaseTest {
         Assert.assertEquals(actualMessage, "Welcome to Jenkins!");
     }
 
-    private void createNewProject(String name, String type) {
+    private void createNewProject(String name, ProjectType projectType) {
 
         getDriver().findElement(By.xpath("//a[@href ='newJob']")).click();
 
         getDriver().findElement(By.id("name")).sendKeys(name);
 
         getWait10().until(ExpectedConditions.elementToBeClickable(
-                By.xpath(("//div[@id='items']//label/span[text()= '%s']".formatted(type))))).click();
+                By.xpath(("//div[@id='items']//label/span[text()= '%s']".formatted(projectType))))).click();
 
         getDriver().findElement(By.id("ok-button")).click();
+    }
 
+    private enum ProjectType {
+        FreestyleProject("Freestyle project"),
+        Pipeline("Pipeline"),
+        MultiConfigurationProject("Multi-configuration project"),
+        Folder("Folder"),
+        MultibranchPipeline("Multibranch Pipeline"),
+        OrganizationFolder("Organization Folder");
+
+        private final String htmlText;
+
+        ProjectType(String htmlText) {
+            this.htmlText = htmlText;
+        }
+
+        public String getHtmlText() {
+            return htmlText;
+        }
     }
 }
 
