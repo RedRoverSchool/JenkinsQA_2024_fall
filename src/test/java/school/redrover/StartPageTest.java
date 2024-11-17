@@ -153,4 +153,20 @@ public class StartPageTest extends BaseTest {
         Assert.assertEquals(secondText.getText(), "This page is where your Jenkins jobs will be displayed. To get started, you can set up distributed builds or start building a software project.");
     }
 
+
+    @Test
+    public void checkTitlesAndButtonsOnMainPage(){
+
+        Assert.assertEquals(getDriver().findElement(By.tagName("h1")).getText(), "Добро пожаловать в Jenkins!");
+        Assert.assertEquals(getDriver().findElement(By.xpath("/html[1]/body[1]/div[2]/div[2]/div[1]/div[2]/div[2]/a[1]")).getText(), "добавить описание");
+        Assert.assertEquals(getDriver().findElement(By.xpath("/html[1]/body[1]/div[2]/div[2]/div[2]/div[1]/section[1]/ul[1]/li[1]/a[1]/span[1]")).getText(),"Create a job");
+        Assert.assertEquals(getDriver().findElement(By.xpath("/html[1]/body[1]/div[2]/div[2]/div[2]/div[1]/section[2]/ul[1]/li[1]/a[1]/span[1]")).getText(),"Set up an agent");
+        Assert.assertEquals(getDriver().findElement(By.xpath("/html[1]/body[1]/div[2]/div[2]/div[2]/div[1]/section[2]/ul[1]/li[2]/a[1]/span[1]")).getText(),"Configure a cloud");
+        Assert.assertEquals(getDriver().findElement(By.xpath("/html[1]/body[1]/div[2]/div[2]/div[2]/div[1]/section[2]/ul[1]/li[3]/a[1]/span[1]")).getText(),"Learn more about distributed builds");
+        Assert.assertEquals(getDriver().findElement(By.xpath("/html[1]/body[1]/div[2]/div[1]/div[1]/div[1]/span[1]/a[1]")).getText(),"Создать Item");
+        Assert .assertEquals(getDriver().findElement(By.xpath("/html[1]/body[1]/div[2]/div[1]/div[1]/div[2]/span[1]/a[1]/span[2]")).getText(),"История сборок");
+        Assert .assertEquals(getDriver().findElement(By.cssSelector("a[href='/manage']")).getText(),"Настроить Jenkins");
+        Assert .assertEquals(getDriver().findElement(By.xpath("/html[1]/body[1]/div[2]/div[1]/div[1]/div[4]/span[1]/a[1]/span[2]")).getText(),"My Views");
+    }
+
 }
