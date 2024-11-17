@@ -17,7 +17,7 @@ public class PipelineTest extends BaseTest {
     @Test
     public void testCreatePipeline() {
 
-        createNewProject(PROJECT_NAME + 1, ProjectType.PipelineProject);
+        createNewProject(PROJECT_NAME + 1, ProjectType.Pipeline);
 
         getDriver().findElement(By.cssSelector(".jenkins-submit-button")).click();
         getDriver().findElement(By.id("jenkins-home-link")).click();
@@ -44,7 +44,7 @@ public class PipelineTest extends BaseTest {
     @Test
     public void testRenameJob() {
 
-        createNewProject(PROJECT_NAME + 2, ProjectType.PipelineProject);
+        createNewProject(PROJECT_NAME + 2, ProjectType.Pipeline);
 
         getDriver().findElement(By.cssSelector(".jenkins-submit-button")).click();
         getDriver().findElement(By.id("jenkins-home-link")).click();
@@ -69,7 +69,7 @@ public class PipelineTest extends BaseTest {
     @Test
     public void testDeleteJob() {
 
-        createNewProject(PROJECT_NAME + 3, ProjectType.PipelineProject);
+        createNewProject(PROJECT_NAME + 3, ProjectType.Pipeline);
 
         getDriver().findElement(By.cssSelector(".jenkins-submit-button")).click();
         getDriver().findElement(By.id("jenkins-home-link")).click();
