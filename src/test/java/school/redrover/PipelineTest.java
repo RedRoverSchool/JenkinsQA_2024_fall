@@ -92,7 +92,7 @@ public class PipelineTest extends BaseTest {
         getDriver().findElement(By.id("name")).sendKeys(name);
 
         getWait10().until(ExpectedConditions.elementToBeClickable(
-                By.xpath(("//div[@id='items']//label/span[text()= '%s']".formatted(type))))).click();
+                By.xpath(("//div[@id='items']//label/span[text()= '%s']".formatted(projectType))))).click();
 
         getDriver().findElement(By.id("ok-button")).click();
     }
