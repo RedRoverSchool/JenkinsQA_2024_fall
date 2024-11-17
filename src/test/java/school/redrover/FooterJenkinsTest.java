@@ -7,7 +7,6 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 import school.redrover.runner.BaseTest;
 
-import java.time.Duration;
 import java.util.List;
 
 public class FooterJenkinsTest extends BaseTest {
