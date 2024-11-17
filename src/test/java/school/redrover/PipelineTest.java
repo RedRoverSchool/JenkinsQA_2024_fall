@@ -111,7 +111,25 @@ public class PipelineTest extends BaseTest {
                 String.format("//div[@id='items']//label/span[text()= '%s']", type)))).click();
 
         getDriver().findElement(By.id("ok-button")).click();
+    }
 
+    private enum ProjectType {
+        FreestyleProject("Freestyle project"),
+        PipelineProject("Pipeline"),
+        MultiConfigurationProject("Multi-configuration project"),
+        Folder("Folder"),
+        MultibranchPipeline("Multibranch Pipeline"),
+        OrganizationFolder("Organization Folder");
+
+        private final String htmlText;
+
+        ProjectType(String htmlText) {
+            this.htmlText = htmlText;
+        }
+
+        public String getHtmlText() {
+            return htmlText;
+        }
     }
 }
 
