@@ -12,12 +12,12 @@ import java.time.Duration;
 
 public class PipelineTest extends BaseTest {
 
+    private static final String PROJECT_NAME = "Project";
+
     @Test
     public void testCreatePipeline() {
 
-        final String nameProject = "Project1";
-
-        createNewProject(nameProject, "Pipeline");
+        createNewProject(PROJECT_NAME + 1, "Pipeline");
 
         getDriver().findElement(By.cssSelector(".jenkins-submit-button")).click();
         getDriver().findElement(By.id("jenkins-home-link")).click();
@@ -25,7 +25,7 @@ public class PipelineTest extends BaseTest {
         String actualJobName = getDriver().findElement(By.xpath(
                 "//table[@id='projectstatus']/tbody/tr/td/a/span")).getText();
 
-        Assert.assertEquals(actualJobName, nameProject);
+        Assert.assertEquals(actualJobName, PROJECT_NAME + 1);
     }
 
     @Test
@@ -46,10 +46,7 @@ public class PipelineTest extends BaseTest {
     @Test
     public void testRenameJob() {
 
-        final String nameJob = "Project2";
-        final String newNameJob = "Project2New";
-
-        createNewProject(nameJob,"Pipeline");
+        createNewProject(PROJECT_NAME + 2,"Pipeline");
 
         getDriver().findElement(By.cssSelector(".jenkins-submit-button")).click();
         getDriver().findElement(By.id("jenkins-home-link")).click();
@@ -60,7 +57,7 @@ public class PipelineTest extends BaseTest {
 
         WebElement inputName = getDriver().findElement(By.xpath("//input[@checkdependson='newName']"));
         inputName.clear();
-        inputName.sendKeys(newNameJob);
+        inputName.sendKeys(PROJECT_NAME + "2New");
 
         getDriver().findElement(By.xpath("//button[@name='Submit']")).click();
 
@@ -69,15 +66,13 @@ public class PipelineTest extends BaseTest {
         String actualJobName = getDriver().findElement(By.xpath(
                 "//table[@id='projectstatus']/tbody/tr/td/a/span")).getText();
 
-        Assert.assertEquals(actualJobName, newNameJob);
+        Assert.assertEquals(actualJobName, PROJECT_NAME + "2New");
     }
 
     @Test
     public void testDeleteJob() {
 
-        final String nameJob = "Project3";
-
-        createNewProject(nameJob, "Pipeline");
+        createNewProject(PROJECT_NAME + 3, "Pipeline");
 
         getDriver().findElement(By.cssSelector(".jenkins-submit-button")).click();
         getDriver().findElement(By.id("jenkins-home-link")).click();
