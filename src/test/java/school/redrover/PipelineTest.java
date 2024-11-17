@@ -85,6 +85,23 @@ public class PipelineTest extends BaseTest {
         Assert.assertEquals(actualMessage, "Welcome to Jenkins!");
     }
 
+    @Test
+    public void createProjectWithNotUniqueName() {
+        String nonUniqueProjectName = PROJECT_NAME + "Unique";
+
+        createNewProjectAndGoMainPageByLogo(nonUniqueProjectName, ProjectType.Pipeline);
+
+        getDriver().findElement(By.xpath("//a[contains(@href, 'newJob')]")).click();
+
+        getDriver().findElement(By.id("name")).sendKeys(nonUniqueProjectName);
+
+        String actualErrorMessage = getDriver().findElement(By.id("itemname-invalid")).getText();
+
+        Assert.assertEquals(actualErrorMessage, "» A job already exists with the name ‘%s’".formatted(nonUniqueProjectName));
+
+
+    }
+
     private void createNewProject(String name, ProjectType projectType) {
 
         getDriver().findElement(By.xpath("//a[@href ='newJob']")).click();
@@ -95,6 +112,20 @@ public class PipelineTest extends BaseTest {
                 By.xpath(("//div[@id='items']//label/span[text()= '%s']".formatted(projectType))))).click();
 
         getDriver().findElement(By.id("ok-button")).click();
+    }
+
+    private void createNewProjectAndGoMainPageByLogo(String name, ProjectType projectType) {
+
+        getDriver().findElement(By.xpath("//a[@href ='newJob']")).click();
+
+        getDriver().findElement(By.id("name")).sendKeys(name);
+
+        getWait10().until(ExpectedConditions.elementToBeClickable(
+                By.xpath(("//div[@id='items']//label/span[text()= '%s']".formatted(projectType))))).click();
+
+        getDriver().findElement(By.id("ok-button")).click();
+        getDriver().findElement(By.cssSelector(".jenkins-submit-button")).click();
+        getDriver().findElement(By.id("jenkins-home-link")).click();
     }
 
     private enum ProjectType {
