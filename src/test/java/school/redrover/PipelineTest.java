@@ -33,13 +33,11 @@ public class PipelineTest extends BaseTest {
 
         getDriver().findElement(By.xpath("//a[@href ='newJob']")).click();
 
-        getDriver().findElement(By.xpath(
-                "//li[@class='org_jenkinsci_plugins_workflow_job_WorkflowJob']")).click();
-        WebElement buttonSubmit = getDriver().findElement(By.id("ok-button"));
+        getDriver().findElement(By.xpath("//li[@class='org_jenkinsci_plugins_workflow_job_WorkflowJob']")).click();
 
         WebElement actualErrorMessage = getDriver().findElement(By.id("itemname-required"));
 
-        Assert.assertFalse(buttonSubmit.isEnabled());
+        Assert.assertFalse(getDriver().findElement(By.id("ok-button")).isEnabled());
         Assert.assertEquals(actualErrorMessage.getText(), "» This field cannot be empty, please enter a valid name");
     }
 
@@ -63,8 +61,7 @@ public class PipelineTest extends BaseTest {
 
         getDriver().findElement(By.id("jenkins-home-link")).click();
 
-        String actualJobName = getDriver().findElement(By.xpath(
-                "//table[@id='projectstatus']/tbody/tr/td/a/span")).getText();
+        String actualJobName = getDriver().findElement(By.xpath("//table[@id='projectstatus']/tbody/tr/td/a/span")).getText();
 
         Assert.assertEquals(actualJobName, PROJECT_NAME + "2New");
     }
@@ -77,32 +74,24 @@ public class PipelineTest extends BaseTest {
         getDriver().findElement(By.cssSelector(".jenkins-submit-button")).click();
         getDriver().findElement(By.id("jenkins-home-link")).click();
 
-        getDriver().findElement(By.xpath(
-                "//table[@id='projectstatus']/tbody/tr/td/a/span")).click();
+        getDriver().findElement(By.xpath("//table[@id='projectstatus']/tbody/tr/td/a/span")).click();
 
-        getDriver().findElement(By.xpath(
-                "//a[@data-title='Delete Pipeline']")).click();
+        getDriver().findElement(By.xpath("//a[@data-title='Delete Pipeline']")).click();
 
-        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(15));
+        getWait10().until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//button[@data-id='ok']"))).click();
 
-        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(
-                "//button[@data-id='ok']"))).click();
-
-        String actualMessage = getDriver().findElement(By.xpath(
-                "//div[@class='empty-state-block']/h1")).getText();
+        String actualMessage = getDriver().findElement(By.xpath("//div[@class='empty-state-block']/h1")).getText();
 
         Assert.assertEquals(actualMessage, "Welcome to Jenkins!");
     }
 
     private void createNewProject(String name, String type) {
 
-        WebDriverWait waite = new WebDriverWait(getDriver(),Duration.ofSeconds(10));
-
         getDriver().findElement(By.xpath("//a[@href ='newJob']")).click();
 
         getDriver().findElement(By.id("name")).sendKeys(name);
 
-        waite.until(ExpectedConditions.elementToBeClickable(By.xpath(
+        getWait10().until(ExpectedConditions.elementToBeClickable(By.xpath(
                 String.format("//div[@id='items']//label/span[text()= '%s']", type)))).click();
 
         getDriver().findElement(By.id("ok-button")).click();
