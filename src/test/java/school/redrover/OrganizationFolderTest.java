@@ -204,8 +204,7 @@ public class OrganizationFolderTest extends BaseTest {
         getDriver().findElement(By.cssSelector("[href$='/newJob']")).click();
         getDriver().findElement(By.id("name")).sendKeys("Organization_Folder");
 
-        JavascriptExecutor js = (JavascriptExecutor) getDriver();
-        js.executeScript("window.scrollTo(0, document.body.scrollHeight);");
+        scrollPage();
 
         getDriver().findElement(By.cssSelector("[class$='OrganizationFolder']")).click();
         getDriver().findElement(By.id("ok-button")).click();
@@ -213,13 +212,11 @@ public class OrganizationFolderTest extends BaseTest {
         new Select(getDriver().findElement(By.xpath("(//select[contains(@class, 'dropdownList')])[2]")))
                 .selectByVisibleText("Default Icon");
 
-        JavascriptExecutor js2 = (JavascriptExecutor) getDriver();
-        js2.executeScript("window.scrollTo(0, document.body.scrollHeight);");
+        scrollPage();
 
         getDriver().findElement(By.name("Submit")).click();
 
-        String organizationFolderCurrentIcon = getDriver().findElement(By.cssSelector("h1 > svg")).getAttribute("title");
-        Assert.assertEquals(organizationFolderCurrentIcon, "Folder");
+        Assert.assertEquals(getDriver().findElement(By.cssSelector("h1 > svg")).getAttribute("title"), "Folder");
     }
 
     @Test

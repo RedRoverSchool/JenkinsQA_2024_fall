@@ -17,6 +17,11 @@ public class MultibranchPipelineTest extends BaseTest {
     private static final By MULTIBRANCH_PIPELINE_PROJECT = By.cssSelector("[class$='MultiBranchProject']");
     private static final By OK_BUTTON = By.id("ok-button");
 
+    private void scrollDown() {
+        JavascriptExecutor scroll = (JavascriptExecutor) getDriver();
+        scroll.executeScript("window.scrollTo(0, document.body.scrollHeight);");
+    }
+
     @Test
     public void testAddDescriptionCreatingMultibranch() {
         final String expectedDescription = "AddedDescription";
@@ -75,7 +80,6 @@ public class MultibranchPipelineTest extends BaseTest {
         Assert.assertEquals(getDriver().findElement(By.xpath("//h1")).getText(),"Hilton Hotels");
     }
 
-    @Ignore
     @Test
     public void testTryCreateProjectExistName() {
         final String projectName = "MultiBuild";
@@ -84,28 +88,27 @@ public class MultibranchPipelineTest extends BaseTest {
         getDriver().findElement(By.cssSelector("[href$='/newJob']")).click();
         getDriver().findElement(By.id("name")).sendKeys(projectName);
 
-        JavascriptExecutor js = (JavascriptExecutor) getDriver();
-        js.executeScript("window.scrollTo(0, document.body.scrollHeight);");
+        scrollDown();
 
         getDriver().findElement(By.cssSelector("[class$='MultiBranchProject']")).click();
         getDriver().findElement(By.id("ok-button")).click();
 
-        JavascriptExecutor js1 = (JavascriptExecutor) getDriver();
-        js1.executeScript("window.scrollTo(0, document.body.scrollHeight);");
+        scrollDown();
 
         getDriver().findElement(By.xpath("//*[@id='bottom-sticker']/div/button[1]")).click();
         getDriver().findElement(By.xpath("//*[@id='jenkins-home-link']")).click();
 
         getDriver().findElement(By.cssSelector("[href$='/newJob']")).click();
-        JavascriptExecutor js2 = (JavascriptExecutor) getDriver();
-        js2.executeScript("window.scrollTo(0, document.body.scrollHeight);");
+
+        scrollDown();
 
         getDriver().findElement(By.cssSelector("[class$='MultiBranchProject']")).click();
         getDriver().findElement(By.id("name")).sendKeys(projectName);
 
-        String actualMessage = getDriver().findElement(By.xpath("//*[@id='itemname-invalid']")).getText();
-        Assert.assertEquals(actualMessage, errorMessage);
+        Assert.assertEquals(getDriver().findElement(By.xpath("//*[@id='itemname-invalid']"))
+                .getText(), errorMessage);
     }
+
     @Ignore
     @Test
     public void testSelectingTriggersScanPeriodFromConfigPage() throws InterruptedException {
