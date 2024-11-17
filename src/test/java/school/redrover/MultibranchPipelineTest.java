@@ -4,13 +4,10 @@ import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
-import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import school.redrover.runner.BaseTest;
-
-import java.time.Duration;
 
 public class MultibranchPipelineTest extends BaseTest {
 
@@ -24,8 +21,6 @@ public class MultibranchPipelineTest extends BaseTest {
     public void testAddDescriptionCreatingMultibranch() {
         final String expectedDescription = "AddedDescription";
 
-        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(2));
-
         getDriver().findElement(By.cssSelector("[href$='/newJob']")).click();
 
         getDriver().findElement(By.id("name")).sendKeys("MultiBranch");
@@ -35,7 +30,7 @@ public class MultibranchPipelineTest extends BaseTest {
         getDriver().findElement(By.cssSelector("[name$='description']")).sendKeys(expectedDescription);
         getDriver().findElement(By.name("Submit")).click();
 
-        String actualDescription = wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("view-message"))).getText();
+        String actualDescription = getWait2().until(ExpectedConditions.visibilityOfElementLocated(By.id("view-message"))).getText();
 
         Assert.assertEquals(actualDescription, expectedDescription);
     }
