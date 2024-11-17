@@ -105,8 +105,11 @@ public class MultibranchPipelineTest extends BaseTest {
         getDriver().findElement(By.cssSelector("[class$='MultiBranchProject']")).click();
         getDriver().findElement(By.id("name")).sendKeys(projectName);
 
-        Assert.assertEquals(getDriver().findElement(By.xpath("//*[@id='itemname-invalid']"))
-                .getText(), errorMessage);
+        String actualMessage = getWait10().until(ExpectedConditions.visibilityOfElementLocated(By
+                .xpath("//*[@id='itemname-invalid']"))).getText();
+
+        Assert.assertEquals(actualMessage, errorMessage);
+
     }
 
     @Ignore
