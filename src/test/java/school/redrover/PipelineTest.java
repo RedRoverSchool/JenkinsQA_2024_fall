@@ -17,7 +17,7 @@ public class PipelineTest extends BaseTest {
 
         final String nameProject = "Project1";
 
-        createNewProject(nameProject, "Pipeline");
+        createNewProject(nameProject, ProjectType.PipelineProject);
 
         getDriver().findElement(By.cssSelector(".jenkins-submit-button")).click();
         getDriver().findElement(By.id("jenkins-home-link")).click();
@@ -49,7 +49,7 @@ public class PipelineTest extends BaseTest {
         final String nameJob = "Project2";
         final String newNameJob = "Project2New";
 
-        createNewProject(nameJob,"Pipeline");
+        createNewProject(nameJob,ProjectType.PipelineProject);
 
         getDriver().findElement(By.cssSelector(".jenkins-submit-button")).click();
         getDriver().findElement(By.id("jenkins-home-link")).click();
@@ -77,7 +77,7 @@ public class PipelineTest extends BaseTest {
 
         final String nameJob = "Project3";
 
-        createNewProject(nameJob, "Pipeline");
+        createNewProject(nameJob, ProjectType.PipelineProject);
 
         getDriver().findElement(By.cssSelector(".jenkins-submit-button")).click();
         getDriver().findElement(By.id("jenkins-home-link")).click();
@@ -99,7 +99,7 @@ public class PipelineTest extends BaseTest {
         Assert.assertEquals(actualMessage, "Welcome to Jenkins!");
     }
 
-    private void createNewProject(String name, String type) {
+    private void createNewProject(String name, ProjectType projectType) {
 
         WebDriverWait waite = new WebDriverWait(getDriver(),Duration.ofSeconds(10));
 
@@ -108,7 +108,7 @@ public class PipelineTest extends BaseTest {
         getDriver().findElement(By.id("name")).sendKeys(name);
 
         waite.until(ExpectedConditions.elementToBeClickable(By.xpath(
-                String.format("//div[@id='items']//label/span[text()= '%s']", type)))).click();
+                String.format("//div[@id='items']//label/span[text()= '%s']", projectType.name())))).click();
 
         getDriver().findElement(By.id("ok-button")).click();
     }
