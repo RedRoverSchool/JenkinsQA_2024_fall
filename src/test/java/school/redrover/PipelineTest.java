@@ -99,7 +99,7 @@ public class PipelineTest extends BaseTest {
 
     private enum ProjectType {
         FreestyleProject("Freestyle project"),
-        PipelineProject("Pipeline"),
+        Pipeline("Pipeline"),
         MultiConfigurationProject("Multi-configuration project"),
         Folder("Folder"),
         MultibranchPipeline("Multibranch Pipeline"),
