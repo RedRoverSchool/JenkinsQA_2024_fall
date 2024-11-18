@@ -311,15 +311,18 @@ public class PipelineProject2Test extends BaseTest {
 
         TestUtils.scrollToBottom(getDriver());
 
-        TestUtils.readFileAndCopyToClipboard(DataFile.VALID_PIPELINE_SCRIPT.getFileName());
+        String pipelineScript = TestUtils.readFileAndRefactoringAutoComplete(DataFile.VALID_PIPELINE_SCRIPT.getFileName());
 
         new Actions(getDriver())
                 .moveToElement(getDriver().findElement(By.xpath("//textarea[@class='ace_text-input']")))
                 .click()
+                .sendKeys(pipelineScript)
+                .click()
                 .keyDown(Keys.CONTROL)
-                .sendKeys("a")
-                .sendKeys(Keys.BACK_SPACE)
-                .sendKeys("v")
+                .keyDown(Keys.SHIFT)
+                .sendKeys(Keys.END)
+                .sendKeys(Keys.DELETE)
+                .keyUp(Keys.SHIFT)
                 .keyUp(Keys.CONTROL)
                 .perform();
         getDriver().findElement(By.xpath("//button[@name='Submit']")).click();
@@ -349,15 +352,16 @@ public class PipelineProject2Test extends BaseTest {
 
         TestUtils.scrollToBottom(getDriver());
 
-        TestUtils.readFileAndCopyToClipboard(DataFile.INVALID_PIPELINE_SCRIPT.getFileName());
+        String pipelineScript = TestUtils.readFileAndRefactoringAutoComplete(DataFile.INVALID_PIPELINE_SCRIPT.getFileName());
 
         new Actions(getDriver())
                 .moveToElement(getDriver().findElement(By.xpath("//textarea[@class='ace_text-input']")))
                 .click()
+                .sendKeys(pipelineScript)
+                .keyDown(Keys.SHIFT)
                 .keyDown(Keys.CONTROL)
-                .sendKeys("a")
-                .sendKeys(Keys.BACK_SPACE)
-                .sendKeys("v")
+                .sendKeys(Keys.DELETE)
+                .keyUp(Keys.SHIFT)
                 .keyUp(Keys.CONTROL)
                 .perform();
         getDriver().findElement(By.xpath("//button[@name='Submit']")).click();
