@@ -1,5 +1,5 @@
-pipeline {
-    agent any
+pipeline_error {
+    agent any_error
 
     stages_error {
         stage('Checkout') {
