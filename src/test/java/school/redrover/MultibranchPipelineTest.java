@@ -9,6 +9,8 @@ import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import school.redrover.runner.BaseTest;
 
+import java.util.List;
+
 public class MultibranchPipelineTest extends BaseTest {
 
     private static final String MP_NAME = "NewItem";
@@ -16,6 +18,19 @@ public class MultibranchPipelineTest extends BaseTest {
     private static final By CREATE_A_JOB_BUTTON = By.cssSelector("[href='newJob']");
     private static final By MULTIBRANCH_PIPELINE_PROJECT = By.cssSelector("[class$='MultiBranchProject']");
     private static final By OK_BUTTON = By.id("ok-button");
+    private static final String MULTIBRANCH_PIPELINE_NAME = "NewMultibranchName";
+    private static final String MULTIBRANCH_PIPELINE_NAME2 = "NewMultibranchName2";
+
+    private void createJob(String jobName) {
+        getDriver().findElement(By.xpath("//a[@href='/view/all/newJob']")).click();
+
+        getDriver().findElement(By.name("name")).sendKeys(jobName);
+        getDriver().findElement(By.xpath("//li[contains(@class,'MultiBranchProject')]")).click();
+        getDriver().findElement(By.id("ok-button")).click();
+        getDriver().findElement(By.name("Submit")).click();
+
+        getDriver().findElement(By.id("jenkins-name-icon")).click();
+    }
 
     private void scrollDown() {
         JavascriptExecutor scroll = (JavascriptExecutor) getDriver();
@@ -130,5 +145,25 @@ public class MultibranchPipelineTest extends BaseTest {
 
         WebElement selectedValue = getDriver().findElement(By.cssSelector("[value='12h']"));
         Assert.assertTrue(selectedValue.isSelected());
+    }
+
+    @Test
+    public void testCreateOneJobAndDisplayOnStartPage() {
+        createJob(MULTIBRANCH_PIPELINE_NAME);
+
+        Assert.assertEquals(
+                getDriver().findElement(By.xpath("//a[contains(@class,'jenkins-table')]")).getText(),
+                MULTIBRANCH_PIPELINE_NAME);
+    }
+
+    @Test
+    public void testCreateJobAndDisplayAmongOtherJobsOnStartPage() {
+        createJob(MULTIBRANCH_PIPELINE_NAME);
+        createJob(MULTIBRANCH_PIPELINE_NAME2);
+
+        List<WebElement> jobs = getDriver().findElements(By.xpath("//a[@class='jenkins-table__link model-link inside']"));
+        List<String> jobNames = jobs.stream().map(WebElement::getText).toList();
+
+        Assert.assertListContainsObject(jobNames,MULTIBRANCH_PIPELINE_NAME2, MULTIBRANCH_PIPELINE_NAME2);
     }
 }
