@@ -16,6 +16,8 @@ public class MoveFolderTest extends BaseTest {
 
     private static final String PARENT_FOLDER = "ParentFolder";
     private static final String CHILD_FOLDER = "ChildFolder";
+    private static final String FOLDER_LOCATOR = "//a[@href='job/%s/']";
+    private static final String MOVE_FOLDER_FROM_MAIM_MENU = "//a[@href='/job/%s/move']";
 
     private void createFolder(String folderName) {
 
@@ -36,7 +38,7 @@ public class MoveFolderTest extends BaseTest {
     }
 
     @Test
-    public void moveFolderFromDropdownMenu (){
+    public void testMoveFolderFromDropdownMenu() {
 
         createFolder(PARENT_FOLDER);
         backToMainPage();
@@ -65,6 +67,34 @@ public class MoveFolderTest extends BaseTest {
 
         Assert.assertEquals(currentUrl,
                 "http://localhost:8080/job/ParentFolder/job/ChildFolder/");
+
+    }
+
+    @Test
+    public void testMoveFolderFromFoldersPage() {
+
+        createFolder(PARENT_FOLDER);
+        backToMainPage();
+        createFolder(CHILD_FOLDER);
+        backToMainPage();
+
+        getDriver().findElement(By.xpath(FOLDER_LOCATOR.formatted(CHILD_FOLDER))).click();
+
+        getDriver().findElement(By.xpath(MOVE_FOLDER_FROM_MAIM_MENU.formatted(CHILD_FOLDER))).click();
+
+        new Select(getDriver().findElement(By.name("destination"))).selectByValue("/" + PARENT_FOLDER);
+
+        getDriver().findElement(
+                By.xpath("//button[normalize-space(text())='Move']")).click();;
+
+        String getActualUrl = getDriver().getCurrentUrl();
+
+        Assert.assertEquals(getActualUrl,
+                "http://localhost:8080/job/ParentFolder/job/ChildFolder/");
+
+
+
+
 
     }
 
