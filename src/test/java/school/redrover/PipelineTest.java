@@ -12,12 +12,12 @@ import java.time.Duration;
 
 public class PipelineTest extends BaseTest {
 
+    private static final String PROJECT_NAME = "Project";
+
     @Test
     public void testCreatePipeline() {
 
-        final String nameProject = "Project1";
-
-        createNewProject(nameProject, "Pipeline");
+        createNewProject(PROJECT_NAME + 1, ProjectType.Pipeline);
 
         getDriver().findElement(By.cssSelector(".jenkins-submit-button")).click();
         getDriver().findElement(By.id("jenkins-home-link")).click();
@@ -25,7 +25,7 @@ public class PipelineTest extends BaseTest {
         String actualJobName = getDriver().findElement(By.xpath(
                 "//table[@id='projectstatus']/tbody/tr/td/a/span")).getText();
 
-        Assert.assertEquals(actualJobName, nameProject);
+        Assert.assertEquals(actualJobName, PROJECT_NAME + 1);
     }
 
     @Test
@@ -33,23 +33,18 @@ public class PipelineTest extends BaseTest {
 
         getDriver().findElement(By.xpath("//a[@href ='newJob']")).click();
 
-        getDriver().findElement(By.xpath(
-                "//li[@class='org_jenkinsci_plugins_workflow_job_WorkflowJob']")).click();
-        WebElement buttonSubmit = getDriver().findElement(By.id("ok-button"));
+        getDriver().findElement(By.xpath("//li[@class='org_jenkinsci_plugins_workflow_job_WorkflowJob']")).click();
 
         WebElement actualErrorMessage = getDriver().findElement(By.id("itemname-required"));
 
-        Assert.assertFalse(buttonSubmit.isEnabled());
+        Assert.assertFalse(getDriver().findElement(By.id("ok-button")).isEnabled());
         Assert.assertEquals(actualErrorMessage.getText(), "» This field cannot be empty, please enter a valid name");
     }
 
     @Test
     public void testRenameJob() {
 
-        final String nameJob = "Project2";
-        final String newNameJob = "Project2New";
-
-        createNewProject(nameJob,"Pipeline");
+        createNewProject(PROJECT_NAME + 2, ProjectType.Pipeline);
 
         getDriver().findElement(By.cssSelector(".jenkins-submit-button")).click();
         getDriver().findElement(By.id("jenkins-home-link")).click();
@@ -60,58 +55,65 @@ public class PipelineTest extends BaseTest {
 
         WebElement inputName = getDriver().findElement(By.xpath("//input[@checkdependson='newName']"));
         inputName.clear();
-        inputName.sendKeys(newNameJob);
+        inputName.sendKeys(PROJECT_NAME + "2New");
 
         getDriver().findElement(By.xpath("//button[@name='Submit']")).click();
 
         getDriver().findElement(By.id("jenkins-home-link")).click();
 
-        String actualJobName = getDriver().findElement(By.xpath(
-                "//table[@id='projectstatus']/tbody/tr/td/a/span")).getText();
+        String actualJobName = getDriver().findElement(By.xpath("//table[@id='projectstatus']/tbody/tr/td/a/span")).getText();
 
-        Assert.assertEquals(actualJobName, newNameJob);
+        Assert.assertEquals(actualJobName, PROJECT_NAME + "2New");
     }
 
     @Test
     public void testDeleteJob() {
 
-        final String nameJob = "Project3";
-
-        createNewProject(nameJob, "Pipeline");
+        createNewProject(PROJECT_NAME + 3, ProjectType.Pipeline);
 
         getDriver().findElement(By.cssSelector(".jenkins-submit-button")).click();
         getDriver().findElement(By.id("jenkins-home-link")).click();
 
-        getDriver().findElement(By.xpath(
-                "//table[@id='projectstatus']/tbody/tr/td/a/span")).click();
+        getDriver().findElement(By.xpath("//table[@id='projectstatus']/tbody/tr/td/a/span")).click();
 
-        getDriver().findElement(By.xpath(
-                "//a[@data-title='Delete Pipeline']")).click();
+        getDriver().findElement(By.xpath("//a[@data-title='Delete Pipeline']")).click();
 
-        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(15));
+        getWait10().until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//button[@data-id='ok']"))).click();
 
-        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(
-                "//button[@data-id='ok']"))).click();
-
-        String actualMessage = getDriver().findElement(By.xpath(
-                "//div[@class='empty-state-block']/h1")).getText();
+        String actualMessage = getDriver().findElement(By.xpath("//div[@class='empty-state-block']/h1")).getText();
 
         Assert.assertEquals(actualMessage, "Welcome to Jenkins!");
     }
 
-    private void createNewProject(String name, String type) {
-
-        WebDriverWait waite = new WebDriverWait(getDriver(),Duration.ofSeconds(10));
+    private void createNewProject(String name, ProjectType projectType) {
 
         getDriver().findElement(By.xpath("//a[@href ='newJob']")).click();
 
         getDriver().findElement(By.id("name")).sendKeys(name);
 
-        waite.until(ExpectedConditions.elementToBeClickable(By.xpath(
-                String.format("//div[@id='items']//label/span[text()= '%s']", type)))).click();
+        getWait10().until(ExpectedConditions.elementToBeClickable(
+                By.xpath(("//div[@id='items']//label/span[text()= '%s']".formatted(projectType))))).click();
 
         getDriver().findElement(By.id("ok-button")).click();
+    }
 
+    private enum ProjectType {
+        FreestyleProject("Freestyle project"),
+        Pipeline("Pipeline"),
+        MultiConfigurationProject("Multi-configuration project"),
+        Folder("Folder"),
+        MultibranchPipeline("Multibranch Pipeline"),
+        OrganizationFolder("Organization Folder");
+
+        private final String htmlText;
+
+        ProjectType(String htmlText) {
+            this.htmlText = htmlText;
+        }
+
+        public String getHtmlText() {
+            return htmlText;
+        }
     }
 }
 
