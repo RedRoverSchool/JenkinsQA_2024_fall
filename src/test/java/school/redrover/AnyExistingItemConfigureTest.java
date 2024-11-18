@@ -10,7 +10,6 @@ import static school.redrover.runner.TestUtils.newItemsData;
 
 public class AnyExistingItemConfigureTest extends BaseTest {
 
-    @Ignore
     @Test
     public void testExistingFolderConfiguration () {
         newItemsData(this, "NewEmptyFolder", "//*[@id='j-add-item-type-nested-projects']/ul/li[1]/div[2]/div");
@@ -20,7 +19,7 @@ public class AnyExistingItemConfigureTest extends BaseTest {
         getWait2().until(ExpectedConditions.visibilityOfElementLocated(By.name("_.name"))).sendKeys("TestName");
         getDriver().findElement(By.name("Submit")).click();
 
-        getDriver().findElement(By.xpath("//*[@id='tasks']/div[2]/span/a")).click();
+        getWait5().until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[@id='tasks']/div[2]/span/a"))).click();
 
         String valueOfName = getDriver().findElement(By.name("_.name")).getAttribute("value");
 
