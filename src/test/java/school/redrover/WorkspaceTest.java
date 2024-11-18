@@ -65,32 +65,24 @@ public class WorkspaceTest extends BaseTest {
     @Test
     public void testBuildNavigation() {
 
-        WebElement buildTwo = getDriver().findElement(
-                By.xpath("//*[@id='jenkins-build-history']/div/div[1]"));
+        WebElement buildTwo = getDriver().findElement(By.cssSelector("#buildHistory tr:nth-child(2) a"));
         buildTwo.click();
 
-        String actualBuildTwoSelector = getDriver().findElement(
-                By.cssSelector("#breadcrumbs > li:nth-child(5)")).getText();
-        String expectedBuildTwoText = "#2";
         Assert.assertEquals(
-                actualBuildTwoSelector, expectedBuildTwoText, "The breadcrumb for Build #2 is correct.");
+                getDriver().findElement(By.cssSelector("#breadcrumbs > li:nth-child(5)")).getText(), "#2");
     }
 
     @Test
     public void testWorkspaceNavigation() {
 
-        WebElement buildTwo = getDriver().findElement(
-                By.xpath("//*[@id='jenkins-build-history']/div/div[1]"));
+        WebElement buildTwo = getDriver().findElement(By.cssSelector("#buildHistory tr:nth-child(2) a"));
         buildTwo.click();
         WebElement breadCrumbs = getDriver().findElement(By.xpath("//*[@id='breadcrumbs']/li[3]/a"));
         breadCrumbs.click();
 
-        String actualBreadCrumbText = getDriver().findElement(
-                By.xpath("//*[@id='breadcrumbs']/li[3]/a")).getText();
-        String expectedBreadCrumbText = "TestJobWorkspace";
-        Assert.assertEquals(actualBreadCrumbText, expectedBreadCrumbText, "The breadcrumb text is correct.");
+        Assert.assertEquals(getDriver().findElement(
+                By.xpath("//*[@id='breadcrumbs']/li[3]/a")).getText(), "TestJobWorkspace");
     }
-
 
     @AfterMethod
     public void tearDown() {
