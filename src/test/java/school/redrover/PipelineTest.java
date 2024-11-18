@@ -86,7 +86,7 @@ public class PipelineTest extends BaseTest {
     }
 
     @Test
-    public void createProjectWithNotUniqueName() {
+    public void testreateProjectWithNotUniqueName() {
         String nonUniqueProjectName = PROJECT_NAME + "Unique";
 
         createNewProjectAndGoMainPageByLogo(nonUniqueProjectName, ProjectType.Pipeline);
