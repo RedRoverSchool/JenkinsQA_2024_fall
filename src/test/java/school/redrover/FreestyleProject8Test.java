@@ -16,7 +16,7 @@ import java.util.List;
 public class FreestyleProject8Test extends BaseTest {
     private static final String PROJECT_NAME = "newProject";
     @Test
-    public void createProject()  {
+    public void testCreateProject()  {
 
         getDriver().findElement(By.xpath("//span[text() ='Create a job']")).click();
         getWait2().until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("#name"))).sendKeys(PROJECT_NAME);
