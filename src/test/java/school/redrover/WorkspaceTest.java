@@ -91,7 +91,6 @@ public class WorkspaceTest extends BaseTest {
         Assert.assertEquals(actualBreadCrumbText, expectedBreadCrumbText, "The breadcrumb text is correct.");
     }
 
-
     @AfterMethod
     public void tearDown() {
 
