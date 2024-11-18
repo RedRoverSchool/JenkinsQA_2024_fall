@@ -1,7 +1,14 @@
 package school.redrover.runner;
 
 import org.openqa.selenium.*;
+import org.openqa.selenium.Point;
 import org.openqa.selenium.support.ui.ExpectedCondition;
+
+import java.awt.*;
+import java.awt.datatransfer.StringSelection;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.nio.file.Paths;
 
 public class TestUtils {
 
@@ -71,5 +78,14 @@ public class TestUtils {
         baseTest.getDriver().findElement(By.xpath("//button[@type='submit']")).click();
 
         baseTest.getDriver().findElement(By.xpath("//button[@name='Submit']")).click();
+    }
+
+    public static void readFileAndCopyToClipboard(String fileName) {
+        try (FileInputStream fis = new FileInputStream(Paths.get("test_data", fileName).toString())) {
+            String fileContent = new String(fis.readAllBytes());
+            Toolkit.getDefaultToolkit().getSystemClipboard().setContents(new StringSelection(fileContent), null);
+        } catch (IOException e) {
+            ProjectUtils.log("File not found");
+        }
     }
 }
