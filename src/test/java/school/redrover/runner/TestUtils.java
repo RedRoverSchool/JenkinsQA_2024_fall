@@ -63,4 +63,13 @@ public class TestUtils {
         ((JavascriptExecutor) driver).executeScript("window.scrollTo(0, document.body.scrollHeight);");
     }
 
+    public static void createPipeline(BaseTest baseTest, String name) {
+        baseTest.getDriver().findElement(By.xpath("//a[@href='/view/all/newJob']")).click();
+
+        baseTest.getDriver().findElement(By.xpath("//input[@name='name']")).sendKeys(name);
+        baseTest.getDriver().findElement(By.xpath("//li[@class='org_jenkinsci_plugins_workflow_job_WorkflowJob']")).click();
+        baseTest.getDriver().findElement(By.xpath("//button[@type='submit']")).click();
+
+        baseTest.getDriver().findElement(By.xpath("//button[@name='Submit']")).click();
+    }
 }
