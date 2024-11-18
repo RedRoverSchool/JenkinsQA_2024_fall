@@ -1,7 +1,7 @@
 pipeline {
     agent any
 
-    stages {
+    stages_error {
         stage('Checkout') {
             steps {
                 echo 'Step: Checkout code from repository'
