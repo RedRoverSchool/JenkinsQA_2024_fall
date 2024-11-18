@@ -1,6 +1,5 @@
 package school.redrover.runner;
 
-import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
@@ -8,11 +7,8 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.ITestResult;
 import org.testng.annotations.*;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.lang.reflect.Method;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.time.Duration;
 
 @Listeners({FilterForTests.class, FilterForTests.class})
@@ -50,21 +46,13 @@ public abstract class BaseTest {
     }
 
     @AfterMethod
-    protected void afterMethod(Method method, ITestResult testResult) {
+    protected void afterMethod(Method method, ITestResult testResult) throws IOException {
 
-        final String screenshotsDir = System.getProperty("user.dir") + "/screenshots";
-
-        if (!testResult.isSuccess()) {
-            File screenshot = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
-            File destinationPath = new File(screenshotsDir, testResult.getName() + ".png");
-
-            try {
-                if (!destinationPath.getParentFile().exists()) {
-                    Files.createDirectories(Paths.get(screenshotsDir));
-                }
-                FileUtils.copyFile(screenshot, destinationPath);
-            } catch (IOException e) {
-                e.printStackTrace();
+        if (!testResult.isSuccess() && ProjectUtils.isServerRun()) {
+            String screenshotName = testResult.getTestClass().getRealClass().getSimpleName()
+                    + "." + testResult.getName() + ".png";
+            try (FileOutputStream fos = new FileOutputStream(new File("screenshots", screenshotName))) {
+                fos.write(((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES));
             }
         }
 
