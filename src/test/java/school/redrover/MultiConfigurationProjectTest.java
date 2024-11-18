@@ -67,15 +67,11 @@ public class MultiConfigurationProjectTest extends BaseTest {
         getDriver().findElement(By.xpath("//a[@href='/view/all/newJob']")).click();
         getDriver().findElement(By.className("hudson_matrix_MatrixProject")).click();
 
-        String actualErrorMessage = getDriver().findElement(By.id("itemname-required")).getText();
-
         JavascriptExecutor js = (JavascriptExecutor) getDriver();
         js.executeScript("window.scrollTo(0, document.body.scrollHeight);");
 
-        WebElement okButton = getDriver().findElement(By.id("ok-button"));
-
-        Assert.assertTrue(actualErrorMessage.contains(errorMessage));
-        Assert.assertFalse(okButton.isEnabled());
+        Assert.assertTrue(getDriver().findElement(By.id("itemname-required")).getText().contains(errorMessage));
+        Assert.assertFalse(getDriver().findElement(By.id("ok-button")).isEnabled());
     }
 
     @Test

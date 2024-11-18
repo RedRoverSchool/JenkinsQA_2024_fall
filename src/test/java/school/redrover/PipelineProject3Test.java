@@ -43,12 +43,9 @@ public class PipelineProject3Test extends BaseTest {
         getDriver().findElement(By.xpath("//a[contains(@href, 'configure')]")).click();
     }
 
-    private static WebDriverWait getWait(WebDriver driver) {
-        return new WebDriverWait(driver, Duration.ofSeconds(10));
-    }
-
     public void clickOnAdvancedButton() {
-        WebElement advancedButton = getDriver().findElement(By.xpath("//section[@class='jenkins-section']//button[@type='button']"));
+        WebElement advancedButton = getDriver().findElement(By
+                .xpath("//section[@class='jenkins-section']//button[@type='button']"));
 
         JavascriptExecutor executor = (JavascriptExecutor) getDriver();
         executor.executeScript("arguments[0].dispatchEvent(new Event('click'));",
@@ -64,11 +61,11 @@ public class PipelineProject3Test extends BaseTest {
         returnToHomePage();
 
         navigateToConfigurePageFromDashboard(PIPELINE_NAME);
-        getWait(getDriver()).until(ExpectedConditions.elementToBeClickable(ADVANCED_PROJECT_OPTIONS_MENU)).click();
+        getWait10().until(ExpectedConditions.elementToBeClickable(ADVANCED_PROJECT_OPTIONS_MENU)).click();
         clickOnAdvancedButton();
 
-        String actualTooltip = getDriver().findElement(By.xpath("//*[contains(text(), '" + labelText + "')]//a")).getAttribute("tooltip");
-        Assert.assertEquals(actualTooltip, tooltipText);
+        Assert.assertEquals(getDriver().findElement(By.xpath("//*[contains(text(), '" + labelText + "')]//a"))
+                .getAttribute("tooltip"), tooltipText);
     }
 
     @Test
@@ -80,8 +77,8 @@ public class PipelineProject3Test extends BaseTest {
         getDriver().findElement(By.xpath("//a[@data-title='Delete Pipeline']")).click();
         getDriver().findElement(By.xpath("//button[@data-id='ok']")).click();
 
-        String emptyHeader = getDriver().findElement(By.cssSelector(".empty-state-block > h1")).getText();
-        Assert.assertEquals(emptyHeader, "Welcome to Jenkins!");
+        Assert.assertEquals(getDriver().findElement(By.cssSelector(".empty-state-block > h1")).getText(),
+                "Welcome to Jenkins!");
     }
 
     @Test
