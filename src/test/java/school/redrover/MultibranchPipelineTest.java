@@ -1,6 +1,7 @@
 package school.redrover;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
@@ -165,5 +166,21 @@ public class MultibranchPipelineTest extends BaseTest {
         List<String> jobNames = jobs.stream().map(WebElement::getText).toList();
 
         Assert.assertListContainsObject(jobNames,MULTIBRANCH_PIPELINE_NAME2, MULTIBRANCH_PIPELINE_NAME2);
+    }
+
+    @Test
+    public void testEnterInvalidNameAndSeesAppropriateMessages() {
+        List<String> invalidSymbols = List.of("!", "@", "#", "$", "%", "^", "&", "*", "|", "/", "?", ":", ";", "\\");
+
+        getDriver().findElement(By.xpath("//a[@href='/view/all/newJob']")).click();
+
+        for (int i = 0; i < 14; i++) {
+            getDriver().findElement(By.name("name")).sendKeys(invalidSymbols.get(i));
+
+            Assert.assertEquals(
+                    getWait2().until(ExpectedConditions.visibilityOfElementLocated(By.id("itemname-invalid"))).getText(),
+                    ("» ‘%s’ is an unsafe character").formatted(invalidSymbols.get(i)));
+            getDriver().findElement(By.name("name")).sendKeys(Keys.BACK_SPACE);
+        }
     }
 }
