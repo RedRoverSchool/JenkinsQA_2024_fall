@@ -95,6 +95,7 @@ public class MultibranchPipelineTest extends BaseTest {
 
         Assert.assertEquals(getDriver().findElement(By.xpath("//h1")).getText(),"Hilton Hotels");
     }
+
     @Ignore
     @Test
     public void testTryCreateProjectExistName() {
@@ -182,5 +183,27 @@ public class MultibranchPipelineTest extends BaseTest {
                     ("» ‘%s’ is an unsafe character").formatted(invalidSymbols.get(i)));
             getDriver().findElement(By.name("name")).sendKeys(Keys.BACK_SPACE);
         }
+    }
+
+    @Test
+    public void testEnterInvalidNameDotAndSeesAppropriateMessages() {
+        getDriver().findElement(By.xpath("//a[@href='/view/all/newJob']")).click();
+
+        getDriver().findElement(By.name("name")).sendKeys(".");
+
+        Assert.assertEquals(
+                getWait2().until(ExpectedConditions.visibilityOfElementLocated(By.id("itemname-invalid"))).getText(),
+                "» “.” is not an allowed name");
+    }
+
+    @Test
+    public void testEnterInvalidNameEmptyAndSeesAppropriateMessages() {
+        getDriver().findElement(By.xpath("//a[@href='/view/all/newJob']")).click();
+
+        getDriver().findElement(By.xpath("//li[contains(@class,'MultiBranchProject')]")).click();
+
+        Assert.assertEquals(
+                getWait2().until(ExpectedConditions.visibilityOfElementLocated(By.id("itemname-required"))).getText(),
+                "» This field cannot be empty, please enter a valid name");
     }
 }
