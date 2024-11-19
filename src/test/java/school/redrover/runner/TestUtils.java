@@ -3,6 +3,10 @@ package school.redrover.runner;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.nio.file.Paths;
+
 public class TestUtils {
 
     public static class ExpectedConditions {
@@ -78,5 +82,16 @@ public class TestUtils {
         baseTest.getDriver().findElement(By.id("name")).sendKeys(itemName);
         baseTest.getDriver().findElement(By.xpath(itemXpath)).click();
         baseTest.getDriver().findElement(By.id("ok-button")).click();
+    }
+
+    public static String readFileAndRefactoringAutoComplete(String fileName) {
+        try (FileInputStream fis = new FileInputStream(Paths.get("test_data", fileName).toString())) {
+            String fileContent = new String(fis.readAllBytes());
+            fileContent = fileContent.replaceAll(" {4}|\t", "");
+            return fileContent;
+        } catch (IOException e) {
+            ProjectUtils.log("File not found");
+            return null;
+        }
     }
 }
