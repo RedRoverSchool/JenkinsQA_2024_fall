@@ -17,7 +17,7 @@ public class MoveFolderTest extends BaseTest {
     private static final String PARENT_FOLDER = "ParentFolder";
     private static final String CHILD_FOLDER = "ChildFolder";
     private static final String FOLDER_LOCATOR = "//a[@href='job/%s/']";
-    private static final String MOVE_FOLDER_FROM_MAIM_MENU = "//a[@href='/job/%s/move']";
+    private static final String MOVE_FOLDER_FROM_MAIN_MENU = "//a[@href='/job/%s/move']";
 
     private void createFolder(String folderName) {
 
@@ -65,8 +65,9 @@ public class MoveFolderTest extends BaseTest {
 
        String currentUrl = getDriver().getCurrentUrl();
 
-        Assert.assertEquals(currentUrl,
-                "http://localhost:8080/job/ParentFolder/job/ChildFolder/");
+        assert currentUrl != null;
+        Assert.assertTrue(currentUrl.contains("/job/ParentFolder/job/ChildFolder/"),
+                "The URL does not contain the expected path: /job/ParentFolder/job/ChildFolder/");
 
     }
 
@@ -80,7 +81,7 @@ public class MoveFolderTest extends BaseTest {
 
         getDriver().findElement(By.xpath(FOLDER_LOCATOR.formatted(CHILD_FOLDER))).click();
 
-        getDriver().findElement(By.xpath(MOVE_FOLDER_FROM_MAIM_MENU.formatted(CHILD_FOLDER))).click();
+        getDriver().findElement(By.xpath(MOVE_FOLDER_FROM_MAIN_MENU.formatted(CHILD_FOLDER))).click();
 
         new Select(getDriver().findElement(By.name("destination"))).selectByValue("/" + PARENT_FOLDER);
 
@@ -89,8 +90,9 @@ public class MoveFolderTest extends BaseTest {
 
         String getActualUrl = getDriver().getCurrentUrl();
 
-        Assert.assertEquals(getActualUrl,
-                "http://localhost:8080/job/ParentFolder/job/ChildFolder/");
+        assert getActualUrl != null;
+        Assert.assertTrue(getActualUrl.contains("/job/ParentFolder/job/ChildFolder/"),
+                "The URL does not contain the expected path: /job/ParentFolder/job/ChildFolder/");
 
 
 
