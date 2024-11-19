@@ -35,6 +35,7 @@ public class FreestyleProject9Test extends BaseTest {
         System.out.println(actualJobsNames);
 
         Assert.assertEquals(actualJobsNames, expectedNameOfFreestyleJobSort);
+
     }
 
     private void createFreestyleProject(String jobName) {
