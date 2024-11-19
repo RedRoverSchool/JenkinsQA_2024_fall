@@ -11,17 +11,17 @@ public class PipelineProject6Test extends BaseTest {
     @Test
     private void testCreate() {
 
-        final String pipelineName = "Pipeline for mighty test";
+        final String PipelineName = "Pipeline for mighty test";
 
         getDriver().findElement(By.xpath("//a[@it]")).click();
-        getDriver().findElement(By.name("name")).sendKeys(pipelineName);
+        getDriver().findElement(By.name("name")).sendKeys(PipelineName);
         getDriver().findElement(By.className("org_jenkinsci_plugins_workflow_job_WorkflowJob")).click();
         getDriver().findElement(By.id("ok-button")).click();
         getDriver().findElement(By.name("Submit")).click();
 
         Assert.assertEquals(
                 getDriver().findElement(By.xpath("//h1[@class]")).getText(),
-                pipelineName);
+                PipelineName);
     }
 
     @Test
