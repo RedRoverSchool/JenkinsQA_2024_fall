@@ -38,6 +38,17 @@ public class NewViewDashboardTest extends BaseTest {
     }
 
     @Test
+    public void testAddNewListView() {
+        addProjectOnDashboard(PROJECT_NAME);
+        goToDashboard();
+        addView(ViewType.ListView);
+        new Actions(getDriver()).moveToElement(getDriver().findElement(By.xpath("//button[@name = 'Submit']"))).click().build().perform();
+
+        List<WebElement> listOfViews = getDriver().findElements(By.xpath("//div[@class = 'tabBar']//a"));
+        Assert.assertTrue(listOfViews.stream().anyMatch(item -> ViewType.ListView.getViewName().equals(item.getText())));
+    }
+
+    @Test
     public void testDeleteView() {
         addProjectOnDashboard(PROJECT_NAME);
         goToDashboard();
