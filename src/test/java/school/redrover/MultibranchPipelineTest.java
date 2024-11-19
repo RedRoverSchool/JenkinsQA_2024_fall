@@ -206,4 +206,26 @@ public class MultibranchPipelineTest extends BaseTest {
                 getWait2().until(ExpectedConditions.visibilityOfElementLocated(By.id("itemname-required"))).getText(),
                 "» This field cannot be empty, please enter a valid name");
     }
+
+    @Test
+    public void testCreateJobAndJobNameVisibleOnStatusPage() {
+        createJob(MULTIBRANCH_PIPELINE_NAME);
+
+        getDriver().findElement(By.xpath(("//a[contains(@href,'%s')]").formatted(MULTIBRANCH_PIPELINE_NAME))).click();
+
+        Assert.assertEquals(
+                getDriver().findElement(By.xpath("//h1")).getText(),
+                MULTIBRANCH_PIPELINE_NAME);
+    }
+
+    @Test
+    public void testCreateJobAndJobNameVisibleOnBreadcrumb() {
+        createJob(MULTIBRANCH_PIPELINE_NAME);
+
+        getDriver().findElement(By.xpath(("//a[contains(@href,'%s')]").formatted(MULTIBRANCH_PIPELINE_NAME))).click();
+
+        Assert.assertEquals(
+                getDriver().findElement(By.xpath("//a[contains(@href,'job')][@class='model-link']")).getText(),
+                MULTIBRANCH_PIPELINE_NAME);
+    }
 }
