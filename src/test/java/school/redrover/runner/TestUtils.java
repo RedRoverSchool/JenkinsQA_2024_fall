@@ -72,4 +72,11 @@ public class TestUtils {
 
         baseTest.getDriver().findElement(By.xpath("//button[@name='Submit']")).click();
     }
+
+    public static void newItemsData(BaseTest baseTest, String itemName, String itemXpath) {
+        baseTest.getDriver().findElement(By.xpath("//*[@id='tasks']/div[1]/span/a")).click();
+        baseTest.getDriver().findElement(By.id("name")).sendKeys(itemName);
+        baseTest.getDriver().findElement(By.xpath(itemXpath)).click();
+        baseTest.getDriver().findElement(By.id("ok-button")).click();
+    }
 }
