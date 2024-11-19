@@ -43,5 +43,6 @@ public class DashboardItemsDropdownTest extends BaseTest {
 
         WebElement newItem = listDD.get(0);
         actions.moveToElement(newItem).click().perform();
+
    }
 }
