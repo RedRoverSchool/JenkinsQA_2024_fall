@@ -1,7 +1,6 @@
 package school.redrover;
 
 import org.openqa.selenium.By;
-import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -315,19 +314,9 @@ public class PipelineProject2Test extends BaseTest {
 
         WebElement textArea = getDriver().findElement(By.xpath("//textarea[@class='ace_text-input']"));
 
-        new Actions(getDriver())
-                .moveToElement(textArea)
-                .click()
-                .sendKeys(pipelineScript)
-                .click()
-                .keyDown(Keys.CONTROL)
-                .keyDown(Keys.SHIFT)
-                .sendKeys(Keys.END)
-                .sendKeys(Keys.DELETE)
-                .keyUp(Keys.SHIFT)
-                .keyUp(Keys.CONTROL)
-                .perform();
-        getDriver().findElement(By.xpath("//button[@name='/Submit']")).click();
+        TestUtils.pasteTextWithJavaScript(getDriver(), textArea, pipelineScript);
+
+        getDriver().findElement(By.xpath("//button[@name='Submit']")).click();
 
         goToMainPage();
 
@@ -358,16 +347,7 @@ public class PipelineProject2Test extends BaseTest {
         WebElement textArea = getWait10().until(ExpectedConditions.presenceOfElementLocated(
                 By.xpath("//textarea[@class='ace_text-input']")));
 
-        new Actions(getDriver())
-                .moveToElement(textArea)
-                .click()
-                .sendKeys(pipelineScript)
-                .keyDown(Keys.SHIFT)
-                .keyDown(Keys.CONTROL)
-                .sendKeys(Keys.DELETE)
-                .keyUp(Keys.SHIFT)
-                .keyUp(Keys.CONTROL)
-                .perform();
+        TestUtils.pasteTextWithJavaScript(getDriver(), textArea, pipelineScript);;
 
         getDriver().findElement(By.xpath("//button[@name='Submit']")).click();
 
