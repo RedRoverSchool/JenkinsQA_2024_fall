@@ -110,8 +110,8 @@ public final class ProjectUtils {
         return driver;
     }
 
-    static void takeScreenshot(WebDriver driver, String methodName, String className) {
-        try (FileOutputStream fileOutputStream = new FileOutputStream(new File("screenshots", "%s.%s.png".formatted(methodName, className)))) {
+    static void takeScreenshot(WebDriver driver, String className, String methodName) {
+        try (FileOutputStream fileOutputStream = new FileOutputStream(new File("screenshots", "%s.%s.png".formatted(className, methodName)))) {
             fileOutputStream.write(((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES));
         } catch (IOException e) {
             throw new RuntimeException(e);
