@@ -36,7 +36,8 @@ public class DropDawnChevronTest extends BaseTest {
         WebElement descriptionInput = wait.until(ExpectedConditions.visibilityOfElementLocated(By.name("description")));
         descriptionInput.sendKeys("TestDropDawnChevron");
 
-        js.executeScript("window.scrollBy(0, 2000);");
+//        js.executeScript("window.scrollBy(0, 2000);");
+        TestUtils.scrollToBottom(getDriver());
 
         WebElement submitButton = wait.until(ExpectedConditions.elementToBeClickable(By.name("Submit")));
         submitButton.click();
