@@ -1,16 +1,17 @@
-package school.redrover.runner;
+package school.redrover;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.testng.Assert;
 import org.testng.annotations.Test;
+import school.redrover.runner.BaseTest;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class MenuItemsTest extends BaseTest{
+public class MenuItemsTest extends BaseTest {
 
     @Test
     public void testCreateJobMenuItems() {
