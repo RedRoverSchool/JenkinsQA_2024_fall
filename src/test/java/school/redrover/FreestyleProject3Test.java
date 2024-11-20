@@ -46,6 +46,10 @@ public class FreestyleProject3Test extends BaseTest {
                 By.xpath("//a[contains(@href, 'configure')]"))).click();
     }
 
+    private void openProject(String name) {
+        getDriver().findElement(By.xpath("//td/a/span[text()='%s']".formatted(name))).click();
+    }
+
     @Test
     public void testCreateProjectViaCreateJobButton() {
         getDriver().findElement(By.xpath("//a[@href='newJob']")).click();
@@ -238,6 +242,28 @@ public class FreestyleProject3Test extends BaseTest {
         Assert.assertTrue(
                 getWait2().until(ExpectedConditions.visibilityOfElementLocated(By.id("out"))).getText()
                         .contains("Finished: SUCCESS"));
+    }
+
+    @Test(dependsOnMethods = "testBuildProjectViaSidebarMenuOnProjectStatusPage")
+    public void testEditBuildInformationAddDisplayName() {
+        final String displayName = "BuildName";
+
+        openProject(PROJECT_NAME);
+
+        getWait10().until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//a[@tooltip='Success > Console Output']"))).click();
+
+        getDriver().findElement(By.xpath("//span[contains(text(), 'Edit Build Information')]/..")).click();
+
+        WebElement displayNameTextField = getWait5().until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//input[@name='displayName']")));
+        displayNameTextField.sendKeys(displayName);
+
+        getDriver().findElement(By.xpath("//button[@name='Submit']")).click();
+
+        getWait10().until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//button[@name='Submit']")));
+
+        Assert.assertTrue(getDriver().findElement(By.tagName("h1")).getText().contains(displayName));
     }
 
     @Test
