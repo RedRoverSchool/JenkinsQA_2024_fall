@@ -62,7 +62,7 @@ public class FreestyleProject1Test extends BaseTest {
     public void testDeleteDescription() {
         String description = new HomePage(getDriver())
                 .openProject(NEW_FREESTYLE_PROJECT_NAME)
-                .editDescription("")
+                .clearDescription()
                 .getDescription();
 
         Assert.assertEquals(description, "");

@@ -21,6 +21,14 @@ public class ProjectPage extends BasePage {
         return this;
     }
 
+    public ProjectPage clearDescription() {
+        getDriver().findElement(By.id("description-link")).click();
+        getDriver().findElement(By.name("description")).clear();
+        getDriver().findElement(By.name("Submit")).click();
+
+        return this;
+    }
+
     public String getDescription() {
         return getDriver().findElement(By.id("description")).getText();
     }
