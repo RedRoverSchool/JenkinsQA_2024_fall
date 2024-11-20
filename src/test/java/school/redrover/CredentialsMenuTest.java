@@ -59,37 +59,17 @@ public class CredentialsMenuTest extends BaseTest {
         WebElement element = getDriver().findElement(By.cssSelector(".model-link.inside.jenkins-table__link"));
         new Actions(getDriver()).moveToElement(element).perform();
 
-        int elementWidth = element.getSize().getWidth();
-        int elementHeight = element.getSize().getHeight();
+        WebElement element1 = getDriver().findElement(By.xpath("//button[@class='jenkins-menu-dropdown-chevron' and @aria-expanded='false']"));
 
-        int xOffset = elementWidth - 9;
-        int yOffset = elementHeight / 2;
-
-        int attempts = 0;
-        boolean arrowClicked = false;
-
-        while (!arrowClicked && attempts < 3) {
-
-            new Actions(getDriver()).moveToElement(element).perform();
-
-            WebDriverWait shortWait = new WebDriverWait(getDriver(), Duration.ofMillis(500));
-            shortWait.until(ExpectedConditions.visibilityOf(element));
-
-            // Переходим к нужным координатам и кликаем
-            new Actions(getDriver())
-                    .moveToElement(element, xOffset, yOffset)
-                    .pause(Duration.ofMillis(200)) // Короткая пауза перед кликом
-                    .click()
-                    .perform();
-
-            arrowClicked = true;
-
-        }
+        new Actions(getDriver())
+                .moveToElement(element1) // Наводимся на элемент
+                .click() // Кликаем
+                .perform();
 
 
 
-        WebElement element1 = getDriver().findElement(By.xpath("//div[contains(@class, 'tippy-box')]"));
-        ((JavascriptExecutor) getDriver()).executeScript("arguments[0].click();", element1);
+        WebElement element2 = getDriver().findElement(By.xpath("//div[contains(@class, 'tippy-box')]"));
+        ((JavascriptExecutor) getDriver()).executeScript("arguments[0].click();", element2);
 
         //assertTrue(addDomainElement.isDisplayed());
 
