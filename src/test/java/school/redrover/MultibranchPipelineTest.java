@@ -59,13 +59,9 @@ public class MultibranchPipelineTest extends BaseTest {
     @Test
     public void testDeleteItemFromStatusPage() {
 
-        getDriver().findElement(CREATE_A_JOB_BUTTON).click();
+        createJob(MP_NAME);
 
-        getDriver().findElement(NAME_INPUT).sendKeys(MP_NAME);
-        getDriver().findElement(MULTIBRANCH_PIPELINE_PROJECT).click();
-        getDriver().findElement(OK_BUTTON).click();
-
-        getDriver().findElement(By.name("Submit")).click();
+        getDriver().findElement(By.xpath(("//a[contains(@href,'%s')]").formatted(MP_NAME))).click();
 
         getDriver().findElement(By.cssSelector("[data-message*='Delete the Multibranch Pipeline']")).click();
 
@@ -73,7 +69,7 @@ public class MultibranchPipelineTest extends BaseTest {
 
         String dashboardText = getDriver().findElement(By.tagName("h1")).getText();
 
-        Assert.assertEquals(dashboardText,"Welcome to Jenkins!");
+        Assert.assertEquals(dashboardText, "Welcome to Jenkins!");
     }
 
     @Test

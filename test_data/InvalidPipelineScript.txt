@@ -1,4 +1,4 @@
-pipeline_error {
+error_pipeline_error {
     agent any_error
 
     stages_error {
@@ -20,4 +20,8 @@ pipeline_error {
             }
         }
 
+    }
+    }
+    }
+    }
     }
