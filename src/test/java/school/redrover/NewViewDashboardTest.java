@@ -42,7 +42,7 @@ public class NewViewDashboardTest extends BaseTest {
         addProjectOnDashboard(PROJECT_NAME);
         goToDashboard();
         addView(ViewType.ListView);
-        new Actions(getDriver()).moveToElement(getDriver().findElement(By.xpath("//button[@name = 'Submit']"))).click().build().perform();
+        getWait5().until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//button[@name = 'Submit']"))).click();
 
         List<WebElement> listOfViews = getDriver().findElements(By.xpath("//div[@class = 'tabBar']//a"));
         Assert.assertTrue(listOfViews.stream().anyMatch(item -> ViewType.ListView.getViewName().equals(item.getText())));
