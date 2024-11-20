@@ -8,7 +8,6 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.testng.Assert;
 import org.testng.annotations.DataProvider;
-import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import school.redrover.runner.BaseTest;
 import school.redrover.runner.TestUtils;
@@ -314,8 +313,10 @@ public class PipelineProject2Test extends BaseTest {
 
         String pipelineScript = TestUtils.readFileAndRefactoringAutoComplete(DataFile.VALID_PIPELINE_SCRIPT.getFileName());
 
+        WebElement textArea = getDriver().findElement(By.xpath("//textarea[@class='ace_text-input']"));
+
         new Actions(getDriver())
-                .moveToElement(getDriver().findElement(By.xpath("//textarea[@class='ace_text-input']")))
+                .moveToElement(textArea)
                 .click()
                 .sendKeys(pipelineScript)
                 .click()
@@ -342,12 +343,10 @@ public class PipelineProject2Test extends BaseTest {
 
         getDriver().navigate().refresh();
 
-        Assert.assertTrue(getDriver()
-                .findElement(By.xpath("//tr[@id='job_%s']//*[name()='svg'][@tooltip='Success']".formatted(PROJECT_NAME)))
-                .isDisplayed());
+        Assert.assertTrue(getWait10().until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//tr[@id='job_%s']//*[name()='svg'][@tooltip='Success']".formatted(PROJECT_NAME)))).isDisplayed());
     }
 
-    @Ignore
     @Test
     public void testBuildWithInvalidPipelineScriptFromFile() {
         createItem(ItemTypes.PIPELINE, PROJECT_NAME);
@@ -356,8 +355,10 @@ public class PipelineProject2Test extends BaseTest {
 
         String pipelineScript = TestUtils.readFileAndRefactoringAutoComplete(DataFile.INVALID_PIPELINE_SCRIPT.getFileName());
 
+        WebElement textArea = getDriver().findElement(By.xpath("//textarea[@class='ace_text-input']"));
+
         new Actions(getDriver())
-                .moveToElement(getDriver().findElement(By.xpath("//textarea[@class='ace_text-input']")))
+                .moveToElement(textArea)
                 .click()
                 .sendKeys(pipelineScript)
                 .keyDown(Keys.SHIFT)
@@ -366,7 +367,9 @@ public class PipelineProject2Test extends BaseTest {
                 .keyUp(Keys.SHIFT)
                 .keyUp(Keys.CONTROL)
                 .perform();
+        System.out.println(textArea.getAttribute("value"));
         getDriver().findElement(By.xpath("//button[@name='Submit']")).click();
+
 
         goToMainPage();
 
@@ -382,9 +385,8 @@ public class PipelineProject2Test extends BaseTest {
 
         getDriver().navigate().refresh();
 
-        Assert.assertTrue(getDriver()
-                .findElement(By.xpath("//tr[@id='job_%s']//*[name()='svg'][@tooltip='Failed']".formatted(PROJECT_NAME)))
-                .isDisplayed());
+        Assert.assertTrue(getWait10().until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//tr[@id='job_%s']//*[name()='svg'][@tooltip='Failed']".formatted(PROJECT_NAME)))).isDisplayed());
     }
 
 }

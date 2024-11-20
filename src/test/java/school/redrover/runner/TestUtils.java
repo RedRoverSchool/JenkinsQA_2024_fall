@@ -5,6 +5,7 @@ import org.openqa.selenium.support.ui.ExpectedCondition;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Paths;
 
 public class TestUtils {
@@ -85,8 +86,8 @@ public class TestUtils {
     }
 
     public static String readFileAndRefactoringAutoComplete(String fileName) {
-        try (FileInputStream fis = new FileInputStream(Paths.get("test_data", fileName).toString())) {
-            String fileContent = new String(fis.readAllBytes());
+        try (FileInputStream fileInputStream = new FileInputStream(Paths.get("test_data", fileName).toString())) {
+            String fileContent = new String(fileInputStream.readAllBytes(), StandardCharsets.UTF_8);
             fileContent = fileContent.replaceAll(" {4}|\t", "");
             return fileContent;
         } catch (IOException e) {
