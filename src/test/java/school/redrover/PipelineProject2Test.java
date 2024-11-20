@@ -12,8 +12,6 @@ import org.testng.annotations.Test;
 import school.redrover.runner.BaseTest;
 import school.redrover.runner.TestUtils;
 
-import java.util.List;
-
 
 public class PipelineProject2Test extends BaseTest {
 
@@ -357,7 +355,8 @@ public class PipelineProject2Test extends BaseTest {
 
         String pipelineScript = TestUtils.readFileAndRefactoringAutoComplete(DataFile.INVALID_PIPELINE_SCRIPT.getFileName());
 
-        WebElement textArea = getDriver().findElement(By.xpath("//textarea[@class='ace_text-input']"));
+        WebElement textArea = getWait10().until(ExpectedConditions.presenceOfElementLocated(
+                By.xpath("//textarea[@class='ace_text-input']")));
 
         new Actions(getDriver())
                 .moveToElement(textArea)
@@ -370,13 +369,7 @@ public class PipelineProject2Test extends BaseTest {
                 .keyUp(Keys.CONTROL)
                 .perform();
 
-        List<WebElement> text = getDriver().findElements(By.xpath("//div[@class='ace_line']"));
-        for (WebElement element : text) {
-            String innerText = element.getAttribute("innerText");
-            System.out.println(innerText);
-        }
         getDriver().findElement(By.xpath("//button[@name='Submit']")).click();
-
 
         goToMainPage();
 
