@@ -4,11 +4,9 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
-import org.testng.ITestResult;
 import org.testng.annotations.Test;
 import school.redrover.runner.BaseTest;
 
-import java.lang.reflect.Method;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
@@ -29,8 +27,7 @@ public class AnExistingFolderChangeTest extends BaseTest {
     public void testNoChangesWarning () {
         createNewFolder();
 
-        WebDriverWait webDriverWait = new WebDriverWait(getDriver(), Duration.ofSeconds(3));
-        webDriverWait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[@id='main-panel']/form/div[1]/div[1]/div[3]/div")));
+        getWait5().until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[@id='main-panel']/form/div[1]/div[1]/div[3]/div")));
 
         Assert.assertEquals(getDriver().findElement(By.xpath("//*[@id='main-panel']/form/div[1]/div[1]/div[3]/div")).getText(),
                 "The new name is the same as the current name.");
@@ -41,8 +38,7 @@ public class AnExistingFolderChangeTest extends BaseTest {
         createNewFolder();
         getDriver().findElement(By.name("newName")).clear();
 
-        WebDriverWait webDriverWait = new WebDriverWait(getDriver(), Duration.ofSeconds(3));
-        webDriverWait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[@id='main-panel']/form/div[1]/div[1]/div[3]/div")));
+        getWait5().until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[@id='main-panel']/form/div[1]/div[1]/div[3]/div")));
 
         Assert.assertEquals(getDriver().findElement(By.xpath("//*[@id='main-panel']/form/div[1]/div[1]/div[3]/div")).getText(),
                 "No name is specified");
@@ -60,16 +56,22 @@ public class AnExistingFolderChangeTest extends BaseTest {
     @Test
     public void testNotAllowedSymbols () {
         createNewFolder();
-        //List<String> setOfSymbols = new ArrayList<>(List.of("$", "%", "#", "&", "[", "]", "@", "!", "~", "^", ",", "/", ":", "*", "?", "<", ">", "|"));
 
-        getDriver().findElement(By.name("newName")).sendKeys("$");
-        getDriver().findElement(By.name("Submit")).click();
+        List<String> setOfSymbols = new ArrayList<>(List.of("$", "%", "#", "&amp;", "[", "]", "@", "!", "^", "/", ":", "*", "?", "|"));
 
-        WebDriverWait webDriverWait = new WebDriverWait(getDriver(), Duration.ofSeconds(3));
-        webDriverWait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("#main-panel > p")));
+        for (String symbols : setOfSymbols) {
 
-        Assert.assertEquals(getDriver().findElement(By.xpath("//*[@id='main-panel']/p")).getText(),
-                "‘$’ is an unsafe character");
+            getDriver().findElement(By.name("newName")).clear();
+            getDriver().findElement(By.name("newName")).sendKeys(symbols);
+            getDriver().findElement(By.name("Submit")).click();
+
+            getWait5().until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("#main-panel > p")));
+
+            Assert.assertEquals(getDriver().findElement(By.xpath("//*[@id='main-panel']/p")).getText(),
+                    "‘" + symbols + "’ is an unsafe character");
+
+            getDriver().navigate().back();
+        }
     }
 
 }
