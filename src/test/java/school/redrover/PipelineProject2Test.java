@@ -1,6 +1,7 @@
 package school.redrover;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -29,6 +30,20 @@ public class PipelineProject2Test extends BaseTest {
         }
     }
 
+    private enum DataFile {
+        VALID_PIPELINE_SCRIPT("ValidPipelineScript.txt"), INVALID_PIPELINE_SCRIPT("InvalidPipelineScript.txt");
+
+        private final String fileName;
+
+        DataFile(String fileName) {
+            this.fileName = fileName;
+        }
+
+        public String getFileName() {
+            return fileName;
+        }
+    }
+
     private static final String PROJECT_NAME = "MyPipelineProject";
     private static final String NEW_PROJECT_NAME = "NewMyPipelineProject";
     private static final String FOLDER_NAME = "MyFolder";
@@ -45,27 +60,28 @@ public class PipelineProject2Test extends BaseTest {
         };
     }
 
-    private void createItemAndGoToMainPage(ItemTypes itemType, String itemName) {
+    private void createItem(ItemTypes itemType, String itemName) {
         getDriver().findElement(By.xpath("//a[@href='/view/all/newJob']")).click();
         getDriver().findElement(By.id("name")).sendKeys(itemName);
         getDriver().findElement(By.xpath(ITEM_NAME_LOCATOR.formatted(itemType.getHtmlTest()))).click();
         getDriver().findElement(By.id("ok-button")).click();
-        getDriver().findElement(By.id("jenkins-name-icon")).click();
-    }
-
-    private void createDisableItemAndGoToMainPage(ItemTypes itemType, String itemName) {
-        getDriver().findElement(By.xpath("//a[@href='/view/all/newJob']")).click();
-        getDriver().findElement(By.id("name")).sendKeys(itemName);
-        getDriver().findElement(By.xpath(ITEM_NAME_LOCATOR.formatted(itemType.getHtmlTest()))).click();
-        getDriver().findElement(By.id("ok-button")).click();
-        getWait10().until(ExpectedConditions.visibilityOfElementLocated(
-                By.xpath("//span[@id='toggle-switch-enable-disable-project']"))).click();
-        getDriver().findElement(By.xpath("//button[@name='Submit']")).click();
-        getDriver().findElement(By.id("jenkins-name-icon")).click();
     }
 
     private void goToMainPage() {
         getDriver().findElement(By.id("jenkins-name-icon")).click();
+    }
+
+    private void createItemAndGoToMainPage(ItemTypes itemType, String itemName) {
+        createItem(itemType, itemName);
+        goToMainPage();
+    }
+
+    private void createDisableItemAndGoToMainPage(ItemTypes itemType, String itemName) {
+        createItem(itemType, itemName);
+        getWait10().until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//span[@id='toggle-switch-enable-disable-project']"))).click();
+        getDriver().findElement(By.xpath("//button[@name='Submit']")).click();
+        goToMainPage();
     }
 
     @Test
@@ -286,8 +302,86 @@ public class PipelineProject2Test extends BaseTest {
 
         goToMainPage();
 
-        Assert.assertTrue(getWait5().until(ExpectedConditions.visibilityOfElementLocated(
-                By.xpath("//tr[contains(@id,'%s')]//a[@tooltip='Schedule a Build for %s']".formatted(PROJECT_NAME, PROJECT_NAME))))
+        Assert.assertTrue(getWait5().until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//tr[contains(@id,'%s')]//a[@tooltip='Schedule a Build for %s']".formatted(PROJECT_NAME, PROJECT_NAME)))).isDisplayed());
+    }
+
+    @Test
+    public void testBuildWithValidPipelineScriptFromFile() {
+        createItem(ItemTypes.PIPELINE, PROJECT_NAME);
+
+        TestUtils.scrollToBottom(getDriver());
+
+        String pipelineScript = TestUtils.readFileAndRefactoringAutoComplete(DataFile.VALID_PIPELINE_SCRIPT.getFileName());
+
+        new Actions(getDriver())
+                .moveToElement(getDriver().findElement(By.xpath("//textarea[@class='ace_text-input']")))
+                .click()
+                .sendKeys(pipelineScript)
+                .click()
+                .keyDown(Keys.CONTROL)
+                .keyDown(Keys.SHIFT)
+                .sendKeys(Keys.END)
+                .sendKeys(Keys.DELETE)
+                .keyUp(Keys.SHIFT)
+                .keyUp(Keys.CONTROL)
+                .perform();
+        getDriver().findElement(By.xpath("//button[@name='Submit']")).click();
+
+        goToMainPage();
+
+        WebElement chevronButton = getWait5().until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//span[text()='%s']/following-sibling::button".formatted(PROJECT_NAME))));
+        TestUtils.moveAndClickWithJavaScript(getDriver(), chevronButton);
+
+        getWait10().until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//button[contains(@href, 'build')]"))).click();
+
+        getWait10().until(ExpectedConditions.invisibilityOfElementLocated(
+                By.xpath("//a[contains(@class,'app-progress-bar')]")));
+
+        getDriver().navigate().refresh();
+
+        Assert.assertTrue(getDriver()
+                .findElement(By.xpath("//tr[@id='job_%s']//*[name()='svg'][@tooltip='Success']".formatted(PROJECT_NAME)))
+                .isDisplayed());
+    }
+
+    @Test
+    public void testBuildWithInvalidPipelineScriptFromFile() {
+        createItem(ItemTypes.PIPELINE, PROJECT_NAME);
+
+        TestUtils.scrollToBottom(getDriver());
+
+        String pipelineScript = TestUtils.readFileAndRefactoringAutoComplete(DataFile.INVALID_PIPELINE_SCRIPT.getFileName());
+
+        new Actions(getDriver())
+                .moveToElement(getDriver().findElement(By.xpath("//textarea[@class='ace_text-input']")))
+                .click()
+                .sendKeys(pipelineScript)
+                .keyDown(Keys.SHIFT)
+                .keyDown(Keys.CONTROL)
+                .sendKeys(Keys.DELETE)
+                .keyUp(Keys.SHIFT)
+                .keyUp(Keys.CONTROL)
+                .perform();
+        getDriver().findElement(By.xpath("//button[@name='Submit']")).click();
+
+        goToMainPage();
+
+        WebElement chevronButton = getWait5().until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//span[text()='%s']/following-sibling::button".formatted(PROJECT_NAME))));
+        TestUtils.moveAndClickWithJavaScript(getDriver(), chevronButton);
+
+        getWait10().until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//button[contains(@href, 'build')]"))).click();
+
+        getWait10().until(ExpectedConditions.invisibilityOfElementLocated(
+                By.xpath("//a[contains(@class,'app-progress-bar')]")));
+
+        getDriver().navigate().refresh();
+
+        Assert.assertTrue(getDriver()
+                .findElement(By.xpath("//tr[@id='job_%s']//*[name()='svg'][@tooltip='Failed']".formatted(PROJECT_NAME)))
                 .isDisplayed());
     }
 
