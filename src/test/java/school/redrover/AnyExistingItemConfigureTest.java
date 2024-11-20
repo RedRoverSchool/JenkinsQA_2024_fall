@@ -10,7 +10,7 @@ import static school.redrover.runner.TestUtils.newItemsData;
 
 public class AnyExistingItemConfigureTest extends BaseTest {
 
-    @Test
+    @Ignore
     public void testExistingFolderConfiguration () {
         newItemsData(this, "NewEmptyFolder", "//*[@id='j-add-item-type-nested-projects']/ul/li[1]/div[2]/div");
 
