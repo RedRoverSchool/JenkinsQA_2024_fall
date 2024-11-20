@@ -7,6 +7,9 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 import school.redrover.runner.BaseTest;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 public class PipelineTest extends BaseTest {
 
@@ -103,21 +106,45 @@ public class PipelineTest extends BaseTest {
         Assert.assertEquals(actualErrorMessage, "» A job already exists with the name ‘%s’".formatted(nonUniqueProjectName));
     }
 
-    private void createNewProject(String name, ProjectType projectType) {
+    @Test
+    public void testCreateSeveralProjects() {
+        int numOfProjects = 6;
+        List<String> expectedNameList = createSeveralProjects(numOfProjects, "PR", ProjectType.Pipeline);
 
-        getDriver().findElement(By.xpath("//a[@href ='newJob']")).click();
+        List<WebElement> projectList = getDriver().findElements(By.xpath("//table[@id='projectstatus']/tbody/tr/td[3]"));
+        List<String> nameList = projectList.stream().map(WebElement::getText).toList();
 
-        getDriver().findElement(By.id("name")).sendKeys(name);
+        Assert.assertEquals(nameList.size(), numOfProjects);
 
-        getWait10().until(ExpectedConditions.elementToBeClickable(
-                By.xpath(("//div[@id='items']//label/span[text()= '%s']".formatted(projectType))))).click();
+        for (int i = 0; i < numOfProjects; i++) {
+            Assert.assertEquals(nameList.get(i),expectedNameList.get(i));
+            System.out.println(nameList.get(i) + " ---> " + expectedNameList.get(i));
+        }
 
-        getDriver().findElement(By.id("ok-button")).click();
+    }
+    private List<String> createSeveralProjects(int numOfProjects, String name, ProjectType projectType) {
+        List<String> projectNameList = new ArrayList<>();
+        for (int i = 1; i <= numOfProjects; i++) {
+            String projectName = name + "_" + i;
+            projectNameList.add(projectName);
+            getDriver().findElement(By.xpath("//a[@href ='/view/all/newJob']")).click();
+
+            getDriver().findElement(By.id("name")).sendKeys(projectName);
+
+            getWait10().until(ExpectedConditions.elementToBeClickable(
+                    By.xpath(("//div[@id='items']//label/span[text()= '%s']".formatted(projectType))))).click();
+
+            getDriver().findElement(By.id("ok-button")).click();
+            getDriver().findElement(By.cssSelector(".jenkins-submit-button")).click();
+            goToHomePageByLogo();
+        }
+        return projectNameList;
     }
 
     private void createNewProjectAndGoMainPageByLogo(String name, ProjectType projectType) {
 
-        getDriver().findElement(By.xpath("//a[@href ='newJob']")).click();
+//        getDriver().findElement(By.xpath("//a[@href ='newJob']")).click();
+        getDriver().findElement(By.xpath("//a[@href ='/view/all/newJob']")).click();
 
         getDriver().findElement(By.id("name")).sendKeys(name);
 
