@@ -14,8 +14,8 @@ import java.util.List;
 
 public class NewViewDashboardTest extends BaseTest {
     private enum ViewType {
-        ListView("List View"),
-        MyView("My View");
+        ListView("ListView"),
+        MyView("MyView");
         private final String viewName;
         ViewType(String viewName) {
             this.viewName = viewName;
@@ -35,6 +35,17 @@ public class NewViewDashboardTest extends BaseTest {
 
         List<WebElement> listOfViews = getDriver().findElements(By.xpath("//div[@class = 'tabBar']//a"));
         Assert.assertTrue(listOfViews.stream().anyMatch(item -> ViewType.MyView.getViewName().equals(item.getText())));
+    }
+
+    @Test
+    public void testAddNewListView() {
+        addProjectOnDashboard(PROJECT_NAME);
+        goToDashboard();
+        addView(ViewType.ListView);
+        getWait5().until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//button[@name = 'Submit']"))).click();
+
+        List<WebElement> listOfViews = getDriver().findElements(By.xpath("//div[@class = 'tabBar']//a"));
+        Assert.assertTrue(listOfViews.stream().anyMatch(item -> ViewType.ListView.getViewName().equals(item.getText())));
     }
 
     @Test
@@ -74,9 +85,16 @@ public class NewViewDashboardTest extends BaseTest {
 
         getDriver().findElement(By.id("name")).sendKeys(nameView.getViewName());
 
-        WebElement button  = getDriver().findElement(By.xpath("//input[@id = 'hudson.model.MyView']"));
-        new Actions(getDriver()).moveToElement(button).click().build().perform();
+        selectViewType(nameView);
 
         getDriver().findElement(By.xpath("//button[@id = 'ok']")).click();
+    }
+
+    private void selectViewType(ViewType viewType) {
+        WebElement button  = getDriver().findElement(By.xpath("//input[@id = 'hudson.model." + viewType + "']"));
+        boolean selectState = button.isSelected();
+        if(selectState == false) {
+            new Actions(getDriver()).moveToElement(button).click().build().perform();
+        }
     }
 }
