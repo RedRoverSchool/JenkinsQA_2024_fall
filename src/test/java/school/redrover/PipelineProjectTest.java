@@ -154,6 +154,19 @@ public class PipelineProjectTest extends BaseTest {
         Assert.assertFalse(isGreenScheduleBuildTrianglePresent);
     }
 
+    @Test(dependsOnMethods = "testDisableProject")
+    public void testEnableProject() {
+        clickProjectByName(PIPELINE_NAME);
+
+        getWait2().until(ExpectedConditions.elementToBeClickable(By.xpath("//button[@formNoValidate='formNoValidate']"))).click();
+        returnToHomePage();
+
+        WebElement greenBuildButton = getWait2().until(ExpectedConditions.elementToBeClickable(
+                By.xpath("//td[@class='jenkins-table__cell--tight']//a[@tooltip='Schedule a Build for " + PIPELINE_NAME + "']")));
+
+        Assert.assertTrue(greenBuildButton.isEnabled());
+    }
+
     @Test
     public void testGetSuccessTooltipDisplayedWhenHoverOverGreenMark() {
         createProjectViaSidebarAndReturnHome(PIPELINE_NAME);
