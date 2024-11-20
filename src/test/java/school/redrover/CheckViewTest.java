@@ -48,7 +48,7 @@ public class CheckViewTest extends BaseTest {
         createView();
 
         Assert.assertEquals(getDriver().findElement(By.xpath(
-                        "//a[@class='jenkins-table__link model-link inside']")).getText(),
+                "//td/a/span[1]")).getText(),
                 "My first project");
     }
 }
