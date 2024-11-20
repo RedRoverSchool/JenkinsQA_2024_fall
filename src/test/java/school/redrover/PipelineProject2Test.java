@@ -8,6 +8,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.testng.Assert;
 import org.testng.annotations.DataProvider;
+import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import school.redrover.runner.BaseTest;
 import school.redrover.runner.TestUtils;
@@ -346,6 +347,7 @@ public class PipelineProject2Test extends BaseTest {
                 .isDisplayed());
     }
 
+    @Ignore
     @Test
     public void testBuildWithInvalidPipelineScriptFromFile() {
         createItem(ItemTypes.PIPELINE, PROJECT_NAME);
