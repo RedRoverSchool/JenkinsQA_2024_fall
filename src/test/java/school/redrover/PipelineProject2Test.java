@@ -327,7 +327,7 @@ public class PipelineProject2Test extends BaseTest {
                 .keyUp(Keys.SHIFT)
                 .keyUp(Keys.CONTROL)
                 .perform();
-        getDriver().findElement(By.xpath("//button[@name='Submit']")).click();
+        getDriver().findElement(By.xpath("//button[@name='/Submit']")).click();
 
         goToMainPage();
 
