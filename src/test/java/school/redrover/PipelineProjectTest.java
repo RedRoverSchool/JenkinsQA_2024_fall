@@ -12,28 +12,29 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-
 public class PipelineProjectTest extends BaseTest {
 
     private static final String PIPELINE_NAME = "Pipeline_name";
     private static final String NEW_PROJECT_NAME = "New_Pipeline_name";
 
-    private void createProjectViaSidebar(String projectName) {
+    private void createProjectViaSidebarAndReturnHome(String name) {
         getDriver().findElement(By.xpath("//a[@href='/view/all/newJob']")).click();
 
-        getDriver().findElement(By.xpath("//input[@name='name']")).sendKeys(projectName);
+        getDriver().findElement(By.xpath("//input[@name='name']")).sendKeys(name);
         getDriver().findElement(By.xpath("//li[@class='org_jenkinsci_plugins_workflow_job_WorkflowJob']")).click();
         getDriver().findElement(By.xpath("//button[@type='submit']")).click();
 
         getDriver().findElement(By.xpath("//button[@name='Submit']")).click();
+
+        getDriver().findElement(By.id("jenkins-home-link")).click();
     }
 
     private void returnToHomePage() {
         getDriver().findElement(By.id("jenkins-home-link")).click();
     }
 
-    private void clickJobByName(String projectName) {
-        getDriver().findElement(By.xpath("//td/a[@href='job/" + projectName + "/']")).click();
+    private void clickProjectByName(String name) {
+        getDriver().findElement(By.xpath("//td/a[@href='job/" + name + "/']")).click();
     }
 
     private List<String> getProjectList() {
@@ -44,17 +45,16 @@ public class PipelineProjectTest extends BaseTest {
                 .toList();
     }
 
-    private void clickGreenTriangleToScheduleBuildForProject(String projectName) {
+    private void clickGreenTriangleToScheduleBuildForProject(String name) {
         getWait10().until(ExpectedConditions.elementToBeClickable(
-                By.xpath("//td[@class='jenkins-table__cell--tight']//a[@tooltip='Schedule a Build for " + projectName + "']"))).click();
+                By.xpath("//td[@class='jenkins-table__cell--tight']//a[@tooltip='Schedule a Build for " + name + "']"))).click();
 
         getWait10().until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@class='tippy-content']")));
     }
 
     @Test
     public void testCreateProjectWithValidNameViaSidebar() {
-        createProjectViaSidebar(PIPELINE_NAME);
-        returnToHomePage();
+        createProjectViaSidebarAndReturnHome(PIPELINE_NAME);
 
         Assert.assertListContainsObject(getProjectList(), PIPELINE_NAME, "Project is not found");
     }
@@ -64,9 +64,8 @@ public class PipelineProjectTest extends BaseTest {
         final List<String> expectedSidebarOptionList =
                 List.of("Status", "Changes", "Build Now", "Configure", "Delete Pipeline", "Stages", "Rename", "Pipeline Syntax");
 
-        createProjectViaSidebar(PIPELINE_NAME);
-        returnToHomePage();
-        clickJobByName(PIPELINE_NAME);
+        createProjectViaSidebarAndReturnHome(PIPELINE_NAME);
+        clickProjectByName(PIPELINE_NAME);
 
         List<String> actualSideBarOptionList = getWait5().until(ExpectedConditions.visibilityOfAllElementsLocatedBy(
                 By.xpath("//div[@class='task ']//span[2]"))).stream().map(WebElement::getText).toList();
@@ -80,9 +79,8 @@ public class PipelineProjectTest extends BaseTest {
         final List<String> expectedSidebarOptionList =
                 List.of("General", "Advanced Project Options", "Pipeline");
 
-        createProjectViaSidebar(PIPELINE_NAME);
-        returnToHomePage();
-        clickJobByName(PIPELINE_NAME);
+        createProjectViaSidebarAndReturnHome(PIPELINE_NAME);
+        clickProjectByName(PIPELINE_NAME);
 
         getWait2().until(ExpectedConditions.elementToBeClickable(
                 By.xpath("//a[@href='/job/" + PIPELINE_NAME + "/configure']"))).click();
@@ -98,9 +96,8 @@ public class PipelineProjectTest extends BaseTest {
     public void testAddDescriptionToProject() {
         final String expectedProjectDescription = "Certain project description";
 
-        createProjectViaSidebar(PIPELINE_NAME);
-        returnToHomePage();
-        clickJobByName(PIPELINE_NAME);
+        createProjectViaSidebarAndReturnHome(PIPELINE_NAME);
+        clickProjectByName(PIPELINE_NAME);
 
         getDriver().findElement(By.id("description-link")).click();
 
@@ -115,9 +112,8 @@ public class PipelineProjectTest extends BaseTest {
 
     @Test
     public void testGetWarningMessageWhenDisableProject() {
-        createProjectViaSidebar(PIPELINE_NAME);
-        returnToHomePage();
-        clickJobByName(PIPELINE_NAME);
+        createProjectViaSidebarAndReturnHome(PIPELINE_NAME);
+        clickProjectByName(PIPELINE_NAME);
 
         getWait2().until(ExpectedConditions.elementToBeClickable(
                 By.xpath("//a[@href='/job/" + PIPELINE_NAME + "/configure']"))).click();
@@ -136,9 +132,8 @@ public class PipelineProjectTest extends BaseTest {
 
     @Test
     public void testDisableProject() {
-        createProjectViaSidebar(PIPELINE_NAME);
-        returnToHomePage();
-        clickJobByName(PIPELINE_NAME);
+        createProjectViaSidebarAndReturnHome(PIPELINE_NAME);
+        clickProjectByName(PIPELINE_NAME);
 
         getWait2().until(ExpectedConditions.elementToBeClickable(
                 By.xpath("//a[@href='/job/" + PIPELINE_NAME + "/configure']"))).click();
@@ -161,10 +156,9 @@ public class PipelineProjectTest extends BaseTest {
 
     @Test
     public void testGetSuccessTooltipDisplayedWhenHoverOverGreenMark() {
-        createProjectViaSidebar(PIPELINE_NAME);
-        returnToHomePage();
+        createProjectViaSidebarAndReturnHome(PIPELINE_NAME);
         clickGreenTriangleToScheduleBuildForProject(PIPELINE_NAME);
-        clickJobByName(PIPELINE_NAME);
+        clickProjectByName(PIPELINE_NAME);
 
         new Actions(getDriver())
                 .moveToElement(getWait10().until(ExpectedConditions.visibilityOfElementLocated(
@@ -185,10 +179,9 @@ public class PipelineProjectTest extends BaseTest {
                 "Last successful build",
                 "Last completed build");
 
-        createProjectViaSidebar(PIPELINE_NAME);
-        returnToHomePage();
+        createProjectViaSidebarAndReturnHome(PIPELINE_NAME);
         clickGreenTriangleToScheduleBuildForProject(PIPELINE_NAME);
-        clickJobByName(PIPELINE_NAME);
+        clickProjectByName(PIPELINE_NAME);
 
         List<String> actualPermalinkList = getWait10().until(ExpectedConditions.visibilityOfAllElementsLocatedBy(
                         By.xpath("//li[@class='permalink-item']")))
@@ -227,10 +220,9 @@ public class PipelineProjectTest extends BaseTest {
 
     @Test
     public void testKeepBuildForever() {
-        createProjectViaSidebar(PIPELINE_NAME);
-        returnToHomePage();
+        createProjectViaSidebarAndReturnHome(PIPELINE_NAME);
         clickGreenTriangleToScheduleBuildForProject(PIPELINE_NAME);
-        clickJobByName(PIPELINE_NAME);
+        clickProjectByName(PIPELINE_NAME);
 
         getWait10().until(ExpectedConditions.elementToBeClickable(By.xpath("//*[@title='Success']"))).click();
         getWait10().until(ExpectedConditions.elementToBeClickable(By.xpath("//button[@name='Submit']"))).click();
@@ -248,9 +240,8 @@ public class PipelineProjectTest extends BaseTest {
 
     @Test
     public void testRenameProjectViaSidebar() {
-        createProjectViaSidebar(PIPELINE_NAME);
-        returnToHomePage();
-        clickJobByName(PIPELINE_NAME);
+        createProjectViaSidebarAndReturnHome(PIPELINE_NAME);
+        clickProjectByName(PIPELINE_NAME);
 
         getDriver().findElement(By.xpath("//a[@href='/job/" + PIPELINE_NAME + "/confirm-rename']")).click();
 
@@ -266,9 +257,8 @@ public class PipelineProjectTest extends BaseTest {
 
     @Test
     public void testDeleteProjectViaSidebar() {
-        createProjectViaSidebar(PIPELINE_NAME);
-        returnToHomePage();
-        clickJobByName(PIPELINE_NAME);
+        createProjectViaSidebarAndReturnHome(PIPELINE_NAME);
+        clickProjectByName(PIPELINE_NAME);
 
         getDriver().findElement(By.xpath("//a[@data-title='Delete Pipeline']")).click();
         getDriver().findElement(By.xpath("//button[@data-id='ok']")).click();
