@@ -347,7 +347,7 @@ public class PipelineProject2Test extends BaseTest {
         WebElement textArea = getWait10().until(ExpectedConditions.presenceOfElementLocated(
                 By.xpath("//textarea[@class='ace_text-input']")));
 
-        TestUtils.pasteTextWithJavaScript(getDriver(), textArea, pipelineScript);;
+        TestUtils.pasteTextWithJavaScript(getDriver(), textArea, pipelineScript);
 
         getDriver().findElement(By.xpath("//button[@name='Submit']")).click();
 
