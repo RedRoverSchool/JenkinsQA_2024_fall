@@ -62,7 +62,7 @@ public class CredentialsMenuTest extends BaseTest {
         assertTrue(!arrowContent.equals("none") && !arrowContent.isEmpty());
 
     }
-/*
+
     @Test
     public void testisDisplayedDomainElementDropdown()  {
 
@@ -73,7 +73,8 @@ public class CredentialsMenuTest extends BaseTest {
         WebElement element = getDriver().findElement(By.cssSelector(".model-link.inside.jenkins-table__link"));
         new Actions(getDriver()).moveToElement(element).perform();
 
-        WebElement element1 = getDriver().findElement(By.xpath("//button[@class='jenkins-menu-dropdown-chevron' and @aria-expanded='false']"));
+        WebElement element1 = getDriver().findElement(By.xpath("//button[@data-href=" +
+                "'http://localhost:8080/user/admin/credentials/store/user' and @aria-expanded='false']"));
 
         new Actions(getDriver())
                 .moveToElement(element1)
@@ -89,7 +90,7 @@ public class CredentialsMenuTest extends BaseTest {
 
         //assertTrue(addDomainElement.isDisplayed());
 
-    }*/
+    }
 
 }
 
