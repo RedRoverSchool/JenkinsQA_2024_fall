@@ -12,6 +12,8 @@ import org.testng.annotations.Test;
 import school.redrover.runner.BaseTest;
 import school.redrover.runner.TestUtils;
 
+import java.util.List;
+
 
 public class PipelineProject2Test extends BaseTest {
 
@@ -367,7 +369,12 @@ public class PipelineProject2Test extends BaseTest {
                 .keyUp(Keys.SHIFT)
                 .keyUp(Keys.CONTROL)
                 .perform();
-        System.out.println(textArea.getAttribute("value"));
+
+        List<WebElement> text = getDriver().findElements(By.xpath("//div[@class='ace_line']"));
+        for (WebElement element : text) {
+            String innerText = element.getAttribute("innerText");
+            System.out.println(innerText);
+        }
         getDriver().findElement(By.xpath("//button[@name='Submit']")).click();
 
 
