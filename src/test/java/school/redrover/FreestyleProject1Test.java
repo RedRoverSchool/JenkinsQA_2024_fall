@@ -7,6 +7,8 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.Test;
+import school.redrover.page.HomePage;
+import school.redrover.page.ProjectPage;
 import school.redrover.runner.BaseTest;
 import school.redrover.runner.TestUtils;
 
@@ -16,10 +18,10 @@ import java.util.Collections;
 import java.util.List;
 
 public class FreestyleProject1Test extends BaseTest {
+
     private static final String NEW_FREESTYLE_PROJECT_NAME = "New freestyle project";
     private static final String RENAMED_FREESTYLE_PROJECT_NAME = "Renamed freestyle project";
     private static final String DESCRIPTION = "Some description";
-
 
     private void createFreestyleProject(String name) {
         getDriver().findElement(By.xpath("//*[@href='/view/all/newJob']")).click();
@@ -28,42 +30,47 @@ public class FreestyleProject1Test extends BaseTest {
         getDriver().findElement(By.id("ok-button")).click();
         getDriver().findElement(By.name("Submit")).click();
 
-    }
-    private void createFreestyleProjectWithDescription() {
-        createFreestyleProject(NEW_FREESTYLE_PROJECT_NAME);
         getDriver().findElement(By.id("jenkins-name-icon")).click();
-
-        Actions actions = new Actions(getDriver());
-        WebElement element = getDriver()
-                .findElement(By.xpath("//span[contains(text(),'" + NEW_FREESTYLE_PROJECT_NAME + "')]"));
-
-        actions.moveToElement(element).click().perform();
-
-        getDriver().findElement(By.id("description-link")).click();
-        getDriver().findElement(By.name("description")).sendKeys(DESCRIPTION);
-        getDriver().findElement(By.name("Submit")).click();
-
     }
-    @Test
-    public void testCreateFreestyleProject() {
-        createFreestyleProject(NEW_FREESTYLE_PROJECT_NAME);
 
-        getDriver().findElement(By.id("jenkins-name-icon")).click();
-        WebElement element = getDriver()
-                .findElement(By.xpath("//span[contains(text(),'" + NEW_FREESTYLE_PROJECT_NAME + "')]"));
-        Assert.assertTrue(element.isDisplayed());
+    private void openProject(String name) {
+        getDriver().findElement(By.xpath("//td/a/span[text() = '%s']/..".formatted(name))).click();
     }
 
     @Test
-    public void testRenameFreestyleProject() throws InterruptedException {
+    public void testCreate() {
         createFreestyleProject(NEW_FREESTYLE_PROJECT_NAME);
-        getDriver().findElement(By.id("jenkins-name-icon")).click();
 
-        Actions actions = new Actions(getDriver());
-        WebElement element = getDriver()
-                .findElement(By.xpath("//span[contains(text(),'" + NEW_FREESTYLE_PROJECT_NAME + "')]"));
+        List<WebElement> elementList = getDriver().findElements(By.xpath("//td/a/span[1]"));
+        List<String> projectList = elementList.stream().map(WebElement::getText).toList();
 
-        actions.moveToElement(element).click().perform();
+        Assert.assertEquals(projectList.size(), 1);
+        Assert.assertEquals(projectList.get(0), NEW_FREESTYLE_PROJECT_NAME);
+    }
+
+    @Test(dependsOnMethods = "testCreate")
+    public void testAddDescription() {
+        String description = new HomePage(getDriver())
+                .openProject(NEW_FREESTYLE_PROJECT_NAME)
+                .editDescription(DESCRIPTION)
+                .getDescription();
+
+        Assert.assertEquals(description, DESCRIPTION);
+    }
+
+    @Test(dependsOnMethods = "testAddDescription")
+    public void testDeleteDescription() {
+        String description = new HomePage(getDriver())
+                .openProject(NEW_FREESTYLE_PROJECT_NAME)
+                .editDescription("")
+                .getDescription();
+
+        Assert.assertEquals(description, "");
+    }
+
+    @Test(dependsOnMethods = "testDeleteDescription")
+    public void testRename() throws InterruptedException {
+        openProject(NEW_FREESTYLE_PROJECT_NAME);
 
         getDriver().findElement((By.xpath("//*[contains(@href,'confirm-rename')]"))).click();
         getDriver().findElement(By.xpath("//input[@name='newName']")).clear();
@@ -81,16 +88,9 @@ public class FreestyleProject1Test extends BaseTest {
         Assert.assertEquals(projectName, RENAMED_FREESTYLE_PROJECT_NAME);
     }
 
-    @Test
-    public void testDeleteFreestyleProject() {
-        createFreestyleProject(NEW_FREESTYLE_PROJECT_NAME);
-        getDriver().findElement(By.id("jenkins-name-icon")).click();
-
-        Actions actions = new Actions(getDriver());
-        WebElement element = getDriver()
-                .findElement(By.xpath("//span[contains(text(),'" + NEW_FREESTYLE_PROJECT_NAME + "')]"));
-
-        actions.moveToElement(element).click().perform();
+    @Test(dependsOnMethods = "testRename")
+    public void testDelete() {
+        openProject(RENAMED_FREESTYLE_PROJECT_NAME);
 
         getDriver().findElement((By.xpath("//*[@data-title='Delete Project']"))).click();
         getDriver().findElement(By.xpath("//button[@data-id='ok']")).click();
@@ -100,31 +100,8 @@ public class FreestyleProject1Test extends BaseTest {
     }
 
     @Test
-    public void testAddFreestyleProjectDescription() {
-        createFreestyleProjectWithDescription();
-
-        String description = getDriver().findElement(By.id("description")).getText();
-
-        Assert.assertEquals(description, DESCRIPTION);
-    }
-
-    @Test
-    public void testDeleteFreestyleProjectDescription() {
-        createFreestyleProjectWithDescription();
-
-        getDriver().findElement(By.id("description-link")).click();
-        getDriver().findElement(By.name("description")).clear();
-        getDriver().findElement(By.name("Submit")).click();
-
-        String description = getDriver().findElement(By.id("description")).getText();
-
-        Assert.assertEquals(description, "");
-    }
-
-    @Test
     public void testFreestyleProjectDescriptionPreview() {
         createFreestyleProject(NEW_FREESTYLE_PROJECT_NAME);
-        getDriver().findElement(By.id("jenkins-name-icon")).click();
 
         Actions actions = new Actions(getDriver());
         WebElement element = getDriver()
@@ -144,7 +121,6 @@ public class FreestyleProject1Test extends BaseTest {
     @Test
     public void testChevronDeleteFreestyleProject() {
         createFreestyleProject(NEW_FREESTYLE_PROJECT_NAME);
-        getDriver().findElement(By.id("jenkins-name-icon")).click();
 
         Actions actions = new Actions(getDriver());
         WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(10));
@@ -175,7 +151,6 @@ public class FreestyleProject1Test extends BaseTest {
     @Test
     public void testChevronRenameFreestyleProject() throws InterruptedException {
         createFreestyleProject(NEW_FREESTYLE_PROJECT_NAME);
-        getDriver().findElement(By.id("jenkins-name-icon")).click();
 
         Actions actions = new Actions(getDriver());
         WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(10));
@@ -211,13 +186,8 @@ public class FreestyleProject1Test extends BaseTest {
     @Test
     public void testJobNameSorting() {
         createFreestyleProject("aaa");
-        getDriver().findElement(By.id("jenkins-name-icon")).click();
-
         createFreestyleProject("bbb");
-        getDriver().findElement(By.id("jenkins-name-icon")).click();
-
         createFreestyleProject("aabb");
-        getDriver().findElement(By.id("jenkins-name-icon")).click();
 
         // This XPath targets the links containing the job names
         List<WebElement> jobLinks = getDriver()
