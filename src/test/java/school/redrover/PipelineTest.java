@@ -3,12 +3,10 @@ package school.redrover;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import school.redrover.runner.BaseTest;
 
-import java.time.Duration;
 
 public class PipelineTest extends BaseTest {
 
@@ -58,6 +56,21 @@ public class PipelineTest extends BaseTest {
         String actualJobName = getDriver().findElement(By.xpath("//table[@id='projectstatus']/tbody/tr/td/a/span")).getText();
 
         Assert.assertEquals(actualJobName, newName);
+    }
+
+    @Test
+    public void testAddDescription() {
+        final String name = PROJECT_NAME + "AndDesc";
+        final String desc = "Add description for new project 45";
+        createNewProjectAndGoMainPageByLogo(name, ProjectType.Pipeline);
+
+        getDriver().findElement(By.xpath("//td/a/span[text() = '%s']/..".formatted(name))).click();
+
+        getDriver().findElement(By.id("description-link")).click();
+        getDriver().findElement(By.name("description")).sendKeys(desc);
+        getDriver().findElement(By.name("Submit")).click();
+
+        Assert.assertEquals(getDriver().findElement(By.id("description")).getText(), desc);
     }
 
     @Test
