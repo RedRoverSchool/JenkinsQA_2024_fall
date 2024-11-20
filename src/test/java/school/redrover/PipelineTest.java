@@ -15,12 +15,8 @@ public class PipelineTest extends BaseTest {
     private static final String PROJECT_NAME = "Project";
 
     @Test
-    public void testCreatePipeline() {
-
-        createNewProject(PROJECT_NAME + 1, ProjectType.Pipeline);
-
-        getDriver().findElement(By.cssSelector(".jenkins-submit-button")).click();
-        getDriver().findElement(By.id("jenkins-home-link")).click();
+    public void testCreate() {
+        createNewProjectAndGoMainPageByLogo(PROJECT_NAME + 1, ProjectType.Pipeline);
 
         String actualJobName = getDriver().findElement(By.xpath(
                 "//table[@id='projectstatus']/tbody/tr/td/a/span")).getText();
@@ -42,12 +38,9 @@ public class PipelineTest extends BaseTest {
     }
 
     @Test
-    public void testRenameJob() {
-
-        createNewProject(PROJECT_NAME + 2, ProjectType.Pipeline);
-
-        getDriver().findElement(By.cssSelector(".jenkins-submit-button")).click();
-        getDriver().findElement(By.id("jenkins-home-link")).click();
+    public void testRename() {
+        final String newName = PROJECT_NAME + "2New";
+        createNewProjectAndGoMainPageByLogo(PROJECT_NAME + 2, ProjectType.Pipeline);
 
         getDriver().findElement(By.xpath("//table[@id='projectstatus']/tbody/tr/td/a/span")).click();
 
@@ -55,24 +48,21 @@ public class PipelineTest extends BaseTest {
 
         WebElement inputName = getDriver().findElement(By.xpath("//input[@checkdependson='newName']"));
         inputName.clear();
-        inputName.sendKeys(PROJECT_NAME + "2New");
+        inputName.sendKeys(newName);
+
 
         getDriver().findElement(By.xpath("//button[@name='Submit']")).click();
 
-        getDriver().findElement(By.id("jenkins-home-link")).click();
+        goToHomePageByLogo();
 
         String actualJobName = getDriver().findElement(By.xpath("//table[@id='projectstatus']/tbody/tr/td/a/span")).getText();
 
-        Assert.assertEquals(actualJobName, PROJECT_NAME + "2New");
+        Assert.assertEquals(actualJobName, newName);
     }
 
     @Test
-    public void testDeleteJob() {
-
-        createNewProject(PROJECT_NAME + 3, ProjectType.Pipeline);
-
-        getDriver().findElement(By.cssSelector(".jenkins-submit-button")).click();
-        getDriver().findElement(By.id("jenkins-home-link")).click();
+    public void testDelete() {
+        createNewProjectAndGoMainPageByLogo(PROJECT_NAME + 3, ProjectType.Pipeline);
 
         getDriver().findElement(By.xpath("//table[@id='projectstatus']/tbody/tr/td/a/span")).click();
 
@@ -86,7 +76,7 @@ public class PipelineTest extends BaseTest {
     }
 
     @Test
-    public void testreateProjectWithNotUniqueName() {
+    public void testCreateWithNotUniqueName() {
         String nonUniqueProjectName = PROJECT_NAME + "Unique";
 
         createNewProjectAndGoMainPageByLogo(nonUniqueProjectName, ProjectType.Pipeline);
@@ -98,8 +88,6 @@ public class PipelineTest extends BaseTest {
         String actualErrorMessage = getDriver().findElement(By.id("itemname-invalid")).getText();
 
         Assert.assertEquals(actualErrorMessage, "» A job already exists with the name ‘%s’".formatted(nonUniqueProjectName));
-
-
     }
 
     private void createNewProject(String name, ProjectType projectType) {
@@ -125,6 +113,10 @@ public class PipelineTest extends BaseTest {
 
         getDriver().findElement(By.id("ok-button")).click();
         getDriver().findElement(By.cssSelector(".jenkins-submit-button")).click();
+        getDriver().findElement(By.id("jenkins-home-link")).click();
+    }
+
+    private void goToHomePageByLogo() {
         getDriver().findElement(By.id("jenkins-home-link")).click();
     }
 
