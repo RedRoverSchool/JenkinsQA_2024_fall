@@ -36,7 +36,7 @@ public class CredentialsMenuTest extends BaseTest {
 
     }
 
-    @Ignore
+
     @Test
     public void testNavigateCredentialsMenu() throws InterruptedException {
 
@@ -45,7 +45,7 @@ public class CredentialsMenuTest extends BaseTest {
         Assert.assertEquals(getDriver().findElement(By.tagName("h1")).getText(), "Credentials");
     }
 
-   /* @Ignore
+
     @Test
     public void testAddDomainArrow()  {
 
@@ -62,7 +62,7 @@ public class CredentialsMenuTest extends BaseTest {
         assertTrue(!arrowContent.equals("none") && !arrowContent.isEmpty());
 
     }
-
+/*
     @Test
     public void testisDisplayedDomainElementDropdown()  {
 
