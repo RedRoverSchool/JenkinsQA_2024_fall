@@ -113,8 +113,6 @@ public final class ProjectUtils {
     static void takeScreenshot(WebDriver driver, String methodName, String className) {
         try (FileOutputStream fileOutputStream = new FileOutputStream(new File("screenshots", "%s.%s.png".formatted(methodName, className)))) {
             fileOutputStream.write(((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES));
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

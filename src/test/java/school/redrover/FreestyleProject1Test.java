@@ -54,25 +54,7 @@ public class FreestyleProject1Test extends BaseTest {
         Assert.assertTrue(element.isDisplayed());
     }
 
-    @Test
-    public void testDeleteFreestyleProject() {
-        createFreestyleProject(NEW_FREESTYLE_PROJECT_NAME);
-        getDriver().findElement(By.id("jenkins-name-icon")).click();
-
-        Actions actions = new Actions(getDriver());
-        WebElement element = getDriver()
-                .findElement(By.xpath("//span[contains(text(),'" + NEW_FREESTYLE_PROJECT_NAME + "')]"));
-
-        actions.moveToElement(element).click().perform();
-
-        getDriver().findElement((By.xpath("//*[@data-title='Delete Project']"))).click();
-        getDriver().findElement(By.xpath("//button[@data-id='ok']")).click();
-        String emptyDashboardHeader = getDriver().findElement(By.cssSelector(".empty-state-block > h1")).getText();
-
-        Assert.assertEquals(emptyDashboardHeader, "Welcome to Jenkins!");
-    }
-
-    @Test
+    @Test(dependsOnMethods = "testCreateFreestyleProject")
     public void testRenameFreestyleProject() throws InterruptedException {
         createFreestyleProject(NEW_FREESTYLE_PROJECT_NAME);
         getDriver().findElement(By.id("jenkins-name-icon")).click();
@@ -97,6 +79,24 @@ public class FreestyleProject1Test extends BaseTest {
                 .findElement(By.xpath("//*[@class='job-index-headline page-headline']")).getText();
 
         Assert.assertEquals(projectName, RENAMED_FREESTYLE_PROJECT_NAME);
+    }
+
+    @Test(dependsOnMethods = "testRenameFreestyleProject")
+    public void testDeleteFreestyleProject() {
+        createFreestyleProject(NEW_FREESTYLE_PROJECT_NAME);
+        getDriver().findElement(By.id("jenkins-name-icon")).click();
+
+        Actions actions = new Actions(getDriver());
+        WebElement element = getDriver()
+                .findElement(By.xpath("//span[contains(text(),'" + NEW_FREESTYLE_PROJECT_NAME + "')]"));
+
+        actions.moveToElement(element).click().perform();
+
+        getDriver().findElement((By.xpath("//*[@data-title='Delete Project']"))).click();
+        getDriver().findElement(By.xpath("//button[@data-id='ok']")).click();
+        String emptyDashboardHeader = getDriver().findElement(By.cssSelector(".empty-state-block > h1")).getText();
+
+        Assert.assertEquals(emptyDashboardHeader, "Welcome to Jenkins!");
     }
 
     @Test
