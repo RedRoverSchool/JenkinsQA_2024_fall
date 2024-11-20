@@ -6,21 +6,21 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 import school.redrover.runner.BaseTest;
 
-public class CheckItemsOnPages extends BaseTest {
+import java.util.List;
 
-    private void verifyElementText(By locator, String expectedText) {
-        WebElement element = getDriver().findElement(locator);
-        Assert.assertTrue(element.isDisplayed(), "Элемент не отображается: " + locator);
-        Assert.assertEquals(element.getText(), expectedText, "Текст элемента не соответствует: " + locator);
-    }
+public class CheckItemsOnPages extends BaseTest {
 
     @Test
     public void checkTitlesAndButtonsOnMainPage(){
-        verifyElementText(By.xpath("/html[1]/body[1]/div[2]/div[2]/div[1]/div[2]/div[2]/a[1]"), "Add description");
-        verifyElementText(By.xpath("/html[1]/body[1]/div[2]/div[1]/div[1]/div[1]/span[1]/a[1]"), "New Item");
-        verifyElementText(By.xpath("/html[1]/body[1]/div[2]/div[1]/div[1]/div[2]/span[1]/a[1]/span[2]"), "Build History");
-        verifyElementText(By.cssSelector("a[href='/manage']"), "Manage Jenkins");
-        verifyElementText(By.xpath("/html[1]/body[1]/div[2]/div[1]/div[1]/div[4]/span[1]/a[1]/span[2]"), "My Views");
+
+            List<WebElement> startPageMainContent = getDriver().findElements(By.className("content-block"));
+
+            Assert.assertEquals(startPageMainContent.size(), 4);
+            Assert.assertEquals(startPageMainContent.get(0).getText(), "Create a job");
+            Assert.assertEquals(startPageMainContent.get(1).getText(), "Set up an agent");
+            Assert.assertEquals(startPageMainContent.get(2).getText(), "Configure a cloud");
+            Assert.assertEquals(startPageMainContent.get(3).getText(), "Learn more about distributed builds");
+
   }
 
 
