@@ -1,13 +1,14 @@
 package school.redrover.runner;
 
 import org.openqa.selenium.Alert;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.time.Duration;
 import java.util.Properties;
 
@@ -107,6 +108,16 @@ public final class ProjectUtils {
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
 
         return driver;
+    }
+
+    static void takeScreenshot(WebDriver driver, String methodName, String className) {
+        try (FileOutputStream fileOutputStream = new FileOutputStream(new File("screenshots", "%s.%s.png".formatted(methodName, className)))) {
+            fileOutputStream.write(((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES));
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public static void get(WebDriver driver) {
