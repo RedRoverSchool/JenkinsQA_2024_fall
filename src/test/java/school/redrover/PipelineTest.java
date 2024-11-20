@@ -36,11 +36,24 @@ public class PipelineTest extends BaseTest {
     }
 
     @Test
+    public void testCreateWithDescription() {
+        final String desc = "The leading open source automation server, Jenkins provides hundreds of plugins to support building, deploying and automating any project.";
+        final String name = PROJECT_NAME + "AndDescription";
+        createNewProjectWithDescriptionAndGoHomePageByLogo(name, ProjectType.Pipeline,desc);
+
+        getDriver().findElement(By.xpath("//td/a/span[text()='%s']/..".formatted(name))).click();
+        getDriver().findElement(By.xpath("//div[@id='description']/div")).getText();
+
+        Assert.assertEquals(getDriver().findElement(
+                By.xpath("//div[@id='description']/div")).getText(),
+                desc);
+    }
+
+    @Test(dependsOnMethods = "testCreateWithDescription")
     public void testRename() {
         final String newName = PROJECT_NAME + "2New";
-        createNewProjectAndGoMainPageByLogo(PROJECT_NAME + 2, ProjectType.Pipeline);
 
-        getDriver().findElement(By.xpath("//table[@id='projectstatus']/tbody/tr/td/a/span")).click();
+        getDriver().findElement(By.xpath("//table[@id='projectstatus']/tbody/tr/td/a/span/..")).click();
 
         getDriver().findElement(By.xpath("//div[@id='tasks']/div[7]")).click();
 
@@ -48,12 +61,12 @@ public class PipelineTest extends BaseTest {
         inputName.clear();
         inputName.sendKeys(newName);
 
-
         getDriver().findElement(By.xpath("//button[@name='Submit']")).click();
 
         goToHomePageByLogo();
 
-        String actualJobName = getDriver().findElement(By.xpath("//table[@id='projectstatus']/tbody/tr/td/a/span")).getText();
+        String actualJobName = getDriver().findElement(
+                By.xpath("//table[@id='projectstatus']/tbody/tr/td/a/span")).getText();
 
         Assert.assertEquals(actualJobName, newName);
     }
@@ -73,11 +86,10 @@ public class PipelineTest extends BaseTest {
         Assert.assertEquals(getDriver().findElement(By.id("description")).getText(), desc);
     }
 
-    @Test
+    @Test(dependsOnMethods = "testRename")
     public void testDelete() {
-        createNewProjectAndGoMainPageByLogo(PROJECT_NAME + 3, ProjectType.Pipeline);
 
-        getDriver().findElement(By.xpath("//table[@id='projectstatus']/tbody/tr/td/a/span")).click();
+        getDriver().findElement(By.xpath("//table[@id='projectstatus']/tbody/tr/td/a/span/..")).click();
 
         getDriver().findElement(By.xpath("//a[@data-title='Delete Pipeline']")).click();
 
@@ -103,7 +115,7 @@ public class PipelineTest extends BaseTest {
         Assert.assertEquals(actualErrorMessage, "» A job already exists with the name ‘%s’".formatted(nonUniqueProjectName));
     }
 
-    private void createNewProject(String name, ProjectType projectType) {
+    private void createNewProjectWithDescriptionAndGoHomePageByLogo(String name, ProjectType projectType, String description) {
 
         getDriver().findElement(By.xpath("//a[@href ='newJob']")).click();
 
@@ -113,6 +125,11 @@ public class PipelineTest extends BaseTest {
                 By.xpath(("//div[@id='items']//label/span[text()= '%s']".formatted(projectType))))).click();
 
         getDriver().findElement(By.id("ok-button")).click();
+
+        getDriver().findElement(By.name("description")).sendKeys(description);
+        getDriver().findElement(By.cssSelector(".jenkins-submit-button")).click();
+
+        goToHomePageByLogo();
     }
 
     private void createNewProjectAndGoMainPageByLogo(String name, ProjectType projectType) {
