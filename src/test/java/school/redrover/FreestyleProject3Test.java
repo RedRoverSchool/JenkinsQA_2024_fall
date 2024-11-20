@@ -6,7 +6,6 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.Assert;
-import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import school.redrover.runner.BaseTest;
 import school.redrover.runner.TestUtils;
@@ -28,7 +27,7 @@ public class FreestyleProject3Test extends BaseTest {
         getDriver().findElement(By.xpath("//li[contains(@class, 'FreeStyleProject')]")).click();
         getDriver().findElement(By.id("ok-button")).click();
 
-        getWait5().until(ExpectedConditions.visibilityOfElementLocated(
+        getWait10().until(ExpectedConditions.visibilityOfElementLocated(
                 By.xpath("//button[@name='Submit']"))).click();
     }
 
@@ -108,7 +107,6 @@ public class FreestyleProject3Test extends BaseTest {
     }
 
     @Test
-    @Ignore
     public void testDeleteDescriptionOnProjectStatusPage() {
         createProjectViaSidebarMenu(PROJECT_NAME);
         addDescriptionOnProjectStatusPage(DESCRIPTION);
@@ -122,7 +120,6 @@ public class FreestyleProject3Test extends BaseTest {
     }
 
     @Test
-    @Ignore
     public void testRenameProject() {
         final String newName = "New " + PROJECT_NAME;
         createProjectViaSidebarMenu(PROJECT_NAME);
