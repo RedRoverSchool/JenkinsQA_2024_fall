@@ -15,7 +15,7 @@ import school.redrover.runner.BaseTest;
 import java.time.Duration;
 
 import static org.testng.Assert.assertTrue;
-import static org.testng.AssertJUnit.assertNotNull;
+
 
 public class CredentialsMenuTest extends BaseTest {
 
@@ -38,14 +38,14 @@ public class CredentialsMenuTest extends BaseTest {
 
     @Ignore
     @Test
-    public void testNavigateCredentialsMenu()  {
+    public void testNavigateCredentialsMenu() throws InterruptedException {
 
         getCredentialsPage();
 
         Assert.assertEquals(getDriver().findElement(By.tagName("h1")).getText(), "Credentials");
     }
 
-    @Ignore
+   /* @Ignore
     @Test
     public void testAddDomainArrow()  {
 
@@ -69,6 +69,7 @@ public class CredentialsMenuTest extends BaseTest {
         getCredentialsPage();
 
 
+
         WebElement element = getDriver().findElement(By.cssSelector(".model-link.inside.jenkins-table__link"));
         new Actions(getDriver()).moveToElement(element).perform();
 
@@ -88,7 +89,7 @@ public class CredentialsMenuTest extends BaseTest {
 
         //assertTrue(addDomainElement.isDisplayed());
 
-    }
+    }*/
 
 }
 
