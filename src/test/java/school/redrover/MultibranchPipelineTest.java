@@ -96,7 +96,6 @@ public class MultibranchPipelineTest extends BaseTest {
         Assert.assertEquals(getDriver().findElement(By.xpath("//h1")).getText(),"Hilton Hotels");
     }
 
-    @Ignore
     @Test
     public void testTryCreateProjectExistName() {
         final String projectName = "MultiBuild";
@@ -122,11 +121,10 @@ public class MultibranchPipelineTest extends BaseTest {
         getDriver().findElement(By.cssSelector("[class$='MultiBranchProject']")).click();
         getDriver().findElement(By.id("name")).sendKeys(projectName);
 
-        String actualMessage = getWait10().until(ExpectedConditions.visibilityOfElementLocated(By
+        String actualMessage = getWait5().until(ExpectedConditions.visibilityOfElementLocated(By
                 .xpath("//*[@id='itemname-invalid']"))).getText();
 
         Assert.assertEquals(actualMessage, errorMessage);
-
     }
 
     @Ignore
