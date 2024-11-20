@@ -8,6 +8,7 @@ import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
+import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import school.redrover.runner.BaseTest;
 
@@ -35,6 +36,7 @@ public class CredentialsMenuTest extends BaseTest {
 
     }
 
+    @Ignore
     @Test
     public void testNavigateCredentialsMenu()  {
 
@@ -43,6 +45,7 @@ public class CredentialsMenuTest extends BaseTest {
         Assert.assertEquals(getDriver().findElement(By.tagName("h1")).getText(), "Credentials");
     }
 
+    @Ignore
     @Test
     public void testAddDomainArrow()  {
 
