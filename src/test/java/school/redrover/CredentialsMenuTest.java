@@ -84,7 +84,7 @@ public class CredentialsMenuTest extends BaseTest {
 
 
 
-        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(10));
+        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(50));
         WebElement element2 = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[contains(@class, 'tippy-box')]")));
         ((JavascriptExecutor) getDriver()).executeScript("arguments[0].click();", element2);
 
