@@ -411,7 +411,7 @@ public class DashboardItemsDropdownTest extends BaseTest {
         actions.moveToElement(mngOldData).click().perform();
 
         String actualUrl = getDriver().getCurrentUrl();
-        Assert.assertTrue(actualUrl.matches(".*\\/manage/administrativeMonitor/OldData(/)?$"), "Page is invalid");
+        Assert.assertTrue(actualUrl.matches(".*\\/manage/administrativeMonitor/OldData/manage(/)?$"), "Page is invalid");
     }
 
     @Test
