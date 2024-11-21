@@ -430,7 +430,7 @@ public class DashboardItemsDropdownTest extends BaseTest {
         actions.moveToElement(mngJenkins).perform();
 
         List<WebElement> mngJenkinsList = getDriver().findElements(By.cssSelector("#tippy-6 > div > div > div > button"));
-        WebElement jenkinsCLI = mngJenkinsList.get(15);
+        WebElement jenkinsCLI = mngJenkinsList.get(14);
         actions.moveToElement(jenkinsCLI).click().perform();
 
         String actualUrl = getDriver().getCurrentUrl();
@@ -455,29 +455,6 @@ public class DashboardItemsDropdownTest extends BaseTest {
         List<WebElement> mngJenkinsList = getDriver().findElements(By.cssSelector("#tippy-6 > div > div > div > button"));
         WebElement script = mngJenkinsList.get(16);
         actions.moveToElement(script).click().perform();
-
-        String actualUrl = getDriver().getCurrentUrl();
-        Assert.assertTrue(actualUrl.matches(".*\\/manage/cli(/)?$"), "Page is invalid");
-    }
-
-    @Test
-    public void testMngJenkinsConsole() {
-        Actions actions = new Actions(getDriver());
-
-        WebElement dashboardButton = getDriver().findElement(By.cssSelector("#breadcrumbs > li.jenkins-breadcrumbs__list-item"));
-        actions.moveToElement(dashboardButton).perform();
-
-        WebElement buttonDropdown = getWait2().until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("#breadcrumbs > li.jenkins-breadcrumbs__list-item > a > button")));
-        TestUtils.moveAndClickWithJavaScript(getDriver(), buttonDropdown);
-
-        List<WebElement> listDD = getWait10().until(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.cssSelector("#tippy-3 > div > div > div > a")));
-
-        WebElement mngJenkins = listDD.get(2);
-        actions.moveToElement(mngJenkins).perform();
-
-        List<WebElement> mngJenkinsList = getDriver().findElements(By.cssSelector("#tippy-6 > div > div > div > button"));
-        WebElement console = mngJenkinsList.get(17);
-        actions.moveToElement(console).click().perform();
 
         String actualUrl = getDriver().getCurrentUrl();
         Assert.assertTrue(actualUrl.matches(".*\\/manage/script(/)?$"), "Page is invalid");
