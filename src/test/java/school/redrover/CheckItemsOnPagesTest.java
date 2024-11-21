@@ -6,7 +6,7 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 import school.redrover.runner.BaseTest;
 
-public class CheckItemsOnPages extends BaseTest {
+public class CheckItemsOnPagesTest extends BaseTest {
 
     private void verifyElementText(By locator, String expectedText) {
         WebElement element = getDriver().findElement(locator);
