@@ -1,7 +1,6 @@
 package school.redrover;
 
 import org.openqa.selenium.By;
-import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -313,18 +312,10 @@ public class PipelineProject2Test extends BaseTest {
 
         String pipelineScript = TestUtils.readFileAndRefactoringAutoComplete(DataFile.VALID_PIPELINE_SCRIPT.getFileName());
 
-        new Actions(getDriver())
-                .moveToElement(getDriver().findElement(By.xpath("//textarea[@class='ace_text-input']")))
-                .click()
-                .sendKeys(pipelineScript)
-                .click()
-                .keyDown(Keys.CONTROL)
-                .keyDown(Keys.SHIFT)
-                .sendKeys(Keys.END)
-                .sendKeys(Keys.DELETE)
-                .keyUp(Keys.SHIFT)
-                .keyUp(Keys.CONTROL)
-                .perform();
+        WebElement textArea = getDriver().findElement(By.xpath("//textarea[@class='ace_text-input']"));
+
+        TestUtils.pasteTextWithJavaScript(getDriver(), textArea, pipelineScript);
+
         getDriver().findElement(By.xpath("//button[@name='Submit']")).click();
 
         goToMainPage();
@@ -341,9 +332,8 @@ public class PipelineProject2Test extends BaseTest {
 
         getDriver().navigate().refresh();
 
-        Assert.assertTrue(getDriver()
-                .findElement(By.xpath("//tr[@id='job_%s']//*[name()='svg'][@tooltip='Success']".formatted(PROJECT_NAME)))
-                .isDisplayed());
+        Assert.assertTrue(getWait10().until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//tr[@id='job_%s']//*[name()='svg'][@tooltip='Success']".formatted(PROJECT_NAME)))).isDisplayed());
     }
 
     @Test
@@ -354,16 +344,11 @@ public class PipelineProject2Test extends BaseTest {
 
         String pipelineScript = TestUtils.readFileAndRefactoringAutoComplete(DataFile.INVALID_PIPELINE_SCRIPT.getFileName());
 
-        new Actions(getDriver())
-                .moveToElement(getDriver().findElement(By.xpath("//textarea[@class='ace_text-input']")))
-                .click()
-                .sendKeys(pipelineScript)
-                .keyDown(Keys.SHIFT)
-                .keyDown(Keys.CONTROL)
-                .sendKeys(Keys.DELETE)
-                .keyUp(Keys.SHIFT)
-                .keyUp(Keys.CONTROL)
-                .perform();
+        WebElement textArea = getWait10().until(ExpectedConditions.presenceOfElementLocated(
+                By.xpath("//textarea[@class='ace_text-input']")));
+
+        TestUtils.pasteTextWithJavaScript(getDriver(), textArea, pipelineScript);
+
         getDriver().findElement(By.xpath("//button[@name='Submit']")).click();
 
         goToMainPage();
@@ -380,9 +365,8 @@ public class PipelineProject2Test extends BaseTest {
 
         getDriver().navigate().refresh();
 
-        Assert.assertTrue(getDriver()
-                .findElement(By.xpath("//tr[@id='job_%s']//*[name()='svg'][@tooltip='Failed']".formatted(PROJECT_NAME)))
-                .isDisplayed());
+        Assert.assertTrue(getWait10().until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//tr[@id='job_%s']//*[name()='svg'][@tooltip='Failed']".formatted(PROJECT_NAME)))).isDisplayed());
     }
 
 }
