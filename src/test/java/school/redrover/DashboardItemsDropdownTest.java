@@ -6,6 +6,7 @@ import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.annotations.Test;
 import school.redrover.runner.BaseTest;
+import school.redrover.runner.TestUtils;
 
 import java.util.List;
 
@@ -21,7 +22,7 @@ public class DashboardItemsDropdownTest extends BaseTest {
 
         WebElement buttonDropdown = getWait2().until(ExpectedConditions.visibilityOfElementLocated(
                 By.cssSelector("#breadcrumbs > li.jenkins-breadcrumbs__list-item > a > button")));
-        actions.moveToElement(buttonDropdown).click().perform();
+        TestUtils.moveAndClickWithJavaScript(getDriver(), buttonDropdown);
 
         List<WebElement> listDD = getWait10().until(ExpectedConditions.visibilityOfAllElementsLocatedBy(
                 By.cssSelector("#tippy-3 > div > div > div > a")));
