@@ -266,6 +266,26 @@ public class FreestyleProject3Test extends BaseTest {
         Assert.assertTrue(getDriver().findElement(By.tagName("h1")).getText().contains(displayName));
     }
 
+    @Test(dependsOnMethods = "testBuildProjectViaSidebarMenuOnProjectStatusPage")
+    public void testAddBuildDescription() {
+        openProject(PROJECT_NAME);
+
+        getWait10().until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//a[@tooltip='Success > Console Output']"))).click();
+
+        getDriver().findElement(By.xpath("//span[contains(text(), 'Edit Build Information')]/..")).click();
+
+        WebElement descriptionTextField = getWait5().until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//textarea")));
+        descriptionTextField.sendKeys(DESCRIPTION);
+
+        getDriver().findElement(By.xpath("//button[@name='Submit']")).click();
+
+        Assert.assertEquals(
+                getWait5().until(ExpectedConditions.visibilityOfElementLocated(By.id("description"))).getText(),
+                DESCRIPTION);
+    }
+
     @Test
     public void testDeleteProjectViaSidebarMenuOnProjectStatusPage() {
         createProjectViaSidebarMenu(PROJECT_NAME);
