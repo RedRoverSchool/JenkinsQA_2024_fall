@@ -102,7 +102,7 @@ public class DashboardItemsDropdownTest extends BaseTest {
         actions.moveToElement(system).click().perform();
 
         String actualUrl = getDriver().getCurrentUrl();
-        Assert.assertTrue(actualUrl.matches(".*\\/manage/configure$"), "Page is invalid");
+        Assert.assertTrue(actualUrl.matches(".*\\/manage/configure(/)?$"), "Page is invalid");
     }
 
     @Test
@@ -129,7 +129,7 @@ public class DashboardItemsDropdownTest extends BaseTest {
         actions.moveToElement(tools).click().perform();
 
         String actualUrl = getDriver().getCurrentUrl();
-        Assert.assertTrue(actualUrl.matches(".*\\/manage/configureTools$"), "Page is invalid");
+        Assert.assertTrue(actualUrl.matches(".*\\/manage/configureTools(/)?$"), "Page is invalid");
     }
 
     @Test
@@ -156,7 +156,7 @@ public class DashboardItemsDropdownTest extends BaseTest {
         actions.moveToElement(plugins).click().perform();
 
         String actualUrl = getDriver().getCurrentUrl();
-        Assert.assertTrue(actualUrl.matches(".*\\/manage/pluginManager$"), "Page is invalid");
+        Assert.assertTrue(actualUrl.matches(".*\\/manage/pluginManager(/)?$"), "Page is invalid");
     }
 
     @Test
@@ -183,7 +183,7 @@ public class DashboardItemsDropdownTest extends BaseTest {
         actions.moveToElement(nodes).click().perform();
 
         String actualUrl = getDriver().getCurrentUrl();
-        Assert.assertTrue(actualUrl.matches(".*\\/manage/computer$"), "Page is invalid");
+        Assert.assertTrue(actualUrl.matches(".*\\/manage/computer(/)?$"), "Page is invalid");
     }
 
     @Test
@@ -210,7 +210,7 @@ public class DashboardItemsDropdownTest extends BaseTest {
         actions.moveToElement(clouds).click().perform();
 
         String actualUrl = getDriver().getCurrentUrl();
-        Assert.assertTrue(actualUrl.matches(".*\\/manage/cloud$"), "Page is invalid");
+        Assert.assertTrue(actualUrl.matches(".*\\/manage/cloud(/)?$"), "Page is invalid");
     }
 
     @Test
@@ -237,7 +237,34 @@ public class DashboardItemsDropdownTest extends BaseTest {
         actions.moveToElement(appearance).click().perform();
 
         String actualUrl = getDriver().getCurrentUrl();
-        Assert.assertTrue(actualUrl.matches(".*\\/manage/appearance$"), "Page is invalid");
+        Assert.assertTrue(actualUrl.matches(".*\\/manage/appearance(/)?$"), "Page is invalid");
+    }
+
+    @Test
+    public void testMngJenkinsSecurity() {
+        Actions actions = new Actions(getDriver());
+
+        WebElement dashboardButton = getDriver().findElement(
+                By.cssSelector("#breadcrumbs > li.jenkins-breadcrumbs__list-item"));
+        actions.moveToElement(dashboardButton).perform();
+
+        WebElement buttonDropdown = getWait2().until(ExpectedConditions.visibilityOfElementLocated(
+                By.cssSelector("#breadcrumbs > li.jenkins-breadcrumbs__list-item > a > button")));
+        TestUtils.moveAndClickWithJavaScript(getDriver(), buttonDropdown);
+
+        List<WebElement> listDD = getWait10().until(ExpectedConditions.visibilityOfAllElementsLocatedBy(
+                By.cssSelector("#tippy-3 > div > div > div > a")));
+
+        WebElement mngJenkins = listDD.get(2);
+        actions.moveToElement(mngJenkins).perform();
+
+        List<WebElement> mngJenkinsList = getDriver().findElements(
+                By.cssSelector("#tippy-6 > div > div > div > a"));
+        WebElement security = mngJenkinsList.get(6);
+        actions.moveToElement(security).click().perform();
+
+        String actualUrl = getDriver().getCurrentUrl();
+        Assert.assertTrue(actualUrl.matches(".*\\/manage/configureSecurity(/)?$"), "Page is invalid");
     }
 
     @Test
