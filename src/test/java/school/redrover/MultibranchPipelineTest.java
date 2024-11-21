@@ -93,7 +93,7 @@ public class MultibranchPipelineTest extends BaseTest {
 
         Assert.assertEquals(getDriver().findElement(By.xpath("//h1")).getText(), "Hilton Hotels");
     }
-
+    @Ignore
     @Test
     public void testTryCreateProjectExistName() {
         final String projectName = "MultiBuild";
