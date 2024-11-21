@@ -1,13 +1,13 @@
 package school.redrover;
 
 import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.Assert;
-import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
+import school.redrover.page.HomePage;
+import school.redrover.page.NewItemPage;
 import school.redrover.runner.BaseTest;
 import school.redrover.runner.TestUtils;
 
@@ -51,6 +51,7 @@ public class FolderTest extends BaseTest {
     private static final String ITEM_LOCATOR_BY_NAME = "//span[text()='%s']";
     private static final String FIRST_FOLDER_NAME = "Freestyle projects";
     private static final String FREESTYLE_PROJECT_NAME = "First freestyle project job";
+    private static final String ITEM_NAME_MAX_LENGTH = "length=255Ab.Ижп-и_№()+='`~23456789012345678901k26789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345length=255";
 
     private void createAndNameNewItem(String name) {
 
@@ -126,15 +127,22 @@ public class FolderTest extends BaseTest {
     }
 
     @Test
-    public void testCreateWithoutConfiguration() {
+    public void testCreateWithMaxNameLength() {
 
-        createAndNameNewItem(FIRST_FOLDER_NAME);
-        TestUtils.scrollToBottom(getDriver());
-        selectItemTypeAndSave(ItemType.FOLDER);
+        new HomePage(getDriver())
+                .clickNewItem()
+                .enterItemName(ITEM_NAME_MAX_LENGTH)
+                .selectProjectTypeAndSave(NewItemPage.ItemType.FOLDER)
+                .goToDashboard();
 
-        submit();
 
-        goToDashboard();
+//        createAndNameNewItem(FIRST_FOLDER_NAME);
+//        TestUtils.scrollToBottom(getDriver());
+//        selectItemTypeAndSave(ItemType.FOLDER);
+//
+//        submit();
+//
+//        goToDashboard();
 
         Assert.assertTrue(
                 getDriver().findElement(By.xpath(ITEM_LOCATOR_BY_NAME.formatted(ItemType.
@@ -216,7 +224,7 @@ public class FolderTest extends BaseTest {
 
     }
 
-    @Ignore
+
     @Test
     public void openBuildHistoryByChevron() {
 
