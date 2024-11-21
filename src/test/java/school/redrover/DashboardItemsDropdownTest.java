@@ -431,7 +431,7 @@ public class DashboardItemsDropdownTest extends BaseTest {
 
         List<WebElement> mngJenkinsList = getDriver().findElements(By.cssSelector("#tippy-6 > div > div > div > button"));
         WebElement jenkinsCLI = mngJenkinsList.get(14);
-        actions.moveToElement(jenkinsCLI).click().perform();
+        actions.scrollToElement(jenkinsCLI).click().perform();
 
         String actualUrl = getDriver().getCurrentUrl();
         Assert.assertTrue(actualUrl.matches(".*\\/manage/cli(/)?$"), "Page is invalid");
@@ -454,7 +454,7 @@ public class DashboardItemsDropdownTest extends BaseTest {
 
         List<WebElement> mngJenkinsList = getDriver().findElements(By.cssSelector("#tippy-6 > div > div > div > button"));
         WebElement script = mngJenkinsList.get(16);
-        actions.moveToElement(script).click().perform();
+        actions.scrollToElement(script).click().perform();
 
         String actualUrl = getDriver().getCurrentUrl();
         Assert.assertTrue(actualUrl.matches(".*\\/manage/script(/)?$"), "Page is invalid");
@@ -477,7 +477,7 @@ public class DashboardItemsDropdownTest extends BaseTest {
 
         List<WebElement> mngJenkinsList = getDriver().findElements(By.cssSelector("#tippy-6 > div > div > div > button"));
         WebElement prepareShutdown = mngJenkinsList.get(17);
-        actions.moveToElement(prepareShutdown).click().perform();
+        actions.scrollToElement(prepareShutdown).click().perform();
 
         String actualUrl = getDriver().getCurrentUrl();
         Assert.assertTrue(actualUrl.matches(".*\\/manage/prepareShutdown(/)?$"), "Page is invalid");
