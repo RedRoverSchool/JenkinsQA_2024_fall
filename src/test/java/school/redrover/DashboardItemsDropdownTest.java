@@ -4,10 +4,10 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.testng.Assert;
 import org.testng.annotations.Test;
 import school.redrover.runner.BaseTest;
 import school.redrover.runner.TestUtils;
-
 import java.util.List;
 
 public class DashboardItemsDropdownTest extends BaseTest {
@@ -29,5 +29,9 @@ public class DashboardItemsDropdownTest extends BaseTest {
 
         WebElement newItem = listDD.get(0);
         actions.moveToElement(newItem).click().perform();
+
+        String expectedTitle = "New Item [Jenkins]";
+        String actualTitle = getDriver().getTitle();
+        Assert.assertEquals(actualTitle, expectedTitle, "Page is invalid");
     }
 }
