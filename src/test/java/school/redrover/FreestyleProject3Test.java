@@ -52,6 +52,24 @@ public class FreestyleProject3Test extends BaseTest {
         getDriver().findElement(By.xpath("//td/a/span[text()='%s']".formatted(name))).click();
     }
 
+    private void clickOnSuccessBuildIcon() {
+        getWait10().until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//a[@tooltip='Success > Console Output']"))).click();
+    }
+
+    private void goToEditBuildInformationPage() {
+        getDriver().findElement(By.xpath("//span[contains(text(), 'Edit Build Information')]/..")).click();
+    }
+
+    private WebElement findDisplayNameTextField() {
+        return getWait5().until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//input[@name='displayName']")));
+    }
+
+    private void clickSubmitButtonOnBuildInformationPage() {
+        getDriver().findElement(By.xpath("//button[@name='Submit']")).click();
+    }
+
     @Test
     public void testCreateProjectViaCreateJobButton() {
         getDriver().findElement(By.xpath("//a[@href='newJob']")).click();
@@ -238,8 +256,8 @@ public class FreestyleProject3Test extends BaseTest {
 
         getWait2().until(ExpectedConditions.visibilityOfElementLocated(
                 By.xpath("//a[@data-build-success='Build scheduled']"))).click();
-        getWait10().until(ExpectedConditions.visibilityOfElementLocated(
-                By.xpath("//a[@tooltip='Success > Console Output']"))).click();
+
+        clickOnSuccessBuildIcon();
 
         Assert.assertTrue(
                 getWait2().until(ExpectedConditions.visibilityOfElementLocated(By.id("out"))).getText()
@@ -250,16 +268,13 @@ public class FreestyleProject3Test extends BaseTest {
     public void testAddBuildDisplayName() {
         openProject(PROJECT_NAME);
 
-        getWait10().until(ExpectedConditions.visibilityOfElementLocated(
-                By.xpath("//a[@tooltip='Success > Console Output']"))).click();
+        clickOnSuccessBuildIcon();
 
-        getDriver().findElement(By.xpath("//span[contains(text(), 'Edit Build Information')]/..")).click();
+        goToEditBuildInformationPage();
 
-        WebElement displayNameTextField = getWait5().until(ExpectedConditions.visibilityOfElementLocated(
-                By.xpath("//input[@name='displayName']")));
-        displayNameTextField.sendKeys(DISPLAY_BUILD_NAME);
+        findDisplayNameTextField().sendKeys(DISPLAY_BUILD_NAME);
 
-        getDriver().findElement(By.xpath("//button[@name='Submit']")).click();
+        clickSubmitButtonOnBuildInformationPage();
 
         getWait10().until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//button[@name='Submit']")));
 
@@ -272,17 +287,14 @@ public class FreestyleProject3Test extends BaseTest {
 
         openProject(PROJECT_NAME);
 
-        getWait10().until(ExpectedConditions.visibilityOfElementLocated(
-                By.xpath("//a[@tooltip='Success > Console Output']"))).click();
+        clickOnSuccessBuildIcon();
 
-        getDriver().findElement(By.xpath("//span[contains(text(), 'Edit Build Information')]/..")).click();
+        goToEditBuildInformationPage();
 
-        WebElement displayNameTextField = getWait5().until(ExpectedConditions.visibilityOfElementLocated(
-                By.xpath("//input[@name='displayName']")));
-        displayNameTextField.clear();
-        displayNameTextField.sendKeys(newDisplayProjectName);
+        findDisplayNameTextField().clear();
+        findDisplayNameTextField().sendKeys(newDisplayProjectName);
 
-        getDriver().findElement(By.xpath("//button[@name='Submit']")).click();
+        clickSubmitButtonOnBuildInformationPage();
 
         getWait10().until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//button[@name='Submit']")));
 
@@ -293,16 +305,15 @@ public class FreestyleProject3Test extends BaseTest {
     public void testAddBuildDescription() {
         openProject(PROJECT_NAME);
 
-        getWait10().until(ExpectedConditions.visibilityOfElementLocated(
-                By.xpath("//a[@tooltip='Success > Console Output']"))).click();
+        clickOnSuccessBuildIcon();
 
-        getDriver().findElement(By.xpath("//span[contains(text(), 'Edit Build Information')]/..")).click();
+        goToEditBuildInformationPage();
 
         WebElement descriptionTextField = getWait5().until(ExpectedConditions.visibilityOfElementLocated(
                 By.xpath("//textarea")));
         descriptionTextField.sendKeys(DESCRIPTION);
 
-        getDriver().findElement(By.xpath("//button[@name='Submit']")).click();
+        clickSubmitButtonOnBuildInformationPage();
 
         Assert.assertEquals(
                 getWait5().until(ExpectedConditions.visibilityOfElementLocated(By.id("description"))).getText(),
@@ -314,17 +325,16 @@ public class FreestyleProject3Test extends BaseTest {
         final String newDescriptionTextField = "New " + DESCRIPTION;
         openProject(PROJECT_NAME);
 
-        getWait10().until(ExpectedConditions.visibilityOfElementLocated(
-                By.xpath("//a[@tooltip='Success > Console Output']"))).click();
+        clickOnSuccessBuildIcon();
 
-        getDriver().findElement(By.xpath("//span[contains(text(), 'Edit Build Information')]/..")).click();
+        goToEditBuildInformationPage();
 
         WebElement descriptionTextField = getWait5().until(ExpectedConditions.visibilityOfElementLocated(
                 By.xpath("//textarea")));
         descriptionTextField.clear();
         descriptionTextField.sendKeys(newDescriptionTextField);
 
-        getDriver().findElement(By.xpath("//button[@name='Submit']")).click();
+        clickSubmitButtonOnBuildInformationPage();
 
         Assert.assertEquals(
                 getWait5().until(ExpectedConditions.visibilityOfElementLocated(By.id("description"))).getText(),
