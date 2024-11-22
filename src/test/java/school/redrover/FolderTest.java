@@ -144,6 +144,7 @@ public class FolderTest extends BaseTest {
 
     @Test
     public void testCreateWithMinNameLength() {
+
         new HomePage(getDriver())
                 .clickNewItem().enterItemName("F")
                 .selectProjectTypeAndSave(NewItemPage.ItemType.FOLDER)
