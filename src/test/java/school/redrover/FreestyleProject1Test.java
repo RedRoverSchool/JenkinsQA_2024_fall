@@ -23,23 +23,14 @@ public class FreestyleProject1Test extends BaseTest {
     private static final String RENAMED_FREESTYLE_PROJECT_NAME = "Renamed freestyle project";
     private static final String DESCRIPTION = "Some description";
 
-    private void createFreestyleProject(String name) {
-        getDriver().findElement(By.xpath("//*[@href='/view/all/newJob']")).click();
-        getDriver().findElement(By.className("hudson_model_FreeStyleProject")).click();
-        getDriver().findElement(By.name("name")).sendKeys(name);
-        getDriver().findElement(By.id("ok-button")).click();
-        getDriver().findElement(By.name("Submit")).click();
-
-        getDriver().findElement(By.id("jenkins-name-icon")).click();
-    }
-
     private void openProject(String name) {
         getDriver().findElement(By.xpath("//td/a/span[text() = '%s']/..".formatted(name))).click();
     }
 
     @Test
     public void testCreate() {
-        createFreestyleProject(NEW_FREESTYLE_PROJECT_NAME);
+        new HomePage(getDriver())
+                .createFreestyleProject(NEW_FREESTYLE_PROJECT_NAME);
 
         List<WebElement> elementList = getDriver().findElements(By.xpath("//td/a/span[1]"));
         List<String> projectList = elementList.stream().map(WebElement::getText).toList();
@@ -101,13 +92,8 @@ public class FreestyleProject1Test extends BaseTest {
 
     @Test
     public void testFreestyleProjectDescriptionPreview() {
-        createFreestyleProject(NEW_FREESTYLE_PROJECT_NAME);
-
-        Actions actions = new Actions(getDriver());
-        WebElement element = getDriver()
-                .findElement(By.xpath("//span[contains(text(),'" + NEW_FREESTYLE_PROJECT_NAME + "')]"));
-
-        actions.moveToElement(element).click().perform();
+        new HomePage(getDriver())
+                .createFreestyleProject(NEW_FREESTYLE_PROJECT_NAME);
 
         getDriver().findElement(By.id("description-link")).click();
         getDriver().findElement(By.name("description")).sendKeys(DESCRIPTION);
@@ -120,7 +106,9 @@ public class FreestyleProject1Test extends BaseTest {
 
     @Test
     public void testChevronDeleteFreestyleProject() {
-        createFreestyleProject(NEW_FREESTYLE_PROJECT_NAME);
+        new HomePage(getDriver())
+                .createFreestyleProject(NEW_FREESTYLE_PROJECT_NAME);
+
 
         Actions actions = new Actions(getDriver());
         WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(10));
@@ -150,7 +138,9 @@ public class FreestyleProject1Test extends BaseTest {
 
     @Test
     public void testChevronRenameFreestyleProject() throws InterruptedException {
-        createFreestyleProject(NEW_FREESTYLE_PROJECT_NAME);
+        new HomePage(getDriver())
+                .createFreestyleProject(NEW_FREESTYLE_PROJECT_NAME);
+
 
         Actions actions = new Actions(getDriver());
         WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(10));
@@ -185,9 +175,10 @@ public class FreestyleProject1Test extends BaseTest {
 
     @Test
     public void testJobNameSorting() {
-        createFreestyleProject("aaa");
-        createFreestyleProject("bbb");
-        createFreestyleProject("aabb");
+        HomePage homePage = new HomePage(getDriver());
+
+        List<String> projectNames = List.of("aaa", "bbb", "aabb");
+        projectNames.forEach(homePage::createFreestyleProject);
 
         // This XPath targets the links containing the job names
         List<WebElement> jobLinks = getDriver()
