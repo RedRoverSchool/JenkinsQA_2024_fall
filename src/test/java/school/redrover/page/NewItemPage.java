@@ -27,6 +27,11 @@ public class NewItemPage extends BasePage {
 
     public NewItemPage enterItemName(String name) {
         getDriver().findElement(By.id("name")).sendKeys(name);
+
+        return this;
+    }
+
+    public NewItemPage scrollToBottom() {
         TestUtils.scrollToBottom(getDriver());
 
         return this;

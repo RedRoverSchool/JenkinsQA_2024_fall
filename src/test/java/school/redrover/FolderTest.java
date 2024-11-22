@@ -1,7 +1,6 @@
 package school.redrover;
 
 import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -53,7 +52,7 @@ public class FolderTest extends BaseTest {
     private static final String ITEM_LOCATOR_BY_NAME = "//span[text()='%s']";
     private static final String FIRST_FOLDER_NAME = "Freestyle projects";
     private static final String FREESTYLE_PROJECT_NAME = "First freestyle project job";
-    private static final String ITEM_NAME_MAX_LENGTH = "012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234";
+    private static final String FOLDER_NAME_MAX_LENGTH = "012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234";
 
     private void createAndNameNewItem(String name) {
 
@@ -131,15 +130,15 @@ public class FolderTest extends BaseTest {
     @Test
     public void testCreateWithMaxNameLength() {
 
-        new HomePage(getDriver())
+        String folderName = new HomePage(getDriver())
                 .clickNewItem()
-                .enterItemName(ITEM_NAME_MAX_LENGTH)
+                .enterItemName(FOLDER_NAME_MAX_LENGTH)
+                .scrollToBottom()
                 .selectProjectTypeAndSave(NewItemPage.ItemType.FOLDER)
-                .goToDashboard();
+                .goToDashboard()
+                .getProjectNameByOrder(1);
 
-        Assert.assertTrue(
-                getDriver().findElement(By.xpath(ITEM_LOCATOR_BY_NAME.formatted(ItemType.
-                        FOLDER.getItemName()))).isDisplayed());
+        Assert.assertEquals(folderName, FOLDER_NAME_MAX_LENGTH);
     }
 
     @Test()
