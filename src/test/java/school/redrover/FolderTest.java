@@ -141,6 +141,17 @@ public class FolderTest extends BaseTest {
         Assert.assertEquals(folderName, FOLDER_NAME_MAX_LENGTH);
     }
 
+    @Test
+    public void testCreateWithMinNameLength() {
+
+        new HomePage(getDriver())
+                .clickNewItem().enterItemName("F")
+                .selectProjectTypeAndSave(NewItemPage.ItemType.FOLDER)
+                .goToDashboard();
+
+        Assert.assertEquals(getDriver().findElement(By.xpath("//td/a/span")).getText(),"F");
+    }
+
     @Test(dependsOnMethods = "testCreateWithMaxNameLength")
     public void configureNameByChevron() {
 

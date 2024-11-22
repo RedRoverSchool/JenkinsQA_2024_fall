@@ -13,6 +13,16 @@ public class HomePage extends BasePage {
         super(driver);
     }
 
+    public void createFreestyleProject(String name) {
+        getDriver().findElement(By.xpath("//*[@href='/view/all/newJob']")).click();
+        getDriver().findElement(By.className("hudson_model_FreeStyleProject")).click();
+        getDriver().findElement(By.name("name")).sendKeys(name);
+        getDriver().findElement(By.id("ok-button")).click();
+        getDriver().findElement(By.name("Submit")).click();
+
+        getDriver().findElement(By.id("jenkins-name-icon")).click();
+    }
+
     public ProjectPage openProject(String name) {
         getDriver().findElement(By.xpath("//td/a/span[text() = '%s']/..".formatted(name))).click();
 
