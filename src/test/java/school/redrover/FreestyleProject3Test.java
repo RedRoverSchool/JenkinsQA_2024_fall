@@ -20,6 +20,8 @@ public class FreestyleProject3Test extends BaseTest {
 
     private static final By CODE_MIRROR_EDITOR = By.cssSelector(".CodeMirror");
 
+    private static final String DISPLAY_BUILD_NAME = "BuildName";
+
     private void createProjectViaSidebarMenu(String projectName) {
         getDriver().findElement(By.xpath("//a[@href='/view/all/newJob']")).click();
 
@@ -48,6 +50,24 @@ public class FreestyleProject3Test extends BaseTest {
 
     private void openProject(String name) {
         getDriver().findElement(By.xpath("//td/a/span[text()='%s']".formatted(name))).click();
+    }
+
+    private void clickOnSuccessBuildIcon() {
+        getWait10().until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//a[@tooltip='Success > Console Output']"))).click();
+    }
+
+    private void goToEditBuildInformationPage() {
+        getDriver().findElement(By.xpath("//span[contains(text(), 'Edit Build Information')]/..")).click();
+    }
+
+    private WebElement findDisplayNameTextField() {
+        return getWait5().until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//input[@name='displayName']")));
+    }
+
+    private void clickSubmitButtonOnBuildInformationPage() {
+        getDriver().findElement(By.xpath("//button[@name='Submit']")).click();
     }
 
     @Test
@@ -236,8 +256,8 @@ public class FreestyleProject3Test extends BaseTest {
 
         getWait2().until(ExpectedConditions.visibilityOfElementLocated(
                 By.xpath("//a[@data-build-success='Build scheduled']"))).click();
-        getWait10().until(ExpectedConditions.visibilityOfElementLocated(
-                By.xpath("//a[@tooltip='Success > Console Output']"))).click();
+
+        clickOnSuccessBuildIcon();
 
         Assert.assertTrue(
                 getWait2().until(ExpectedConditions.visibilityOfElementLocated(By.id("out"))).getText()
@@ -245,25 +265,102 @@ public class FreestyleProject3Test extends BaseTest {
     }
 
     @Test(dependsOnMethods = "testBuildProjectViaSidebarMenuOnProjectStatusPage")
-    public void testEditBuildInformationAddDisplayName() {
-        final String displayName = "BuildName";
-
+    public void testAddBuildDisplayName() {
         openProject(PROJECT_NAME);
 
-        getWait10().until(ExpectedConditions.visibilityOfElementLocated(
-                By.xpath("//a[@tooltip='Success > Console Output']"))).click();
+        clickOnSuccessBuildIcon();
 
-        getDriver().findElement(By.xpath("//span[contains(text(), 'Edit Build Information')]/..")).click();
+        goToEditBuildInformationPage();
 
-        WebElement displayNameTextField = getWait5().until(ExpectedConditions.visibilityOfElementLocated(
-                By.xpath("//input[@name='displayName']")));
-        displayNameTextField.sendKeys(displayName);
+        findDisplayNameTextField().sendKeys(DISPLAY_BUILD_NAME);
 
-        getDriver().findElement(By.xpath("//button[@name='Submit']")).click();
+        clickSubmitButtonOnBuildInformationPage();
 
         getWait10().until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//button[@name='Submit']")));
 
-        Assert.assertTrue(getDriver().findElement(By.tagName("h1")).getText().contains(displayName));
+        Assert.assertTrue(getDriver().findElement(By.tagName("h1")).getText().contains(DISPLAY_BUILD_NAME));
+    }
+
+    @Test(dependsOnMethods = {"testBuildProjectViaSidebarMenuOnProjectStatusPage", "testAddBuildDisplayName"})
+    public void testEditBuildDisplayName() {
+        final String newDisplayProjectName = "New " + DISPLAY_BUILD_NAME;
+
+        openProject(PROJECT_NAME);
+
+        clickOnSuccessBuildIcon();
+
+        goToEditBuildInformationPage();
+
+        findDisplayNameTextField().clear();
+        findDisplayNameTextField().sendKeys(newDisplayProjectName);
+
+        clickSubmitButtonOnBuildInformationPage();
+
+        getWait10().until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//button[@name='Submit']")));
+
+        Assert.assertTrue(getDriver().findElement(By.tagName("h1")).getText().contains(newDisplayProjectName));
+    }
+
+    @Test(dependsOnMethods = "testBuildProjectViaSidebarMenuOnProjectStatusPage")
+    public void testAddBuildDescription() {
+        openProject(PROJECT_NAME);
+
+        clickOnSuccessBuildIcon();
+
+        goToEditBuildInformationPage();
+
+        WebElement descriptionTextField = getWait5().until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//textarea")));
+        descriptionTextField.sendKeys(DESCRIPTION);
+
+        clickSubmitButtonOnBuildInformationPage();
+
+        Assert.assertEquals(
+                getWait5().until(ExpectedConditions.visibilityOfElementLocated(By.id("description"))).getText(),
+                DESCRIPTION);
+    }
+
+    @Test(dependsOnMethods = {"testBuildProjectViaSidebarMenuOnProjectStatusPage", "testAddBuildDescription"})
+    public void testEditBuildDescription() {
+        final String newDescriptionTextField = "New " + DESCRIPTION;
+        openProject(PROJECT_NAME);
+
+        clickOnSuccessBuildIcon();
+
+        goToEditBuildInformationPage();
+
+        WebElement descriptionTextField = getWait5().until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//textarea")));
+        descriptionTextField.clear();
+        descriptionTextField.sendKeys(newDescriptionTextField);
+
+        clickSubmitButtonOnBuildInformationPage();
+
+        Assert.assertEquals(
+                getWait5().until(ExpectedConditions.visibilityOfElementLocated(By.id("description"))).getText(),
+                newDescriptionTextField);
+    }
+
+    @Test
+    public void testDeleteLastBuild() {
+        createProjectViaSidebarMenu(PROJECT_NAME);
+
+        getWait2().until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//a[@data-build-success='Build scheduled']"))).click();
+
+        clickOnSuccessBuildIcon();
+
+        String buildName = getWait5().until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//span[contains(text(), 'Delete build')]"))).getText();
+        getDriver().findElement(By.xpath("//span[contains(text(), 'Delete build')]/..")).click();
+
+        getWait5().until(ExpectedConditions.visibilityOfElementLocated(By.name("Submit"))).click();
+
+        List<String> buildHistory = getDriver().findElements(By.xpath("//tr")).stream()
+                .map(WebElement::getText)
+                .toList();
+
+        Assert.assertFalse(buildHistory.contains(buildName));
     }
 
     @Test

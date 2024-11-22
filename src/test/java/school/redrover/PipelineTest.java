@@ -10,7 +10,6 @@ import org.testng.annotations.Test;
 import school.redrover.runner.BaseTest;
 import school.redrover.runner.TestUtils;
 
-import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,7 +45,7 @@ public class PipelineTest extends BaseTest {
     public void testCreateWithDescription() {
         final String desc = "The leading open source automation server, Jenkins provides hundreds of plugins to support building, deploying and automating any project.";
         final String name = PROJECT_NAME + "AndDescription";
-        createNewProjectWithDescriptionAndGoHomePageByLogo(name, ProjectType.Pipeline,desc);
+        createNewProjectWithDescriptionAndGoHomePageByLogo(name, ProjectType.Pipeline, desc);
 
         getDriver().findElement(By.xpath("//td/a/span[text()='%s']/..".formatted(name))).click();
         getDriver().findElement(By.xpath("//div[@id='description']/div")).getText();
@@ -141,7 +140,7 @@ public class PipelineTest extends BaseTest {
 
         getDriver().findElement(By.id("name")).sendKeys(nonUniqueProjectName);
 
-        String actualErrorMessage = getDriver().findElement(By.id("itemname-invalid")).getText();
+        String actualErrorMessage = getWait5().until(ExpectedConditions.presenceOfElementLocated(By.id("itemname-invalid"))).getText();
 
         Assert.assertEquals(actualErrorMessage, "» A job already exists with the name ‘%s’".formatted(nonUniqueProjectName));
     }
