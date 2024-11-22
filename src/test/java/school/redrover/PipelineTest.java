@@ -111,16 +111,18 @@ public class PipelineTest extends BaseTest {
         final String projectName = "ProjectDeleteByChevron";
         createNewProjectAndGoMainPageByLogo(projectName, ProjectType.Pipeline);
 
-        new Actions(getDriver()).moveToElement(findProjectOnDashboardByName(projectName)).perform();
+        new Actions(getDriver())
+                .moveToElement(findProjectOnDashboardByName(projectName))
+                .perform();
 
-        getWait5().until(TestUtils.ExpectedConditions.elementIsNotMoving(
+        getWait10().until(TestUtils.ExpectedConditions.elementIsNotMoving(
                 By.xpath("//a[@href ='job/%s/']/button[@class='jenkins-menu-dropdown-chevron']"
                         .formatted(projectName)))).click();
 
-        getWait5().until(ExpectedConditions.elementToBeClickable(
+        getWait10().until(ExpectedConditions.elementToBeClickable(
                 By.xpath("//div[@class='jenkins-dropdown']/button[@href = '/job/%s/doDelete']".formatted(projectName)))).click();
 
-        getWait5().until(ExpectedConditions.visibilityOfElementLocated(
+        getWait10().until(ExpectedConditions.visibilityOfElementLocated(
                 By.xpath("//button[@data-id='ok']"))).click();
 
         goToHomePageByLogo();
