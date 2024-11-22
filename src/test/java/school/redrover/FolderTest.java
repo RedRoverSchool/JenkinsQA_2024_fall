@@ -142,6 +142,17 @@ public class FolderTest extends BaseTest {
                         FOLDER.getItemName()))).isDisplayed());
     }
 
+    @Test
+    public void testCreateWithMinNameLength() {
+
+        new HomePage(getDriver())
+                .clickNewItem().enterItemName("F")
+                .selectProjectTypeAndSave(NewItemPage.ItemType.FOLDER)
+                .goToDashboard();
+
+        Assert.assertEquals(getDriver().findElement(By.xpath("//td/a/span")).getText(),"F");
+    }
+
     @Test()
     public void testCreateWithoutConfiguration() {
 
