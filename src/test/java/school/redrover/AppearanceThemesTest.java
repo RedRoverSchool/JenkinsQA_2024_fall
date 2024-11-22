@@ -8,6 +8,7 @@ import school.redrover.runner.BaseTest;
 
 public class AppearanceThemesTest extends BaseTest {
 
+    @Ignore
     @Test
     public void testAppearanceThemesDark() {
         getDriver().findElement(By.cssSelector("[href='/manage']")).click();

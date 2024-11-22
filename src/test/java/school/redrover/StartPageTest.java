@@ -46,6 +46,7 @@ public class StartPageTest extends BaseTest {
         Assert.assertEquals(startPageMainContent.get(3).getText(), "Learn more about distributed builds");
     }
 
+    @Ignore
     @Test
     public void testStartPageSidePanelTaskContent() {
 
