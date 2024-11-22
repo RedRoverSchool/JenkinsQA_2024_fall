@@ -54,6 +54,7 @@ public class FolderTest extends BaseTest {
     private static final String FIRST_FOLDER_NAME = "Freestyle projects";
     private static final String FREESTYLE_PROJECT_NAME = "First freestyle project job";
     private static final String ITEM_NAME_MAX_LENGTH = "012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234";
+
     private void createAndNameNewItem(String name) {
 
         getDriver().findElement(By.xpath("//span[text()='New Item']/ancestor::a")).click();
