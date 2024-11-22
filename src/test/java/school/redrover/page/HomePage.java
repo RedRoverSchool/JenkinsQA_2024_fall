@@ -2,7 +2,11 @@ package school.redrover.page;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import school.redrover.page.base.BasePage;
+import school.redrover.runner.TestUtils;
 
 public class HomePage extends BasePage {
 
@@ -30,5 +34,16 @@ public class HomePage extends BasePage {
         getDriver().findElement(By.xpath("//span[text()='New Item']/ancestor::a")).click();
 
         return new NewItemPage(getDriver());
+    }
+
+    public HomePage openDropdownViaChevron(String projectName) {
+        new Actions(getDriver()).moveToElement(getDriver().findElement(By.xpath("//a[@href='job/%s/']/span".formatted(projectName))))
+                .pause(500)
+                .perform();
+        WebElement chevron = getDriver().findElement(By.xpath("//td//button[@aria-expanded='false']"));
+        TestUtils.moveAndClickWithJavaScript(getDriver(), chevron);
+        getWait5().until(ExpectedConditions.attributeToBe(chevron, "aria-expanded", "true"));
+
+        return this;
     }
 }

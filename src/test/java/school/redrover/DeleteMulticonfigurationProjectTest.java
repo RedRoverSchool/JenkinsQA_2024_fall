@@ -16,23 +16,12 @@ public class DeleteMulticonfigurationProjectTest extends BaseTest {
     private static final String PROJECT_NAME = "MulticonfigurationProject";
 
     private HomePage createProject(String projectName) {
-        HomePage homepage = new HomePage(getDriver())
+        HomePage homePage = new HomePage(getDriver())
                 .clickNewItem()
                 .enterItemName(projectName)
                 .selectProjectTypeAndSave(NewItemPage.ItemType.MULTICONFIGURATION_PROJECT)
                 .goToDashboard();
-        return homepage;
-    }
-
-    private void openDropdownViaChevron(String projectName) {
-        new Actions(getDriver()).moveToElement(getDriver().findElement(
-                        By.xpath("//a[@href='job/%s/']/span".formatted(projectName))))
-                .pause(1000)
-                .perform();
-
-        WebElement chevron = getDriver().findElement(By.xpath("//td//button[@aria-expanded='false']"));
-        TestUtils.moveAndClickWithJavaScript(getDriver(), chevron);
-        getWait5().until(ExpectedConditions.attributeToBe(chevron, "aria-expanded", "true"));
+        return homePage;
     }
 
     @Test
@@ -50,7 +39,8 @@ public class DeleteMulticonfigurationProjectTest extends BaseTest {
 
     @Test(dependsOnMethods = "testPopupForDeletionOnProjectPage")
     public void testPopupForDeletionOnMainPage() {
-        openDropdownViaChevron(PROJECT_NAME);
+        new HomePage(getDriver()).openDropdownViaChevron(PROJECT_NAME);
+
         getDriver().findElement(By.xpath("//button[@href='/job/%s/doDelete']".formatted(PROJECT_NAME))).click();
 
         WebElement deletionPopup = getWait5().until(ExpectedConditions.visibilityOf(getDriver().findElement(
@@ -62,7 +52,7 @@ public class DeleteMulticonfigurationProjectTest extends BaseTest {
     public void testPopupForDeletionOnMyViews() {
         getDriver().findElement(By.xpath("//a[@href='/me/my-views']")).click();
 
-        openDropdownViaChevron(PROJECT_NAME);
+        new HomePage(getDriver()).openDropdownViaChevron(PROJECT_NAME);
         getDriver().findElement(By.xpath("//button[@href='/me/my-views/view/all/job/%s/doDelete']".formatted(PROJECT_NAME))).click();
 
         WebElement deletionPopup = getWait5().until(ExpectedConditions.visibilityOf(getDriver().findElement(
