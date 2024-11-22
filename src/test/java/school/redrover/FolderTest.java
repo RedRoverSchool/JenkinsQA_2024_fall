@@ -8,6 +8,8 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.Assert;
 import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
+import school.redrover.page.HomePage;
+import school.redrover.page.NewItemPage;
 import school.redrover.runner.BaseTest;
 import school.redrover.runner.TestUtils;
 
@@ -123,6 +125,20 @@ public class FolderTest extends BaseTest {
 
         getDriver().findElement(By.xpath("//td//a[@title='Schedule a Build for %s']".formatted(projectName))).click();
 
+    }
+
+    @Test
+    public void testCreateWithMaxNameLength() {
+
+        new HomePage(getDriver())
+                .clickNewItem()
+                .enterItemName(ITEM_NAME_MAX_LENGTH)
+                .selectProjectTypeAndSave(NewItemPage.ItemType.FOLDER)
+                .goToDashboard();
+
+        Assert.assertTrue(
+                getDriver().findElement(By.xpath(ITEM_LOCATOR_BY_NAME.formatted(ItemType.
+                        FOLDER.getItemName()))).isDisplayed());
     }
 
     @Test
