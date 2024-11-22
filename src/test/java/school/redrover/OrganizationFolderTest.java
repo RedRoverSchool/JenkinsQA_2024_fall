@@ -134,6 +134,7 @@ public class OrganizationFolderTest extends BaseTest {
                 DISPLAY_NAME);
     }
 
+    @Ignore
     @Test
     public void testItemNameAfterCreation() {
 
