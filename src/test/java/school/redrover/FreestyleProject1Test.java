@@ -111,7 +111,6 @@ public class FreestyleProject1Test extends BaseTest {
 
 
         Actions actions = new Actions(getDriver());
-        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(10));
 
         WebElement projectName = getDriver()
                 .findElement(By.xpath("//span[contains(text(),'" + NEW_FREESTYLE_PROJECT_NAME + "')]"));
@@ -124,9 +123,9 @@ public class FreestyleProject1Test extends BaseTest {
 
         TestUtils.moveAndClickWithJavaScript(getDriver(), chevron);
 
-        wait.until(ExpectedConditions.attributeToBe(chevron, "aria-expanded", "true"));
+        getWait10().until(ExpectedConditions.attributeToBe(chevron, "aria-expanded", "true"));
 
-        WebElement delete = wait.until(ExpectedConditions.visibilityOfElementLocated((
+        WebElement delete = getWait10().until(ExpectedConditions.visibilityOfElementLocated((
                 By.xpath("//*[contains(@href,'doDelete')]"))));
         delete.click();
 
@@ -143,7 +142,6 @@ public class FreestyleProject1Test extends BaseTest {
 
 
         Actions actions = new Actions(getDriver());
-        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(10));
 
         WebElement projectName = getDriver()
                 .findElement(By.xpath("//span[contains(text(),'" + NEW_FREESTYLE_PROJECT_NAME + "')]"));
@@ -156,14 +154,14 @@ public class FreestyleProject1Test extends BaseTest {
 
         TestUtils.moveAndClickWithJavaScript(getDriver(), chevron);
 
-        wait.until(ExpectedConditions.attributeToBe(chevron, "aria-expanded", "true"));
+        getWait10().until(ExpectedConditions.attributeToBe(chevron, "aria-expanded", "true"));
 
-        WebElement delete = wait.until(ExpectedConditions.visibilityOfElementLocated((By
+        WebElement delete = getWait10().until(ExpectedConditions.visibilityOfElementLocated((By
                 .xpath("//*[contains(@href,'confirm-rename')]"))));
         delete.click();
 
         getDriver().findElement(By.name("newName")).clear();
-        Thread.sleep(200);
+        getWait2();
         getDriver().findElement(By.name("newName")).sendKeys(RENAMED_FREESTYLE_PROJECT_NAME);
         getDriver().findElement(By.name("Submit")).click();
 
