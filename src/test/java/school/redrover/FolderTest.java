@@ -144,24 +144,13 @@ public class FolderTest extends BaseTest {
     @Test(dependsOnMethods = "testCreateWithMaxNameLength")
     public void configureNameByChevron() {
 
-        new HomePage(getDriver()).
-                        .
-        TestUtils.scrollToBottom(getDriver());
-        selectItemTypeAndSave(ItemType.FOLDER);
+        String configurationName = new HomePage(getDriver())
+                .selectConfigureFromItemDropdownMenu(FOLDER_NAME_MAX_LENGTH)
+                        .enterName(FIRST_FOLDER_NAME)
+                                .saveConfigurations()
+                                        .getConfigurationName();
 
-        submit();
-        goToDashboard();
-
-        selectFolderMenuByChevron(FIRST_FOLDER_NAME, FolderMenu.CONFIGURE);
-
-        getDriver().findElement(By.xpath("//div[contains(text(),'Display Name')]/following-sibling::div[1]/input"))
-                .sendKeys(FIRST_FOLDER_NAME + 1);
-
-        getDriver().findElement(By.name("Submit")).click();
-        goToDashboard();
-
-        Assert.assertEquals(getDriver().findElement(By.xpath("//a[@class='jenkins-table__link model-link inside']")).getText(),
-                FIRST_FOLDER_NAME + 1);
+        Assert.assertEquals(configurationName, FIRST_FOLDER_NAME);
 
     }
 

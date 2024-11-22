@@ -14,4 +14,17 @@ public class ConfigurationPage extends BasePage {
 
         return new HomePage(getDriver());
     }
+
+    public ConfigurationPage enterName(String name) {
+        getDriver().findElement(By.xpath("//div[contains(text(),'Display Name')]/following-sibling::div[1]/input"))
+                .sendKeys(name);
+
+        return this;
+    }
+
+    public ProjectPage saveConfigurations() {
+        getDriver().findElement(By.name("Submit")).click();
+
+        return new ProjectPage(getDriver());
+    }
 }

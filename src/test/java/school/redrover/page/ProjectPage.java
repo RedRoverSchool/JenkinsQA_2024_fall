@@ -32,4 +32,8 @@ public class ProjectPage extends BasePage {
     public String getDescription() {
         return getDriver().findElement(By.id("description")).getText();
     }
+
+    public String getConfigurationName() {
+        return getDriver().findElement(By.tagName("h1")).getText();
+    }
 }

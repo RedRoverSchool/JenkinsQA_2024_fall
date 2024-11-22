@@ -2,10 +2,8 @@ package school.redrover.page;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import school.redrover.FolderTest;
 import school.redrover.page.base.BasePage;
 import school.redrover.runner.TestUtils;
 
@@ -35,21 +33,18 @@ public class HomePage extends BasePage {
                 .getText();
     }
 
-    // //div[@class='jenkins-dropdown__item__icon']/parent::*[contains(., 'Rename')] по имени в меню
-    // //td/a/span[text() = 'ipo']/../button
-    public HomePage selectFolderMenuByChevron(String folderName, FolderTest.FolderMenu folderMenu) {
+    public ConfigurationPage selectConfigureFromItemDropdownMenu(String itemName) {
 
-        WebElement chevron = getDriver().findElement(
-                By.xpath("//a[@class='jenkins-table__link model-link inside']//button[@class='jenkins-menu-dropdown-chevron']"));
-
-        new Actions(getDriver()).moveToElement(getDriver().findElement(By.xpath(ITEM_LOCATOR_BY_NAME
-                .formatted(folderName)))).perform();
-        TestUtils.moveAndClickWithJavaScript(getDriver(), chevron);
+        new Actions(getDriver()).moveToElement(getDriver().findElement(By.xpath("//td/a/span[text() = '%s']/.."
+                .formatted(itemName)))).perform();
+        TestUtils.moveAndClickWithJavaScript(getDriver(), getDriver().findElement(
+                By.xpath("//td/a/span[text() = '%s']/../button".formatted(itemName))));
 
         getWait10().until(ExpectedConditions.visibilityOfElementLocated(
-                By.xpath("//*[@class='jenkins-dropdown__item '][%s]"
-                        .formatted(folderMenu.getMenuNumber())))).click();
+                By.xpath("//div[@class='jenkins-dropdown__item__icon']/parent::*[contains(., '%s')]"
+                        .formatted("Configure")))).click();
 
+        return new ConfigurationPage(getDriver());
     }
 
 
