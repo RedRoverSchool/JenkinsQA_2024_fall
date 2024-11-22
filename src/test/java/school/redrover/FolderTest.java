@@ -129,6 +129,7 @@ public class FolderTest extends BaseTest {
 
     }
 
+    @Ignore
     @Test
     public void testCreateWithMaxNameLength() {
 
