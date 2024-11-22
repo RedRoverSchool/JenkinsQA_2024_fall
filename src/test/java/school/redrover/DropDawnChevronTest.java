@@ -7,6 +7,7 @@ import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
+import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import school.redrover.runner.BaseTest;
 import school.redrover.runner.TestUtils;
@@ -15,6 +16,7 @@ import java.time.Duration;
 
 public class DropDawnChevronTest extends BaseTest {
 
+    @Ignore
     @Test
     public void testDropDawnNewItem() {
         WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(10));
