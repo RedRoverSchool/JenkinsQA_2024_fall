@@ -115,9 +115,11 @@ public class PipelineTest extends BaseTest {
                 .moveToElement(findProjectOnDashboardByName(projectName))
                 .perform();
 
-        getWait10().until(TestUtils.ExpectedConditions.elementIsNotMoving(
+        WebElement buttonChevron = getWait10().until(TestUtils.ExpectedConditions.elementIsNotMoving(
                 By.xpath("//a[@href ='job/%s/']/button[@class='jenkins-menu-dropdown-chevron']"
-                        .formatted(projectName)))).click();
+                        .formatted(projectName))));
+        new Actions(getDriver())
+                .moveToElement(buttonChevron).click().perform();
 
         getWait10().until(ExpectedConditions.elementToBeClickable(
                 By.xpath("//div[@class='jenkins-dropdown']/button[@href = '/job/%s/doDelete']".formatted(projectName)))).click();
