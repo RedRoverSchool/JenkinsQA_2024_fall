@@ -3,9 +3,11 @@ package school.redrover.page;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import school.redrover.FolderTest;
 import school.redrover.page.base.BasePage;
-
-import java.util.List;
+import school.redrover.runner.TestUtils;
 
 public class HomePage extends BasePage {
 
@@ -25,11 +27,31 @@ public class HomePage extends BasePage {
         return new NewItemPage(getDriver());
     }
 
-    public String getProjectNameByOrder(int order) {
+    public String getItemNameByOrder(int order) {
 
         return getDriver().findElements(By.xpath("//td/a/span")).stream()
                 .skip(order - 1)
                 .findFirst().orElseThrow(() -> new IllegalArgumentException("Некорректный порядок: " + order))
                 .getText();
     }
+
+    // //div[@class='jenkins-dropdown__item__icon']/parent::*[contains(., 'Rename')] по имени в меню
+    // //td/a/span[text() = 'ipo']/../button
+    public HomePage selectFolderMenuByChevron(String folderName, FolderTest.FolderMenu folderMenu) {
+
+        WebElement chevron = getDriver().findElement(
+                By.xpath("//a[@class='jenkins-table__link model-link inside']//button[@class='jenkins-menu-dropdown-chevron']"));
+
+        new Actions(getDriver()).moveToElement(getDriver().findElement(By.xpath(ITEM_LOCATOR_BY_NAME
+                .formatted(folderName)))).perform();
+        TestUtils.moveAndClickWithJavaScript(getDriver(), chevron);
+
+        getWait10().until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//*[@class='jenkins-dropdown__item '][%s]"
+                        .formatted(folderMenu.getMenuNumber())))).click();
+
+    }
+
+
+
 }

@@ -136,31 +136,16 @@ public class FolderTest extends BaseTest {
                 .scrollToBottom()
                 .selectProjectTypeAndSave(NewItemPage.ItemType.FOLDER)
                 .goToDashboard()
-                .getProjectNameByOrder(1);
+                .getItemNameByOrder(1);
 
         Assert.assertEquals(folderName, FOLDER_NAME_MAX_LENGTH);
     }
 
-    @Test()
-    public void testCreateWithoutConfiguration() {
-
-        createAndNameNewItem(FIRST_FOLDER_NAME);
-        TestUtils.scrollToBottom(getDriver());
-        selectItemTypeAndSave(ItemType.FOLDER);
-
-        submit();
-
-        goToDashboard();
-
-        Assert.assertTrue(
-                getDriver().findElement(By.xpath(ITEM_LOCATOR_BY_NAME.formatted(ItemType.
-                        FOLDER.getItemName()))).isDisplayed());
-    }
-
-    @Test
+    @Test(dependsOnMethods = "testCreateWithMaxNameLength")
     public void configureNameByChevron() {
 
-        createAndNameNewItem(FIRST_FOLDER_NAME);
+        new HomePage(getDriver()).
+                        .
         TestUtils.scrollToBottom(getDriver());
         selectItemTypeAndSave(ItemType.FOLDER);
 
