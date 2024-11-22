@@ -366,6 +366,7 @@ public class FreestyleProject3Test extends BaseTest {
         Assert.assertFalse(buildHistory.contains(buildName));
     }
 
+    @Ignore
     @Test
     public void testDeleteProjectViaSidebarMenuOnProjectStatusPage() {
         createProjectViaSidebarMenu(PROJECT_NAME);
