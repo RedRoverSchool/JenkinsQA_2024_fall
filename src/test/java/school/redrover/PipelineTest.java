@@ -118,10 +118,11 @@ public class PipelineTest extends BaseTest {
         WebElement buttonChevron = getWait10().until(TestUtils.ExpectedConditions.elementIsNotMoving(
                 By.xpath("//a[@href ='job/%s/']/button[@class='jenkins-menu-dropdown-chevron']"
                         .formatted(projectName))));
+
         new Actions(getDriver())
                 .moveToElement(buttonChevron).click().perform();
 
-        getWait10().until(ExpectedConditions.elementToBeClickable(
+        getWait10().until(ExpectedConditions.presenceOfElementLocated(
                 By.xpath("//div[@class='jenkins-dropdown']/button[@href = '/job/%s/doDelete']".formatted(projectName)))).click();
 
         getWait10().until(ExpectedConditions.visibilityOfElementLocated(
