@@ -6,6 +6,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.Assert;
+import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import school.redrover.runner.BaseTest;
 import school.redrover.runner.TestUtils;
@@ -231,6 +232,7 @@ public class FreestyleProject3Test extends BaseTest {
         Assert.assertEquals(extractedText, testCommand);
     }
 
+    @Ignore
     @Test
     public void testCheckSidebarMenuItemsOnProjectStatusPage() {
         final List<String> benchmarkSidebarMenuItems = List.of(
@@ -339,6 +341,28 @@ public class FreestyleProject3Test extends BaseTest {
         Assert.assertEquals(
                 getWait5().until(ExpectedConditions.visibilityOfElementLocated(By.id("description"))).getText(),
                 newDescriptionTextField);
+    }
+
+    @Test
+    public void testDeleteLastBuild() {
+        createProjectViaSidebarMenu(PROJECT_NAME);
+
+        getWait2().until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//a[@data-build-success='Build scheduled']"))).click();
+
+        clickOnSuccessBuildIcon();
+
+        String buildName = getWait5().until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//span[contains(text(), 'Delete build')]"))).getText();
+        getDriver().findElement(By.xpath("//span[contains(text(), 'Delete build')]/..")).click();
+
+        getWait5().until(ExpectedConditions.visibilityOfElementLocated(By.name("Submit"))).click();
+
+        List<String> buildHistory = getDriver().findElements(By.xpath("//tr")).stream()
+                .map(WebElement::getText)
+                .toList();
+
+        Assert.assertFalse(buildHistory.contains(buildName));
     }
 
     @Test

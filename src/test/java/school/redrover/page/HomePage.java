@@ -25,4 +25,10 @@ public class HomePage extends BasePage {
 
         return new ProjectPage(getDriver());
     }
+
+    public NewItemPage clickNewItem() {
+        getDriver().findElement(By.xpath("//span[text()='New Item']/ancestor::a")).click();
+
+        return new NewItemPage(getDriver());
+    }
 }
