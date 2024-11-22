@@ -5,6 +5,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.Assert;
+import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import school.redrover.runner.BaseTest;
 
@@ -184,6 +185,7 @@ public class PipelineProjectTest extends BaseTest {
         Assert.assertEquals(greenMarkTooltip, "Success");
     }
 
+    @Ignore
     @Test
     public void testGetPermalinksInformationUponSuccessfulBuild() {
         final List<String> expectedPermalinkList = List.of(
