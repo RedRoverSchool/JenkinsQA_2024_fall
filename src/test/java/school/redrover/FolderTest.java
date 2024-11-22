@@ -53,6 +53,8 @@ public class FolderTest extends BaseTest {
     private static final String ITEM_LOCATOR_BY_NAME = "//span[text()='%s']";
     private static final String FIRST_FOLDER_NAME = "Freestyle projects";
     private static final String FREESTYLE_PROJECT_NAME = "First freestyle project job";
+    private static final String ITEM_NAME_MAX_LENGTH = "length=255Ab.Ижп-и_№()+='`~23456789012345678901k26789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345length=255";
+
 
     private void createAndNameNewItem(String name) {
 
