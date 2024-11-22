@@ -119,11 +119,12 @@ public class PipelineTest extends BaseTest {
                 By.xpath("//a[@href ='job/%s/']/button[@class='jenkins-menu-dropdown-chevron']"
                         .formatted(projectName))));
 
-        new Actions(getDriver())
-                .moveToElement(buttonChevron).click().perform();
+//        new Actions(getDriver())
+//                .moveToElement(buttonChevron).click().perform();
+        TestUtils.moveAndClickWithJavaScript(getDriver(), buttonChevron);
 
-        getWait10().until(ExpectedConditions.presenceOfElementLocated(
-                By.xpath("//div[@class='jenkins-dropdown']/button[@href = '/job/%s/doDelete']".formatted(projectName)))).click();
+        getWait10().until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//button[@href = '/job/%s/doDelete']".formatted(projectName)))).click();
 
         getWait10().until(ExpectedConditions.visibilityOfElementLocated(
                 By.xpath("//button[@data-id='ok']"))).click();
