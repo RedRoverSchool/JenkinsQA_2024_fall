@@ -344,6 +344,28 @@ public class FreestyleProject3Test extends BaseTest {
     }
 
     @Test
+    public void testDeleteLastBuild() {
+        createProjectViaSidebarMenu(PROJECT_NAME);
+
+        getWait2().until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//a[@data-build-success='Build scheduled']"))).click();
+
+        clickOnSuccessBuildIcon();
+
+        String buildName = getWait5().until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//span[contains(text(), 'Delete build')]"))).getText();
+        getDriver().findElement(By.xpath("//span[contains(text(), 'Delete build')]/..")).click();
+
+        getWait5().until(ExpectedConditions.visibilityOfElementLocated(By.name("Submit"))).click();
+
+        List<String> buildHistory = getDriver().findElements(By.xpath("//tr")).stream()
+                .map(WebElement::getText)
+                .toList();
+
+        Assert.assertFalse(buildHistory.contains(buildName));
+    }
+
+    @Test
     public void testDeleteProjectViaSidebarMenuOnProjectStatusPage() {
         createProjectViaSidebarMenu(PROJECT_NAME);
 
