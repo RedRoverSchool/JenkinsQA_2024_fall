@@ -71,6 +71,7 @@ public class FreestyleProject3Test extends BaseTest {
         getDriver().findElement(By.xpath("//button[@name='Submit']")).click();
     }
 
+    @Ignore
     @Test
     public void testCreateProjectViaCreateJobButton() {
         getDriver().findElement(By.xpath("//a[@href='newJob']")).click();

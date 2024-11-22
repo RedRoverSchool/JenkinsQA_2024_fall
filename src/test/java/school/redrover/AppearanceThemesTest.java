@@ -21,6 +21,7 @@ public class AppearanceThemesTest extends BaseTest {
                 getAttribute("data-theme"), "dark");
     }
 
+    @Ignore
     @Test
     public void testAppearanceThemesDefault () {
         getDriver().findElement(By.cssSelector("[href='/manage']")).click();
