@@ -8,6 +8,8 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.Assert;
 import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
+import school.redrover.page.HomePage;
+import school.redrover.page.NewItemPage;
 import school.redrover.runner.BaseTest;
 import school.redrover.runner.TestUtils;
 
@@ -51,6 +53,7 @@ public class FolderTest extends BaseTest {
     private static final String ITEM_LOCATOR_BY_NAME = "//span[text()='%s']";
     private static final String FIRST_FOLDER_NAME = "Freestyle projects";
     private static final String FREESTYLE_PROJECT_NAME = "First freestyle project job";
+    private static final String ITEM_NAME_MAX_LENGTH = "012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234";
 
     private void createAndNameNewItem(String name) {
 
@@ -126,6 +129,20 @@ public class FolderTest extends BaseTest {
     }
 
     @Test
+    public void testCreateWithMaxNameLength() {
+
+        new HomePage(getDriver())
+                .clickNewItem()
+                .enterItemName(ITEM_NAME_MAX_LENGTH)
+                .selectProjectTypeAndSave(NewItemPage.ItemType.FOLDER)
+                .goToDashboard();
+
+        Assert.assertTrue(
+                getDriver().findElement(By.xpath(ITEM_LOCATOR_BY_NAME.formatted(ItemType.
+                        FOLDER.getItemName()))).isDisplayed());
+    }
+
+    @Test()
     public void testCreateWithoutConfiguration() {
 
         createAndNameNewItem(FIRST_FOLDER_NAME);
