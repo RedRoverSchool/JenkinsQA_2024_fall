@@ -6,7 +6,6 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import school.redrover.page.base.BasePage;
 
 import java.util.Arrays;
-import java.util.List;
 
 public class ProjectPage extends BasePage {
 
@@ -32,11 +31,15 @@ public class ProjectPage extends BasePage {
         return this;
     }
 
-    public String getDescription() {
+    public String getFolderDescriptin() {
         return getDriver().findElement(By.id("view-message")).getText();
     }
 
-    public String getConfigurationName() {
+    public String getDescription() {
+        return getDriver().findElement(By.id("description")).getText();
+    }
+
+    public String getDisplayName() {
         return getDriver().findElement(By.tagName("h1")).getText();
     }
 

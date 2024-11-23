@@ -2,13 +2,11 @@ package school.redrover;
 
 import org.openqa.selenium.By;
 import org.testng.Assert;
-import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import school.redrover.page.HomePage;
 import school.redrover.page.NewItemPage;
 import school.redrover.page.ProjectPage;
 import school.redrover.runner.BaseTest;
-import school.redrover.runner.TestUtils;
 
 public class FolderTest extends BaseTest {
 
@@ -47,7 +45,7 @@ public class FolderTest extends BaseTest {
                 .selectConfigureFromItemMenu("F")
                 .enterName(FIRST_FOLDER_NAME)
                 .saveConfigurations()
-                .getConfigurationName();
+                .getDisplayName();
 
         Assert.assertEquals(configurationName, FIRST_FOLDER_NAME);
         Assert.assertEquals(new ProjectPage(getDriver()).getFolderName(), "F");
@@ -64,7 +62,7 @@ public class FolderTest extends BaseTest {
                 .selectConfigureFromItemMenu(FIRST_FOLDER_NAME)
                .enterDescription("This is new description")
                .saveConfigurations()
-               .getDescription();
+               .getFolderDescriptin();
 
         Assert.assertEquals(desc,
                 "This is new description");
