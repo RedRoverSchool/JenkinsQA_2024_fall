@@ -152,6 +152,11 @@ public class HomePage extends BasePage {
         return this;
     }
 
+    public String getItemName() {
+
+        return getDriver().findElement(By.xpath("//a[contains(@class,'jenkins-table')]")).getText();
+    }
+
     public String getWelcomeText() {
         return getDriver().findElement(By.xpath("//p[contains(text(), 'This page is where')]")).getText();
     }
@@ -172,5 +177,4 @@ public class HomePage extends BasePage {
 
         return getDriver().findElements(By.className("content-block"));
     }
-
 }
