@@ -19,7 +19,7 @@ import school.redrover.runner.BaseTest;
         }
 
         @Test
-        public void testQueshion() throws InterruptedException {
+        public void testQueshion() {
 
             getWait2().until(ExpectedConditions.elementToBeClickable(By.xpath("//*[@id=\"searchform\"]/a")))
                     .click();
