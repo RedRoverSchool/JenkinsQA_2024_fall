@@ -1,37 +1,117 @@
 package school.redrover;
 
 import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptException;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.WebElement;
 import org.testng.Assert;
 import org.testng.annotations.Test;
+import school.redrover.page.HomePage;
+import school.redrover.page.CreateNewItemPage;
+import school.redrover.page.ProjectPage;
 import school.redrover.runner.BaseTest;
 
 public class FolderTest extends BaseTest {
 
+    private static final String FIRST_FOLDER_NAME = "Freestyle projects";
+    private static final String FREESTYLE_PROJECT_NAME = "First freestyle project job";
+    private static final String FOLDER_NAME_MAX_LENGTH = "012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234";
+
     @Test
-    public void testCreateNewFolderWithoutConfiguration(){
+    public void testCreateWithMaxNameLength() {
 
-        WebElement newJobButton = getDriver().findElement(By.xpath("//a[@href='newJob']"));
-        newJobButton.click();
+        String folderName = new HomePage(getDriver())
+                .clickNewItem()
+                .enterItemName(FOLDER_NAME_MAX_LENGTH)
+                .selectProjectTypeAndSave(CreateNewItemPage.ItemType.FOLDER)
+                .goToDashboard()
+                .getItemNameByOrder(1);
 
-        WebElement nameInput = getDriver().findElement(By.xpath("//input[@id='name']"));
-        nameInput.sendKeys("First folder");
+        Assert.assertEquals(folderName, FOLDER_NAME_MAX_LENGTH);
+    }
 
-        JavascriptExecutor js = (JavascriptExecutor) getDriver();
-        js.executeScript("window.scrollBy(0, 500);");
+    @Test
+    public void testCreateWithMinNameLength() {
 
-        WebElement folderRadioButton = getDriver().findElement(By.xpath("//li[@class='com_cloudbees_hudson_plugins_folder_Folder']"));
-        folderRadioButton.click();
+        new HomePage(getDriver())
+                .clickNewItem().enterItemName("F")
+                .selectProjectTypeAndSave(CreateNewItemPage.ItemType.FOLDER)
+                .goToDashboard();
 
-        WebElement okButton = getDriver().findElement(By.id("ok-button"));
-        okButton.click();
+        Assert.assertEquals(getDriver().findElement(By.xpath("//td/a/span")).getText(),"F");
+    }
 
-        WebElement saveButton = getDriver().findElement(By.xpath("//button[contains(@name, 'Submit')]"));
-        saveButton.click();
+    @Test(dependsOnMethods = "testCreateWithMinNameLength")
+    public void testConfigureNameByChevron() {
 
-        String title = getDriver().findElement(By.tagName("h1")).getText();
-        Assert.assertEquals(title, "First folder");
+        String configurationName = new HomePage(getDriver())
+                .selectConfigureFromItemMenu("F")
+                .enterName(FIRST_FOLDER_NAME)
+                .saveConfigurations()
+                .getDisplayName();
+
+        Assert.assertEquals(configurationName, FIRST_FOLDER_NAME);
+        Assert.assertEquals(new ProjectPage(getDriver()).getFolderName(), "F");
+
+    }
+
+    @Test
+    public void testConfigureDescriptionByChevron() {
+
+       String desc =  new HomePage(getDriver())
+                .clickNewItem()
+                .nameAndSelectItemType(FIRST_FOLDER_NAME, CreateNewItemPage.ItemType.FOLDER)
+                .goToDashboard()
+                .selectConfigureFromItemMenu(FIRST_FOLDER_NAME)
+               .enterDescription("This is new description")
+               .saveConfigurations()
+               .getFolderDescription();
+
+        Assert.assertEquals(desc,
+                "This is new description");
+    }
+
+    @Test(dependsOnMethods = "testConfigureDescriptionByChevron")
+    public void testCreateNewItemByChevron() {
+        String projectName = new ProjectPage(getDriver())
+                .goToDashboard()
+                .selectNewItemFromFolderMenu(FIRST_FOLDER_NAME)
+                .nameAndSelectItemType(FREESTYLE_PROJECT_NAME, CreateNewItemPage.ItemType.FREESTYLE_PROJECT)
+                .addExecuteWindowsBatchCommand("echo 'Hello world!'")
+                .saveConfigurations()
+                .goToDashboard()
+                .openProject(FIRST_FOLDER_NAME)
+                .getItemNameByOrder(1);
+
+        Assert.assertEquals(projectName, FREESTYLE_PROJECT_NAME);
+    }
+
+    @Test
+    public void testCreateNewItemFromFolderPage() {
+        String projectName =  new HomePage(getDriver())
+                .clickNewItem()
+                .nameAndSelectItemType(FIRST_FOLDER_NAME, CreateNewItemPage.ItemType.FOLDER)
+                .goToDashboard()
+                .openProject(FIRST_FOLDER_NAME)
+                .clickNewItem()
+                .nameAndSelectItemType(FREESTYLE_PROJECT_NAME, CreateNewItemPage.ItemType.FREESTYLE_PROJECT)
+                .addExecuteWindowsBatchCommand("echo 'Hello world!'")
+                .saveConfigurations()
+                .goToDashboard()
+                .openProject(FIRST_FOLDER_NAME)
+                .getItemNameByOrder(1);
+
+        Assert.assertEquals(projectName, FREESTYLE_PROJECT_NAME);
+    }
+
+    @Test(dependsOnMethods = "testCreateNewItemFromFolderPage")
+    public void testOpenBuildHistoryByChevron() {
+
+        String buildHistoryName = new HomePage(getDriver())
+                .openProject(FIRST_FOLDER_NAME)
+                .runJob(FREESTYLE_PROJECT_NAME)
+                .goToDashboard()
+                .selectBuildHistoryFromItemMenu(FIRST_FOLDER_NAME)
+                .getBuildHistory();
+
+        Assert.assertEquals(buildHistoryName, "%s » %s".formatted(FIRST_FOLDER_NAME, FREESTYLE_PROJECT_NAME));
+
     }
 }

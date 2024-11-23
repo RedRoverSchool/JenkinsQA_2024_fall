@@ -1,17 +1,25 @@
 package school.redrover;
-import org.openqa.selenium.By;
+
 import org.openqa.selenium.WebElement;
 import org.testng.Assert;
 import org.testng.annotations.Test;
+import school.redrover.page.HomePage;
 import school.redrover.runner.BaseTest;
+
 import java.util.List;
+
 
 public class StartPageTest extends BaseTest {
 
-    @Test
-    public void testStartPageMainPanelContent(){
+    private static final String NEW_FOLDER_NAME = "FirstFolder";
+    private static final String DESCRIPTIONS_TEXT = "Hello World";
 
-        List<WebElement> startPageMainContent = getDriver().findElements(By.className("content-block"));
+
+    @Test
+    public void testStartPageMainPanelContent() {
+
+        List<WebElement> startPageMainContent = new HomePage(getDriver())
+                .getContentBlock();
 
         Assert.assertEquals(startPageMainContent.size(), 4);
         Assert.assertEquals(startPageMainContent.get(0).getText(), "Create a job");
@@ -21,9 +29,10 @@ public class StartPageTest extends BaseTest {
     }
 
     @Test
-    public void testStartPageSidePanelTaskContent(){
+    public void testStartPageSidePanelTaskContent() {
 
-        List<WebElement> startPageSideContent = getDriver().findElements(By.xpath("//div[contains(@class, 'task')]"));
+        List<WebElement> startPageSideContent = new HomePage(getDriver())
+                .getSideContent();
 
         Assert.assertEquals(startPageSideContent.size(), 4);
         Assert.assertEquals(startPageSideContent.get(0).getText(), "New Item");
@@ -33,9 +42,10 @@ public class StartPageTest extends BaseTest {
     }
 
     @Test
-    public void testCheckLinksSidePanel(){
+    public void testCheckLinksSidePanel() {
 
-        List<WebElement> startPageSideContent = getDriver().findElements(By.xpath("//a[contains(@class, 'task-link-no-confirm')]"));
+        List<WebElement> startPageSideContent = new HomePage(getDriver())
+                .getSideContent();
 
         Assert.assertEquals(startPageSideContent.size(), 4);
         Assert.assertEquals(startPageSideContent.get(0).getAttribute("href"), "http://localhost:8080/view/all/newJob");
@@ -45,19 +55,48 @@ public class StartPageTest extends BaseTest {
     }
 
     @Test
-    public void testCreateDescription() throws InterruptedException {
+    public void testCreateDescription() {
 
-        WebElement buttonAddDescriptions = getDriver().findElement(By.id("description-link"));
-        buttonAddDescriptions.click();
+        String actualDescription = new HomePage(getDriver())
+                .crateDescription(DESCRIPTIONS_TEXT)
+                .getDescriptionText();
 
-        WebElement descriptionField = getDriver().findElement(By.xpath("//textarea[contains(@class, 'jenkins-input')]"));
-        descriptionField.sendKeys("Hello World!!");
 
-        WebElement buttonSave = getDriver().findElement(By.name("Submit"));
-        buttonSave.click();
-        Thread.sleep(1000);
-
-        WebElement descriptionText = getDriver().findElement(By.xpath("//div[@id='description']/div[1]"));
-        Assert.assertEquals(descriptionText.getText(), "Hello World!!");
+        Assert.assertEquals(actualDescription, DESCRIPTIONS_TEXT);
     }
+
+    @Test
+    public void testCreateNewFolder() {
+
+
+        String actualName = new HomePage(getDriver())
+                .createNewFolder(NEW_FOLDER_NAME)
+                .getFirstFolderName();
+
+        Assert.assertEquals(actualName, NEW_FOLDER_NAME);
+    }
+
+    @Test(dependsOnMethods = "testCreateNewFolder")
+    public void testDeleteNewFolder() {
+
+        String welcomeText = new HomePage(getDriver())
+                .deleteFolder(NEW_FOLDER_NAME)
+                .getWelcomeText();
+
+        Assert.assertEquals(welcomeText,
+                "This page is where your Jenkins jobs will be displayed. To get started, you can set up distributed builds or start building a software project.");
+    }
+
+    @Test
+    public void testDeleteNewFolderViaChevron() {
+
+        String welcomeText = new HomePage(getDriver())
+                .createNewFolder(NEW_FOLDER_NAME)
+                .deleteFolderViaChevron(NEW_FOLDER_NAME)
+                .getWelcomeText();
+
+        Assert.assertEquals(welcomeText,
+                "This page is where your Jenkins jobs will be displayed. To get started, you can set up distributed builds or start building a software project.");
+    }
+
 }

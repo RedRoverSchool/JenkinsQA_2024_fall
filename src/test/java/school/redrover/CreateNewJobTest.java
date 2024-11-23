@@ -1,7 +1,6 @@
 package school.redrover;
 
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebElement;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import school.redrover.runner.BaseTest;
@@ -9,26 +8,21 @@ import school.redrover.runner.BaseTest;
 public class CreateNewJobTest extends BaseTest {
 
     @Test
-    public void testCreateNewPipeline() throws InterruptedException {
-        WebElement createJobButton = getDriver().findElement(By.xpath("//a[@href='newJob']"));
-        createJobButton.click();
+    public void testCreateNewPipeline() {
 
-        WebElement inputField = getDriver().findElement(By.id("name"));
-        inputField.sendKeys("CodeBrew");
-        Thread.sleep(1000);
+        getDriver().findElement(By.xpath("//a[@href='newJob']")).click();
 
-        WebElement pipelineButton = getDriver().findElement(By.xpath("//span[text()='Pipeline']"));
-        pipelineButton.click();
+        getDriver().findElement(By.id("name")).sendKeys("CodeBrew");
 
-        WebElement okButton = getDriver().findElement(By.id("ok-button"));
-        okButton.click();
+        getDriver().findElement(By.xpath("//span[text()='Pipeline']")).click();
 
-        WebElement dashBoardButton = getDriver().findElement(By.xpath("//a[text()='Dashboard']"));
-        dashBoardButton.click();
+        getDriver().findElement(By.id("ok-button")).click();
 
-        String actualPipeLineName = getDriver().findElement(By.xpath("//span[text()='CodeBrew']")).getText().toLowerCase();
+        getDriver().findElement(By.xpath("//a[text()='Dashboard']")).click();
+
+        String actualPipeLineName = getDriver().findElement(
+                By.xpath("//span[text()='CodeBrew']")).getText().toLowerCase();
 
         Assert.assertEquals(actualPipeLineName, "codebrew", "Actual result doesn't meet expectation");
-
     }
 }

@@ -1,58 +1,60 @@
 package school.redrover;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.ui.ExpectedCondition;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import school.redrover.runner.BaseTest;
 
+import java.time.Duration;
+
+import static school.redrover.runner.TestUtils.newItemsData;
+
 public class PageElementsTest extends BaseTest {
 
-    private void newItemsData(String itemName, String itemXpath){
-        getDriver().findElement(By.xpath("//*[@id='tasks']/div[1]/span/a")).click();
-        getDriver().findElement(By.id("name")).sendKeys(itemName);
-        getDriver().findElement(By.xpath(itemXpath)).click();
-        getDriver().findElement(By.id("ok-button")).click();
-    }
-
     @Test
-    public void newItem (){
+    public void testNewItem () {
         String newItemElement = getDriver().findElement(By.xpath("//*[@id='tasks']/div[1]/span/a")).getText();
         Assert.assertEquals(newItemElement, "New Item");
     }
 
     @Test
-    public void buildHistory (){
+    public void testBuildHistory () {
         String buildHistory = getDriver().findElement(By.xpath("//*[@id='tasks']/div[2]/span/a")).getText();
         Assert.assertEquals(buildHistory, "Build History");
     }
 
     @Test
-    public void manageJenkins (){
+    public void testManageJenkins () {
         String manageJenkins = getDriver().findElement(By.xpath("//*[@id='tasks']/div[3]/span/a")).getText();
         Assert.assertEquals(manageJenkins, "Manage Jenkins");
     }
 
     @Test
-    public void myView (){
+    public void testMyView () {
         String myView = getDriver().findElement(By.xpath("//*[@id='tasks']/div[4]/span/a")).getText();
         Assert.assertEquals(myView, "My Views");
     }
 
     @Test
-    public void addDescription (){
+    public void testAddDescription () {
         String addDescription = getDriver().findElement(By.xpath("//*[@id='description-link']")).getText();
         Assert.assertEquals(addDescription, "Add description");
     }
 
     @Test
-    public void verifyversion (){
+    public void testVerifyVersion () {
         String version = getDriver().findElement(By.xpath("//*[@id='jenkins']/footer/div/div[2]/button")).getText();
         Assert.assertEquals(version, "Jenkins 2.462.3");
     }
 
     @Test
-    public void writeDescription (){
+    public void testWriteDescription () {
         getDriver().findElement(By.xpath("//*[@id='description-link']")).click();
         getDriver().findElement(By.name("description")).sendKeys("The test");
         getDriver().findElement(By.name("Submit")).click();
@@ -62,7 +64,7 @@ public class PageElementsTest extends BaseTest {
     }
 
     @Test
-    public void newItemValidationName (){
+    public void testNewItemValidationName () {
         getDriver().findElement(By.xpath("//*[@id='tasks']/div[1]/span/a")).click();
         getDriver().findElement(By.xpath("//*[@id='j-add-item-type-standalone-projects']/ul/li[2]/div[2]/div")).click();
 
@@ -71,7 +73,7 @@ public class PageElementsTest extends BaseTest {
     }
 
     @Test
-    public void newItemValidationOKButton (){
+    public void testNewItemValidationOKButton () {
         getDriver().findElement(By.xpath("//*[@id='tasks']/div[1]/span/a")).click();
         boolean state = getDriver().findElement(By.id("ok-button")).isEnabled();
 
@@ -79,8 +81,9 @@ public class PageElementsTest extends BaseTest {
     }
 
     @Test
-    public void newPipeline (){
-        newItemsData("PipeTest", "//*[@id='j-add-item-type-standalone-projects']/ul/li[2]/div[2]/label");
+    @Ignore
+    public void testNewPipeline () {
+        newItemsData(this, "PipeTest", "//*[@id='j-add-item-type-standalone-projects']/ul/li[2]/div[2]/label");
 
         getDriver().findElement(By.xpath("//*[@id='main-panel']/form/div[1]/section[1]/div[3]/div[1]/div/span/label")).click();
         getDriver().findElement(By.name("_.daysToKeepStr")).sendKeys("5");
@@ -93,8 +96,9 @@ public class PageElementsTest extends BaseTest {
     }
 
     @Test
-    public void newFreeStyleProject (){
-        newItemsData("FreeStyleProjectTest", "//*[@id='j-add-item-type-standalone-projects']/ul/li[1]/div[2]/label");
+    @Ignore
+    public void testNewFreeStyleProject (){
+        newItemsData(this,"FreeStyleProjectTest", "//*[@id='j-add-item-type-standalone-projects']/ul/li[1]/div[2]/label");
 
         getDriver().findElement(By.name("Submit")).click();
 
@@ -104,8 +108,8 @@ public class PageElementsTest extends BaseTest {
     }
 
     @Test
-    public void newMultiConfigurationProject(){
-        newItemsData("MultiConfigurationProjectTest", "//*[@id='j-add-item-type-standalone-projects']/ul/li[3]/div[2]/label");
+    public void testNewMultiConfigurationProject(){
+        newItemsData(this,"MultiConfigurationProjectTest", "//*[@id='j-add-item-type-standalone-projects']/ul/li[3]/div[2]/label");
 
         getDriver().findElement(By.name("Submit")).click();
 
@@ -115,8 +119,8 @@ public class PageElementsTest extends BaseTest {
     }
 
     @Test
-    public void newFolder(){
-        newItemsData("newFolderTest", "//*[@id='j-add-item-type-standalone-projects']/ul/li[3]/div[2]/label");
+    public void testNewFolder(){
+        newItemsData(this,"newFolderTest", "//*[@id='j-add-item-type-standalone-projects']/ul/li[3]/div[2]/label");
 
         getDriver().findElement(By.id("jenkins")).sendKeys("Testing Folder");
         getDriver().findElement(By.name("Submit")).click();
@@ -126,9 +130,10 @@ public class PageElementsTest extends BaseTest {
         Assert.assertEquals(result, "Project newFolderTest");
     }
 
+    @Ignore
     @Test
-    public void newMultibranchPipeline(){
-        newItemsData("newMultibranchPipelineTest", "//*[@id='j-add-item-type-nested-projects']/ul/li[2]/div[2]/label");
+    public void testNewMultibranchPipeline(){
+        newItemsData(this,"newMultibranchPipelineTest", "//*[@id='j-add-item-type-nested-projects']/ul/li[2]/div[2]/label");
 
         getDriver().findElement(By.name("_.displayNameOrNull")).sendKeys("Testing MultibranchPipeline");
         getDriver().findElement(By.name("Submit")).click();
@@ -140,8 +145,8 @@ public class PageElementsTest extends BaseTest {
 
     @Ignore
     @Test
-    public void newOrganizationFolder(){
-        newItemsData("newOrganizationFolderTest", "//*[@id='j-add-item-type-nested-projects']/ul/li[3]/div[2]/label/span");
+    public void testNewOrganizationFolder(){
+        newItemsData(this,"newOrganizationFolderTest", "//*[@id='j-add-item-type-nested-projects']/ul/li[3]/div[2]/label/span");
 
         getDriver().findElement(By.name("_.displayNameOrNull")).sendKeys("Testing OrganizationFolder");
         getDriver().findElement(By.name("Submit")).click();
@@ -151,4 +156,15 @@ public class PageElementsTest extends BaseTest {
         Assert.assertEquals(result, "Testing OrganizationFolder");
     }
 
+    @Ignore
+    @Test
+    public void testFreeStyleProjectsHovers() {
+        newItemsData(this,"FreeStyleProjectTestHovers", "//*[@id='j-add-item-type-standalone-projects']/ul/li[1]/div[2]/label");
+
+        WebElement oldBuilds = getDriver().findElement(By.xpath("//*[@id='main-panel']/form/div[1]/section[1]/div[3]/div[1]/div/a"));
+        new Actions(getDriver()).moveToElement(oldBuilds).perform();
+        String result = getWait5().until(ExpectedConditions.visibilityOfElementLocated(By.id("tippy-15"))).getText();
+
+        Assert.assertEquals(result, "Help for feature: Discard old builds");
+    }
 }

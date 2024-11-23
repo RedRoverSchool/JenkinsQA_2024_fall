@@ -215,5 +215,4 @@ public class FreestyleProjectTest extends BaseTest {
                 .findElement(By.xpath(String.format("//span[text()='%s']", PROJECT_NAME)))
                 .getText(), PROJECT_NAME);
     }
-
 }
