@@ -12,7 +12,8 @@ public class NewItemPage extends BasePage {
 
     public enum ItemType {
         FOLDER("Folder"),
-        FREESTYLE_PROJECT("Freestyle project");
+        FREESTYLE_PROJECT("Freestyle project"),
+        MULTICONFIGURATION_PROJECT("Multi-configuration project");
 
         private final String itemName;
 
