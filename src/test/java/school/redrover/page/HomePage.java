@@ -43,8 +43,7 @@ public class HomePage extends BasePage {
                 .getText();
     }
 
-    public ConfigurationPage selectConfigureFromItemDropdownMenu(String itemName) {
-
+    public void selectMenuFromItemDropdown (String itemName, String menuName) {
         new Actions(getDriver()).moveToElement(getDriver().findElement(By.xpath("//td/a/span[text() = '%s']/.."
                 .formatted(itemName)))).perform();
         TestUtils.moveAndClickWithJavaScript(getDriver(), getDriver().findElement(
@@ -52,9 +51,25 @@ public class HomePage extends BasePage {
 
         getWait10().until(ExpectedConditions.visibilityOfElementLocated(
                 By.xpath("//div[@class='jenkins-dropdown__item__icon']/parent::*[contains(., '%s')]"
-                        .formatted("Configure")))).click();
+                        .formatted(menuName)))).click();
+    }
+
+    public ConfigurationPage selectConfigureFromItemMenu(String itemName) {
+        selectMenuFromItemDropdown(itemName, "Configure");
 
         return new ConfigurationPage(getDriver());
+    }
+
+    public NewItemPage selectNewItemFromFolderMenu(String itemName) {
+        selectMenuFromItemDropdown(itemName, "New Item");
+
+        return new NewItemPage(getDriver());
+    }
+
+    public BuildHistoryPage selectBuildHistoryFromItemMenu(String itemName) {
+        selectMenuFromItemDropdown(itemName, "Build History");
+
+        return new  BuildHistoryPage(getDriver());
     }
 
 

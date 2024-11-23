@@ -31,16 +31,19 @@ public class NewItemPage extends BasePage {
         return this;
     }
 
-    public NewItemPage scrollToBottom() {
-        TestUtils.scrollToBottom(getDriver());
-
-        return this;
-    }
-
     public ConfigurationPage selectProjectTypeAndSave(ItemType itemType) {
         getDriver().findElement(By.xpath("//span[text()='%s']".formatted(itemType.getItemName()))).click();
         getDriver().findElement(By.id("ok-button")).click();
 
         return new ConfigurationPage(getDriver());
     }
+
+    public ConfigurationPage nameAndSelectItemType(String itemName, ItemType itemType) {
+        enterItemName(itemName);
+        selectProjectTypeAndSave(itemType);
+
+        return new ConfigurationPage(getDriver());
+    }
+
+
 }
