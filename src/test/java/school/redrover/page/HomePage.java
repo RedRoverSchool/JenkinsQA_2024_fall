@@ -2,6 +2,7 @@ package school.redrover.page;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import school.redrover.page.base.BasePage;
@@ -78,6 +79,14 @@ public class HomePage extends BasePage {
         return new  BuildHistoryPage(getDriver());
     }
 
+    public HomePage openDropdownViaChevron(String projectName) {
+        new Actions(getDriver()).moveToElement(getDriver().findElement(By.xpath("//a[@href='job/%s/']/span".formatted(projectName))))
+                .pause(500)
+                .perform();
+        WebElement chevron = getDriver().findElement(By.xpath("//td//button[@aria-expanded='false']"));
+        TestUtils.moveAndClickWithJavaScript(getDriver(), chevron);
+        getWait5().until(ExpectedConditions.attributeToBe(chevron, "aria-expanded", "true"));
 
-
+        return this;
+    }
 }
