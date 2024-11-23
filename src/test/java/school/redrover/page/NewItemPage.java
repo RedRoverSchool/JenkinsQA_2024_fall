@@ -28,7 +28,6 @@ public class NewItemPage extends BasePage {
 
     public NewItemPage enterItemName(String name) {
         getDriver().findElement(By.id("name")).sendKeys(name);
-        TestUtils.scrollToBottom(getDriver());
 
         return this;
     }
@@ -39,4 +38,13 @@ public class NewItemPage extends BasePage {
 
         return new ConfigurationPage(getDriver());
     }
+
+    public ConfigurationPage nameAndSelectItemType(String itemName, ItemType itemType) {
+        enterItemName(itemName);
+        selectProjectTypeAndSave(itemType);
+
+        return new ConfigurationPage(getDriver());
+    }
+
+
 }
