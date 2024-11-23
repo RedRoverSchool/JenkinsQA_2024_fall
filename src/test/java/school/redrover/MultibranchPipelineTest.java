@@ -10,6 +10,7 @@ import org.openqa.selenium.support.ui.Select;
 import org.testng.Assert;
 import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
+import school.redrover.page.HomePage;
 import school.redrover.runner.BaseTest;
 
 import java.util.List;
@@ -42,20 +43,17 @@ public class MultibranchPipelineTest extends BaseTest {
 
     @Test
     public void testAddDescriptionCreatingMultibranch() {
-        final String expectedDescription = "AddedDescription";
+        final String description = "AddedDescription";
 
-        getDriver().findElement(By.cssSelector("[href$='/newJob']")).click();
+        String actualDescription = new HomePage(getDriver())
+                .clickNewItem()
+                .enterItemName(MP_NAME)
+                .selectMultibranchPipelineAndClickOk()
+                .enterDescription(description)
+                .clickSaveButton()
+                .getDescription();
 
-        getDriver().findElement(By.id("name")).sendKeys("MultiBranch");
-        getDriver().findElement(By.cssSelector("[class$='MultiBranchProject']")).click();
-        getDriver().findElement(By.id("ok-button")).click();
-
-        getDriver().findElement(By.cssSelector("[name$='description']")).sendKeys(expectedDescription);
-        getDriver().findElement(By.name("Submit")).click();
-
-        String actualDescription = getWait2().until(ExpectedConditions.visibilityOfElementLocated(By.id("view-message"))).getText();
-
-        Assert.assertEquals(actualDescription, expectedDescription);
+        Assert.assertEquals(actualDescription, description);
     }
 
     @Test
@@ -147,11 +145,17 @@ public class MultibranchPipelineTest extends BaseTest {
 
     @Test
     public void testCreateOneJobAndDisplayOnStartPage() {
-        createJob(MULTIBRANCH_PIPELINE_NAME);
+
+        String actualJobName = new HomePage(getDriver())
+                .clickNewItem()
+                .enterItemName(MULTIBRANCH_PIPELINE_NAME)
+                .selectMultibranchPipelineAndClickOk()
+                .clickSaveButton()
+                .goToDashboard()
+                .getItemName();
 
         Assert.assertEquals(
-                getDriver().findElement(By.xpath("//a[contains(@class,'jenkins-table')]")).getText(),
-                MULTIBRANCH_PIPELINE_NAME);
+                actualJobName,MULTIBRANCH_PIPELINE_NAME);
     }
 
     @Test
