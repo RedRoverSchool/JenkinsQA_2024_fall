@@ -41,7 +41,7 @@ public class FolderTest extends BaseTest {
     }
 
     @Test(dependsOnMethods = "testCreateWithMinNameLength")
-    public void configureNameByChevron() {
+    public void testConfigureNameByChevron() {
 
         String configurationName = new HomePage(getDriver())
                 .selectConfigureFromItemMenu("F")
@@ -55,7 +55,7 @@ public class FolderTest extends BaseTest {
     }
 
     @Test
-    public void configureDescriptionByChevron() {
+    public void testConfigureDescriptionByChevron() {
 
        String desc =  new HomePage(getDriver())
                 .clickNewItem()
@@ -70,8 +70,8 @@ public class FolderTest extends BaseTest {
                 "This is new description");
     }
 
-    @Test(dependsOnMethods = "configureDescriptionByChevron")
-    public void createNewItemByChevron() {
+    @Test(dependsOnMethods = "testConfigureDescriptionByChevron")
+    public void testCreateNewItemByChevron() {
         String projectName = new ProjectPage(getDriver())
                 .goToDashboard()
                 .selectNewItemFromFolderMenu(FIRST_FOLDER_NAME)
@@ -85,10 +85,29 @@ public class FolderTest extends BaseTest {
         Assert.assertEquals(projectName, FREESTYLE_PROJECT_NAME);
     }
 
-    @Test(dependsOnMethods = {"createNewItemByChevron", "configureDescriptionByChevron"})
-    public void openBuildHistoryByChevron() {
+    @Test
+    public void testCreateNewItemFromFolderPage() {
+        String projectName =  new HomePage(getDriver())
+                .clickNewItem()
+                .nameAndSelectItemType(FIRST_FOLDER_NAME, NewItemPage.ItemType.FOLDER)
+                .goToDashboard()
+                .openProject(FIRST_FOLDER_NAME)
+                .clickNewItem()
+                .nameAndSelectItemType(FREESTYLE_PROJECT_NAME, NewItemPage.ItemType.FREESTYLE_PROJECT)
+                .addExecuteWindowsBatchCommand("echo 'Hello world!'")
+                .saveConfigurations()
+                .goToDashboard()
+                .openProject(FIRST_FOLDER_NAME)
+                .getItemNameByOrder(1);
 
-        String buildHistoryName = new ProjectPage(getDriver())
+        Assert.assertEquals(projectName, FREESTYLE_PROJECT_NAME);
+    }
+
+    @Test(dependsOnMethods = "testCreateNewItemFromFolderPage")
+    public void testOpenBuildHistoryByChevron() {
+
+        String buildHistoryName = new HomePage(getDriver())
+                .openProject(FIRST_FOLDER_NAME)
                 .runJob(FREESTYLE_PROJECT_NAME)
                 .goToDashboard()
                 .selectBuildHistoryFromItemMenu(FIRST_FOLDER_NAME)
