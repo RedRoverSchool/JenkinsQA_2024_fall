@@ -29,6 +29,14 @@ public class HomePage extends BasePage {
         return new ProjectPage(getDriver());
     }
 
+    public ManageJenkinsPage openManageJenkinsPage() {
+        getDriver().findElement(By.xpath("//a[@href = '/manage']")).click();
+
+        return new ManageJenkinsPage(getDriver());
+    }
+
+
+
     public NewItemPage clickNewItem() {
         getDriver().findElement(By.xpath("//span[text()='New Item']/ancestor::a")).click();
 
