@@ -109,7 +109,7 @@ public class FolderTest extends BaseTest {
                 .runJob(FREESTYLE_PROJECT_NAME)
                 .goToDashboard()
                 .selectBuildHistoryFromItemMenu(FIRST_FOLDER_NAME)
-                .getBuildHistory();
+                .getBuildName();
 
         Assert.assertEquals(buildHistoryName, "%s » %s".formatted(FIRST_FOLDER_NAME, FREESTYLE_PROJECT_NAME));
 
