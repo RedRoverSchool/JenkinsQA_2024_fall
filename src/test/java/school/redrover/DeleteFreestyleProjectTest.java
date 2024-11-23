@@ -13,7 +13,7 @@ import java.util.List;
 public class DeleteFreestyleProjectTest extends BaseTest {
 
     @Test
-    public void testCreateTwoProjects() {
+    public void testDeleteFirstProject() {
         final String firstProject = "First";
         final String secondProject = "Second";
 
