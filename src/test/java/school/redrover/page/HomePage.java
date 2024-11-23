@@ -8,6 +8,8 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import school.redrover.page.base.BasePage;
 import school.redrover.runner.TestUtils;
 
+import java.util.List;
+
 public class HomePage extends BasePage {
 
     public HomePage(WebDriver driver) {
@@ -88,5 +90,10 @@ public class HomePage extends BasePage {
         getWait5().until(ExpectedConditions.attributeToBe(chevron, "aria-expanded", "true"));
 
         return this;
+    }
+
+    public String getItemName() {
+
+        return getDriver().findElement(By.xpath("//a[contains(@class,'jenkins-table')]")).getText();
     }
 }

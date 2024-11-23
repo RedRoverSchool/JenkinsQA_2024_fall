@@ -145,11 +145,17 @@ public class MultibranchPipelineTest extends BaseTest {
 
     @Test
     public void testCreateOneJobAndDisplayOnStartPage() {
-        createJob(MULTIBRANCH_PIPELINE_NAME);
+
+        String actualJobName = new HomePage(getDriver())
+                .clickNewItem()
+                .enterItemName(MULTIBRANCH_PIPELINE_NAME)
+                .selectMultibranchPipelineAndClickOk()
+                .clickSaveButton()
+                .goToDashboard()
+                .getItemName();
 
         Assert.assertEquals(
-                getDriver().findElement(By.xpath("//a[contains(@class,'jenkins-table')]")).getText(),
-                MULTIBRANCH_PIPELINE_NAME);
+                actualJobName,MULTIBRANCH_PIPELINE_NAME);
     }
 
     @Test
