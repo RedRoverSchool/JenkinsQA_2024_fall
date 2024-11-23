@@ -4,7 +4,7 @@ import org.openqa.selenium.By;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import school.redrover.page.HomePage;
-import school.redrover.page.NewItemPage;
+import school.redrover.page.CreateNewItemPage;
 import school.redrover.page.ProjectPage;
 import school.redrover.runner.BaseTest;
 
@@ -20,7 +20,7 @@ public class FolderTest extends BaseTest {
         String folderName = new HomePage(getDriver())
                 .clickNewItem()
                 .enterItemName(FOLDER_NAME_MAX_LENGTH)
-                .selectProjectTypeAndSave(NewItemPage.ItemType.FOLDER)
+                .selectProjectTypeAndSave(CreateNewItemPage.ItemType.FOLDER)
                 .goToDashboard()
                 .getItemNameByOrder(1);
 
@@ -32,7 +32,7 @@ public class FolderTest extends BaseTest {
 
         new HomePage(getDriver())
                 .clickNewItem().enterItemName("F")
-                .selectProjectTypeAndSave(NewItemPage.ItemType.FOLDER)
+                .selectProjectTypeAndSave(CreateNewItemPage.ItemType.FOLDER)
                 .goToDashboard();
 
         Assert.assertEquals(getDriver().findElement(By.xpath("//td/a/span")).getText(),"F");
@@ -57,7 +57,7 @@ public class FolderTest extends BaseTest {
 
        String desc =  new HomePage(getDriver())
                 .clickNewItem()
-                .nameAndSelectItemType(FIRST_FOLDER_NAME, NewItemPage.ItemType.FOLDER)
+                .nameAndSelectItemType(FIRST_FOLDER_NAME, CreateNewItemPage.ItemType.FOLDER)
                 .goToDashboard()
                 .selectConfigureFromItemMenu(FIRST_FOLDER_NAME)
                .enterDescription("This is new description")
@@ -73,7 +73,7 @@ public class FolderTest extends BaseTest {
         String projectName = new ProjectPage(getDriver())
                 .goToDashboard()
                 .selectNewItemFromFolderMenu(FIRST_FOLDER_NAME)
-                .nameAndSelectItemType(FREESTYLE_PROJECT_NAME, NewItemPage.ItemType.FREESTYLE_PROJECT)
+                .nameAndSelectItemType(FREESTYLE_PROJECT_NAME, CreateNewItemPage.ItemType.FREESTYLE_PROJECT)
                 .addExecuteWindowsBatchCommand("echo 'Hello world!'")
                 .saveConfigurations()
                 .goToDashboard()
@@ -87,11 +87,11 @@ public class FolderTest extends BaseTest {
     public void testCreateNewItemFromFolderPage() {
         String projectName =  new HomePage(getDriver())
                 .clickNewItem()
-                .nameAndSelectItemType(FIRST_FOLDER_NAME, NewItemPage.ItemType.FOLDER)
+                .nameAndSelectItemType(FIRST_FOLDER_NAME, CreateNewItemPage.ItemType.FOLDER)
                 .goToDashboard()
                 .openProject(FIRST_FOLDER_NAME)
                 .clickNewItem()
-                .nameAndSelectItemType(FREESTYLE_PROJECT_NAME, NewItemPage.ItemType.FREESTYLE_PROJECT)
+                .nameAndSelectItemType(FREESTYLE_PROJECT_NAME, CreateNewItemPage.ItemType.FREESTYLE_PROJECT)
                 .addExecuteWindowsBatchCommand("echo 'Hello world!'")
                 .saveConfigurations()
                 .goToDashboard()
