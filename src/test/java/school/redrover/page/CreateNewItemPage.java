@@ -3,16 +3,16 @@ package school.redrover.page;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import school.redrover.page.base.BasePage;
-import school.redrover.runner.TestUtils;
 
-public class NewItemPage extends BasePage {
-    public NewItemPage(WebDriver driver) {
+public class CreateNewItemPage extends BasePage {
+    public CreateNewItemPage(WebDriver driver) {
         super(driver);
     }
 
     public enum ItemType {
         FOLDER("Folder"),
-        FREESTYLE_PROJECT("Freestyle project");
+        FREESTYLE_PROJECT("Freestyle project"),
+        MULTICONFIGURATION_PROJECT("Multi-configuration project");
 
         private final String itemName;
 
@@ -25,9 +25,8 @@ public class NewItemPage extends BasePage {
         }
     }
 
-    public NewItemPage enterItemName(String name) {
+    public CreateNewItemPage enterItemName(String name) {
         getDriver().findElement(By.id("name")).sendKeys(name);
-        TestUtils.scrollToBottom(getDriver());
 
         return this;
     }
@@ -38,4 +37,20 @@ public class NewItemPage extends BasePage {
 
         return new ConfigurationPage(getDriver());
     }
+
+    public ConfigurationPage nameAndSelectItemType(String itemName, ItemType itemType) {
+        enterItemName(itemName);
+        selectProjectTypeAndSave(itemType);
+
+        return new ConfigurationPage(getDriver());
+    }
+
+    public MultibranchPipelineConfigPage selectMultibranchPipelineAndClickOk() {
+        getDriver().findElement(By.cssSelector("[class$='MultiBranchProject']")).click();
+        getDriver().findElement(By.id("ok-button")).click();
+
+        return new MultibranchPipelineConfigPage(getDriver());
+    }
+
+
 }
