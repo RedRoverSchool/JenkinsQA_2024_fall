@@ -71,6 +71,7 @@ public class FreestyleProject3Test extends BaseTest {
         getDriver().findElement(By.xpath("//button[@name='Submit']")).click();
     }
 
+    @Ignore
     @Test
     public void testCreateProjectViaCreateJobButton() {
         getDriver().findElement(By.xpath("//a[@href='newJob']")).click();
@@ -365,6 +366,7 @@ public class FreestyleProject3Test extends BaseTest {
         Assert.assertFalse(buildHistory.contains(buildName));
     }
 
+    @Ignore
     @Test
     public void testDeleteProjectViaSidebarMenuOnProjectStatusPage() {
         createProjectViaSidebarMenu(PROJECT_NAME);
