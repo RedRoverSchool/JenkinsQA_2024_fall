@@ -119,8 +119,6 @@ public class PipelineTest extends BaseTest {
                 By.xpath("//a[@href ='job/%s/']/button[@class='jenkins-menu-dropdown-chevron']"
                         .formatted(projectName))));
 
-//        new Actions(getDriver())
-//                .moveToElement(buttonChevron).click().perform();
         TestUtils.moveAndClickWithJavaScript(getDriver(), buttonChevron);
 
         getWait10().until(ExpectedConditions.visibilityOfElementLocated(
@@ -136,7 +134,6 @@ public class PipelineTest extends BaseTest {
         Assert.assertEquals(actualMessage, "Welcome to Jenkins!");
     }
 
-    @Ignore
     @Test
     public void testCreateWithNotUniqueName() {
         String nonUniqueProjectName = PROJECT_NAME + "Unique";
@@ -147,7 +144,8 @@ public class PipelineTest extends BaseTest {
 
         getDriver().findElement(By.id("name")).sendKeys(nonUniqueProjectName);
 
-        String actualErrorMessage = getWait5().until(ExpectedConditions.presenceOfElementLocated(By.id("itemname-invalid"))).getText();
+        String actualErrorMessage = getWait5().until(ExpectedConditions.visibilityOfElementLocated(
+                By.id("itemname-invalid"))).getText();
 
         Assert.assertEquals(actualErrorMessage, "» A job already exists with the name ‘%s’".formatted(nonUniqueProjectName));
     }
