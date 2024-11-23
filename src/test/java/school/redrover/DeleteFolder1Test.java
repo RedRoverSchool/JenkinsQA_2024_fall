@@ -25,9 +25,6 @@ public class DeleteFolder1Test extends BaseTest {
 
         getDriver().findElement(By.cssSelector("input.jenkins-input")).sendKeys(name);
 
-//        getDriver().findElement(By.cssSelector("textarea.jenkins-input")).sendKeys(
-//                "Advertising on websites from $5/month.\nCall as 555-55-55");
-
         getDriver().findElement(By.cssSelector(".jenkins-submit-button")).click();
 
         getDriver().findElement(By.cssSelector("li.jenkins-breadcrumbs__list-item:nth-child(1) > a:nth-child(1)")).click();
