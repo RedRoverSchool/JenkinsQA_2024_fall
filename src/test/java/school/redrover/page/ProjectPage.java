@@ -66,10 +66,10 @@ public class ProjectPage extends BasePage {
                 .getText();
     }
 
-    public NewItemPage clickNewItem() {
+    public CreateNewItemPage clickNewItem() {
         getDriver().findElement(By.xpath("//span[text()='New Item']/ancestor::a")).click();
 
-        return new NewItemPage(getDriver());
+        return new CreateNewItemPage(getDriver());
     }
 
     public ProjectPage runJob(String projectName) {

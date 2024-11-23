@@ -36,10 +36,10 @@ public class HomePage extends BasePage {
         return new ManageJenkinsPage(getDriver());
     }
 
-    public NewItemPage clickNewItem() {
-        getDriver().findElement(By.xpath("//span[text()='New Item']/ancestor::a")).click();
+    public CreateNewItemPage clickNewItem() {
+        getDriver().findElement(By.cssSelector("[href$='/newJob']")).click();
 
-        return new NewItemPage(getDriver());
+        return new CreateNewItemPage(getDriver());
     }
 
     public String getItemNameByOrder(int order) {
@@ -67,10 +67,10 @@ public class HomePage extends BasePage {
         return new ConfigurationPage(getDriver());
     }
 
-    public NewItemPage selectNewItemFromFolderMenu(String itemName) {
+    public CreateNewItemPage selectNewItemFromFolderMenu(String itemName) {
         selectMenuFromItemDropdown(itemName, "New Item");
 
-        return new NewItemPage(getDriver());
+        return new CreateNewItemPage(getDriver());
     }
 
     public BuildHistoryPage selectBuildHistoryFromItemMenu(String itemName) {

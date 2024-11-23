@@ -6,7 +6,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import school.redrover.page.HomePage;
-import school.redrover.page.NewItemPage;
+import school.redrover.page.CreateNewItemPage;
 import school.redrover.runner.BaseTest;
 
 public class DeleteMulticonfigurationProjectTest extends BaseTest {
@@ -17,7 +17,7 @@ public class DeleteMulticonfigurationProjectTest extends BaseTest {
         HomePage homePage = new HomePage(getDriver())
                 .clickNewItem()
                 .enterItemName(projectName)
-                .selectProjectTypeAndSave(NewItemPage.ItemType.MULTICONFIGURATION_PROJECT)
+                .selectProjectTypeAndSave(CreateNewItemPage.ItemType.MULTICONFIGURATION_PROJECT)
                 .goToDashboard();
         return homePage;
     }
