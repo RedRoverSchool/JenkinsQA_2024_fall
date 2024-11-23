@@ -8,8 +8,6 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import school.redrover.page.base.BasePage;
 import school.redrover.runner.TestUtils;
 
-import java.util.List;
-
 public class HomePage extends BasePage {
 
     public HomePage(WebDriver driver) {
