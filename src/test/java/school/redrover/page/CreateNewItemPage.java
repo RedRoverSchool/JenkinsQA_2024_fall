@@ -3,10 +3,9 @@ package school.redrover.page;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import school.redrover.page.base.BasePage;
-import school.redrover.runner.TestUtils;
 
-public class NewItemPage extends BasePage {
-    public NewItemPage(WebDriver driver) {
+public class CreateNewItemPage extends BasePage {
+    public CreateNewItemPage(WebDriver driver) {
         super(driver);
     }
 
@@ -26,7 +25,7 @@ public class NewItemPage extends BasePage {
         }
     }
 
-    public NewItemPage enterItemName(String name) {
+    public CreateNewItemPage enterItemName(String name) {
         getDriver().findElement(By.id("name")).sendKeys(name);
 
         return this;
@@ -44,6 +43,13 @@ public class NewItemPage extends BasePage {
         selectProjectTypeAndSave(itemType);
 
         return new ConfigurationPage(getDriver());
+    }
+
+    public MultibranchPipelineConfigPage selectMultibranchPipelineAndClickOk() {
+        getDriver().findElement(By.cssSelector("[class$='MultiBranchProject']")).click();
+        getDriver().findElement(By.id("ok-button")).click();
+
+        return new MultibranchPipelineConfigPage(getDriver());
     }
 
 
