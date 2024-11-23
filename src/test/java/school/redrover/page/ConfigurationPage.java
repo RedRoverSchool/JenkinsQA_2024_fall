@@ -49,9 +49,9 @@ public class ConfigurationPage extends BasePage {
     }
 
     public ConfigurationPage addExecuteWindowsBatchCommand(String command) {
+        getWait10().until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//span[contains(text(),'Build Steps')]/.."))).click();
         TestUtils.scrollToBottom(getDriver());
-        getDriver().findElement(By.xpath("//button[contains(text(),'Add build step')]")).click();
-        getDriver().findElement(By.xpath("//button[contains(text(),'Execute Windows batch command')]")).click();
+        addBuildStep("Execute Windows batch command");
         getDriver().findElement(By.xpath("//textarea[@name='command']"))
                 .sendKeys(command);
 
