@@ -1,0 +1,6 @@
+local.admin.username=имя_пользователя
+local.admin.password=пароль
+local.host=хост
+local.port=порт
+local.chrome_options=--window-size=1920,1080
+local.closeBrowserIfError=false
