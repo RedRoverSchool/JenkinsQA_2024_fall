@@ -5,6 +5,7 @@ import org.openqa.selenium.WebDriver;
 import school.redrover.page.base.BasePage;
 
 public class CreateNewItemPage extends BasePage {
+
     public CreateNewItemPage(WebDriver driver) {
         super(driver);
     }

@@ -14,4 +14,10 @@ public class MultibranchPipelineProjectPage extends BasePage {
     public String getDescription() {
         return getWait2().until(ExpectedConditions.visibilityOfElementLocated(By.id("view-message"))).getText();
     }
+
+    public HomePage goToDashboard() {
+        getDriver().findElement(By.xpath("//a[contains(text(),'Dashboard')]")).click();
+
+        return new HomePage(getDriver());
+    }
 }
