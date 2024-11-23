@@ -83,6 +83,7 @@ public class TestUtils {
         baseTest.getDriver().findElement(By.xpath("//button[@type='submit']")).click();
 
         baseTest.getDriver().findElement(By.xpath("//button[@name='Submit']")).click();
+        baseTest.getDriver().findElement(By.id("jenkins-home-link")).click();
     }
 
     public static void newItemsData(BaseTest baseTest, String itemName, String itemXpath) {
