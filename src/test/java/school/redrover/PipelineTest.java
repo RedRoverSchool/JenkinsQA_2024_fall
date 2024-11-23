@@ -119,8 +119,6 @@ public class PipelineTest extends BaseTest {
                 By.xpath("//a[@href ='job/%s/']/button[@class='jenkins-menu-dropdown-chevron']"
                         .formatted(projectName))));
 
-//        new Actions(getDriver())
-//                .moveToElement(buttonChevron).click().perform();
         TestUtils.moveAndClickWithJavaScript(getDriver(), buttonChevron);
 
         getWait10().until(ExpectedConditions.visibilityOfElementLocated(
