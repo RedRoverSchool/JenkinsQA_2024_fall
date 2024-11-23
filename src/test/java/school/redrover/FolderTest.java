@@ -62,7 +62,7 @@ public class FolderTest extends BaseTest {
                 .selectConfigureFromItemMenu(FIRST_FOLDER_NAME)
                .enterDescription("This is new description")
                .saveConfigurations()
-               .getFolderDescriptin();
+               .getFolderDescription();
 
         Assert.assertEquals(desc,
                 "This is new description");
