@@ -31,7 +31,7 @@ public class ProjectPage extends BasePage {
         return this;
     }
 
-    public String getFolderDescriptin() {
+    public String getFolderDescription() {
         return getDriver().findElement(By.id("view-message")).getText();
     }
 
