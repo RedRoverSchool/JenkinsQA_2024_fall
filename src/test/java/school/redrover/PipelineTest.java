@@ -134,7 +134,6 @@ public class PipelineTest extends BaseTest {
         Assert.assertEquals(actualMessage, "Welcome to Jenkins!");
     }
 
-    @Ignore
     @Test
     public void testCreateWithNotUniqueName() {
         String nonUniqueProjectName = PROJECT_NAME + "Unique";
