@@ -2,7 +2,6 @@ package school.redrover.page;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import school.redrover.MultibranchPipelineTest;
 import school.redrover.page.base.BasePage;
 
 public class MultibranchPipelineConfigPage extends BasePage {
