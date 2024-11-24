@@ -32,8 +32,11 @@ public class WorkPipelineTest extends BaseTest {
     public void testDeleteItem() {
 
         getDriver().findElement(By.xpath("//*[@id=\"job_First\"]/td[3]/a/span")).click();
+        getWait10();
 
         getDriver().findElement(By.xpath("//*[@id=\"tippy-6\"]/div/div/div/button[2]")).click();
+        getWait10();
+
         getDriver().findElement(By.xpath("//*[@id=\"jenkins\"]/dialog/div[3]/button[1]")).click();
 
         String resultDelete = getDriver().findElement(By.xpath("//*[@id=\"main-panel\"]/div[2]/div/h1")).getText();
