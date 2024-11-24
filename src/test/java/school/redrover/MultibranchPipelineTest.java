@@ -24,7 +24,6 @@ public class MultibranchPipelineTest extends BaseTest {
     private static final By OK_BUTTON = By.id("ok-button");
     private static final String MULTIBRANCH_PIPELINE_NAME = "NewMultibranchName";
     private static final String MULTIBRANCH_PIPELINE_NAME2 = "NewMultibranchName2";
-    private static final String DELETE_MULTIBRANCH_PIPELINE = "Delete Multibranch Pipeline";
 
     private void createJob(String jobName) {
         getDriver().findElement(By.xpath("//a[@href='/view/all/newJob']")).click();
