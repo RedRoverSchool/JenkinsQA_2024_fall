@@ -20,7 +20,6 @@ public class ViewTest extends BaseTest {
     private static final By OK_BUTTON = By.xpath("//button[@name='Submit']");
 
     private void createListViewForJob(String viewName, String jobName) {
-        getDriver().findElement(By.id("jenkins-home-link")).click();
         getWait2().until(ExpectedConditions.elementToBeClickable(By.xpath("//a[@title='New View']"))).click();
 
         WebElement inputNameField = getWait2().until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//input[@id='name']")));
@@ -31,10 +30,6 @@ public class ViewTest extends BaseTest {
 
         getWait2().until(ExpectedConditions.elementToBeClickable(By.xpath("//label[@title='%s']".formatted(jobName)))).click();
         getDriver().findElement(OK_BUTTON).click();
-    }
-
-    private void returnToHomePage() {
-        getDriver().findElement(By.id("jenkins-home-link")).click();
     }
 
     private List<String> getColumnList() {
@@ -73,7 +68,6 @@ public class ViewTest extends BaseTest {
         );
 
         TestUtils.createPipeline(this, PIPELINE_NAME);
-        returnToHomePage();
 
         getWait2().until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//a[@title='New View']"))).click();
 
@@ -105,7 +99,6 @@ public class ViewTest extends BaseTest {
 
         TestUtils.createPipeline(this, PIPELINE_NAME);
         createListViewForJob(VIEW_NAME, PIPELINE_NAME);
-        returnToHomePage();
         clickViewByName(VIEW_NAME);
 
         getWait2().until(ExpectedConditions.elementToBeClickable(
@@ -136,7 +129,6 @@ public class ViewTest extends BaseTest {
 
         TestUtils.createPipeline(this, PIPELINE_NAME);
         createListViewForJob(VIEW_NAME, PIPELINE_NAME);
-        returnToHomePage();
         clickViewByName(VIEW_NAME);
 
         getWait2().until(ExpectedConditions.elementToBeClickable(
