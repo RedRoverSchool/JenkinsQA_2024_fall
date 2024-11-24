@@ -106,7 +106,7 @@ public class PipelineTest extends BaseTest {
         Assert.assertEquals(actualMessage, "Welcome to Jenkins!");
     }
 
-    @Test
+    @Test(description = "AT_02.005.02")
     public void testDeleteByChevronDashboard() {
         final String projectName = "ProjectDeleteByChevron";
         createNewProjectAndGoMainPageByLogo(projectName, ProjectType.Pipeline);
@@ -119,8 +119,6 @@ public class PipelineTest extends BaseTest {
                 By.xpath("//a[@href ='job/%s/']/button[@class='jenkins-menu-dropdown-chevron']"
                         .formatted(projectName))));
 
-//        new Actions(getDriver())
-//                .moveToElement(buttonChevron).click().perform();
         TestUtils.moveAndClickWithJavaScript(getDriver(), buttonChevron);
 
         getWait10().until(ExpectedConditions.visibilityOfElementLocated(
@@ -136,7 +134,35 @@ public class PipelineTest extends BaseTest {
         Assert.assertEquals(actualMessage, "Welcome to Jenkins!");
     }
 
-    @Ignore
+    @Test(description = "AT_02.005.03")
+    public void testDeleteByChevronBreadcrumb() {
+        final String projectName = "ProjectDeleteByChevronBreadcrumb";
+        createNewProjectAndGoMainPageByLogo(projectName, ProjectType.Pipeline);
+
+        new Actions(getDriver())
+                .moveToElement(findProjectOnDashboardByName(projectName))
+                .click()
+                .perform();
+
+        WebElement buttonChevron = getWait10().until(TestUtils.ExpectedConditions.elementIsNotMoving(
+                By.xpath("//a[@href ='/job/%s/']/button[@class='jenkins-menu-dropdown-chevron']"
+                        .formatted(projectName))));
+
+        TestUtils.moveAndClickWithJavaScript(getDriver(), buttonChevron);
+
+        getWait10().until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//button[@href = '/job/%s/doDelete']".formatted(projectName)))).click();
+
+        getWait10().until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//button[@data-id='ok']"))).click();
+
+        goToHomePageByLogo();
+
+        String actualMessage = getDriver().findElement(By.xpath("//div[@class='empty-state-block']/h1")).getText();
+
+        Assert.assertEquals(actualMessage, "Welcome to Jenkins!");
+    }
+
     @Test
     public void testCreateWithNotUniqueName() {
         String nonUniqueProjectName = PROJECT_NAME + "Unique";
@@ -147,7 +173,8 @@ public class PipelineTest extends BaseTest {
 
         getDriver().findElement(By.id("name")).sendKeys(nonUniqueProjectName);
 
-        String actualErrorMessage = getWait5().until(ExpectedConditions.presenceOfElementLocated(By.id("itemname-invalid"))).getText();
+        String actualErrorMessage = getWait5().until(ExpectedConditions.visibilityOfElementLocated(
+                By.id("itemname-invalid"))).getText();
 
         Assert.assertEquals(actualErrorMessage, "» A job already exists with the name ‘%s’".formatted(nonUniqueProjectName));
     }
