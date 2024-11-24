@@ -60,6 +60,21 @@ public class DeleteMulticonfigurationProjectTest extends BaseTest {
     }
 
     @Test
+
+    public void testDeleteProjectFromProjectPage() {
+        createProject(PROJECT_NAME).openProject(PROJECT_NAME);
+
+        getDriver().findElement(By.xpath("//*[contains(@class,'icon-edit-delete')]")).click();
+
+        WebElement deletionPopup = getWait5().until(ExpectedConditions.visibilityOf(getDriver().findElement(
+                By.xpath("//button[normalize-space()='Yes']"))));
+        deletionPopup.click();
+
+        Assert.assertEquals(getDriver().findElement(By.xpath("//h1[.='Welcome to Jenkins!']")).getText(),
+                "Welcome to Jenkins!");
+
+    }
+
     public void testDeleteViaDropDownMenu() {
         createProject(PROJECT_NAME);
 
@@ -73,4 +88,5 @@ public class DeleteMulticonfigurationProjectTest extends BaseTest {
 
 
     }
+
 }
