@@ -211,6 +211,6 @@ public class HomePage extends BasePage {
         getDriver().findElement(By.xpath("//button[contains(@href,'Delete')]")).click();
         getDriver().findElement(By.xpath("//button[@data-id='ok']")).click();
 
-        return new HomePage(getDriver());
+        return this;
     }
 }
