@@ -6,6 +6,7 @@ import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.Assert;
 import org.testng.annotations.Test;
+import school.redrover.page.HomePage;
 import school.redrover.runner.BaseTest;
 import school.redrover.runner.TestUtils;
 
@@ -15,8 +16,8 @@ import java.util.Map;
 
 public class PipelineProjectTest extends BaseTest {
 
-    private static final String PIPELINE_NAME = "Pipeline_name";
-    private static final String NEW_PROJECT_NAME = "New_Pipeline_name";
+    private static final String PIPELINE_NAME = "PipelineName";
+    private static final String NEW_PROJECT_NAME = "NewPipelineName";
 
     private void returnToHomePage() {
         getDriver().findElement(By.id("jenkins-home-link")).click();
@@ -44,47 +45,39 @@ public class PipelineProjectTest extends BaseTest {
 
     @Test
     public void testCreateProjectWithValidNameViaSidebar() {
-        getDriver().findElement(By.xpath("//a[@href='/view/all/newJob']")).click();
+        List<String> itemList = new HomePage(getDriver())
+                .clickNewItem()
+                .enterItemName(PIPELINE_NAME)
+                .selectPipelineAndClickOk()
+                .clickSaveButton()
+                .returnToHomePage()
+                .getItemList();
 
-        getDriver().findElement(By.xpath("//input[@name='name']")).sendKeys(PIPELINE_NAME);
-        getDriver().findElement(By.xpath("//li[@class='org_jenkinsci_plugins_workflow_job_WorkflowJob']")).click();
-        getDriver().findElement(By.xpath("//button[@type='submit']")).click();
-
-        getDriver().findElement(By.xpath("//button[@name='Submit']")).click();
-
-        getDriver().findElement(By.id("jenkins-home-link")).click();
-
-        Assert.assertListContainsObject(getProjectList(), PIPELINE_NAME, "Project is not found");
+        Assert.assertListContainsObject(itemList, PIPELINE_NAME, "Project is not created");
     }
 
     @Test(dependsOnMethods = "testCreateProjectWithValidNameViaSidebar")
     public void testVerifySidebarOptionsOnProjectPage() {
-        final List<String> expectedSidebarOptionList =
-                List.of("Status", "Changes", "Build Now", "Configure", "Delete Pipeline", "Stages", "Rename", "Pipeline Syntax");
+        List<String> actualSidebarOptionList = new HomePage(getDriver())
+                .openProject(PIPELINE_NAME)
+                .getSidebarOptionList();
 
-        clickProjectByName(PIPELINE_NAME);
-
-        List<String> actualSideBarOptionList = getWait5().until(ExpectedConditions.visibilityOfAllElementsLocatedBy(
-                By.xpath("//div[@class='task ']//span[2]"))).stream().map(WebElement::getText).toList();
-
-        Assert.assertEquals(actualSideBarOptionList, expectedSidebarOptionList,
+        Assert.assertEquals(
+                actualSidebarOptionList,
+                List.of("Status", "Changes", "Build Now", "Configure", "Delete Pipeline", "Stages", "Rename", "Pipeline Syntax"),
                 "Sidebar options on Project page do not match expected list.");
     }
 
     @Test(dependsOnMethods = "testVerifySidebarOptionsOnProjectPage")
     public void testVerifySidebarOptionsOnConfigurationPage() {
-        final List<String> expectedSidebarOptionList =
-                List.of("General", "Advanced Project Options", "Pipeline");
+        List<String> actualSidebarOptionList = new HomePage(getDriver())
+                .openProject(PIPELINE_NAME)
+                .clickConfigureSidebar(PIPELINE_NAME)
+                .getSidebarConfigurationOption();
 
-        clickProjectByName(PIPELINE_NAME);
-
-        getWait2().until(ExpectedConditions.elementToBeClickable(
-                By.xpath("//a[@href='/job/" + PIPELINE_NAME + "/configure']"))).click();
-
-        List<String> actualSideBarOptionList = getWait2().until(ExpectedConditions.visibilityOfAllElementsLocatedBy(
-                By.xpath("//div[@class='task']//span[2]"))).stream().map(WebElement::getText).toList();
-
-        Assert.assertEquals(actualSideBarOptionList, expectedSidebarOptionList,
+        Assert.assertEquals(
+                actualSidebarOptionList,
+                List.of("General", "Advanced Project Options", "Pipeline"),
                 "Sidebar options on Configuration page do not match expected list.");
     }
 
@@ -163,7 +156,7 @@ public class PipelineProjectTest extends BaseTest {
         returnToHomePage();
 
         WebElement disableCircleSign = getWait5().until(ExpectedConditions.visibilityOfElementLocated(
-                By.xpath("//tr[@id='job_Pipeline_name']//*[@tooltip='Disabled']")));
+                By.xpath("//tr[@id='job_%s']//*[@tooltip='Disabled']".formatted(PIPELINE_NAME))));
 
         boolean isGreenScheduleBuildTrianglePresent = !getDriver().findElements(
                         By.xpath("//td[@class='jenkins-table__cell--tight']//a[@tooltip='Schedule a Build for " + PIPELINE_NAME + "']"))

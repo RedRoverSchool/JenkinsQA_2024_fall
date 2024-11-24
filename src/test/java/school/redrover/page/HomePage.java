@@ -177,4 +177,12 @@ public class HomePage extends BasePage {
 
         return getDriver().findElements(By.className("content-block"));
     }
+
+    public List<String> getItemList() {
+
+        return getDriver().findElements(By.xpath("//td/a[contains(@href,'job/')]"))
+                .stream()
+                .map(WebElement::getText)
+                .toList();
+    }
 }
