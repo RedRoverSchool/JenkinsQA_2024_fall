@@ -185,4 +185,12 @@ public class HomePage extends BasePage {
                 .map(WebElement::getText)
                 .toList();
     }
+
+    public MultibranchPipelineProjectPage clickOnCreatedItem(String itemName) {
+        getDriver().findElement(
+                By.xpath(("//a[contains(@href,'%s')][@class='jenkins-table__link model-link inside']")
+                        .formatted(itemName))).click();
+
+        return new MultibranchPipelineProjectPage(getDriver());
+    }
 }
