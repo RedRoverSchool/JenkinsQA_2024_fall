@@ -59,9 +59,8 @@ public class DeleteMulticonfigurationProjectTest extends BaseTest {
     }
 
     @Test
-    public void testDeleteProjectFromProjectPage() throws InterruptedException {
+    public void testDeleteProjectFromProjectPage() {
         createProject(PROJECT_NAME).openProject(PROJECT_NAME);
-
 
         getDriver().findElement(By.xpath("//*[contains(@class,'icon-edit-delete')]")).click();
 
