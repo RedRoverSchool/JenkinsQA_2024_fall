@@ -1,6 +1,7 @@
 package school.redrover;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import school.redrover.runner.BaseTest;
@@ -34,8 +35,7 @@ public class WorkPipelineTest extends BaseTest {
         getDriver().findElement(By.xpath("//*[@id=\"job_First\"]/td[3]/a/span")).click();
         getWait10();
 
-        getDriver().findElement(By.xpath("//*[@id=\"tippy-6\"]/div/div/div/button[2]")).click();
-        getWait10();
+        getWait10().until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[@id=\"tippy-6\"]/div/div/div/button[2]"))).click();
 
         getDriver().findElement(By.xpath("//*[@id=\"jenkins\"]/dialog/div[3]/button[1]")).click();
 
