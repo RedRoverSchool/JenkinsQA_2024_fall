@@ -20,4 +20,11 @@ public class MultibranchPipelineProjectPage extends BasePage {
 
         return new HomePage(getDriver());
     }
+
+    public HomePage deleteItemBySidebar() {
+        getDriver().findElement(By.xpath("//a[@data-title='Delete Multibranch Pipeline']")).click();
+        getDriver().findElement(By.xpath("//button[@data-id='ok']")).click();
+
+        return new HomePage(getDriver());
+    }
 }
