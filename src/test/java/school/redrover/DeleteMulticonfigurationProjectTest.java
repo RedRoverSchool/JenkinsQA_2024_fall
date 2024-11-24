@@ -7,6 +7,7 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 import school.redrover.page.HomePage;
 import school.redrover.page.CreateNewItemPage;
+import school.redrover.page.ProjectPage;
 import school.redrover.runner.BaseTest;
 
 public class DeleteMulticonfigurationProjectTest extends BaseTest {
@@ -58,8 +59,10 @@ public class DeleteMulticonfigurationProjectTest extends BaseTest {
         Assert.assertTrue(deletionPopup.isDisplayed());
     }
 
-    @Test(dependsOnMethods = "testPopupForDeletionOnProjectPage")
+    @Test
     public void testDeleteViaDropDownMenu() {
+        createProject(PROJECT_NAME);
+
         new HomePage(getDriver()).openDropdownViaChevron(PROJECT_NAME);
 
         getDriver().findElement(By.xpath("//button[@href='/job/%s/doDelete']".formatted(PROJECT_NAME))).click();
