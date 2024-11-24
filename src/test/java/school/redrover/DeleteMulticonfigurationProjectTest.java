@@ -58,4 +58,16 @@ public class DeleteMulticonfigurationProjectTest extends BaseTest {
         Assert.assertTrue(deletionPopup.isDisplayed());
     }
 
+    @Test(dependsOnMethods = "testPopupForDeletionOnProjectPage")
+    public void testDeleteViaDropDownMenu() {
+        new HomePage(getDriver()).openDropdownViaChevron(PROJECT_NAME);
+
+        getDriver().findElement(By.xpath("//button[@href='/job/%s/doDelete']".formatted(PROJECT_NAME))).click();
+
+        getDriver().findElement(By.xpath("//button[@data-id='ok']")).click();
+
+        Assert.assertTrue(getDriver().getPageSource().contains("Welcome to Jenkins"));
+
+
+    }
 }
