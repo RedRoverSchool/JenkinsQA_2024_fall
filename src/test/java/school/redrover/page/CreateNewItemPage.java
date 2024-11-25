@@ -11,9 +11,12 @@ public class CreateNewItemPage extends BasePage {
     }
 
     public enum ItemType {
+        PIPELINE("Pipeline"),
         FOLDER("Folder"),
         FREESTYLE_PROJECT("Freestyle project"),
-        MULTICONFIGURATION_PROJECT("Multi-configuration project");
+        MULTICONFIGURATION_PROJECT("Multi-configuration project"),
+        MULTIBRANCH_PIPELINE("Multibranch Pipeline"),
+        ORGANIZATION_FOLDER("Organization Folder");
 
         private final String itemName;
 
