@@ -85,8 +85,8 @@ public class PipelineTest extends BaseTest {
         findProjectOnDashboardByName(name).click();
         clickRenameButtonOnSidebar();
 
-        String actualWarningMessage = getDriver().findElement(
-                By.xpath("//div[@class='validation-error-area validation-error-area--visible']")).getText();
+        String actualWarningMessage = getWait5().until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//div[@class='validation-error-area validation-error-area--visible']"))).getText();
 
         Assert.assertEquals(actualWarningMessage, "The new name is the same as the current name.");
     }
