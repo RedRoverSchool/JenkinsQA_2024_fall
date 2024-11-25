@@ -1,6 +1,7 @@
 package school.redrover.page;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
@@ -192,6 +193,25 @@ public class HomePage extends BasePage {
                         .formatted(itemName))).click();
 
         return new MultibranchPipelineProjectPage(getDriver());
+    }
+
+    public HomePage deleteItemViaChevronItem(String itemName) {
+        WebElement jobName = getDriver().findElement(
+                By.xpath("//td/a/span[text() = '%s']/..".formatted(itemName)));
+        new Actions(getDriver()).moveToElement(jobName).perform();
+
+        WebElement chevronButton = getWait5().until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//td/a/span[text() = '%s']/../button".formatted(itemName))));
+
+        ((JavascriptExecutor) getDriver())
+                .executeScript("arguments[0].dispatchEvent(new Event('mouseenter'));", chevronButton);
+        ((JavascriptExecutor) getDriver())
+                .executeScript("arguments[0].dispatchEvent(new Event('click'));", chevronButton);
+
+        getDriver().findElement(By.xpath("//button[contains(@href,'Delete')]")).click();
+        getDriver().findElement(By.xpath("//button[@data-id='ok']")).click();
+
+        return this;
     }
 
     public boolean isDisableCircleSignPresent(String name) {

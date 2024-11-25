@@ -77,6 +77,20 @@ public class PipelineTest extends BaseTest {
         Assert.assertEquals(actualJobName, newName);
     }
 
+    @Test(description = "AT_02.007.01")
+    public void testWarningMessageOnRenameProjectPage() {
+        final String name = "PipelineProjectRename";
+        createNewProjectAndGoMainPageByLogo(name, ProjectType.Pipeline);
+
+        findProjectOnDashboardByName(name).click();
+        clickRenameButtonOnSidebar();
+
+        String actualWarningMessage = getWait5().until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//div[@class='validation-error-area validation-error-area--visible']"))).getText();
+
+        Assert.assertEquals(actualWarningMessage, "The new name is the same as the current name.");
+    }
+
     @Test
     public void testRenameByChevronDashboard() {
         final String projectName = "PipelineRenameByChevron";
@@ -291,6 +305,12 @@ public class PipelineTest extends BaseTest {
 
     private WebElement findProjectOnDashboardByName(String name) {
         return getDriver().findElement(By.xpath("//a[@href ='job/%s/']".formatted(name)));
+    }
+
+    private void clickRenameButtonOnSidebar() {
+
+        getDriver().findElement(
+                By.xpath("//div[@id='tasks']/div//span[contains(text(), 'Rename')]/..")).click();
     }
 
     private enum ProjectType {
