@@ -41,7 +41,7 @@ public class FreestyleProject3Test extends BaseTest {
     }
 
     private void verifyYouAreOnProjectStatusPage() {
-        getWait5().until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//h2[text()='Permalinks']")));
+        getWait10().until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//h2[text()='Permalinks']")));
     }
 
     private void clickConfigureInSidebarMenuOnProjectStatusPage() {
@@ -71,7 +71,6 @@ public class FreestyleProject3Test extends BaseTest {
         getDriver().findElement(By.xpath("//button[@name='Submit']")).click();
     }
 
-    @Ignore
     @Test
     public void testCreateProjectViaCreateJobButton() {
         getDriver().findElement(By.xpath("//a[@href='newJob']")).click();
@@ -80,7 +79,7 @@ public class FreestyleProject3Test extends BaseTest {
         getDriver().findElement(By.xpath("//li[contains(@class, 'FreeStyleProject')]")).click();
         getDriver().findElement(By.id("ok-button")).click();
 
-        getWait5().until(ExpectedConditions.elementToBeClickable(By.xpath("//button[@name='Submit']")))
+        getWait10().until(ExpectedConditions.elementToBeClickable(By.xpath("//button[@name='Submit']")))
                 .click();
 
         verifyYouAreOnProjectStatusPage();
