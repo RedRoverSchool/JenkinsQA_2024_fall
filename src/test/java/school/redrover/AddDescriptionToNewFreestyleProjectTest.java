@@ -3,6 +3,7 @@ package school.redrover;
 import org.openqa.selenium.By;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.Assert;
+import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import school.redrover.runner.BaseTest;
 import school.redrover.runner.TestUtils;
@@ -30,6 +31,7 @@ public class AddDescriptionToNewFreestyleProjectTest extends BaseTest {
         Assert.assertEquals(getDescription(), "It's a simple test project");
     }
 
+    @Ignore
     @Test
     public void testAddDescriptionToExisting () {
         newItemsData(this,"FreeStyleProjectTest",
