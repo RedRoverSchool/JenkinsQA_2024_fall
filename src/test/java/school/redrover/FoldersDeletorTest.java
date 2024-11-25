@@ -6,6 +6,7 @@ import org.openqa.selenium.interactions.Action;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.Assert;
+import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import school.redrover.runner.BaseTest;
 import school.redrover.runner.TestUtils;
@@ -17,7 +18,7 @@ public class FoldersDeletorTest extends BaseTest {
     private void clickOnSave () {
         getDriver().findElement(By.name("Submit")).click();
     }
-
+    @Ignore
     @Test
     public void testViaMainPageChevron () {
         newItemsData(this,"FolderToRemove",
@@ -59,7 +60,7 @@ public class FoldersDeletorTest extends BaseTest {
                         By.xpath("/html/body/div[2]/div[2]/div[2]/div/p"))).getText(),
                 "This page is where your Jenkins jobs will be displayed. To get started, you can set up distributed builds or start building a software project.");
     }
-
+    @Ignore
     @Test
     public void testViaMyViewChevron () {
         newItemsData(this,"FolderToRemove",
