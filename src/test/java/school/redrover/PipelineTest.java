@@ -255,6 +255,12 @@ public class PipelineTest extends BaseTest {
         return getDriver().findElement(By.xpath("//a[@href ='job/%s/']".formatted(name)));
     }
 
+    private void clickRenameButtonOnSidebar() {
+
+        getDriver().findElement(
+                By.xpath("//div[@id='tasks']/div//span[contains(text(), 'Rename')]/..")).click();
+    }
+
     private enum ProjectType {
         FreestyleProject("Freestyle project"),
         Pipeline("Pipeline"),
