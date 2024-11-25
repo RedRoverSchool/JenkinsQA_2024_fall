@@ -30,17 +30,17 @@ public class AddDescriptionToNewFreestyleProjectTest extends BaseTest {
         Assert.assertEquals(getDescription(), "It's a simple test project");
     }
 
-    @Test
+    @Test (dependsOnMethods = "testAddDescription")
     public void testAddDescriptionToExisting () {
-        newItemsData(this,"FreeStyleProjectTest",
-                "//*[@id='j-add-item-type-standalone-projects']/ul/li[1]/div[2]/label");
-        clickOnSave();
-
         getWait10().until(ExpectedConditions.elementToBeClickable(By.id("description-link"))).click();
+
+        getWait10().until(ExpectedConditions.visibilityOfElementLocated(
+                By.name("description"))).clear();
         getWait10().until(ExpectedConditions.visibilityOfElementLocated(
                 By.name("description"))).sendKeys("It's a description for an existing project");
         clickOnSave();
 
-        Assert.assertEquals(getDescription(), "It's a description for an existing project");
+        Assert.assertEquals(getDescription(), "It's a description for an existing project\n" +
+                "Edit description");
     }
 }

@@ -10,8 +10,15 @@ import static school.redrover.runner.TestUtils.newItemsData;
 
 public class FreeStyleProjectEnablingTest extends BaseTest {
 
-    private void clickOnSave () {
+    private void changeState () {
+        getWait10().until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//*[@id='toggle-switch-enable-disable-project']/label"))).click();
         getDriver().findElement(By.name("Submit")).click();
+    }
+
+    private boolean getCurrentState() {
+        return getWait10().until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//*[@id='toggle-switch-enable-disable-project']/label"))).isEnabled();
     }
 
     @Test
@@ -19,19 +26,14 @@ public class FreeStyleProjectEnablingTest extends BaseTest {
         newItemsData(this,"FreeStyleProjectTest",
                 "//*[@id='j-add-item-type-standalone-projects']/ul/li[1]/div[2]/label");
 
-        boolean defaultState = getWait10().until(ExpectedConditions.visibilityOfElementLocated(
-                By.xpath("//*[@id='toggle-switch-enable-disable-project']/label"))).isEnabled();
-
-        Assert.assertTrue(defaultState);
+        Assert.assertTrue(getCurrentState());
     }
 
     @Test(dependsOnMethods = "testDefaultState")
     public void testDisableEnabled () {
         getDriver().navigate().back();
 
-        getWait10().until(ExpectedConditions.visibilityOfElementLocated(
-                By.xpath("//*[@id='toggle-switch-enable-disable-project']/label"))).click();
-        clickOnSave();
+        changeState();
 
         String indicatorText = getWait10().until(ExpectedConditions.visibilityOfElementLocated(By.id("enable-project"))).getText();
 
@@ -46,9 +48,22 @@ public class FreeStyleProjectEnablingTest extends BaseTest {
         getWait10().until(ExpectedConditions.elementToBeClickable(By.name("Submit"))).click();
         getDriver().findElement(By.cssSelector("#tasks > div:nth-child(6) > span > a")).click();
 
-        boolean isItEnabled = getWait10().until(ExpectedConditions.visibilityOfElementLocated(
-                By.xpath("//*[@id='toggle-switch-enable-disable-project']/label"))).isEnabled();
+        Assert.assertTrue(getCurrentState());
+    }
 
-        Assert.assertTrue(isItEnabled);
+    @Test (dependsOnMethods = "testEnableWithIndicator")
+    public void testEnabledFromProjectPage () {
+        getDriver().navigate().back();
+
+        changeState();
+
+        getWait10().until(ExpectedConditions.elementToBeClickable(
+                By.xpath("/html/body/div[2]/div[1]/div[1]/div[4]/span/a"))).click();
+
+        changeState();
+
+        getDriver().navigate().back();
+
+        Assert.assertTrue(getCurrentState());
     }
 }
