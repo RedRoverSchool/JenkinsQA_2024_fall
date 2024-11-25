@@ -77,6 +77,20 @@ public class PipelineTest extends BaseTest {
         Assert.assertEquals(actualJobName, newName);
     }
 
+    @Test(description = "AT_02.007.01")
+    public void testWarningMessageOnRenameProjectPage() {
+        final String name = "PipelineProjectRename";
+        createNewProjectAndGoMainPageByLogo(name, ProjectType.Pipeline);
+
+        findProjectOnDashboardByName(name).click();
+        clickRenameButtonOnSidebar();
+
+        String actualWarningMessage = getDriver().findElement(
+                By.xpath("//div[@class='validation-error-area validation-error-area--visible']")).getText();
+
+        Assert.assertEquals(actualWarningMessage, "The new name is the same as the current name.");
+    }
+
     @Test
     public void testAddDescription() {
         final String name = PROJECT_NAME + "AndDesc";
