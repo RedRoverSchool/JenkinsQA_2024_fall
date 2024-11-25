@@ -5,6 +5,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import school.redrover.page.base.BasePage;
+import school.redrover.runner.TestUtils;
 
 import java.util.HashMap;
 import java.util.List;
@@ -46,6 +47,14 @@ public class PipelineConfigurePage extends BasePage {
     public PipelineConfigurePage clickToggleToDisableProject() {
         getWait5().until(ExpectedConditions.elementToBeClickable(
                 By.xpath("//label[@data-title='Disabled']"))).click();
+
+        return this;
+    }
+
+    public PipelineConfigurePage addScriptToPipeline(String script) {
+
+        TestUtils.scrollToBottom(getDriver());
+        getDriver().findElement(By.cssSelector("textarea[class='ace_text-input']")).sendKeys(script);
 
         return this;
     }
