@@ -14,11 +14,11 @@ import java.util.List;
 
 public class UpdatesBuildHistoryTest extends BaseTest {
 
-    public void openBuildHistoryPage() {
+    private void openBuildHistoryPage() {
         getDriver().findElement(By.xpath("//a[@href = '/view/all/builds']")).click();
     }
 
-    public void scheduleBuild() {
+    private void scheduleBuild() {
         getDriver().findElement(By.xpath("//td[@class = 'jenkins-table__cell--tight']")).click();
     }
 
