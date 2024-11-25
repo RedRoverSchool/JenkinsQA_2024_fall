@@ -7,7 +7,7 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 import school.redrover.page.HomePage;
 import school.redrover.page.CreateNewItemPage;
-import school.redrover.page.ProjectPage;
+import school.redrover.page.MyViewsPage;
 import school.redrover.runner.BaseTest;
 
 public class DeleteMulticonfigurationProjectTest extends BaseTest {
@@ -85,8 +85,17 @@ public class DeleteMulticonfigurationProjectTest extends BaseTest {
         getDriver().findElement(By.xpath("//button[@data-id='ok']")).click();
 
         Assert.assertTrue(getDriver().getPageSource().contains("Welcome to Jenkins"));
+    }
 
+    @Test
+    public void testDeleteFromMyViewsPage() {
+        createProject(PROJECT_NAME);
 
+        getDriver().findElement(By.xpath("//a[@href='/me/my-views']")).click();
+
+        new MyViewsPage(getDriver()).deleteAnyJobViaChevron(PROJECT_NAME);
+
+        Assert.assertTrue(getDriver().getPageSource().contains("This folder is empty"));
     }
 
 }
