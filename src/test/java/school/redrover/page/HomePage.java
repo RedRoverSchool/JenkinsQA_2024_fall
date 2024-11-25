@@ -1,6 +1,7 @@
 package school.redrover.page;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
@@ -176,5 +177,58 @@ public class HomePage extends BasePage {
     public List<WebElement> getContentBlock() {
 
         return getDriver().findElements(By.className("content-block"));
+    }
+
+    public List<String> getItemList() {
+
+        return getDriver().findElements(By.xpath("//td/a[contains(@href,'job/')]"))
+                .stream()
+                .map(WebElement::getText)
+                .toList();
+    }
+
+    public MultibranchPipelineProjectPage clickOnCreatedItem(String itemName) {
+        getDriver().findElement(
+                By.xpath(("//a[contains(@href,'%s')][@class='jenkins-table__link model-link inside']")
+                        .formatted(itemName))).click();
+
+        return new MultibranchPipelineProjectPage(getDriver());
+    }
+
+    public HomePage deleteItemViaChevronItem(String itemName) {
+        WebElement jobName = getDriver().findElement(
+                By.xpath("//td/a/span[text() = '%s']/..".formatted(itemName)));
+        new Actions(getDriver()).moveToElement(jobName).perform();
+
+        WebElement chevronButton = getWait5().until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//td/a/span[text() = '%s']/../button".formatted(itemName))));
+
+        ((JavascriptExecutor) getDriver())
+                .executeScript("arguments[0].dispatchEvent(new Event('mouseenter'));", chevronButton);
+        ((JavascriptExecutor) getDriver())
+                .executeScript("arguments[0].dispatchEvent(new Event('click'));", chevronButton);
+
+        getDriver().findElement(By.xpath("//button[contains(@href,'Delete')]")).click();
+        getDriver().findElement(By.xpath("//button[@data-id='ok']")).click();
+
+        return this;
+    }
+
+    public boolean isDisableCircleSignPresent(String name) {
+        try {
+            WebElement disableCircleSign = getWait5().until(ExpectedConditions.visibilityOfElementLocated(
+                    By.xpath("//tr[@id='job_%s']//*[@tooltip='Disabled']".formatted(name))));
+
+            return disableCircleSign.isDisplayed();
+
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public boolean isGreenScheduleBuildTrianglePresent(String name) {
+        return !getDriver().findElements(
+                By.xpath("//td[@class='jenkins-table__cell--tight']//a[@tooltip='Schedule a Build for %s']"
+                        .formatted(name))).isEmpty();
     }
 }

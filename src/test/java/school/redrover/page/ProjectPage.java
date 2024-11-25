@@ -2,10 +2,12 @@ package school.redrover.page;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import school.redrover.page.base.BasePage;
 
 import java.util.Arrays;
+import java.util.List;
 
 public class ProjectPage extends BasePage {
 
@@ -74,6 +76,24 @@ public class ProjectPage extends BasePage {
 
     public ProjectPage runJob(String projectName) {
         getDriver().findElement(By.xpath("//td//a[@title='Schedule a Build for %s']".formatted(projectName))).click();
+
+        return this;
+    }
+
+    public List<String> getSidebarOptionList() {
+        return getWait5().until(ExpectedConditions.visibilityOfAllElementsLocatedBy(
+                By.xpath("//div[@class='task ']//span[2]"))).stream().map(WebElement::getText).toList();
+    }
+
+    public PipelineConfigurePage clickConfigureSidebar(String name) {
+        getWait2().until(ExpectedConditions.elementToBeClickable(
+                By.xpath("//a[@href='/job/%s/configure']".formatted(name)))).click();
+
+        return new PipelineConfigurePage(getDriver());
+    }
+
+    public ProjectPage clickEnableButton() {
+        getWait2().until(ExpectedConditions.elementToBeClickable(By.xpath("//button[@formNoValidate='formNoValidate']"))).click();
 
         return this;
     }

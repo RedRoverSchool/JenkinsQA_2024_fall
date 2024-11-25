@@ -91,6 +91,7 @@ public class MultibranchPipelineTest extends BaseTest {
 
         Assert.assertEquals(getDriver().findElement(By.xpath("//h1")).getText(), "Hilton Hotels");
     }
+
     @Ignore
     @Test
     public void testTryCreateProjectExistName() {
@@ -145,7 +146,6 @@ public class MultibranchPipelineTest extends BaseTest {
 
     @Test
     public void testCreateOneJobAndDisplayOnStartPage() {
-
         String actualJobName = new HomePage(getDriver())
                 .clickNewItem()
                 .enterItemName(MULTIBRANCH_PIPELINE_NAME)
@@ -154,8 +154,7 @@ public class MultibranchPipelineTest extends BaseTest {
                 .goToDashboard()
                 .getItemName();
 
-        Assert.assertEquals(
-                actualJobName,MULTIBRANCH_PIPELINE_NAME);
+        Assert.assertEquals(actualJobName, MULTIBRANCH_PIPELINE_NAME);
     }
 
     @Test
@@ -231,44 +230,31 @@ public class MultibranchPipelineTest extends BaseTest {
 
     @Test
     public void testDeleteJobUsingSidebarStatusPage() {
-        createJob(MULTIBRANCH_PIPELINE_NAME);
-
-        getDriver().findElement(
-                By.xpath(("//a[contains(@href,'%s')][@class='jenkins-table__link model-link inside']")
-                        .formatted(MULTIBRANCH_PIPELINE_NAME))).click();
-
-        getDriver().findElement(By.xpath("//a[@data-title='Delete Multibranch Pipeline']")).click();
-        getDriver().findElement(By.xpath("//button[@data-id='ok']")).click();
+        new HomePage(getDriver())
+                .clickNewItem()
+                .enterItemName(MULTIBRANCH_PIPELINE_NAME)
+                .selectMultibranchPipelineAndClickOk()
+                .clickSaveButton()
+                .goToDashboard()
+                .clickOnCreatedItem(MULTIBRANCH_PIPELINE_NAME)
+                .deleteItemBySidebar();
 
         Assert.assertTrue(getDriver().findElements(
-                By.xpath("//a[contains(@href,'%s')][@class='jenkins-table__link model-link inside']"
-                        .formatted(MULTIBRANCH_PIPELINE_NAME))).isEmpty());
+                By.xpath("//span[text()='%s']".formatted(MULTIBRANCH_PIPELINE_NAME))).isEmpty());
     }
 
     @Test
-    public void testDeleteJobUsingDropdownDashboard() {
-        createJob(MULTIBRANCH_PIPELINE_NAME);
-
-        WebElement jobName = getDriver().findElement(
-                By.xpath("//a[contains(@href,'%s')][@class='jenkins-table__link model-link inside']"
-                        .formatted(MULTIBRANCH_PIPELINE_NAME)));
-        new Actions(getDriver()).moveToElement(jobName).perform();
-
-        WebElement chevronButton = getWait5().until(ExpectedConditions.visibilityOfElementLocated(
-                By.xpath("//button[@class='jenkins-menu-dropdown-chevron'][contains(@data-href,'%s')]"
-                        .formatted(MULTIBRANCH_PIPELINE_NAME))));
-
-        ((JavascriptExecutor) getDriver())
-                .executeScript("arguments[0].dispatchEvent(new Event('mouseenter'));", chevronButton);
-        ((JavascriptExecutor) getDriver())
-                .executeScript("arguments[0].dispatchEvent(new Event('click'));", chevronButton);
-
-        getDriver().findElement(By.xpath("//button[contains(@href,'Delete')]")).click();
-        getDriver().findElement(By.xpath("//button[@data-id='ok']")).click();
+    public void testDeleteJobUsingItemDropdownOnDashboard() {
+        new HomePage(getDriver())
+                .clickNewItem()
+                .enterItemName(MULTIBRANCH_PIPELINE_NAME)
+                .selectMultibranchPipelineAndClickOk()
+                .clickSaveButton()
+                .goToDashboard()
+                .deleteItemViaChevronItem(MULTIBRANCH_PIPELINE_NAME);
 
         Assert.assertTrue(getDriver().findElements(
-                By.xpath("//a[contains(@href,'%s')][@class='jenkins-table__link model-link inside']"
-                        .formatted(MULTIBRANCH_PIPELINE_NAME))).isEmpty());
+                By.xpath("//span[text()='%s']".formatted(MULTIBRANCH_PIPELINE_NAME))).isEmpty());
     }
 
     @Test
