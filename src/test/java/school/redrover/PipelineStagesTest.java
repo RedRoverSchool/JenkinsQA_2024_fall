@@ -83,4 +83,5 @@ public class PipelineStagesTest extends BaseTest {
         Assert.assertEquals(icons.get(0).getCssValue("color"), "rgba(30, 166, 75, 1)");
         Assert.assertEquals(icons.get(1).getCssValue("color"), "rgba(230, 0, 31, 1)");
     }
+
 }
