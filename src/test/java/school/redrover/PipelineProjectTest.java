@@ -7,10 +7,10 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import school.redrover.page.HomePage;
+import school.redrover.page.PipelineProjectPage;
 import school.redrover.runner.BaseTest;
 import school.redrover.runner.TestUtils;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -53,7 +53,10 @@ public class PipelineProjectTest extends BaseTest {
                 .returnToHomePage()
                 .getItemList();
 
-        Assert.assertListContainsObject(itemList, PIPELINE_NAME, "Project is not created");
+        Assert.assertListContainsObject(
+                itemList,
+                PIPELINE_NAME,
+                "Project is not created");
     }
 
     @Test(dependsOnMethods = "testCreateProjectWithValidNameViaSidebar")
@@ -83,100 +86,69 @@ public class PipelineProjectTest extends BaseTest {
 
     @Test(dependsOnMethods = "testVerifySidebarOptionsOnConfigurationPage")
     public void testVerifyCheckboxTooltipsContainCorrectText() {
-        clickProjectByName(PIPELINE_NAME);
-
-        getWait2().until(ExpectedConditions.elementToBeClickable(
-                By.xpath("//a[@href='/job/" + PIPELINE_NAME + "/configure']"))).click();
-
-        List<WebElement> checkboxWithQuestionMarkList = getDriver().findElements(
-                By.xpath("//div[@hashelp = 'true']//label[@class='attach-previous ']"));
-        List<WebElement> questionMarkList = getDriver().findElements(
-                By.xpath("//div[@hashelp = 'true']//a[@class='jenkins-help-button']"));
-
-        Map<String, String> labelToTooltipTextMap = new HashMap<>();
-        for (int i = 0; i < checkboxWithQuestionMarkList.size(); i++) {
-            String checkboxText = checkboxWithQuestionMarkList.get(i).getText();
-            String tooltipText = questionMarkList.get(i).getAttribute("tooltip");
-            labelToTooltipTextMap.put(checkboxText, tooltipText);
-        }
+        Map<String, String> labelToTooltipTextMap = new HomePage(getDriver())
+                .openProject(PIPELINE_NAME)
+                .clickConfigureSidebar(PIPELINE_NAME)
+                .getCheckboxWithTooltipTextMap();
 
         labelToTooltipTextMap.forEach((checkbox, tooltip) ->
-                Assert.assertTrue(tooltip.contains("Help for feature: " + checkbox),
+                Assert.assertTrue(
+                        tooltip.contains("Help for feature: " + checkbox),
                         "Tooltip for feature '" + checkbox + "' does not contain the correct text"));
     }
 
     @Test(dependsOnMethods = "testVerifyCheckboxTooltipsContainCorrectText")
     public void testAddDescriptionToProject() {
-        final String expectedProjectDescription = "Certain project description";
+        final String expectedProjectDescription = "Certain_project_description";
 
-        clickProjectByName(PIPELINE_NAME);
+        String actualDescription = new HomePage(getDriver())
+                .openProject(PIPELINE_NAME)
+                .editDescription(expectedProjectDescription)
+                .getDescription();
 
-        getDriver().findElement(By.id("description-link")).click();
-
-        getDriver().findElement(By.xpath("//textarea[@name='description']")).sendKeys(expectedProjectDescription);
-        getDriver().findElement(By.xpath("//button[@name='Submit']")).click();
-
-        String actualDescription = getDriver().findElement(By.id("description")).getText();
-
-        Assert.assertEquals(actualDescription, expectedProjectDescription,
+        Assert.assertEquals(
+                actualDescription,
+                expectedProjectDescription,
                 "Expected description for the project is not found");
     }
 
     @Test(dependsOnMethods = "testAddDescriptionToProject")
     public void testGetWarningMessageWhenDisableProject() {
-        clickProjectByName(PIPELINE_NAME);
+        PipelineProjectPage pipelineProjectPage = new HomePage(getDriver())
+                .openProject(PIPELINE_NAME)
+                .clickConfigureSidebar(PIPELINE_NAME)
+                .clickToggleToDisableProject()
+                .clickSaveButton();
 
-        getWait2().until(ExpectedConditions.elementToBeClickable(
-                By.xpath("//a[@href='/job/" + PIPELINE_NAME + "/configure']"))).click();
-        getWait5().until(ExpectedConditions.elementToBeClickable(
-                By.xpath("//label[@data-title='Disabled']"))).click();
-        getDriver().findElement(By.xpath("//button[@name='Submit']")).click();
-
-        String actualWarningMessage = getWait5().until(ExpectedConditions.visibilityOfElementLocated(
-                By.xpath("//form[@id='enable-project']"))).getText().split("\n")[0];
-        String buttonText = getWait2().until(ExpectedConditions.visibilityOfElementLocated(
-                By.xpath("//form[@id='enable-project']/button[@name='Submit']"))).getText();
-
-        Assert.assertEquals(actualWarningMessage, "This project is currently disabled");
-        Assert.assertEquals(buttonText, "Enable");
+        Assert.assertEquals(
+                pipelineProjectPage.getWarningDisabledMessage(),
+                "This project is currently disabled");
+        Assert.assertEquals(
+                pipelineProjectPage.getStatusButtonText(),
+                "Enable");
     }
 
-    @Test
+    @Test(dependsOnMethods = "testGetWarningMessageWhenDisableProject")
     public void testDisableProject() {
-        TestUtils.createPipeline(this, PIPELINE_NAME);
+        HomePage homePage = new HomePage(getDriver());
 
-        clickProjectByName(PIPELINE_NAME);
-
-        getWait2().until(ExpectedConditions.elementToBeClickable(
-                By.xpath("//a[@href='/job/" + PIPELINE_NAME + "/configure']"))).click();
-        getWait5().until(ExpectedConditions.elementToBeClickable(
-                By.xpath("//label[@data-title='Disabled']"))).click();
-        getDriver().findElement(By.xpath("//button[@name='Submit']")).click();
-
-        returnToHomePage();
-
-        WebElement disableCircleSign = getWait5().until(ExpectedConditions.visibilityOfElementLocated(
-                By.xpath("//tr[@id='job_%s']//*[@tooltip='Disabled']".formatted(PIPELINE_NAME))));
-
-        boolean isGreenScheduleBuildTrianglePresent = !getDriver().findElements(
-                        By.xpath("//td[@class='jenkins-table__cell--tight']//a[@tooltip='Schedule a Build for " + PIPELINE_NAME + "']"))
-                .isEmpty();
-
-        Assert.assertTrue(disableCircleSign.isDisplayed());
-        Assert.assertFalse(isGreenScheduleBuildTrianglePresent);
+        Assert.assertTrue(
+                homePage.isDisableCircleSignPresent(PIPELINE_NAME));
+        Assert.assertFalse(
+                homePage.isGreenScheduleBuildTrianglePresent(PIPELINE_NAME));
     }
 
     @Test(dependsOnMethods = "testDisableProject")
     public void testEnableProject() {
-        clickProjectByName(PIPELINE_NAME);
+        boolean isGreenBuildButtonPresent = new HomePage(getDriver())
+                .openProject(PIPELINE_NAME)
+                .clickEnableButton()
+                .goToDashboard()
+                .isGreenScheduleBuildTrianglePresent(PIPELINE_NAME);
 
-        getWait2().until(ExpectedConditions.elementToBeClickable(By.xpath("//button[@formNoValidate='formNoValidate']"))).click();
-        returnToHomePage();
-
-        WebElement greenBuildButton = getWait2().until(ExpectedConditions.elementToBeClickable(
-                By.xpath("//td[@class='jenkins-table__cell--tight']//a[@tooltip='Schedule a Build for " + PIPELINE_NAME + "']")));
-
-        Assert.assertTrue(greenBuildButton.isEnabled());
+        Assert.assertTrue(
+                isGreenBuildButtonPresent,
+                "Green build button is not displayed for the project");
     }
 
     @Test(dependsOnMethods = "testEnableProject")

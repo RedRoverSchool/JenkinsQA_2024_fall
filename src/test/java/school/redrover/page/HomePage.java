@@ -212,5 +212,22 @@ public class HomePage extends BasePage {
         getDriver().findElement(By.xpath("//button[@data-id='ok']")).click();
 
         return this;
+
+    public boolean isDisableCircleSignPresent(String name) {
+        try {
+            WebElement disableCircleSign = getWait5().until(ExpectedConditions.visibilityOfElementLocated(
+                    By.xpath("//tr[@id='job_%s']//*[@tooltip='Disabled']".formatted(name))));
+
+            return disableCircleSign.isDisplayed();
+
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public boolean isGreenScheduleBuildTrianglePresent(String name) {
+        return !getDriver().findElements(
+                By.xpath("//td[@class='jenkins-table__cell--tight']//a[@tooltip='Schedule a Build for %s']"
+                        .formatted(name))).isEmpty();
     }
 }

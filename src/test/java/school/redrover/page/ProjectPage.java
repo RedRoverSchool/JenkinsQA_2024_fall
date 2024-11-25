@@ -91,4 +91,10 @@ public class ProjectPage extends BasePage {
 
         return new PipelineConfigurePage(getDriver());
     }
+
+    public ProjectPage clickEnableButton() {
+        getWait2().until(ExpectedConditions.elementToBeClickable(By.xpath("//button[@formNoValidate='formNoValidate']"))).click();
+
+        return this;
+    }
 }
