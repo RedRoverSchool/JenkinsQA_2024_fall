@@ -30,7 +30,7 @@ public class FreestyleProject3Test extends BaseTest {
         getDriver().findElement(By.xpath("//li[contains(@class, 'FreeStyleProject')]")).click();
         getDriver().findElement(By.id("ok-button")).click();
 
-        getWait10().until(ExpectedConditions.visibilityOfElementLocated(
+        getWait10().until(ExpectedConditions.elementToBeClickable(
                 By.xpath("//button[@name='Submit']"))).click();
     }
 
@@ -233,7 +233,6 @@ public class FreestyleProject3Test extends BaseTest {
         Assert.assertEquals(extractedText, testCommand);
     }
 
-    @Ignore
     @Test
     public void testCheckSidebarMenuItemsOnProjectStatusPage() {
         final List<String> benchmarkSidebarMenuItems = List.of(
