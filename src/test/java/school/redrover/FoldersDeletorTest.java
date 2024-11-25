@@ -18,7 +18,7 @@ public class FoldersDeletorTest extends BaseTest {
     private void clickOnSave () {
         getDriver().findElement(By.name("Submit")).click();
     }
-    @Ignore
+
     @Test
     public void testViaMainPageChevron () {
         newItemsData(this,"FolderToRemove",
@@ -34,7 +34,9 @@ public class FoldersDeletorTest extends BaseTest {
 
         WebElement chooseAction = getWait10().until(ExpectedConditions.presenceOfElementLocated(
                 By.xpath("//*[@id='job_FolderToRemove']/td[3]/a/button")));
-        actions.moveToElement(chooseAction).click().perform();
+        actions.moveToElement(chooseAction).pause(500).click().perform();
+
+        TestUtils.moveAndClickWithJavaScript(getDriver(), chooseAction);
 
         getWait10().until(ExpectedConditions.elementToBeClickable(
                 By.xpath("/html/body/div[3]/div/div/div/button"))).click();
@@ -60,7 +62,7 @@ public class FoldersDeletorTest extends BaseTest {
                         By.xpath("/html/body/div[2]/div[2]/div[2]/div/p"))).getText(),
                 "This page is where your Jenkins jobs will be displayed. To get started, you can set up distributed builds or start building a software project.");
     }
-    @Ignore
+
     @Test
     public void testViaMyViewChevron () {
         newItemsData(this,"FolderToRemove",
@@ -79,7 +81,9 @@ public class FoldersDeletorTest extends BaseTest {
 
         WebElement chooseAction = getWait10().until(ExpectedConditions.presenceOfElementLocated(
                 By.xpath("//*[@id='job_FolderToRemove']/td[3]/a/button")));
-        actions.moveToElement(chooseAction).click().perform();
+        actions.moveToElement(chooseAction).pause(500).click().perform();
+
+        TestUtils.moveAndClickWithJavaScript(getDriver(), chooseAction);
 
         getWait10().until(ExpectedConditions.elementToBeClickable(
                 By.xpath("/html/body/div[3]/div/div/div/button"))).click();
