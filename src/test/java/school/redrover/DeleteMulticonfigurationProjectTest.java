@@ -7,7 +7,7 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 import school.redrover.page.HomePage;
 import school.redrover.page.CreateNewItemPage;
-import school.redrover.page.ProjectPage;
+import school.redrover.page.MyViewsPage;
 import school.redrover.runner.BaseTest;
 
 public class DeleteMulticonfigurationProjectTest extends BaseTest {
@@ -15,12 +15,11 @@ public class DeleteMulticonfigurationProjectTest extends BaseTest {
     private static final String PROJECT_NAME = "MulticonfigurationProject";
 
     private HomePage createProject(String projectName) {
-        HomePage homePage = new HomePage(getDriver())
+        return new HomePage(getDriver())
                 .clickNewItem()
                 .enterItemName(projectName)
                 .selectProjectTypeAndSave(CreateNewItemPage.ItemType.MULTICONFIGURATION_PROJECT)
                 .goToDashboard();
-        return homePage;
     }
 
     @Test
@@ -47,7 +46,7 @@ public class DeleteMulticonfigurationProjectTest extends BaseTest {
         Assert.assertTrue(deletionPopup.isDisplayed());
     }
 
-    @Test(dependsOnMethods = "testPopupForDeletionOnProjectPage")
+    @Test(dependsOnMethods = "testPopupForDeletionOnMainPage")
     public void testPopupForDeletionOnMyViews() {
         getDriver().findElement(By.xpath("//a[@href='/me/my-views']")).click();
 
@@ -60,7 +59,6 @@ public class DeleteMulticonfigurationProjectTest extends BaseTest {
     }
 
     @Test
-
     public void testDeleteProjectFromProjectPage() {
         createProject(PROJECT_NAME).openProject(PROJECT_NAME);
 
@@ -75,6 +73,7 @@ public class DeleteMulticonfigurationProjectTest extends BaseTest {
 
     }
 
+    @Test
     public void testDeleteViaDropDownMenu() {
         createProject(PROJECT_NAME);
 
@@ -85,8 +84,16 @@ public class DeleteMulticonfigurationProjectTest extends BaseTest {
         getDriver().findElement(By.xpath("//button[@data-id='ok']")).click();
 
         Assert.assertTrue(getDriver().getPageSource().contains("Welcome to Jenkins"));
-
-
     }
 
+    @Test
+    public void testDeleteFromMyViewsPage() {
+        createProject(PROJECT_NAME);
+
+        getDriver().findElement(By.xpath("//a[@href='/me/my-views']")).click();
+
+        new MyViewsPage(getDriver()).deleteAnyJobViaChevron(PROJECT_NAME);
+
+        Assert.assertTrue(getDriver().getPageSource().contains("This folder is empty"));
+    }
 }
