@@ -49,7 +49,6 @@ public class FolderTest extends BaseTest {
 
         Assert.assertEquals(configurationName, FIRST_FOLDER_NAME);
         Assert.assertEquals(new ProjectPage(getDriver()).getFolderName(), "F");
-
     }
 
     @Test
@@ -112,6 +111,50 @@ public class FolderTest extends BaseTest {
                 .getBuildName();
 
         Assert.assertEquals(buildHistoryName, "%s » %s".formatted(FIRST_FOLDER_NAME, FREESTYLE_PROJECT_NAME));
-
     }
+
+    @Test
+    public void testErrorDuringCreationWithDotInEnd() {
+        String errorMessage = new HomePage(getDriver())
+                .clickNewItem()
+                .enterItemName("Folder.")
+                .selectProjectType(CreateNewItemPage.ItemType.FOLDER)
+                .getInvalidNameMessage();
+
+        Assert.assertEquals(errorMessage, "» A name cannot end with ‘.’");
+    }
+
+    @Test
+    public void testErrorAfterCreationWithDotInEnd() {
+        String errorMessage = new HomePage(getDriver())
+                .clickNewItem()
+                .enterItemName("Folder.")
+                .selectProjectType(CreateNewItemPage.ItemType.FOLDER)
+                .selectProjectType(CreateNewItemPage.ItemType.FOLDER)
+                .saveInvalidData()
+                .getErrorMessage();
+
+        Assert.assertEquals(errorMessage, "A name cannot end with ‘.’");
+    }
+
+    @Test
+    public void testErrorEmptyNameCreation() {
+        String errorMessage = new HomePage(getDriver())
+                .clickNewItem()
+                .selectProjectType(CreateNewItemPage.ItemType.FOLDER)
+                .getEmptyNameMessage();
+
+        Assert.assertEquals(errorMessage, "» This field cannot be empty, please enter a valid name");
+    }
+
+    @Test(dependsOnMethods = "testOpenBuildHistoryByChevron")
+    public void testErrorDuplicateNameCreation() {
+        String errorMessage = new HomePage(getDriver())
+                .clickNewItem().enterItemName(FIRST_FOLDER_NAME)
+                .getInvalidNameMessage();
+
+        Assert.assertEquals(errorMessage, "» A job already exists with the name ‘Freestyle projects’");
+    }
+
+
 }
