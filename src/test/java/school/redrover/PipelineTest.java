@@ -252,6 +252,21 @@ public class PipelineTest extends BaseTest {
         }
 
     }
+
+    @Test
+    public void testPipelineDisabledTooltipOnHomePage() {
+        String tooltipValue = new HomePage(getDriver())
+                                  .clickNewItem()
+                                  .enterItemName(PROJECT_NAME)
+                                  .selectPipelineAndClickOk()
+                                  .clickToggleToDisableOrEnableProject()
+                                  .clickSaveButton()
+                                  .returnToHomePage()
+                                  .getTooltipValue(PROJECT_NAME);
+
+        Assert.assertEquals(tooltipValue, "Disabled");
+    }
+
     private List<String> createSeveralProjects(int numOfProjects, String name, ProjectType projectType) {
         List<String> projectNameList = new ArrayList<>();
         for (int i = 1; i <= numOfProjects; i++) {
