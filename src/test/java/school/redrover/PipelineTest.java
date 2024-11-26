@@ -68,7 +68,7 @@ public class PipelineTest extends BaseTest {
         new HomePage(getDriver())
                 .clickNewItem()
                 .nameAndSelectItemType(nonUniqueProjectName, CreateNewItemPage.ItemType.PIPELINE)
-                        .saveConfigurations()
+                .saveConfigurations()
                 .goToDashboard()
                 .clickNewItem()
                 .enterItemName(nonUniqueProjectName);
