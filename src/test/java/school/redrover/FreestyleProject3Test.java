@@ -71,6 +71,11 @@ public class FreestyleProject3Test extends BaseTest {
         getDriver().findElement(By.xpath("//button[@name='Submit']")).click();
     }
 
+    private void clickWorkspaceSidebarMenu() {
+        getWait5().until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//span[text()='Workspace']/.."))).click();
+    }
+
     @Test
     public void testCreateProjectViaCreateJobButton() {
         getDriver().findElement(By.xpath("//a[@href='newJob']")).click();
@@ -255,7 +260,7 @@ public class FreestyleProject3Test extends BaseTest {
 
         createProjectViaSidebarMenu(PROJECT_NAME);
 
-        getWait2().until(ExpectedConditions.visibilityOfElementLocated(
+        getWait5().until(ExpectedConditions.visibilityOfElementLocated(
                 By.xpath("//a[@data-build-success='Build scheduled']"))).click();
 
         clickOnSuccessBuildIcon();
@@ -401,5 +406,28 @@ public class FreestyleProject3Test extends BaseTest {
         Assert.assertFalse(
                 getDriver().findElements(By.xpath("//tbody//a[contains(@href, 'job')]//span")).stream()
                         .allMatch(w -> w.getText().equals(PROJECT_NAME) && w.getText().length() == PROJECT_NAME.length()));
+    }
+
+    @Test
+    public void testDeleteWorkspace() {
+        String expectedText = "Error: no workspace";
+        createProjectViaSidebarMenu(PROJECT_NAME);
+
+        getWait5().until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//a[@data-build-success='Build scheduled']"))).click();
+
+        getWait10().until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//a[@tooltip='Success > Console Output']")));
+
+        clickWorkspaceSidebarMenu();
+
+        getWait10().until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//a[@data-title='Wipe Out Current Workspace']"))).click();
+
+        getWait10().until(ExpectedConditions.elementToBeClickable(By.xpath("//button[@data-id='ok']"))).click();
+
+        clickWorkspaceSidebarMenu();
+
+        Assert.assertEquals(getDriver().findElement(By.tagName("h1")).getText(), expectedText);
     }
 }
