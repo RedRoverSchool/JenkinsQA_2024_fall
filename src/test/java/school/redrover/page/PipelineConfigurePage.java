@@ -44,7 +44,7 @@ public class PipelineConfigurePage extends BasePage {
         return labelToTooltipTextMap;
     }
 
-    public PipelineConfigurePage clickToggleToDisableProject() {
+    public PipelineConfigurePage clickToggleToDisableOrEnableProject() {
         getWait5().until(ExpectedConditions.elementToBeClickable(
                 By.xpath("//label[@data-title='Disabled']"))).click();
 
