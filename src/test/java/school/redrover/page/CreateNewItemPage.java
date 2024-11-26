@@ -83,7 +83,6 @@ public class CreateNewItemPage extends BasePage {
 
         return new ErrorPage(getDriver());
     }
-}
 
     public CreateNewItemPage selectPipeline() {
         getWait10().until(ExpectedConditions.elementToBeClickable(
