@@ -7,6 +7,8 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.Assert;
 import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
+import school.redrover.page.CreateNewItemPage;
+import school.redrover.page.HomePage;
 import school.redrover.runner.BaseTest;
 import school.redrover.runner.TestUtils;
 
@@ -20,12 +22,15 @@ public class PipelineTest extends BaseTest {
 
     @Test
     public void testCreate() {
-        createNewProjectAndGoMainPageByLogo(PROJECT_NAME + 1, ProjectType.Pipeline);
+        String projectName = PROJECT_NAME + "New";
+        String actualProjectName = new HomePage(getDriver())
+                .clickNewItem()
+                .nameAndSelectItemType(projectName, CreateNewItemPage.ItemType.PIPELINE)
+                .saveConfigurations()
+                .goToDashboard()
+                .getItemName();
 
-        String actualJobName = getDriver().findElement(By.xpath(
-                "//table[@id='projectstatus']/tbody/tr/td/a/span")).getText();
-
-        Assert.assertEquals(actualJobName, PROJECT_NAME + 1);
+        Assert.assertEquals(actualProjectName, projectName);
     }
 
     @Test

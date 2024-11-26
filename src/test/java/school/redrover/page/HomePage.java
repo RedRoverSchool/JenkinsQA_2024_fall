@@ -8,6 +8,7 @@ import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import school.redrover.page.base.BasePage;
 import school.redrover.runner.TestUtils;
+
 import java.util.List;
 
 public class HomePage extends BasePage {
@@ -67,7 +68,7 @@ public class HomePage extends BasePage {
                 .perform();
 
         TestUtils.moveAndClickWithJavaScript(getDriver(),
-                getDriver().findElement(By.xpath("//button[@data-href='http://localhost:8080/job/" + name + "/']")) );
+                getDriver().findElement(By.xpath("//button[@data-href='http://localhost:8080/job/" + name + "/']")));
 
         WebElement deleteButton = getWait5().until(ExpectedConditions.presenceOfElementLocated(
                 By.xpath("//button[contains(@href, 'doDelete')]")));
@@ -113,7 +114,7 @@ public class HomePage extends BasePage {
                 .getText();
     }
 
-    public void selectMenuFromItemDropdown (String itemName, String menuName) {
+    public void selectMenuFromItemDropdown(String itemName, String menuName) {
         new Actions(getDriver()).moveToElement(getDriver().findElement(By.xpath("//td/a/span[text() = '%s']/.."
                 .formatted(itemName)))).perform();
         TestUtils.moveAndClickWithJavaScript(getDriver(), getDriver().findElement(
@@ -139,7 +140,7 @@ public class HomePage extends BasePage {
     public BuildHistoryPage selectBuildHistoryFromItemMenu(String itemName) {
         selectMenuFromItemDropdown(itemName, "Build History");
 
-        return new  BuildHistoryPage(getDriver());
+        return new BuildHistoryPage(getDriver());
     }
 
     public HomePage openDropdownViaChevron(String projectName) {
@@ -230,6 +231,15 @@ public class HomePage extends BasePage {
         return !getDriver().findElements(
                 By.xpath("//td[@class='jenkins-table__cell--tight']//a[@tooltip='Schedule a Build for %s']"
                         .formatted(name))).isEmpty();
+    }
+
+    public HomePage clickScheduleBuild(String name) {
+        getWait10().until(ExpectedConditions.elementToBeClickable(
+                By.xpath("//td[@class='jenkins-table__cell--tight']//a[@tooltip='Schedule a Build for " + name + "']"))).click();
+        getWait10().until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@class='tippy-content']")));
+        getWait10().until(ExpectedConditions.invisibilityOfElementLocated(By.xpath("//div[@class='tippy-content']")));
+
+        return this;
     }
 
     public HomePage scheduleBuild(String projectName) {
