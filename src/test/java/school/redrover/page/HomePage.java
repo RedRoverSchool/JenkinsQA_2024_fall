@@ -231,4 +231,13 @@ public class HomePage extends BasePage {
                 By.xpath("//td[@class='jenkins-table__cell--tight']//a[@tooltip='Schedule a Build for %s']"
                         .formatted(name))).isEmpty();
     }
+
+    public HomePage scheduleBuild(String projectName) {
+        getDriver().findElement(By.xpath("//a[@title = 'Schedule a Build for %s']".formatted(projectName))).click();
+        return this;
+    }
+
+    public void openBuildHistoryPage() {
+        getDriver().findElement(By.xpath("//a[@href = '/view/all/builds']")).click();
+    }
 }
