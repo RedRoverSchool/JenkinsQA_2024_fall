@@ -275,8 +275,8 @@ public class PipelineTest extends BaseTest {
     }
 
     private String getErrorMessage() {
-        return getDriver().findElement(
-                By.xpath("//div[@class='add-item-name']/div[@class='input-validation-message']")).getText();
+        return getWait5().until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//div[@class='add-item-name']/div[@class='input-validation-message']"))).getText();
     }
 
     private void createNewProjectWithDescriptionAndGoHomePageByLogo(String name, ProjectType projectType, String description) {

@@ -2,6 +2,7 @@ package school.redrover.page;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import school.redrover.page.base.BasePage;
 
 public class CreateNewItemPage extends BasePage {
@@ -61,5 +62,10 @@ public class CreateNewItemPage extends BasePage {
         getDriver().findElement(By.xpath("//button[@type='submit']")).click();
 
         return new PipelineConfigurePage(getDriver());
+    }
+
+    public String getErrorMessage() {
+        return getWait5().until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//div[@class='add-item-name']/div[@class='input-validation-message']"))).getText();
     }
 }
