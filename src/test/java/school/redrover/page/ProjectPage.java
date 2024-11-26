@@ -3,6 +3,7 @@ package school.redrover.page;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import school.redrover.page.base.BasePage;
 
@@ -96,5 +97,47 @@ public class ProjectPage extends BasePage {
         getWait2().until(ExpectedConditions.elementToBeClickable(By.xpath("//button[@formNoValidate='formNoValidate']"))).click();
 
         return this;
+    }
+
+    public ProjectPage hoverOverBuildStatusMark() {
+        new Actions(getDriver())
+                .moveToElement(getWait10().until(ExpectedConditions.visibilityOfElementLocated(
+                        By.xpath("//*[local-name()='svg' and @tooltip]"))))
+                .perform();
+
+        return this;
+    }
+
+    public String getStatusMarkTooltipText() {
+        return getWait10().until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//div[@class='tippy-content']"))).getText();
+    }
+
+    public List<String> getPermalinkList() {
+        return getWait10().until(ExpectedConditions.visibilityOfAllElementsLocatedBy(
+                        By.xpath("//li[@class='permalink-item']")))
+                .stream()
+                .map(WebElement::getText)
+                .map(string -> string.split("\\(#")[0].trim())
+                .toList();
+    }
+
+    public PipelineBuildPage clickBuildStatusMark() {
+        getWait10().until(ExpectedConditions.elementToBeClickable(By.xpath("//*[@title='Success']"))).click();
+
+        return new PipelineBuildPage(getDriver());
+    }
+
+    public PipelineRenamePage clickRenameSidebar(String name) {
+        getDriver().findElement(By.xpath("//a[@href='/job/%s/confirm-rename']".formatted(name))).click();
+
+        return new PipelineRenamePage(getDriver());
+    }
+
+    public HomePage clickDeletePipelineSidebarAndConfirmDeletion() {
+        getDriver().findElement(By.xpath("//a[@data-title='Delete Pipeline']")).click();
+        getDriver().findElement(By.xpath("//button[@data-id='ok']")).click();
+
+        return new HomePage(getDriver());
     }
 }

@@ -12,7 +12,7 @@ import school.redrover.runner.BaseTest;
 
 public class AddJenkinsPipelineTest extends BaseTest {
 
-    @Ignore
+
     @Test
     public void testCreateMultiConfigProject() {
          getDriver().findElement(By.linkText("New Item")).click();
@@ -28,7 +28,7 @@ public class AddJenkinsPipelineTest extends BaseTest {
          WebElement inputElement = getDriver().findElement(By.name("_.projectUrlStr"));
          Actions actions = new Actions(getDriver());
          actions.moveToElement(inputElement).click().perform();
-         inputElement.sendKeys("https://github.com/dema28/DenisNovicov.git");
+         inputElement.sendKeys("https://github.com/dema28/DenisNovicov/");
 
          JavascriptExecutor js = (JavascriptExecutor) getDriver();
          js.executeScript("window.scrollBy(0, 1000);");
