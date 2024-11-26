@@ -16,9 +16,9 @@ public class DeleteFreestyleProjectTest extends BaseTest {
     public void testDeleteFirstProject() {
         final String firstProject = "First";
         final String secondProject = "Second";
-
-        new HomePage(getDriver()).createFreestyleProject(firstProject);
-        new HomePage(getDriver()).createFreestyleProject(secondProject);
+//
+//        new HomePage(getDriver()).createFreestyleProject(firstProject);
+//        new HomePage(getDriver()).createFreestyleProject(secondProject);
 
         new HomePage(getDriver()).openDropdownViaChevron(firstProject);
         getDriver().findElement(By.xpath("//button[normalize-space()='Delete Project']")).click();

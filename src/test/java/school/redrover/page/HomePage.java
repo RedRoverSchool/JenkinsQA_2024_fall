@@ -5,6 +5,7 @@ import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import school.redrover.page.base.BasePage;
 import school.redrover.runner.TestUtils;
@@ -17,15 +18,26 @@ public class HomePage extends BasePage {
         super(driver);
     }
 
-    public void createFreestyleProject(String name) {
-        getDriver().findElement(By.xpath("//*[@href='/view/all/newJob']")).click();
-        getDriver().findElement(By.className("hudson_model_FreeStyleProject")).click();
-        getDriver().findElement(By.name("name")).sendKeys(name);
-        getDriver().findElement(By.id("ok-button")).click();
-        getDriver().findElement(By.name("Submit")).click();
+    WebDriver driver;
 
-        getDriver().findElement(By.id("jenkins-name-icon")).click();
+    By clickGetPage = By.xpath("//a[@href='/view/all/newJob']");
+
+    public CreateNewItemPage goToPage() {
+        getDriver().findElement(clickGetPage).click();
+
+        return new CreateNewItemPage(getDriver());
+
     }
+
+//    public void createFreestyleProject(String name) {
+////        getDriver().findElement(By.xpath("//*[@href='/view/all/newJob']")).click();
+//        getDriver().findElement(By.className("hudson_model_FreeStyleProject")).click();
+//        getDriver().findElement(By.name("name")).sendKeys(name);
+//        getDriver().findElement(By.id("ok-button")).click();
+//        getDriver().findElement(By.name("Submit")).click();
+//
+//        getDriver().findElement(By.id("jenkins-name-icon")).click();
+//    }
 
     public HomePage createNewFolder(String name) {
 

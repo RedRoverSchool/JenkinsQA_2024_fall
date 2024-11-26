@@ -4,6 +4,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import school.redrover.page.base.BasePage;
 import school.redrover.runner.TestUtils;
@@ -14,6 +15,32 @@ public class ConfigurationPage extends BasePage {
     public ConfigurationPage(WebDriver driver) {
         super(driver);
     }
+
+    @FindBy(name = "Submit")
+    WebElement submit;
+
+
+
+    public ProjectPage submitButton() {
+        getDriver().findElement(By.name("Submit")).click();
+
+        return new ProjectPage(getDriver());
+    }
+
+
+
+    public void createFreestyleProject(String name) {
+//        getDriver().findElement(By.className("hudson_model_FreeStyleProject")).click();
+//        getDriver().findElement(By.name("name")).sendKeys(name);
+//        getDriver().findElement(By.id("ok-button")).click();
+//        getDriver().findElement(By.name("Submit")).click();
+
+        getDriver().findElement(By.id("jenkins-name-icon")).click();
+    }
+
+
+
+
 
     public HomePage goToDashboard() {
         getDriver().findElement(By.xpath("//a[contains(text(),'Dashboard')]")).click();

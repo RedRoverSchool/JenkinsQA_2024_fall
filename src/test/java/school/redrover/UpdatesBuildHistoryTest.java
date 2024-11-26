@@ -17,7 +17,7 @@ public class UpdatesBuildHistoryTest extends BaseTest {
 
     @Test
     public void testBuildHistoryIsEmpty() {
-        new HomePage(getDriver()).createFreestyleProject(PROJECT_NAME);
+//        new HomePage(getDriver()).createFreestyleProject(PROJECT_NAME);
         new HomePage(getDriver()).openBuildHistoryPage();
 
         List<WebElement> elementList = getDriver().findElements(By.xpath("//td/a/span"));

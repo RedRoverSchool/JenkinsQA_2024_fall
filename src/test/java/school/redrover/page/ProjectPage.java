@@ -4,6 +4,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import school.redrover.page.base.BasePage;
 
@@ -14,6 +15,20 @@ public class ProjectPage extends BasePage {
 
     public ProjectPage(WebDriver driver) {
         super(driver);
+    }
+
+
+    @FindBy(id = "jenkins-name-icon")
+    WebElement getHomePageIcon;
+
+
+
+    public HomePage goToHome() {
+        getDriver().findElement(By.id("jenkins-name-icon")).click();
+
+        return new HomePage(getDriver());
+
+
     }
 
     public ProjectPage editDescription(String text) {

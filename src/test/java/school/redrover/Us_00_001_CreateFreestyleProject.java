@@ -15,7 +15,7 @@ public class Us_00_001_CreateFreestyleProject extends BaseTest {
     public void createFromTheLeftSidebarMenu(){
         final String generatedName = generateRandomString(7);
 
-        new HomePage(getDriver()).createFreestyleProject(generatedName);
+//        new HomePage(getDriver()).createFreestyleProject(generatedName);
 
         List<String>namesOfJobsPresentedInJenkins =
                 getDriver().findElements(By.xpath("//div[@id='main-panel']//tbody//tr//td//a//span"))

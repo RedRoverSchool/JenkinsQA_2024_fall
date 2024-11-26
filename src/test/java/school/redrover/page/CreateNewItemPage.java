@@ -2,6 +2,8 @@ package school.redrover.page;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
 import school.redrover.page.base.BasePage;
 
 public class CreateNewItemPage extends BasePage {
@@ -28,6 +30,40 @@ public class CreateNewItemPage extends BasePage {
             return itemName;
         }
     }
+
+    By by = By.className("hudson_model_FreeStyleProject");
+    WebElement getFreestyleProject;
+
+
+    //    @FindBy(by.className= "hudson_model_FreeStyleProject")
+//    WebElement getFreestyleProject;
+
+//    @FindBy(name = "name")
+//    WebElement name;
+
+    @FindBy(id = "ok-button")
+    WebElement getOkButton;
+
+    public CreateNewItemPage clickFreeStyle() {
+        getDriver().findElement(By.className("hudson_model_FreeStyleProject")).click();
+
+        return this;//остаться на странице
+    }
+
+    public CreateNewItemPage sendName(String firstName) {
+        getDriver().findElement(By.name("name")).sendKeys(firstName);
+
+        return this;
+    }
+
+    public ConfigurationPage clickOkButton() {
+        getDriver().findElement(By.id("ok-button")).click();
+
+        return new ConfigurationPage(getDriver());
+
+
+    }
+
 
     public CreateNewItemPage enterItemName(String name) {
         getDriver().findElement(By.id("name")).sendKeys(name);
