@@ -65,15 +65,14 @@ public class PipelineTest extends BaseTest {
     public void testCreateWithNotUniqueName() {
         final String nonUniqueProjectName = PROJECT_NAME + "Unique";
 
-        new HomePage(getDriver())
+        String actualErrorMessage = new HomePage(getDriver())
                 .clickNewItem()
                 .nameAndSelectItemType(nonUniqueProjectName, CreateNewItemPage.ItemType.PIPELINE)
                 .saveConfigurations()
                 .goToDashboard()
                 .clickNewItem()
-                .enterItemName(nonUniqueProjectName);
-
-        String actualErrorMessage = getErrorMessage();
+                .enterItemName(nonUniqueProjectName)
+                .getErrorMessage();
 
         Assert.assertEquals(actualErrorMessage, "» A job already exists with the name ‘%s’".formatted(nonUniqueProjectName));
     }
