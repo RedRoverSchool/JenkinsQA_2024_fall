@@ -3,6 +3,7 @@ package school.redrover;
 import org.openqa.selenium.By;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.Assert;
+import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import school.redrover.runner.BaseTest;
 import school.redrover.runner.TestUtils;
@@ -30,17 +31,18 @@ public class AddDescriptionToNewFreestyleProjectTest extends BaseTest {
         Assert.assertEquals(getDescription(), "It's a simple test project");
     }
 
-    @Test
-    public void testAddDescriptionToExisting () {
-        newItemsData(this,"FreeStyleProjectTest",
-                "//*[@id='j-add-item-type-standalone-projects']/ul/li[1]/div[2]/label");
-        clickOnSave();
 
+    @Test (dependsOnMethods = "testAddDescription")
+    public void testAddDescriptionToExisting () {
         getWait10().until(ExpectedConditions.elementToBeClickable(By.id("description-link"))).click();
+
+        getWait10().until(ExpectedConditions.visibilityOfElementLocated(
+                By.name("description"))).clear();
         getWait10().until(ExpectedConditions.visibilityOfElementLocated(
                 By.name("description"))).sendKeys("It's a description for an existing project");
         clickOnSave();
 
-        Assert.assertEquals(getDescription(), "It's a description for an existing project");
+        Assert.assertEquals(getDescription(), "It's a description for an existing project\n" +
+                "Edit description");
     }
 }

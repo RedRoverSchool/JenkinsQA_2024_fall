@@ -92,6 +92,44 @@ public class PipelineTest extends BaseTest {
     }
 
     @Test
+    public void testRenameByChevronDashboard() {
+        final String projectName = "PipelineRenameByChevron";
+        final String projectNameNew = "PipelineRenameByChevronNew";
+        createNewProjectAndGoMainPageByLogo(projectName, ProjectType.Pipeline);
+
+        findProjectOnDashboardByName(projectName);
+
+        WebElement buttonChevron = getWait10().until(TestUtils.ExpectedConditions.elementIsNotMoving(
+                By.xpath("//a[@href ='job/%s/']/button[@class='jenkins-menu-dropdown-chevron']"
+                        .formatted(projectName))));
+
+        TestUtils.moveAndClickWithJavaScript(getDriver(), buttonChevron);
+
+        getWait10().until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//a[@href = '/job/%s/confirm-rename']".formatted(projectName)))).click();
+
+        WebElement inputName = getDriver().findElement(By.xpath("//input[@checkdependson='newName']"));
+        inputName.clear();
+        inputName.sendKeys(projectNameNew);
+
+        getDriver().findElement(By.xpath("//button[@name='Submit']")).click();
+
+        String verifyBreadcrumb = getDriver().findElement(
+                By.xpath("//ol[@id='breadcrumbs']/li[@class='jenkins-breadcrumbs__list-item'][2]")).getText();
+
+        String currentUrl = getDriver().getCurrentUrl();
+
+        String nameFromUrl = currentUrl.substring(projectNameNew.length(), currentUrl.length() - 1);
+
+        Assert.assertEquals(getWait5().until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//div[@class='jenkins-app-bar']//h1"))).getText(),
+                projectNameNew);
+        Assert.assertEquals(verifyBreadcrumb, projectNameNew);
+        Assert.assertEquals(nameFromUrl, projectNameNew);
+
+    }
+
+    @Test
     public void testAddDescription() {
         final String name = PROJECT_NAME + "AndDesc";
         final String desc = "Add description for new project 45";
