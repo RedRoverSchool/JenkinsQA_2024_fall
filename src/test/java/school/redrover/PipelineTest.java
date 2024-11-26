@@ -29,6 +29,20 @@ public class PipelineTest extends BaseTest {
     }
 
     @Test
+    public void testCreateWithDescription() {
+        final String desc = "The leading open source automation server, Jenkins provides hundreds of plugins to support building, deploying and automating any project.";
+        final String name = PROJECT_NAME + "AndDescription";
+        createNewProjectWithDescriptionAndGoHomePageByLogo(name, ProjectType.Pipeline, desc);
+
+        getDriver().findElement(By.xpath("//td/a/span[text()='%s']/..".formatted(name))).click();
+        getDriver().findElement(By.xpath("//div[@id='description']/div")).getText();
+
+        Assert.assertEquals(getDriver().findElement(
+                        By.xpath("//div[@id='description']/div")).getText(),
+                desc);
+    }
+
+    @Test
     public void testCreateWithEmptyName() {
 
         getDriver().findElement(By.xpath("//a[@href ='newJob']")).click();
@@ -42,17 +56,35 @@ public class PipelineTest extends BaseTest {
     }
 
     @Test
-    public void testCreateWithDescription() {
-        final String desc = "The leading open source automation server, Jenkins provides hundreds of plugins to support building, deploying and automating any project.";
-        final String name = PROJECT_NAME + "AndDescription";
-        createNewProjectWithDescriptionAndGoHomePageByLogo(name, ProjectType.Pipeline, desc);
+    public void testCreateWithNotUniqueName() {
+        String nonUniqueProjectName = PROJECT_NAME + "Unique";
 
-        getDriver().findElement(By.xpath("//td/a/span[text()='%s']/..".formatted(name))).click();
-        getDriver().findElement(By.xpath("//div[@id='description']/div")).getText();
+        createNewProjectAndGoMainPageByLogo(nonUniqueProjectName, ProjectType.Pipeline);
 
-        Assert.assertEquals(getDriver().findElement(
-                By.xpath("//div[@id='description']/div")).getText(),
-                desc);
+        getDriver().findElement(By.xpath("//a[contains(@href, 'newJob')]")).click();
+
+        getDriver().findElement(By.id("name")).sendKeys(nonUniqueProjectName);
+
+        String actualErrorMessage = getWait5().until(ExpectedConditions.visibilityOfElementLocated(
+                By.id("itemname-invalid"))).getText();
+
+        Assert.assertEquals(actualErrorMessage, "» A job already exists with the name ‘%s’".formatted(nonUniqueProjectName));
+    }
+
+    @Test
+    public void testCreateSeveralProjects() {
+        int numOfProjects = 6;
+        List<String> expectedNameList = createSeveralProjects(numOfProjects, "PR", ProjectType.Pipeline);
+
+        List<WebElement> projectList = getDriver().findElements(By.xpath("//table[@id='projectstatus']/tbody/tr/td[3]"));
+        List<String> nameList = projectList.stream().map(WebElement::getText).toList();
+
+        Assert.assertEquals(nameList.size(), numOfProjects);
+
+        for (int i = 0; i < numOfProjects; i++) {
+            Assert.assertEquals(nameList.get(i),expectedNameList.get(i));
+            System.out.println(nameList.get(i) + " ---> " + expectedNameList.get(i));
+        }
     }
 
     @Test(dependsOnMethods = "testCreateWithDescription")
@@ -215,38 +247,6 @@ public class PipelineTest extends BaseTest {
         Assert.assertEquals(actualMessage, "Welcome to Jenkins!");
     }
 
-    @Test
-    public void testCreateWithNotUniqueName() {
-        String nonUniqueProjectName = PROJECT_NAME + "Unique";
-
-        createNewProjectAndGoMainPageByLogo(nonUniqueProjectName, ProjectType.Pipeline);
-
-        getDriver().findElement(By.xpath("//a[contains(@href, 'newJob')]")).click();
-
-        getDriver().findElement(By.id("name")).sendKeys(nonUniqueProjectName);
-
-        String actualErrorMessage = getWait5().until(ExpectedConditions.visibilityOfElementLocated(
-                By.id("itemname-invalid"))).getText();
-
-        Assert.assertEquals(actualErrorMessage, "» A job already exists with the name ‘%s’".formatted(nonUniqueProjectName));
-    }
-
-    @Test
-    public void testCreateSeveralProjects() {
-        int numOfProjects = 6;
-        List<String> expectedNameList = createSeveralProjects(numOfProjects, "PR", ProjectType.Pipeline);
-
-        List<WebElement> projectList = getDriver().findElements(By.xpath("//table[@id='projectstatus']/tbody/tr/td[3]"));
-        List<String> nameList = projectList.stream().map(WebElement::getText).toList();
-
-        Assert.assertEquals(nameList.size(), numOfProjects);
-
-        for (int i = 0; i < numOfProjects; i++) {
-            Assert.assertEquals(nameList.get(i),expectedNameList.get(i));
-            System.out.println(nameList.get(i) + " ---> " + expectedNameList.get(i));
-        }
-
-    }
     private List<String> createSeveralProjects(int numOfProjects, String name, ProjectType projectType) {
         List<String> projectNameList = new ArrayList<>();
         for (int i = 1; i <= numOfProjects; i++) {
