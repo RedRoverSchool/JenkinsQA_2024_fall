@@ -13,23 +13,12 @@ import school.redrover.runner.TestUtils;
 import java.util.List;
 
 public class UpdatesBuildHistoryTest extends BaseTest {
-
-    private void openBuildHistoryPage() {
-        getDriver().findElement(By.xpath("//a[@href = '/view/all/builds']")).click();
-    }
-
-    private void scheduleBuild() {
-        getDriver().findElement(By.xpath("//td[@class = 'jenkins-table__cell--tight']")).click();
-    }
+    private final String PROJECT_NAME = "TestName";
 
     @Test
     public void testBuildHistoryIsEmpty() {
-        final String projectName = "TestName";
-
-        new HomePage(getDriver())
-                .createFreestyleProject(projectName);
-
-        openBuildHistoryPage();
+        new HomePage(getDriver()).createFreestyleProject(PROJECT_NAME);
+        new HomePage(getDriver()).openBuildHistoryPage();
 
         List<WebElement> elementList = getDriver().findElements(By.xpath("//td/a/span"));
         List<String> historyList = elementList.stream().map(WebElement::getText).toList();
@@ -39,8 +28,9 @@ public class UpdatesBuildHistoryTest extends BaseTest {
 
     @Test(dependsOnMethods = "testBuildHistoryIsEmpty")
     public void testUpdateAfterExecutingBuild() {
-        scheduleBuild();
-        openBuildHistoryPage();
+        new HomePage(getDriver())
+                .scheduleBuild(PROJECT_NAME)
+                .openBuildHistoryPage();
 
         List<WebElement> elementList = getDriver().findElements(By.xpath("//*[@id='projectStatus']/tbody/tr/td[4]"));
         List<String> historyList = elementList.stream().map(WebElement::getText).toList();
@@ -50,10 +40,8 @@ public class UpdatesBuildHistoryTest extends BaseTest {
 
     @Test(dependsOnMethods = "testUpdateAfterExecutingBuild")
     public void testUpdateAfterChangingConfig() {
-         new HomePage(getDriver())
-                .openDropdownViaChevron("TestName");
+        new HomePage(getDriver()).selectConfigureFromItemMenu(PROJECT_NAME);
 
-        getDriver().findElement(By.xpath("//a[normalize-space()='Configure']")).click();
         TestUtils.scrollToBottom(getDriver());
         getDriver().findElement(By.xpath("//button[normalize-space()='Add build step']")).click();
         getWait2().until(ExpectedConditions.
@@ -61,14 +49,9 @@ public class UpdatesBuildHistoryTest extends BaseTest {
         getDriver().findElement(By.xpath("//button[contains(@name,'Submit')]")).click();
 
         new ProjectPage(getDriver())
-                .goToDashboard();
-
-        scheduleBuild();
-
-        new ProjectPage(getDriver())
-                .goToDashboard();
-
-        openBuildHistoryPage();
+                .goToDashboard()
+                .scheduleBuild(PROJECT_NAME)
+                .openBuildHistoryPage();
 
         List<WebElement> elementList = getDriver().findElements(By.xpath("//*[@id='projectStatus']/tbody/tr/td[4]"));
         List<String> historyList = elementList.stream().map(WebElement::getText).toList();
