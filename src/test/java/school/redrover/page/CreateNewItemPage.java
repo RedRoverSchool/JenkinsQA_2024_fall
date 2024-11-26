@@ -11,9 +11,12 @@ public class CreateNewItemPage extends BasePage {
     }
 
     public enum ItemType {
+        PIPELINE("Pipeline"),
         FOLDER("Folder"),
         FREESTYLE_PROJECT("Freestyle project"),
-        MULTICONFIGURATION_PROJECT("Multi-configuration project");
+        MULTICONFIGURATION_PROJECT("Multi-configuration project"),
+        MULTIBRANCH_PIPELINE("Multibranch Pipeline"),
+        ORGANIZATION_FOLDER("Organization Folder");
 
         private final String itemName;
 
@@ -53,5 +56,10 @@ public class CreateNewItemPage extends BasePage {
         return new MultibranchPipelineConfigPage(getDriver());
     }
 
+    public PipelineConfigurePage selectPipelineAndClickOk() {
+        getDriver().findElement(By.xpath("//li[@class='org_jenkinsci_plugins_workflow_job_WorkflowJob']")).click();
+        getDriver().findElement(By.xpath("//button[@type='submit']")).click();
 
+        return new PipelineConfigurePage(getDriver());
+    }
 }

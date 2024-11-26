@@ -30,7 +30,7 @@ public class FreestyleProject3Test extends BaseTest {
         getDriver().findElement(By.xpath("//li[contains(@class, 'FreeStyleProject')]")).click();
         getDriver().findElement(By.id("ok-button")).click();
 
-        getWait10().until(ExpectedConditions.visibilityOfElementLocated(
+        getWait10().until(ExpectedConditions.elementToBeClickable(
                 By.xpath("//button[@name='Submit']"))).click();
     }
 
@@ -41,7 +41,7 @@ public class FreestyleProject3Test extends BaseTest {
     }
 
     private void verifyYouAreOnProjectStatusPage() {
-        getWait5().until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//h2[text()='Permalinks']")));
+        getWait10().until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//h2[text()='Permalinks']")));
     }
 
     private void clickConfigureInSidebarMenuOnProjectStatusPage() {
@@ -71,7 +71,6 @@ public class FreestyleProject3Test extends BaseTest {
         getDriver().findElement(By.xpath("//button[@name='Submit']")).click();
     }
 
-    @Ignore
     @Test
     public void testCreateProjectViaCreateJobButton() {
         getDriver().findElement(By.xpath("//a[@href='newJob']")).click();
@@ -80,7 +79,7 @@ public class FreestyleProject3Test extends BaseTest {
         getDriver().findElement(By.xpath("//li[contains(@class, 'FreeStyleProject')]")).click();
         getDriver().findElement(By.id("ok-button")).click();
 
-        getWait5().until(ExpectedConditions.elementToBeClickable(By.xpath("//button[@name='Submit']")))
+        getWait10().until(ExpectedConditions.elementToBeClickable(By.xpath("//button[@name='Submit']")))
                 .click();
 
         verifyYouAreOnProjectStatusPage();
@@ -233,7 +232,6 @@ public class FreestyleProject3Test extends BaseTest {
         Assert.assertEquals(extractedText, testCommand);
     }
 
-    @Ignore
     @Test
     public void testCheckSidebarMenuItemsOnProjectStatusPage() {
         final List<String> benchmarkSidebarMenuItems = List.of(
@@ -348,7 +346,7 @@ public class FreestyleProject3Test extends BaseTest {
     public void testDeleteLastBuild() {
         createProjectViaSidebarMenu(PROJECT_NAME);
 
-        getWait2().until(ExpectedConditions.visibilityOfElementLocated(
+        getWait10().until(ExpectedConditions.visibilityOfElementLocated(
                 By.xpath("//a[@data-build-success='Build scheduled']"))).click();
 
         clickOnSuccessBuildIcon();
@@ -357,7 +355,7 @@ public class FreestyleProject3Test extends BaseTest {
                 By.xpath("//span[contains(text(), 'Delete build')]"))).getText();
         getDriver().findElement(By.xpath("//span[contains(text(), 'Delete build')]/..")).click();
 
-        getWait5().until(ExpectedConditions.visibilityOfElementLocated(By.name("Submit"))).click();
+        getWait10().until(ExpectedConditions.visibilityOfElementLocated(By.name("Submit"))).click();
 
         List<String> buildHistory = getDriver().findElements(By.xpath("//tr")).stream()
                 .map(WebElement::getText)
@@ -371,14 +369,14 @@ public class FreestyleProject3Test extends BaseTest {
     public void testDeleteProjectViaSidebarMenuOnProjectStatusPage() {
         createProjectViaSidebarMenu(PROJECT_NAME);
 
-        getWait2().until(ExpectedConditions.visibilityOfElementLocated(
+        getWait10().until(ExpectedConditions.visibilityOfElementLocated(
                 By.xpath("//a[@data-title='Delete Project']"))).click();
 
-        getWait5().until(ExpectedConditions.elementToBeClickable(
+        getWait10().until(ExpectedConditions.elementToBeClickable(
                 By.xpath("//button[@data-id='ok']"))).click();
 
         Assert.assertEquals(
-                getWait2().until(ExpectedConditions.visibilityOfElementLocated(By.tagName("h1"))).getText(),
+                getWait10().until(ExpectedConditions.visibilityOfElementLocated(By.tagName("h1"))).getText(),
                 "Welcome to Jenkins!",
                 "There were more than one project on Dashboard");
     }
@@ -387,18 +385,18 @@ public class FreestyleProject3Test extends BaseTest {
     public void testDeleteProjectViaSidebarMenuOnProjectStatusPageWhenSeveralProjectsExist() {
         createProjectViaSidebarMenu(PROJECT_NAME + 2);
 
-        getWait2().until(ExpectedConditions.visibilityOfElementLocated(
+        getWait10().until(ExpectedConditions.visibilityOfElementLocated(
                 By.xpath("//a[contains(text(), 'Dashboard')]"))).click();
 
         createProjectViaSidebarMenu(PROJECT_NAME);
 
-        getWait2().until(ExpectedConditions.visibilityOfElementLocated(
+        getWait10().until(ExpectedConditions.visibilityOfElementLocated(
                 By.xpath("//a[@data-title='Delete Project']"))).click();
 
-        getWait5().until(ExpectedConditions.elementToBeClickable(
+        getWait10().until(ExpectedConditions.elementToBeClickable(
                 By.xpath("//button[@data-id='ok']"))).click();
 
-        getWait2().until(ExpectedConditions.visibilityOfElementLocated(By.id("projectstatus"))).isDisplayed();
+        getWait10().until(ExpectedConditions.visibilityOfElementLocated(By.id("projectstatus"))).isDisplayed();
 
         Assert.assertFalse(
                 getDriver().findElements(By.xpath("//tbody//a[contains(@href, 'job')]//span")).stream()
