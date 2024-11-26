@@ -63,16 +63,17 @@ public class PipelineTest extends BaseTest {
 
     @Test
     public void testCreateWithNotUniqueName() {
-        String nonUniqueProjectName = PROJECT_NAME + "Unique";
+        final String nonUniqueProjectName = PROJECT_NAME + "Unique";
 
-        createNewProjectAndGoMainPageByLogo(nonUniqueProjectName, ProjectType.Pipeline);
+        new HomePage(getDriver())
+                .clickNewItem()
+                .nameAndSelectItemType(nonUniqueProjectName, CreateNewItemPage.ItemType.PIPELINE)
+                        .saveConfigurations()
+                .goToDashboard()
+                .clickNewItem()
+                .enterItemName(nonUniqueProjectName);
 
-        getDriver().findElement(By.xpath("//a[contains(@href, 'newJob')]")).click();
-
-        getDriver().findElement(By.id("name")).sendKeys(nonUniqueProjectName);
-
-        String actualErrorMessage = getWait5().until(ExpectedConditions.visibilityOfElementLocated(
-                By.id("itemname-invalid"))).getText();
+        String actualErrorMessage = getErrorMessage();
 
         Assert.assertEquals(actualErrorMessage, "» A job already exists with the name ‘%s’".formatted(nonUniqueProjectName));
     }
