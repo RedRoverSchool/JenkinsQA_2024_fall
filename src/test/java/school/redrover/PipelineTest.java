@@ -22,7 +22,7 @@ public class PipelineTest extends BaseTest {
 
     @Test
     public void testCreate() {
-        String projectName = PROJECT_NAME + "New";
+        final String projectName = PROJECT_NAME + "New";
         String actualProjectName = new HomePage(getDriver())
                 .clickNewItem()
                 .nameAndSelectItemType(projectName, CreateNewItemPage.ItemType.PIPELINE)
@@ -37,14 +37,17 @@ public class PipelineTest extends BaseTest {
     public void testCreateWithDescription() {
         final String desc = "The leading open source automation server, Jenkins provides hundreds of plugins to support building, deploying and automating any project.";
         final String name = PROJECT_NAME + "AndDescription";
-        createNewProjectWithDescriptionAndGoHomePageByLogo(name, ProjectType.Pipeline, desc);
 
-        getDriver().findElement(By.xpath("//td/a/span[text()='%s']/..".formatted(name))).click();
-        getDriver().findElement(By.xpath("//div[@id='description']/div")).getText();
+        String actualDesc = new HomePage(getDriver())
+                .clickNewItem()
+                .nameAndSelectItemType(name, CreateNewItemPage.ItemType.PIPELINE)
+                .enterDescription(desc)
+                .saveConfigurations()
+                .goToDashboard()
+                .openProject(name)
+                .getDescription();
 
-        Assert.assertEquals(getDriver().findElement(
-                        By.xpath("//div[@id='description']/div")).getText(),
-                desc);
+        Assert.assertEquals(actualDesc, desc);
     }
 
     @Test
