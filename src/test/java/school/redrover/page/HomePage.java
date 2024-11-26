@@ -236,10 +236,18 @@ public class HomePage extends BasePage {
     public HomePage clickScheduleBuild(String name) {
         getWait10().until(ExpectedConditions.elementToBeClickable(
                 By.xpath("//td[@class='jenkins-table__cell--tight']//a[@tooltip='Schedule a Build for " + name + "']"))).click();
-
         getWait10().until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@class='tippy-content']")));
         getWait10().until(ExpectedConditions.invisibilityOfElementLocated(By.xpath("//div[@class='tippy-content']")));
 
         return this;
     }
- }
+
+    public HomePage scheduleBuild(String projectName) {
+        getDriver().findElement(By.xpath("//a[@title = 'Schedule a Build for %s']".formatted(projectName))).click();
+        return this;
+    }
+
+    public void openBuildHistoryPage() {
+        getDriver().findElement(By.xpath("//a[@href = '/view/all/builds']")).click();
+    }
+}
