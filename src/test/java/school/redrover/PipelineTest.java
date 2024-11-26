@@ -53,14 +53,12 @@ public class PipelineTest extends BaseTest {
     @Test
     public void testCreateWithEmptyName() {
 
-        getDriver().findElement(By.xpath("//a[@href ='newJob']")).click();
+        new HomePage(getDriver())
+                .clickNewItem()
+                        .selectPipelineAndClickOk();
+        String actualErrorMessage = getErrorMessage();
 
-        getDriver().findElement(By.xpath("//li[@class='org_jenkinsci_plugins_workflow_job_WorkflowJob']")).click();
-
-        WebElement actualErrorMessage = getDriver().findElement(By.id("itemname-required"));
-
-        Assert.assertFalse(getDriver().findElement(By.id("ok-button")).isEnabled());
-        Assert.assertEquals(actualErrorMessage.getText(), "» This field cannot be empty, please enter a valid name");
+        Assert.assertEquals(actualErrorMessage, "» This field cannot be empty, please enter a valid name");
     }
 
     @Test
@@ -274,6 +272,11 @@ public class PipelineTest extends BaseTest {
             goToHomePageByLogo();
         }
         return projectNameList;
+    }
+
+    private String getErrorMessage() {
+        return getDriver().findElement(
+                By.xpath("//div[@class='add-item-name']/div[@class='input-validation-message']")).getText();
     }
 
     private void createNewProjectWithDescriptionAndGoHomePageByLogo(String name, ProjectType projectType, String description) {
