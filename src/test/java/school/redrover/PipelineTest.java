@@ -90,7 +90,6 @@ public class PipelineTest extends BaseTest {
 
         for (int i = 0; i < numOfProjects; i++) {
             Assert.assertEquals(nameList.get(i),expectedNameList.get(i));
-            System.out.println(nameList.get(i) + " ---> " + expectedNameList.get(i));
         }
     }
 
