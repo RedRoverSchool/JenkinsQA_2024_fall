@@ -250,4 +250,9 @@ public class HomePage extends BasePage {
     public void openBuildHistoryPage() {
         getDriver().findElement(By.xpath("//a[@href = '/view/all/builds']")).click();
     }
+
+    public String getTooltipValue(String projectName) {
+
+        return getDriver().findElement(By.cssSelector("#job_" + projectName + "> td:nth-of-type(1) > div > svg")).getAttribute("tooltip");
+    }
 }
