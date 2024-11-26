@@ -9,7 +9,7 @@ public class BuildHistoryPage extends BasePage {
         super(driver);
     }
 
-    public String getBuildHistory(){
+    public String getBuildName(){
         return getDriver().findElement(By.xpath("//a[@class='jenkins-table__link model-link']/span")).getText();
     }
 }

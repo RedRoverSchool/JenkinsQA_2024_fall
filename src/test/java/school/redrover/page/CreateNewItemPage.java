@@ -43,6 +43,12 @@ public class CreateNewItemPage extends BasePage {
         return new ConfigurationPage(getDriver());
     }
 
+    public CreateNewItemPage selectProjectType(ItemType itemType) {
+        getDriver().findElement(By.xpath("//span[text()='%s']".formatted(itemType.getItemName()))).click();
+
+        return this;
+    }
+
     public ConfigurationPage nameAndSelectItemType(String itemName, ItemType itemType) {
         enterItemName(itemName);
         selectProjectTypeAndSave(itemType);
@@ -75,6 +81,20 @@ public class CreateNewItemPage extends BasePage {
         getDriver().findElement(By.xpath("//button[@type='submit']")).click();
 
         return new OrganizationFolderConfigurationPage(getDriver());
+    }
+  
+    public String getInvalidNameMessage() {
+        return getDriver().findElement(By.id("itemname-invalid")).getText();
+    }
+
+    public String getEmptyNameMessage() {
+        return getDriver().findElement(By.id("itemname-required")).getText();
+    }
+
+    public ErrorPage saveInvalidData(){
+        getDriver().findElement(By.id("ok-button")).click();
+
+        return new ErrorPage(getDriver());
     }
 }
 
