@@ -6,7 +6,6 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.Assert;
-import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import school.redrover.runner.BaseTest;
 import school.redrover.runner.TestUtils;
@@ -74,6 +73,19 @@ public class FreestyleProject3Test extends BaseTest {
     private void clickWorkspaceSidebarMenu() {
         getWait5().until(ExpectedConditions.visibilityOfElementLocated(
                 By.xpath("//span[text()='Workspace']/.."))).click();
+    }
+
+    private void clickBuildNowAndWaitForBuildHistoryUpdate() {
+        getWait10().until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//a[@data-build-success='Build scheduled']"))).click();
+
+        getWait10().until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//a[@tooltip='Success > Console Output']")));
+    }
+
+    private void wipeOutCurrentWorkspace() {
+    getWait10().until(ExpectedConditions.visibilityOfElementLocated(
+            By.xpath("//a[@data-title='Wipe Out Current Workspace']"))).click();
     }
 
     @Test
@@ -369,7 +381,6 @@ public class FreestyleProject3Test extends BaseTest {
         Assert.assertFalse(buildHistory.contains(buildName));
     }
 
-    @Ignore
     @Test
     public void testDeleteProjectViaSidebarMenuOnProjectStatusPage() {
         createProjectViaSidebarMenu(PROJECT_NAME);
@@ -410,24 +421,43 @@ public class FreestyleProject3Test extends BaseTest {
 
     @Test
     public void testDeleteWorkspace() {
-        String expectedText = "Error: no workspace";
+        final String expectedText = "Error: no workspace";
         createProjectViaSidebarMenu(PROJECT_NAME);
 
-        getWait5().until(ExpectedConditions.visibilityOfElementLocated(
-                By.xpath("//a[@data-build-success='Build scheduled']"))).click();
-
-        getWait10().until(ExpectedConditions.visibilityOfElementLocated(
-                By.xpath("//a[@tooltip='Success > Console Output']")));
+        clickBuildNowAndWaitForBuildHistoryUpdate();
 
         clickWorkspaceSidebarMenu();
 
-        getWait10().until(ExpectedConditions.visibilityOfElementLocated(
-                By.xpath("//a[@data-title='Wipe Out Current Workspace']"))).click();
+        wipeOutCurrentWorkspace();
 
         getWait10().until(ExpectedConditions.elementToBeClickable(By.xpath("//button[@data-id='ok']"))).click();
 
         clickWorkspaceSidebarMenu();
 
         Assert.assertEquals(getDriver().findElement(By.tagName("h1")).getText(), expectedText);
+    }
+
+    @Test
+    public void testDeleteWorkspaceConfirmationOptions() {
+        List<String> dialogOptions = List.of("Are you sure about wiping out the workspace?", "Cancel", "Yes");
+        createProjectViaSidebarMenu(PROJECT_NAME);
+
+        clickBuildNowAndWaitForBuildHistoryUpdate();
+
+        clickWorkspaceSidebarMenu();
+
+        wipeOutCurrentWorkspace();
+
+        getWait10().until(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.tagName("dialog")));
+
+        List<String> confirmationDialog = getDriver().findElements(By.cssSelector("dialog *")).stream()
+                .map(WebElement::getText)
+                .toList();
+
+        confirmationDialog.forEach(System.out::println);
+
+        for (String option : dialogOptions) {
+            Assert.assertTrue(confirmationDialog.contains(option), "Missing option: " + option);
+        }
     }
 }
