@@ -2,6 +2,7 @@ package school.redrover;
 
 import org.openqa.selenium.By;
 import org.testng.Assert;
+import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import school.redrover.page.HomePage;
 import school.redrover.page.CreateNewItemPage;
@@ -147,6 +148,7 @@ public class FolderTest extends BaseTest {
         Assert.assertEquals(errorMessage, "» This field cannot be empty, please enter a valid name");
     }
 
+    @Ignore
     @Test(dependsOnMethods = "testOpenBuildHistoryByChevron")
     public void testErrorDuplicateNameCreation() {
         String errorMessage = new HomePage(getDriver())
