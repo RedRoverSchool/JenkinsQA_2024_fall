@@ -1,19 +1,15 @@
 package school.redrover;
 
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.interactions.Actions;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import school.redrover.page.HomePage;
 import school.redrover.runner.BaseTest;
-import school.redrover.runner.TestUtils;
 
 import java.util.List;
 import java.util.Random;
 
-public class CreateNewFreestyleProjectFromLeftSideBarTest extends BaseTest {
+public class Us_00_001_CreateFreestyleProject extends BaseTest {
 
     @Test()
     public void createFromTheLeftSidebarMenu(){
@@ -31,7 +27,7 @@ public class CreateNewFreestyleProjectFromLeftSideBarTest extends BaseTest {
     }
 
     @Test
-    public void errorMessageForEmptyProjectName() {
+    public void errorMessageDisplayedForEmptyProjectName() {
         getDriver().findElement(By.xpath("//*[@href='/view/all/newJob']")).click();
         getDriver().findElement(By.className("hudson_model_FreeStyleProject")).click();
 
@@ -40,7 +36,7 @@ public class CreateNewFreestyleProjectFromLeftSideBarTest extends BaseTest {
     }
 
     @Test
-    public void errorMessageForInvalidCharactersInProjectName(){
+    public void errorMessageDisplayedForInvalidCharactersInProjectName(){
         getDriver().findElement(By.xpath("//*[@href='/view/all/newJob']")).click();
         getDriver().findElement(By.name("name")).sendKeys("#:!@#$%^&");
 
