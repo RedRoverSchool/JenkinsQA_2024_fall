@@ -4,7 +4,6 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.testng.Assert;
@@ -259,31 +258,16 @@ public class MultibranchPipelineTest extends BaseTest {
 
     @Test
     public void testDeleteJobUsingDropdownBreadcrumbJobPage() {
-        createJob(MULTIBRANCH_PIPELINE_NAME);
-
-        getDriver().findElement(
-                By.xpath("//a[contains(@href,'%s')][@class='jenkins-table__link model-link inside']"
-                        .formatted(MULTIBRANCH_PIPELINE_NAME))).click();
-
-        WebElement jobName = getDriver().findElement(
-                By.xpath("//a[contains(@href,'%s')][@class='model-link']"
-                        .formatted(MULTIBRANCH_PIPELINE_NAME)));
-        new Actions(getDriver()).moveToElement(jobName).perform();
-
-        WebElement chevronButton = getWait5().until(ExpectedConditions.visibilityOfElementLocated(
-                By.xpath("//button[@class='jenkins-menu-dropdown-chevron'][contains(@data-href,'%s')]"
-                        .formatted(MULTIBRANCH_PIPELINE_NAME))));
-
-        ((JavascriptExecutor) getDriver())
-                .executeScript("arguments[0].dispatchEvent(new Event('mouseenter'));", chevronButton);
-        ((JavascriptExecutor) getDriver())
-                .executeScript("arguments[0].dispatchEvent(new Event('click'));", chevronButton);
-
-        getDriver().findElement(By.xpath("//button[contains(@href,'Delete')]")).click();
-        getDriver().findElement(By.xpath("//button[@data-id='ok']")).click();
+        new HomePage(getDriver())
+                .clickNewItem()
+                .enterItemName(MULTIBRANCH_PIPELINE_NAME)
+                .selectMultibranchPipelineAndClickOk()
+                .clickSaveButton()
+                .goToDashboard()
+                .clickOnCreatedItem(MULTIBRANCH_PIPELINE_NAME)
+                .deleteJobUsingDropdownBreadcrumbJobPage();
 
         Assert.assertTrue(getDriver().findElements(
-                By.xpath("//a[contains(@href,'%s')][@class='jenkins-table__link model-link inside']"
-                        .formatted(MULTIBRANCH_PIPELINE_NAME))).isEmpty());
+                By.xpath("//span[text()='%s']".formatted(MULTIBRANCH_PIPELINE_NAME))).isEmpty());
     }
 }
