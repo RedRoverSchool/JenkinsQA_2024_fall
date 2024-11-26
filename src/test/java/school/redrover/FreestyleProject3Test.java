@@ -438,7 +438,7 @@ public class FreestyleProject3Test extends BaseTest {
     }
 
     @Test
-    public void testDeleteWorkspaceConfirmationMessage() {
+    public void testDeleteWorkspaceConfirmationOptions() {
         List<String> dialogOptions = List.of("Are you sure about wiping out the workspace?", "Cancel", "Yes");
         createProjectViaSidebarMenu(PROJECT_NAME);
 
