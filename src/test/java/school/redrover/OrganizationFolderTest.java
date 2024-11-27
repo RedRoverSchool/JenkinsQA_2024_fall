@@ -2,6 +2,7 @@ package school.redrover;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -10,6 +11,8 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
+import school.redrover.page.CreateNewItemPage;
+import school.redrover.page.HomePage;
 import school.redrover.runner.BaseTest;
 
 import java.time.Duration;
@@ -29,47 +32,40 @@ public class OrganizationFolderTest extends BaseTest {
     @Test
     public void testTitle() {
 
-        getDriver().findElement(By.xpath("//span/a[@href='/view/all/newJob']")).click();
-        getDriver().findElement(By.xpath("//div/input[@class='jenkins-input']")).sendKeys(ITEM_NAME);
-        scrollPage();
+        new HomePage(getDriver())
+                .clickNewItem()
+                .enterItemName(ITEM_NAME)
+                .selectOrganizationFolderAndClickOk();
 
-        getDriver().findElement(By.className("jenkins_branch_OrganizationFolder")).click();
-        getDriver().findElement(By.xpath("//div/button[@type='submit']")).click();
-        String title = getDriver().findElement(By.id("general")).getText();
-
-        Assert.assertEquals(title, "General");
+        Assert.assertEquals(
+                getDriver().findElement(By.id("general")).getText(),
+                "General");
     }
 
     @Test
     public void testTooltipGeneralEnabled() {
 
-        getDriver().findElement(By.xpath("//span/a[@href='/view/all/newJob']")).click();
-        getDriver().findElement(By.xpath("//div/input[@class='jenkins-input']")).sendKeys(ITEM_NAME);
-        scrollPage();
-
-        getDriver().findElement(By.className("jenkins_branch_OrganizationFolder")).click();
-        getDriver().findElement(By.xpath("//div/button[@type='submit']")).click();
-
-        Actions actions = new Actions(getDriver());
-        actions.moveToElement(getDriver().findElement(By.xpath("//span/label[@for='enable-disable-project']"))).perform();
+        String tooltipText = new HomePage(getDriver())
+                .clickNewItem()
+                .enterItemName(ITEM_NAME)
+                .selectOrganizationFolderAndClickOk()
+                .getTooltipGeneralText();
 
         Assert.assertEquals(
-                getDriver().findElement(By.xpath("//div[@class='jenkins-app-bar__controls']/span")).getAttribute("tooltip"),
+                tooltipText,
                 "(No new builds within this Organization Folder will be executed until it is re-enabled)");
     }
 
     @Test
     public void testDescriptionPreview() {
 
-        getDriver().findElement(By.xpath("//span/a[@href='/view/all/newJob']")).click();
-        getDriver().findElement(By.xpath("//div/input[@class='jenkins-input']")).sendKeys(ITEM_NAME);
-        scrollPage();
-        getDriver().findElement(By.className("jenkins_branch_OrganizationFolder")).click();
-        getDriver().findElement(By.xpath("//div/button[@type='submit']")).click();
-
-        getDriver().findElement(By.xpath("//div/input[@name='_.displayNameOrNull']")).sendKeys(DISPLAY_NAME);
-        getDriver().findElement(By.xpath("//div/textarea[@name='_.description']")).sendKeys(DESCRIPTION);
-        getDriver().findElement(By.xpath("//div/a[@class='textarea-show-preview']")).click();
+        new HomePage(getDriver())
+                .clickNewItem()
+                .enterItemName(ITEM_NAME)
+                .selectOrganizationFolderAndClickOk()
+                .enterName(DISPLAY_NAME)
+                .enterDescription(DESCRIPTION)
+                .changeDescriptionPreviewState();
 
         Assert.assertEquals(
                 getDriver().findElement(By.xpath("//div/div[@class='textarea-preview']")).getText(),
@@ -79,17 +75,14 @@ public class OrganizationFolderTest extends BaseTest {
     @Test
     public void testDescriptionPreviewHide() {
 
-        getDriver().findElement(By.xpath("//span/a[@href='/view/all/newJob']")).click();
-        getDriver().findElement(By.xpath("//div/input[@class='jenkins-input']")).sendKeys(ITEM_NAME);
-        scrollPage();
-        getDriver().findElement(By.className("jenkins_branch_OrganizationFolder")).click();
-        getDriver().findElement(By.xpath("//div/button[@type='submit']")).click();
-
-        getDriver().findElement(By.xpath("//div/input[@name='_.displayNameOrNull']")).sendKeys(DISPLAY_NAME);
-        getDriver().findElement(By.xpath("//div/textarea[@name='_.description']")).sendKeys(DESCRIPTION);
-
-        getDriver().findElement(By.xpath("//div/a[@class='textarea-show-preview']")).click();
-        getDriver().findElement(By.xpath("//div/a[@class='textarea-hide-preview']")).click();
+        new HomePage(getDriver())
+                .clickNewItem()
+                .enterItemName(ITEM_NAME)
+                .selectOrganizationFolderAndClickOk()
+                .enterName(DISPLAY_NAME)
+                .enterDescription(DESCRIPTION)
+                .changeDescriptionPreviewState()
+                .changeDescriptionPreviewState();
 
         Assert.assertEquals(
                 getDriver().findElement(By.xpath("//div/div[@class='textarea-preview']")).getAttribute("style"),
@@ -134,6 +127,7 @@ public class OrganizationFolderTest extends BaseTest {
                 DISPLAY_NAME);
     }
 
+
     @Test
     public void testItemNameAfterCreation() {
 
@@ -144,9 +138,13 @@ public class OrganizationFolderTest extends BaseTest {
         getDriver().findElement(By.xpath("//div/button[@type='submit']")).click();
 
         getDriver().findElement(By.xpath("//div/input[@name='_.displayNameOrNull']")).sendKeys(DISPLAY_NAME);
-        getDriver().findElement(By.xpath("//div/button[@class='jenkins-button jenkins-submit-button jenkins-button--primary ']")).click();
+        getDriver()
+                .findElement(By.xpath("//div/button[@class='jenkins-button jenkins-submit-button jenkins-button--primary ']"))
+                .click();
         String itemNameExpected = "Folder name: " + ITEM_NAME;
-        getDriver().findElement(By.xpath("//div[2]/div[2]")).getText();
+
+        WebDriverWait driverWait = new WebDriverWait(getDriver(), Duration.ofSeconds(3));
+        driverWait.until(ExpectedConditions.visibilityOfElementLocated(By.id("main-panel")));
 
         String itemNameActual = getDriver().findElement(By.id("main-panel")).getText();
         int indexNameStart = itemNameActual.indexOf("\n");
@@ -155,8 +153,9 @@ public class OrganizationFolderTest extends BaseTest {
 
         Assert.assertEquals(itemNameActualCut, itemNameExpected);
     }
-    @Ignore
+
     @Test
+
     public void testDescriptionAfterCreation() {
 
         getDriver().findElement(By.xpath("//span/a[@href='/view/all/newJob']")).click();
@@ -168,7 +167,7 @@ public class OrganizationFolderTest extends BaseTest {
         getDriver().findElement(By.xpath("//div/textarea[@name='_.description']")).sendKeys(DESCRIPTION);
         getDriver().findElement(By.xpath("//div/button[@class='jenkins-button jenkins-submit-button jenkins-button--primary ']")).click();
 
-        WebDriverWait driverWait = new WebDriverWait(getDriver(), Duration.ofSeconds(5));
+        WebDriverWait driverWait = new WebDriverWait(getDriver(), Duration.ofSeconds(10));
         driverWait.until(ExpectedConditions.visibilityOfElementLocated(By.id("view-message")));
 
         Assert.assertEquals(
@@ -204,8 +203,7 @@ public class OrganizationFolderTest extends BaseTest {
         getDriver().findElement(By.cssSelector("[href$='/newJob']")).click();
         getDriver().findElement(By.id("name")).sendKeys("Organization_Folder");
 
-        JavascriptExecutor js = (JavascriptExecutor) getDriver();
-        js.executeScript("window.scrollTo(0, document.body.scrollHeight);");
+        scrollPage();
 
         getDriver().findElement(By.cssSelector("[class$='OrganizationFolder']")).click();
         getDriver().findElement(By.id("ok-button")).click();
@@ -213,13 +211,11 @@ public class OrganizationFolderTest extends BaseTest {
         new Select(getDriver().findElement(By.xpath("(//select[contains(@class, 'dropdownList')])[2]")))
                 .selectByVisibleText("Default Icon");
 
-        JavascriptExecutor js2 = (JavascriptExecutor) getDriver();
-        js2.executeScript("window.scrollTo(0, document.body.scrollHeight);");
+        scrollPage();
 
         getDriver().findElement(By.name("Submit")).click();
 
-        String organizationFolderCurrentIcon = getDriver().findElement(By.cssSelector("h1 > svg")).getAttribute("title");
-        Assert.assertEquals(organizationFolderCurrentIcon, "Folder");
+        Assert.assertEquals(getDriver().findElement(By.cssSelector("h1 > svg")).getAttribute("title"), "Folder");
     }
 
     @Test

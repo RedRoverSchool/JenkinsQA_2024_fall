@@ -50,4 +50,20 @@ public class FreestyleProject9Test extends BaseTest {
         getDriver().findElement(By.cssSelector("[name='Submit']")).click();
         getDriver().findElement(By.id("jenkins-name-icon")).click();
     }
+
+    @Test
+
+    public void testFirst() {
+
+        getDriver().findElement(By.xpath("/html/body/div/div/div/div/span/a")).click();
+
+        WebElement writeName = getDriver().findElement(By.xpath("/html/body/div/div/div/form/div/div/input"));
+        writeName.sendKeys("Hello");
+
+        getDriver().findElement(By.xpath("/html/body/div/div/div/form/div/div/div/ul/li")).click();
+        getDriver().findElement(By.xpath("/html/body/div/div/div/form/div/div/button")).click();
+
+    }
 }
+
+

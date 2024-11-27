@@ -1,0 +1,32 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Checkout') {
+            steps {
+                echo 'Step: Checkout code from repository'
+            }
+        }
+
+        stage('Build') {
+            steps {
+                echo 'Step: Build the project'
+            }
+        }
+
+        stage('Test') {
+            steps {
+                echo 'Step: Run tests'
+            }
+        }
+
+        stage('Deploy') {
+            when {
+                branch 'main'
+            }
+            steps {
+                echo 'Step: Deploy to production'
+            }
+        }
+    }
+}

@@ -8,6 +8,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
+import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import school.redrover.runner.BaseTest;
 
@@ -19,6 +20,10 @@ public class MultiConfigurationProjectTest extends BaseTest {
     private static final String NAME_OF_PROJECT = " project";
     private static final String DESCRIPTIONS = "Descriptions of project";
 
+    private void waitTimeUntilVisibilityElement(Integer time, WebElement element){
+        new WebDriverWait(getDriver(), Duration.ofSeconds(time)).until(ExpectedConditions.visibilityOf(element));
+    }
+
     private void createMultiConfigProject() {
         getDriver().findElement(By.cssSelector("[href$='newJob']")).click();
         getDriver().findElement(By.id("name")).sendKeys("MultiConfigProject");
@@ -26,15 +31,11 @@ public class MultiConfigurationProjectTest extends BaseTest {
         getDriver().findElement(By.id("ok-button")).click();
     }
 
-    public WebDriverWait wait2() {
-        return new WebDriverWait(getDriver(), Duration.ofSeconds(2));
-    }
-
     @Test(description = "Create project without descriptions")
     public void testCreateProjectWithoutDescription() {
         getDriver().findElement(By.xpath("//a[@href='/view/all/newJob']")).click();
         WebElement itemName = getDriver().findElement(By.xpath("//input[@id='name']"));
-        wait2().until(ExpectedConditions.visibilityOf(itemName));
+        waitTimeUntilVisibilityElement(2, itemName);
         itemName.sendKeys("Multi-configuration" + NAME_OF_PROJECT);
         getDriver().findElement(By.xpath("//span[text()='Multi-configuration project']")).click();
         getDriver().findElement(By.xpath("//button[@id = 'ok-button']")).click();
@@ -55,7 +56,8 @@ public class MultiConfigurationProjectTest extends BaseTest {
         getDriver().findElement(By.xpath("//textarea[@name = 'description']")).sendKeys(DESCRIPTIONS);
         getDriver().findElement(By.xpath("//div/button[@name = 'Submit']")).submit();
 
-        Assert.assertEquals(getDriver().findElement(By.xpath("//div[@id='description']/div[1]")).getText(), DESCRIPTIONS);
+        Assert.assertEquals(getDriver().findElement(By.xpath("//div[@id='description']/div[1]")).getText()
+                , DESCRIPTIONS);
 
     }
 
@@ -66,15 +68,11 @@ public class MultiConfigurationProjectTest extends BaseTest {
         getDriver().findElement(By.xpath("//a[@href='/view/all/newJob']")).click();
         getDriver().findElement(By.className("hudson_matrix_MatrixProject")).click();
 
-        String actualErrorMessage = getDriver().findElement(By.id("itemname-required")).getText();
-
         JavascriptExecutor js = (JavascriptExecutor) getDriver();
         js.executeScript("window.scrollTo(0, document.body.scrollHeight);");
 
-        WebElement okButton = getDriver().findElement(By.id("ok-button"));
-
-        Assert.assertTrue(actualErrorMessage.contains(errorMessage));
-        Assert.assertFalse(okButton.isEnabled());
+        Assert.assertTrue(getDriver().findElement(By.id("itemname-required")).getText().contains(errorMessage));
+        Assert.assertFalse(getDriver().findElement(By.id("ok-button")).isEnabled());
     }
 
     @Test
@@ -141,5 +139,21 @@ public class MultiConfigurationProjectTest extends BaseTest {
         String actualSelectedItemName = select.getFirstSelectedOption().getText();
 
         Assert.assertEquals(actualSelectedItemName, "Month");
+    }
+
+    @Ignore
+    @Test
+    public void testCreateWithExistingName(){
+        testCreateProjectWithoutDescription();
+
+        getDriver().findElement(By.xpath("//a[@href='/view/all/newJob']")).click();
+        WebElement itemName = getDriver().findElement(By.xpath("//input[@id='name']"));
+        waitTimeUntilVisibilityElement(2, itemName);
+        itemName.sendKeys("Multi-configuration" + NAME_OF_PROJECT);
+        WebElement errorMessage = getDriver().findElement(By.xpath("//div[@id = 'itemname-invalid']"));
+        waitTimeUntilVisibilityElement(4, errorMessage);
+
+        Assert.assertEquals(errorMessage.getText(), "» A job already exists with the name " +
+                "‘Multi-configuration project’");
     }
 }
