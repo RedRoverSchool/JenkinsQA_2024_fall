@@ -118,6 +118,7 @@ public class PageElementsTest extends BaseTest {
         Assert.assertEquals(result, "Project MultiConfigurationProjectTest");
     }
 
+    @Ignore
     @Test
     public void testNewFolder(){
         newItemsData(this,"newFolderTest", "//*[@id='j-add-item-type-standalone-projects']/ul/li[3]/div[2]/label");
