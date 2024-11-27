@@ -39,7 +39,7 @@ public class FreestyleProject1Test extends BaseTest {
     @Test(dependsOnMethods = "testCreate")
     public void testAddDescription() {
         String description = new HomePage(getDriver())
-                .openProject(NEW_FREESTYLE_PROJECT_NAME)
+                .openFreestyleProject(NEW_FREESTYLE_PROJECT_NAME)
                 .editDescription(DESCRIPTION)
                 .getDescription();
 
@@ -49,7 +49,7 @@ public class FreestyleProject1Test extends BaseTest {
     @Test(dependsOnMethods = "testAddDescription")
     public void testDeleteDescription() {
         String description = new HomePage(getDriver())
-                .openProject(NEW_FREESTYLE_PROJECT_NAME)
+                .openFreestyleProject(NEW_FREESTYLE_PROJECT_NAME)
                 .clearDescription()
                 .getDescription();
 

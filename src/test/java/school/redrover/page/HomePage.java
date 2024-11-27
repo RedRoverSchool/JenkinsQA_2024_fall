@@ -11,7 +11,7 @@ import school.redrover.runner.TestUtils;
 
 import java.util.List;
 
-public class HomePage extends BasePage {
+public class HomePage  extends BasePage {
 
     public HomePage(WebDriver driver) {
         super(driver);
@@ -88,10 +88,28 @@ public class HomePage extends BasePage {
         return getDriver().findElement(By.className("jenkins-table__link")).getText();
     }
 
-    public FolderProjectPage openProject(String name) {
+    public FolderProjectPage openFolder(String name) {
         getDriver().findElement(By.xpath("//td/a/span[text() = '%s']/..".formatted(name))).click();
 
         return new FolderProjectPage(getDriver());
+    }
+
+    public PipelineProjectPage openPipelineProject(String name) {
+        getDriver().findElement(By.xpath("//td/a/span[text() = '%s']/..".formatted(name))).click();
+
+        return new PipelineProjectPage(getDriver());
+    }
+
+    public MultiConfigurationProjectPage openMultiConfigurationProject(String name) {
+        getDriver().findElement(By.xpath("//td/a/span[text() = '%s']/..".formatted(name))).click();
+
+        return new MultiConfigurationProjectPage(getDriver());
+    }
+
+    public FreestyleProjectProjectPage openFreestyleProject(String name) {
+        getDriver().findElement(By.xpath("//td/a/span[text() = '%s']/..".formatted(name))).click();
+
+        return new FreestyleProjectProjectPage(getDriver());
     }
 
     public ManageJenkinsPage openManageJenkinsPage() {

@@ -14,6 +14,11 @@ public class MultibranchPipelineProjectPage extends BaseProjectPage {
         super(driver);
     }
 
+    @Override
+    protected MultibranchPipelineProjectPage createProjectPage() {
+        return new MultibranchPipelineProjectPage(getDriver());
+    }
+
     public String getDescription() {
         return getWait2().until(ExpectedConditions.visibilityOfElementLocated(By.id("view-message"))).getText();
     }
