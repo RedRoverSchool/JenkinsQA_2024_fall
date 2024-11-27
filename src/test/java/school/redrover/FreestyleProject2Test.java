@@ -1,11 +1,15 @@
 package school.redrover;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import school.redrover.runner.BaseTest;
 
 public class FreestyleProject2Test extends BaseTest {
+
+    private static final String FREESTYLE_NAME = "Freestyle_first";
 
     public void createFreestyleProject(String nameFreestyleProject) {
         getDriver().findElement(By.xpath("//a[@href='/view/all/newJob']")).click();
@@ -14,15 +18,24 @@ public class FreestyleProject2Test extends BaseTest {
         getDriver().findElement(By.id("ok-button")).click();
     }
 
+    private void returnToHomePage() {
+        getDriver().findElement(By.id("jenkins-home-link")).click();
+    }
+
+    private void clickJobByName(String nameFreestyleProject) {
+        getDriver().findElement(By.xpath("//td/a[@href='job/" + nameFreestyleProject + "/']")).click();
+    }
+
     @Test
     public void testEditDescription(){
-        final String PROJECT_DESCRIPTION = "my new build";
+        final String projectDescription = "my new build";
         final String editDescribe = "Create one more build apps";
 
-        String PROJECT_NAME = "Freestyle_first";
-        createFreestyleProject(PROJECT_NAME);
+        createFreestyleProject(FREESTYLE_NAME);
 
-        getDriver().findElement(By.xpath("//*[@id=\"main-panel\"]/form/div[1]/div[2]/div/div[2]/textarea")).sendKeys(PROJECT_DESCRIPTION);
+        getDriver().findElement(By.xpath("//*[@id=\"main-panel\"]/form/div[1]/div[2]/div/div[2]/textarea"))
+                .sendKeys(projectDescription);
+
         getDriver().findElement(By.name("Submit")).click();
         getDriver().findElement(By.xpath("//*[@id='jenkins-home-link']")).click();
 
@@ -34,4 +47,38 @@ public class FreestyleProject2Test extends BaseTest {
 
         Assert.assertTrue(getDriver().findElement(By.id("description")).getText().contains(editDescribe));
     }
+
+    @Test
+    public void testDeleteFromInsideProject() {
+        createFreestyleProject(FREESTYLE_NAME);
+        returnToHomePage();
+        clickJobByName(FREESTYLE_NAME);
+
+        getDriver().findElement(By.xpath("//a[@data-title='Delete Project']")).click();
+        getDriver().findElement(By.xpath("//button[@data-id='ok']")).click();
+
+        Assert.assertEquals(getDriver().findElement(By.cssSelector(".empty-state-block > h1")).getText(),
+                "Welcome to Jenkins!");
+    }
+
+    @Test
+    public void testCreateWithSpecialSymbols() {
+        String[] specialCharacters = {"!", "%", "&", "#", "@", "*", "$", "?", "^", "|", "/", "]", "["};
+
+        getDriver().findElement(By.xpath("//a[@href='/view/all/newJob']")).click();
+        getDriver().findElement(By.cssSelector(".hudson_model_FreeStyleProject")).click();
+        WebElement nameField = getDriver().findElement(By.xpath("//input[@name='name']"));
+
+        for (String specChar: specialCharacters) {
+            nameField.clear();
+            nameField.sendKeys("Free" + specChar + "styles");
+
+            WebElement actualMessage = getWait5().until(ExpectedConditions.visibilityOfElementLocated(By.
+                    xpath("//div[@id='itemname-invalid']")));
+
+            String expectMessage = "» ‘" + specChar + "’ is an unsafe character";
+            Assert.assertEquals(actualMessage.getText(), expectMessage, "Message is not displayed");
+        }
+    }
+
 }
