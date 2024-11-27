@@ -44,20 +44,23 @@ public class PipelineTest extends BaseTest {
     }
 
     @Test
-    public void testCreateWithDescription() {
-        final String desc = "The leading open source automation server, Jenkins provides hundreds of plugins to support building, deploying and automating any project.";
-        final String name = "PipelineProjectAndDescription";
-        createNewProjectWithDescriptionAndGoHomePageByLogo(name, ProjectType.Pipeline, desc);
+    public void testCreateWithNotUniqueName() {
+        String nonUniqueProjectName = "PipelineProjectUnique";
 
-        getDriver().findElement(By.xpath("//td/a/span[text()='%s']/..".formatted(name))).click();
-        getDriver().findElement(By.xpath("//div[@id='description']/div")).getText();
+        String actualErrorMessage = new HomePage(getDriver())
+                .clickNewItem()
+                .enterItemName(nonUniqueProjectName)
+                .selectPipelineAndClickOk()
+                .gotoHomePage()
+                .clickNewItem()
+                .enterItemName(nonUniqueProjectName)
+                .selectPipeline()
+                .getErrorMessage();
 
-        Assert.assertEquals(getDriver().findElement(
-                By.xpath("//div[@id='description']/div")).getText(),
-                desc);
+        Assert.assertEquals(actualErrorMessage, "» A job already exists with the name ‘%s’".formatted(nonUniqueProjectName));
     }
 
-    @Test(dependsOnMethods = "testCreateWithDescription")
+    @Test(dependsOnMethods = "testCreate")
     public void testRename() {
         final String projectName = "PipelineProject2New";
 
@@ -215,22 +218,6 @@ public class PipelineTest extends BaseTest {
         String actualMessage = getDriver().findElement(By.xpath("//div[@class='empty-state-block']/h1")).getText();
 
         Assert.assertEquals(actualMessage, "Welcome to Jenkins!");
-    }
-
-    @Test
-    public void testCreateWithNotUniqueName() {
-        String nonUniqueProjectName = "PipelineProjectUnique";
-
-        createNewProjectAndGoMainPageByLogo(nonUniqueProjectName, ProjectType.Pipeline);
-
-        getDriver().findElement(By.xpath("//a[contains(@href, 'newJob')]")).click();
-
-        getDriver().findElement(By.id("name")).sendKeys(nonUniqueProjectName);
-
-        String actualErrorMessage = getWait5().until(ExpectedConditions.visibilityOfElementLocated(
-                By.id("itemname-invalid"))).getText();
-
-        Assert.assertEquals(actualErrorMessage, "» A job already exists with the name ‘%s’".formatted(nonUniqueProjectName));
     }
 
     @Test
