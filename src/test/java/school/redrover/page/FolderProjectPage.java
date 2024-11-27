@@ -6,17 +6,18 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import school.redrover.page.base.BasePage;
+import school.redrover.page.base.BaseProjectPage;
 
 import java.util.Arrays;
 import java.util.List;
 
-public class ProjectPage extends BasePage {
+public class FolderProjectPage extends BaseProjectPage {
 
-    public ProjectPage(WebDriver driver) {
+    public FolderProjectPage(WebDriver driver) {
         super(driver);
     }
 
-    public ProjectPage editDescription(String text) {
+    public FolderProjectPage editDescription(String text) {
         getDriver().findElement(By.id("description-link")).click();
         getDriver().findElement(By.name("description")).sendKeys(text);
         getDriver().findElement(By.name("Submit")).click();
@@ -26,7 +27,7 @@ public class ProjectPage extends BasePage {
         return this;
     }
 
-    public ProjectPage clearDescription() {
+    public FolderProjectPage clearDescription() {
         getDriver().findElement(By.id("description-link")).click();
         getDriver().findElement(By.name("description")).clear();
         getDriver().findElement(By.name("Submit")).click();
@@ -55,12 +56,6 @@ public class ProjectPage extends BasePage {
                 .orElse("");
     }
 
-    public HomePage goToDashboard() {
-        getDriver().findElement(By.xpath("//a[contains(text(),'Dashboard')]")).click();
-
-        return new HomePage(getDriver());
-    }
-
     public String getItemNameByOrder(int order) {
 
         return getDriver().findElements(By.xpath("//td/a/span")).stream()
@@ -75,7 +70,7 @@ public class ProjectPage extends BasePage {
         return new CreateNewItemPage(getDriver());
     }
 
-    public ProjectPage runJob(String projectName) {
+    public FolderProjectPage runJob(String projectName) {
         getDriver().findElement(By.xpath("//td//a[@title='Schedule a Build for %s']".formatted(projectName))).click();
 
         return this;
@@ -93,13 +88,13 @@ public class ProjectPage extends BasePage {
         return new PipelineConfigurePage(getDriver());
     }
 
-    public ProjectPage clickEnableButton() {
+    public FolderProjectPage clickEnableButton() {
         getWait2().until(ExpectedConditions.elementToBeClickable(By.xpath("//button[@formNoValidate='formNoValidate']"))).click();
 
         return this;
     }
 
-    public ProjectPage hoverOverBuildStatusMark() {
+    public FolderProjectPage hoverOverBuildStatusMark() {
         new Actions(getDriver())
                 .moveToElement(getWait10().until(ExpectedConditions.visibilityOfElementLocated(
                         By.xpath("//*[local-name()='svg' and @tooltip]"))))

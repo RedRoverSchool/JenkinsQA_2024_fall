@@ -22,7 +22,7 @@ public class PipelineProjectTest extends BaseTest {
                 .enterItemName(PIPELINE_NAME)
                 .selectPipelineAndClickOk()
                 .clickSaveButton()
-                .returnToHomePage()
+                .gotoHomePage()
                 .getItemList();
 
         Assert.assertListContainsObject(
@@ -115,7 +115,7 @@ public class PipelineProjectTest extends BaseTest {
         boolean isGreenBuildButtonPresent = new HomePage(getDriver())
                 .openProject(PIPELINE_NAME)
                 .clickEnableButton()
-                .goToDashboard()
+                .gotoHomePage()
                 .isGreenScheduleBuildTrianglePresent(PIPELINE_NAME);
 
         Assert.assertTrue(
@@ -174,7 +174,7 @@ public class PipelineProjectTest extends BaseTest {
                 .clickRenameSidebar(PIPELINE_NAME)
                 .cleanInputFieldAndTypeName(NEW_PROJECT_NAME)
                 .clickRenameButton()
-                .returnToHomePage()
+                .gotoHomePage()
                 .getItemList();
 
         Assert.assertListContainsObject(

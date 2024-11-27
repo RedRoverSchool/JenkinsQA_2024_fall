@@ -6,7 +6,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import school.redrover.page.HomePage;
-import school.redrover.page.ProjectPage;
+import school.redrover.page.FolderProjectPage;
 import school.redrover.runner.BaseTest;
 import school.redrover.runner.TestUtils;
 
@@ -48,8 +48,8 @@ public class UpdatesBuildHistoryTest extends BaseTest {
                 elementToBeClickable(By.xpath("//button[normalize-space()='Run with timeout']"))).click();
         getDriver().findElement(By.xpath("//button[contains(@name,'Submit')]")).click();
 
-        new ProjectPage(getDriver())
-                .goToDashboard()
+        new FolderProjectPage(getDriver())
+                .gotoHomePage()
                 .scheduleBuild(PROJECT_NAME)
                 .openBuildHistoryPage();
 
