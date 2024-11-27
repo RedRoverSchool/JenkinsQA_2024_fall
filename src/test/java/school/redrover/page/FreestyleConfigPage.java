@@ -22,6 +22,7 @@ public class FreestyleConfigPage extends BaseConfigPage<FreestyleConfigPage, Fre
         getDriver().findElement(By.xpath("//button[contains(text(),'%s')]".formatted(buildStep))).click();
 
         return this;
+
     }
 
     public FreestyleConfigPage addExecuteWindowsBatchCommand(String command) {
