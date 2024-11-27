@@ -9,7 +9,7 @@ import school.redrover.runner.BaseTest;
 public class BuildExecutorStatusTest extends BaseTest {
 
     @Test
-    public void testBuildExecutorStatusPanell (){
+    public void testBuildExecutorStatusPanel (){
         WebElement buildExecutorStatusPanel = getDriver().findElement(By.id("executors"));
         Assert.assertTrue(buildExecutorStatusPanel.isDisplayed(), "Panel 'executors' is not displayed on the page.");
     }
@@ -19,8 +19,8 @@ public class BuildExecutorStatusTest extends BaseTest {
         WebElement buildExecutorStatusClick = getDriver().findElement(By.xpath("//*[@id='executors']/div[1]/span/a"));
         buildExecutorStatusClick.click();
 
-        String NodesTitle = getDriver().findElement(By.xpath("//*[@id='main-panel']/div[1]/div[1]/h1")).getText();
-        Assert.assertEquals(NodesTitle, "Nodes");
+        String nodesTitle = getDriver().findElement(By.xpath("//*[@id='main-panel']/div[1]/div[1]/h1")).getText();
+        Assert.assertEquals(nodesTitle, "Nodes");
     }
 
 }

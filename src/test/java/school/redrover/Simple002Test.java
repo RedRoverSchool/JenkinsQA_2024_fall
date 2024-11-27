@@ -9,9 +9,33 @@ import school.redrover.runner.BaseTest;
 public class Simple002Test extends BaseTest {
 
     @Test
-    public void testIconLogout() {
-        WebElement elementIL = getDriver().findElement(By.cssSelector("a[href^='/logout']"));
+    public void testLinkLogOut() {
+        WebElement linkLogOut = getDriver().findElement(By.cssSelector("a[href^='/logout']"));
 
-        Assert.assertNotNull(elementIL);
+        Assert.assertNotNull(linkLogOut);
     }
+    @Test
+    public void testLinkSetUpDistriBuildComp() {
+
+        WebElement linkSetUpDistriBuildComp = getDriver().findElement(By.cssSelector("a[href$='computer/new']"));
+
+        Assert.assertNotNull(linkSetUpDistriBuildComp);
+    }
+
+    @Test
+    public void testLinkSetUpDistriBuildCloud() {
+
+        WebElement linkSetUpDistriBuildCloud= getDriver().findElement(By.cssSelector("a[href$='cloud/']"));
+
+        Assert.assertNotNull(linkSetUpDistriBuildCloud);
+    }
+
+    @Test
+    public void testLinkSetUpDistriBuildLearnMore() {
+
+        WebElement linkSetUpDistriBuildLearnMore = getDriver().findElement(By.cssSelector("a[href$='distributed-builds']"));
+
+        Assert.assertNotNull(linkSetUpDistriBuildLearnMore);
+    }
+
 }
