@@ -21,11 +21,11 @@ public class PipelineTest extends BaseTest {
 
     @Test
     public void testCreate() {
-        String projectName = PROJECT_NAME + "New";
+        String projectName = "PipelineProjectNew";
         String actualProjectName = new HomePage(getDriver())
                 .clickNewItem()
-                .nameAndSelectItemType(projectName, CreateNewItemPage.ItemType.PIPELINE)
-                .clickSaveButton()
+                .enterItemName(projectName)
+                .selectPipelineAndClickOk()
                 .gotoHomePage()
                 .getItemName();
 
@@ -35,33 +35,34 @@ public class PipelineTest extends BaseTest {
     @Test
     public void testCreateWithEmptyName() {
 
-        getDriver().findElement(By.xpath("//a[@href ='newJob']")).click();
+        String actualErrorMessage = new HomePage(getDriver())
+                .clickNewItem()
+                .selectPipeline()
+                .getErrorMessage();
 
-        getDriver().findElement(By.xpath("//li[@class='org_jenkinsci_plugins_workflow_job_WorkflowJob']")).click();
-
-        WebElement actualErrorMessage = getDriver().findElement(By.id("itemname-required"));
-
-        Assert.assertFalse(getDriver().findElement(By.id("ok-button")).isEnabled());
-        Assert.assertEquals(actualErrorMessage.getText(), "» This field cannot be empty, please enter a valid name");
+        Assert.assertEquals(actualErrorMessage, "» This field cannot be empty, please enter a valid name");
     }
 
     @Test
-    public void testCreateWithDescription() {
-        final String desc = "The leading open source automation server, Jenkins provides hundreds of plugins to support building, deploying and automating any project.";
-        final String name = PROJECT_NAME + "AndDescription";
-        createNewProjectWithDescriptionAndGoHomePageByLogo(name, ProjectType.Pipeline, desc);
+    public void testCreateWithNotUniqueName() {
+        String nonUniqueProjectName = "PipelineProjectUnique";
 
-        getDriver().findElement(By.xpath("//td/a/span[text()='%s']/..".formatted(name))).click();
-        getDriver().findElement(By.xpath("//div[@id='description']/div")).getText();
+        String actualErrorMessage = new HomePage(getDriver())
+                .clickNewItem()
+                .enterItemName(nonUniqueProjectName)
+                .selectPipelineAndClickOk()
+                .gotoHomePage()
+                .clickNewItem()
+                .enterItemName(nonUniqueProjectName)
+                .selectPipeline()
+                .getErrorMessage();
 
-        Assert.assertEquals(getDriver().findElement(
-                By.xpath("//div[@id='description']/div")).getText(),
-                desc);
+        Assert.assertEquals(actualErrorMessage, "» A job already exists with the name ‘%s’".formatted(nonUniqueProjectName));
     }
 
-    @Test(dependsOnMethods = "testCreateWithDescription")
+    @Test(dependsOnMethods = "testCreate")
     public void testRename() {
-        final String newName = PROJECT_NAME + "2New";
+        final String projectName = "PipelineProject2New";
 
         getDriver().findElement(By.xpath("//table[@id='projectstatus']/tbody/tr/td/a/span/..")).click();
 
@@ -69,7 +70,7 @@ public class PipelineTest extends BaseTest {
 
         WebElement inputName = getDriver().findElement(By.xpath("//input[@checkdependson='newName']"));
         inputName.clear();
-        inputName.sendKeys(newName);
+        inputName.sendKeys(projectName);
 
         getDriver().findElement(By.xpath("//button[@name='Submit']")).click();
 
@@ -78,15 +79,15 @@ public class PipelineTest extends BaseTest {
         String actualJobName = getDriver().findElement(
                 By.xpath("//table[@id='projectstatus']/tbody/tr/td/a/span")).getText();
 
-        Assert.assertEquals(actualJobName, newName);
+        Assert.assertEquals(actualJobName, projectName);
     }
 
-    @Test(description = "AT_02.007.01")
+    @Test()
     public void testWarningMessageOnRenameProjectPage() {
-        final String name = "PipelineProjectRename";
-        createNewProjectAndGoMainPageByLogo(name, ProjectType.Pipeline);
+        final String projectName = "PipelineProjectRename";
+        createNewProjectAndGoMainPageByLogo(projectName, ProjectType.Pipeline);
 
-        findProjectOnDashboardByName(name).click();
+        findProjectOnDashboardByName(projectName).click();
         clickRenameButtonOnSidebar();
 
         String actualWarningMessage = getWait5().until(ExpectedConditions.visibilityOfElementLocated(
@@ -135,11 +136,11 @@ public class PipelineTest extends BaseTest {
 
     @Test
     public void testAddDescription() {
-        final String name = PROJECT_NAME + "AndDesc";
+        final String projectName = "PipelineProjectAndDesc";
         final String desc = "Add description for new project 45";
-        createNewProjectAndGoMainPageByLogo(name, ProjectType.Pipeline);
+        createNewProjectAndGoMainPageByLogo(projectName, ProjectType.Pipeline);
 
-        getDriver().findElement(By.xpath("//td/a/span[text() = '%s']/..".formatted(name))).click();
+        getDriver().findElement(By.xpath("//td/a/span[text() = '%s']/..".formatted(projectName))).click();
 
         getDriver().findElement(By.id("description-link")).click();
         getDriver().findElement(By.name("description")).sendKeys(desc);
@@ -162,7 +163,7 @@ public class PipelineTest extends BaseTest {
         Assert.assertEquals(actualMessage, "Welcome to Jenkins!");
     }
 
-    @Test(description = "AT_02.005.02")
+    @Test()
     public void testDeleteByChevronDashboard() {
         final String projectName = "ProjectDeleteByChevron";
         createNewProjectAndGoMainPageByLogo(projectName, ProjectType.Pipeline);
@@ -190,7 +191,7 @@ public class PipelineTest extends BaseTest {
         Assert.assertEquals(actualMessage, "Welcome to Jenkins!");
     }
 
-    @Test(description = "AT_02.005.03")
+    @Test()
     public void testDeleteByChevronBreadcrumb() {
         final String projectName = "ProjectDeleteByChevronBreadcrumb";
         createNewProjectAndGoMainPageByLogo(projectName, ProjectType.Pipeline);
@@ -217,22 +218,6 @@ public class PipelineTest extends BaseTest {
         String actualMessage = getDriver().findElement(By.xpath("//div[@class='empty-state-block']/h1")).getText();
 
         Assert.assertEquals(actualMessage, "Welcome to Jenkins!");
-    }
-
-    @Test
-    public void testCreateWithNotUniqueName() {
-        String nonUniqueProjectName = PROJECT_NAME + "Unique";
-
-        createNewProjectAndGoMainPageByLogo(nonUniqueProjectName, ProjectType.Pipeline);
-
-        getDriver().findElement(By.xpath("//a[contains(@href, 'newJob')]")).click();
-
-        getDriver().findElement(By.id("name")).sendKeys(nonUniqueProjectName);
-
-        String actualErrorMessage = getWait5().until(ExpectedConditions.visibilityOfElementLocated(
-                By.id("itemname-invalid"))).getText();
-
-        Assert.assertEquals(actualErrorMessage, "» A job already exists with the name ‘%s’".formatted(nonUniqueProjectName));
     }
 
     @Test
