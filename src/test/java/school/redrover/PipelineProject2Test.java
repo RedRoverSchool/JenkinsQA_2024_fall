@@ -1,21 +1,19 @@
 package school.redrover;
 
-import org.openqa.selenium.WebDriver;
 import org.testng.Assert;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 import school.redrover.page.HomePage;
-import school.redrover.page.PipelineProjectPage;
+import school.redrover.runner.BaseTest;
+
 import java.util.List;
 
 
-public class PipelineProject2Test extends PipelineProjectPage {
+public class PipelineProject2Test extends BaseTest {
 
     private static final String PROJECT_NAME = "MyPipelineProject";
 
-    public PipelineProject2Test(WebDriver driver) {
-        super(driver);
-    }
+
 
     @DataProvider
     public Object[][] providerUnsafeCharacters() {
