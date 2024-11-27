@@ -13,4 +13,5 @@ public class FreestyleProjectPage extends BaseProjectPage {
     protected FreestyleProjectPage createProjectPage() {
         return new FreestyleProjectPage(getDriver());
     }
+
 }
