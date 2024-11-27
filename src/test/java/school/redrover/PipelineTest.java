@@ -8,6 +8,7 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 import school.redrover.page.CreateNewItemPage;
 import school.redrover.page.HomePage;
+import school.redrover.page.PipelineProjectPage;
 import school.redrover.runner.BaseTest;
 import school.redrover.runner.TestUtils;
 
@@ -17,7 +18,7 @@ import java.util.List;
 
 public class PipelineTest extends BaseTest {
 
-    private static final String PROJECT_NAME = "Project";
+    private static final String PROJECT_NAME = "PipelineProject";
 
     @Test
     public void testCreate() {
@@ -60,26 +61,40 @@ public class PipelineTest extends BaseTest {
         Assert.assertEquals(actualErrorMessage, "» A job already exists with the name ‘%s’".formatted(nonUniqueProjectName));
     }
 
-    @Test(dependsOnMethods = "testCreate")
+    @Test
+    public void testCreateWithDescription() {
+        final String description = "The leading open source automation server, Jenkins provides hundreds of plugins to support building, deploying and automating any project.";
+        final String projectName = "PipelineProjectAndDescription";
+
+        String actualDescription = new HomePage(getDriver())
+                .clickNewItem()
+                .enterItemName(projectName)
+                .selectPipelineAndClickOk()
+                .enterDescription(description)
+                .clickSaveButton()
+                .getDescription();
+
+        Assert.assertEquals(actualDescription, description);
+    }
+
+    @Test()
     public void testRename() {
         final String projectName = "PipelineProject2New";
 
-        getDriver().findElement(By.xpath("//table[@id='projectstatus']/tbody/tr/td/a/span/..")).click();
+        PipelineProjectPage projectPage = new HomePage(getDriver())
+                .clickNewItem()
+                .enterItemName(PROJECT_NAME)
+                .selectPipelineAndClickOk()
+                .clickSaveButton()
+                .gotoHomePage()
+                .clickOnPipelineName(PROJECT_NAME)
+                .clickRenameOnSidebar()
+                .cleanInputFieldAndTypeName(projectName)
+                .clickRenameButton();
 
-        getDriver().findElement(By.xpath("//div[@id='tasks']/div[7]")).click();
 
-        WebElement inputName = getDriver().findElement(By.xpath("//input[@checkdependson='newName']"));
-        inputName.clear();
-        inputName.sendKeys(projectName);
-
-        getDriver().findElement(By.xpath("//button[@name='Submit']")).click();
-
-        goToHomePageByLogo();
-
-        String actualJobName = getDriver().findElement(
-                By.xpath("//table[@id='projectstatus']/tbody/tr/td/a/span")).getText();
-
-        Assert.assertEquals(actualJobName, projectName);
+        Assert.assertEquals(projectPage.getTitle(), projectName);
+        Assert.assertEquals(projectPage.getProjectNameBreadcrumb(),projectName);
     }
 
     @Test()
@@ -336,5 +351,3 @@ public class PipelineTest extends BaseTest {
         }
     }
 }
-
-
