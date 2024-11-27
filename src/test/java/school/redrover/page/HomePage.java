@@ -106,10 +106,10 @@ public class HomePage  extends BasePage {
         return new MultiConfigurationProjectPage(getDriver());
     }
 
-    public FreestyleProjectProjectPage openFreestyleProject(String name) {
+    public FreestyleProjectPage openFreestyleProject(String name) {
         getDriver().findElement(By.xpath("//td/a/span[text() = '%s']/..".formatted(name))).click();
 
-        return new FreestyleProjectProjectPage(getDriver());
+        return new FreestyleProjectPage(getDriver());
     }
 
     public ManageJenkinsPage openManageJenkinsPage() {

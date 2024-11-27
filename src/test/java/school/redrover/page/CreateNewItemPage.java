@@ -49,18 +49,18 @@ public class  CreateNewItemPage extends BasePage {
         return new MultiConfigurationConfigPage(getDriver());
     }
 
-    public FreestyleProjectConfigPage selectFreestyleProjectAndClickOk() {
+    public FreestyleConfigPage selectFreestyleProjectAndClickOk() {
         getDriver().findElement(By.xpath("//span[text()='Freestyle project']")).click();
         clickOkButton();
 
-        return new FreestyleProjectConfigPage(getDriver());
+        return new FreestyleConfigPage(getDriver());
     }
 
-    public FreestyleProjectConfigPage nameAndSelectFreestyleProject(String itemName) {
+    public FreestyleConfigPage nameAndSelectFreestyleProject(String itemName) {
         enterItemName(itemName);
         selectFreestyleProjectAndClickOk();
 
-        return new FreestyleProjectConfigPage(getDriver());
+        return new FreestyleConfigPage(getDriver());
     }
 
     public MultibranchPipelineConfigPage selectMultibranchPipelineAndClickOk() {
