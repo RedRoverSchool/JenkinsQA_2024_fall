@@ -1,6 +1,7 @@
 package school.redrover.page;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import school.redrover.page.base.BasePage;
 
@@ -69,6 +70,19 @@ public class CreateNewItemPage extends BasePage {
         return new PipelineConfigurePage(getDriver());
     }
 
+    public OrganizationFolderConfigurationPage selectOrganizationFolderAndClickOk() {
+
+        JavascriptExecutor js = (JavascriptExecutor) getDriver();
+        js.executeScript("window.scrollTo(0, document.body.scrollHeight);");
+
+        getDriver()
+                .findElement(By.xpath("//li[@class='jenkins_branch_OrganizationFolder']"))
+                .click();
+        getDriver().findElement(By.xpath("//button[@type='submit']")).click();
+
+        return new OrganizationFolderConfigurationPage(getDriver());
+    }
+  
     public String getInvalidNameMessage() {
         return getDriver().findElement(By.id("itemname-invalid")).getText();
     }
@@ -83,3 +97,4 @@ public class CreateNewItemPage extends BasePage {
         return new ErrorPage(getDriver());
     }
 }
+
