@@ -19,7 +19,7 @@ public class DeleteMulticonfigurationProjectTest extends BaseTest {
                 .clickNewItem()
                 .enterItemName(projectName)
                 .selectProjectTypeAndSave(CreateNewItemPage.ItemType.MULTICONFIGURATION_PROJECT)
-                .goToDashboard();
+                .gotoHomePage();
     }
 
     @Test

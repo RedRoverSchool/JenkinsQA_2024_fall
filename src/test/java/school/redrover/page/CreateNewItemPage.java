@@ -36,11 +36,11 @@ public class CreateNewItemPage extends BasePage {
         return this;
     }
 
-    public ConfigurationPage selectProjectTypeAndSave(ItemType itemType) {
+    public FolderConfigPage selectProjectTypeAndSave(ItemType itemType) {
         getDriver().findElement(By.xpath("//span[text()='%s']".formatted(itemType.getItemName()))).click();
         getDriver().findElement(By.id("ok-button")).click();
 
-        return new ConfigurationPage(getDriver());
+        return new FolderConfigPage(getDriver());
     }
 
     public CreateNewItemPage selectProjectType(ItemType itemType) {
@@ -49,11 +49,11 @@ public class CreateNewItemPage extends BasePage {
         return this;
     }
 
-    public ConfigurationPage nameAndSelectItemType(String itemName, ItemType itemType) {
+    public FolderConfigPage nameAndSelectItemType(String itemName, ItemType itemType) {
         enterItemName(itemName);
         selectProjectTypeAndSave(itemType);
 
-        return new ConfigurationPage(getDriver());
+        return new FolderConfigPage(getDriver());
     }
 
     public MultibranchPipelineConfigPage selectMultibranchPipelineAndClickOk() {

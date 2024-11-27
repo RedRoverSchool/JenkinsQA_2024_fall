@@ -1,48 +1,18 @@
 package school.redrover.page.base;
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.support.ui.WebDriverWait;
+import school.redrover.page.HomePage;
 
-import java.time.Duration;
-
-public abstract class BasePage {
-
-    private final WebDriver driver;
-
-    private WebDriverWait wait2;
-    private WebDriverWait wait5;
-    private WebDriverWait wait10;
+public abstract class BasePage extends BaseModel {
 
     public BasePage(WebDriver driver) {
-        this.driver = driver;
+        super(driver);
     }
 
-    protected WebDriver getDriver() {
-        return driver;
-    }
+    public HomePage gotoHomePage() {
+        getDriver().findElement(By.id("jenkins-home-link")).click();
 
-    protected WebDriverWait getWait2() {
-        if (wait2 == null) {
-            wait2 = new WebDriverWait(getDriver(), Duration.ofSeconds(2));
-        }
-
-        return wait2;
-    }
-
-    protected WebDriverWait getWait5() {
-        if (wait5 == null) {
-            wait5 = new WebDriverWait(getDriver(), Duration.ofSeconds(5));
-        }
-
-        return wait5;
-
-    }
-
-    protected WebDriverWait getWait10() {
-        if (wait10 == null) {
-            wait10 = new WebDriverWait(getDriver(), Duration.ofSeconds(10));
-        }
-
-        return wait10;
+        return new HomePage(getDriver());
     }
 }
