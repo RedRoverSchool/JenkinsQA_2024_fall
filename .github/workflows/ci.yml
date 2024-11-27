@@ -23,8 +23,8 @@ jobs:
           java-version: '17'
           cache: 'maven'
 
-#      - name: Get list of changed files
-#        run: echo "LIST_OF_CHANGED_FILES=$(git diff --name-only origin/$GITHUB_HEAD_REF $(git merge-base origin/$GITHUB_HEAD_REF origin/main) | tr '\n' ';')" >> $GITHUB_ENV
+      - name: Get list of changed files
+        run: echo "LIST_OF_CHANGED_FILES=$(git diff --name-only origin/$GITHUB_HEAD_REF $(git merge-base origin/$GITHUB_HEAD_REF origin/main) | tr '\n' ';')" >> $GITHUB_ENV
 
       - name: Prepare Jenkins data
         run: |
@@ -46,10 +46,7 @@ jobs:
         run: ./.github/wait-for-jenkins.sh
 
       - name: Create screenshots directory
-        run: |
-          rm -rf ${{ github.workspace }}/screenshots/*
-          mkdir -p ${{ github.workspace }}/screenshots
-          chmod -R 777 ${{ github.workspace }}/screenshots
+        run: mkdir -p ${{ github.workspace }}/screenshots
 
       - name: Maven test
         run: mvn test

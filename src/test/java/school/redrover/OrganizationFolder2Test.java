@@ -5,17 +5,21 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 import school.redrover.runner.BaseTest;
 
+
+
 public class OrganizationFolder2Test extends BaseTest {
-    private static final String ORGANIZATION_FOLDER_NAME = "NewOrgFolder";
 
     @Test
     public void testCreateOrganizationFolder() {
         getDriver().findElement(By.xpath("//a[.='New Item']")).click();
-        getDriver().findElement(By.id("name")).sendKeys(ORGANIZATION_FOLDER_NAME);
-        getDriver().findElement(By.xpath("//label/span[text() ='Organization Folder']")).click();
-        getDriver().findElement(By.xpath("//button[@id='ok-button']")).click();
-        getDriver().findElement(By.xpath("//button[@name='Submit']")).click();
+        getDriver().findElement(By.id("name")).click();
+        getDriver().findElement(By.id("name")).sendKeys("New Organization Folder");
+        getDriver().findElement(By.xpath("//span[.='Organization Folder']")).click();
+        getDriver().findElement(By.id("ok-button")).click();
+        getDriver().findElement(By.name("Submit")).click();
 
-        Assert.assertEquals(getDriver().findElement(By.xpath("//h1")).getText(), ORGANIZATION_FOLDER_NAME);
+        getDriver().findElement(By.xpath("//a[.='Dashboard']")).click();
+
+        Assert.assertTrue(getDriver().findElement(By.xpath("//span[.='New Organization Folder']")).isDisplayed());
     }
 }

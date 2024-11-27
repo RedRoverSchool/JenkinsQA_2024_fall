@@ -13,4 +13,10 @@ public class GroupWnFTest extends BaseTest {
         WebElement welcomeMessage = getDriver().findElement(By.xpath("//h1"));
         Assert.assertEquals(welcomeMessage.getText(), "Welcome to Jenkins!");
     }
+
+    @Test
+    public void manageJenkinsButtonTest() {
+        WebElement manageJenkinsButton = getDriver().findElement(By.linkText("Manage Jenkins"));
+        Assert.assertTrue(manageJenkinsButton.isDisplayed(), "Manage Jenkins button should be displayed on the home page");
+    }
 }

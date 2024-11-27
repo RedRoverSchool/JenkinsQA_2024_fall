@@ -5,11 +5,13 @@ import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.testng.Assert;
+import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import school.redrover.runner.BaseTest;
 
 
 public class AddJenkinsPipelineTest extends BaseTest {
+
 
     @Test
     public void testCreateMultiConfigProject() {
@@ -26,7 +28,7 @@ public class AddJenkinsPipelineTest extends BaseTest {
          WebElement inputElement = getDriver().findElement(By.name("_.projectUrlStr"));
          Actions actions = new Actions(getDriver());
          actions.moveToElement(inputElement).click().perform();
-         inputElement.sendKeys("https://github.com/dema28/DenisNovicov.git");
+         inputElement.sendKeys("https://github.com/dema28/DenisNovicov/");
 
          JavascriptExecutor js = (JavascriptExecutor) getDriver();
          js.executeScript("window.scrollBy(0, 1000);");

@@ -1,75 +1,145 @@
 package school.redrover.runner;
 
-import org.apache.commons.io.FileUtils;
-import org.openqa.selenium.OutputType;
-import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.ITestResult;
 import org.testng.annotations.*;
+import school.redrover.runner.order.OrderForTests;
+import school.redrover.runner.order.OrderUtils;
 
-import java.io.File;
-import java.io.IOException;
 import java.lang.reflect.Method;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.time.Duration;
+import java.util.Arrays;
+import java.util.stream.Collectors;
 
-@Listeners({FilterForTests.class})
+@Listeners({FilterForTests.class, OrderForTests.class})
 public abstract class BaseTest {
 
     private WebDriver driver;
 
-    @BeforeMethod
-    protected void beforeMethod(Method method) {
-        ProjectUtils.logf("Run %s.%s", this.getClass().getName(), method.getName());
+    private WebDriverWait wait2;
+    private WebDriverWait wait5;
+    private WebDriverWait wait10;
 
+    private OrderUtils.MethodsOrder<Method> methodsOrder;
+
+
+    private void startDriver() {
+        ProjectUtils.log("Browser open");
+
+        driver = ProjectUtils.createDriver();
+    }
+
+    private void clearData() {
         ProjectUtils.log("Clear data");
         JenkinsUtils.clearData();
+    }
 
-        ProjectUtils.log("Browser open");
-        driver = ProjectUtils.createDriver();
-
-        ProjectUtils.log("Get web page");
-        ProjectUtils.get(driver);
-
+    private void loginWeb() {
         ProjectUtils.log("Login");
         JenkinsUtils.login(driver);
     }
 
-    @AfterMethod
-    protected void afterMethod(Method method, ITestResult testResult) {
+    private void getWeb() {
+        ProjectUtils.log("Get web page");
+        ProjectUtils.get(driver);
+    }
 
-        final String screenshotsDir = System.getProperty("user.dir") + "/screenshots";
+    private void acceptAlert() {
+        ProjectUtils.acceptAlert(getDriver());
+    }
 
-        if (!testResult.isSuccess()) {
-            File screenshot = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
-            File destinationPath = new File(screenshotsDir, testResult.getName() + ".png");
+    private void stopDriver() {
+        try {
+            JenkinsUtils.logout(driver);
+        } catch (Exception ignore) {}
 
-            try {
-                if (!destinationPath.getParentFile().exists()) {
-                    Files.createDirectories(Paths.get(screenshotsDir));
-                }
-                FileUtils.copyFile(screenshot, destinationPath);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
+        closeDriver();
+    }
 
-        if (ProjectUtils.isServerRun() || testResult.isSuccess() || ProjectUtils.closeBrowserIfError()) {
-            try {
-                JenkinsUtils.logout(driver);
-            } catch (Exception ignore) {
-            }
+    private void closeDriver() {
+        if (driver != null) {
             driver.quit();
+
+            driver = null;
+            wait2 = null;
+            wait5 = null;
+            wait10 = null;
+
             ProjectUtils.log("Browser closed");
         }
+    }
 
-        ProjectUtils.logf(
-                "Execution time is %.3f sec",
-                (testResult.getEndMillis() - testResult.getStartMillis()) / 1000.0);
+    @BeforeClass
+    protected void beforeClass() {
+        methodsOrder = OrderUtils.createMethodsOrder(
+                Arrays.stream(this.getClass().getMethods())
+                        .filter(m -> m.getAnnotation(Test.class) != null && m.getAnnotation(Ignore.class) == null)
+                        .collect(Collectors.toList()),
+                m -> m.getName(),
+                m -> m.getAnnotation(Test.class).dependsOnMethods());
+    }
 
+    @BeforeMethod
+    protected void beforeMethod(Method method) {
+        ProjectUtils.logf("Run %s.%s", this.getClass().getName(), method.getName());
+        try {
+            if (!methodsOrder.isGroupStarted(method) || methodsOrder.isGroupFinished(method)) {
+                clearData();
+                startDriver();
+                getWeb();
+                loginWeb();
+            } else {
+                getWeb();
+                acceptAlert();
+            }
+        } catch (Exception e) {
+            closeDriver();
+            throw new RuntimeException(e);
+        } finally {
+            methodsOrder.markAsInvoked(method);
+        }
+    }
+
+    @AfterMethod
+    protected void afterMethod(Method method, ITestResult testResult) {
+        if (!testResult.isSuccess() && ProjectUtils.isServerRun()) {
+            ProjectUtils.takeScreenshot(getDriver(), testResult.getTestClass().getRealClass().getSimpleName(), testResult.getName());
+        }
+
+        if (methodsOrder.isGroupFinished(method) && (ProjectUtils.isServerRun() || testResult.isSuccess() || ProjectUtils.closeBrowserIfError())) {
+            stopDriver();
+        }
+
+        ProjectUtils.logf("Execution time is %.3f sec", (testResult.getEndMillis() - testResult.getStartMillis()) / 1000.0);
     }
 
     protected WebDriver getDriver() {
         return driver;
+    }
+
+    protected WebDriverWait getWait2() {
+        if (wait2 == null) {
+            wait2 = new WebDriverWait(getDriver(), Duration.ofSeconds(2));
+        }
+
+        return wait2;
+    }
+
+    protected WebDriverWait getWait5() {
+        if (wait5 == null) {
+            wait5 = new WebDriverWait(getDriver(), Duration.ofSeconds(5));
+        }
+
+        return wait5;
+
+    }
+
+    protected WebDriverWait getWait10() {
+        if (wait10 == null) {
+            wait10 = new WebDriverWait(getDriver(), Duration.ofSeconds(10));
+        }
+
+        return wait10;
     }
 }

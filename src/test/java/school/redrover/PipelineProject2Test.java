@@ -1,136 +1,80 @@
 package school.redrover;
 
-import org.openqa.selenium.By;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.Select;
-import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
+import school.redrover.page.HomePage;
 import school.redrover.runner.BaseTest;
 
-import java.time.Duration;
+import java.util.List;
+
 
 public class PipelineProject2Test extends BaseTest {
 
     private static final String PROJECT_NAME = "MyPipelineProject";
-    private static final String FOLDER_NAME = "MyFolder";
 
-    private void createItem(String nameItem, String locator) {
-        getDriver().findElement(By.xpath("//a[@href='/view/all/newJob']")).click();
-        getDriver().findElement(By.id("name")).sendKeys(nameItem);
-        getDriver().findElement(By.xpath(locator)).click();
-        getDriver().findElement(By.id("ok-button")).click();
-    }
+    @DataProvider
+    public Object[][] providerUnsafeCharacters() {
 
-    private void goToMainPage() {
-        getDriver().findElement(By.id("jenkins-name-icon")).click();
-    }
-
-    @Test
-    public void testCreatePipelineProjectWithValidName() {
-        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(10));
-
-        createItem(PROJECT_NAME, "//span[text()='Pipeline']");
-        goToMainPage();
-
-        String pipelineProjectName = wait.until(ExpectedConditions.visibilityOfElementLocated(
-                By.xpath(String.format("//span[text()='%s']", PROJECT_NAME)))).getText();
-
-        Assert.assertEquals(pipelineProjectName, PROJECT_NAME);
+        return new Object[][]{
+                {"\\"}, {"]"}, {":"}, {"#"}, {"&"}, {"?"}, {"!"}, {"@"},
+                {"$"}, {"%"}, {"^"}, {"*"}, {"|"}, {"/"}, {"<"}, {">"},
+                {"["}, {";"}
+        };
     }
 
     @Test
-    public void testCreatePipelineProjectWithEmptyName() {
+    public void testCreateWithEmptyName() {
+        String emptyNameMessage = new HomePage(getDriver())
+                .clickNewItem()
+                .enterItemName("")
+                .selectPipeline()
+                .getEmptyNameMessage();
 
-        getDriver().findElement(By.xpath("//a[@href='/view/all/newJob']")).click();
-
-        getDriver().findElement(By.xpath("//span[text()='Pipeline']")).click();
-
-        String errorMessage = getDriver()
-                .findElement(By.id("itemname-required")).getText();
-
-        Assert.assertEquals(errorMessage, "» This field cannot be empty, please enter a valid name");
+        Assert.assertEquals(emptyNameMessage, "» This field cannot be empty, please enter a valid name");
     }
 
     @Test
-    public void testCreatePipelineProjectWithDuplicateName() {
-        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(10));
+    public void testCreateWithDuplicateName() {
+        String errorMessage = new HomePage(getDriver()).clickNewItem()
+                .enterItemName(PROJECT_NAME)
+                .selectPipelineAndClickOk()
+                .clickSaveButton()
+                .gotoHomePage()
+                .clickNewItem()
+                .enterItemName(PROJECT_NAME)
+                .selectPipeline()
+                .getErrorMessage();
 
-        createItem(PROJECT_NAME, "//span[text()='Pipeline']");
-        goToMainPage();
+        Assert.assertEquals(errorMessage, "» A job already exists with the name ‘%s’".formatted(PROJECT_NAME));
+    }
 
-        wait.until(ExpectedConditions.visibilityOfElementLocated(
-                By.xpath("//a[@href='/view/all/newJob']"))).click();
+    @Test(dataProvider = "providerUnsafeCharacters")
+    public void testCreateWithUnsafeCharactersInName(String unsafeCharacter) {
+        String invalidNameMessage = new HomePage(getDriver())
+                .clickNewItem()
+                .enterItemName(unsafeCharacter)
+                .selectPipeline()
+                .getInvalidNameMessage();
 
-        getDriver().findElement(By.id("name")).sendKeys(PROJECT_NAME);
-        getDriver().findElement(By.xpath("//span[text()='Pipeline']")).click();
-
-        String errorMessage = getDriver()
-                .findElement(By.id("itemname-invalid")).getText();
-
-        Assert.assertEquals(errorMessage, String.format("» A job already exists with the name ‘%s’", PROJECT_NAME));
+        Assert.assertEquals(invalidNameMessage, "» ‘%s’ is an unsafe character".formatted(unsafeCharacter));
     }
 
     @Test
-    public void testAddDescriptionForPipelineProject() {
-        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(10));
+    public void testDeleteViaChevron() {
+        List<String> projectList = new HomePage(getDriver())
+                .clickNewItem()
+                .enterItemName(PROJECT_NAME)
+                .selectPipelineAndClickOk()
+                .clickSaveButton()
+                .gotoHomePage()
+                .selectDeleteFromItemMenu(PROJECT_NAME)
+                .clickYesForConfirmDelete()
+                .getItemList();
 
-        String description = "Description pipeline project.";
-
-        createItem(PROJECT_NAME, "//span[text()='Pipeline']");
-        goToMainPage();
-
-        wait.until(ExpectedConditions.visibilityOfElementLocated(
-                        By.xpath(String.format("//span[text()='%s']", PROJECT_NAME))))
-                .click();
-
-        getDriver().findElement(By.id("description-link")).click();
-        getDriver()
-                .findElement(By.xpath("//textarea[@name='description']"))
-                .sendKeys(description);
-        getDriver().findElement(By.xpath("//button[@name='Submit']")).click();
-
-        String actualDescription = getDriver()
-                .findElement(By.xpath("//div[@id='description']/div"))
-                .getText();
-
-        Assert.assertEquals(actualDescription, description);
+        Assert.assertListNotContainsObject(projectList, PROJECT_NAME, "Project is not deleted");
     }
 
-    @Test
-    public void testMovePipelineProjectToFolder() {
 
-        createItem(FOLDER_NAME, "//span[text()='Folder']");
-        goToMainPage();
-
-        createItem(PROJECT_NAME, "//span[text()='Pipeline']");
-        goToMainPage();
-
-        getDriver()
-                .findElement(By.xpath(String.format("//span[text()='%s']", PROJECT_NAME)))
-                .click();
-
-        getDriver()
-                .findElement(By.xpath("//a[contains(@href, 'move')]"))
-                .click();
-
-        new Select(getDriver().findElement(By.xpath("//select[@name='destination']")))
-                .selectByValue("/" + FOLDER_NAME);
-
-        getDriver()
-                .findElement(By.xpath("//button[@name='Submit']"))
-                .click();
-        goToMainPage();
-
-        getDriver()
-                .findElement(By.xpath(String.format("//span[text()='%s']", FOLDER_NAME)))
-                .click();
-
-        String movedPipelineProjectName = getDriver()
-                .findElement(By.xpath(String.format("//span[text()='%s']", PROJECT_NAME)))
-                .getText();
-
-        Assert.assertEquals(movedPipelineProjectName, PROJECT_NAME);
-    }
 
 }
