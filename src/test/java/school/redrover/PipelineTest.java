@@ -6,7 +6,6 @@ import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.Assert;
 import org.testng.annotations.Test;
-import school.redrover.page.CreateNewItemPage;
 import school.redrover.page.HomePage;
 import school.redrover.runner.BaseTest;
 import school.redrover.runner.TestUtils;
@@ -98,7 +97,7 @@ public class PipelineTest extends BaseTest {
         Assert.assertEquals(actualJobName, newName);
     }
 
-    @Test(description = "AT_02.007.01")
+    @Test()
     public void testWarningMessageOnRenameProjectPage() {
         final String name = "PipelineProjectRename";
         createNewProjectAndGoMainPageByLogo(name, ProjectType.Pipeline);
@@ -179,7 +178,7 @@ public class PipelineTest extends BaseTest {
         Assert.assertEquals(actualMessage, "Welcome to Jenkins!");
     }
 
-    @Test(description = "AT_02.005.02")
+    @Test()
     public void testDeleteByChevronDashboard() {
         final String projectName = "ProjectDeleteByChevron";
         createNewProjectAndGoMainPageByLogo(projectName, ProjectType.Pipeline);
@@ -207,7 +206,7 @@ public class PipelineTest extends BaseTest {
         Assert.assertEquals(actualMessage, "Welcome to Jenkins!");
     }
 
-    @Test(description = "AT_02.005.03")
+    @Test()
     public void testDeleteByChevronBreadcrumb() {
         final String projectName = "ProjectDeleteByChevronBreadcrumb";
         createNewProjectAndGoMainPageByLogo(projectName, ProjectType.Pipeline);
@@ -288,22 +287,6 @@ public class PipelineTest extends BaseTest {
         return projectNameList;
     }
 
-    private void createNewProjectWithDescriptionAndGoHomePageByLogo(String name, ProjectType projectType, String description) {
-
-        getDriver().findElement(By.xpath("//a[@href ='newJob']")).click();
-
-        getDriver().findElement(By.id("name")).sendKeys(name);
-
-        getWait10().until(ExpectedConditions.elementToBeClickable(
-                By.xpath(("//div[@id='items']//label/span[text()= '%s']".formatted(projectType))))).click();
-
-        getDriver().findElement(By.id("ok-button")).click();
-
-        getDriver().findElement(By.name("description")).sendKeys(description);
-        getDriver().findElement(By.cssSelector(".jenkins-submit-button")).click();
-
-        goToHomePageByLogo();
-    }
 
     private void createNewProjectAndGoMainPageByLogo(String name, ProjectType projectType) {
 
