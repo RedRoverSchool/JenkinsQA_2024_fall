@@ -3,6 +3,7 @@ package school.redrover.page;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import school.redrover.page.base.BasePage;
 
 public class CreateNewItemPage extends BasePage {
@@ -30,8 +31,26 @@ public class CreateNewItemPage extends BasePage {
         }
     }
 
+    By getNameOfProject = By.xpath("//input[@id='name']");
+    By getTypeOfMultiConfigurationProject = By.xpath("//span[text()='Multi-configuration project']");
+
+    By getSubmitButton = By.xpath("//button[@id = 'ok-button']");
+    By getInputField = By.id("itemname-required");
+
+    public CreateNewItemPage choseMultiConfigurationProject() {
+        getDriver().findElement(getTypeOfMultiConfigurationProject).click();
+
+        return this;
+    }
+
+    public MultiConfigurationConfigPage submitCreationProject() {
+        getDriver().findElement(getSubmitButton).click();
+
+        return new MultiConfigurationConfigPage(getDriver());
+    }
+
     public CreateNewItemPage enterItemName(String name) {
-        getDriver().findElement(By.id("name")).sendKeys(name);
+        getDriver().findElement(getNameOfProject).sendKeys(name);
 
         return this;
     }
@@ -82,7 +101,7 @@ public class CreateNewItemPage extends BasePage {
 
         return new OrganizationFolderConfigurationPage(getDriver());
     }
-  
+
     public String getInvalidNameMessage() {
         return getDriver().findElement(By.id("itemname-invalid")).getText();
     }
@@ -91,10 +110,15 @@ public class CreateNewItemPage extends BasePage {
         return getDriver().findElement(By.id("itemname-required")).getText();
     }
 
-    public ErrorPage saveInvalidData(){
-        getDriver().findElement(By.id("ok-button")).click();
+    public ErrorPage saveInvalidData() {
+        getDriver().findElement(getSubmitButton).click();
 
         return new ErrorPage(getDriver());
+    }
+
+    public String errorEmptyField() {
+
+        return  getDriver().findElement(getInputField).getText();
     }
 }
 

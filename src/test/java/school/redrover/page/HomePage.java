@@ -6,15 +6,41 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.testng.Assert;
 import school.redrover.page.base.BasePage;
 import school.redrover.runner.TestUtils;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class HomePage extends BasePage {
 
     public HomePage(WebDriver driver) {
         super(driver);
+    }
+
+    By getNewItem = By.xpath("//a[@href='/view/all/newJob']");
+    By listOfProjects = By.xpath("//a[@class = 'jenkins-table__link model-link inside'] /span");
+    By getCreatedMultiConfigurationProject =By.xpath("//td/a[@href='job/MTC%20project/']");
+
+    public CreateNewItemPage clickNewItem() {
+        getDriver().findElement(getNewItem).click();
+
+        return new CreateNewItemPage(getDriver());
+    }
+
+    public List<String> showCreatedProject() {
+        List<WebElement> itemList  =getDriver().findElements(listOfProjects);
+
+        return itemList.stream().map(WebElement::getText).collect(Collectors.toList());
+
+    }
+
+    public MultiConfigurationProjectPage goToMultiConfigurationProjectPage() {
+        getDriver().findElement(getCreatedMultiConfigurationProject).click();
+
+        return new MultiConfigurationProjectPage(getDriver());
+
     }
 
     public void createFreestyleProject(String name) {
@@ -100,11 +126,6 @@ public class HomePage extends BasePage {
         return new ManageJenkinsPage(getDriver());
     }
 
-    public CreateNewItemPage clickNewItem() {
-        getDriver().findElement(By.cssSelector("[href$='/newJob']")).click();
-
-        return new CreateNewItemPage(getDriver());
-    }
 
     public String getItemNameByOrder(int order) {
 

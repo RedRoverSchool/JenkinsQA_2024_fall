@@ -9,6 +9,7 @@ import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.Test;
+import school.redrover.page.HomePage;
 import school.redrover.runner.BaseTest;
 
 import java.time.Duration;
@@ -16,12 +17,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class MultiConfigurationProjectTest extends BaseTest {
-    private static final String NAME_OF_PROJECT = " project";
+    private static final String NAME_OF_PROJECT = "MTC project";
     private static final String DESCRIPTIONS = "Descriptions of project";
-
-    private void waitTimeUntilVisibilityElement(Integer time, WebElement element){
-        new WebDriverWait(getDriver(), Duration.ofSeconds(time)).until(ExpectedConditions.visibilityOf(element));
-    }
+    private static final  String ERROR_MESSAGE= "» This field cannot be empty, please enter a valid name";
 
     private void createMultiConfigProject() {
         getDriver().findElement(By.cssSelector("[href$='newJob']")).click();
@@ -32,46 +30,37 @@ public class MultiConfigurationProjectTest extends BaseTest {
 
     @Test(description = "Create project without descriptions")
     public void testCreateProjectWithoutDescription() {
-        getDriver().findElement(By.xpath("//a[@href='/view/all/newJob']")).click();
-        WebElement itemName = getDriver().findElement(By.xpath("//input[@id='name']"));
-        waitTimeUntilVisibilityElement(2, itemName);
-        itemName.sendKeys("Multi-configuration" + NAME_OF_PROJECT);
-        getDriver().findElement(By.xpath("//span[text()='Multi-configuration project']")).click();
-        getDriver().findElement(By.xpath("//button[@id = 'ok-button']")).click();
-        getDriver().findElement(By.xpath("//a[@id='jenkins-home-link']")).click();
+        List<String> itemList = new HomePage(getDriver())
+                .clickNewItem()
+                .enterItemName(NAME_OF_PROJECT)
+                .choseMultiConfigurationProject()
+                .submitCreationProject()
+                .goHome()
+                .showCreatedProject();
+        Assert.assertTrue(itemList.contains(NAME_OF_PROJECT));
 
-        List<WebElement> itemList = getDriver().findElements
-                (By.xpath("//a[@class = 'jenkins-table__link model-link inside'] /span"));
-        List<String> itemListMap = itemList.stream().map(WebElement::getText).collect(Collectors.toList());
-
-        Assert.assertTrue(itemListMap.contains("Multi-configuration project"));
     }
 
     @Test(description = " MultiConfigurationProjectTest | Add descriptions to existing project")
     public void testAddDescriptions() {
         testCreateProjectWithoutDescription();
-        getDriver().findElement(By.xpath("//td/a[@href='job/Multi-configuration%20project/']")).click();
-        getDriver().findElement(By.xpath("//a[@id='description-link']")).click();
-        getDriver().findElement(By.xpath("//textarea[@name = 'description']")).sendKeys(DESCRIPTIONS);
-        getDriver().findElement(By.xpath("//div/button[@name = 'Submit']")).submit();
+        String descriptions  = new HomePage(getDriver())
+                .goToMultiConfigurationProjectPage()
+                .addDescriptions(DESCRIPTIONS)
+                .showDescriptions();
 
         Assert.assertEquals(getDriver().findElement(By.xpath("//div[@id='description']/div[1]")).getText()
                 , DESCRIPTIONS);
-
     }
 
     @Test
     public void testCreateProjectWithoutName() {
-        final String errorMessage = "This field cannot be empty";
+       String errorFieldMessage  = new HomePage(getDriver())
+                .clickNewItem()
+                .choseMultiConfigurationProject()
+                .errorEmptyField();
 
-        getDriver().findElement(By.xpath("//a[@href='/view/all/newJob']")).click();
-        getDriver().findElement(By.className("hudson_matrix_MatrixProject")).click();
-
-        JavascriptExecutor js = (JavascriptExecutor) getDriver();
-        js.executeScript("window.scrollTo(0, document.body.scrollHeight);");
-
-        Assert.assertTrue(getDriver().findElement(By.id("itemname-required")).getText().contains(errorMessage));
-        Assert.assertFalse(getDriver().findElement(By.id("ok-button")).isEnabled());
+        Assert.assertEquals(errorFieldMessage, ERROR_MESSAGE);
     }
 
     @Test
@@ -142,15 +131,14 @@ public class MultiConfigurationProjectTest extends BaseTest {
     @Test
     public void testCreateWithExistingName(){
         testCreateProjectWithoutDescription();
+        String errorMessage = new  HomePage(getDriver())
+                .clickNewItem()
+                .enterItemName(NAME_OF_PROJECT)
+                .choseMultiConfigurationProject()
+                .saveInvalidData()
+                .getErrorMessage();
 
-        getDriver().findElement(By.xpath("//a[@href='/view/all/newJob']")).click();
-        WebElement itemName = getDriver().findElement(By.xpath("//input[@id='name']"));
-        waitTimeUntilVisibilityElement(2, itemName);
-        itemName.sendKeys("Multi-configuration" + NAME_OF_PROJECT);
-        WebElement errorMessage = getDriver().findElement(By.xpath("//div[@id = 'itemname-invalid']"));
-        waitTimeUntilVisibilityElement(4, errorMessage);
-
-        Assert.assertEquals(errorMessage.getText(), "» A job already exists with the name " +
-                "‘Multi-configuration project’");
+        Assert.assertEquals(errorMessage, "A job already exists with the name " +
+        "‘MTC project’");
     }
 }

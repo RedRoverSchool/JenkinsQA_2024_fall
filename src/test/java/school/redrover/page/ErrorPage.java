@@ -8,8 +8,9 @@ public class ErrorPage extends BasePage {
     public ErrorPage(WebDriver driver) {
         super(driver);
     }
+    By errorMessage = By.tagName("p");
 
     public String getErrorMessage() {
-        return getDriver().findElement(By.tagName("p")).getText();
+        return getDriver().findElement(errorMessage).getText();
     }
 }
