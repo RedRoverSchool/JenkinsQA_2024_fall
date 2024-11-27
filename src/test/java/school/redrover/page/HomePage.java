@@ -149,6 +149,19 @@ public class HomePage  extends BasePage {
         return new FolderConfigPage(getDriver());
     }
 
+    public HomePage selectDeleteFromItemMenu(String itemName) {
+        selectMenuFromItemDropdown(itemName, "Delete");
+
+        return this;
+    }
+
+    public HomePage clickYesForConfirmDelete() {
+        getWait5().until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//button[@data-id='ok']"))).click();
+
+        return this;
+    }
+
     public CreateNewItemPage selectNewItemFromFolderMenu(String itemName) {
         selectMenuFromItemDropdown(itemName, "New Item");
 
