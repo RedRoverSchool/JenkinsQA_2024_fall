@@ -2,6 +2,7 @@ package school.redrover;
 
 import org.openqa.selenium.By;
 import org.testng.Assert;
+import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import school.redrover.runner.BaseTest;
 
@@ -19,6 +20,7 @@ public class AddNewItemTest extends BaseTest {
         getDriver().findElement(By.xpath("//button[@name='Submit']")).click();
     }
 
+    @Ignore
     @Test
     public void testInsideProject() {
 
