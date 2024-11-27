@@ -48,6 +48,16 @@ public class PipelineProjectPage extends BaseProjectPage {
                 By.xpath("//div[@id='description']"))).getText();
     }
 
+    public String getTitle() {
+        return getDriver().findElement(By.xpath("//div[@class='jenkins-app-bar']//h1")).getText();
+    }
+
+    public String getProjectNameBreadcrumb() {
+        return getDriver().findElement(
+                By.xpath("//ol[@id='breadcrumbs']/li[@class='jenkins-breadcrumbs__list-item'][2]")).getText();
+    }
+
+
     public PipelineConfigurePage clickConfigureSidebar(String name) {
         getWait2().until(ExpectedConditions.elementToBeClickable(
                 By.xpath("//a[@href='/job/%s/configure']".formatted(name)))).click();
