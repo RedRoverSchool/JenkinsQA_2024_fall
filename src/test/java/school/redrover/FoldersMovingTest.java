@@ -7,6 +7,7 @@ import org.openqa.selenium.support.ui.Select;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import school.redrover.runner.BaseTest;
+import java.util.List;
 
 import static school.redrover.runner.TestUtils.newItemsData;
 
@@ -80,5 +81,32 @@ public class FoldersMovingTest extends BaseTest {
                 "FolderOne\n" +
                 "FolderThree\n" +
                 "Move");
+    }
+
+    @Test(dependsOnMethods = "testTryToMoveInTheSamePlace")
+    public void testMoveOnTheHigherLevel () {
+        getWait10().until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("/html/body/div[2]/div[2]/div[2]/div[2]/table/tbody/tr/td[3]/a/span"))).click();
+        getWait10().until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("/html/body/div[2]/div[2]/div[3]/div[2]/table/tbody/tr[1]/td[3]/a/span"))).click();
+
+        clickOnMove();
+        setDestinationFolder("Jenkins");
+
+        Assert.assertEquals(getFolderExtension(), "Dashboard\n" +
+                "FolderThree");
+    }
+
+    @Test(dependsOnMethods = "testMoveOnTheHigherLevel")
+    public void testNoOptionsToMoveParentIntoChild () {
+        getWait10().until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("/html/body/div[2]/div[2]/div[2]/div[2]/table/tbody/tr/td[3]/a/span"))).click();
+        clickOnMove();
+
+        List<String> available = getDriver().findElements(By.name("destination")).stream()
+                .map(WebElement::getText)
+                .toList();
+
+        Assert.assertFalse(available.toString().contains("FolderTwo"));
     }
 }
