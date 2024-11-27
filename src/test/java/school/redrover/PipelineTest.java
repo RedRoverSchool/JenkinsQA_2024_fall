@@ -24,8 +24,8 @@ public class PipelineTest extends BaseTest {
         String projectName = "PipelineProjectNew";
         String actualProjectName = new HomePage(getDriver())
                 .clickNewItem()
-                .nameAndSelectItemType(projectName, CreateNewItemPage.ItemType.PIPELINE)
-                .clickSaveButton()
+                .enterItemName(projectName)
+                .selectPipelineAndClickOk()
                 .gotoHomePage()
                 .getItemName();
 
