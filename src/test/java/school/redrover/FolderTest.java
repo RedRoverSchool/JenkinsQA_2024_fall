@@ -7,6 +7,7 @@ import org.testng.annotations.Test;
 import school.redrover.page.HomePage;
 import school.redrover.page.FolderProjectPage;
 import school.redrover.runner.BaseTest;
+import java.util.List;
 
 public class FolderTest extends BaseTest {
 
@@ -30,13 +31,15 @@ public class FolderTest extends BaseTest {
     @Test
     public void testCreateWithMinNameLength() {
 
-        new HomePage(getDriver())
+        List<String> itemList = new HomePage(getDriver())
                 .clickNewItem()
                 .enterItemName("F")
                 .selectFolderAndClickOk()
-                .gotoHomePage();
+                .gotoHomePage()
+                .getItemList();
 
-        Assert.assertEquals(getDriver().findElement(By.xpath("//td/a/span")).getText(),"F");
+        Assert.assertEquals(itemList.size(),1);
+        Assert.assertEquals(itemList.get(0),"F");
     }
 
     @Test(dependsOnMethods = "testCreateWithMinNameLength")
@@ -70,6 +73,7 @@ public class FolderTest extends BaseTest {
 
     @Test(dependsOnMethods = "testConfigureDescriptionByChevron")
     public void testCreateNewItemByChevron() {
+
         String projectName = new FolderProjectPage(getDriver())
                 .gotoHomePage()
                 .selectNewItemFromFolderMenu(FIRST_FOLDER_NAME)
@@ -85,6 +89,7 @@ public class FolderTest extends BaseTest {
 
     @Test
     public void testCreateNewItemFromFolderPage() {
+
         String projectName =  new HomePage(getDriver())
                 .clickNewItem()
                 .nameAndSelectFolderType(FIRST_FOLDER_NAME)
@@ -116,6 +121,7 @@ public class FolderTest extends BaseTest {
 
     @Test
     public void testErrorDuringCreationWithDotInEnd() {
+
         String errorMessage = new HomePage(getDriver())
                 .clickNewItem()
                 .enterItemName("Folder.")
@@ -127,6 +133,7 @@ public class FolderTest extends BaseTest {
 
     @Test
     public void testErrorAfterCreationWithDotInEnd() {
+
         String errorMessage = new HomePage(getDriver())
                 .clickNewItem()
                 .enterItemName("Folder.")
@@ -140,6 +147,7 @@ public class FolderTest extends BaseTest {
 
     @Test
     public void testErrorEmptyNameCreation() {
+
         String errorMessage = new HomePage(getDriver())
                 .clickNewItem()
                 .selectFolderType()
@@ -151,6 +159,7 @@ public class FolderTest extends BaseTest {
     @Ignore
     @Test(dependsOnMethods = "testOpenBuildHistoryByChevron")
     public void testErrorDuplicateNameCreation() {
+
         String errorMessage = new HomePage(getDriver())
                 .clickNewItem().enterItemName(FIRST_FOLDER_NAME)
                 .getInvalidNameMessage();
