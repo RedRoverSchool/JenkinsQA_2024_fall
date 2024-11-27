@@ -17,9 +17,9 @@ public class ViewTest extends BaseTest {
 
     private static final String PIPELINE_NAME = "Pipeline_name";
     private static final String VIEW_NAME = "View_name";
+    private static final By OK_BUTTON = By.xpath("//button[@name='Submit']");
 
     private void createListViewForJob(String viewName, String jobName) {
-        getDriver().findElement(By.id("jenkins-home-link")).click();
         getWait2().until(ExpectedConditions.elementToBeClickable(By.xpath("//a[@title='New View']"))).click();
 
         WebElement inputNameField = getWait2().until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//input[@id='name']")));
@@ -29,11 +29,20 @@ public class ViewTest extends BaseTest {
         getDriver().findElement(By.xpath("//button[@name='Submit']")).click();
 
         getWait2().until(ExpectedConditions.elementToBeClickable(By.xpath("//label[@title='%s']".formatted(jobName)))).click();
-        getDriver().findElement(By.xpath("//button[@name='Submit']")).click();
+        getDriver().findElement(OK_BUTTON).click();
     }
 
-    private void returnToHomePage() {
-        getDriver().findElement(By.id("jenkins-home-link")).click();
+    private List<String> getColumnList() {
+
+        return getWait5().until(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.xpath("//thead//th")))
+                .stream()
+                .map(WebElement::getText)
+                .toList();
+    }
+
+    private void clickViewByName(String name) {
+        getWait2().until(ExpectedConditions.elementToBeClickable(
+                By.xpath("//a[@href='/view/%s/']".formatted(name)))).click();
     }
 
     @Test
@@ -59,7 +68,6 @@ public class ViewTest extends BaseTest {
         );
 
         TestUtils.createPipeline(this, PIPELINE_NAME);
-        returnToHomePage();
 
         getWait2().until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//a[@title='New View']"))).click();
 
@@ -86,15 +94,13 @@ public class ViewTest extends BaseTest {
     }
 
     @Test
-    public void testDeleteViewColumnForSpecificProject() {
+    public void testDeleteViewColumnForSpecificProjectByXButton() {
         final String columnName = "Weather";
 
         TestUtils.createPipeline(this, PIPELINE_NAME);
         createListViewForJob(VIEW_NAME, PIPELINE_NAME);
-        returnToHomePage();
+        clickViewByName(VIEW_NAME);
 
-        getWait2().until(ExpectedConditions.elementToBeClickable(
-                By.xpath("//a[@href='/view/%s/']".formatted(VIEW_NAME)))).click();
         getWait2().until(ExpectedConditions.elementToBeClickable(
                 By.xpath("//a[@href='/view/%s/configure']".formatted(VIEW_NAME)))).click();
 
@@ -110,14 +116,32 @@ public class ViewTest extends BaseTest {
         closeButton.click();
 
         getWait10().until(ExpectedConditions.numberOfElementsToBe(By.xpath("//div[@class='repeated-chunk__header']"), 6));
-        getWait2().until(ExpectedConditions.elementToBeClickable(By.xpath("//button[@name='Submit']"))).click();
+        getWait2().until(ExpectedConditions.elementToBeClickable(OK_BUTTON)).click();
 
-        List<String> columnList = getWait5().until(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.xpath("//thead//th")))
-                .stream()
-                .map(WebElement::getText)
-                .toList();
 
-        Assert.assertEquals(columnList.size(), 6);
-        Assert.assertListNotContainsObject(columnList, columnName, "Deleted column is not displayed");
+        Assert.assertEquals(getColumnList().size(), 6);
+        Assert.assertListNotContainsObject(getColumnList(), columnName, "Deleted column is not displayed");
+    }
+
+    @Test
+    public void testAddColumn() {
+        final String columnName = "Git Branches";
+
+        TestUtils.createPipeline(this, PIPELINE_NAME);
+        createListViewForJob(VIEW_NAME, PIPELINE_NAME);
+        clickViewByName(VIEW_NAME);
+
+        getWait2().until(ExpectedConditions.elementToBeClickable(
+                By.xpath("//a[@href='/view/%s/configure']".formatted(VIEW_NAME)))).click();
+
+        TestUtils.scrollToBottom(getDriver());
+
+        getWait5().until(ExpectedConditions.elementToBeClickable(By.xpath("//button[@suffix='columns']"))).click();
+        getWait5().until(ExpectedConditions.elementToBeClickable(
+                By.xpath("//button[contains(text(),'%s')]".formatted(columnName)))).click();
+        getWait2().until(ExpectedConditions.elementToBeClickable(OK_BUTTON)).click();
+
+        Assert.assertEquals(getColumnList().size(), 8);
+        Assert.assertTrue(getColumnList().contains(columnName));
     }
 }

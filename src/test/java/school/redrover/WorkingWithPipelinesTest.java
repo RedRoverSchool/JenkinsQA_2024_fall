@@ -16,6 +16,7 @@ import java.util.List;
 public class WorkingWithPipelinesTest extends BaseTest {
 
     private static final String PIPELINE_NAME = "Regression";
+    private static final String PIPELINE_RENAME = "NewRegression";
     private static final String FREESTYLE_PROJECT_NAME = "Freestyle";
 
 
@@ -44,7 +45,6 @@ public class WorkingWithPipelinesTest extends BaseTest {
         getDriver().findElement(By.id("name")).sendKeys(itemName);
         getDriver().findElement(By.cssSelector(itemType.getCssSelector())).click();
         getDriver().findElement(By.id("ok-button")).click();
-
     }
     private List<String> getProjectList() {
         List<WebElement> jobList = getDriver().findElements(By.xpath("//td/a[contains(@href,'job')]"));
@@ -86,11 +86,8 @@ public class WorkingWithPipelinesTest extends BaseTest {
         System.out.println("Freestyle Project создан и находится в списке на главной странице");
     }
 
-    @Test
+    @Test(dependsOnMethods = "testSearchPipelineOnMainPage")
         public void testRenameViaChevron() {
-
-        createItemUtils(PIPELINE_NAME, ItemType.PIPELINE);
-        returnToHomePage();
 
         WebElement regressionLink = getDriver().findElement(By.xpath("//a[@href='job/Regression/']"));
 
@@ -110,7 +107,7 @@ public class WorkingWithPipelinesTest extends BaseTest {
 
         WebElement inputRename = getWait10().until(ExpectedConditions.elementToBeClickable(By.name("newName")));
 
-        new Actions(getDriver()).doubleClick(inputRename).sendKeys("NewRegression").perform();
+        new Actions(getDriver()).doubleClick(inputRename).sendKeys(PIPELINE_RENAME).perform();
 
         getDriver().findElement(By.xpath("//button[@class='jenkins-button jenkins-submit-button jenkins-button--primary ']"))
                 .click();
@@ -118,24 +115,22 @@ public class WorkingWithPipelinesTest extends BaseTest {
         returnToHomePage();
 
         Assert.assertListContainsObject(getProjectList(),
-                "NewRegression", "Пайплайн не найден на главной странице или текст не совпадает");
+                PIPELINE_RENAME, "Пайплайн не найден на главной странице или текст не совпадает");
     }
 
-    @Test
+    @Test(dependsOnMethods = "testRenameViaChevron")
     public void testDeleteViaChevron() {
 
-        createItemUtils(PIPELINE_NAME, ItemType.PIPELINE);
-        returnToHomePage();
         createItemUtils("SecondPipeline", ItemType.PIPELINE);
         returnToHomePage();
 
-        WebElement regressionLink = getDriver().findElement(By.xpath("//a[@href='job/Regression/']"));
+        WebElement regressionLink = getDriver().findElement(By.xpath("//a[@href='job/NewRegression/']"));
 
         new Actions(getDriver())
                 .moveToElement(regressionLink).perform();
 
         WebElement chevron = getDriver().findElement(
-                By.xpath("//button[@data-href='http://localhost:8080/job/Regression/']"));
+                By.xpath("//button[@data-href='http://localhost:8080/job/NewRegression/']"));
 
         ((JavascriptExecutor) getDriver()).executeScript(
                 "arguments[0].dispatchEvent(new Event('mouseenter'));", chevron);
@@ -143,7 +138,7 @@ public class WorkingWithPipelinesTest extends BaseTest {
                 "arguments[0].dispatchEvent(new Event('click'));", chevron);
 
         getWait5().until(ExpectedConditions.elementToBeClickable(
-                        By.xpath("//button[@href='/job/Regression/doDelete']")))
+                        By.xpath("//button[@href='/job/NewRegression/doDelete']")))
                 .click();
 
         getWait5().until(ExpectedConditions.elementToBeClickable(
@@ -152,7 +147,7 @@ public class WorkingWithPipelinesTest extends BaseTest {
 
         returnToHomePage();
 
-        Assert.assertListNotContainsObject(getProjectList(), PIPELINE_NAME,
+        Assert.assertListNotContainsObject(getProjectList(), PIPELINE_RENAME,
                 "Пайплайн не найден на главной странице или текст не совпадает");
     }
 }

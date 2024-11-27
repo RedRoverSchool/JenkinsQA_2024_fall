@@ -1,7 +1,6 @@
 package school.redrover;
 
 import org.openqa.selenium.By;
-import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -94,6 +93,59 @@ public class PipelineProject2Test extends BaseTest {
         Assert.assertEquals(pipelineProjectName, PROJECT_NAME);
     }
 
+    @Test(dependsOnMethods = "testCreateWithValidName")
+    public void testRenameViaSidePanel() {
+
+        getWait10().until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath(ITEM_NAME_LOCATOR.formatted(PROJECT_NAME)))).click();
+
+        getDriver().findElement(By.xpath("//a[contains(@href, 'confirm-rename')]")).click();
+
+        WebElement itemName = getDriver().findElement(By.xpath("//input[@name='newName']"));
+        itemName.clear();
+        itemName.sendKeys(NEW_PROJECT_NAME);
+        getDriver().findElement(By.xpath("//button[@name='Submit']")).click();
+
+        goToMainPage();
+
+        Assert.assertEquals(getDriver()
+                .findElement(By.xpath("//span[text()='%s']".formatted(NEW_PROJECT_NAME)))
+                .getText(), NEW_PROJECT_NAME);
+    }
+
+    @Test(dependsOnMethods = "testRenameViaSidePanel")
+    public void testDeleteViaSidePanel() {
+
+        getWait5().until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath(ITEM_NAME_LOCATOR.formatted(NEW_PROJECT_NAME)))).click();
+
+        getDriver().findElement(By.xpath("//a[contains(@data-url, 'doDelete')]")).click();
+
+        getWait5().until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//button[@data-id='ok']"))).click();
+
+        Assert.assertTrue(getDriver().findElements(By.xpath(ITEM_NAME_LOCATOR.formatted(NEW_PROJECT_NAME))).isEmpty());
+    }
+
+    @Test
+    public void testAddDescription() {
+        String description = "Description pipeline project.";
+
+        createItemAndGoToMainPage(ItemTypes.PIPELINE, PROJECT_NAME);
+
+        getWait5().until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath(ITEM_NAME_LOCATOR.formatted(PROJECT_NAME)))).click();
+
+        getDriver().findElement(By.id("description-link")).click();
+        getDriver()
+                .findElement(By.xpath("//textarea[@name='description']")).sendKeys(description);
+        getDriver().findElement(By.xpath("//button[@name='Submit']")).click();
+
+        Assert.assertEquals(
+                getDriver().findElement(By.xpath("//div[@id='description']/div")).getText(),
+                description);
+    }
+
     @Test
     public void testCreateWithEmptyName() {
         getDriver().findElement(By.xpath("//a[@href='/view/all/newJob']")).click();
@@ -120,23 +172,15 @@ public class PipelineProject2Test extends BaseTest {
                 "» A job already exists with the name ‘%s’".formatted(PROJECT_NAME));
     }
 
-    @Test
-    public void testAddDescription() {
-        String description = "Description pipeline project.";
+    @Test(dataProvider = "providerUnsafeCharacters")
+    public void testCreateWithUnsafeCharactersInName(String unsafeCharacter) {
+        getDriver().findElement(By.xpath("//a[@href='/view/all/newJob']")).click();
 
-        createItemAndGoToMainPage(ItemTypes.PIPELINE, PROJECT_NAME);
-
-        getWait5().until(ExpectedConditions.visibilityOfElementLocated(
-                By.xpath(ITEM_NAME_LOCATOR.formatted(PROJECT_NAME)))).click();
-
-        getDriver().findElement(By.id("description-link")).click();
-        getDriver()
-                .findElement(By.xpath("//textarea[@name='description']")).sendKeys(description);
-        getDriver().findElement(By.xpath("//button[@name='Submit']")).click();
+        getDriver().findElement(By.id("name")).sendKeys(unsafeCharacter);
 
         Assert.assertEquals(
-                getDriver().findElement(By.xpath("//div[@id='description']/div")).getText(),
-                description);
+                getDriver().findElement(By.id("itemname-invalid")).getText(),
+                "» ‘%s’ is an unsafe character".formatted(unsafeCharacter));
     }
 
     @Test
@@ -161,21 +205,6 @@ public class PipelineProject2Test extends BaseTest {
     }
 
     @Test
-    public void testDeleteViaSidePanel() {
-        createItemAndGoToMainPage(ItemTypes.PIPELINE, PROJECT_NAME);
-
-        getWait5().until(ExpectedConditions.visibilityOfElementLocated(
-                By.xpath(ITEM_NAME_LOCATOR.formatted(PROJECT_NAME)))).click();
-
-        getDriver().findElement(By.xpath("//a[contains(@data-url, 'doDelete')]")).click();
-
-        getWait5().until(ExpectedConditions.visibilityOfElementLocated(
-                By.xpath("//button[@data-id='ok']"))).click();
-
-        Assert.assertTrue(getDriver().findElements(By.xpath(ITEM_NAME_LOCATOR.formatted(PROJECT_NAME))).isEmpty());
-    }
-
-    @Test
     public void testDeleteViaChevron() {
         createItemAndGoToMainPage(ItemTypes.PIPELINE, PROJECT_NAME);
 
@@ -195,38 +224,6 @@ public class PipelineProject2Test extends BaseTest {
                 By.xpath("//button[@data-id='ok']"))).click();
 
         Assert.assertTrue(getDriver().findElements(By.xpath(String.format(ITEM_NAME_LOCATOR, PROJECT_NAME))).isEmpty());
-    }
-
-    @Test(dataProvider = "providerUnsafeCharacters")
-    public void testCreateWithUnsafeCharactersInName(String unsafeCharacter) {
-        getDriver().findElement(By.xpath("//a[@href='/view/all/newJob']")).click();
-
-        getDriver().findElement(By.id("name")).sendKeys(unsafeCharacter);
-
-        Assert.assertEquals(
-                getDriver().findElement(By.id("itemname-invalid")).getText(),
-                "» ‘%s’ is an unsafe character".formatted(unsafeCharacter));
-    }
-
-    @Test
-    public void testRenameViaSidePanel() {
-        createItemAndGoToMainPage(ItemTypes.PIPELINE, PROJECT_NAME);
-
-        getWait10().until(ExpectedConditions.visibilityOfElementLocated(
-                By.xpath(ITEM_NAME_LOCATOR.formatted(PROJECT_NAME)))).click();
-
-        getDriver().findElement(By.xpath("//a[contains(@href, 'confirm-rename')]")).click();
-
-        WebElement itemName = getDriver().findElement(By.xpath("//input[@name='newName']"));
-        itemName.clear();
-        itemName.sendKeys(NEW_PROJECT_NAME);
-        getDriver().findElement(By.xpath("//button[@name='Submit']")).click();
-
-        goToMainPage();
-
-        Assert.assertEquals(getDriver()
-                .findElement(By.xpath("//span[text()='%s']".formatted(NEW_PROJECT_NAME)))
-                .getText(), NEW_PROJECT_NAME);
     }
 
     @Test
@@ -256,7 +253,6 @@ public class PipelineProject2Test extends BaseTest {
                 .findElement(By.xpath("//span[text()='%s']".formatted(NEW_PROJECT_NAME)))
                 .getText(), NEW_PROJECT_NAME);
     }
-
 
     @Test
     public void testDisabledProjectViaSidePanel() {
@@ -313,18 +309,10 @@ public class PipelineProject2Test extends BaseTest {
 
         String pipelineScript = TestUtils.readFileAndRefactoringAutoComplete(DataFile.VALID_PIPELINE_SCRIPT.getFileName());
 
-        new Actions(getDriver())
-                .moveToElement(getDriver().findElement(By.xpath("//textarea[@class='ace_text-input']")))
-                .click()
-                .sendKeys(pipelineScript)
-                .click()
-                .keyDown(Keys.CONTROL)
-                .keyDown(Keys.SHIFT)
-                .sendKeys(Keys.END)
-                .sendKeys(Keys.DELETE)
-                .keyUp(Keys.SHIFT)
-                .keyUp(Keys.CONTROL)
-                .perform();
+        WebElement textArea = getDriver().findElement(By.xpath("//textarea[@class='ace_text-input']"));
+
+        TestUtils.pasteTextWithJavaScript(getDriver(), textArea, pipelineScript);
+
         getDriver().findElement(By.xpath("//button[@name='Submit']")).click();
 
         goToMainPage();
@@ -341,9 +329,8 @@ public class PipelineProject2Test extends BaseTest {
 
         getDriver().navigate().refresh();
 
-        Assert.assertTrue(getDriver()
-                .findElement(By.xpath("//tr[@id='job_%s']//*[name()='svg'][@tooltip='Success']".formatted(PROJECT_NAME)))
-                .isDisplayed());
+        Assert.assertTrue(getWait10().until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//tr[@id='job_%s']//*[name()='svg'][@tooltip='Success']".formatted(PROJECT_NAME)))).isDisplayed());
     }
 
     @Test
@@ -354,16 +341,11 @@ public class PipelineProject2Test extends BaseTest {
 
         String pipelineScript = TestUtils.readFileAndRefactoringAutoComplete(DataFile.INVALID_PIPELINE_SCRIPT.getFileName());
 
-        new Actions(getDriver())
-                .moveToElement(getDriver().findElement(By.xpath("//textarea[@class='ace_text-input']")))
-                .click()
-                .sendKeys(pipelineScript)
-                .keyDown(Keys.SHIFT)
-                .keyDown(Keys.CONTROL)
-                .sendKeys(Keys.DELETE)
-                .keyUp(Keys.SHIFT)
-                .keyUp(Keys.CONTROL)
-                .perform();
+        WebElement textArea = getWait10().until(ExpectedConditions.presenceOfElementLocated(
+                By.xpath("//textarea[@class='ace_text-input']")));
+
+        TestUtils.pasteTextWithJavaScript(getDriver(), textArea, pipelineScript);
+
         getDriver().findElement(By.xpath("//button[@name='Submit']")).click();
 
         goToMainPage();
@@ -380,9 +362,8 @@ public class PipelineProject2Test extends BaseTest {
 
         getDriver().navigate().refresh();
 
-        Assert.assertTrue(getDriver()
-                .findElement(By.xpath("//tr[@id='job_%s']//*[name()='svg'][@tooltip='Failed']".formatted(PROJECT_NAME)))
-                .isDisplayed());
+        Assert.assertTrue(getWait10().until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//tr[@id='job_%s']//*[name()='svg'][@tooltip='Failed']".formatted(PROJECT_NAME)))).isDisplayed());
     }
 
 }
