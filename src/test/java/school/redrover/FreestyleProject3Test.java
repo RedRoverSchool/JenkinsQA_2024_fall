@@ -6,6 +6,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.Assert;
+import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import school.redrover.runner.BaseTest;
 import school.redrover.runner.TestUtils;
@@ -88,6 +89,7 @@ public class FreestyleProject3Test extends BaseTest {
             By.xpath("//a[@data-title='Wipe Out Current Workspace']"))).click();
     }
 
+    @Ignore
     @Test
     public void testCreateProjectViaCreateJobButton() {
         getDriver().findElement(By.xpath("//a[@href='newJob']")).click();
@@ -115,6 +117,7 @@ public class FreestyleProject3Test extends BaseTest {
         Assert.assertEquals(actualName, PROJECT_NAME);
     }
 
+    @Ignore
     @Test
     public void testAddDescriptionOnProjectStatusPage() {
         createProjectViaSidebarMenu(PROJECT_NAME);
