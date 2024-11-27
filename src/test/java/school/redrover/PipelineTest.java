@@ -60,6 +60,22 @@ public class PipelineTest extends BaseTest {
         Assert.assertEquals(actualErrorMessage, "» A job already exists with the name ‘%s’".formatted(nonUniqueProjectName));
     }
 
+    @Test
+    public void testCreateWithDescription() {
+        final String description = "The leading open source automation server, Jenkins provides hundreds of plugins to support building, deploying and automating any project.";
+        final String projectName = "PipelineProjectAndDescription";
+
+        String actualDescription = new HomePage(getDriver())
+                .clickNewItem()
+                .enterItemName(projectName)
+                .selectPipelineAndClickOk()
+                .enterDescription(description)
+                .clickSaveButton()
+                .getDescription();
+
+        Assert.assertEquals(actualDescription, description);
+    }
+
     @Test(dependsOnMethods = "testCreate")
     public void testRename() {
         final String projectName = "PipelineProject2New";
