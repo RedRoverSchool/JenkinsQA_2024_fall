@@ -88,10 +88,10 @@ public class HomePage extends BasePage {
         return getDriver().findElement(By.className("jenkins-table__link")).getText();
     }
 
-    public ProjectPage openProject(String name) {
+    public FolderProjectPage openProject(String name) {
         getDriver().findElement(By.xpath("//td/a/span[text() = '%s']/..".formatted(name))).click();
 
-        return new ProjectPage(getDriver());
+        return new FolderProjectPage(getDriver());
     }
 
     public ManageJenkinsPage openManageJenkinsPage() {
@@ -125,10 +125,10 @@ public class HomePage extends BasePage {
                         .formatted(menuName)))).click();
     }
 
-    public ConfigurationPage selectConfigureFromItemMenu(String itemName) {
+    public FolderConfigPage selectConfigureFromItemMenu(String itemName) {
         selectMenuFromItemDropdown(itemName, "Configure");
 
-        return new ConfigurationPage(getDriver());
+        return new FolderConfigPage(getDriver());
     }
 
     public CreateNewItemPage selectNewItemFromFolderMenu(String itemName) {
@@ -249,5 +249,10 @@ public class HomePage extends BasePage {
 
     public void openBuildHistoryPage() {
         getDriver().findElement(By.xpath("//a[@href = '/view/all/builds']")).click();
+    }
+
+    public String getTooltipValue(String projectName) {
+
+        return getDriver().findElement(By.cssSelector("#job_" + projectName + "> td:nth-of-type(1) > div > svg")).getAttribute("tooltip");
     }
 }
