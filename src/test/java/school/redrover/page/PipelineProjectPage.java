@@ -39,4 +39,20 @@ public class PipelineProjectPage extends BaseProjectPage {
         return getWait5().until(ExpectedConditions.visibilityOfElementLocated(
                 By.xpath("//div[@id='description']"))).getText();
     }
+
+    public PipelineRenamePage clickRenameOnSidebar() {
+        getWait2().until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//span[contains(text(), 'Rename')]/.."))).click();
+
+        return new PipelineRenamePage(getDriver());
+    }
+
+    public String getTitle() {
+        return getDriver().findElement(By.xpath("//div[@class='jenkins-app-bar']//h1")).getText();
+    }
+
+    public String getProjectNameBreadcrumb() {
+        return getDriver().findElement(
+                By.xpath("//ol[@id='breadcrumbs']/li[@class='jenkins-breadcrumbs__list-item'][2]")).getText();
+    }
 }

@@ -268,4 +268,9 @@ public class HomePage extends BasePage {
 
         return getDriver().findElement(By.cssSelector("#job_" + projectName + "> td:nth-of-type(1) > div > svg")).getAttribute("tooltip");
     }
+
+    public PipelineProjectPage clickOnPipelineName(String name) {
+        getDriver().findElement(By.xpath("//td/a/span[text() = '%s']/..".formatted(name))).click();
+        return new PipelineProjectPage(getDriver());
+    }
 }
