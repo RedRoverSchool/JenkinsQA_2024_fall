@@ -3,7 +3,9 @@ package school.redrover.page;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+
+import org.openqa.selenium.support.ui.ExpectedConditions;
+
 import school.redrover.page.base.BasePage;
 
 public class CreateNewItemPage extends BasePage {
@@ -115,10 +117,20 @@ public class CreateNewItemPage extends BasePage {
 
         return new ErrorPage(getDriver());
     }
-
     public String errorEmptyField() {
 
-        return  getDriver().findElement(getInputField).getText();
+        return getDriver().findElement(getInputField).getText();
+    }
+
+    public CreateNewItemPage selectPipeline() {
+        getWait10().until(ExpectedConditions.elementToBeClickable(
+                By.xpath(("//div[@id='items']//label/span[text()= 'Pipeline']")))).click();
+        return this;
+    }
+
+    public String getErrorMessage() {
+        return getWait5().until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//div[@class='add-item-name']/div[@class='input-validation-message']"))).getText();
     }
 }
 

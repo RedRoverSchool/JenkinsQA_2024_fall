@@ -34,4 +34,9 @@ public class PipelineProjectPage extends BaseProjectPage {
 
         return new PipelineStagesPage(getDriver());
     }
+
+    public String getDescription() {
+        return getWait5().until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//div[@id='description']"))).getText();
+    }
 }
