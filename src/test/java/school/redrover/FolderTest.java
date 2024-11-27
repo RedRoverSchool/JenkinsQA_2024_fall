@@ -36,7 +36,7 @@ public class FolderTest extends BaseTest {
                 .selectProjectTypeAndSave(CreateNewItemPage.ItemType.FOLDER)
                 .gotoHomePage();
 
-        Assert.assertEquals(getDriver().findElement(By.xpath("//td/a/span")).getText(),"F");
+        Assert.assertEquals(getDriver().findElement(By.xpath("//td/a/span")).getText(), "F");
     }
 
     @Test(dependsOnMethods = "testCreateWithMinNameLength")
@@ -55,14 +55,14 @@ public class FolderTest extends BaseTest {
     @Test
     public void testConfigureDescriptionByChevron() {
 
-       String desc =  new HomePage(getDriver())
-               .clickNewItem()
-               .nameAndSelectItemType(FIRST_FOLDER_NAME, CreateNewItemPage.ItemType.FOLDER)
-               .gotoHomePage()
-               .selectConfigureFromItemMenu(FIRST_FOLDER_NAME)
-               .enterDescription("This is new description")
-               .clickSaveButton()
-               .getFolderDescription();
+        String desc = new HomePage(getDriver())
+                .clickNewItem()
+                .nameAndSelectItemType(FIRST_FOLDER_NAME, CreateNewItemPage.ItemType.FOLDER)
+                .gotoHomePage()
+                .selectConfigureFromItemMenu(FIRST_FOLDER_NAME)
+                .enterDescription("This is new description")
+                .clickSaveButton()
+                .getFolderDescription();
 
         Assert.assertEquals(desc,
                 "This is new description");
@@ -85,7 +85,7 @@ public class FolderTest extends BaseTest {
 
     @Test
     public void testCreateNewItemFromFolderPage() {
-        String projectName =  new HomePage(getDriver())
+        String projectName = new HomePage(getDriver())
                 .clickNewItem()
                 .nameAndSelectItemType(FIRST_FOLDER_NAME, CreateNewItemPage.ItemType.FOLDER)
                 .gotoHomePage()

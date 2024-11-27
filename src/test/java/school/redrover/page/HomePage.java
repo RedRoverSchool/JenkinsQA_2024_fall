@@ -131,6 +131,19 @@ public class HomePage extends BasePage {
         return new FolderConfigPage(getDriver());
     }
 
+    public HomePage selectDeleteFromItemMenu(String itemName) {
+        selectMenuFromItemDropdown(itemName, "Delete");
+
+        return this;
+    }
+
+    public HomePage clickYesForConfirmDelete() {
+        getWait5().until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//button[@data-id='ok']"))).click();
+
+        return this;
+    }
+
     public CreateNewItemPage selectNewItemFromFolderMenu(String itemName) {
         selectMenuFromItemDropdown(itemName, "New Item");
 
@@ -254,5 +267,10 @@ public class HomePage extends BasePage {
     public String getTooltipValue(String projectName) {
 
         return getDriver().findElement(By.cssSelector("#job_" + projectName + "> td:nth-of-type(1) > div > svg")).getAttribute("tooltip");
+    }
+
+    public PipelineProjectPage clickOnPipelineName(String name) {
+        getDriver().findElement(By.xpath("//td/a/span[text() = '%s']/..".formatted(name))).click();
+        return new PipelineProjectPage(getDriver());
     }
 }
