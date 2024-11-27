@@ -5,7 +5,6 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.Assert;
-import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import school.redrover.page.CreateNewItemPage;
 import school.redrover.page.HomePage;
@@ -26,8 +25,8 @@ public class PipelineTest extends BaseTest {
         String actualProjectName = new HomePage(getDriver())
                 .clickNewItem()
                 .nameAndSelectItemType(projectName, CreateNewItemPage.ItemType.PIPELINE)
-                .saveConfigurations()
-                .goToDashboard()
+                .clickSaveButton()
+                .gotoHomePage()
                 .getItemName();
 
         Assert.assertEquals(actualProjectName, projectName);
@@ -261,7 +260,7 @@ public class PipelineTest extends BaseTest {
                                   .selectPipelineAndClickOk()
                                   .clickToggleToDisableOrEnableProject()
                                   .clickSaveButton()
-                                  .returnToHomePage()
+                                  .gotoHomePage()
                                   .getTooltipValue(PROJECT_NAME);
 
         Assert.assertEquals(tooltipValue, "Disabled");

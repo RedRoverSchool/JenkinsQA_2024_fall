@@ -4,16 +4,12 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import school.redrover.page.base.BasePage;
+import school.redrover.page.base.BaseProjectPage;
 
-public class PipelineProjectPage extends BasePage {
+public class PipelineProjectPage extends BaseProjectPage {
+
     public PipelineProjectPage(WebDriver driver) {
         super(driver);
-    }
-
-    public HomePage returnToHomePage() {
-        getDriver().findElement(By.id("jenkins-home-link")).click();
-
-        return new HomePage(getDriver());
     }
 
     public String getWarningDisabledMessage() {

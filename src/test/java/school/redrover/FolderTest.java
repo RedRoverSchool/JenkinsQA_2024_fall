@@ -5,7 +5,7 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 import school.redrover.page.HomePage;
 import school.redrover.page.CreateNewItemPage;
-import school.redrover.page.ProjectPage;
+import school.redrover.page.FolderProjectPage;
 import school.redrover.runner.BaseTest;
 
 public class FolderTest extends BaseTest {
@@ -21,7 +21,7 @@ public class FolderTest extends BaseTest {
                 .clickNewItem()
                 .enterItemName(FOLDER_NAME_MAX_LENGTH)
                 .selectProjectTypeAndSave(CreateNewItemPage.ItemType.FOLDER)
-                .goToDashboard()
+                .gotoHomePage()
                 .getItemNameByOrder(1);
 
         Assert.assertEquals(folderName, FOLDER_NAME_MAX_LENGTH);
@@ -33,7 +33,7 @@ public class FolderTest extends BaseTest {
         new HomePage(getDriver())
                 .clickNewItem().enterItemName("F")
                 .selectProjectTypeAndSave(CreateNewItemPage.ItemType.FOLDER)
-                .goToDashboard();
+                .gotoHomePage();
 
         Assert.assertEquals(getDriver().findElement(By.xpath("//td/a/span")).getText(),"F");
     }
@@ -44,23 +44,23 @@ public class FolderTest extends BaseTest {
         String configurationName = new HomePage(getDriver())
                 .selectConfigureFromItemMenu("F")
                 .enterName(FIRST_FOLDER_NAME)
-                .saveConfigurations()
+                .clickSaveButton()
                 .getDisplayName();
 
         Assert.assertEquals(configurationName, FIRST_FOLDER_NAME);
-        Assert.assertEquals(new ProjectPage(getDriver()).getFolderName(), "F");
+        Assert.assertEquals(new FolderProjectPage(getDriver()).getFolderName(), "F");
     }
 
     @Test
     public void testConfigureDescriptionByChevron() {
 
        String desc =  new HomePage(getDriver())
-                .clickNewItem()
-                .nameAndSelectItemType(FIRST_FOLDER_NAME, CreateNewItemPage.ItemType.FOLDER)
-                .goToDashboard()
-                .selectConfigureFromItemMenu(FIRST_FOLDER_NAME)
+               .clickNewItem()
+               .nameAndSelectItemType(FIRST_FOLDER_NAME, CreateNewItemPage.ItemType.FOLDER)
+               .gotoHomePage()
+               .selectConfigureFromItemMenu(FIRST_FOLDER_NAME)
                .enterDescription("This is new description")
-               .saveConfigurations()
+               .clickSaveButton()
                .getFolderDescription();
 
         Assert.assertEquals(desc,
@@ -69,13 +69,13 @@ public class FolderTest extends BaseTest {
 
     @Test(dependsOnMethods = "testConfigureDescriptionByChevron")
     public void testCreateNewItemByChevron() {
-        String projectName = new ProjectPage(getDriver())
-                .goToDashboard()
+        String projectName = new FolderProjectPage(getDriver())
+                .gotoHomePage()
                 .selectNewItemFromFolderMenu(FIRST_FOLDER_NAME)
                 .nameAndSelectItemType(FREESTYLE_PROJECT_NAME, CreateNewItemPage.ItemType.FREESTYLE_PROJECT)
                 .addExecuteWindowsBatchCommand("echo 'Hello world!'")
-                .saveConfigurations()
-                .goToDashboard()
+                .clickSaveButton()
+                .gotoHomePage()
                 .openProject(FIRST_FOLDER_NAME)
                 .getItemNameByOrder(1);
 
@@ -87,13 +87,13 @@ public class FolderTest extends BaseTest {
         String projectName =  new HomePage(getDriver())
                 .clickNewItem()
                 .nameAndSelectItemType(FIRST_FOLDER_NAME, CreateNewItemPage.ItemType.FOLDER)
-                .goToDashboard()
+                .gotoHomePage()
                 .openProject(FIRST_FOLDER_NAME)
                 .clickNewItem()
                 .nameAndSelectItemType(FREESTYLE_PROJECT_NAME, CreateNewItemPage.ItemType.FREESTYLE_PROJECT)
                 .addExecuteWindowsBatchCommand("echo 'Hello world!'")
-                .saveConfigurations()
-                .goToDashboard()
+                .clickSaveButton()
+                .gotoHomePage()
                 .openProject(FIRST_FOLDER_NAME)
                 .getItemNameByOrder(1);
 
@@ -106,7 +106,7 @@ public class FolderTest extends BaseTest {
         String buildHistoryName = new HomePage(getDriver())
                 .openProject(FIRST_FOLDER_NAME)
                 .runJob(FREESTYLE_PROJECT_NAME)
-                .goToDashboard()
+                .gotoHomePage()
                 .selectBuildHistoryFromItemMenu(FIRST_FOLDER_NAME)
                 .getBuildName();
 
