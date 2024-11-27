@@ -21,10 +21,11 @@ public class PipelineTest extends BaseTest {
 
     @Test
     public void testCreate() {
-        String projectName = PROJECT_NAME + "New";
+        String projectName = "PipelineProjectNew";
         String actualProjectName = new HomePage(getDriver())
                 .clickNewItem()
-                .nameAndSelectItemType(projectName, CreateNewItemPage.ItemType.PIPELINE)
+                .enterItemName(projectName)
+                .selectPipelineAndClickOk()
                 .clickSaveButton()
                 .gotoHomePage()
                 .getItemName();
