@@ -34,7 +34,7 @@ public class PipelineProjectTest extends BaseTest {
     @Test(dependsOnMethods = "testCreateProjectWithValidNameViaSidebar")
     public void testVerifySidebarOptionsOnProjectPage() {
         List<String> actualSidebarOptionList = new HomePage(getDriver())
-                .openProject(PIPELINE_NAME)
+                .openPipelineProject(PIPELINE_NAME)
                 .getSidebarOptionList();
 
         Assert.assertEquals(
@@ -46,7 +46,7 @@ public class PipelineProjectTest extends BaseTest {
     @Test(dependsOnMethods = "testVerifySidebarOptionsOnProjectPage")
     public void testVerifySidebarOptionsOnConfigurationPage() {
         List<String> actualSidebarOptionList = new HomePage(getDriver())
-                .openProject(PIPELINE_NAME)
+                .openPipelineProject(PIPELINE_NAME)
                 .clickConfigureSidebar(PIPELINE_NAME)
                 .getSidebarConfigurationOption();
 
@@ -59,7 +59,7 @@ public class PipelineProjectTest extends BaseTest {
     @Test(dependsOnMethods = "testVerifySidebarOptionsOnConfigurationPage")
     public void testVerifyCheckboxTooltipsContainCorrectText() {
         Map<String, String> labelToTooltipTextMap = new HomePage(getDriver())
-                .openProject(PIPELINE_NAME)
+                .openPipelineProject(PIPELINE_NAME)
                 .clickConfigureSidebar(PIPELINE_NAME)
                 .getCheckboxWithTooltipTextMap();
 
@@ -74,7 +74,7 @@ public class PipelineProjectTest extends BaseTest {
         final String expectedProjectDescription = "Certain_project_description";
 
         String actualDescription = new HomePage(getDriver())
-                .openProject(PIPELINE_NAME)
+                .openPipelineProject(PIPELINE_NAME)
                 .editDescription(expectedProjectDescription)
                 .getDescription();
 
@@ -87,7 +87,7 @@ public class PipelineProjectTest extends BaseTest {
     @Test(dependsOnMethods = "testAddDescriptionToProject")
     public void testGetWarningMessageWhenDisableProject() {
         PipelineProjectPage pipelineProjectPage = new HomePage(getDriver())
-                .openProject(PIPELINE_NAME)
+                .openPipelineProject(PIPELINE_NAME)
                 .clickConfigureSidebar(PIPELINE_NAME)
                 .clickToggleToDisableOrEnableProject()
                 .clickSaveButton();
@@ -113,7 +113,7 @@ public class PipelineProjectTest extends BaseTest {
     @Test(dependsOnMethods = "testDisableProject")
     public void testEnableProject() {
         boolean isGreenBuildButtonPresent = new HomePage(getDriver())
-                .openProject(PIPELINE_NAME)
+                .openPipelineProject(PIPELINE_NAME)
                 .clickEnableButton()
                 .gotoHomePage()
                 .isGreenScheduleBuildTrianglePresent(PIPELINE_NAME);
@@ -129,7 +129,7 @@ public class PipelineProjectTest extends BaseTest {
 
         List<String> permalinkList = new HomePage(getDriver())
                 .clickScheduleBuild(PIPELINE_NAME)
-                .openProject(PIPELINE_NAME)
+                .openPipelineProject(PIPELINE_NAME)
                 .getPermalinkList();
 
         Assert.assertTrue(
@@ -145,7 +145,7 @@ public class PipelineProjectTest extends BaseTest {
     @Test(dependsOnMethods = "testGetPermalinksInformationUponSuccessfulBuild")
     public void testGetSuccessTooltipDisplayedWhenHoverOverGreenMark() {
         String greenMarkTooltip = new HomePage(getDriver())
-                .openProject(PIPELINE_NAME)
+                .openPipelineProject(PIPELINE_NAME)
                 .hoverOverBuildStatusMark()
                 .getStatusMarkTooltipText();
 
@@ -157,7 +157,7 @@ public class PipelineProjectTest extends BaseTest {
     @Test(dependsOnMethods = "testGetSuccessTooltipDisplayedWhenHoverOverGreenMark")
     public void testKeepBuildForever() {
         boolean isDeleteOptionPresent = new HomePage(getDriver())
-                .openProject(PIPELINE_NAME)
+                .openPipelineProject(PIPELINE_NAME)
                 .clickBuildStatusMark()
                 .clickKeepThisBuildForever()
                 .isDeleteBuildOptionSidebarPresent(PIPELINE_NAME);
@@ -170,7 +170,7 @@ public class PipelineProjectTest extends BaseTest {
     @Test(dependsOnMethods = "testEnableProject")
     public void testRenameProjectViaSidebar() {
         List<String> projectList = new HomePage(getDriver())
-                .openProject(PIPELINE_NAME)
+                .openPipelineProject(PIPELINE_NAME)
                 .clickRenameSidebar(PIPELINE_NAME)
                 .cleanInputFieldAndTypeName(NEW_PROJECT_NAME)
                 .clickRenameButton()
@@ -186,7 +186,7 @@ public class PipelineProjectTest extends BaseTest {
     @Test(dependsOnMethods = "testRenameProjectViaSidebar")
     public void testDeleteProjectViaSidebar() {
         List<String> projectList = new HomePage(getDriver())
-                .openProject(NEW_PROJECT_NAME)
+                .openPipelineProject(NEW_PROJECT_NAME)
                 .clickDeletePipelineSidebarAndConfirmDeletion()
                 .getItemList();
 

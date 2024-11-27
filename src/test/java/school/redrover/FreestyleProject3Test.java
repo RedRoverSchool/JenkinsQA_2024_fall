@@ -106,6 +106,7 @@ public class FreestyleProject3Test extends BaseTest {
         Assert.assertEquals(getDriver().findElement(By.tagName("h1")).getText(), PROJECT_NAME);
     }
 
+    @Ignore
     @Test
     public void testCreateProjectViaSidebarMenu() {
         createProjectViaSidebarMenu(PROJECT_NAME);

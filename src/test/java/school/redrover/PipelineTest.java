@@ -88,7 +88,7 @@ public class PipelineTest extends BaseTest {
                 .clickSaveButton()
                 .gotoHomePage()
                 .clickOnPipelineName(PROJECT_NAME)
-                .clickRenameOnSidebar()
+                .clickRenameSidebar(PROJECT_NAME)
                 .cleanInputFieldAndTypeName(projectName)
                 .clickRenameButton();
 
