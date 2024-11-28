@@ -17,7 +17,7 @@ public class HomePage  extends BasePage {
         super(driver);
     }
 
-    public void createFreestyleProject(String name) {
+    public HomePage createFreestyleProject(String name) {
         getDriver().findElement(By.xpath("//*[@href='/view/all/newJob']")).click();
         getDriver().findElement(By.className("hudson_model_FreeStyleProject")).click();
         getDriver().findElement(By.name("name")).sendKeys(name);
@@ -25,6 +25,7 @@ public class HomePage  extends BasePage {
         getDriver().findElement(By.name("Submit")).click();
 
         getDriver().findElement(By.id("jenkins-name-icon")).click();
+        return this;
     }
 
     public HomePage createNewFolder(String name) {
@@ -275,11 +276,14 @@ public class HomePage  extends BasePage {
 
     public HomePage scheduleBuild(String projectName) {
         getDriver().findElement(By.xpath("//a[@title = 'Schedule a Build for %s']".formatted(projectName))).click();
-        return this;
+
+        return new HomePage(getDriver());
     }
 
-    public void openBuildHistoryPage() {
+    public BuildHistoryPage gotoBuildHistoryPageFromLeftPanel() {
         getDriver().findElement(By.xpath("//a[@href = '/view/all/builds']")).click();
+
+        return new BuildHistoryPage(getDriver());
     }
 
     public String getTooltipValue(String projectName) {
