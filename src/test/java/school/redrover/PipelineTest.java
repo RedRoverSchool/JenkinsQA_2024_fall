@@ -100,13 +100,16 @@ public class PipelineTest extends BaseTest {
     @Test()
     public void testWarningMessageOnRenameProjectPage() {
         final String projectName = "PipelineProjectRename";
-        createNewProjectAndGoMainPageByLogo(projectName, ProjectType.Pipeline);
 
-        findProjectOnDashboardByName(projectName).click();
-        clickRenameButtonOnSidebar();
-
-        String actualWarningMessage = getWait5().until(ExpectedConditions.visibilityOfElementLocated(
-                By.xpath("//div[@class='validation-error-area validation-error-area--visible']"))).getText();
+        String actualWarningMessage = new HomePage(getDriver())
+                .clickNewItem()
+                .enterItemName(projectName)
+                .selectPipelineAndClickOk()
+                .clickSaveButton()
+                .gotoHomePage()
+                .clickOnPipelineName(projectName)
+                .clickRenameSidebar(projectName)
+                .getWarningMessage();
 
         Assert.assertEquals(actualWarningMessage, "The new name is the same as the current name.");
     }
