@@ -9,7 +9,7 @@ import school.redrover.runner.BaseTest;
 import java.util.List;
 import java.util.Random;
 
-public class CreateFreestyleProject extends BaseTest {
+public class CreateFreestyleProjectRTest extends BaseTest {
 
     private final String PROJECT_NAME = generateRandomString(6);
 
@@ -50,7 +50,7 @@ public class CreateFreestyleProject extends BaseTest {
 
         String existedErrorMessage = new HomePage(getDriver())
                 .createFreestyleProject(PROJECT_NAME)
-                .goToCreateNewItemPage()
+                .clickNewItem()
                 .enterItemName(PROJECT_NAME)
                 .getInvalidNameMessage();
 
