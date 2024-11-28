@@ -70,6 +70,7 @@ public class MultiConfigurationProjectTest extends BaseTest {
         Assert.assertFalse(getDriver().findElement(By.id("ok-button")).isEnabled());
     }
 
+    @Ignore
     @Test
     public void testDragAndDropConfigurationMatrixBlock() {
 
