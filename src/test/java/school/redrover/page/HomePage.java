@@ -6,7 +6,6 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import school.redrover.PipelineRenameTest;
 import school.redrover.page.base.BasePage;
 import school.redrover.runner.TestUtils;
 
@@ -102,14 +101,8 @@ public class HomePage  extends BasePage {
     }
 
     public PipelineProjectPage openPipelineProject(String name) {
-        getDriver().findElement(By.xpath("//td/a/span[text() = '%s']/..".formatted(name))).click();
-
-        return new PipelineProjectPage(getDriver());
-    }
-
-    //todo:if the project name is longer than ? number of characters, the name is split <wbr> and the locator “//td/a/span[text() = ‘%s’]/...” does not find the element
-    public PipelineProjectPage openPipelineProject2(String name) {
         getDriver().findElement(By.xpath("//td/a[@href='job/%s/']".formatted(name))).click();
+
         return new PipelineProjectPage(getDriver());
     }
 
@@ -204,9 +197,9 @@ public class HomePage  extends BasePage {
         return this;
     }
 
-    public String getItemName() {
+    public String getItemName(String projectName) {
 
-        return getDriver().findElement(By.xpath("//a[contains(@class,'jenkins-table')]")).getText();
+        return getDriver().findElement(By.xpath("//td/a[@href='job/%s/']".formatted(projectName))).getText();
     }
 
     public String getWelcomeText() {

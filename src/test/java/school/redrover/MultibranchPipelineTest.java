@@ -40,7 +40,6 @@ public class MultibranchPipelineTest extends BaseTest {
         scroll.executeScript("window.scrollTo(0, document.body.scrollHeight);");
     }
 
-    @Ignore
     @Test
     public void testAddDescriptionCreatingMultibranch() {
         final String description = "AddedDescription";
@@ -152,7 +151,7 @@ public class MultibranchPipelineTest extends BaseTest {
                 .selectMultibranchPipelineAndClickOk()
                 .clickSaveButton()
                 .gotoHomePage()
-                .getItemName();
+                .getItemName(MULTIBRANCH_PIPELINE_NAME);
 
         Assert.assertEquals(actualJobName, MULTIBRANCH_PIPELINE_NAME);
     }

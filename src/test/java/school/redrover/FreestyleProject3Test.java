@@ -91,18 +91,6 @@ public class FreestyleProject3Test extends BaseTest {
 
     @Ignore
     @Test
-    public void testCreateProjectViaSidebarMenu() {
-        createProjectViaSidebarMenu(PROJECT_NAME);
-
-        verifyYouAreOnProjectStatusPage();
-
-        String actualName = getDriver().findElement(By.tagName("h1")).getText();
-
-        Assert.assertEquals(actualName, PROJECT_NAME);
-    }
-
-    @Ignore
-    @Test
     public void testAddDescriptionOnProjectStatusPage() {
         createProjectViaSidebarMenu(PROJECT_NAME);
 
