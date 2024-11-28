@@ -342,9 +342,9 @@ public class HomePage extends BasePage {
         return this;
     }
 
-    public String getStatusBuild(String name) {
+    public String getStatusBuild(String name, String status) {
         return getWait10().until(ExpectedConditions.visibilityOfElementLocated(
-                By.xpath("//tr[@id='job_%s']//*[name()='svg'][@tooltip='Success']".formatted(name)))).getAttribute("tooltip");
+                By.xpath("//tr[@id='job_%s']//*[name()='svg'][@tooltip='%s']".formatted(name, status)))).getAttribute("tooltip");
     }
 
 }
