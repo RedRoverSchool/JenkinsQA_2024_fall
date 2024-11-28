@@ -196,6 +196,10 @@ public class HomePage  extends BasePage {
         return getDriver().findElement(By.xpath("//p[contains(text(), 'This page is where')]")).getText();
     }
 
+    public String getWelcomeTitle() {
+        return getDriver().findElement(By.xpath("//div[@class='empty-state-block']/h1")).getText();
+    }
+
     public String getDescriptionText() {
         return getWait5().until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@id='description']/div[1]"))).getText();
     }
