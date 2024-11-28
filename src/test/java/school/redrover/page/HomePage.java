@@ -6,6 +6,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import school.redrover.PipelineRenameTest;
 import school.redrover.page.base.BasePage;
 import school.redrover.runner.TestUtils;
 
@@ -290,5 +291,18 @@ public class HomePage  extends BasePage {
     public PipelineProjectPage clickOnPipelineName(String name) {
         getDriver().findElement(By.xpath("//td/a/span[text() = '%s']/..".formatted(name))).click();
         return new PipelineProjectPage(getDriver());
+    }
+
+    public PipelineRenamePage goToPipelineRenamePageViaDropdown(String name) {
+        new Actions(getDriver()).moveToElement(getDriver().findElement(By.xpath("//a[@href='job/%s/']/span".formatted(name))))
+                .pause(500)
+                .perform();
+        WebElement chevron = getDriver().findElement(By.xpath("//td//button[@aria-expanded='false']"));
+        TestUtils.moveAndClickWithJavaScript(getDriver(), chevron);
+        getWait5().until(ExpectedConditions.attributeToBe(chevron, "aria-expanded", "true"));
+
+        getDriver().findElement(By.xpath("//a[@href='/job/%s/confirm-rename']".formatted(name))).click();
+
+        return new PipelineRenamePage(getDriver());
     }
 }
