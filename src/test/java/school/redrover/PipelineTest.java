@@ -148,15 +148,19 @@ public class PipelineTest extends BaseTest {
     public void testAddDescription() {
         final String projectName = "PipelineProjectAndDesc";
         final String desc = "Add description for new project 45";
-        createNewProjectAndGoMainPageByLogo(projectName, ProjectType.Pipeline);
 
-        getDriver().findElement(By.xpath("//td/a/span[text() = '%s']/..".formatted(projectName))).click();
+        String descriptionText = new HomePage(getDriver())
+                .clickNewItem()
+                .enterItemName(projectName)
+                .selectPipelineAndClickOk()
+                .gotoHomePage()
+                .openPipelineProject(projectName)
+                .clickAddDescriptionButton()
+                .enterDescription(desc)
+                .clickSaveButton()
+                .getDescription();
 
-        getDriver().findElement(By.id("description-link")).click();
-        getDriver().findElement(By.name("description")).sendKeys(desc);
-        getDriver().findElement(By.name("Submit")).click();
-
-        Assert.assertEquals(getDriver().findElement(By.id("description")).getText(), desc);
+        Assert.assertEquals(descriptionText, desc);
     }
 
     @Test(dependsOnMethods = "testRename")
