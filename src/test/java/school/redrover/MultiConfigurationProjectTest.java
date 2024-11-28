@@ -148,6 +148,6 @@ public class MultiConfigurationProjectTest extends BaseTest {
                 .saveInvalidData()
                 .getErrorMessage();
 
-        Assert.assertTrue(errorMessage.contains("A job already exists with the name "));
+        Assert.assertTrue(errorMessage.matches("A job already exists with the name ‘MTC project’"));
     }
 }
