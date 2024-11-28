@@ -313,4 +313,11 @@ public class HomePage  extends BasePage {
 
         return new PipelineRenamePage(getDriver());
     }
+
+    public HomePage clickDeletePipelineChevronDropdownMenu(String name) {
+        getWait5().until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//button[@href = '/job/%s/doDelete']".formatted(name)))).click();
+
+        return new HomePage(getDriver());
+    }
 }
