@@ -8,6 +8,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
+import school.redrover.page.HomePage;
 import school.redrover.runner.BaseTest;
 
 import java.time.Duration;
@@ -214,5 +215,17 @@ public class FreestyleProjectTest extends BaseTest {
         Assert.assertEquals(getDriver()
                 .findElement(By.xpath(String.format("//span[text()='%s']", PROJECT_NAME)))
                 .getText(), PROJECT_NAME);
+    }
+
+    @Test
+    public void testCreateProjectViaCreateJobButton() {
+        String actualProjectName = new HomePage(getDriver())
+                .clickCreateJob()
+                .enterItemName(PROJECT_NAME)
+                .selectFreestyleProjectAndClickOk()
+                .clickSaveButton()
+                .getProjectName();
+
+        Assert.assertEquals(actualProjectName, PROJECT_NAME);
     }
 }
