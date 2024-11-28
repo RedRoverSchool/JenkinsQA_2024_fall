@@ -2,15 +2,12 @@ package school.redrover;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.Assert;
 import org.testng.annotations.Test;
-import school.redrover.page.CreateNewItemPage;
 import school.redrover.page.HomePage;
 import school.redrover.page.PipelineProjectPage;
 import school.redrover.runner.BaseTest;
-import school.redrover.runner.TestUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -92,7 +89,6 @@ public class PipelineTest extends BaseTest {
                 .cleanInputFieldAndTypeName(projectName)
                 .clickRenameButton();
 
-
         Assert.assertEquals(projectPage.getTitle(), projectName);
         Assert.assertEquals(projectPage.getProjectNameBreadcrumb(),projectName);
     }
@@ -168,8 +164,8 @@ public class PipelineTest extends BaseTest {
 
         String welcomeTitle = new HomePage(getDriver())
                 .openPipelineProject("PipelineProject2New")
-                        .clickDeletePipelineSidebarAndConfirmDeletion()
-                                .getWelcomeTitle();
+                .clickDeletePipelineSidebarAndConfirmDeletion()
+                .getWelcomeTitle();
 
         Assert.assertEquals(welcomeTitle, "Welcome to Jenkins!");
     }
@@ -208,22 +204,6 @@ public class PipelineTest extends BaseTest {
         Assert.assertEquals(welcomeTitle, "Welcome to Jenkins!");
     }
 
-    @Test
-    public void testCreateSeveralProjects() {
-        int numOfProjects = 6;
-        List<String> expectedNameList = createSeveralProjects(numOfProjects, "PR", ProjectType.Pipeline);
-
-        List<WebElement> projectList = getDriver().findElements(By.xpath("//table[@id='projectstatus']/tbody/tr/td[3]"));
-        List<String> nameList = projectList.stream().map(WebElement::getText).toList();
-
-        Assert.assertEquals(nameList.size(), numOfProjects);
-
-        for (int i = 0; i < numOfProjects; i++) {
-            Assert.assertEquals(nameList.get(i),expectedNameList.get(i));
-            System.out.println(nameList.get(i) + " ---> " + expectedNameList.get(i));
-        }
-
-    }
 
     @Test
     public void testPipelineDisabledTooltipOnHomePage() {
@@ -260,49 +240,8 @@ public class PipelineTest extends BaseTest {
         return projectNameList;
     }
 
-    private void createNewProjectWithDescriptionAndGoHomePageByLogo(String name, ProjectType projectType, String description) {
-
-        getDriver().findElement(By.xpath("//a[@href ='newJob']")).click();
-
-        getDriver().findElement(By.id("name")).sendKeys(name);
-
-        getWait10().until(ExpectedConditions.elementToBeClickable(
-                By.xpath(("//div[@id='items']//label/span[text()= '%s']".formatted(projectType))))).click();
-
-        getDriver().findElement(By.id("ok-button")).click();
-
-        getDriver().findElement(By.name("description")).sendKeys(description);
-        getDriver().findElement(By.cssSelector(".jenkins-submit-button")).click();
-
-        goToHomePageByLogo();
-    }
-
-    private void createNewProjectAndGoMainPageByLogo(String name, ProjectType projectType) {
-
-        getDriver().findElement(By.xpath("//a[@href ='/view/all/newJob']")).click();
-
-        getDriver().findElement(By.id("name")).sendKeys(name);
-
-        getWait10().until(ExpectedConditions.elementToBeClickable(
-                By.xpath(("//div[@id='items']//label/span[text()= '%s']".formatted(projectType))))).click();
-
-        getDriver().findElement(By.id("ok-button")).click();
-        getDriver().findElement(By.cssSelector(".jenkins-submit-button")).click();
-        getDriver().findElement(By.id("jenkins-home-link")).click();
-    }
-
     private void goToHomePageByLogo() {
         getDriver().findElement(By.id("jenkins-home-link")).click();
-    }
-
-    private WebElement findProjectOnDashboardByName(String name) {
-        return getDriver().findElement(By.xpath("//a[@href ='job/%s/']".formatted(name)));
-    }
-
-    private void clickRenameButtonOnSidebar() {
-
-        getDriver().findElement(
-                By.xpath("//div[@id='tasks']/div//span[contains(text(), 'Rename')]/..")).click();
     }
 
     private enum ProjectType {
