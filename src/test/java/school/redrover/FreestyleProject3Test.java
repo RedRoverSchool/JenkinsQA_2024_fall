@@ -91,23 +91,6 @@ public class FreestyleProject3Test extends BaseTest {
 
     @Ignore
     @Test
-    public void testCreateProjectViaCreateJobButton() {
-        getDriver().findElement(By.xpath("//a[@href='newJob']")).click();
-
-        getWait5().until(ExpectedConditions.visibilityOfElementLocated(By.id("name"))).sendKeys(PROJECT_NAME);
-        getDriver().findElement(By.xpath("//li[contains(@class, 'FreeStyleProject')]")).click();
-        getDriver().findElement(By.id("ok-button")).click();
-
-        getWait10().until(ExpectedConditions.elementToBeClickable(By.xpath("//button[@name='Submit']")))
-                .click();
-
-        verifyYouAreOnProjectStatusPage();
-
-        Assert.assertEquals(getDriver().findElement(By.tagName("h1")).getText(), PROJECT_NAME);
-    }
-
-    @Ignore
-    @Test
     public void testCreateProjectViaSidebarMenu() {
         createProjectViaSidebarMenu(PROJECT_NAME);
 
