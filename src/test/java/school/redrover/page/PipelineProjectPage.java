@@ -107,4 +107,22 @@ public class PipelineProjectPage extends BaseProjectPage<PipelineProjectPage> {
                 .map(string -> string.split("\\(#")[0].trim())
                 .toList();
     }
+
+    public PipelineProjectPage clickAddDescriptionButton() {
+        getDriver().findElement(By.xpath("//a[@href='editDescription']")).click();
+
+        return new PipelineProjectPage(getDriver());
+    }
+
+    public PipelineProjectPage enterDescription(String text) {
+        getWait5().until(ExpectedConditions.presenceOfElementLocated(
+                By.xpath("//textarea[@name='description']"))).sendKeys(text);
+        return new PipelineProjectPage(getDriver());
+    }
+
+    public PipelineProjectPage clickSaveButton() {
+        getDriver().findElement(By.xpath("//button[@name='Submit']")).click();
+
+        return new PipelineProjectPage(getDriver());
+    }
 }
