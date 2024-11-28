@@ -26,6 +26,10 @@ public class CreateNewItemPage extends BasePage {
         }
     }
 
+    public String getErrorMessage() {
+        return getDriver().findElement(By.id("itemname-invalid")).getText();
+    }
+
     public CreateNewItemPage enterItemName(String name) {
         getDriver().findElement(By.id("name")).sendKeys(name);
 
