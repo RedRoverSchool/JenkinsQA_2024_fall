@@ -259,5 +259,4 @@ public class PipelineProjectTest extends BaseTest {
 
         Assert.assertEquals(invalidNameMessage, "» ‘%s’ is an unsafe character".formatted(unsafeCharacter));
     }
-
 }
