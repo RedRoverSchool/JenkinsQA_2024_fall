@@ -324,7 +324,7 @@ public class PipelineProjectTest extends BaseTest {
                 .enterItemName(PIPELINE_NAME)
                 .selectPipelineAndClickOk()
                 .gotoHomePage()
-                .openPipelineProject2(PIPELINE_NAME)
+                .openPipelineProject(PIPELINE_NAME)
                 .openDropDownMenuByChevronBreadcrumb(PIPELINE_NAME)
                 .clickDeletePipelineSidebarAndConfirmDeletion()
                 .getWelcomeTitle();
