@@ -118,15 +118,14 @@ public class PageElementsTest extends BaseTest {
         Assert.assertEquals(result, "Project MultiConfigurationProjectTest");
     }
 
-    @Ignore
     @Test
     public void testNewFolder(){
         newItemsData(this,"newFolderTest", "//*[@id='j-add-item-type-standalone-projects']/ul/li[3]/div[2]/label");
 
-        getDriver().findElement(By.id("jenkins")).sendKeys("Testing Folder");
+        getWait10().until(ExpectedConditions.visibilityOfElementLocated(By.id("jenkins"))).sendKeys("Testing Folder");
         getDriver().findElement(By.name("Submit")).click();
 
-        String result = getDriver().findElement(By.xpath("//*[@id='main-panel']/h1")).getText();
+        String result = getWait10().until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[@id='main-panel']/h1"))).getText();
 
         Assert.assertEquals(result, "Project newFolderTest");
     }
