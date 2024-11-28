@@ -178,29 +178,18 @@ public class PipelineTest extends BaseTest {
     @Test()
     public void testDeleteByChevronDashboard() {
         final String projectName = "ProjectDeleteByChevron";
-        createNewProjectAndGoMainPageByLogo(projectName, ProjectType.Pipeline);
 
-        new Actions(getDriver())
-                .moveToElement(findProjectOnDashboardByName(projectName))
-                .perform();
+        String welcomeTitle = new HomePage(getDriver())
+                .clickNewItem()
+                .enterItemName(projectName)
+                .selectPipelineAndClickOk()
+                .gotoHomePage()
+                .openDropdownViaChevron(projectName)
+                .clickDeletePipelineChevronDropdownMenu(projectName)
+                .clickYesForConfirmDelete()
+                .getWelcomeTitle();
 
-        WebElement buttonChevron = getWait10().until(TestUtils.ExpectedConditions.elementIsNotMoving(
-                By.xpath("//a[@href ='job/%s/']/button[@class='jenkins-menu-dropdown-chevron']"
-                        .formatted(projectName))));
-
-        TestUtils.moveAndClickWithJavaScript(getDriver(), buttonChevron);
-
-        getWait10().until(ExpectedConditions.visibilityOfElementLocated(
-                By.xpath("//button[@href = '/job/%s/doDelete']".formatted(projectName)))).click();
-
-        getWait10().until(ExpectedConditions.visibilityOfElementLocated(
-                By.xpath("//button[@data-id='ok']"))).click();
-
-        goToHomePageByLogo();
-
-        String actualMessage = getDriver().findElement(By.xpath("//div[@class='empty-state-block']/h1")).getText();
-
-        Assert.assertEquals(actualMessage, "Welcome to Jenkins!");
+        Assert.assertEquals(welcomeTitle, "Welcome to Jenkins!");
     }
 
     @Test()
