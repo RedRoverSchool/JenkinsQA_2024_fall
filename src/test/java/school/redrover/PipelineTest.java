@@ -167,15 +167,12 @@ public class PipelineTest extends BaseTest {
     @Test(dependsOnMethods = "testRename")
     public void testDelete() {
 
-        getDriver().findElement(By.xpath("//table[@id='projectstatus']/tbody/tr/td/a/span/..")).click();
+        String welcomeTitle = new HomePage(getDriver())
+                .openPipelineProject("PipelineProject2New")
+                        .clickDeletePipelineSidebarAndConfirmDeletion()
+                                .getWelcomeTitle();
 
-        getDriver().findElement(By.xpath("//a[@data-title='Delete Pipeline']")).click();
-
-        getWait10().until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//button[@data-id='ok']"))).click();
-
-        String actualMessage = getDriver().findElement(By.xpath("//div[@class='empty-state-block']/h1")).getText();
-
-        Assert.assertEquals(actualMessage, "Welcome to Jenkins!");
+        Assert.assertEquals(welcomeTitle, "Welcome to Jenkins!");
     }
 
     @Test()
