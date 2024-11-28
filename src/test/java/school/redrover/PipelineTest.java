@@ -19,7 +19,7 @@ public class PipelineTest extends BaseTest {
                 .enterItemName(projectName)
                 .selectPipelineAndClickOk()
                 .gotoHomePage()
-                .getItemName();
+                .getItemName(PROJECT_NAME);
 
         Assert.assertEquals(actualProjectName, projectName);
     }
