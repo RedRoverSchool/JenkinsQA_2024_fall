@@ -102,6 +102,12 @@ public class HomePage  extends BasePage {
         return new PipelineProjectPage(getDriver());
     }
 
+    //todo:if the project name is longer than ? number of characters, the name is split <wbr> and the locator “//td/a/span[text() = ‘%s’]/...” does not find the element
+    public PipelineProjectPage openPipelineProject2(String name) {
+        getDriver().findElement(By.xpath("//td/a[@href='job/%s/']".formatted(name))).click();
+        return new PipelineProjectPage(getDriver());
+    }
+
     public MultiConfigurationProjectPage openMultiConfigurationProject(String name) {
         getDriver().findElement(By.xpath("//td/a/span[text() = '%s']/..".formatted(name))).click();
 
