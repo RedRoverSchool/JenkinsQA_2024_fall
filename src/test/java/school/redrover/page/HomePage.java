@@ -12,7 +12,7 @@ import school.redrover.runner.TestUtils;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class HomePage  extends BasePage {
+public class HomePage extends BasePage {
 
     public HomePage(WebDriver driver) {
         super(driver);
@@ -282,7 +282,7 @@ public class HomePage  extends BasePage {
 
     public HomePage clickScheduleBuild(String name) {
         getWait10().until(ExpectedConditions.elementToBeClickable(
-                By.xpath("//td[@class='jenkins-table__cell--tight']//a[@tooltip='Schedule a Build for " + name + "']"))).click();
+                By.xpath("//td[@class='jenkins-table__cell--tight']//a[@tooltip='Schedule a Build for %s']".formatted(name)))).click();
         getWait10().until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@class='tippy-content']")));
         getWait10().until(ExpectedConditions.invisibilityOfElementLocated(By.xpath("//div[@class='tippy-content']")));
 
@@ -337,4 +337,26 @@ public class HomePage  extends BasePage {
        return itemList.stream().map(WebElement::getText).collect(Collectors.toList());
 
     }
+    public HomePage clickBuildNowViaDropdown(String name) {
+        WebElement chevronButton = getWait5().until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//span[text()='%s']/following-sibling::button".formatted(name))));
+        TestUtils.moveAndClickWithJavaScript(getDriver(), chevronButton);
+
+        getWait10().until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//button[contains(@href, 'build')]"))).click();
+
+        getWait10().until(ExpectedConditions.invisibilityOfElementLocated(
+                By.xpath("//a[contains(@class,'app-progress-bar')]")));
+
+        getDriver().navigate().refresh();
+
+        return this;
+    }
+
+    public String getStatusBuild(String name) {
+        return getWait10().until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//tr[@id='job_%s']//*[name()='svg'][@tooltip='Success']".formatted(name)))).getAttribute("tooltip");
+    }
+
+
 }
