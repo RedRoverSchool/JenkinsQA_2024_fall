@@ -102,6 +102,12 @@ public class HomePage  extends BasePage {
         return new PipelineProjectPage(getDriver());
     }
 
+    //todo:if the project name is longer than ? number of characters, the name is split <wbr> and the locator “//td/a/span[text() = ‘%s’]/...” does not find the element
+    public PipelineProjectPage openPipelineProject2(String name) {
+        getDriver().findElement(By.xpath("//td/a[@href='job/%s/']".formatted(name))).click();
+        return new PipelineProjectPage(getDriver());
+    }
+
     public MultiConfigurationProjectPage openMultiConfigurationProject(String name) {
         getDriver().findElement(By.xpath("//td/a/span[text() = '%s']/..".formatted(name))).click();
 
@@ -194,6 +200,10 @@ public class HomePage  extends BasePage {
 
     public String getWelcomeText() {
         return getDriver().findElement(By.xpath("//p[contains(text(), 'This page is where')]")).getText();
+    }
+
+    public String getWelcomeTitle() {
+        return getDriver().findElement(By.xpath("//div[@class='empty-state-block']/h1")).getText();
     }
 
     public String getDescriptionText() {
@@ -308,5 +318,12 @@ public class HomePage  extends BasePage {
         getDriver().findElement(By.xpath("//a[@href='/job/%s/confirm-rename']".formatted(name))).click();
 
         return new PipelineRenamePage(getDriver());
+    }
+
+    public HomePage clickDeletePipelineChevronDropdownMenu(String name) {
+        getWait5().until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//button[@href = '/job/%s/doDelete']".formatted(name)))).click();
+
+        return new HomePage(getDriver());
     }
 }
