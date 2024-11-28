@@ -1,6 +1,7 @@
 package school.redrover;
 
 import org.testng.Assert;
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 import school.redrover.page.HomePage;
 import school.redrover.page.PipelineProjectPage;
@@ -14,6 +15,17 @@ public class PipelineProjectTest extends BaseTest {
 
     private static final String PIPELINE_NAME = "PipelineName";
     private static final String NEW_PROJECT_NAME = "NewPipelineName";
+
+    @DataProvider
+    public Object[][] providerUnsafeCharacters() {
+
+        return new Object[][]{
+                {"\\"}, {"]"}, {":"}, {"#"}, {"&"}, {"?"}, {"!"}, {"@"},
+                {"$"}, {"%"}, {"^"}, {"*"}, {"|"}, {"/"}, {"<"}, {">"},
+                {"["}, {";"}
+        };
+
+    }
 
     @Test
     public void testCreateProjectWithValidNameViaSidebar() {
@@ -195,4 +207,57 @@ public class PipelineProjectTest extends BaseTest {
                 NEW_PROJECT_NAME,
                 "Project is not deleted");
     }
+
+    @Test
+    public void testDeleteViaChevron() {
+        List<String> projectList = new HomePage(getDriver())
+                .clickNewItem()
+                .enterItemName(PIPELINE_NAME)
+                .selectPipelineAndClickOk()
+                .clickSaveButton()
+                .gotoHomePage()
+                .selectDeleteFromItemMenu(PIPELINE_NAME)
+                .clickYesForConfirmDelete()
+                .getItemList();
+
+        Assert.assertListNotContainsObject(projectList, PIPELINE_NAME, "Project is not deleted");
+    }
+
+    @Test
+    public void testCreateWithEmptyName() {
+        String emptyNameMessage = new HomePage(getDriver())
+                .clickNewItem()
+                .enterItemName("")
+                .selectPipeline()
+                .getEmptyNameMessage();
+
+        Assert.assertEquals(emptyNameMessage, "» This field cannot be empty, please enter a valid name");
+    }
+
+    @Test
+    public void testCreateWithDuplicateName() {
+        String errorMessage = new HomePage(getDriver()).clickNewItem()
+                .enterItemName(PIPELINE_NAME)
+                .selectPipelineAndClickOk()
+                .clickSaveButton()
+                .gotoHomePage()
+                .clickNewItem()
+                .enterItemName(PIPELINE_NAME)
+                .selectPipeline()
+                .getErrorMessage();
+
+        Assert.assertEquals(errorMessage, "» A job already exists with the name ‘%s’".formatted(PIPELINE_NAME));
+    }
+
+    @Test(dataProvider = "providerUnsafeCharacters")
+    public void testCreateWithUnsafeCharactersInName(String unsafeCharacter) {
+        String invalidNameMessage = new HomePage(getDriver())
+                .clickNewItem()
+                .enterItemName(unsafeCharacter)
+                .selectPipeline()
+                .getInvalidNameMessage();
+
+        Assert.assertEquals(invalidNameMessage, "» ‘%s’ is an unsafe character".formatted(unsafeCharacter));
+    }
+
 }
