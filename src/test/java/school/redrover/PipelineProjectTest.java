@@ -259,4 +259,76 @@ public class PipelineProjectTest extends BaseTest {
 
         Assert.assertEquals(invalidNameMessage, "» ‘%s’ is an unsafe character".formatted(unsafeCharacter));
     }
+
+    @Test()
+    public void testRename() {
+        PipelineProjectPage projectPage = new HomePage(getDriver())
+                .clickNewItem()
+                .enterItemName(PIPELINE_NAME)
+                .selectPipelineAndClickOk()
+                .clickSaveButton()
+                .gotoHomePage()
+                .clickOnPipelineName(PIPELINE_NAME)
+                .clickRenameSidebar(PIPELINE_NAME)
+                .cleanInputFieldAndTypeName(NEW_PROJECT_NAME)
+                .clickRenameButton();
+
+        Assert.assertEquals(projectPage.getTitle(), NEW_PROJECT_NAME);
+        Assert.assertEquals(projectPage.getProjectNameBreadcrumb(),NEW_PROJECT_NAME);
+    }
+
+    @Test()
+    public void testWarningMessageOnRenameProjectPage() {
+        String actualWarningMessage = new HomePage(getDriver())
+                .clickNewItem()
+                .enterItemName(PIPELINE_NAME)
+                .selectPipelineAndClickOk()
+                .clickSaveButton()
+                .gotoHomePage()
+                .clickOnPipelineName(PIPELINE_NAME)
+                .clickRenameSidebar(PIPELINE_NAME)
+                .getWarningMessage();
+
+        Assert.assertEquals(actualWarningMessage, "The new name is the same as the current name.");
+    }
+
+    @Test
+    public void testRenameByChevronDashboard() {
+        PipelineProjectPage projectPage = new HomePage(getDriver())
+                .clickNewItem()
+                .enterItemName(PIPELINE_NAME)
+                .selectPipelineAndClickOk()
+                .clickSaveButton()
+                .gotoHomePage()
+                .goToPipelineRenamePageViaDropdown(PIPELINE_NAME)
+                .cleanInputFieldAndTypeName(NEW_PROJECT_NAME)
+                .clickRenameButton();
+
+        Assert.assertEquals(projectPage.getTitle(), NEW_PROJECT_NAME);
+        Assert.assertEquals(projectPage.getProjectNameBreadcrumb(), NEW_PROJECT_NAME);
+    }
+
+    @Test(dependsOnMethods = "testRenameByChevronDashboard")
+    public void testRenameByChevronDisplayedOnHomePageWithCorrectName() {
+        boolean isDisplayed = new HomePage(getDriver())
+                .getItemList()
+                .contains(NEW_PROJECT_NAME);
+
+        Assert.assertTrue(isDisplayed);
+    }
+
+    @Test()
+    public void testDeleteByChevronBreadcrumb() {
+        String welcomeTitle = new HomePage(getDriver())
+                .clickNewItem()
+                .enterItemName(PIPELINE_NAME)
+                .selectPipelineAndClickOk()
+                .gotoHomePage()
+                .openPipelineProject2(PIPELINE_NAME)
+                .openDropDownMenuByChevronBreadcrumb(PIPELINE_NAME)
+                .clickDeletePipelineSidebarAndConfirmDeletion()
+                .getWelcomeTitle();
+
+        Assert.assertEquals(welcomeTitle, "Welcome to Jenkins!");
+    }
 }
