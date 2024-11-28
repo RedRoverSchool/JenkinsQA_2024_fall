@@ -9,13 +9,14 @@ import school.redrover.runner.BaseTest;
 import java.util.List;
 import java.util.Random;
 
-public class Us_00_001_CreateFreestyleProject extends BaseTest {
+public class CreateFreestyleProject extends BaseTest {
+
+    private final String PROJECT_NAME = generateRandomString(6);
 
     @Test()
-    public void createFromTheLeftSidebarMenu(){
-        final String generatedName = generateRandomString(7);
+    public void testCreateFromTheLeftSidebarMenu(){
 
-        new HomePage(getDriver()).createFreestyleProject(generatedName);
+        new HomePage(getDriver()).createFreestyleProject(PROJECT_NAME);
 
         List<String>namesOfJobsPresentedInJenkins =
                 getDriver().findElements(By.xpath("//div[@id='main-panel']//tbody//tr//td//a//span"))
@@ -23,11 +24,11 @@ public class Us_00_001_CreateFreestyleProject extends BaseTest {
                         .map(e -> e.getText())
                         .toList();
 
-        Assert.assertEquals(namesOfJobsPresentedInJenkins.get(0), generatedName);
+        Assert.assertEquals(namesOfJobsPresentedInJenkins.get(0), PROJECT_NAME);
     }
 
     @Test
-    public void errorMessageDisplayedForEmptyProjectName() {
+    public void testErrorMessageDisplayedForEmptyProjectName() {
         getDriver().findElement(By.xpath("//*[@href='/view/all/newJob']")).click();
         getDriver().findElement(By.className("hudson_model_FreeStyleProject")).click();
 
@@ -36,13 +37,24 @@ public class Us_00_001_CreateFreestyleProject extends BaseTest {
     }
 
     @Test
-    public void errorMessageDisplayedForInvalidCharactersInProjectName(){
+    public void testErrorMessageDisplayedForInvalidCharactersInProjectName(){
         getDriver().findElement(By.xpath("//*[@href='/view/all/newJob']")).click();
         getDriver().findElement(By.name("name")).sendKeys("#:!@#$%^&");
 
         Assert.assertEquals(getDriver().findElement(By.xpath("//div[@id='itemname-invalid']")).getText()
                 , "» ‘#’ is an unsafe character");
+    }
 
+    @Test
+    public void testCreateProjectWithExistingName(){
+
+        String existedErrorMessage = new HomePage(getDriver())
+                .createFreestyleProject(PROJECT_NAME)
+                .goToCreateNewItemPage()
+                .enterItemName(PROJECT_NAME)
+                .getInvalidNameMessage();
+
+        Assert.assertTrue(existedErrorMessage.contains("» A job already exists with the"));
     }
 
     private String generateRandomString(int stringLength){
@@ -55,6 +67,5 @@ public class Us_00_001_CreateFreestyleProject extends BaseTest {
         }
         return sb.toString();
     }
-
 
 }

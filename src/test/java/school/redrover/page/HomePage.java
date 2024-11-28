@@ -13,8 +13,16 @@ import java.util.List;
 
 public class HomePage  extends BasePage {
 
+    private final By dashBordNewItem = By.xpath("//*[@href='/view/all/newJob']");
+
     public HomePage(WebDriver driver) {
         super(driver);
+    }
+
+    public CreateNewItemPage goToCreateNewItemPage(){
+
+        getDriver().findElement(dashBordNewItem).click();
+        return new CreateNewItemPage(getDriver());
     }
 
     public HomePage createFreestyleProject(String name) {
