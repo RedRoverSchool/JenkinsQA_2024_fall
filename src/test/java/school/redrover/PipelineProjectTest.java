@@ -274,7 +274,7 @@ public class PipelineProjectTest extends BaseTest {
                 .clickRenameButton();
 
         Assert.assertEquals(projectPage.getTitle(), NEW_PROJECT_NAME);
-        Assert.assertEquals(projectPage.getProjectNameBreadcrumb(), NEW_PROJECT_NAME);
+        Assert.assertEquals(projectPage.getProjectNameBreadcrumb(),NEW_PROJECT_NAME);
     }
 
     @Test()
@@ -330,5 +330,19 @@ public class PipelineProjectTest extends BaseTest {
                 .getWelcomeTitle();
 
         Assert.assertEquals(welcomeTitle, "Welcome to Jenkins!");
+    }
+
+    @Test
+    public void testPipelineDisabledTooltipOnHomePage() {
+        String tooltipValue = new HomePage(getDriver())
+                .clickNewItem()
+                .enterItemName(PIPELINE_NAME)
+                .selectPipelineAndClickOk()
+                .clickToggleToDisableOrEnableProject()
+                .clickSaveButton()
+                .gotoHomePage()
+                .getTooltipValue(PIPELINE_NAME);
+
+        Assert.assertEquals(tooltipValue, "Disabled");
     }
 }
