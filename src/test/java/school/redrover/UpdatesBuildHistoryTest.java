@@ -1,79 +1,48 @@
 package school.redrover;
 
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.Assert;
 import org.testng.annotations.Test;
+import school.redrover.page.BuildHistoryPage;
 import school.redrover.page.HomePage;
-import school.redrover.page.ProjectPage;
 import school.redrover.runner.BaseTest;
-import school.redrover.runner.TestUtils;
 
 import java.util.List;
 
 public class UpdatesBuildHistoryTest extends BaseTest {
-
-    private void openBuildHistoryPage() {
-        getDriver().findElement(By.xpath("//a[@href = '/view/all/builds']")).click();
-    }
-
-    private void scheduleBuild() {
-        getDriver().findElement(By.xpath("//td[@class = 'jenkins-table__cell--tight']")).click();
-    }
+    private final String PROJECT_NAME = "TestName";
 
     @Test
     public void testBuildHistoryIsEmpty() {
-        final String projectName = "TestName";
+        List <String> emptyHistory = new HomePage(getDriver())
+                .createFreestyleProject(PROJECT_NAME)
+                .gotoBuildHistoryPageFromLeftPanel()
+                .getListOfStatuses();
 
-        new HomePage(getDriver())
-                .createFreestyleProject(projectName);
-
-        openBuildHistoryPage();
-
-        List<WebElement> elementList = getDriver().findElements(By.xpath("//td/a/span"));
-        List<String> historyList = elementList.stream().map(WebElement::getText).toList();
-
-        Assert.assertEquals(historyList.size(),0);
+        Assert.assertEquals(emptyHistory.size(),0);
     }
 
     @Test(dependsOnMethods = "testBuildHistoryIsEmpty")
     public void testUpdateAfterExecutingBuild() {
-        scheduleBuild();
-        openBuildHistoryPage();
+        List <String> oneExecution = new HomePage(getDriver())
+                .scheduleBuild(PROJECT_NAME)
+                .gotoBuildHistoryPageFromLeftPanel()
+                .getListOfStatuses();
 
-        List<WebElement> elementList = getDriver().findElements(By.xpath("//*[@id='projectStatus']/tbody/tr/td[4]"));
-        List<String> historyList = elementList.stream().map(WebElement::getText).toList();
-
-        Assert.assertEquals(historyList.get(0), "stable");
+        Assert.assertEquals(oneExecution.get(0), "stable");
+        Assert.assertEquals(oneExecution.size(),1);
     }
 
     @Test(dependsOnMethods = "testUpdateAfterExecutingBuild")
     public void testUpdateAfterChangingConfig() {
-         new HomePage(getDriver())
-                .openDropdownViaChevron("TestName");
+        List <String> changeConfig = new BuildHistoryPage(getDriver())
+                .addBuildSteps(PROJECT_NAME,"Run with timeout")
+                .gotoHomePage()
+                .scheduleBuild(PROJECT_NAME)
+                .gotoHomePage()
+                .gotoBuildHistoryPageFromLeftPanel()
+                .getListOfStatuses();
 
-        getDriver().findElement(By.xpath("//a[normalize-space()='Configure']")).click();
-        TestUtils.scrollToBottom(getDriver());
-        getDriver().findElement(By.xpath("//button[normalize-space()='Add build step']")).click();
-        getWait2().until(ExpectedConditions.
-                elementToBeClickable(By.xpath("//button[normalize-space()='Run with timeout']"))).click();
-        getDriver().findElement(By.xpath("//button[contains(@name,'Submit')]")).click();
-
-        new ProjectPage(getDriver())
-                .goToDashboard();
-
-        scheduleBuild();
-
-        new ProjectPage(getDriver())
-                .goToDashboard();
-
-        openBuildHistoryPage();
-
-        List<WebElement> elementList = getDriver().findElements(By.xpath("//*[@id='projectStatus']/tbody/tr/td[4]"));
-        List<String> historyList = elementList.stream().map(WebElement::getText).toList();
-
-        Assert.assertEquals(historyList.get(0), "broken since this build");
-        Assert.assertEquals(historyList.size(),2);
+        Assert.assertEquals(changeConfig.get(0), "broken since this build");
+        Assert.assertEquals(changeConfig.size(),2);
     }
 }

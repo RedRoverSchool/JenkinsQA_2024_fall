@@ -4,16 +4,12 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
-import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import school.redrover.page.HomePage;
-import school.redrover.page.ProjectPage;
 import school.redrover.runner.BaseTest;
 import school.redrover.runner.TestUtils;
 
-import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -43,7 +39,7 @@ public class FreestyleProject1Test extends BaseTest {
     @Test(dependsOnMethods = "testCreate")
     public void testAddDescription() {
         String description = new HomePage(getDriver())
-                .openProject(NEW_FREESTYLE_PROJECT_NAME)
+                .openFreestyleProject(NEW_FREESTYLE_PROJECT_NAME)
                 .editDescription(DESCRIPTION)
                 .getDescription();
 
@@ -53,7 +49,7 @@ public class FreestyleProject1Test extends BaseTest {
     @Test(dependsOnMethods = "testAddDescription")
     public void testDeleteDescription() {
         String description = new HomePage(getDriver())
-                .openProject(NEW_FREESTYLE_PROJECT_NAME)
+                .openFreestyleProject(NEW_FREESTYLE_PROJECT_NAME)
                 .clearDescription()
                 .getDescription();
 
