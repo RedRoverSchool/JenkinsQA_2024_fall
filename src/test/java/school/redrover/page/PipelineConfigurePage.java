@@ -5,7 +5,6 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import school.redrover.page.base.BaseConfigPage;
-import school.redrover.page.base.BasePage;
 import school.redrover.runner.TestUtils;
 
 import java.util.HashMap;
@@ -55,6 +54,14 @@ public class PipelineConfigurePage extends BaseConfigPage<PipelineConfigurePage,
 
         TestUtils.scrollToBottom(getDriver());
         getDriver().findElement(By.cssSelector("textarea[class='ace_text-input']")).sendKeys(script);
+
+        return this;
+    }
+
+    public PipelineConfigurePage enterScriptFromFile(String fileName) {
+        String pipelineScript = TestUtils.readFile(fileName);
+        WebElement textArea = getDriver().findElement(By.xpath("//textarea[@class='ace_text-input']"));
+        TestUtils.pasteTextWithJavaScript(getDriver(), textArea, pipelineScript);
 
         return this;
     }
