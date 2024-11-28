@@ -345,4 +345,40 @@ public class PipelineProjectTest extends BaseTest {
 
         Assert.assertEquals(tooltipValue, "Disabled");
     }
+
+    @Test
+    public void testBuildWithValidPipelineScript() {
+        final String validPipelineScriptFile = "ValidPipelineScript.txt";
+        final String status = "Success";
+
+        String statusBuild = new HomePage(getDriver())
+                .clickNewItem()
+                .enterItemName(PIPELINE_NAME)
+                .selectPipelineAndClickOk()
+                .enterScriptFromFile(validPipelineScriptFile)
+                .clickSaveButton()
+                .gotoHomePage()
+                .clickBuildNowViaDropdown(PIPELINE_NAME)
+                .getStatusBuild(PIPELINE_NAME, status);
+
+        Assert.assertEquals(statusBuild, status);
+    }
+
+    @Test
+    public void testBuildWithInvalidPipelineScript() {
+        final String invalidPipelineScriptFile = "InvalidPipelineScript.txt";
+        final String status = "Failed";
+
+        String statusBuild = new HomePage(getDriver())
+                .clickNewItem()
+                .enterItemName(PIPELINE_NAME)
+                .selectPipelineAndClickOk()
+                .enterScriptFromFile(invalidPipelineScriptFile)
+                .clickSaveButton()
+                .gotoHomePage()
+                .clickBuildNowViaDropdown(PIPELINE_NAME)
+                .getStatusBuild(PIPELINE_NAME, status);
+
+        Assert.assertEquals(statusBuild, status);
+    }
 }
