@@ -12,7 +12,7 @@ public class  CreateNewItemPage extends BasePage {
         super(driver);
     }
 
-    By getMultiConfigurationProject = By.xpath("//span[text()='Multi-configuration project']");
+    By getMultiConfigurationProject = By.xpath("//li//span[text()='Multi-configuration project']");
     By getSubmitButton = By.xpath("//button[@id = 'ok-button']");
 
     public CreateNewItemPage enterItemName(String name) {

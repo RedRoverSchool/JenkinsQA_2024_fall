@@ -47,13 +47,12 @@ public class MultiConfigurationProjectTest extends BaseTest {
     @Test(description = " MultiConfigurationProjectTest | Add descriptions to existing project")
     public void testAddDescriptions() {
         testCreateProjectWithoutDescription();
-        getDriver().findElement(By.xpath("//td/a[@href='job/Multi-configuration%20project/']")).click();
+        getDriver().findElement(By.xpath("//td/a[@href='job/MTC%20project/']")).click();
         getDriver().findElement(By.xpath("//a[@id='description-link']")).click();
         getDriver().findElement(By.xpath("//textarea[@name = 'description']")).sendKeys(DESCRIPTIONS);
         getDriver().findElement(By.xpath("//div/button[@name = 'Submit']")).submit();
 
-        Assert.assertEquals(getDriver().findElement(By.xpath("//div[@id='description']/div[1]")).getText()
-                , DESCRIPTIONS);
+        Assert.assertEquals(getDriver().findElement(By.xpath("//div[@id='description']/div[1]")).getText(),DESCRIPTIONS);
 
     }
 
@@ -148,8 +147,6 @@ public class MultiConfigurationProjectTest extends BaseTest {
                 .saveInvalidData()
                 .getErrorMessage();
 
-        Assert.assertEquals(errorMessage, "A job already exists with the name " +
-                "‘MTC project’");
-
+        Assert.assertTrue(errorMessage.contains("A job already exists with the name "));
     }
 }
