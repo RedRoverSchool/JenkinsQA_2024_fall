@@ -1,16 +1,10 @@
 package school.redrover;
 
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import school.redrover.page.HomePage;
 import school.redrover.page.PipelineProjectPage;
 import school.redrover.runner.BaseTest;
-
-import java.util.ArrayList;
-import java.util.List;
 
 
 public class PipelineTest extends BaseTest {
@@ -217,49 +211,5 @@ public class PipelineTest extends BaseTest {
                                   .getTooltipValue(PROJECT_NAME);
 
         Assert.assertEquals(tooltipValue, "Disabled");
-    }
-
-    private List<String> createSeveralProjects(int numOfProjects, String name, ProjectType projectType) {
-        List<String> projectNameList = new ArrayList<>();
-        for (int i = 1; i <= numOfProjects; i++) {
-            String projectName = name + "_" + i;
-            projectNameList.add(projectName);
-            getDriver().findElement(By.xpath("//a[@href ='/view/all/newJob']")).click();
-
-            getDriver().findElement(By.id("name")).sendKeys(projectName);
-
-            getWait10().until(ExpectedConditions.elementToBeClickable(
-                    By.xpath(("//div[@id='items']//label/span[text()= '%s']".formatted(projectType))))).click();
-
-            getDriver().findElement(By.id("ok-button")).click();
-
-            getDriver().findElement(By.cssSelector(".jenkins-submit-button")).click();
-
-            goToHomePageByLogo();
-        }
-        return projectNameList;
-    }
-
-    private void goToHomePageByLogo() {
-        getDriver().findElement(By.id("jenkins-home-link")).click();
-    }
-
-    private enum ProjectType {
-        FreestyleProject("Freestyle project"),
-        Pipeline("Pipeline"),
-        MultiConfigurationProject("Multi-configuration project"),
-        Folder("Folder"),
-        MultibranchPipeline("Multibranch Pipeline"),
-        OrganizationFolder("Organization Folder");
-
-        private final String htmlText;
-
-        ProjectType(String htmlText) {
-            this.htmlText = htmlText;
-        }
-
-        public String getHtmlText() {
-            return htmlText;
-        }
     }
 }
