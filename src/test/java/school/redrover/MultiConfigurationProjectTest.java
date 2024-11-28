@@ -10,6 +10,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
+import school.redrover.page.HomePage;
 import school.redrover.runner.BaseTest;
 
 import java.time.Duration;
@@ -17,7 +18,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class MultiConfigurationProjectTest extends BaseTest {
-    private static final String NAME_OF_PROJECT = " project";
+    private static final String NAME_OF_PROJECT = "MTC project";
     private static final String DESCRIPTIONS = "Descriptions of project";
 
     private void waitTimeUntilVisibilityElement(Integer time, WebElement element){
@@ -33,19 +34,14 @@ public class MultiConfigurationProjectTest extends BaseTest {
 
     @Test(description = "Create project without descriptions")
     public void testCreateProjectWithoutDescription() {
-        getDriver().findElement(By.xpath("//a[@href='/view/all/newJob']")).click();
-        WebElement itemName = getDriver().findElement(By.xpath("//input[@id='name']"));
-        waitTimeUntilVisibilityElement(2, itemName);
-        itemName.sendKeys("Multi-configuration" + NAME_OF_PROJECT);
-        getDriver().findElement(By.xpath("//span[text()='Multi-configuration project']")).click();
-        getDriver().findElement(By.xpath("//button[@id = 'ok-button']")).click();
-        getDriver().findElement(By.xpath("//a[@id='jenkins-home-link']")).click();
-
-        List<WebElement> itemList = getDriver().findElements
-                (By.xpath("//a[@class = 'jenkins-table__link model-link inside'] /span"));
-        List<String> itemListMap = itemList.stream().map(WebElement::getText).collect(Collectors.toList());
-
-        Assert.assertTrue(itemListMap.contains("Multi-configuration project"));
+        List<String> itemList = new HomePage(getDriver())
+                .clickNewItem()
+                .enterItemName(NAME_OF_PROJECT)
+                .choseMultiConfigurationProject()
+                .submitCreationProject()
+                .goHome()
+                .showCreatedProject();
+        Assert.assertTrue(itemList.contains(NAME_OF_PROJECT));
     }
 
     @Test(description = " MultiConfigurationProjectTest | Add descriptions to existing project")
@@ -141,19 +137,19 @@ public class MultiConfigurationProjectTest extends BaseTest {
         Assert.assertEquals(actualSelectedItemName, "Month");
     }
 
-    @Ignore
+
     @Test
     public void testCreateWithExistingName(){
         testCreateProjectWithoutDescription();
+        String errorMessage = new  HomePage(getDriver())
+                .clickNewItem()
+                .enterItemName(NAME_OF_PROJECT)
+                .choseMultiConfigurationProject()
+                .saveInvalidData()
+                .getErrorMessage();
 
-        getDriver().findElement(By.xpath("//a[@href='/view/all/newJob']")).click();
-        WebElement itemName = getDriver().findElement(By.xpath("//input[@id='name']"));
-        waitTimeUntilVisibilityElement(2, itemName);
-        itemName.sendKeys("Multi-configuration" + NAME_OF_PROJECT);
-        WebElement errorMessage = getDriver().findElement(By.xpath("//div[@id = 'itemname-invalid']"));
-        waitTimeUntilVisibilityElement(4, errorMessage);
+        Assert.assertEquals(errorMessage, "A job already exists with the name " +
+                "‘MTC project’");
 
-        Assert.assertEquals(errorMessage.getText(), "» A job already exists with the name " +
-                "‘Multi-configuration project’");
     }
 }

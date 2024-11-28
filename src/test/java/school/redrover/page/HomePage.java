@@ -11,12 +11,17 @@ import school.redrover.page.base.BasePage;
 import school.redrover.runner.TestUtils;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class HomePage  extends BasePage {
 
     public HomePage(WebDriver driver) {
         super(driver);
     }
+    By getNewItem = By.xpath("//a[@href='/view/all/newJob']");
+    By listOfProjects = By.xpath("//a[@class = 'jenkins-table__link model-link inside'] /span");
+    By getCreatedMultiConfigurationProject =By.xpath("//td/a[@href='job/MTC%20project/']");
+
 
     public HomePage createFreestyleProject(String name) {
         getDriver().findElement(By.xpath("//*[@href='/view/all/newJob']")).click();
@@ -325,5 +330,12 @@ public class HomePage  extends BasePage {
                 By.xpath("//button[@href = '/job/%s/doDelete']".formatted(name)))).click();
 
         return new HomePage(getDriver());
+    }
+
+    public List<String> showCreatedProject() {
+        List<WebElement>itemList = getDriver().findElements(listOfProjects);
+
+       return itemList.stream().map(WebElement::getText).collect(Collectors.toList());
+
     }
 }
