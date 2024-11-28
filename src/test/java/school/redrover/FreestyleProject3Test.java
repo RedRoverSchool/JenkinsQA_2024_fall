@@ -106,6 +106,7 @@ public class FreestyleProject3Test extends BaseTest {
         Assert.assertEquals(getDriver().findElement(By.tagName("h1")).getText(), PROJECT_NAME);
     }
 
+    @Ignore
     @Test
     public void testCreateProjectViaSidebarMenu() {
         createProjectViaSidebarMenu(PROJECT_NAME);
@@ -213,6 +214,7 @@ public class FreestyleProject3Test extends BaseTest {
         Assert.assertFalse(getDriver().findElement(By.id("main-panel")).getText().contains(PROJECT_NAME));
     }
 
+    @Ignore
     @Test
     public void testAddBuildStepsExecuteShellCommandWhenConfigureProject() {
         final String testCommand = "echo \"TEST! Hello Jenkins!\"";

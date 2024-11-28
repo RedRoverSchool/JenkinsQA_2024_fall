@@ -16,5 +16,4 @@ public class ManageJenkinsPage extends BasePage {
 
         return new PluginsPage(getDriver());
     }
-
 }

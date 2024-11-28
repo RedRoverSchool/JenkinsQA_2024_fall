@@ -8,7 +8,7 @@ import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import school.redrover.page.base.BaseProjectPage;
 
-public class MultibranchPipelineProjectPage extends BaseProjectPage {
+public class MultibranchPipelineProjectPage extends BaseProjectPage<MultibranchPipelineProjectPage> {
 
     public MultibranchPipelineProjectPage(WebDriver driver) {
         super(driver);

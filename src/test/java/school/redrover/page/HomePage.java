@@ -6,19 +6,24 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+<<<<<<< HEAD
 import org.testng.Assert;
+=======
+import school.redrover.PipelineRenameTest;
+>>>>>>> e7357be367a870d0f61f746714286a6795ede335
 import school.redrover.page.base.BasePage;
 import school.redrover.runner.TestUtils;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class HomePage extends BasePage {
+public class HomePage  extends BasePage {
 
     public HomePage(WebDriver driver) {
         super(driver);
     }
 
+<<<<<<< HEAD
     By getNewItem = By.xpath("//a[@href='/view/all/newJob']");
     By listOfProjects = By.xpath("//a[@class = 'jenkins-table__link model-link inside'] /span");
     By getCreatedMultiConfigurationProject =By.xpath("//td/a[@href='job/MTC%20project/']");
@@ -44,6 +49,9 @@ public class HomePage extends BasePage {
     }
 
     public void createFreestyleProject(String name) {
+=======
+    public HomePage createFreestyleProject(String name) {
+>>>>>>> e7357be367a870d0f61f746714286a6795ede335
         getDriver().findElement(By.xpath("//*[@href='/view/all/newJob']")).click();
         getDriver().findElement(By.className("hudson_model_FreeStyleProject")).click();
         getDriver().findElement(By.name("name")).sendKeys(name);
@@ -51,6 +59,7 @@ public class HomePage extends BasePage {
         getDriver().findElement(By.name("Submit")).click();
 
         getDriver().findElement(By.id("jenkins-name-icon")).click();
+        return this;
     }
 
     public HomePage createNewFolder(String name) {
@@ -114,10 +123,34 @@ public class HomePage extends BasePage {
         return getDriver().findElement(By.className("jenkins-table__link")).getText();
     }
 
-    public FolderProjectPage openProject(String name) {
+    public FolderProjectPage openFolder(String name) {
         getDriver().findElement(By.xpath("//td/a/span[text() = '%s']/..".formatted(name))).click();
 
         return new FolderProjectPage(getDriver());
+    }
+
+    public PipelineProjectPage openPipelineProject(String name) {
+        getDriver().findElement(By.xpath("//td/a/span[text() = '%s']/..".formatted(name))).click();
+
+        return new PipelineProjectPage(getDriver());
+    }
+
+    //todo:if the project name is longer than ? number of characters, the name is split <wbr> and the locator “//td/a/span[text() = ‘%s’]/...” does not find the element
+    public PipelineProjectPage openPipelineProject2(String name) {
+        getDriver().findElement(By.xpath("//td/a[@href='job/%s/']".formatted(name))).click();
+        return new PipelineProjectPage(getDriver());
+    }
+
+    public MultiConfigurationProjectPage openMultiConfigurationProject(String name) {
+        getDriver().findElement(By.xpath("//td/a/span[text() = '%s']/..".formatted(name))).click();
+
+        return new MultiConfigurationProjectPage(getDriver());
+    }
+
+    public FreestyleProjectPage openFreestyleProject(String name) {
+        getDriver().findElement(By.xpath("//td/a/span[text() = '%s']/..".formatted(name))).click();
+
+        return new FreestyleProjectPage(getDriver());
     }
 
     public ManageJenkinsPage openManageJenkinsPage() {
@@ -152,6 +185,19 @@ public class HomePage extends BasePage {
         return new FolderConfigPage(getDriver());
     }
 
+    public HomePage selectDeleteFromItemMenu(String itemName) {
+        selectMenuFromItemDropdown(itemName, "Delete");
+
+        return this;
+    }
+
+    public HomePage clickYesForConfirmDelete() {
+        getWait5().until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//button[@data-id='ok']"))).click();
+
+        return this;
+    }
+
     public CreateNewItemPage selectNewItemFromFolderMenu(String itemName) {
         selectMenuFromItemDropdown(itemName, "New Item");
 
@@ -182,6 +228,10 @@ public class HomePage extends BasePage {
 
     public String getWelcomeText() {
         return getDriver().findElement(By.xpath("//p[contains(text(), 'This page is where')]")).getText();
+    }
+
+    public String getWelcomeTitle() {
+        return getDriver().findElement(By.xpath("//div[@class='empty-state-block']/h1")).getText();
     }
 
     public String getDescriptionText() {
@@ -265,15 +315,43 @@ public class HomePage extends BasePage {
 
     public HomePage scheduleBuild(String projectName) {
         getDriver().findElement(By.xpath("//a[@title = 'Schedule a Build for %s']".formatted(projectName))).click();
-        return this;
+
+        return new HomePage(getDriver());
     }
 
-    public void openBuildHistoryPage() {
+    public BuildHistoryPage gotoBuildHistoryPageFromLeftPanel() {
         getDriver().findElement(By.xpath("//a[@href = '/view/all/builds']")).click();
+
+        return new BuildHistoryPage(getDriver());
     }
 
     public String getTooltipValue(String projectName) {
 
         return getDriver().findElement(By.cssSelector("#job_" + projectName + "> td:nth-of-type(1) > div > svg")).getAttribute("tooltip");
+    }
+
+    public PipelineProjectPage clickOnPipelineName(String name) {
+        getDriver().findElement(By.xpath("//td/a/span[text() = '%s']/..".formatted(name))).click();
+        return new PipelineProjectPage(getDriver());
+    }
+
+    public PipelineRenamePage goToPipelineRenamePageViaDropdown(String name) {
+        new Actions(getDriver()).moveToElement(getDriver().findElement(By.xpath("//a[@href='job/%s/']/span".formatted(name))))
+                .pause(500)
+                .perform();
+        WebElement chevron = getDriver().findElement(By.xpath("//td//button[@aria-expanded='false']"));
+        TestUtils.moveAndClickWithJavaScript(getDriver(), chevron);
+        getWait5().until(ExpectedConditions.attributeToBe(chevron, "aria-expanded", "true"));
+
+        getDriver().findElement(By.xpath("//a[@href='/job/%s/confirm-rename']".formatted(name))).click();
+
+        return new PipelineRenamePage(getDriver());
+    }
+
+    public HomePage clickDeletePipelineChevronDropdownMenu(String name) {
+        getWait5().until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//button[@href = '/job/%s/doDelete']".formatted(name)))).click();
+
+        return new HomePage(getDriver());
     }
 }
