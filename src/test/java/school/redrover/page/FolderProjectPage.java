@@ -3,17 +3,13 @@ package school.redrover.page;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import school.redrover.page.base.BaseProjectPage;
+
 import java.util.Arrays;
 
-public class FolderProjectPage extends BaseProjectPage {
+public class FolderProjectPage extends BaseProjectPage<FolderProjectPage> {
 
     public FolderProjectPage(WebDriver driver) {
         super(driver);
-    }
-
-    @Override
-    protected FolderProjectPage createProjectPage() {
-        return new FolderProjectPage(getDriver());
     }
 
     public String getFolderDescription() {
