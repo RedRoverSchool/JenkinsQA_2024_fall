@@ -100,13 +100,16 @@ public class PipelineTest extends BaseTest {
     @Test()
     public void testWarningMessageOnRenameProjectPage() {
         final String projectName = "PipelineProjectRename";
-        createNewProjectAndGoMainPageByLogo(projectName, ProjectType.Pipeline);
 
-        findProjectOnDashboardByName(projectName).click();
-        clickRenameButtonOnSidebar();
-
-        String actualWarningMessage = getWait5().until(ExpectedConditions.visibilityOfElementLocated(
-                By.xpath("//div[@class='validation-error-area validation-error-area--visible']"))).getText();
+        String actualWarningMessage = new HomePage(getDriver())
+                .clickNewItem()
+                .enterItemName(projectName)
+                .selectPipelineAndClickOk()
+                .clickSaveButton()
+                .gotoHomePage()
+                .clickOnPipelineName(projectName)
+                .clickRenameSidebar(projectName)
+                .getWarningMessage();
 
         Assert.assertEquals(actualWarningMessage, "The new name is the same as the current name.");
     }
@@ -115,53 +118,49 @@ public class PipelineTest extends BaseTest {
     public void testRenameByChevronDashboard() {
         final String projectName = "PipelineRenameByChevron";
         final String projectNameNew = "PipelineRenameByChevronNew";
-        createNewProjectAndGoMainPageByLogo(projectName, ProjectType.Pipeline);
 
-        findProjectOnDashboardByName(projectName);
+        PipelineProjectPage projectPage = new HomePage(getDriver())
+                .clickNewItem()
+                .enterItemName(projectName)
+                .selectPipelineAndClickOk()
+                .clickSaveButton()
+                .gotoHomePage()
+                .goToPipelineRenamePageViaDropdown(projectName)
+                .cleanInputFieldAndTypeName(projectNameNew)
+                .clickRenameButton();
 
-        WebElement buttonChevron = getWait10().until(TestUtils.ExpectedConditions.elementIsNotMoving(
-                By.xpath("//a[@href ='job/%s/']/button[@class='jenkins-menu-dropdown-chevron']"
-                        .formatted(projectName))));
+        Assert.assertEquals(projectPage.getTitle(), projectNameNew);
+        Assert.assertEquals(projectPage.getProjectNameBreadcrumb(), projectNameNew);
+    }
 
-        TestUtils.moveAndClickWithJavaScript(getDriver(), buttonChevron);
+    @Test(dependsOnMethods = "testRenameByChevronDashboard")
+    public void testRenameByChevronDisplayedOnHomePageWithCorrectName() {
+        final String projectNameNew = "PipelineRenameByChevronNew";
 
-        getWait10().until(ExpectedConditions.visibilityOfElementLocated(
-                By.xpath("//a[@href = '/job/%s/confirm-rename']".formatted(projectName)))).click();
+        boolean isDisplayed = new HomePage(getDriver())
+                .getItemList()
+                .contains(projectNameNew);
 
-        WebElement inputName = getDriver().findElement(By.xpath("//input[@checkdependson='newName']"));
-        inputName.clear();
-        inputName.sendKeys(projectNameNew);
-
-        getDriver().findElement(By.xpath("//button[@name='Submit']")).click();
-
-        String verifyBreadcrumb = getDriver().findElement(
-                By.xpath("//ol[@id='breadcrumbs']/li[@class='jenkins-breadcrumbs__list-item'][2]")).getText();
-
-        String currentUrl = getDriver().getCurrentUrl();
-
-        String nameFromUrl = currentUrl.substring(projectNameNew.length(), currentUrl.length() - 1);
-
-        Assert.assertEquals(getWait5().until(ExpectedConditions.visibilityOfElementLocated(
-                By.xpath("//div[@class='jenkins-app-bar']//h1"))).getText(),
-                projectNameNew);
-        Assert.assertEquals(verifyBreadcrumb, projectNameNew);
-        Assert.assertEquals(nameFromUrl, projectNameNew);
-
+        Assert.assertTrue(isDisplayed);
     }
 
     @Test
     public void testAddDescription() {
         final String projectName = "PipelineProjectAndDesc";
         final String desc = "Add description for new project 45";
-        createNewProjectAndGoMainPageByLogo(projectName, ProjectType.Pipeline);
 
-        getDriver().findElement(By.xpath("//td/a/span[text() = '%s']/..".formatted(projectName))).click();
+        String descriptionText = new HomePage(getDriver())
+                .clickNewItem()
+                .enterItemName(projectName)
+                .selectPipelineAndClickOk()
+                .gotoHomePage()
+                .openPipelineProject(projectName)
+                .clickAddDescriptionButton()
+                .enterDescription(desc)
+                .clickSaveButton()
+                .getDescription();
 
-        getDriver().findElement(By.id("description-link")).click();
-        getDriver().findElement(By.name("description")).sendKeys(desc);
-        getDriver().findElement(By.name("Submit")).click();
-
-        Assert.assertEquals(getDriver().findElement(By.id("description")).getText(), desc);
+        Assert.assertEquals(descriptionText, desc);
     }
 
     @Test(dependsOnMethods = "testRename")
