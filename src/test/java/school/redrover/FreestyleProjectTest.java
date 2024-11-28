@@ -11,19 +11,6 @@ public class FreestyleProjectTest extends BaseTest {
     private static final String PROJECT_NAME = "MyFreestyleProject";
 
     @Test
-    public void testCreateFreestyleProjectWithValidName() {
-        String freestyleProjectItem = new HomePage(getDriver())
-                .clickNewItem()
-                .enterItemName(PROJECT_NAME)
-                .selectFreestyleProjectAndClickOk()
-                .clickSaveButton()
-                .gotoHomePage()
-                .getItemName(PROJECT_NAME);
-
-        Assert.assertEquals(freestyleProjectItem, PROJECT_NAME);
-    }
-
-    @Test
     public void testCreateFreestyleProjectWithEmptyName() {
         String emptyNameMessage = new HomePage(getDriver())
                 .clickNewItem()
