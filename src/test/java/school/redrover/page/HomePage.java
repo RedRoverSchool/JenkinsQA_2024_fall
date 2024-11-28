@@ -131,6 +131,12 @@ public class HomePage  extends BasePage {
         return new CreateNewItemPage(getDriver());
     }
 
+    public CreateNewItemPage clickCreateJob() {
+        getDriver().findElement(By.xpath("//a[@href='newJob']")).click();
+
+        return new CreateNewItemPage(getDriver());
+    }
+
     public String getItemNameByOrder(int order) {
 
         return getDriver().findElements(By.xpath("//td/a/span")).stream()
