@@ -152,7 +152,7 @@ public class MultibranchPipelineTest extends BaseTest {
                 .selectMultibranchPipelineAndClickOk()
                 .clickSaveButton()
                 .gotoHomePage()
-                .getItemName();
+                .getItemName(MULTIBRANCH_PIPELINE_NAME);
 
         Assert.assertEquals(actualJobName, MULTIBRANCH_PIPELINE_NAME);
     }

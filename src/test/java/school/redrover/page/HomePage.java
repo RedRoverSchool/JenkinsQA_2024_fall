@@ -6,7 +6,6 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import school.redrover.PipelineRenameTest;
 import school.redrover.page.base.BasePage;
 import school.redrover.runner.TestUtils;
 
@@ -199,9 +198,9 @@ public class HomePage  extends BasePage {
         return this;
     }
 
-    public String getItemName() {
+    public String getItemName(String projectName) {
 
-        return getDriver().findElement(By.xpath("//a[contains(@class,'jenkins-table')]")).getText();
+        return getDriver().findElement(By.xpath("//td/a[@href='job/%s/']".formatted(projectName))).getText();
     }
 
     public String getWelcomeText() {
