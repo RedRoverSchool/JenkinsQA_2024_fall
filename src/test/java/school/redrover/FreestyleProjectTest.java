@@ -25,7 +25,7 @@ public class FreestyleProjectTest extends BaseTest {
     public void testCreateFreestyleProjectWithDuplicateName() {
         String errorMessage = new HomePage(getDriver()).clickNewItem()
                 .enterItemName(PROJECT_NAME)
-                .selectPipelineAndClickOk()
+                .selectFreestyleProjectAndClickOk()
                 .clickSaveButton()
                 .gotoHomePage()
                 .clickNewItem()
