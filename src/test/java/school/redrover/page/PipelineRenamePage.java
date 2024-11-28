@@ -22,4 +22,10 @@ public class PipelineRenamePage extends BasePage {
 
         return new PipelineProjectPage(getDriver());
     }
+
+        public ErrorPage clickRenameButtonAndRedirectToErrorPage() {
+        getDriver().findElement(By.xpath("//button[@name='Submit']")).click();
+
+        return new ErrorPage(getDriver());
+    }
 }
