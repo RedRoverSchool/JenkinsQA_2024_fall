@@ -40,7 +40,6 @@ public class MultibranchPipelineTest extends BaseTest {
         scroll.executeScript("window.scrollTo(0, document.body.scrollHeight);");
     }
 
-    @Ignore
     @Test
     public void testAddDescriptionCreatingMultibranch() {
         final String description = "AddedDescription";
