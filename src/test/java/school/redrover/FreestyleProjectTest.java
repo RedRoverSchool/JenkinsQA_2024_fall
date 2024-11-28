@@ -48,4 +48,16 @@ public class FreestyleProjectTest extends BaseTest {
 
         Assert.assertEquals(actualProjectName, PROJECT_NAME);
     }
+
+    @Test
+    public void testCreateProjectViaSidebarMenu() {
+        String actualProjectName = new HomePage(getDriver())
+                .clickNewItem()
+                .enterItemName(PROJECT_NAME)
+                .selectFreestyleProjectAndClickOk()
+                .clickSaveButton()
+                .getProjectName();
+
+        Assert.assertEquals(actualProjectName, PROJECT_NAME);
+    }
 }
