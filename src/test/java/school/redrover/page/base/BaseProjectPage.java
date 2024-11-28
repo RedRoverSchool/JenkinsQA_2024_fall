@@ -8,13 +8,11 @@ import school.redrover.page.CreateNewItemPage;
 
 import java.util.List;
 
-public abstract class BaseProjectPage<Self extends BaseProjectPage<?, ?>, ProjectPage extends BaseProjectPage> extends BasePage {
+public abstract class BaseProjectPage<Self extends BaseProjectPage<?>> extends BasePage {
 
     public BaseProjectPage(WebDriver driver) {
         super(driver);
     }
-
-    protected abstract ProjectPage createProjectPage();
 
     public CreateNewItemPage clickNewItem() {
         getDriver().findElement(By.xpath("//span[text()='New Item']/ancestor::a")).click();
@@ -29,7 +27,7 @@ public abstract class BaseProjectPage<Self extends BaseProjectPage<?, ?>, Projec
 
         getWait2().until(ExpectedConditions.textToBe(By.id("description"), text));
 
-        return (Self)this;
+        return (Self) this;
     }
 
     public Self clearDescription() {

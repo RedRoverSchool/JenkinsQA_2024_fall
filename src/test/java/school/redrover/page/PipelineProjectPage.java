@@ -9,15 +9,10 @@ import school.redrover.page.base.BaseProjectPage;
 
 import java.util.List;
 
-public class PipelineProjectPage extends BaseProjectPage {
+public class PipelineProjectPage extends BaseProjectPage<PipelineProjectPage> {
 
     public PipelineProjectPage(WebDriver driver) {
         super(driver);
-    }
-
-    @Override
-    protected PipelineProjectPage createProjectPage() {
-        return new PipelineProjectPage(getDriver());
     }
 
     public String getWarningDisabledMessage() {
