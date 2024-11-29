@@ -17,6 +17,17 @@ public class FreestyleConfigPage extends BaseConfigPage<FreestyleConfigPage, Fre
         return new FreestyleProjectPage(getDriver());
     }
 
+    By getInputName = By.xpath("//textarea[@name='description']");
+    By getButtonSubmit = By.xpath("//button[@name='Submit']");
+
+    public FreestyleProjectPage typeDescription (String description) {
+        getDriver().findElement(getInputName).sendKeys(description);
+        getDriver().findElement(getButtonSubmit).click();
+
+        return new FreestyleProjectPage(getDriver());
+    }
+
+
     public FreestyleConfigPage addBuildStep(String buildStep) {
         getDriver().findElement(By.xpath("//button[contains(text(),'Add build step')]")).click();
         getDriver().findElement(By.xpath("//button[contains(text(),'%s')]".formatted(buildStep))).click();
@@ -34,4 +45,6 @@ public class FreestyleConfigPage extends BaseConfigPage<FreestyleConfigPage, Fre
 
         return this;
     }
+
+
 }
