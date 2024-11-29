@@ -45,11 +45,14 @@ public class OrganizationFolder3Test extends BaseTest {
 
     @Test(dependsOnMethods = "testCreate")
     public void testAddName() {
-        goConfigure();
-        getDriver().findElement(By.name("_.displayNameOrNull")).sendKeys(NAME);
-        clickElement(By.name("Submit"));
+        String name = new HomePage(getDriver())
+                .clickItemName()
+                .clickConfigure()
+                .setDisplayName(NAME)
+                .clickSave()
+                .getName();
 
-        Assert.assertEquals(textElement(By.tagName("h1")), NAME);
+        Assert.assertEquals(name, NAME);
     }
 
     @Test(dependsOnMethods = {"testCreate", "testAddName"})
