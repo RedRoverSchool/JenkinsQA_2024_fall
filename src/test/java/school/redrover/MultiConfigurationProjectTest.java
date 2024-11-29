@@ -47,7 +47,7 @@ public class MultiConfigurationProjectTest extends BaseTest {
     @Test(description = " MultiConfigurationProjectTest | Add descriptions to existing project")
     public void testAddDescriptions() {
         testCreateProjectWithoutDescription();
-        getDriver().findElement(By.xpath("//td/a[@href='job/MTC%20project/']")).click();
+        getDriver().findElement(By.xpath("//td/a[@href='job/Multi-configuration%20project/']")).click();
         getDriver().findElement(By.xpath("//a[@id='description-link']")).click();
         getDriver().findElement(By.xpath("//textarea[@name = 'description']")).sendKeys(DESCRIPTIONS);
         getDriver().findElement(By.xpath("//div/button[@name = 'Submit']")).submit();
