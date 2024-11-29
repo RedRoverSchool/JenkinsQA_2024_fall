@@ -4,22 +4,21 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import school.redrover.page.base.BasePage;
+import school.redrover.page.base.BaseConfigPage;
 import school.redrover.runner.TestUtils;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class PipelineConfigurePage extends BasePage {
+public class PipelineConfigurePage extends BaseConfigPage<PipelineConfigurePage, PipelineProjectPage> {
 
     public PipelineConfigurePage(WebDriver driver) {
         super(driver);
     }
 
-    public PipelineProjectPage clickSaveButton() {
-        getDriver().findElement(By.xpath("//button[@name='Submit']")).click();
-
+    @Override
+    protected PipelineProjectPage createProjectPage() {
         return new PipelineProjectPage(getDriver());
     }
 
@@ -55,6 +54,14 @@ public class PipelineConfigurePage extends BasePage {
 
         TestUtils.scrollToBottom(getDriver());
         getDriver().findElement(By.cssSelector("textarea[class='ace_text-input']")).sendKeys(script);
+
+        return this;
+    }
+
+    public PipelineConfigurePage enterScriptFromFile(String fileName) {
+        String pipelineScript = TestUtils.readFile(fileName);
+        WebElement textArea = getDriver().findElement(By.xpath("//textarea[@class='ace_text-input']"));
+        TestUtils.pasteTextWithJavaScript(getDriver(), textArea, pipelineScript);
 
         return this;
     }

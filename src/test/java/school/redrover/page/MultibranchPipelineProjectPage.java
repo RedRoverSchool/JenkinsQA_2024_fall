@@ -6,22 +6,16 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import school.redrover.page.base.BasePage;
+import school.redrover.page.base.BaseProjectPage;
 
-public class MultibranchPipelineProjectPage extends BasePage {
+public class MultibranchPipelineProjectPage extends BaseProjectPage<MultibranchPipelineProjectPage> {
 
     public MultibranchPipelineProjectPage(WebDriver driver) {
         super(driver);
     }
 
     public String getDescription() {
-        return getWait2().until(ExpectedConditions.visibilityOfElementLocated(By.id("view-message"))).getText();
-    }
-
-    public HomePage goToDashboard() {
-        getDriver().findElement(By.xpath("//a[contains(text(),'Dashboard')]")).click();
-
-        return new HomePage(getDriver());
+        return getWait5().until(ExpectedConditions.visibilityOfElementLocated(By.id("view-message"))).getText();
     }
 
     public HomePage deleteItemBySidebar() {

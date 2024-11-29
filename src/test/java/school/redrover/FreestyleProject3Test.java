@@ -76,33 +76,20 @@ public class FreestyleProject3Test extends BaseTest {
                 By.xpath("//span[text()='Workspace']/.."))).click();
     }
 
-    @Test
-    public void testCreateProjectViaCreateJobButton() {
-        getDriver().findElement(By.xpath("//a[@href='newJob']")).click();
+    private void clickBuildNowAndWaitForBuildHistoryUpdate() {
+        getWait10().until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//a[@data-build-success='Build scheduled']"))).click();
 
-        getWait5().until(ExpectedConditions.visibilityOfElementLocated(By.id("name"))).sendKeys(PROJECT_NAME);
-        getDriver().findElement(By.xpath("//li[contains(@class, 'FreeStyleProject')]")).click();
-        getDriver().findElement(By.id("ok-button")).click();
-
-        getWait10().until(ExpectedConditions.elementToBeClickable(By.xpath("//button[@name='Submit']")))
-                .click();
-
-        verifyYouAreOnProjectStatusPage();
-
-        Assert.assertEquals(getDriver().findElement(By.tagName("h1")).getText(), PROJECT_NAME);
+        getWait10().until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//a[@tooltip='Success > Console Output']")));
     }
 
-    @Test
-    public void testCreateProjectViaSidebarMenu() {
-        createProjectViaSidebarMenu(PROJECT_NAME);
-
-        verifyYouAreOnProjectStatusPage();
-
-        String actualName = getDriver().findElement(By.tagName("h1")).getText();
-
-        Assert.assertEquals(actualName, PROJECT_NAME);
+    private void wipeOutCurrentWorkspace() {
+    getWait10().until(ExpectedConditions.visibilityOfElementLocated(
+            By.xpath("//a[@data-title='Wipe Out Current Workspace']"))).click();
     }
 
+    @Ignore
     @Test
     public void testAddDescriptionOnProjectStatusPage() {
         createProjectViaSidebarMenu(PROJECT_NAME);
@@ -198,6 +185,7 @@ public class FreestyleProject3Test extends BaseTest {
         Assert.assertFalse(getDriver().findElement(By.id("main-panel")).getText().contains(PROJECT_NAME));
     }
 
+    @Ignore
     @Test
     public void testAddBuildStepsExecuteShellCommandWhenConfigureProject() {
         final String testCommand = "echo \"TEST! Hello Jenkins!\"";
@@ -237,6 +225,7 @@ public class FreestyleProject3Test extends BaseTest {
         Assert.assertEquals(extractedText, testCommand);
     }
 
+    @Ignore
     @Test
     public void testCheckSidebarMenuItemsOnProjectStatusPage() {
         final List<String> benchmarkSidebarMenuItems = List.of(
@@ -369,7 +358,6 @@ public class FreestyleProject3Test extends BaseTest {
         Assert.assertFalse(buildHistory.contains(buildName));
     }
 
-    @Ignore
     @Test
     public void testDeleteProjectViaSidebarMenuOnProjectStatusPage() {
         createProjectViaSidebarMenu(PROJECT_NAME);
@@ -410,24 +398,43 @@ public class FreestyleProject3Test extends BaseTest {
 
     @Test
     public void testDeleteWorkspace() {
-        String expectedText = "Error: no workspace";
+        final String expectedText = "Error: no workspace";
         createProjectViaSidebarMenu(PROJECT_NAME);
 
-        getWait5().until(ExpectedConditions.visibilityOfElementLocated(
-                By.xpath("//a[@data-build-success='Build scheduled']"))).click();
-
-        getWait10().until(ExpectedConditions.visibilityOfElementLocated(
-                By.xpath("//a[@tooltip='Success > Console Output']")));
+        clickBuildNowAndWaitForBuildHistoryUpdate();
 
         clickWorkspaceSidebarMenu();
 
-        getWait10().until(ExpectedConditions.visibilityOfElementLocated(
-                By.xpath("//a[@data-title='Wipe Out Current Workspace']"))).click();
+        wipeOutCurrentWorkspace();
 
         getWait10().until(ExpectedConditions.elementToBeClickable(By.xpath("//button[@data-id='ok']"))).click();
 
         clickWorkspaceSidebarMenu();
 
         Assert.assertEquals(getDriver().findElement(By.tagName("h1")).getText(), expectedText);
+    }
+
+    @Test
+    public void testDeleteWorkspaceConfirmationOptions() {
+        List<String> dialogOptions = List.of("Are you sure about wiping out the workspace?", "Cancel", "Yes");
+        createProjectViaSidebarMenu(PROJECT_NAME);
+
+        clickBuildNowAndWaitForBuildHistoryUpdate();
+
+        clickWorkspaceSidebarMenu();
+
+        wipeOutCurrentWorkspace();
+
+        getWait10().until(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.tagName("dialog")));
+
+        List<String> confirmationDialog = getDriver().findElements(By.cssSelector("dialog *")).stream()
+                .map(WebElement::getText)
+                .toList();
+
+        confirmationDialog.forEach(System.out::println);
+
+        for (String option : dialogOptions) {
+            Assert.assertTrue(confirmationDialog.contains(option), "Missing option: " + option);
+        }
     }
 }

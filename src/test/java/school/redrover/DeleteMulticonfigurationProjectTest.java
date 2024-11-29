@@ -6,7 +6,6 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import school.redrover.page.HomePage;
-import school.redrover.page.CreateNewItemPage;
 import school.redrover.page.MyViewsPage;
 import school.redrover.runner.BaseTest;
 
@@ -18,13 +17,13 @@ public class DeleteMulticonfigurationProjectTest extends BaseTest {
         return new HomePage(getDriver())
                 .clickNewItem()
                 .enterItemName(projectName)
-                .selectProjectTypeAndSave(CreateNewItemPage.ItemType.MULTICONFIGURATION_PROJECT)
-                .goToDashboard();
+                .selectMultiConfigurationAndClickOk()
+                .gotoHomePage();
     }
 
     @Test
     public void testPopupForDeletionOnProjectPage() {
-        createProject(PROJECT_NAME).openProject(PROJECT_NAME);
+        createProject(PROJECT_NAME).openMultiConfigurationProject(PROJECT_NAME);
 
         getDriver().findElement(
                 By.xpath("//div[@id='side-panel']//span[text()='Delete Multi-configuration project']")).click();
@@ -60,7 +59,7 @@ public class DeleteMulticonfigurationProjectTest extends BaseTest {
 
     @Test
     public void testDeleteProjectFromProjectPage() {
-        createProject(PROJECT_NAME).openProject(PROJECT_NAME);
+        createProject(PROJECT_NAME).openMultiConfigurationProject(PROJECT_NAME);
 
         getDriver().findElement(By.xpath("//*[contains(@class,'icon-edit-delete')]")).click();
 

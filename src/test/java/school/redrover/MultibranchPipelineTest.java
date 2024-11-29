@@ -150,8 +150,8 @@ public class MultibranchPipelineTest extends BaseTest {
                 .enterItemName(MULTIBRANCH_PIPELINE_NAME)
                 .selectMultibranchPipelineAndClickOk()
                 .clickSaveButton()
-                .goToDashboard()
-                .getItemName();
+                .gotoHomePage()
+                .getItemName(MULTIBRANCH_PIPELINE_NAME);
 
         Assert.assertEquals(actualJobName, MULTIBRANCH_PIPELINE_NAME);
     }
@@ -234,7 +234,7 @@ public class MultibranchPipelineTest extends BaseTest {
                 .enterItemName(MULTIBRANCH_PIPELINE_NAME)
                 .selectMultibranchPipelineAndClickOk()
                 .clickSaveButton()
-                .goToDashboard()
+                .gotoHomePage()
                 .clickOnCreatedItem(MULTIBRANCH_PIPELINE_NAME)
                 .deleteItemBySidebar();
 
@@ -249,7 +249,7 @@ public class MultibranchPipelineTest extends BaseTest {
                 .enterItemName(MULTIBRANCH_PIPELINE_NAME)
                 .selectMultibranchPipelineAndClickOk()
                 .clickSaveButton()
-                .goToDashboard()
+                .gotoHomePage()
                 .deleteItemViaChevronItem(MULTIBRANCH_PIPELINE_NAME);
 
         Assert.assertTrue(getDriver().findElements(
@@ -263,7 +263,7 @@ public class MultibranchPipelineTest extends BaseTest {
                 .enterItemName(MULTIBRANCH_PIPELINE_NAME)
                 .selectMultibranchPipelineAndClickOk()
                 .clickSaveButton()
-                .goToDashboard()
+                .gotoHomePage()
                 .clickOnCreatedItem(MULTIBRANCH_PIPELINE_NAME)
                 .deleteJobUsingDropdownBreadcrumbJobPage();
 

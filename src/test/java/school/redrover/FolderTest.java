@@ -2,11 +2,12 @@ package school.redrover;
 
 import org.openqa.selenium.By;
 import org.testng.Assert;
+import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import school.redrover.page.HomePage;
-import school.redrover.page.CreateNewItemPage;
-import school.redrover.page.ProjectPage;
+import school.redrover.page.FolderProjectPage;
 import school.redrover.runner.BaseTest;
+import java.util.List;
 
 public class FolderTest extends BaseTest {
 
@@ -20,8 +21,8 @@ public class FolderTest extends BaseTest {
         String folderName = new HomePage(getDriver())
                 .clickNewItem()
                 .enterItemName(FOLDER_NAME_MAX_LENGTH)
-                .selectProjectTypeAndSave(CreateNewItemPage.ItemType.FOLDER)
-                .goToDashboard()
+                .selectFolderAndClickOk()
+                .gotoHomePage()
                 .getItemNameByOrder(1);
 
         Assert.assertEquals(folderName, FOLDER_NAME_MAX_LENGTH);
@@ -30,12 +31,15 @@ public class FolderTest extends BaseTest {
     @Test
     public void testCreateWithMinNameLength() {
 
-        new HomePage(getDriver())
-                .clickNewItem().enterItemName("F")
-                .selectProjectTypeAndSave(CreateNewItemPage.ItemType.FOLDER)
-                .goToDashboard();
+        List<String> itemList = new HomePage(getDriver())
+                .clickNewItem()
+                .enterItemName("F")
+                .selectFolderAndClickOk()
+                .gotoHomePage()
+                .getItemList();
 
-        Assert.assertEquals(getDriver().findElement(By.xpath("//td/a/span")).getText(),"F");
+        Assert.assertEquals(itemList.size(),1);
+        Assert.assertEquals(itemList.get(0),"F");
     }
 
     @Test(dependsOnMethods = "testCreateWithMinNameLength")
@@ -43,25 +47,24 @@ public class FolderTest extends BaseTest {
 
         String configurationName = new HomePage(getDriver())
                 .selectConfigureFromItemMenu("F")
-                .enterName(FIRST_FOLDER_NAME)
-                .saveConfigurations()
-                .getDisplayName();
+                .enterConfigurationName(FIRST_FOLDER_NAME)
+                .clickSaveButton()
+                .getConfigurationName();
 
         Assert.assertEquals(configurationName, FIRST_FOLDER_NAME);
-        Assert.assertEquals(new ProjectPage(getDriver()).getFolderName(), "F");
-
+        Assert.assertEquals(new FolderProjectPage(getDriver()).getFolderName(), "F");
     }
 
     @Test
     public void testConfigureDescriptionByChevron() {
 
        String desc =  new HomePage(getDriver())
-                .clickNewItem()
-                .nameAndSelectItemType(FIRST_FOLDER_NAME, CreateNewItemPage.ItemType.FOLDER)
-                .goToDashboard()
-                .selectConfigureFromItemMenu(FIRST_FOLDER_NAME)
+               .clickNewItem()
+               .nameAndSelectFolderType(FIRST_FOLDER_NAME)
+               .gotoHomePage()
+               .selectConfigureFromItemMenu(FIRST_FOLDER_NAME)
                .enterDescription("This is new description")
-               .saveConfigurations()
+               .clickSaveButton()
                .getFolderDescription();
 
         Assert.assertEquals(desc,
@@ -70,14 +73,15 @@ public class FolderTest extends BaseTest {
 
     @Test(dependsOnMethods = "testConfigureDescriptionByChevron")
     public void testCreateNewItemByChevron() {
-        String projectName = new ProjectPage(getDriver())
-                .goToDashboard()
+
+        String projectName = new FolderProjectPage(getDriver())
+                .gotoHomePage()
                 .selectNewItemFromFolderMenu(FIRST_FOLDER_NAME)
-                .nameAndSelectItemType(FREESTYLE_PROJECT_NAME, CreateNewItemPage.ItemType.FREESTYLE_PROJECT)
+                .nameAndSelectFreestyleProject(FREESTYLE_PROJECT_NAME)
                 .addExecuteWindowsBatchCommand("echo 'Hello world!'")
-                .saveConfigurations()
-                .goToDashboard()
-                .openProject(FIRST_FOLDER_NAME)
+                .clickSaveButton()
+                .gotoHomePage()
+                .openFolder(FIRST_FOLDER_NAME)
                 .getItemNameByOrder(1);
 
         Assert.assertEquals(projectName, FREESTYLE_PROJECT_NAME);
@@ -85,17 +89,18 @@ public class FolderTest extends BaseTest {
 
     @Test
     public void testCreateNewItemFromFolderPage() {
+
         String projectName =  new HomePage(getDriver())
                 .clickNewItem()
-                .nameAndSelectItemType(FIRST_FOLDER_NAME, CreateNewItemPage.ItemType.FOLDER)
-                .goToDashboard()
-                .openProject(FIRST_FOLDER_NAME)
+                .nameAndSelectFolderType(FIRST_FOLDER_NAME)
+                .gotoHomePage()
+                .openFolder(FIRST_FOLDER_NAME)
                 .clickNewItem()
-                .nameAndSelectItemType(FREESTYLE_PROJECT_NAME, CreateNewItemPage.ItemType.FREESTYLE_PROJECT)
+                .nameAndSelectFreestyleProject(FREESTYLE_PROJECT_NAME)
                 .addExecuteWindowsBatchCommand("echo 'Hello world!'")
-                .saveConfigurations()
-                .goToDashboard()
-                .openProject(FIRST_FOLDER_NAME)
+                .clickSaveButton()
+                .gotoHomePage()
+                .openFolder(FIRST_FOLDER_NAME)
                 .getItemNameByOrder(1);
 
         Assert.assertEquals(projectName, FREESTYLE_PROJECT_NAME);
@@ -105,13 +110,62 @@ public class FolderTest extends BaseTest {
     public void testOpenBuildHistoryByChevron() {
 
         String buildHistoryName = new HomePage(getDriver())
-                .openProject(FIRST_FOLDER_NAME)
+                .openFolder(FIRST_FOLDER_NAME)
                 .runJob(FREESTYLE_PROJECT_NAME)
-                .goToDashboard()
+                .gotoHomePage()
                 .selectBuildHistoryFromItemMenu(FIRST_FOLDER_NAME)
-                .getBuildHistory();
+                .getBuildName();
 
         Assert.assertEquals(buildHistoryName, "%s » %s".formatted(FIRST_FOLDER_NAME, FREESTYLE_PROJECT_NAME));
-
     }
+
+    @Test
+    public void testErrorDuringCreationWithDotInEnd() {
+
+        String errorMessage = new HomePage(getDriver())
+                .clickNewItem()
+                .enterItemName("Folder.")
+                .selectFolderType()
+                .getInvalidNameMessage();
+
+        Assert.assertEquals(errorMessage, "» A name cannot end with ‘.’");
+    }
+
+    @Test
+    public void testErrorAfterCreationWithDotInEnd() {
+
+        String errorMessage = new HomePage(getDriver())
+                .clickNewItem()
+                .enterItemName("Folder.")
+                .selectFolderType()
+                .selectFolderType()
+                .saveInvalidData()
+                .getErrorMessage();
+
+        Assert.assertEquals(errorMessage, "A name cannot end with ‘.’");
+    }
+
+    @Test
+    public void testErrorEmptyNameCreation() {
+
+        String errorMessage = new HomePage(getDriver())
+                .clickNewItem()
+                .selectFolderType()
+                .getEmptyNameMessage();
+
+        Assert.assertEquals(errorMessage, "» This field cannot be empty, please enter a valid name");
+    }
+
+    @Ignore
+    @Test(dependsOnMethods = "testOpenBuildHistoryByChevron")
+    public void testErrorDuplicateNameCreation() {
+
+        String errorMessage = new HomePage(getDriver())
+                .clickNewItem().enterItemName(FIRST_FOLDER_NAME)
+                .getInvalidNameMessage();
+
+        Assert.assertEquals(errorMessage, "» A job already exists with the name ‘Freestyle projects’");
+    }
+
+
 }
