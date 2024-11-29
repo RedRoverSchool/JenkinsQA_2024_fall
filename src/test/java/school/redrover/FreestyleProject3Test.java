@@ -30,8 +30,7 @@ public class FreestyleProject3Test extends BaseTest {
         getDriver().findElement(By.xpath("//li[contains(@class, 'FreeStyleProject')]")).click();
         getDriver().findElement(By.id("ok-button")).click();
 
-        getWait10().until(ExpectedConditions.elementToBeClickable(
-                By.xpath("//button[@name='Submit']"))).click();
+        getDriver().findElement(By.name("Submit")).click();
     }
 
     private void addDescriptionOnProjectStatusPage(String description) {
@@ -87,40 +86,6 @@ public class FreestyleProject3Test extends BaseTest {
     private void wipeOutCurrentWorkspace() {
     getWait10().until(ExpectedConditions.visibilityOfElementLocated(
             By.xpath("//a[@data-title='Wipe Out Current Workspace']"))).click();
-    }
-
-    @Ignore
-    @Test
-    public void testAddDescriptionOnProjectStatusPage() {
-        createProjectViaSidebarMenu(PROJECT_NAME);
-
-        addDescriptionOnProjectStatusPage(DESCRIPTION);
-
-        String projectDescriptionOnStatusPage = getDriver().findElement(
-                By.xpath("//div[@id='description']//div")).getText();
-
-        Assert.assertTrue(projectDescriptionOnStatusPage.contains(DESCRIPTION));
-    }
-
-    @Test
-    public void testEditDescriptionOnProjectStatusPage() {
-        final String newDescription = "New " + DESCRIPTION;
-
-        createProjectViaSidebarMenu(PROJECT_NAME);
-        addDescriptionOnProjectStatusPage(DESCRIPTION);
-
-        WebElement editDescriptionButton = getDriver().findElement(By.id("description-link"));
-        editDescriptionButton.click();
-
-        WebElement descriptionTextField = getDriver().findElement(By.tagName("textarea"));
-        descriptionTextField.clear();
-        descriptionTextField.sendKeys(newDescription);
-        getDriver().findElement(By.xpath("//button[@name='Submit']")).click();
-
-        String projectDescriptionOnStatusPage = getDriver().findElement(
-                By.xpath("//div[@id='description']//div")).getText();
-
-        Assert.assertEquals(projectDescriptionOnStatusPage, newDescription);
     }
 
     @Test

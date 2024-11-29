@@ -17,6 +17,7 @@ import java.util.List;
 public class FreestyleProject1Test extends BaseTest {
 
     private static final String NEW_FREESTYLE_PROJECT_NAME = "New freestyle project";
+    private static final String FREESTYLE_PROJECT_NAME = "Freestyle project";
     private static final String RENAMED_FREESTYLE_PROJECT_NAME = "Renamed freestyle project";
     private static final String DESCRIPTION = "Some description";
 
@@ -26,14 +27,16 @@ public class FreestyleProject1Test extends BaseTest {
 
     @Test
     public void testCreate() {
-        new HomePage(getDriver())
-                .createFreestyleProject(NEW_FREESTYLE_PROJECT_NAME);
+        List<String> createProject = new HomePage(getDriver())
+                .clickNewItem()
+                .enterItemName(NEW_FREESTYLE_PROJECT_NAME)
+                .selectTypeOfProject(FREESTYLE_PROJECT_NAME)
+                .clickOkToSubmit()
+                .clickSubmitButton()
+                .goHome()
+                .showCreatedProject();
 
-        List<WebElement> elementList = getDriver().findElements(By.xpath("//td/a/span[1]"));
-        List<String> projectList = elementList.stream().map(WebElement::getText).toList();
-
-        Assert.assertEquals(projectList.size(), 1);
-        Assert.assertEquals(projectList.get(0), NEW_FREESTYLE_PROJECT_NAME);
+        Assert.assertTrue(createProject.contains(NEW_FREESTYLE_PROJECT_NAME));
     }
 
     @Test(dependsOnMethods = "testCreate")

@@ -1,0 +1,220 @@
+#
+# There is insufficient memory for the Java Runtime Environment to continue.
+# Native memory allocation (mmap) failed to map 199229440 bytes for G1 virtual space
+# Possible reasons:
+#   The system is out of physical RAM or swap space
+#   The process is running with CompressedOops enabled, and the Java Heap may be blocking the growth of the native heap
+# Possible solutions:
+#   Reduce memory load on the system
+#   Increase physical memory or swap space
+#   Check if swap backing store is full
+#   Decrease Java heap size (-Xmx/-Xms)
+#   Decrease number of Java threads
+#   Decrease Java thread stack sizes (-Xss)
+#   Set larger code cache with -XX:ReservedCodeCacheSize=
+#   JVM is running with Zero Based Compressed Oops mode in which the Java heap is
+#     placed in the first 32GB address space. The Java Heap base address is the
+#     maximum limit for the native heap growth. Please use -XX:HeapBaseMinAddress
+#     to set the Java Heap base and to place the Java Heap above 32GB virtual address.
+# This output file may be truncated or incomplete.
+#
+#  Out of Memory Error (os_windows.cpp:3559), pid=16356, tid=13936
+#
+# JRE version:  (17.0.7+7) (build )
+# Java VM: OpenJDK 64-Bit Server VM (17.0.7+7-LTS, mixed mode, sharing, tiered, compressed oops, compressed class ptrs, g1 gc, windows-amd64)
+# No core dump will be written. Minidumps are not enabled by default on client versions of Windows
+#
+
+---------------  S U M M A R Y ------------
+
+Command Line: -ea -Didea.test.cyclic.buffer.size=1048576 -javaagent:C:\Program Files\JetBrains\IntelliJ IDEA Community Edition 2023.3.3\lib\idea_rt.jar=51936:C:\Program Files\JetBrains\IntelliJ IDEA Community Edition 2023.3.3\bin -Dfile.encoding=UTF-8 com.intellij.rt.testng.RemoteTestNGStarter -usedefaultlisteners false -socket51935 @w@C:\Users\iylia\AppData\Local\Temp\idea_working_dirs_testng1.tmp -temp C:\Users\iylia\AppData\Local\Temp\idea_testng1.tmp
+
+Host: Intel(R) Core(TM) i5-3230M CPU @ 2.60GHz, 4 cores, 11G,  Windows 10 , 64 bit Build 19041 (10.0.19041.5072)
+Time: Fri Nov 29 21:13:06 2024  Windows 10 , 64 bit Build 19041 (10.0.19041.5072) elapsed time: 0.034329 seconds (0d 0h 0m 0s)
+
+---------------  T H R E A D  ---------------
+
+Current thread (0x000001f9ab1e5ab0):  JavaThread "Unknown thread" [_thread_in_vm, id=13936, stack(0x0000006bf5e00000,0x0000006bf5f00000)]
+
+Stack: [0x0000006bf5e00000,0x0000006bf5f00000]
+Native frames: (J=compiled Java code, j=interpreted, Vv=VM code, C=native code)
+V  [jvm.dll+0x64b53a]
+V  [jvm.dll+0x7fef54]
+V  [jvm.dll+0x80070e]
+V  [jvm.dll+0x800d63]
+V  [jvm.dll+0x236a2b]
+V  [jvm.dll+0x64843a]
+V  [jvm.dll+0x63ce8a]
+V  [jvm.dll+0x2f5629]
+V  [jvm.dll+0x2fc826]
+V  [jvm.dll+0x348eea]
+V  [jvm.dll+0x34912f]
+V  [jvm.dll+0x2cb9a8]
+V  [jvm.dll+0x2cc939]
+V  [jvm.dll+0x7d2cd1]
+V  [jvm.dll+0x3563c1]
+V  [jvm.dll+0x7b32ae]
+V  [jvm.dll+0x3d38d3]
+V  [jvm.dll+0x3d52c1]
+C  [jli.dll+0x51bf]
+C  [ucrtbase.dll+0x21bb2]
+C  [KERNEL32.DLL+0x17374]
+C  [ntdll.dll+0x4cc91]
+
+
+---------------  P R O C E S S  ---------------
+
+Threads class SMR info:
+_java_thread_list=0x00007ffbfa0dc858, length=0, elements={
+}
+
+Java Threads: ( => current thread )
+
+Other Threads:
+  0x000001f9ab23c790 GCTaskThread "GC Thread#0" [stack: 0x0000006bf5f00000,0x0000006bf6000000] [id=6580]
+  0x000001f9ab2494a0 ConcurrentGCThread "G1 Main Marker" [stack: 0x0000006bf6000000,0x0000006bf6100000] [id=16944]
+  0x000001f9ab24aec0 ConcurrentGCThread "G1 Conc#0" [stack: 0x0000006bf6100000,0x0000006bf6200000] [id=14404]
+
+[error occurred during error reporting (printing all threads), id 0xc0000005, EXCEPTION_ACCESS_VIOLATION (0xc0000005) at pc=0x00007ffbf98ccc47]
+
+VM state: not at safepoint (not fully initialized)
+
+VM Mutex/Monitor currently owned by a thread:  ([mutex/lock_event])
+[0x000001f9ab1e1750] Heap_lock - owner thread: 0x000001f9ab1e5ab0
+
+Heap address: 0x0000000742200000, size: 3038 MB, Compressed Oops mode: Zero based, Oop shift amount: 3
+
+CDS archive(s) mapped at: [0x0000000000000000-0x0000000000000000-0x0000000000000000), size 0, SharedBaseAddress: 0x0000000800000000, ArchiveRelocationMode: 0.
+Narrow klass base: 0x0000000000000000, Narrow klass shift: 0, Narrow klass range: 0x0
+
+GC Precious Log:
+<Empty>
+
+Heap:
+ garbage-first heap   total 0K, used 0K [0x0000000742200000, 0x0000000800000000)
+  region size 2048K, 0 young (0K), 0 survivors (0K)
+
+[error occurred during error reporting (printing heap information), id 0xc0000005, EXCEPTION_ACCESS_VIOLATION (0xc0000005) at pc=0x00007ffbf9c93419]
+
+GC Heap History (0 events):
+No events
+
+Dll operation events (1 events):
+Event: 0.024 Loaded shared library C:\Users\iylia\.jdks\corretto-17.0.7\bin\java.dll
+
+Deoptimization events (0 events):
+No events
+
+Classes unloaded (0 events):
+No events
+
+Classes redefined (0 events):
+No events
+
+Internal exceptions (0 events):
+No events
+
+VM Operations (0 events):
+No events
+
+Events (0 events):
+No events
+
+
+Dynamic libraries:
+0x00007ff65c4e0000 - 0x00007ff65c4ed000 	C:\Users\iylia\.jdks\corretto-17.0.7\bin\java.exe
+0x00007ffc81cd0000 - 0x00007ffc81ec8000 	C:\Windows\SYSTEM32\ntdll.dll
+0x00007ffc80bc0000 - 0x00007ffc80c82000 	C:\Windows\System32\KERNEL32.DLL
+0x00007ffc7f8d0000 - 0x00007ffc7fbce000 	C:\Windows\System32\KERNELBASE.dll
+0x00007ffc7f370000 - 0x00007ffc7f470000 	C:\Windows\System32\ucrtbase.dll
+0x00007ffc77100000 - 0x00007ffc77117000 	C:\Users\iylia\.jdks\corretto-17.0.7\bin\jli.dll
+0x00007ffc74530000 - 0x00007ffc74545000 	C:\Users\iylia\.jdks\corretto-17.0.7\bin\VCRUNTIME140.dll
+0x00007ffc81470000 - 0x00007ffc8160d000 	C:\Windows\System32\USER32.dll
+0x00007ffc7f540000 - 0x00007ffc7f562000 	C:\Windows\System32\win32u.dll
+0x00007ffc6c8a0000 - 0x00007ffc6cb3a000 	C:\Windows\WinSxS\amd64_microsoft.windows.common-controls_6595b64144ccf1df_6.0.19041.4355_none_60b8b9eb71f62e16\COMCTL32.dll
+0x00007ffc81990000 - 0x00007ffc819bb000 	C:\Windows\System32\GDI32.dll
+0x00007ffc7fbd0000 - 0x00007ffc7fce7000 	C:\Windows\System32\gdi32full.dll
+0x00007ffc81370000 - 0x00007ffc8140e000 	C:\Windows\System32\msvcrt.dll
+0x00007ffc7f4a0000 - 0x00007ffc7f53d000 	C:\Windows\System32\msvcp_win.dll
+0x00007ffc819c0000 - 0x00007ffc819ef000 	C:\Windows\System32\IMM32.DLL
+0x00007ffc500b0000 - 0x00007ffc5014b000 	C:\Users\iylia\.jdks\corretto-17.0.7\bin\msvcp140.dll
+0x00007ffbf95f0000 - 0x00007ffbfa20a000 	C:\Users\iylia\.jdks\corretto-17.0.7\bin\server\jvm.dll
+0x00007ffc81aa0000 - 0x00007ffc81b51000 	C:\Windows\System32\ADVAPI32.dll
+0x00007ffc800c0000 - 0x00007ffc8015f000 	C:\Windows\System32\sechost.dll
+0x00007ffc81240000 - 0x00007ffc81363000 	C:\Windows\System32\RPCRT4.dll
+0x00007ffc7f470000 - 0x00007ffc7f497000 	C:\Windows\System32\bcrypt.dll
+0x00007ffc673a0000 - 0x00007ffc673a9000 	C:\Windows\SYSTEM32\WSOCK32.dll
+0x00007ffc6c780000 - 0x00007ffc6c7a7000 	C:\Windows\SYSTEM32\WINMM.dll
+0x00007ffc80050000 - 0x00007ffc800bb000 	C:\Windows\System32\WS2_32.dll
+0x00007ffc753e0000 - 0x00007ffc753ea000 	C:\Windows\SYSTEM32\VERSION.dll
+0x00007ffc7dba0000 - 0x00007ffc7dbb2000 	C:\Windows\SYSTEM32\kernel.appcore.dll
+0x00007ffc6e560000 - 0x00007ffc6e56a000 	C:\Users\iylia\.jdks\corretto-17.0.7\bin\jimage.dll
+0x00007ffc7d930000 - 0x00007ffc7db14000 	C:\Windows\SYSTEM32\DBGHELP.DLL
+0x00007ffc6d440000 - 0x00007ffc6d474000 	C:\Windows\SYSTEM32\dbgcore.DLL
+0x00007ffc7f570000 - 0x00007ffc7f5f2000 	C:\Windows\System32\bcryptPrimitives.dll
+0x00007ffc7af30000 - 0x00007ffc7af3e000 	C:\Users\iylia\.jdks\corretto-17.0.7\bin\instrument.dll
+0x00007ffc66260000 - 0x00007ffc66285000 	C:\Users\iylia\.jdks\corretto-17.0.7\bin\java.dll
+
+dbghelp: loaded successfully - version: 4.0.5 - missing functions: none
+symbol engine: initialized successfully - sym options: 0x614 - pdb path: .;C:\Users\iylia\.jdks\corretto-17.0.7\bin;C:\Windows\SYSTEM32;C:\Windows\WinSxS\amd64_microsoft.windows.common-controls_6595b64144ccf1df_6.0.19041.4355_none_60b8b9eb71f62e16;C:\Users\iylia\.jdks\corretto-17.0.7\bin\server
+
+VM Arguments:
+jvm_args: -ea -Didea.test.cyclic.buffer.size=1048576 -javaagent:C:\Program Files\JetBrains\IntelliJ IDEA Community Edition 2023.3.3\lib\idea_rt.jar=51936:C:\Program Files\JetBrains\IntelliJ IDEA Community Edition 2023.3.3\bin -Dfile.encoding=UTF-8 
+java_command: com.intellij.rt.testng.RemoteTestNGStarter -usedefaultlisteners false -socket51935 @w@C:\Users\iylia\AppData\Local\Temp\idea_working_dirs_testng1.tmp -temp C:\Users\iylia\AppData\Local\Temp\idea_testng1.tmp
+java_class_path (initial): C:\Program Files\JetBrains\IntelliJ IDEA Community Edition 2023.3.3\lib\idea_rt.jar;C:\Program Files\JetBrains\IntelliJ IDEA Community Edition 2023.3.3\plugins\testng\lib\testng-rt.jar;C:\Disk D\RedRover.shools\JenkinsQA_2024_fall\target\test-classes;C:\Users\iylia\.m2\repository\org\testng\testng\7.10.2\testng-7.10.2.jar;C:\Users\iylia\.m2\repository\org\slf4j\slf4j-api\1.7.36\slf4j-api-1.7.36.jar;C:\Users\iylia\.m2\repository\com\beust\jcommander\1.82\jcommander-1.82.jar;C:\Users\iylia\.m2\repository\org\webjars\jquery\3.7.1\jquery-3.7.1.jar;C:\Users\iylia\.m2\repository\org\seleniumhq\selenium\selenium-java\4.26.0\selenium-java-4.26.0.jar;C:\Users\iylia\.m2\repository\org\seleniumhq\selenium\selenium-api\4.26.0\selenium-api-4.26.0.jar;C:\Users\iylia\.m2\repository\org\jspecify\jspecify\1.0.0\jspecify-1.0.0.jar;C:\Users\iylia\.m2\repository\org\seleniumhq\selenium\selenium-chrome-driver\4.26.0\selenium-chrome-driver-4.26.0.jar;C:\Users\iylia\.m2\repository\com\google\auto\service\auto-service-annotations\1.1.1\auto-service-annotations-1.1.1.jar;C:\Users\iylia\.m2\repository\org\seleniumhq\selenium\selenium-chromium-driver\4.26.0\selenium-chromium-driver-4.26.0.jar;C:\Users\iylia\.m2\repository\org\seleniumhq\selenium\selenium-json\4.26.0\selenium-json-4.26.0.jar;C:\Users\iylia\.m2\repository\org\seleniumhq\selenium\selenium-manager\4.26.0\selenium-manager-4.26.0.jar;C:\Users\iylia\.m2\repository\org\seleniumhq\selenium\selenium-devtools-v128\4.26.0\selenium-devtools-v128-4.26.0.jar;C:\Users\iylia\.m2\repository\org\seleniumhq\selenium\selenium-devtools-v129\4.26.0\selenium-devtools-v129-4.26.0.jar;C:\Users\iylia\.m2\repository\org\seleniumhq\selenium\selenium-devtools-v130\4.26.0\selenium-devtools-v130-4.26.0.jar;C:\Users\iylia\.m2\repository\org\seleniumhq\selenium\selenium-devtools-v85\4.26.0\selenium-devtools-v85-4.26.0.jar;C:\Users\iylia\.m2\repository\org\seleniumhq\selenium\selenium-edge-driver\4.26.0\selenium-edge-driver-4.26.0.
+Launcher Type: SUN_STANDARD
+
+[Global flags]
+     intx CICompilerCount                          = 3                                         {product} {ergonomic}
+     uint ConcGCThreads                            = 1                                         {product} {ergonomic}
+     uint G1ConcRefinementThreads                  = 4                                         {product} {ergonomic}
+   size_t G1HeapRegionSize                         = 2097152                                   {product} {ergonomic}
+    uintx GCDrainStackTargetSize                   = 64                                        {product} {ergonomic}
+   size_t InitialHeapSize                          = 199229440                                 {product} {ergonomic}
+   size_t MarkStackSize                            = 4194304                                   {product} {ergonomic}
+   size_t MaxHeapSize                              = 3185573888                                {product} {ergonomic}
+   size_t MinHeapDeltaBytes                        = 2097152                                   {product} {ergonomic}
+   size_t MinHeapSize                              = 8388608                                   {product} {ergonomic}
+    uintx NonNMethodCodeHeapSize                   = 5832780                                {pd product} {ergonomic}
+    uintx NonProfiledCodeHeapSize                  = 122912730                              {pd product} {ergonomic}
+    uintx ProfiledCodeHeapSize                     = 122912730                              {pd product} {ergonomic}
+    uintx ReservedCodeCacheSize                    = 251658240                              {pd product} {ergonomic}
+     bool SegmentedCodeCache                       = true                                      {product} {ergonomic}
+   size_t SoftMaxHeapSize                          = 3185573888                             {manageable} {ergonomic}
+     bool UseCompressedClassPointers               = true                           {product lp64_product} {ergonomic}
+     bool UseCompressedOops                        = true                           {product lp64_product} {ergonomic}
+     bool UseG1GC                                  = true                                      {product} {ergonomic}
+     bool UseLargePagesIndividualAllocation        = false                                  {pd product} {ergonomic}
+
+Logging:
+Log output configuration:
+ #0: stdout all=warning uptime,level,tags
+ #1: stderr all=off uptime,level,tags
+
+Environment Variables:
+PATH=C:\Program Files\Microsoft\jdk-11.0.12.7-hotspot\bin;C:\Program Files (x86)\Common Files\Oracle\Java\javapath;C:\Python310\Scripts\;C:\Python310\;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\System32\OpenSSH\;C:\Program Files\Microsoft VS Code\bin;C:\ProgramData\chocolatey\bin;C:\Program Files\dotnet\;C:\xampp\php;C:\ProgramData\ComposerSetup\bin;C:\Program Files\Docker\Docker\resources\bin;C:\Program Files\nodejs\;C:\Program Files\Git\cmd;C:\Program Files\apache-maven-3.9.8\bin;C:\Users\iylia\.jdks\corretto-17.0.7\bin;C:\Program Files\Microsoft\jdk-11.0.12.7-hotspot\bin;C:\Program Files\allure-2.30.0\bin;C:\Program Files\MySQL\MySQL Shell 8.0\bin\;C:\Users\iylia\AppData\Local\Programs\Python\Python311\Scripts\;C:\Users\iylia\AppData\Local\Programs\Python\Python311\;C:\Users\iylia\AppData\Local\Microsoft\WindowsApps;C:\Users\iylia\AppData\Local\Programs\Hyper\resources\bin;C:\chromedriver;C:\Users\iylia\.dotnet\tools;C:\Users\iylia\AppData\Roaming\Composer\vendor\bin;C:\Program Files\JetBrains\PyCharm Community Edition 2023.3\bin;;C:\Users\iylia\AppData\Roaming\npm
+USERNAME=Roman
+OS=Windows_NT
+PROCESSOR_IDENTIFIER=Intel64 Family 6 Model 58 Stepping 9, GenuineIntel
+TMP=C:\Users\iylia\AppData\Local\Temp
+TEMP=C:\Users\iylia\AppData\Local\Temp
+
+
+
+---------------  S Y S T E M  ---------------
+
+OS:
+ Windows 10 , 64 bit Build 19041 (10.0.19041.5072)
+OS uptime: 1 days 1:07 hours
+Hyper-V role detected
+
+CPU: total 4 (initial active 4) (2 cores per cpu, 2 threads per core) family 6 model 58 stepping 9 microcode 0x21, cx8, cmov, fxsr, ht, mmx, sse, sse2, sse3, ssse3, sse4.1, sse4.2, popcnt, tsc, tscinvbit, avx, aes, erms, clmul, vzeroupper, clflush, hv
+
+Memory: 4k page, system-wide physical 12148M (2376M free)
+TotalPageFile size 14562M (AvailPageFile size 36M)
+current process WorkingSet (physical memory assigned to process): 10M, peak: 10M
+current process commit charge ("private bytes"): 51M, peak: 241M
+
+vm_info: OpenJDK 64-Bit Server VM (17.0.7+7-LTS) for windows-amd64 JRE (17.0.7+7-LTS), built on Apr 14 2023 01:39:21 by "Administrator" with MS VC++ 15.9 (VS2017)
+
+END.

@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class MultiConfigurationProjectTest extends BaseTest {
-    private static final String NAME_OF_PROJECT = "MTC project";
+    private static final String NAME_OF_PROJECT = "Multi-configuration project";
     private static final String DESCRIPTIONS = "Descriptions of project";
 
     private void waitTimeUntilVisibilityElement(Integer time, WebElement element) {
@@ -37,7 +37,7 @@ public class MultiConfigurationProjectTest extends BaseTest {
         List<String> itemList = new HomePage(getDriver())
                 .clickNewItem()
                 .enterItemName(NAME_OF_PROJECT)
-                .choseMultiConfigurationProject()
+                .selectTypeOfProject(NAME_OF_PROJECT)
                 .submitCreationProject()
                 .goHome()
                 .showCreatedProject();
@@ -47,7 +47,7 @@ public class MultiConfigurationProjectTest extends BaseTest {
     @Test(description = " MultiConfigurationProjectTest | Add descriptions to existing project")
     public void testAddDescriptions() {
         testCreateProjectWithoutDescription();
-        getDriver().findElement(By.xpath("//td/a[@href='job/MTC%20project/']")).click();
+        getDriver().findElement(By.xpath("//td/a[@href='job/Multi-configuration%20project/']")).click();
         getDriver().findElement(By.xpath("//a[@id='description-link']")).click();
         getDriver().findElement(By.xpath("//textarea[@name = 'description']")).sendKeys(DESCRIPTIONS);
         getDriver().findElement(By.xpath("//div/button[@name = 'Submit']")).submit();
