@@ -6,7 +6,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import school.redrover.page.base.BasePage;
 
-public class  CreateNewItemPage extends BasePage {
+public class CreateNewItemPage extends BasePage {
 
     public CreateNewItemPage(WebDriver driver) {
         super(driver);
@@ -14,6 +14,7 @@ public class  CreateNewItemPage extends BasePage {
 
     By getMultiConfigurationProject = By.xpath("//li//span[text()='Multi-configuration project']");
     By getSubmitButton = By.xpath("//button[@id = 'ok-button']");
+    private final By GET_ORGANIZATION_FOLDER = By.xpath("//li[contains(@class,'jenkins_branch_OrganizationFolder')]");
 
     public CreateNewItemPage enterItemName(String name) {
         getDriver().findElement(By.id("name")).sendKeys(name);
@@ -130,9 +131,16 @@ public class  CreateNewItemPage extends BasePage {
         return this;
     }
 
-    public MultiConfigurationProjectPage submitCreationProject(){
+    public MultiConfigurationProjectPage submitCreationProject() {
         getDriver().findElement(getSubmitButton).click();
 
         return new MultiConfigurationProjectPage(getDriver());
+    }
+
+    public OrganizationFolderConfigurationPage clickOrganizationFolderAndClickOk() {
+        getDriver().findElement(GET_ORGANIZATION_FOLDER).click();
+        clickOkButton();
+
+        return new OrganizationFolderConfigurationPage(getDriver());
     }
 }

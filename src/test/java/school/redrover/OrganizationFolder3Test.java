@@ -7,6 +7,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.Select;
 import org.testng.Assert;
 import org.testng.annotations.Test;
+import school.redrover.page.HomePage;
 import school.redrover.runner.BaseTest;
 
 public class OrganizationFolder3Test extends BaseTest {
@@ -32,16 +33,14 @@ public class OrganizationFolder3Test extends BaseTest {
 
     @Test
     public void testCreate() {
-        clickElement(By.linkText("Create a job"));
-        getDriver().findElement(By.name("name")).sendKeys(NAME_FOLDER);
-        clickElement(By.xpath("//li[contains(@class,'jenkins_branch_OrganizationFolder')]"));
-        clickElement(By.id("ok-button"));
-        clickElement(By.id("jenkins-home-link"));
+        String typeProject = new HomePage(getDriver())
+                .clickCreateJob()
+                .enterItemName(NAME_FOLDER)
+                .clickOrganizationFolderAndClickOk()
+                .clickLogoJenkins()
+                .getTypeProject();
 
-        Assert.assertEquals(
-                textElement(By.xpath("//div[contains(@class,'jenkins-table__cell__button-wrapper')]")),
-                NAME_FOLDER
-        );
+        Assert.assertEquals(typeProject, NAME_FOLDER);
     }
 
     @Test(dependsOnMethods = "testCreate")
