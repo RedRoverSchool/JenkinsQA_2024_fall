@@ -30,7 +30,7 @@ public class FreestyleProject3Test extends BaseTest {
         getDriver().findElement(By.xpath("//li[contains(@class, 'FreeStyleProject')]")).click();
         getDriver().findElement(By.id("ok-button")).click();
 
-        getDriver().findElement(By.xpath("//button[@name='Submit']")).click();
+        getDriver().findElement(By.name("Submit")).click();
     }
 
     private void addDescriptionOnProjectStatusPage(String description) {
