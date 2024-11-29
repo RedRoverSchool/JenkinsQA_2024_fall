@@ -32,7 +32,7 @@ public class CreateNewItem1Test extends BaseTest {
         String error = new HomePage(getDriver())
                 .clickNewItem()
                 .enterItemName(ITEM_NAME)
-                .getErrorMessage();
+                .getInvalidNameMessage();
 
         Assert.assertEquals(error, "» A job already exists with the name ‘%s’".formatted(ITEM_NAME));
     }
