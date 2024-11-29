@@ -7,6 +7,8 @@ import school.redrover.page.base.BasePage;
 
 public class OrganizationFolderConfigurationPage extends BasePage {
 
+    private final By LOGO_JENKINS = By.id("jenkins-home-link");
+
     public OrganizationFolderConfigurationPage(WebDriver driver) {
         super(driver);
     }
@@ -37,13 +39,16 @@ public class OrganizationFolderConfigurationPage extends BasePage {
                 .findElement(By.xpath("//div/div[@class='textarea-preview']"))
                 .getAttribute("style").equals("display: none;")) {
             getDriver().findElement(By.xpath("//div/a[@class='textarea-show-preview']")).click();
-        }
-        else {
+        } else {
             getDriver().findElement(By.xpath("//div/a[@class='textarea-hide-preview']")).click();
         }
         return new OrganizationFolderConfigurationPage(getDriver());
     }
 
+    public HomePage clickLogoJenkins() {
+        getDriver().findElement(LOGO_JENKINS).click();
 
+        return new HomePage(getDriver());
+    }
 }
 

@@ -17,10 +17,9 @@ public class HomePage extends BasePage {
     public HomePage(WebDriver driver) {
         super(driver);
     }
-    By getNewItem = By.xpath("//a[@href='/view/all/newJob']");
-    By listOfProjects = By.xpath("//a[@class = 'jenkins-table__link model-link inside'] /span");
-    By getCreatedMultiConfigurationProject =By.xpath("//td/a[@href='job/MTC%20project/']");
 
+    By listOfProjects = By.xpath("//a[@class = 'jenkins-table__link model-link inside'] /span");
+    private final By GET_PROJECT_TYPE = By.xpath("//div[contains(@class,'jenkins-table__cell__button-wrapper')]");
 
     public HomePage createFreestyleProject(String name) {
         getDriver().findElement(By.xpath("//*[@href='/view/all/newJob']")).click();
@@ -332,11 +331,12 @@ public class HomePage extends BasePage {
     }
 
     public List<String> showCreatedProject() {
-        List<WebElement>itemList = getDriver().findElements(listOfProjects);
+        List<WebElement> itemList = getDriver().findElements(listOfProjects);
 
-       return itemList.stream().map(WebElement::getText).collect(Collectors.toList());
+        return itemList.stream().map(WebElement::getText).collect(Collectors.toList());
 
     }
+
     public HomePage clickBuildNowViaDropdown(String name) {
         WebElement chevronButton = getWait5().until(ExpectedConditions.visibilityOfElementLocated(
                 By.xpath("//span[text()='%s']/following-sibling::button".formatted(name))));
@@ -358,5 +358,7 @@ public class HomePage extends BasePage {
                 By.xpath("//tr[@id='job_%s']//*[name()='svg'][@tooltip='%s']".formatted(name, status)))).getAttribute("tooltip");
     }
 
-
+    public String getTypeProject() {
+        return getDriver().findElement(GET_PROJECT_TYPE).getText();
+    }
 }
