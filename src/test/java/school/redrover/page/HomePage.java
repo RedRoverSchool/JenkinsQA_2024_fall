@@ -10,12 +10,16 @@ import school.redrover.page.base.BasePage;
 import school.redrover.runner.TestUtils;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
-public class HomePage  extends BasePage {
+public class HomePage extends BasePage {
 
     public HomePage(WebDriver driver) {
         super(driver);
     }
+
+    By listOfProjects = By.xpath("//a[@class = 'jenkins-table__link model-link inside'] /span");
+    private final By GET_PROJECT_TYPE = By.xpath("//div[contains(@class,'jenkins-table__cell__button-wrapper')]");
 
     public HomePage createFreestyleProject(String name) {
         getDriver().findElement(By.xpath("//*[@href='/view/all/newJob']")).click();
@@ -277,7 +281,7 @@ public class HomePage  extends BasePage {
 
     public HomePage clickScheduleBuild(String name) {
         getWait10().until(ExpectedConditions.elementToBeClickable(
-                By.xpath("//td[@class='jenkins-table__cell--tight']//a[@tooltip='Schedule a Build for " + name + "']"))).click();
+                By.xpath("//td[@class='jenkins-table__cell--tight']//a[@tooltip='Schedule a Build for %s']".formatted(name)))).click();
         getWait10().until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@class='tippy-content']")));
         getWait10().until(ExpectedConditions.invisibilityOfElementLocated(By.xpath("//div[@class='tippy-content']")));
 
@@ -324,5 +328,37 @@ public class HomePage  extends BasePage {
                 By.xpath("//button[@href = '/job/%s/doDelete']".formatted(name)))).click();
 
         return new HomePage(getDriver());
+    }
+
+    public List<String> showCreatedProject() {
+        List<WebElement> itemList = getDriver().findElements(listOfProjects);
+
+        return itemList.stream().map(WebElement::getText).collect(Collectors.toList());
+
+    }
+
+    public HomePage clickBuildNowViaDropdown(String name) {
+        WebElement chevronButton = getWait5().until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//span[text()='%s']/following-sibling::button".formatted(name))));
+        TestUtils.moveAndClickWithJavaScript(getDriver(), chevronButton);
+
+        getWait10().until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//button[contains(@href, 'build')]"))).click();
+
+        getWait10().until(ExpectedConditions.invisibilityOfElementLocated(
+                By.xpath("//a[contains(@class,'app-progress-bar')]")));
+
+        getDriver().navigate().refresh();
+
+        return this;
+    }
+
+    public String getStatusBuild(String name, String status) {
+        return getWait10().until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//tr[@id='job_%s']//*[name()='svg'][@tooltip='%s']".formatted(name, status)))).getAttribute("tooltip");
+    }
+
+    public String getTypeProject() {
+        return getDriver().findElement(GET_PROJECT_TYPE).getText();
     }
 }

@@ -15,7 +15,7 @@ public class MultibranchPipelineProjectPage extends BaseProjectPage<MultibranchP
     }
 
     public String getDescription() {
-        return getWait2().until(ExpectedConditions.visibilityOfElementLocated(By.id("view-message"))).getText();
+        return getWait5().until(ExpectedConditions.visibilityOfElementLocated(By.id("view-message"))).getText();
     }
 
     public HomePage deleteItemBySidebar() {

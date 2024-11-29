@@ -1,8 +1,6 @@
 package school.redrover;
 
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import school.redrover.page.HomePage;
@@ -12,22 +10,31 @@ import java.util.List;
 
 public class DeleteFreestyleProjectTest extends BaseTest {
 
+    final String FIRST_PROJECT = "First";
+    final String SECOND_PROJECT = "Second";
+
     @Test
-    public void testDeleteFirstProject() {
-        final String firstProject = "First";
-        final String secondProject = "Second";
+    public void testDeleteFirstProjectViaChevron() {
+        List<String> projectsList = new HomePage(getDriver())
+                .createFreestyleProject(FIRST_PROJECT)
+                .createFreestyleProject(SECOND_PROJECT)
+                .selectDeleteFromItemMenu(FIRST_PROJECT)
+                .clickYesForConfirmDelete()
+                .getItemList();
 
-        new HomePage(getDriver()).createFreestyleProject(firstProject);
-        new HomePage(getDriver()).createFreestyleProject(secondProject);
-
-        new HomePage(getDriver()).openDropdownViaChevron(firstProject);
-        getDriver().findElement(By.xpath("//button[normalize-space()='Delete Project']")).click();
-        getWait2().until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//dialog/div/button[text() = 'Yes']"))).click();
-
-        List<WebElement> elementList = getDriver().findElements(By.xpath("//td/a/span"));
-        List<String> projectList = elementList.stream().map(WebElement::getText).toList();
-
-        Assert.assertEquals(projectList.size(),1);
-        Assert.assertEquals(projectList.get(0), secondProject);
+        Assert.assertEquals(projectsList.size(),1);
+        Assert.assertEquals(projectsList.get(0), SECOND_PROJECT);
     }
+
+    @Test(dependsOnMethods = "testDeleteFirstProjectViaChevron")
+    public void testDeleteAllProjectsViaChevron() {
+        List<String> projectsList = new HomePage(getDriver())
+                .selectDeleteFromItemMenu(SECOND_PROJECT)
+                .clickYesForConfirmDelete()
+                .getItemList();
+
+        Assert.assertEquals(projectsList.size(), 0);
+        Assert.assertEquals(getDriver().findElement(By.tagName("h1")).getText(),"Welcome to Jenkins!");
+    }
+
 }
