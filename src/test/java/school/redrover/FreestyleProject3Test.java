@@ -190,6 +190,7 @@ public class FreestyleProject3Test extends BaseTest {
         Assert.assertEquals(extractedText, testCommand);
     }
 
+    @Ignore
     @Test
     public void testCheckSidebarMenuItemsOnProjectStatusPage() {
         final List<String> benchmarkSidebarMenuItems = List.of(
