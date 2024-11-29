@@ -102,7 +102,7 @@ public class CreateNewItemPage extends BasePage {
         return getDriver().findElement(By.id("itemname-required")).getText();
     }
 
-    public ErrorPage saveInvalidData() {
+    public ErrorPage saveInvalidData(){
         clickOkButton();
 
         return new ErrorPage(getDriver());
@@ -131,7 +131,7 @@ public class CreateNewItemPage extends BasePage {
         return this;
     }
 
-    public MultiConfigurationProjectPage submitCreationProject(){
+    public MultiConfigurationProjectPage submitCreationProject() {
         getDriver().findElement(getSubmitButton).click();
 
         return new MultiConfigurationProjectPage(getDriver());
