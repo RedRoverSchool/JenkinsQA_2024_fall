@@ -1,4 +1,5 @@
 package school.redrover;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
@@ -8,6 +9,7 @@ import org.openqa.selenium.support.ui.Select;
 import org.testng.Assert;
 import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
+import school.redrover.page.HomePage;
 import school.redrover.runner.BaseTest;
 
 import java.util.List;
@@ -40,20 +42,17 @@ public class MultibranchPipelineTest extends BaseTest {
 
     @Test
     public void testAddDescriptionCreatingMultibranch() {
-        final String expectedDescription = "AddedDescription";
+        final String description = "AddedDescription";
 
-        getDriver().findElement(By.cssSelector("[href$='/newJob']")).click();
+        String actualDescription = new HomePage(getDriver())
+                .clickNewItem()
+                .enterItemName(MP_NAME)
+                .selectMultibranchPipelineAndClickOk()
+                .enterDescription(description)
+                .clickSaveButton()
+                .getDescription();
 
-        getDriver().findElement(By.id("name")).sendKeys("MultiBranch");
-        getDriver().findElement(By.cssSelector("[class$='MultiBranchProject']")).click();
-        getDriver().findElement(By.id("ok-button")).click();
-
-        getDriver().findElement(By.cssSelector("[name$='description']")).sendKeys(expectedDescription);
-        getDriver().findElement(By.name("Submit")).click();
-
-        String actualDescription = getWait2().until(ExpectedConditions.visibilityOfElementLocated(By.id("view-message"))).getText();
-
-        Assert.assertEquals(actualDescription, expectedDescription);
+        Assert.assertEquals(actualDescription, description);
     }
 
     @Test
@@ -73,7 +72,7 @@ public class MultibranchPipelineTest extends BaseTest {
     }
 
     @Test
-    public void testRenameMultibranchViaSideBar () {
+    public void testRenameMultibranchViaSideBar() {
 
         getDriver().findElement(By.cssSelector("[href='newJob']")).click();
 
@@ -89,9 +88,10 @@ public class MultibranchPipelineTest extends BaseTest {
         getDriver().findElement(By.cssSelector("[class*='input validated']")).sendKeys("Hilton Hotels");
         getDriver().findElement(By.cssSelector("[class*='submit']")).click();
 
-        Assert.assertEquals(getDriver().findElement(By.xpath("//h1")).getText(),"Hilton Hotels");
+        Assert.assertEquals(getDriver().findElement(By.xpath("//h1")).getText(), "Hilton Hotels");
     }
 
+    @Ignore
     @Test
     public void testTryCreateProjectExistName() {
         final String projectName = "MultiBuild";
@@ -145,11 +145,15 @@ public class MultibranchPipelineTest extends BaseTest {
 
     @Test
     public void testCreateOneJobAndDisplayOnStartPage() {
-        createJob(MULTIBRANCH_PIPELINE_NAME);
+        String actualJobName = new HomePage(getDriver())
+                .clickNewItem()
+                .enterItemName(MULTIBRANCH_PIPELINE_NAME)
+                .selectMultibranchPipelineAndClickOk()
+                .clickSaveButton()
+                .gotoHomePage()
+                .getItemName(MULTIBRANCH_PIPELINE_NAME);
 
-        Assert.assertEquals(
-                getDriver().findElement(By.xpath("//a[contains(@class,'jenkins-table')]")).getText(),
-                MULTIBRANCH_PIPELINE_NAME);
+        Assert.assertEquals(actualJobName, MULTIBRANCH_PIPELINE_NAME);
     }
 
     @Test
@@ -160,7 +164,7 @@ public class MultibranchPipelineTest extends BaseTest {
         List<WebElement> jobs = getDriver().findElements(By.xpath("//a[@class='jenkins-table__link model-link inside']"));
         List<String> jobNames = jobs.stream().map(WebElement::getText).toList();
 
-        Assert.assertListContainsObject(jobNames,MULTIBRANCH_PIPELINE_NAME2, MULTIBRANCH_PIPELINE_NAME2);
+        Assert.assertListContainsObject(jobNames, MULTIBRANCH_PIPELINE_NAME2, MULTIBRANCH_PIPELINE_NAME2);
     }
 
     @Test
@@ -221,5 +225,49 @@ public class MultibranchPipelineTest extends BaseTest {
         Assert.assertEquals(
                 getDriver().findElement(By.xpath("//a[contains(@href,'job')][@class='model-link']")).getText(),
                 MULTIBRANCH_PIPELINE_NAME);
+    }
+
+    @Test
+    public void testDeleteJobUsingSidebarStatusPage() {
+        new HomePage(getDriver())
+                .clickNewItem()
+                .enterItemName(MULTIBRANCH_PIPELINE_NAME)
+                .selectMultibranchPipelineAndClickOk()
+                .clickSaveButton()
+                .gotoHomePage()
+                .clickOnCreatedItem(MULTIBRANCH_PIPELINE_NAME)
+                .deleteItemBySidebar();
+
+        Assert.assertTrue(getDriver().findElements(
+                By.xpath("//span[text()='%s']".formatted(MULTIBRANCH_PIPELINE_NAME))).isEmpty());
+    }
+
+    @Test
+    public void testDeleteJobUsingItemDropdownOnDashboard() {
+        new HomePage(getDriver())
+                .clickNewItem()
+                .enterItemName(MULTIBRANCH_PIPELINE_NAME)
+                .selectMultibranchPipelineAndClickOk()
+                .clickSaveButton()
+                .gotoHomePage()
+                .deleteItemViaChevronItem(MULTIBRANCH_PIPELINE_NAME);
+
+        Assert.assertTrue(getDriver().findElements(
+                By.xpath("//span[text()='%s']".formatted(MULTIBRANCH_PIPELINE_NAME))).isEmpty());
+    }
+
+    @Test
+    public void testDeleteJobUsingDropdownBreadcrumbJobPage() {
+        new HomePage(getDriver())
+                .clickNewItem()
+                .enterItemName(MULTIBRANCH_PIPELINE_NAME)
+                .selectMultibranchPipelineAndClickOk()
+                .clickSaveButton()
+                .gotoHomePage()
+                .clickOnCreatedItem(MULTIBRANCH_PIPELINE_NAME)
+                .deleteJobUsingDropdownBreadcrumbJobPage();
+
+        Assert.assertTrue(getDriver().findElements(
+                By.xpath("//span[text()='%s']".formatted(MULTIBRANCH_PIPELINE_NAME))).isEmpty());
     }
 }

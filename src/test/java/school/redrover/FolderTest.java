@@ -1,251 +1,171 @@
 package school.redrover;
 
 import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.interactions.Actions;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.Assert;
 import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
+import school.redrover.page.HomePage;
+import school.redrover.page.FolderProjectPage;
 import school.redrover.runner.BaseTest;
-import school.redrover.runner.TestUtils;
+import java.util.List;
 
 public class FolderTest extends BaseTest {
 
-    private enum ItemType {
-
-        FOLDER("Folder"),
-        FREESTYLE_PROJECT("Freestyle project");
-
-        private final String itemName;
-
-        ItemType(String itemName) {
-            this.itemName = itemName;
-        }
-
-        public String getItemName() {
-            return itemName;
-
-        }
-    }
-
-    private enum FolderMenu {
-
-        CONFIGURE("1"),
-        NEW_ITEM("2"),
-        BUILD_HISTORY("4");
-
-        private final String menuNumber;
-
-        FolderMenu(String menuNumber) {
-            this.menuNumber = menuNumber;
-        }
-
-        public String getMenuNumber() {
-            return menuNumber;
-
-        }
-    }
-
-    private static final String ITEM_LOCATOR_BY_NAME = "//span[text()='%s']";
     private static final String FIRST_FOLDER_NAME = "Freestyle projects";
     private static final String FREESTYLE_PROJECT_NAME = "First freestyle project job";
+    private static final String FOLDER_NAME_MAX_LENGTH = "012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234";
 
-    private void createAndNameNewItem(String name) {
+    @Test
+    public void testCreateWithMaxNameLength() {
 
-        getDriver().findElement(By.xpath("//span[text()='New Item']/ancestor::a")).click();
-        getDriver().findElement(By.id("name")).sendKeys(name);
+        String folderName = new HomePage(getDriver())
+                .clickNewItem()
+                .enterItemName(FOLDER_NAME_MAX_LENGTH)
+                .selectFolderAndClickOk()
+                .gotoHomePage()
+                .getItemNameByOrder(1);
 
-    }
-
-    private void nameItemType(String name) {
-
-        getDriver().findElement(By.id("name")).sendKeys(name);
-
-    }
-
-    private void selectItemTypeAndSave(ItemType itemType) {
-
-        getDriver().findElement(By.xpath(ITEM_LOCATOR_BY_NAME.formatted(itemType.getItemName()))).click();
-        getDriver().findElement(By.id("ok-button")).click();
-
-    }
-
-    private void goToDashboard() {
-
-        getDriver().findElement(By.xpath("//a[contains(text(),'Dashboard')]")).click();
-
-    }
-
-    private void selectFolderMenuByChevron(String folderName, FolderMenu folderMenu) {
-
-        WebElement chevron = getDriver().findElement(
-                By.xpath("//a[@class='jenkins-table__link model-link inside']//button[@class='jenkins-menu-dropdown-chevron']"));
-
-        new Actions(getDriver()).moveToElement(getDriver().findElement(By.xpath(ITEM_LOCATOR_BY_NAME
-                .formatted(folderName)))).perform();
-        TestUtils.moveAndClickWithJavaScript(getDriver(), chevron);
-
-        getWait10().until(ExpectedConditions.visibilityOfElementLocated(
-                By.xpath("//*[@class='jenkins-dropdown__item '][%s]"
-                        .formatted(folderMenu.getMenuNumber())))).click();
-
-    }
-
-    private void submit() {
-
-        getDriver().findElement(By.xpath("//button[contains(@name, 'Submit')]")).click();
-
-    }
-
-    private void addDescription(String description) {
-
-        getDriver().findElement(By.xpath("//div[contains(text(),'Description')]/following-sibling::div[1]/textarea"))
-                .sendKeys(description);
-
-    }
-
-    private void clickButtonByName(String buttonName) {
-
-        getDriver().findElement(By.xpath("//button[contains(text(),'%s')]".formatted(buttonName)))
-                .click();
-
-    }
-
-    private void openFolderByName(String folderName) {
-
-        getDriver().findElement(By.xpath(ITEM_LOCATOR_BY_NAME.formatted(folderName))).click();
-
-    }
-
-    private void runJob(String projectName) {
-
-        getDriver().findElement(By.xpath("//td//a[@title='Schedule a Build for %s']".formatted(projectName))).click();
-
+        Assert.assertEquals(folderName, FOLDER_NAME_MAX_LENGTH);
     }
 
     @Test
-    public void testCreateWithoutConfiguration() {
+    public void testCreateWithMinNameLength() {
 
-        createAndNameNewItem(FIRST_FOLDER_NAME);
-        TestUtils.scrollToBottom(getDriver());
-        selectItemTypeAndSave(ItemType.FOLDER);
+        List<String> itemList = new HomePage(getDriver())
+                .clickNewItem()
+                .enterItemName("F")
+                .selectFolderAndClickOk()
+                .gotoHomePage()
+                .getItemList();
 
-        submit();
+        Assert.assertEquals(itemList.size(),1);
+        Assert.assertEquals(itemList.get(0),"F");
+    }
 
-        goToDashboard();
+    @Test(dependsOnMethods = "testCreateWithMinNameLength")
+    public void testConfigureNameByChevron() {
 
-        Assert.assertTrue(
-                getDriver().findElement(By.xpath(ITEM_LOCATOR_BY_NAME.formatted(ItemType.
-                        FOLDER.getItemName()))).isDisplayed());
+        String configurationName = new HomePage(getDriver())
+                .selectConfigureFromItemMenu("F")
+                .enterConfigurationName(FIRST_FOLDER_NAME)
+                .clickSaveButton()
+                .getConfigurationName();
+
+        Assert.assertEquals(configurationName, FIRST_FOLDER_NAME);
+        Assert.assertEquals(new FolderProjectPage(getDriver()).getFolderName(), "F");
     }
 
     @Test
-    public void configureNameByChevron() {
+    public void testConfigureDescriptionByChevron() {
 
-        createAndNameNewItem(FIRST_FOLDER_NAME);
-        TestUtils.scrollToBottom(getDriver());
-        selectItemTypeAndSave(ItemType.FOLDER);
+       String desc =  new HomePage(getDriver())
+               .clickNewItem()
+               .nameAndSelectFolderType(FIRST_FOLDER_NAME)
+               .gotoHomePage()
+               .selectConfigureFromItemMenu(FIRST_FOLDER_NAME)
+               .enterDescription("This is new description")
+               .clickSaveButton()
+               .getFolderDescription();
 
-        submit();
-        goToDashboard();
+        Assert.assertEquals(desc,
+                "This is new description");
+    }
 
-        selectFolderMenuByChevron(FIRST_FOLDER_NAME, FolderMenu.CONFIGURE);
+    @Test(dependsOnMethods = "testConfigureDescriptionByChevron")
+    public void testCreateNewItemByChevron() {
 
-        getDriver().findElement(By.xpath("//div[contains(text(),'Display Name')]/following-sibling::div[1]/input"))
-                .sendKeys(FIRST_FOLDER_NAME + 1);
+        String projectName = new FolderProjectPage(getDriver())
+                .gotoHomePage()
+                .selectNewItemFromFolderMenu(FIRST_FOLDER_NAME)
+                .nameAndSelectFreestyleProject(FREESTYLE_PROJECT_NAME)
+                .addExecuteWindowsBatchCommand("echo 'Hello world!'")
+                .clickSaveButton()
+                .gotoHomePage()
+                .openFolder(FIRST_FOLDER_NAME)
+                .getItemNameByOrder(1);
 
-        getDriver().findElement(By.name("Submit")).click();
-        goToDashboard();
-
-        Assert.assertEquals(getDriver().findElement(By.xpath("//a[@class='jenkins-table__link model-link inside']")).getText(),
-                FIRST_FOLDER_NAME + 1);
-
+        Assert.assertEquals(projectName, FREESTYLE_PROJECT_NAME);
     }
 
     @Test
-    public void configureDescriptionByChevron() {
+    public void testCreateNewItemFromFolderPage() {
 
-        createAndNameNewItem(FIRST_FOLDER_NAME);
-        TestUtils.scrollToBottom(getDriver());
-        selectItemTypeAndSave(ItemType.FOLDER);
+        String projectName =  new HomePage(getDriver())
+                .clickNewItem()
+                .nameAndSelectFolderType(FIRST_FOLDER_NAME)
+                .gotoHomePage()
+                .openFolder(FIRST_FOLDER_NAME)
+                .clickNewItem()
+                .nameAndSelectFreestyleProject(FREESTYLE_PROJECT_NAME)
+                .addExecuteWindowsBatchCommand("echo 'Hello world!'")
+                .clickSaveButton()
+                .gotoHomePage()
+                .openFolder(FIRST_FOLDER_NAME)
+                .getItemNameByOrder(1);
 
-        submit();
-        goToDashboard();
+        Assert.assertEquals(projectName, FREESTYLE_PROJECT_NAME);
+    }
 
-        selectFolderMenuByChevron(FIRST_FOLDER_NAME, FolderMenu.CONFIGURE);
-        addDescription("This is folder description");
-        submit();
-        goToDashboard();
+    @Test(dependsOnMethods = "testCreateNewItemFromFolderPage")
+    public void testOpenBuildHistoryByChevron() {
 
-        getDriver().findElement(By.xpath(ITEM_LOCATOR_BY_NAME.formatted(FIRST_FOLDER_NAME))).click();
+        String buildHistoryName = new HomePage(getDriver())
+                .openFolder(FIRST_FOLDER_NAME)
+                .runJob(FREESTYLE_PROJECT_NAME)
+                .gotoHomePage()
+                .selectBuildHistoryFromItemMenu(FIRST_FOLDER_NAME)
+                .getBuildName();
 
-        Assert.assertEquals(getDriver().findElement(By.id("view-message")).getText(),
-                "This is folder description");
-
+        Assert.assertEquals(buildHistoryName, "%s » %s".formatted(FIRST_FOLDER_NAME, FREESTYLE_PROJECT_NAME));
     }
 
     @Test
-    public void createNewItemByChevron() {
+    public void testErrorDuringCreationWithDotInEnd() {
 
-        createAndNameNewItem(FIRST_FOLDER_NAME);
-        TestUtils.scrollToBottom(getDriver());
-        selectItemTypeAndSave(ItemType.FOLDER);
-        submit();
-        goToDashboard();
+        String errorMessage = new HomePage(getDriver())
+                .clickNewItem()
+                .enterItemName("Folder.")
+                .selectFolderType()
+                .getInvalidNameMessage();
 
-        selectFolderMenuByChevron(FIRST_FOLDER_NAME, FolderMenu.NEW_ITEM);
-        nameItemType(FREESTYLE_PROJECT_NAME);
-        selectItemTypeAndSave(ItemType.FREESTYLE_PROJECT);
+        Assert.assertEquals(errorMessage, "» A name cannot end with ‘.’");
+    }
 
-        addDescription("This is project description");
-        TestUtils.scrollToBottom(getDriver());
-        clickButtonByName("Add build step");
-        clickButtonByName("Execute Windows batch command");
-        getDriver().findElement(By.xpath("//textarea[@name='command']"))
-                .sendKeys("echo 'Hello world!'");
-        submit();
+    @Test
+    public void testErrorAfterCreationWithDotInEnd() {
 
-        Assert.assertEquals(
-                getDriver().findElement(By.xpath("//div[@class='jenkins-app-bar']//div[1]")).getText(),
-                FREESTYLE_PROJECT_NAME);
+        String errorMessage = new HomePage(getDriver())
+                .clickNewItem()
+                .enterItemName("Folder.")
+                .selectFolderType()
+                .selectFolderType()
+                .saveInvalidData()
+                .getErrorMessage();
 
-        Assert.assertEquals(getDriver().findElement(By.id("description")).getText(),
-                "This is project description");
+        Assert.assertEquals(errorMessage, "A name cannot end with ‘.’");
+    }
 
+    @Test
+    public void testErrorEmptyNameCreation() {
+
+        String errorMessage = new HomePage(getDriver())
+                .clickNewItem()
+                .selectFolderType()
+                .getEmptyNameMessage();
+
+        Assert.assertEquals(errorMessage, "» This field cannot be empty, please enter a valid name");
     }
 
     @Ignore
-    @Test
-    public void openBuildHistoryByChevron() {
+    @Test(dependsOnMethods = "testOpenBuildHistoryByChevron")
+    public void testErrorDuplicateNameCreation() {
 
-        createAndNameNewItem(FIRST_FOLDER_NAME);
-        TestUtils.scrollToBottom(getDriver());
-        selectItemTypeAndSave(ItemType.FOLDER);
-        submit();
-        goToDashboard();
+        String errorMessage = new HomePage(getDriver())
+                .clickNewItem().enterItemName(FIRST_FOLDER_NAME)
+                .getInvalidNameMessage();
 
-        selectFolderMenuByChevron(FIRST_FOLDER_NAME, FolderMenu.NEW_ITEM);
-        nameItemType(FREESTYLE_PROJECT_NAME);
-        selectItemTypeAndSave(ItemType.FREESTYLE_PROJECT);
-
-        TestUtils.scrollToBottom(getDriver());
-        clickButtonByName("Add build step");
-        clickButtonByName("Execute Windows batch command");
-        getDriver().findElement(By.xpath("//textarea[@name='command']"))
-                .sendKeys("echo 'Hello world!'");
-        submit();
-
-        goToDashboard();
-        openFolderByName(FIRST_FOLDER_NAME);
-        runJob(FREESTYLE_PROJECT_NAME);
-
-        goToDashboard();
-        selectFolderMenuByChevron(FIRST_FOLDER_NAME, FolderMenu.BUILD_HISTORY);
-
-        Assert.assertEquals(getDriver().findElement(By.xpath("//a[@class='jenkins-table__link model-link']/span")).getText(),
-                "%s » %s".formatted(FIRST_FOLDER_NAME, FREESTYLE_PROJECT_NAME));
-
+        Assert.assertEquals(errorMessage, "» A job already exists with the name ‘Freestyle projects’");
     }
+
+
 }

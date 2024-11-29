@@ -1,282 +1,384 @@
 package school.redrover;
 
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.interactions.Actions;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.Assert;
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
+import school.redrover.page.HomePage;
+import school.redrover.page.PipelineProjectPage;
 import school.redrover.runner.BaseTest;
+import school.redrover.runner.TestUtils;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class PipelineProjectTest extends BaseTest {
 
-    private static final String PIPELINE_NAME = "Pipeline_name";
-    private static final String NEW_PROJECT_NAME = "New_Pipeline_name";
+    private static final String PIPELINE_NAME = "PipelineName";
+    private static final String NEW_PROJECT_NAME = "NewPipelineName";
 
-    private void createProjectViaSidebarAndReturnHome(String name) {
-        getDriver().findElement(By.xpath("//a[@href='/view/all/newJob']")).click();
+    @DataProvider
+    public Object[][] providerUnsafeCharacters() {
 
-        getDriver().findElement(By.xpath("//input[@name='name']")).sendKeys(name);
-        getDriver().findElement(By.xpath("//li[@class='org_jenkinsci_plugins_workflow_job_WorkflowJob']")).click();
-        getDriver().findElement(By.xpath("//button[@type='submit']")).click();
+        return new Object[][]{
+                {"\\"}, {"]"}, {":"}, {"#"}, {"&"}, {"?"}, {"!"}, {"@"},
+                {"$"}, {"%"}, {"^"}, {"*"}, {"|"}, {"/"}, {"<"}, {">"},
+                {"["}, {";"}
+        };
 
-        getDriver().findElement(By.xpath("//button[@name='Submit']")).click();
-
-        getDriver().findElement(By.id("jenkins-home-link")).click();
-    }
-
-    private void returnToHomePage() {
-        getDriver().findElement(By.id("jenkins-home-link")).click();
-    }
-
-    private void clickProjectByName(String name) {
-        getDriver().findElement(By.xpath("//td/a[@href='job/" + name + "/']")).click();
-    }
-
-    private List<String> getProjectList() {
-
-        return getDriver().findElements(By.xpath("//td/a[contains(@href,'job/')]"))
-                .stream()
-                .map(WebElement::getText)
-                .toList();
-    }
-
-    private void clickGreenTriangleToScheduleBuildForProject(String name) {
-        getWait10().until(ExpectedConditions.elementToBeClickable(
-                By.xpath("//td[@class='jenkins-table__cell--tight']//a[@tooltip='Schedule a Build for " + name + "']"))).click();
-
-        getWait10().until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@class='tippy-content']")));
     }
 
     @Test
     public void testCreateProjectWithValidNameViaSidebar() {
-        createProjectViaSidebarAndReturnHome(PIPELINE_NAME);
+        List<String> itemList = new HomePage(getDriver())
+                .clickNewItem()
+                .enterItemName(PIPELINE_NAME)
+                .selectPipelineAndClickOk()
+                .clickSaveButton()
+                .gotoHomePage()
+                .getItemList();
 
-        Assert.assertListContainsObject(getProjectList(), PIPELINE_NAME, "Project is not found");
+        Assert.assertListContainsObject(
+                itemList,
+                PIPELINE_NAME,
+                "Project is not created");
     }
 
-    @Test
+    @Test(dependsOnMethods = "testCreateProjectWithValidNameViaSidebar")
     public void testVerifySidebarOptionsOnProjectPage() {
-        final List<String> expectedSidebarOptionList =
-                List.of("Status", "Changes", "Build Now", "Configure", "Delete Pipeline", "Stages", "Rename", "Pipeline Syntax");
+        List<String> actualSidebarOptionList = new HomePage(getDriver())
+                .openPipelineProject(PIPELINE_NAME)
+                .getSidebarOptionList();
 
-        createProjectViaSidebarAndReturnHome(PIPELINE_NAME);
-        clickProjectByName(PIPELINE_NAME);
-
-        List<String> actualSideBarOptionList = getWait5().until(ExpectedConditions.visibilityOfAllElementsLocatedBy(
-                By.xpath("//div[@class='task ']//span[2]"))).stream().map(WebElement::getText).toList();
-
-        Assert.assertEquals(actualSideBarOptionList, expectedSidebarOptionList,
+        Assert.assertEquals(
+                actualSidebarOptionList,
+                List.of("Status", "Changes", "Build Now", "Configure", "Delete Pipeline", "Stages", "Rename", "Pipeline Syntax"),
                 "Sidebar options on Project page do not match expected list.");
     }
 
-    @Test
+    @Test(dependsOnMethods = "testVerifySidebarOptionsOnProjectPage")
     public void testVerifySidebarOptionsOnConfigurationPage() {
-        final List<String> expectedSidebarOptionList =
-                List.of("General", "Advanced Project Options", "Pipeline");
+        List<String> actualSidebarOptionList = new HomePage(getDriver())
+                .openPipelineProject(PIPELINE_NAME)
+                .clickConfigureSidebar(PIPELINE_NAME)
+                .getSidebarConfigurationOption();
 
-        createProjectViaSidebarAndReturnHome(PIPELINE_NAME);
-        clickProjectByName(PIPELINE_NAME);
-
-        getWait2().until(ExpectedConditions.elementToBeClickable(
-                By.xpath("//a[@href='/job/" + PIPELINE_NAME + "/configure']"))).click();
-
-        List<String> actualSideBarOptionList = getWait2().until(ExpectedConditions.visibilityOfAllElementsLocatedBy(
-                By.xpath("//div[@class='task']//span[2]"))).stream().map(WebElement::getText).toList();
-
-        Assert.assertEquals(actualSideBarOptionList, expectedSidebarOptionList,
+        Assert.assertEquals(
+                actualSidebarOptionList,
+                List.of("General", "Advanced Project Options", "Pipeline"),
                 "Sidebar options on Configuration page do not match expected list.");
     }
 
-    @Test
+    @Test(dependsOnMethods = "testVerifySidebarOptionsOnConfigurationPage")
+    public void testVerifyCheckboxTooltipsContainCorrectText() {
+        Map<String, String> labelToTooltipTextMap = new HomePage(getDriver())
+                .openPipelineProject(PIPELINE_NAME)
+                .clickConfigureSidebar(PIPELINE_NAME)
+                .getCheckboxWithTooltipTextMap();
+
+        labelToTooltipTextMap.forEach((checkbox, tooltip) ->
+                Assert.assertTrue(
+                        tooltip.contains("Help for feature: " + checkbox),
+                        "Tooltip for feature '" + checkbox + "' does not contain the correct text"));
+    }
+
+    @Test(dependsOnMethods = "testVerifyCheckboxTooltipsContainCorrectText")
     public void testAddDescriptionToProject() {
-        final String expectedProjectDescription = "Certain project description";
+        final String expectedProjectDescription = "Certain_project_description";
 
-        createProjectViaSidebarAndReturnHome(PIPELINE_NAME);
-        clickProjectByName(PIPELINE_NAME);
+        String actualDescription = new HomePage(getDriver())
+                .openPipelineProject(PIPELINE_NAME)
+                .editDescription(expectedProjectDescription)
+                .getDescription();
 
-        getDriver().findElement(By.id("description-link")).click();
-
-        getDriver().findElement(By.xpath("//textarea[@name='description']")).sendKeys(expectedProjectDescription);
-        getDriver().findElement(By.xpath("//button[@name='Submit']")).click();
-
-        String actualDescription = getDriver().findElement(By.id("description")).getText();
-
-        Assert.assertEquals(actualDescription, expectedProjectDescription,
+        Assert.assertEquals(
+                actualDescription,
+                expectedProjectDescription,
                 "Expected description for the project is not found");
     }
 
-    @Test
+    @Test(dependsOnMethods = "testAddDescriptionToProject")
     public void testGetWarningMessageWhenDisableProject() {
-        createProjectViaSidebarAndReturnHome(PIPELINE_NAME);
-        clickProjectByName(PIPELINE_NAME);
+        PipelineProjectPage pipelineProjectPage = new HomePage(getDriver())
+                .openPipelineProject(PIPELINE_NAME)
+                .clickConfigureSidebar(PIPELINE_NAME)
+                .clickToggleToDisableOrEnableProject()
+                .clickSaveButton();
 
-        getWait2().until(ExpectedConditions.elementToBeClickable(
-                By.xpath("//a[@href='/job/" + PIPELINE_NAME + "/configure']"))).click();
-        getWait5().until(ExpectedConditions.elementToBeClickable(
-                By.xpath("//label[@data-title='Disabled']"))).click();
-        getDriver().findElement(By.xpath("//button[@name='Submit']")).click();
-
-        String actualWarningMessage = getWait5().until(ExpectedConditions.visibilityOfElementLocated(
-                By.xpath("//form[@id='enable-project']"))).getText().split("\n")[0];
-        String buttonText = getWait2().until(ExpectedConditions.visibilityOfElementLocated(
-                By.xpath("//form[@id='enable-project']/button[@name='Submit']"))).getText();
-
-        Assert.assertEquals(actualWarningMessage, "This project is currently disabled");
-        Assert.assertEquals(buttonText, "Enable");
+        Assert.assertEquals(
+                pipelineProjectPage.getWarningDisabledMessage(),
+                "This project is currently disabled");
+        Assert.assertEquals(
+                pipelineProjectPage.getStatusButtonText(),
+                "Enable");
     }
 
-    @Test
+    @Test(dependsOnMethods = "testGetWarningMessageWhenDisableProject")
     public void testDisableProject() {
-        createProjectViaSidebarAndReturnHome(PIPELINE_NAME);
-        clickProjectByName(PIPELINE_NAME);
+        HomePage homePage = new HomePage(getDriver());
 
-        getWait2().until(ExpectedConditions.elementToBeClickable(
-                By.xpath("//a[@href='/job/" + PIPELINE_NAME + "/configure']"))).click();
-        getWait5().until(ExpectedConditions.elementToBeClickable(
-                By.xpath("//label[@data-title='Disabled']"))).click();
-        getDriver().findElement(By.xpath("//button[@name='Submit']")).click();
-
-        returnToHomePage();
-
-        WebElement disableCircleSign = getWait5().until(ExpectedConditions.visibilityOfElementLocated(
-                By.xpath("//tr[@id='job_Pipeline_name']//*[@tooltip='Disabled']")));
-
-        boolean isGreenScheduleBuildTrianglePresent = !getDriver().findElements(
-                        By.xpath("//td[@class='jenkins-table__cell--tight']//a[@tooltip='Schedule a Build for " + PIPELINE_NAME + "']"))
-                .isEmpty();
-
-        Assert.assertTrue(disableCircleSign.isDisplayed());
-        Assert.assertFalse(isGreenScheduleBuildTrianglePresent);
+        Assert.assertTrue(
+                homePage.isDisableCircleSignPresent(PIPELINE_NAME));
+        Assert.assertFalse(
+                homePage.isGreenScheduleBuildTrianglePresent(PIPELINE_NAME));
     }
 
     @Test(dependsOnMethods = "testDisableProject")
     public void testEnableProject() {
-        clickProjectByName(PIPELINE_NAME);
+        boolean isGreenBuildButtonPresent = new HomePage(getDriver())
+                .openPipelineProject(PIPELINE_NAME)
+                .clickEnableButton()
+                .gotoHomePage()
+                .isGreenScheduleBuildTrianglePresent(PIPELINE_NAME);
 
-        getWait2().until(ExpectedConditions.elementToBeClickable(By.xpath("//button[@formNoValidate='formNoValidate']"))).click();
-        returnToHomePage();
-
-        WebElement greenBuildButton = getWait2().until(ExpectedConditions.elementToBeClickable(
-                By.xpath("//td[@class='jenkins-table__cell--tight']//a[@tooltip='Schedule a Build for " + PIPELINE_NAME + "']")));
-
-        Assert.assertTrue(greenBuildButton.isEnabled());
-    }
-
-    @Test
-    public void testGetSuccessTooltipDisplayedWhenHoverOverGreenMark() {
-        createProjectViaSidebarAndReturnHome(PIPELINE_NAME);
-        clickGreenTriangleToScheduleBuildForProject(PIPELINE_NAME);
-        clickProjectByName(PIPELINE_NAME);
-
-        new Actions(getDriver())
-                .moveToElement(getWait10().until(ExpectedConditions.visibilityOfElementLocated(
-                        By.xpath("//*[@title='Success']"))))
-                .perform();
-
-        String greenMarkTooltip = getWait10().until(ExpectedConditions.visibilityOfElementLocated(
-                By.xpath("//div[@class='tippy-content']"))).getText();
-
-        Assert.assertEquals(greenMarkTooltip, "Success");
+        Assert.assertTrue(
+                isGreenBuildButtonPresent,
+                "Green build button is not displayed for the project");
     }
 
     @Test
     public void testGetPermalinksInformationUponSuccessfulBuild() {
-        final List<String> expectedPermalinkList = List.of(
-                "Last build",
-                "Last stable build",
-                "Last successful build",
-                "Last completed build");
+        TestUtils.createPipeline(this, PIPELINE_NAME);
 
-        createProjectViaSidebarAndReturnHome(PIPELINE_NAME);
-        clickGreenTriangleToScheduleBuildForProject(PIPELINE_NAME);
-        clickProjectByName(PIPELINE_NAME);
+        List<String> permalinkList = new HomePage(getDriver())
+                .clickScheduleBuild(PIPELINE_NAME)
+                .openPipelineProject(PIPELINE_NAME)
+                .getPermalinkList();
 
-        List<String> actualPermalinkList = getWait10().until(ExpectedConditions.visibilityOfAllElementsLocatedBy(
-                        By.xpath("//li[@class='permalink-item']")))
-                .stream()
-                .map(WebElement::getText)
-                .map(string -> string.split("\\(#")[0].trim())
-                .toList();
-
-        Assert.assertTrue(actualPermalinkList.containsAll(expectedPermalinkList),
+        Assert.assertTrue(
+                permalinkList.containsAll(
+                        List.of(
+                                "Last build",
+                                "Last stable build",
+                                "Last successful build",
+                                "Last completed build")),
                 "Not all expected permalinks are present in the actual permalinks list.");
     }
 
-    @Test
-    public void testVerifyCheckboxTooltipsContainCorrectText() {
-        getDriver().findElement(By.xpath("//a[@href='/view/all/newJob']")).click();
-        getDriver().findElement(By.xpath("//input[@name='name']")).sendKeys(PIPELINE_NAME);
-        getDriver().findElement(By.xpath("//li[@class='org_jenkinsci_plugins_workflow_job_WorkflowJob']")).click();
-        getDriver().findElement(By.xpath("//button[@type='submit']")).click();
+    @Test(dependsOnMethods = "testGetPermalinksInformationUponSuccessfulBuild")
+    public void testGetSuccessTooltipDisplayedWhenHoverOverGreenMark() {
+        String greenMarkTooltip = new HomePage(getDriver())
+                .openPipelineProject(PIPELINE_NAME)
+                .hoverOverBuildStatusMark()
+                .getStatusMarkTooltipText();
 
-        List<WebElement> checkboxWithQuestionMarkList = getDriver().findElements(
-                By.xpath("//div[@hashelp = 'true']//label[@class='attach-previous ']"));
-        List<WebElement> questionMarkList = getDriver().findElements(
-                By.xpath("//div[@hashelp = 'true']//a[@class='jenkins-help-button']"));
-
-        Map<String, String> labelToTooltipTextMap = new HashMap<>();
-        for (int i = 0; i < checkboxWithQuestionMarkList.size(); i++) {
-            String checkboxText = checkboxWithQuestionMarkList.get(i).getText();
-            String tooltipText = questionMarkList.get(i).getAttribute("tooltip");
-            labelToTooltipTextMap.put(checkboxText, tooltipText);
-        }
-
-        labelToTooltipTextMap.forEach((checkbox, tooltip) ->
-                Assert.assertTrue(tooltip.contains("Help for feature: " + checkbox),
-                        "Tooltip for feature '" + checkbox + "' does not contain the correct text"));
+        Assert.assertEquals(
+                greenMarkTooltip,
+                "Success");
     }
 
-    @Test
+    @Test(dependsOnMethods = "testGetSuccessTooltipDisplayedWhenHoverOverGreenMark")
     public void testKeepBuildForever() {
-        createProjectViaSidebarAndReturnHome(PIPELINE_NAME);
-        clickGreenTriangleToScheduleBuildForProject(PIPELINE_NAME);
-        clickProjectByName(PIPELINE_NAME);
+        boolean isDeleteOptionPresent = new HomePage(getDriver())
+                .openPipelineProject(PIPELINE_NAME)
+                .clickBuildStatusMark()
+                .clickKeepThisBuildForever()
+                .isDeleteBuildOptionSidebarPresent(PIPELINE_NAME);
 
-        getWait10().until(ExpectedConditions.elementToBeClickable(By.xpath("//*[@title='Success']"))).click();
-        getWait10().until(ExpectedConditions.elementToBeClickable(By.xpath("//button[@name='Submit']"))).click();
-
-        List<WebElement> sidebarTaskList = getWait10().until(ExpectedConditions.visibilityOfAllElementsLocatedBy(
-                By.xpath("//div[@id='tasks']/div")));
-
-        boolean isDeleteBuildOptionPresent = sidebarTaskList.stream()
-                .anyMatch(element -> element.getAttribute("href") != null &&
-                        element.getAttribute("href").contains("/job/" + PIPELINE_NAME + "/1/confirmDelete"));
-
-        Assert.assertFalse(isDeleteBuildOptionPresent,
+        Assert.assertFalse(
+                isDeleteOptionPresent,
                 "Delete build sidebar option is displayed, but it should not be.");
     }
 
-    @Test
+    @Test(dependsOnMethods = "testEnableProject")
     public void testRenameProjectViaSidebar() {
-        createProjectViaSidebarAndReturnHome(PIPELINE_NAME);
-        clickProjectByName(PIPELINE_NAME);
+        List<String> projectList = new HomePage(getDriver())
+                .openPipelineProject(PIPELINE_NAME)
+                .clickRenameSidebar(PIPELINE_NAME)
+                .cleanInputFieldAndTypeName(NEW_PROJECT_NAME)
+                .clickRenameButton()
+                .gotoHomePage()
+                .getItemList();
 
-        getDriver().findElement(By.xpath("//a[@href='/job/" + PIPELINE_NAME + "/confirm-rename']")).click();
-
-        getDriver().findElement(By.xpath("//input[@checkdependson='newName']")).clear();
-        getDriver().findElement(By.xpath("//input[@checkdependson='newName']")).sendKeys(NEW_PROJECT_NAME);
-        getDriver().findElement(By.xpath("//button[@name='Submit']")).click();
-
-        returnToHomePage();
-
-        Assert.assertListContainsObject(getProjectList(), NEW_PROJECT_NAME,
+        Assert.assertListContainsObject(
+                projectList,
+                NEW_PROJECT_NAME,
                 "Project is not renamed");
     }
 
-    @Test
+    @Test(dependsOnMethods = "testRenameProjectViaSidebar")
     public void testDeleteProjectViaSidebar() {
-        createProjectViaSidebarAndReturnHome(PIPELINE_NAME);
-        clickProjectByName(PIPELINE_NAME);
+        List<String> projectList = new HomePage(getDriver())
+                .openPipelineProject(NEW_PROJECT_NAME)
+                .clickDeletePipelineSidebarAndConfirmDeletion()
+                .getItemList();
 
-        getDriver().findElement(By.xpath("//a[@data-title='Delete Pipeline']")).click();
-        getDriver().findElement(By.xpath("//button[@data-id='ok']")).click();
-
-        Assert.assertListNotContainsObject(getProjectList(), PIPELINE_NAME,
+        Assert.assertListNotContainsObject(
+                projectList,
+                NEW_PROJECT_NAME,
                 "Project is not deleted");
+    }
+
+    @Test
+    public void testDeleteViaChevron() {
+        List<String> projectList = new HomePage(getDriver())
+                .clickNewItem()
+                .enterItemName(PIPELINE_NAME)
+                .selectPipelineAndClickOk()
+                .clickSaveButton()
+                .gotoHomePage()
+                .selectDeleteFromItemMenu(PIPELINE_NAME)
+                .clickYesForConfirmDelete()
+                .getItemList();
+
+        Assert.assertListNotContainsObject(projectList, PIPELINE_NAME, "Project is not deleted");
+    }
+
+    @Test
+    public void testCreateWithEmptyName() {
+        String emptyNameMessage = new HomePage(getDriver())
+                .clickNewItem()
+                .enterItemName("")
+                .selectPipeline()
+                .getEmptyNameMessage();
+
+        Assert.assertEquals(emptyNameMessage, "» This field cannot be empty, please enter a valid name");
+    }
+
+    @Test
+    public void testCreateWithDuplicateName() {
+        String errorMessage = new HomePage(getDriver()).clickNewItem()
+                .enterItemName(PIPELINE_NAME)
+                .selectPipelineAndClickOk()
+                .clickSaveButton()
+                .gotoHomePage()
+                .clickNewItem()
+                .enterItemName(PIPELINE_NAME)
+                .selectPipeline()
+                .getErrorMessage();
+
+        Assert.assertEquals(errorMessage, "» A job already exists with the name ‘%s’".formatted(PIPELINE_NAME));
+    }
+
+    @Test(dataProvider = "providerUnsafeCharacters")
+    public void testCreateWithUnsafeCharactersInName(String unsafeCharacter) {
+        String invalidNameMessage = new HomePage(getDriver())
+                .clickNewItem()
+                .enterItemName(unsafeCharacter)
+                .selectPipeline()
+                .getInvalidNameMessage();
+
+        Assert.assertEquals(invalidNameMessage, "» ‘%s’ is an unsafe character".formatted(unsafeCharacter));
+    }
+
+    @Test()
+    public void testRename() {
+        PipelineProjectPage projectPage = new HomePage(getDriver())
+                .clickNewItem()
+                .enterItemName(PIPELINE_NAME)
+                .selectPipelineAndClickOk()
+                .clickSaveButton()
+                .gotoHomePage()
+                .clickOnPipelineName(PIPELINE_NAME)
+                .clickRenameSidebar(PIPELINE_NAME)
+                .cleanInputFieldAndTypeName(NEW_PROJECT_NAME)
+                .clickRenameButton();
+
+        Assert.assertEquals(projectPage.getTitle(), NEW_PROJECT_NAME);
+        Assert.assertEquals(projectPage.getProjectNameBreadcrumb(),NEW_PROJECT_NAME);
+    }
+
+    @Test()
+    public void testWarningMessageOnRenameProjectPage() {
+        String actualWarningMessage = new HomePage(getDriver())
+                .clickNewItem()
+                .enterItemName(PIPELINE_NAME)
+                .selectPipelineAndClickOk()
+                .clickSaveButton()
+                .gotoHomePage()
+                .clickOnPipelineName(PIPELINE_NAME)
+                .clickRenameSidebar(PIPELINE_NAME)
+                .getWarningMessage();
+
+        Assert.assertEquals(actualWarningMessage, "The new name is the same as the current name.");
+    }
+
+    @Test
+    public void testRenameByChevronDashboard() {
+        PipelineProjectPage projectPage = new HomePage(getDriver())
+                .clickNewItem()
+                .enterItemName(PIPELINE_NAME)
+                .selectPipelineAndClickOk()
+                .clickSaveButton()
+                .gotoHomePage()
+                .goToPipelineRenamePageViaDropdown(PIPELINE_NAME)
+                .cleanInputFieldAndTypeName(NEW_PROJECT_NAME)
+                .clickRenameButton();
+
+        Assert.assertEquals(projectPage.getTitle(), NEW_PROJECT_NAME);
+        Assert.assertEquals(projectPage.getProjectNameBreadcrumb(), NEW_PROJECT_NAME);
+    }
+
+    @Test(dependsOnMethods = "testRenameByChevronDashboard")
+    public void testRenameByChevronDisplayedOnHomePageWithCorrectName() {
+        boolean isDisplayed = new HomePage(getDriver())
+                .getItemList()
+                .contains(NEW_PROJECT_NAME);
+
+        Assert.assertTrue(isDisplayed);
+    }
+
+    @Test()
+    public void testDeleteByChevronBreadcrumb() {
+        String welcomeTitle = new HomePage(getDriver())
+                .clickNewItem()
+                .enterItemName(PIPELINE_NAME)
+                .selectPipelineAndClickOk()
+                .gotoHomePage()
+                .openPipelineProject(PIPELINE_NAME)
+                .openDropDownMenuByChevronBreadcrumb(PIPELINE_NAME)
+                .clickDeletePipelineSidebarAndConfirmDeletion()
+                .getWelcomeTitle();
+
+        Assert.assertEquals(welcomeTitle, "Welcome to Jenkins!");
+    }
+
+    @Test
+    public void testPipelineDisabledTooltipOnHomePage() {
+        String tooltipValue = new HomePage(getDriver())
+                .clickNewItem()
+                .enterItemName(PIPELINE_NAME)
+                .selectPipelineAndClickOk()
+                .clickToggleToDisableOrEnableProject()
+                .clickSaveButton()
+                .gotoHomePage()
+                .getTooltipValue(PIPELINE_NAME);
+
+        Assert.assertEquals(tooltipValue, "Disabled");
+    }
+
+    @Test
+    public void testBuildWithValidPipelineScript() {
+        final String validPipelineScriptFile = "ValidPipelineScript.txt";
+        final String status = "Success";
+
+        String statusBuild = new HomePage(getDriver())
+                .clickNewItem()
+                .enterItemName(PIPELINE_NAME)
+                .selectPipelineAndClickOk()
+                .enterScriptFromFile(validPipelineScriptFile)
+                .clickSaveButton()
+                .gotoHomePage()
+                .clickBuildNowViaDropdown(PIPELINE_NAME)
+                .getStatusBuild(PIPELINE_NAME, status);
+
+        Assert.assertEquals(statusBuild, status);
+    }
+
+    @Test
+    public void testBuildWithInvalidPipelineScript() {
+        final String invalidPipelineScriptFile = "InvalidPipelineScript.txt";
+        final String status = "Failed";
+
+        String statusBuild = new HomePage(getDriver())
+                .clickNewItem()
+                .enterItemName(PIPELINE_NAME)
+                .selectPipelineAndClickOk()
+                .enterScriptFromFile(invalidPipelineScriptFile)
+                .clickSaveButton()
+                .gotoHomePage()
+                .clickBuildNowViaDropdown(PIPELINE_NAME)
+                .getStatusBuild(PIPELINE_NAME, status);
+
+        Assert.assertEquals(statusBuild, status);
     }
 }

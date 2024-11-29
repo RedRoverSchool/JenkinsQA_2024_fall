@@ -64,13 +64,6 @@ public class TestUtils {
                 .executeScript("arguments[0].dispatchEvent(new Event('click'));", element);
     }
 
-    public static void pasteTextWithJavaScript(WebDriver driver, WebElement element, String text) {
-        ((JavascriptExecutor) driver)
-                .executeScript("arguments[0].value = arguments[1];", element, text);
-        ((JavascriptExecutor) driver)
-                .executeScript("arguments[0].dispatchEvent(new Event('input', { bubbles: true }));", element);
-    }
-
     public static void scrollToBottom(WebDriver driver) {
         ((JavascriptExecutor) driver).executeScript("window.scrollTo(0, document.body.scrollHeight);");
     }
@@ -83,6 +76,7 @@ public class TestUtils {
         baseTest.getDriver().findElement(By.xpath("//button[@type='submit']")).click();
 
         baseTest.getDriver().findElement(By.xpath("//button[@name='Submit']")).click();
+        baseTest.getDriver().findElement(By.id("jenkins-home-link")).click();
     }
 
     public static void newItemsData(BaseTest baseTest, String itemName, String itemXpath) {
@@ -92,7 +86,14 @@ public class TestUtils {
         baseTest.getDriver().findElement(By.id("ok-button")).click();
     }
 
-    public static String readFileAndRefactoringAutoComplete(String fileName) {
+    public static void pasteTextWithJavaScript(WebDriver driver, WebElement element, String text) {
+        ((JavascriptExecutor) driver)
+                .executeScript("arguments[0].value = arguments[1];", element, text);
+        ((JavascriptExecutor) driver)
+                .executeScript("arguments[0].dispatchEvent(new Event('input', { bubbles: true }));", element);
+    }
+
+    public static String readFile(String fileName) {
         try (FileInputStream fileInputStream = new FileInputStream(Paths.get("test_data", fileName).toString())) {
             return new String(fileInputStream.readAllBytes(), StandardCharsets.UTF_8);
         } catch (IOException e) {
@@ -100,4 +101,6 @@ public class TestUtils {
             return null;
         }
     }
+
+
 }

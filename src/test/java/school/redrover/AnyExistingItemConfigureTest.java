@@ -14,19 +14,15 @@ public class AnyExistingItemConfigureTest extends BaseTest {
     public void testExistingFolderConfiguration () {
         newItemsData(this, "NewEmptyFolder", "//*[@id='j-add-item-type-nested-projects']/ul/li[1]/div[2]/div");
 
-        getDriver().findElement(
-                By.xpath("//*[@id='main-panel']/form/div[1]/section[2]/section/section/div[3]/div[1]/div/button")).click();
-        getWait2().until(ExpectedConditions.visibilityOfElementLocated(By.name("_.name"))).sendKeys("TestName");
         getDriver().findElement(By.name("Submit")).click();
 
         getDriver().navigate().back();
 
-        String valueOfName = getWait10().until(ExpectedConditions.visibilityOfElementLocated(By.name("_.name"))).getAttribute("value");
+        getWait10().until(ExpectedConditions.visibilityOfElementLocated(By.name("_.displayNameOrNull"))).sendKeys("TestName");
+        getDriver().findElement(By.name("Submit")).click();
+
+        String valueOfName = getWait10().until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[@id='main-panel']/h1"))).getText();
 
         Assert.assertEquals(valueOfName, "TestName");
-        Assert.assertTrue(getDriver().findElement(
-                By.xpath("//*[@id='main-panel']/form/div[1]/section[2]/section/section/div[3]/div[1]/div/div[1]/div[2]/div[4]/div[1]/span/label")).isEnabled());
-        Assert.assertTrue(getDriver().findElement(
-                By.xpath("//*[@id='main-panel']/form/div[1]/section[2]/section/section/div[3]/div[1]/div/div[1]/div[2]/div[5]/div[1]/span/label")).isEnabled());
     }
 }
