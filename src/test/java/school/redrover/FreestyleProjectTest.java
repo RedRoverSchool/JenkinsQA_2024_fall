@@ -10,6 +10,8 @@ public class FreestyleProjectTest extends BaseTest {
 
     private static final String PROJECT_NAME = "MyFreestyleProject";
 
+    private static final String DESCRIPTION = "Bla-bla-bla project";
+
     @Test
     public void testCreateFreestyleProjectWithEmptyName() {
         String emptyNameMessage = new HomePage(getDriver())
@@ -59,5 +61,18 @@ public class FreestyleProjectTest extends BaseTest {
                 .getProjectName();
 
         Assert.assertEquals(actualProjectName, PROJECT_NAME);
+    }
+
+    @Test(dependsOnMethods = "testCreateProjectViaSidebarMenu")
+    public void testEditDescriptionOnProjectPage() {
+        final String newDescription = "New " + DESCRIPTION;
+
+        String actualDescription = new HomePage(getDriver())
+                .openFreestyleProject(PROJECT_NAME)
+                .clearDescription()
+                .editDescription(newDescription)
+                .getDescription();
+
+        Assert.assertEquals(actualDescription, newDescription);
     }
 }
