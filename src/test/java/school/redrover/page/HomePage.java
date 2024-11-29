@@ -20,6 +20,7 @@ public class HomePage extends BasePage {
 
     By listOfProjects = By.xpath("//a[@class = 'jenkins-table__link model-link inside'] /span");
     private final By GET_PROJECT_TYPE = By.xpath("//div[contains(@class,'jenkins-table__cell__button-wrapper')]");
+    By getNewJob = By.cssSelector(("[href$='/newJob']"));
 
     public HomePage createFreestyleProject(String name) {
         getDriver().findElement(By.xpath("//*[@href='/view/all/newJob']")).click();
@@ -124,7 +125,7 @@ public class HomePage extends BasePage {
     }
 
     public CreateNewItemPage clickNewItem() {
-        getDriver().findElement(By.cssSelector("[href$='/newJob']")).click();
+        getDriver().findElement(getNewJob) .click();
 
         return new CreateNewItemPage(getDriver());
     }
