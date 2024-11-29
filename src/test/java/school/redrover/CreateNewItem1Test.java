@@ -13,7 +13,7 @@ public class CreateNewItem1Test extends BaseTest {
     public void testWithButton() {
         String name = new HomePage(getDriver())
                 .createNewFolder(ITEM_NAME)
-                .getItemName();
+                .getItemName(ITEM_NAME);
 
         Assert.assertEquals(name, ITEM_NAME);
     }
@@ -22,7 +22,7 @@ public class CreateNewItem1Test extends BaseTest {
     public void testWithLinkInSidebar() {
         HomePage hp = new HomePage(getDriver());
         hp.createFreestyleProject(ITEM_NAME);
-        String name = hp.getItemName();
+        String name = hp.getItemName(ITEM_NAME);
 
         Assert.assertEquals(name, ITEM_NAME);
     }
