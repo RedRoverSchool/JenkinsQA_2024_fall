@@ -47,15 +47,15 @@ public class FreestyleProject5Test extends BaseTest {
 
     }
 
+    private final String EMPTY_NAME = "";
     @Test
     public void testCreateFreestyleProjectEmptyName() {
-        getDriver().findElement(By.xpath("//div[@id='tasks']//div[1]//span[1]//a[1]")).click();
-        getDriver().findElement(By.xpath("//*[@id=\"j-add-item-type-standalone-projects\"]/ul/li[1]")).click();
-
-        getDriver().findElement(By.xpath("//button[@id='ok-button']")).click();
-        Assert.assertEquals(getDriver()
-                .findElement(By.xpath("//*[@id=\"itemname-required\"]"))
-                .getText(), "» This field cannot be empty, please enter a valid name");
+        String errorMessage = new HomePage(getDriver())
+                .clickNewItem()
+                .enterItemName(EMPTY_NAME)
+                .selectFreestyleProject()
+                .getErrorMessage();
+        Assert.assertEquals(errorMessage,"» This field cannot be empty, please enter a valid name" );
 
     }
 
