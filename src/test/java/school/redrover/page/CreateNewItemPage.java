@@ -92,7 +92,7 @@ public class  CreateNewItemPage extends BasePage {
 
         return new OrganizationFolderConfigurationPage(getDriver());
     }
-  
+
     public String getInvalidNameMessage() {
         return getDriver().findElement(By.id("itemname-invalid")).getText();
     }
@@ -123,6 +123,7 @@ public class  CreateNewItemPage extends BasePage {
         return getWait5().until(ExpectedConditions.visibilityOfElementLocated(
                 By.xpath("//div[@class='add-item-name']/div[@class='input-validation-message']"))).getText();
     }
+
     public CreateNewItemPage choseMultiConfigurationProject() {
         getDriver().findElement(getMultiConfigurationProject).click();
 
@@ -135,4 +136,3 @@ public class  CreateNewItemPage extends BasePage {
         return new MultiConfigurationProjectPage(getDriver());
     }
 }
-
