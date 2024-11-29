@@ -12,11 +12,11 @@ import school.redrover.runner.BaseTest;
 
 public class OrganizationFolder3Test extends BaseTest {
 
-    String NAME_FOLDER = "Organization Folder";
-    String NAME = "Name Organization Folder";
-    String NEW_NAME = "New Name Organization Folder";
-    String DESCRIPTION = "Description Organization Folder";
-    String NEW_DESCRIPTION = "New Description Organization Folder";
+    private final String NAME_FOLDER = "Organization Folder";
+    private final String NAME = "Name Organization Folder";
+    private final String NEW_NAME = "New Name Organization Folder";
+    private final String DESCRIPTION = "Description Organization Folder";
+    private final String NEW_DESCRIPTION = "New Description Organization Folder";
 
     private void clickElement(By by) {
         getDriver().findElement(by).click();
@@ -55,7 +55,7 @@ public class OrganizationFolder3Test extends BaseTest {
         Assert.assertEquals(name, NAME);
     }
 
-    @Test(dependsOnMethods = {"testCreate", "testAddName"})
+    @Test(dependsOnMethods = {"testAddName"})
     public void testEditName() {
         goConfigure();
         getDriver().findElement(By.name("_.displayNameOrNull")).sendKeys(Keys.LEFT_CONTROL + "a");
@@ -74,7 +74,7 @@ public class OrganizationFolder3Test extends BaseTest {
         Assert.assertEquals(textElement(By.id("view-message")), DESCRIPTION);
     }
 
-    @Test(dependsOnMethods = {"testCreate", "testAddDescription"})
+    @Test(dependsOnMethods = {"testAddDescription"})
     public void testEditDescription() {
         goConfigure();
         getDriver().findElement(By.name("_.description")).sendKeys(Keys.LEFT_CONTROL + "a");
@@ -84,7 +84,7 @@ public class OrganizationFolder3Test extends BaseTest {
         Assert.assertEquals(textElement(By.id("view-message")), NEW_DESCRIPTION);
     }
 
-    @Test(dependsOnMethods = {"testAddDescription", "testEditDescription", "testAddName", "testEditName", "testCreate", "testConfigureTheProject"})
+    @Test(dependsOnMethods = {"testEditDescription", "testEditName"})
     public void testDelete() {
         clickElement(By.xpath("//td/a[@class='jenkins-table__link model-link inside']"));
         clickElement(By.xpath("//a[@data-title='Delete Organization Folder']"));
@@ -94,7 +94,7 @@ public class OrganizationFolder3Test extends BaseTest {
     }
 
 
-    @Test(dependsOnMethods = {"testCreate", "testAddName", "testAddDescription", "testEditName", "testEditDescription"})
+    @Test(dependsOnMethods = {"testAddName", "testAddDescription", "testEditName", "testEditDescription"})
     public void testConfigureTheProject() {
         goConfigure();
         getDriver().findElement(By.name("_.displayNameOrNull")).sendKeys(Keys.LEFT_CONTROL + "a");
