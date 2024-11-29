@@ -14,4 +14,7 @@ public class FreestyleProjectPage extends BaseProjectPage<FreestyleProjectPage> 
         return getDriver().findElement(By.tagName("h1")).getText();
     }
 
+
+
+
 }
