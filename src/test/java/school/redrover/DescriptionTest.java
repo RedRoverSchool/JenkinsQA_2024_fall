@@ -18,4 +18,15 @@ public class DescriptionTest extends BaseTest {
 
         Assert.assertEquals(descText, DESCRIPTION_TEXT);
     }
+
+    @Test
+    public void testEditDescription() {
+
+        String descriptionText = new HomePage(getDriver())
+                .crateDescription(DESCRIPTION_TEXT)
+                .crateDescription("123")
+                .getDescriptionText();
+
+        Assert.assertEquals(descriptionText, "123" + DESCRIPTION_TEXT);
+    }
 }
