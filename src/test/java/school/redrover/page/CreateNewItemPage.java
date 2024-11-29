@@ -12,6 +12,9 @@ public class  CreateNewItemPage extends BasePage {
         super(driver);
     }
 
+    By getMultiConfigurationProject = By.xpath("//li//span[text()='Multi-configuration project']");
+    By getSubmitButton = By.xpath("//button[@id = 'ok-button']");
+
     public CreateNewItemPage enterItemName(String name) {
         getDriver().findElement(By.id("name")).sendKeys(name);
 
@@ -119,6 +122,17 @@ public class  CreateNewItemPage extends BasePage {
     public String getErrorMessage() {
         return getWait5().until(ExpectedConditions.visibilityOfElementLocated(
                 By.xpath("//div[@class='add-item-name']/div[@class='input-validation-message']"))).getText();
+    }
+    public CreateNewItemPage choseMultiConfigurationProject() {
+        getDriver().findElement(getMultiConfigurationProject).click();
+
+        return this;
+    }
+
+    public MultiConfigurationProjectPage submitCreationProject(){
+        getDriver().findElement(getSubmitButton).click();
+
+        return new MultiConfigurationProjectPage(getDriver());
     }
 }
 
