@@ -396,4 +396,9 @@ public class HomePage extends BasePage {
         return getWait2().until(ExpectedConditions.visibilityOfElementLocated(
                 By.cssSelector("[href='/manage/about']"))).getText();
     }
+
+    public HomePage clickMyViewsButton() {
+       getDriver().findElement(By.linkText("My Views")).click();
+       return this;
+    }
 }
