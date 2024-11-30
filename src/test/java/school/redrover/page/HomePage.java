@@ -184,6 +184,12 @@ public class HomePage extends BasePage {
         return new BuildHistoryPage(getDriver());
     }
 
+    public HomePage selectBuildNowFromItemMenu(String itemName) {
+        selectMenuFromItemDropdown(itemName, "Build Now");
+
+        return this;
+    }
+
     public HomePage openDropdownViaChevron(String projectName) {
         new Actions(getDriver()).moveToElement(getDriver().findElement(By.xpath("//a[@href='job/%s/']/span".formatted(projectName))))
                 .pause(500)
@@ -299,14 +305,9 @@ public class HomePage extends BasePage {
         return new BuildHistoryPage(getDriver());
     }
 
-    public String getTooltipValue(String projectName) {
+    public String getStatusBuild(String projectName) {
 
         return getDriver().findElement(By.cssSelector("#job_" + projectName + "> td:nth-of-type(1) > div > svg")).getAttribute("tooltip");
-    }
-
-    public PipelineProjectPage clickOnPipelineName(String name) {
-        getDriver().findElement(By.xpath("//td/a/span[text() = '%s']/..".formatted(name))).click();
-        return new PipelineProjectPage(getDriver());
     }
 
     public PipelineRenamePage goToPipelineRenamePageViaDropdown(String name) {
@@ -329,16 +330,6 @@ public class HomePage extends BasePage {
 
     }
 
-    public HomePage clickBuildNowViaDropdown(String name) {
-        WebElement chevronButton = getWait5().until(ExpectedConditions.visibilityOfElementLocated(
-                By.xpath("//span[text()='%s']/following-sibling::button".formatted(name))));
-        TestUtils.moveAndClickWithJavaScript(getDriver(), chevronButton);
-
-        getWait10().until(ExpectedConditions.visibilityOfElementLocated(
-                By.xpath("//button[contains(@href, 'build')]"))).click();
-        return this;
-    }
-
     public HomePage refreshAfterBuild() {
         getWait10().until(ExpectedConditions.invisibilityOfElementLocated(
                 By.xpath("//a[contains(@class,'app-progress-bar')]")));
@@ -346,11 +337,6 @@ public class HomePage extends BasePage {
         getDriver().navigate().refresh();
 
         return this;
-    }
-
-    public String getStatusBuild(String name, String status) {
-        return getWait10().until(ExpectedConditions.visibilityOfElementLocated(
-                By.xpath("//tr[@id='job_%s']//*[name()='svg'][@tooltip='%s']".formatted(name, status)))).getAttribute("tooltip");
     }
 
     public String getTypeProject() {
