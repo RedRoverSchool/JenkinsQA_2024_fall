@@ -362,4 +362,10 @@ public class HomePage extends BasePage {
     public String getTypeProject() {
         return getDriver().findElement(GET_PROJECT_TYPE).getText();
     }
+
+    public NewViewPage clickCreateNewViewButton() {
+        getDriver().findElement(By.xpath("//a[@href='/newView']")).click();
+
+        return new NewViewPage(getDriver());
+    }
 }
