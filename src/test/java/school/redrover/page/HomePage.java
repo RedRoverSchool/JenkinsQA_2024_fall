@@ -375,4 +375,10 @@ public class HomePage extends BasePage {
     public String getNumberOfRuns() {
         return getDriver().findElement(By.xpath("//a[@class='jenkins-table__link jenkins-table__badge model-link inside']")).getText();
     }
+
+    public NewViewPage clickCreateNewViewButton() {
+        getDriver().findElement(By.xpath("//a[@href='/newView']")).click();
+
+        return new NewViewPage(getDriver());
+    }
 }
