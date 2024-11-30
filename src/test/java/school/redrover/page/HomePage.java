@@ -10,6 +10,7 @@ import school.redrover.page.base.BasePage;
 import school.redrover.runner.TestUtils;
 
 import java.util.List;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class HomePage extends BasePage {
@@ -21,6 +22,27 @@ public class HomePage extends BasePage {
     By listOfProjects = By.xpath("//a[@class = 'jenkins-table__link model-link inside'] /span");
     private final By GET_PROJECT_TYPE = By.xpath("//div[contains(@class,'jenkins-table__cell__button-wrapper')]");
     By getNewJob = By.cssSelector(("[href$='/newJob']"));
+
+    private <T> T openItem(String name, Function<WebDriver, T> page) {
+        getDriver().findElement(By.xpath("//td/a/span[text() = '%s']/..".formatted(name))).click();
+        return page.apply(getDriver());
+    }
+
+    public FreestyleProjectPage openFreestyleProject(String name) {
+        return openItem(name, FreestyleProjectPage::new);
+    }
+
+    public PipelineProjectPage openPipelineProject(String name) {
+        return openItem(name, PipelineProjectPage::new);
+    }
+
+    public MultiConfigurationProjectPage openMultiConfigurationProject(String name) {
+        return openItem(name, MultiConfigurationProjectPage::new);
+    }
+
+    public FolderProjectPage openFolder(String name) {
+        return openItem(name, FolderProjectPage::new);
+    }
 
     public HomePage createFreestyleProject(String name) {
         getDriver().findElement(By.xpath("//*[@href='/view/all/newJob']")).click();
@@ -94,30 +116,6 @@ public class HomePage extends BasePage {
         return getDriver().findElement(By.className("jenkins-table__link")).getText();
     }
 
-    public FolderProjectPage openFolder(String name) {
-        getDriver().findElement(By.xpath("//td/a/span[text() = '%s']/..".formatted(name))).click();
-
-        return new FolderProjectPage(getDriver());
-    }
-
-    public PipelineProjectPage openPipelineProject(String name) {
-        getDriver().findElement(By.xpath("//td/a[@href='job/%s/']".formatted(name))).click();
-
-        return new PipelineProjectPage(getDriver());
-    }
-
-    public MultiConfigurationProjectPage openMultiConfigurationProject(String name) {
-        getDriver().findElement(By.xpath("//td/a/span[text() = '%s']/..".formatted(name))).click();
-
-        return new MultiConfigurationProjectPage(getDriver());
-    }
-
-    public FreestyleProjectPage openFreestyleProject(String name) {
-        getDriver().findElement(By.xpath("//td/a/span[text() = '%s']/..".formatted(name))).click();
-
-        return new FreestyleProjectPage(getDriver());
-    }
-
     public ManageJenkinsPage openManageJenkinsPage() {
         getDriver().findElement(By.xpath("//a[@href = '/manage']")).click();
 
@@ -125,7 +123,7 @@ public class HomePage extends BasePage {
     }
 
     public CreateNewItemPage clickNewItem() {
-        getDriver().findElement(getNewJob) .click();
+        getDriver().findElement(getNewJob).click();
 
         return new CreateNewItemPage(getDriver());
     }
@@ -324,13 +322,6 @@ public class HomePage extends BasePage {
         return new PipelineRenamePage(getDriver());
     }
 
-    public HomePage clickDeletePipelineChevronDropdownMenu(String name) {
-        getWait5().until(ExpectedConditions.visibilityOfElementLocated(
-                By.xpath("//button[@href = '/job/%s/doDelete']".formatted(name)))).click();
-
-        return new HomePage(getDriver());
-    }
-
     public List<String> showCreatedProject() {
         List<WebElement> itemList = getDriver().findElements(listOfProjects);
 
@@ -398,7 +389,7 @@ public class HomePage extends BasePage {
     }
 
     public HomePage clickMyViewsButton() {
-       getDriver().findElement(By.linkText("My Views")).click();
-       return this;
+        getDriver().findElement(By.linkText("My Views")).click();
+        return this;
     }
 }
