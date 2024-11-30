@@ -33,21 +33,18 @@ public class VersionTest extends BaseTest {
 
     @Test
     public void testJenkinsVersionOnDashboard() {
-        HomePage homePage = new HomePage(getDriver());
-        String currentJenkinsVersion = homePage.clickOnJenkinsVersion();
+        String currentJenkinsVersion = new HomePage(getDriver())
+                .getJenkinsVersion();
 
         Assert.assertEquals(currentJenkinsVersion, EXPECTED_JENKINS_VERSION);
     }
 
-    @Test(dependsOnMethods = "testJenkinsVersionOnDashboard")
+    @Test
     public void testJenkinsLabelInDropdown() {
-        HomePage homePage = new HomePage(getDriver());
-        String actualButtonLabel = homePage.hoverOverAboutJenkins();
+        String actualButtonLabel = new HomePage(getDriver())
+                .clickJenkinsVersionButton()
+                .getAboutJenkinsDropdownLabelText();
 
-        if (actualButtonLabel.contains(ABOUT_JENKINS_LABEL)) {
-            Assert.assertEquals(actualButtonLabel, ABOUT_JENKINS_LABEL);
-        } else {
-            System.out.println("Cannot indicate an element");
-        }
+        Assert.assertEquals(actualButtonLabel, ABOUT_JENKINS_LABEL);
     }
 }

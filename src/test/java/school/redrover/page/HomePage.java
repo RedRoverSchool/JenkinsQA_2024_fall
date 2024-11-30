@@ -363,18 +363,20 @@ public class HomePage extends BasePage {
         return getDriver().findElement(GET_PROJECT_TYPE).getText();
     }
 
-    public String clickOnJenkinsVersion() {
-        WebElement jenkinsButton = getDriver().findElement(By.xpath("//button[@type='button']"));
-        new Actions(getDriver()).scrollToElement(jenkinsButton).click().perform();
+    public String getJenkinsVersion() {
 
-        return jenkinsButton.getText();
+        return getDriver().findElement(By.cssSelector("[class$='jenkins_ver']")).getText();
     }
 
-    public String hoverOverAboutJenkins() {
-        WebElement jenkinsDropdown = getWait2().until(ExpectedConditions.elementToBeClickable(
-                By.xpath("//*[@id='jenkins']")));
-        new Actions(getDriver()).moveToElement(jenkinsDropdown).perform();
+    public HomePage clickJenkinsVersionButton() {
+        getDriver().findElement(By.cssSelector("[class$='jenkins_ver']")).click();
 
-        return jenkinsDropdown.getText();
+        return this;
+    }
+
+    public String getAboutJenkinsDropdownLabelText() {
+
+        return getWait2().until(ExpectedConditions.visibilityOfElementLocated(
+                By.cssSelector("[href='/manage/about']"))).getText();
     }
 }
