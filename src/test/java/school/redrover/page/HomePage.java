@@ -362,4 +362,9 @@ public class HomePage extends BasePage {
     public String getTypeProject() {
         return getDriver().findElement(GET_PROJECT_TYPE).getText();
     }
+
+    public HomePage clickMyViewsButton() {
+       getDriver().findElement(By.linkText("My Views")).click();
+       return this;
+    }
 }
