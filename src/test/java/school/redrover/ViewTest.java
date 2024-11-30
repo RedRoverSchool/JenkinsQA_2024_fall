@@ -5,6 +5,8 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.Assert;
 import org.testng.annotations.Test;
+import school.redrover.page.HomePage;
+import school.redrover.page.NewViewPage;
 import school.redrover.runner.BaseTest;
 import school.redrover.runner.TestUtils;
 
@@ -143,5 +145,18 @@ public class ViewTest extends BaseTest {
 
         Assert.assertEquals(getColumnList().size(), 8);
         Assert.assertTrue(getColumnList().contains(columnName));
+    }
+
+    @Test
+    public void testCreateNewViewForm() {
+        NewViewPage newViewPage = new HomePage(getDriver())
+                                .createNewFolder("NewFolder")
+                                .gotoHomePage()
+                                .clickCreateNewViewButton();
+
+        Assert.assertTrue(newViewPage.getInputFromNameField().isEmpty(), "Input field should be empty.");
+        Assert.assertFalse(newViewPage.isRadioButtonListViewSelected(), "ListView radio button should not be selected.");
+        Assert.assertFalse(newViewPage.isRadioButtonMyViewSelected(), "MyView radio button should not be selected.");
+        Assert.assertFalse(newViewPage.isCreateButtonEnabled(), "Create button should be disabled.");
     }
 }
