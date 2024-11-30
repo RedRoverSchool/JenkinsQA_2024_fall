@@ -359,6 +359,7 @@ public class PipelineProjectTest extends BaseTest {
                 .clickSaveButton()
                 .gotoHomePage()
                 .clickBuildNowViaDropdown(PIPELINE_NAME)
+                .refreshAfterBuild()
                 .getStatusBuild(PIPELINE_NAME, status);
 
         Assert.assertEquals(statusBuild, status);
@@ -377,6 +378,7 @@ public class PipelineProjectTest extends BaseTest {
                 .clickSaveButton()
                 .gotoHomePage()
                 .clickBuildNowViaDropdown(PIPELINE_NAME)
+                .refreshAfterBuild()
                 .getStatusBuild(PIPELINE_NAME, status);
 
         Assert.assertEquals(statusBuild, status);
