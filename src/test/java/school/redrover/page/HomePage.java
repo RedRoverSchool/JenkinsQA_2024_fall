@@ -345,7 +345,10 @@ public class HomePage extends BasePage {
 
         getWait10().until(ExpectedConditions.visibilityOfElementLocated(
                 By.xpath("//button[contains(@href, 'build')]"))).click();
+        return this;
+    }
 
+    public HomePage refreshAfterBuild() {
         getWait10().until(ExpectedConditions.invisibilityOfElementLocated(
                 By.xpath("//a[contains(@class,'app-progress-bar')]")));
 
@@ -361,6 +364,16 @@ public class HomePage extends BasePage {
 
     public String getTypeProject() {
         return getDriver().findElement(GET_PROJECT_TYPE).getText();
+    }
+
+    public String getNotificationBarStatus() {
+
+        return getWait2().until(ExpectedConditions
+                .visibilityOfElementLocated(By.xpath("//div[@id = 'notification-bar']"))).getText();
+    }
+
+    public String getNumberOfRuns() {
+        return getDriver().findElement(By.xpath("//a[@class='jenkins-table__link jenkins-table__badge model-link inside']")).getText();
     }
 
     public NewViewPage clickCreateNewViewButton() {
