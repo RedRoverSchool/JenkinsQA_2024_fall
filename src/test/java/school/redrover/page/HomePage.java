@@ -381,4 +381,19 @@ public class HomePage extends BasePage {
 
         return new NewViewPage(getDriver());
     }
+
+    public String getJenkinsVersion() {
+        return getDriver().findElement(By.cssSelector("[class$='jenkins_ver']")).getText();
+    }
+
+    public HomePage clickJenkinsVersionButton() {
+        getDriver().findElement(By.cssSelector("[class$='jenkins_ver']")).click();
+
+        return this;
+    }
+
+    public String getAboutJenkinsDropdownLabelText() {
+        return getWait2().until(ExpectedConditions.visibilityOfElementLocated(
+                By.cssSelector("[href='/manage/about']"))).getText();
+    }
 }
