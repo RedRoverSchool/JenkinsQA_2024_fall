@@ -362,4 +362,19 @@ public class HomePage extends BasePage {
     public String getTypeProject() {
         return getDriver().findElement(GET_PROJECT_TYPE).getText();
     }
+
+    public String clickOnJenkinsVersion() {
+        WebElement jenkinsButton = getDriver().findElement(By.xpath("//button[@type='button']"));
+        new Actions(getDriver()).scrollToElement(jenkinsButton).click().perform();
+
+        return jenkinsButton.getText();
+    }
+
+    public String hoverOverAboutJenkins() {
+        WebElement jenkinsDropdown = getWait2().until(ExpectedConditions.elementToBeClickable(
+                By.xpath("//*[@id='jenkins']")));
+        new Actions(getDriver()).moveToElement(jenkinsDropdown).perform();
+
+        return jenkinsDropdown.getText();
+    }
 }
