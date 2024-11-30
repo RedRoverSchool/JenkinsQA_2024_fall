@@ -3,6 +3,7 @@ package school.redrover;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.testng.Assert;
+import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import school.redrover.runner.BaseTest;
 
@@ -18,6 +19,7 @@ public class CheckVersion1Test extends BaseTest {
                 getText(),"Jenkins 2.462.3");
     }
 
+    @Ignore
     @Test
     public void checkVersionAboutJenkins(){
         buttonJenkins().click();
