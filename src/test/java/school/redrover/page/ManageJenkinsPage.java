@@ -104,8 +104,9 @@ public class ManageJenkinsPage extends BasePage {
     }
 
     public CredentialsConfigurePage clickConfigureCredentialsItem() {
-        WebElement configureCredentialsItem = getWait5().until(ExpectedConditions
-                                                                   .visibilityOfElementLocated(By.cssSelector("a[href$='configureCredentials']")));
+        WebElement configureCredentialsItem = getWait5()
+                                                  .until(ExpectedConditions.visibilityOfElementLocated(
+                                                      By.cssSelector("a[href$='configureCredentials']")));
         configureCredentialsItem.click();
 
         return new CredentialsConfigurePage(getDriver());
