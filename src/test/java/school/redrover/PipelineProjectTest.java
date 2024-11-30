@@ -268,7 +268,7 @@ public class PipelineProjectTest extends BaseTest {
                 .selectPipelineAndClickOk()
                 .clickSaveButton()
                 .gotoHomePage()
-                .clickOnPipelineName(PIPELINE_NAME)
+                .openPipelineProject(PIPELINE_NAME)
                 .clickRenameSidebar(PIPELINE_NAME)
                 .cleanInputFieldAndTypeName(NEW_PROJECT_NAME)
                 .clickRenameButton();
@@ -285,7 +285,7 @@ public class PipelineProjectTest extends BaseTest {
                 .selectPipelineAndClickOk()
                 .clickSaveButton()
                 .gotoHomePage()
-                .clickOnPipelineName(PIPELINE_NAME)
+                .openPipelineProject(PIPELINE_NAME)
                 .clickRenameSidebar(PIPELINE_NAME)
                 .getWarningMessage();
 
@@ -341,7 +341,7 @@ public class PipelineProjectTest extends BaseTest {
                 .clickToggleToDisableOrEnableProject()
                 .clickSaveButton()
                 .gotoHomePage()
-                .getTooltipValue(PIPELINE_NAME);
+                .getStatusBuild(PIPELINE_NAME);
 
         Assert.assertEquals(tooltipValue, "Disabled");
     }
@@ -349,7 +349,6 @@ public class PipelineProjectTest extends BaseTest {
     @Test
     public void testBuildWithValidPipelineScript() {
         final String validPipelineScriptFile = "ValidPipelineScript.txt";
-        final String status = "Success";
 
         String statusBuild = new HomePage(getDriver())
                 .clickNewItem()
@@ -358,17 +357,16 @@ public class PipelineProjectTest extends BaseTest {
                 .enterScriptFromFile(validPipelineScriptFile)
                 .clickSaveButton()
                 .gotoHomePage()
-                .clickBuildNowViaDropdown(PIPELINE_NAME)
+                .selectBuildNowFromItemMenu(PIPELINE_NAME)
                 .refreshAfterBuild()
-                .getStatusBuild(PIPELINE_NAME, status);
+                .getStatusBuild(PIPELINE_NAME);
 
-        Assert.assertEquals(statusBuild, status);
+        Assert.assertEquals(statusBuild, "Success");
     }
 
     @Test
     public void testBuildWithInvalidPipelineScript() {
         final String invalidPipelineScriptFile = "InvalidPipelineScript.txt";
-        final String status = "Failed";
 
         String statusBuild = new HomePage(getDriver())
                 .clickNewItem()
@@ -377,10 +375,10 @@ public class PipelineProjectTest extends BaseTest {
                 .enterScriptFromFile(invalidPipelineScriptFile)
                 .clickSaveButton()
                 .gotoHomePage()
-                .clickBuildNowViaDropdown(PIPELINE_NAME)
+                .selectBuildNowFromItemMenu(PIPELINE_NAME)
                 .refreshAfterBuild()
-                .getStatusBuild(PIPELINE_NAME, status);
+                .getStatusBuild(PIPELINE_NAME);
 
-        Assert.assertEquals(statusBuild, status);
+        Assert.assertEquals(statusBuild, "Failed");
     }
 }
