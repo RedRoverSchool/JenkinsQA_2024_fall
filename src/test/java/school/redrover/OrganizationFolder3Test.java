@@ -12,11 +12,11 @@ import school.redrover.runner.BaseTest;
 
 public class OrganizationFolder3Test extends BaseTest {
 
-    private final String NAME_FOLDER = "Organization Folder";
-    private final String NAME = "Name Organization Folder";
-    private final String NEW_NAME = "New Name Organization Folder";
-    private final String DESCRIPTION = "Description Organization Folder";
-    private final String NEW_DESCRIPTION = "New Description Organization Folder";
+    private static final String NAME_FOLDER = "Organization Folder";
+    private static final String NAME = "Name Organization Folder";
+    private static final String NEW_NAME = "New Name Organization Folder";
+    private static final String DESCRIPTION = "Description Organization Folder";
+    private static final String NEW_DESCRIPTION = "New Description Organization Folder";
 
     private void clickElement(By by) {
         getDriver().findElement(by).click();

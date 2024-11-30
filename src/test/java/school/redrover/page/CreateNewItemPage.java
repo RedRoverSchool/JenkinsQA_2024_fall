@@ -14,7 +14,7 @@ public class CreateNewItemPage extends BasePage {
 
     By getMultiConfigurationProject = By.xpath("//li//span[text()='Multi-configuration project']");
     By getSubmitButton = By.xpath("//button[@id = 'ok-button']");
-    private final By GET_ORGANIZATION_FOLDER = By.xpath("//li[contains(@class,'jenkins_branch_OrganizationFolder')]");
+    private static final By GET_ORGANIZATION_FOLDER = By.xpath("//li[contains(@class,'jenkins_branch_OrganizationFolder')]");
 
     public CreateNewItemPage enterItemName(String name) {
         getDriver().findElement(By.id("name")).sendKeys(name);
@@ -115,9 +115,8 @@ public class CreateNewItemPage extends BasePage {
     }
 
     public CreateNewItemPage selectFreestyleProject() {
-        getWait10().until(ExpectedConditions.elementToBeClickable(
-                By.xpath(("//div[@id='items']//label/span[text()= 'Freestyle project']")))).click();
-        return new CreateNewItemPage(getDriver());
+        getDriver().findElement(By.xpath(("//span[text()= 'Freestyle project']"))).click();
+        return this;
     }
 
     public String getErrorMessage() {
