@@ -7,7 +7,7 @@ import school.redrover.runner.BaseTest;
 
 import java.util.List;
 
-public class PipelineProjectTemporary extends BaseTest {
+public class PipelineProject7Test extends BaseTest {
 
     final private String projectNane = "PipelineProject";
 
