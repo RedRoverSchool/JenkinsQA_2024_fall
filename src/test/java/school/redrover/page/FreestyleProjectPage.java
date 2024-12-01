@@ -2,6 +2,7 @@ package school.redrover.page;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import school.redrover.page.base.BaseProjectPage;
 
 public class FreestyleProjectPage extends BaseProjectPage<FreestyleProjectPage> {
@@ -22,4 +23,9 @@ public class FreestyleProjectPage extends BaseProjectPage<FreestyleProjectPage> 
         return new HomePage(getDriver());
     }
 
+    public FreestyleRenamePage clickRenameOnSidebar() {
+        getWait10().until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//span[text()='Rename']/.."))).click();
+
+        return new FreestyleRenamePage(getDriver());
+    }
 }
