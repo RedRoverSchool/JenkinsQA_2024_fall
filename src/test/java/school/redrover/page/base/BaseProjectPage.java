@@ -5,6 +5,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import school.redrover.page.CreateNewItemPage;
+import school.redrover.page.FreestyleConfigPage;
 
 import java.util.List;
 
@@ -36,6 +37,20 @@ public abstract class BaseProjectPage<Self extends BaseProjectPage<?>> extends B
         getDriver().findElement(By.name("Submit")).click();
 
         return (Self) this;
+    }
+
+    public Self renameProject (String newName) {
+        getWait10().until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("/html/body/div[2]/div[1]/div[1]/div[7]/span/a"))).click();
+        getWait10().until(ExpectedConditions.visibilityOfElementLocated(By.name("newName"))).clear();
+        getWait10().until(ExpectedConditions.visibilityOfElementLocated(By.name("newName"))).sendKeys(newName);
+        getDriver().findElement(By.name("Submit")).click();
+        return (Self) this;
+    }
+
+    public String getRenameWarningMessage () {
+        return getWait10().until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("/html/body/div[2]/div[2]/p"))).getText();
     }
 
     public String getDescription() {
