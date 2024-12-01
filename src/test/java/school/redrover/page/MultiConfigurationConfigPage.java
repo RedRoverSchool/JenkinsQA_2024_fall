@@ -5,11 +5,10 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.Select;
 import school.redrover.page.base.BaseConfigPage;
-import school.redrover.page.base.BaseProjectPage;
 
 import java.util.List;
 
-public class MultiConfigurationConfigPage extends BaseConfigPage {
+public class MultiConfigurationConfigPage extends BaseConfigPage<MultiConfigurationConfigPage, MultiConfigurationProjectPage> {
 
     public MultiConfigurationConfigPage(WebDriver driver) {
         super(driver);
