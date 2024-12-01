@@ -13,7 +13,7 @@ public class DeleteMulticonfigurationProjectTest extends BaseTest {
 
     private static final String PROJECT_NAME = "MulticonfigurationProject";
 
-    private HomePage createProject(String projectName) {
+    private HomePage createMulticonfigurationProject(String projectName) {
         return new HomePage(getDriver())
                 .clickNewItem()
                 .enterItemName(projectName)
@@ -22,44 +22,39 @@ public class DeleteMulticonfigurationProjectTest extends BaseTest {
     }
 
     @Test
-    public void testPopupForDeletionOnProjectPage() {
-        createProject(PROJECT_NAME).openMultiConfigurationProject(PROJECT_NAME);
-
-        getDriver().findElement(
-                By.xpath("//div[@id='side-panel']//span[text()='Delete Multi-configuration project']")).click();
-
-        WebElement deletionPopup = getWait5().until(ExpectedConditions.visibilityOf(getDriver().findElement(
-                By.xpath("//footer/following-sibling::dialog"))));
+    public void testDeletionPopupAppearsOnProjectPage() {
+        WebElement deletionPopup = createMulticonfigurationProject(PROJECT_NAME)
+                .openMultiConfigurationProject(PROJECT_NAME)
+                .clickDeleteProject()
+                .getDeletionPopup();
 
         Assert.assertTrue(deletionPopup.isDisplayed());
     }
 
-    @Test(dependsOnMethods = "testPopupForDeletionOnProjectPage")
-    public void testPopupForDeletionOnMainPage() {
-        new HomePage(getDriver()).openDropdownViaChevron(PROJECT_NAME);
+    @Test(dependsOnMethods = "testDeletionPopupAppearsOnProjectPage")
+    public void testDeletionPopupAppearsOnMainPage() {
+        WebElement deletionPopup = new HomePage(getDriver())
+                .openDropdownViaChevron(PROJECT_NAME)
+                .clickDeleteInProjectDropdown(PROJECT_NAME)
+                .getDeletionPopup();
 
-        getDriver().findElement(By.xpath("//button[@href='/job/%s/doDelete']".formatted(PROJECT_NAME))).click();
-
-        WebElement deletionPopup = getWait5().until(ExpectedConditions.visibilityOf(getDriver().findElement(
-                By.xpath("//footer/following-sibling::dialog"))));
         Assert.assertTrue(deletionPopup.isDisplayed());
     }
 
-    @Test(dependsOnMethods = "testPopupForDeletionOnMainPage")
-    public void testPopupForDeletionOnMyViews() {
-        getDriver().findElement(By.xpath("//a[@href='/me/my-views']")).click();
+    @Test(dependsOnMethods = "testDeletionPopupAppearsOnMainPage")
+    public void testDeletionPopupAppearsOnMyViews() {
+        WebElement deletionPopup = new HomePage(getDriver())
+                .goToMyViews()
+                .openDropdownViaChevron(PROJECT_NAME)
+                .clickDeleteInProjectDropdown(PROJECT_NAME)
+                .getDeletionPopup();
 
-        new HomePage(getDriver()).openDropdownViaChevron(PROJECT_NAME);
-        getDriver().findElement(By.xpath("//button[@href='/me/my-views/view/all/job/%s/doDelete']".formatted(PROJECT_NAME))).click();
-
-        WebElement deletionPopup = getWait5().until(ExpectedConditions.visibilityOf(getDriver().findElement(
-                By.xpath("//footer/following-sibling::dialog"))));
         Assert.assertTrue(deletionPopup.isDisplayed());
     }
 
     @Test
     public void testDeleteProjectFromProjectPage() {
-        createProject(PROJECT_NAME).openMultiConfigurationProject(PROJECT_NAME);
+        createMulticonfigurationProject(PROJECT_NAME).openMultiConfigurationProject(PROJECT_NAME);
 
         getDriver().findElement(By.xpath("//*[contains(@class,'icon-edit-delete')]")).click();
 
@@ -74,7 +69,7 @@ public class DeleteMulticonfigurationProjectTest extends BaseTest {
 
     @Test
     public void testDeleteViaDropDownMenu() {
-        createProject(PROJECT_NAME);
+        createMulticonfigurationProject(PROJECT_NAME);
 
         new HomePage(getDriver()).openDropdownViaChevron(PROJECT_NAME);
 
@@ -87,7 +82,7 @@ public class DeleteMulticonfigurationProjectTest extends BaseTest {
 
     @Test
     public void testDeleteFromMyViewsPage() {
-        createProject(PROJECT_NAME);
+        createMulticonfigurationProject(PROJECT_NAME);
 
         getDriver().findElement(By.xpath("//a[@href='/me/my-views']")).click();
 
