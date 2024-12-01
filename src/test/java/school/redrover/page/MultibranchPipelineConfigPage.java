@@ -25,7 +25,7 @@ public class MultibranchPipelineConfigPage extends BaseConfigPage<MultibranchPip
     public MultibranchPipelineConfigPage clickPeriodicalScanningCheckbox() {
         WebElement periodicalScanningCheckbox =
                 getDriver().findElement(By.xpath("(//*[contains(@class,'group-start row-set-start')]/div/span)[1]"));
-        getWait2().until(isElementInViewPort(periodicalScanningCheckbox));
+        getWait5().until(isElementInViewPort(periodicalScanningCheckbox));
         periodicalScanningCheckbox.click();
 
         return this;
