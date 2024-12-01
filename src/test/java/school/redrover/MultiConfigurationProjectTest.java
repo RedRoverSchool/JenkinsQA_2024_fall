@@ -6,24 +6,17 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
-import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import school.redrover.page.HomePage;
 import school.redrover.runner.BaseTest;
 
-import java.time.Duration;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class MultiConfigurationProjectTest extends BaseTest {
     private static final String NAME_OF_PROJECT = "MTC project";
     private static final String DESCRIPTIONS = "Descriptions of project";
-
-    private void waitTimeUntilVisibilityElement(Integer time, WebElement element) {
-        new WebDriverWait(getDriver(), Duration.ofSeconds(time)).until(ExpectedConditions.visibilityOf(element));
-    }
 
     private void createMultiConfigProject() {
         getDriver().findElement(By.cssSelector("[href$='newJob']")).click();
@@ -37,11 +30,12 @@ public class MultiConfigurationProjectTest extends BaseTest {
         List<String> itemList = new HomePage(getDriver())
                 .clickNewItem()
                 .enterItemName(NAME_OF_PROJECT)
-                .choseMultiConfigurationProject()
-                .submitCreationProject()
-                .goHome()
-                .showCreatedProject();
-        Assert.assertTrue(itemList.contains(NAME_OF_PROJECT));
+                .selectMultiConfigurationAndClickOk()
+                .gotoHomePage()
+                .getItemList();
+
+        Assert.assertEquals(itemList.size(), 1);
+        Assert.assertEquals(itemList.get(0), NAME_OF_PROJECT);
     }
 
     @Test(description = " MultiConfigurationProjectTest | Add descriptions to existing project")
@@ -137,17 +131,14 @@ public class MultiConfigurationProjectTest extends BaseTest {
         Assert.assertEquals(actualSelectedItemName, "Month");
     }
 
-    @Ignore
-    @Test
+    @Test(dependsOnMethods = "testCreateProjectWithoutDescription")
     public void testCreateWithExistingName() {
-        testCreateProjectWithoutDescription();
         String errorMessage = new HomePage(getDriver())
                 .clickNewItem()
                 .enterItemName(NAME_OF_PROJECT)
-                .choseMultiConfigurationProject()
-                .saveInvalidData()
+                .selectFreestyleProject()
                 .getErrorMessage();
 
-        Assert.assertTrue(errorMessage.matches("A job already exists with the name ‘MTC project’"));
+        Assert.assertEquals(errorMessage, "» A job already exists with the name ‘%s’".formatted(NAME_OF_PROJECT));
     }
 }
