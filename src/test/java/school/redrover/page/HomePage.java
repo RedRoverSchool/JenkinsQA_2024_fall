@@ -379,6 +379,21 @@ public class HomePage extends BasePage {
         return this;
     }
 
+    public List<String> getViewList() {
+        return getWait2().until(ExpectedConditions.visibilityOfAllElementsLocatedBy(
+                        By.xpath("//div[@class='tab' and not(.//a[@tooltip='New View'])]")))
+                .stream()
+                .map(WebElement::getText)
+                .toList();
+    }
+
+    public ViewPage clickViewByName(String name) {
+        getWait2().until(ExpectedConditions.elementToBeClickable(
+                By.xpath("//a[@href='/view/%s/']".formatted(name)))).click();
+
+        return new ViewPage(getDriver());
+    }
+
     public HomePage clickDeleteInProjectDropdown(String projectName) {
         getDriver().findElement(By.xpath("//button[@href='/job/%s/doDelete']".formatted(projectName))).click();
         return this;
