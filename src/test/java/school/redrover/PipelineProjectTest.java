@@ -268,7 +268,7 @@ public class PipelineProjectTest extends BaseTest {
                 .selectPipelineAndClickOk()
                 .clickSaveButton()
                 .gotoHomePage()
-                .clickOnPipelineName(PIPELINE_NAME)
+                .openPipelineProject(PIPELINE_NAME)
                 .clickRenameSidebar(PIPELINE_NAME)
                 .cleanInputFieldAndTypeName(NEW_PROJECT_NAME)
                 .clickRenameButton();
@@ -285,7 +285,7 @@ public class PipelineProjectTest extends BaseTest {
                 .selectPipelineAndClickOk()
                 .clickSaveButton()
                 .gotoHomePage()
-                .clickOnPipelineName(PIPELINE_NAME)
+                .openPipelineProject(PIPELINE_NAME)
                 .clickRenameSidebar(PIPELINE_NAME)
                 .getWarningMessage();
 
@@ -341,8 +341,44 @@ public class PipelineProjectTest extends BaseTest {
                 .clickToggleToDisableOrEnableProject()
                 .clickSaveButton()
                 .gotoHomePage()
-                .getTooltipValue(PIPELINE_NAME);
+                .getStatusBuild(PIPELINE_NAME);
 
         Assert.assertEquals(tooltipValue, "Disabled");
+    }
+
+    @Test
+    public void testBuildWithValidPipelineScript() {
+        final String validPipelineScriptFile = "ValidPipelineScript.txt";
+
+        String statusBuild = new HomePage(getDriver())
+                .clickNewItem()
+                .enterItemName(PIPELINE_NAME)
+                .selectPipelineAndClickOk()
+                .enterScriptFromFile(validPipelineScriptFile)
+                .clickSaveButton()
+                .gotoHomePage()
+                .selectBuildNowFromItemMenu(PIPELINE_NAME)
+                .refreshAfterBuild()
+                .getStatusBuild(PIPELINE_NAME);
+
+        Assert.assertEquals(statusBuild, "Success");
+    }
+
+    @Test
+    public void testBuildWithInvalidPipelineScript() {
+        final String invalidPipelineScriptFile = "InvalidPipelineScript.txt";
+
+        String statusBuild = new HomePage(getDriver())
+                .clickNewItem()
+                .enterItemName(PIPELINE_NAME)
+                .selectPipelineAndClickOk()
+                .enterScriptFromFile(invalidPipelineScriptFile)
+                .clickSaveButton()
+                .gotoHomePage()
+                .selectBuildNowFromItemMenu(PIPELINE_NAME)
+                .refreshAfterBuild()
+                .getStatusBuild(PIPELINE_NAME);
+
+        Assert.assertEquals(statusBuild, "Failed");
     }
 }

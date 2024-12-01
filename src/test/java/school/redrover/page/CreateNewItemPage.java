@@ -6,20 +6,41 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import school.redrover.page.base.BasePage;
 
-public class  CreateNewItemPage extends BasePage {
+public class CreateNewItemPage extends BasePage {
 
     public CreateNewItemPage(WebDriver driver) {
         super(driver);
     }
 
+    By getMultiConfigurationProject = By.xpath("//li//span[text()='Multi-configuration project']");
+    By getSubmitButton = By.xpath("//button[@id = 'ok-button']");
+    private final By GET_ORGANIZATION_FOLDER = By.xpath("//li[contains(@class,'jenkins_branch_OrganizationFolder')]");
+    By getInputName = By.id("name");
+    By getOkButton = By.id("ok-button");
+
+
     public CreateNewItemPage enterItemName(String name) {
-        getDriver().findElement(By.id("name")).sendKeys(name);
+        getDriver().findElement(getInputName).sendKeys(name);
 
         return this;
     }
 
     public void clickOkButton() {
-        getDriver().findElement(By.id("ok-button")).click();
+        getDriver().findElement(getOkButton).click();
+    }
+
+    public FreestyleConfigPage clickOkToSubmit() {
+        getDriver().findElement(getOkButton).click();
+
+        return new FreestyleConfigPage(getDriver());
+    }
+
+    public CreateNewItemPage selectTypeOfProject(String name ) {
+        getDriver().findElement(By.xpath("//span[text()='" +  name + "']")).click();
+
+        return new CreateNewItemPage(getDriver());
+
+
     }
 
     public CreateNewItemPage selectFolderType() {
@@ -89,7 +110,7 @@ public class  CreateNewItemPage extends BasePage {
 
         return new OrganizationFolderConfigurationPage(getDriver());
     }
-  
+
     public String getInvalidNameMessage() {
         return getDriver().findElement(By.id("itemname-invalid")).getText();
     }
@@ -98,7 +119,7 @@ public class  CreateNewItemPage extends BasePage {
         return getDriver().findElement(By.id("itemname-required")).getText();
     }
 
-    public ErrorPage saveInvalidData(){
+    public ErrorPage saveInvalidData() {
         clickOkButton();
 
         return new ErrorPage(getDriver());
@@ -120,5 +141,23 @@ public class  CreateNewItemPage extends BasePage {
         return getWait5().until(ExpectedConditions.visibilityOfElementLocated(
                 By.xpath("//div[@class='add-item-name']/div[@class='input-validation-message']"))).getText();
     }
-}
 
+    public CreateNewItemPage choseMultiConfigurationProject() {
+        getDriver().findElement(getMultiConfigurationProject).click();
+
+        return this;
+    }
+
+    public MultiConfigurationProjectPage submitCreationProject() {
+        getDriver().findElement(getSubmitButton).click();
+
+        return new MultiConfigurationProjectPage(getDriver());
+    }
+
+    public OrganizationFolderConfigurationPage clickOrganizationFolderAndClickOk() {
+        getDriver().findElement(GET_ORGANIZATION_FOLDER).click();
+        clickOkButton();
+
+        return new OrganizationFolderConfigurationPage(getDriver());
+    }
+}
