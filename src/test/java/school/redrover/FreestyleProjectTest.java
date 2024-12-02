@@ -75,4 +75,18 @@ public class FreestyleProjectTest extends BaseTest {
 
         Assert.assertEquals(actualDescription, newDescription);
     }
+
+    @Test(dependsOnMethods = "testCreateProjectViaSidebarMenu")
+    public void testRenameProjectViaSidebarMenu() {
+        final String newName = "New " + PROJECT_NAME;
+
+        String actualProjectName = new HomePage(getDriver())
+                .openFreestyleProject(PROJECT_NAME)
+                .clickRenameOnSidebar()
+                .clearOldAndInputNewProjectName(newName)
+                .clickRenameButton()
+                .getProjectName();
+
+        Assert.assertEquals(actualProjectName, newName);
+    }
 }

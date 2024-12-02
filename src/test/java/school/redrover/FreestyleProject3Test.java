@@ -33,16 +33,6 @@ public class FreestyleProject3Test extends BaseTest {
         getDriver().findElement(By.name("Submit")).click();
     }
 
-    private void addDescriptionOnProjectStatusPage(String description) {
-        getWait10().until(ExpectedConditions.visibilityOfElementLocated(By.id("description-link"))).click();
-        getDriver().findElement(By.tagName("textarea")).sendKeys(description);
-        getDriver().findElement(By.xpath("//button[@name='Submit']")).click();
-    }
-
-    private void verifyYouAreOnProjectStatusPage() {
-        getWait10().until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//h2[text()='Permalinks']")));
-    }
-
     private void clickConfigureInSidebarMenuOnProjectStatusPage() {
         getWait2().until(ExpectedConditions.visibilityOfElementLocated(
                 By.xpath("//a[contains(@href, 'configure')]"))).click();
@@ -86,39 +76,6 @@ public class FreestyleProject3Test extends BaseTest {
     private void wipeOutCurrentWorkspace() {
     getWait10().until(ExpectedConditions.visibilityOfElementLocated(
             By.xpath("//a[@data-title='Wipe Out Current Workspace']"))).click();
-    }
-
-    @Test
-    public void testDeleteDescriptionOnProjectStatusPage() {
-        createProjectViaSidebarMenu(PROJECT_NAME);
-        addDescriptionOnProjectStatusPage(DESCRIPTION);
-
-        getDriver().findElement(By.id("description-link")).click();
-        getDriver().findElement(By.tagName("textarea")).clear();
-        getDriver().findElement(By.xpath("//button[@name='Submit']")).click();
-
-        Assert.assertFalse(getDriver().findElement(By.xpath("//div[@id='description']//div")).getText()
-                .contains(DESCRIPTION));
-    }
-
-    @Test
-    public void testRenameProject() {
-        final String newName = "New " + PROJECT_NAME;
-        createProjectViaSidebarMenu(PROJECT_NAME);
-
-        WebElement renameSidebarMenu = getWait5().until(ExpectedConditions.visibilityOfElementLocated(
-                By.xpath("//a[@href='/job/" + PROJECT_NAME.replace(" ", "%20") + "/confirm-rename']")));
-        renameSidebarMenu.click();
-
-        WebElement newNameTextField = getDriver().findElement(By.xpath("//input[@checkdependson ='newName']"));
-        newNameTextField.clear();
-        newNameTextField.sendKeys(newName);
-
-        getDriver().findElement(By.xpath("//button[@name='Submit']")).click();
-
-        verifyYouAreOnProjectStatusPage();
-
-        Assert.assertEquals(getDriver().findElement(By.tagName("h1")).getText(), newName);
     }
 
     @Test
