@@ -6,7 +6,6 @@ import org.testng.annotations.Test;
 import school.redrover.page.HomePage;
 import school.redrover.runner.BaseTest;
 
-
 public class FreestyleProjectTest extends BaseTest {
 
     private static final String PROJECT_NAME = "MyFreestyleProject";
@@ -90,5 +89,16 @@ public class FreestyleProjectTest extends BaseTest {
                 .getProjectName();
 
         Assert.assertEquals(actualProjectName, newName);
+    }
+
+    @Test
+    public void testDeleteProjectViaChevron() {
+        String pageTitle = new HomePage(getDriver())
+                .createFreestyleProject(PROJECT_NAME)
+                .selectDeleteFromItemMenu(PROJECT_NAME)
+                .clickYesForConfirmDelete()
+                .getWelcomeTitle();
+
+        Assert.assertEquals(pageTitle, "Welcome to Jenkins!");
     }
 }
