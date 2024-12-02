@@ -13,7 +13,7 @@ public class DescriptionTest extends BaseTest {
     public void testAdd() {
 
         String descText = new HomePage(getDriver())
-                .crateDescription(DESCRIPTION_TEXT)
+                .createDescription(DESCRIPTION_TEXT)
                 .getDescriptionText();
 
         Assert.assertEquals(descText, DESCRIPTION_TEXT);
@@ -23,8 +23,8 @@ public class DescriptionTest extends BaseTest {
     public void testEditDescription() {
 
         String descriptionText = new HomePage(getDriver())
-                .crateDescription(DESCRIPTION_TEXT)
-                .crateDescription("123")
+                .createDescription(DESCRIPTION_TEXT)
+                .createDescription("123")
                 .getDescriptionText();
 
         Assert.assertEquals(descriptionText, "123" + DESCRIPTION_TEXT);
