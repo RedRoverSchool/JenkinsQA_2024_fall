@@ -69,7 +69,7 @@ public class HomePage extends BasePage {
         return this;
     }
 
-    public HomePage crateDescription(String text) {
+    public HomePage createDescription(String text) {
 
         getDriver().findElement(By.id("description-link")).click();
 
