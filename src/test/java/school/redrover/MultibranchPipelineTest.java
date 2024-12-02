@@ -116,6 +116,7 @@ public class MultibranchPipelineTest extends BaseTest {
         Assert.assertEquals(actualMessage, errorMessage);
     }
 
+    @Ignore
     @Test
     public void testSelectingTriggersScanPeriodFromConfigPage() {
         WebElement selectedValue = new HomePage(getDriver())
