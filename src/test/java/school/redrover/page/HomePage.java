@@ -409,4 +409,31 @@ public class HomePage extends BasePage {
 
         return new MyViewsPage(getDriver());
     }
+
+    public HomePage clickNameTableHeaderChangeOrder() {
+        getDriver().findElement(
+                By.xpath("//table[@id='projectstatus']/thead/tr/th/a[contains(text(), 'Name')]")).click();
+
+        return new HomePage(getDriver());
+    }
+
+    public HomePage clickStatusTableHeaderChangeOrder() {
+        getDriver().findElement(
+                By.xpath("//table[@id='projectstatus']/thead/tr/th/a[contains(text(), 'S')]")).click();
+
+        return new HomePage(getDriver());
+    }
+
+    public String getTitleTableHeaderWithDownArrow() {
+        return getDriver().findElement(
+                        By.xpath("//table[@id='projectstatus']/thead/tr/th/a/span[contains(text(), '  ↓')]/.."))
+                .getText().split(" ")[0].trim();
+    }
+
+    public String getTitleTableHeaderWithUpArrow() {
+        return getDriver().findElement(
+                        By.xpath("//table[@id='projectstatus']/thead/tr/th/a/span[contains(text(), '  ↑')]/.."))
+                .getText().split(" ")[0].trim();
+    }
+
 }
