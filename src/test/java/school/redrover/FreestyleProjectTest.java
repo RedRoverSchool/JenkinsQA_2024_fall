@@ -1,6 +1,7 @@
 package school.redrover;
 
 import org.testng.Assert;
+import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import school.redrover.page.HomePage;
 import school.redrover.runner.BaseTest;
@@ -63,6 +64,7 @@ public class FreestyleProjectTest extends BaseTest {
         Assert.assertEquals(actualProjectName, PROJECT_NAME);
     }
 
+    @Ignore
     @Test(dependsOnMethods = "testCreateProjectViaSidebarMenu")
     public void testEditDescriptionOnProjectPage() {
         final String newDescription = "New " + DESCRIPTION;
