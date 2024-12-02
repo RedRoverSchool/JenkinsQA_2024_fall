@@ -5,6 +5,8 @@ import org.testng.annotations.Test;
 import school.redrover.page.HomePage;
 import school.redrover.runner.BaseTest;
 
+import java.util.List;
+
 
 public class FreestyleProjectTest extends BaseTest {
 
@@ -63,7 +65,7 @@ public class FreestyleProjectTest extends BaseTest {
         Assert.assertEquals(actualProjectName, PROJECT_NAME);
     }
 
-    @Test(dependsOnMethods = "testCreateProjectViaSidebarMenu")
+   @Test(dependsOnMethods = "testCreateProjectViaCreateJobButton")
     public void testEditDescriptionOnProjectPage() {
         final String newDescription = "New " + DESCRIPTION;
 
@@ -74,5 +76,43 @@ public class FreestyleProjectTest extends BaseTest {
                 .getDescription();
 
         Assert.assertEquals(actualDescription, newDescription);
+    }
+
+    @Test(dependsOnMethods = "testCreateProjectViaSidebarMenu")
+    public void testRenameProjectViaSidebarMenu() {
+        final String newName = "New " + PROJECT_NAME;
+
+        String actualProjectName = new HomePage(getDriver())
+                .openFreestyleProject(PROJECT_NAME)
+                .clickRenameOnSidebar()
+                .clearOldAndInputNewProjectName(newName)
+                .clickRenameButton()
+                .getProjectName();
+
+        Assert.assertEquals(actualProjectName, newName);
+    }
+
+    @Test
+    public void testDeleteProjectViaChevron() {
+        String pageTitle = new HomePage(getDriver())
+                .createFreestyleProject(PROJECT_NAME)
+                .selectDeleteFromItemMenu(PROJECT_NAME)
+                .clickYesForConfirmDelete()
+                .getWelcomeTitle();
+
+        Assert.assertEquals(pageTitle, "Welcome to Jenkins!");
+    }
+
+    @Test
+    public void testCheckSidebarMenuItemsOnProjectPage() {
+        final List<String> templateSidebarMenu = List.of(
+                "Status", "Changes", "Workspace", "Build Now", "Configure", "Delete Project", "Rename");
+
+        List<String> actualSidebarMenu = new HomePage(getDriver())
+                .createFreestyleProject(PROJECT_NAME)
+                .openFreestyleProject(PROJECT_NAME)
+                .getSidebarOptionList();
+
+        Assert.assertEquals(actualSidebarMenu, templateSidebarMenu);
     }
 }
