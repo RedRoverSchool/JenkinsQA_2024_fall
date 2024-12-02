@@ -12,11 +12,13 @@ public class DescriptionTest extends BaseTest {
     @Test
     public void testAdd() {
 
-        String descText = new HomePage(getDriver())
-                .createDescription(DESCRIPTION_TEXT)
+        String textDescription = new HomePage(getDriver())
+                .clickAddDescription()
+                .enterDescription(DESCRIPTION_TEXT)
+                .clickSaveButton()
                 .getDescriptionText();
 
-        Assert.assertEquals(descText, DESCRIPTION_TEXT);
+        Assert.assertEquals(textDescription, DESCRIPTION_TEXT);
     }
 
     @Test

@@ -435,5 +435,18 @@ public class HomePage extends BasePage {
                         By.xpath("//table[@id='projectstatus']/thead/tr/th/a/span[contains(text(), '  ↑')]/.."))
                 .getText().split(" ")[0].trim();
     }
+    public HomePage clickAddDescription() {
+        getDriver().findElement(By.xpath("//a[@id='description-link']")).click();
+        return this;
+    }
+    public  HomePage enterDescription(String description) {
+      getDriver().findElement(By.xpath("//textarea[contains(@class, 'jenkins-input')]")).sendKeys(description);
+      return this;
+    }
+    public HomePage clickSaveButton() {
+        getDriver().findElement(By.xpath("//button[@name='Submit']")).click();
+        return this;
+    }
+
 
 }
