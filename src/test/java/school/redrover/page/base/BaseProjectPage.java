@@ -5,7 +5,6 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import school.redrover.page.CreateNewItemPage;
-import school.redrover.page.FreestyleConfigPage;
 
 import java.util.List;
 

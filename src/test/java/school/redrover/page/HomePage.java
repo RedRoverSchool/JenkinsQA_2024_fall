@@ -393,4 +393,20 @@ public class HomePage extends BasePage {
 
         return new ViewPage(getDriver());
     }
+
+    public HomePage clickDeleteInProjectDropdown(String projectName) {
+        getDriver().findElement(By.xpath("//button[@href='/job/%s/doDelete']".formatted(projectName))).click();
+        return this;
+    }
+
+    public WebElement getDeletionPopup() {
+        return getWait5().until(ExpectedConditions.visibilityOf(getDriver().findElement(
+                By.xpath("//footer/following-sibling::dialog"))));
+    }
+
+    public MyViewsPage goToMyViews() {
+        getDriver().findElement(By.xpath("//a[@href='/me/my-views']")).click();
+
+        return new MyViewsPage(getDriver());
+    }
 }
