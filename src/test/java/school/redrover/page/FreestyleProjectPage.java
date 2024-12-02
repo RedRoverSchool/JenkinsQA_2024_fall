@@ -28,4 +28,10 @@ public class FreestyleProjectPage extends BaseProjectPage<FreestyleProjectPage> 
 
         return new FreestyleRenamePage(getDriver());
     }
+
+    public FreestyleConfigPage clickConfigureOnSidebar() {
+        getWait5().until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//a[contains(@href, 'configure')]"))).click();
+        return new FreestyleConfigPage(getDriver());
+    }
 }
