@@ -2,6 +2,7 @@ package school.redrover.page;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import school.redrover.page.base.BaseProjectPage;
 
 import java.util.Arrays;
@@ -43,4 +44,11 @@ public class FolderProjectPage extends BaseProjectPage<FolderProjectPage> {
         return this;
     }
 
+    public FolderProjectPage cancelDeletingViaModalWindow () {
+        getWait10().until(ExpectedConditions.elementToBeClickable(
+                By.xpath("/html/body/div[2]/div[1]/div[1]/div[4]/span/a"))).click();
+        getWait10().until(ExpectedConditions.elementToBeClickable(
+                By.xpath("/html/body/dialog/div[3]/button[2]"))).click();
+        return this;
+    }
 }
