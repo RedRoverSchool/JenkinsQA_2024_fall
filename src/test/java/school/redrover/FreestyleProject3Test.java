@@ -147,25 +147,6 @@ public class FreestyleProject3Test extends BaseTest {
         Assert.assertEquals(extractedText, testCommand);
     }
 
-    @Ignore
-    @Test
-    public void testCheckSidebarMenuItemsOnProjectStatusPage() {
-        final List<String> benchmarkSidebarMenuItems = List.of(
-                "Status", "Changes", "Workspace", "Build Now", "Configure", "Delete Project", "Rename");
-
-        createProjectViaSidebarMenu(PROJECT_NAME);
-
-        getWait10().until(ExpectedConditions.visibilityOfElementLocated(
-                By.xpath("//span[contains(text(), 'Rename')]")));
-
-        List<WebElement> sidebarMenuItems = getWait10().until(ExpectedConditions.visibilityOfAllElementsLocatedBy(
-                By.xpath("//span[contains(@class,'task-icon-link')]/following-sibling::span")));
-
-        List<String> sidebarMenuForCheck = sidebarMenuItems.stream().map(WebElement::getText).toList();
-
-        Assert.assertEquals(sidebarMenuForCheck, benchmarkSidebarMenuItems);
-    }
-
     @Test
     public void testBuildProjectViaSidebarMenuOnProjectStatusPage() {
 
