@@ -33,7 +33,6 @@ public class FreestyleConfigPage extends BaseConfigPage<FreestyleConfigPage, Fre
         return new FreestyleProjectPage(getDriver());
     }
 
-
     public FreestyleConfigPage addBuildStep(String buildStep) {
         getDriver().findElement(By.xpath("//button[contains(text(),'Add build step')]")).click();
         getDriver().findElement(By.xpath("//button[contains(text(),'%s')]".formatted(buildStep))).click();
@@ -79,7 +78,7 @@ public class FreestyleConfigPage extends BaseConfigPage<FreestyleConfigPage, Fre
         return this;
     }
 
-        public String getTextExecuteShellTextArea() {
+    public String getTextExecuteShellTextArea() {
         return (String) ((JavascriptExecutor) getDriver()).executeScript(
                 "return arguments[0].CodeMirror.getValue();", getDriver().findElement(CODE_MIRROR_FIELD));
     }
