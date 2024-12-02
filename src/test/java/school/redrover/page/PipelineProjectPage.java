@@ -142,4 +142,10 @@ public class PipelineProjectPage extends BaseProjectPage<PipelineProjectPage> {
 
         return new PipelineProjectPage(getDriver());
     }
+
+    public PipelineSyntaxPage gotoPipelineSyntaxPageFromLeftPanel(String projectName) {
+        getDriver().findElement(By.xpath("//a[@href='/job/%s/pipeline-syntax']".formatted(projectName))).click();
+
+        return new PipelineSyntaxPage(getDriver());
+    }
 }

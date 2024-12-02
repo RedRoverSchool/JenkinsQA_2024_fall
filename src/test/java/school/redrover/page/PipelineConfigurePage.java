@@ -1,8 +1,10 @@
 package school.redrover.page;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import school.redrover.page.base.BaseConfigPage;
 import school.redrover.runner.TestUtils;
@@ -64,5 +66,19 @@ public class PipelineConfigurePage extends BaseConfigPage<PipelineConfigurePage,
         TestUtils.pasteTextWithJavaScript(getDriver(), textArea, pipelineScript);
 
         return this;
+    }
+    public PipelineConfigurePage pastScript() {
+        TestUtils.scrollToBottom(getDriver());
+
+        getWait2().until(ExpectedConditions.visibilityOfElementLocated(By.id("workflow-editor-1")))
+                .click();
+        new Actions(getDriver())
+                .keyDown(Keys.CONTROL).sendKeys("v").keyUp(Keys.CONTROL).build().perform();
+
+        return this;
+    }
+
+    public String getScriptText() {
+        return getDriver().findElement(By.xpath("//div[@class='ace_content']")).getText();
     }
 }
