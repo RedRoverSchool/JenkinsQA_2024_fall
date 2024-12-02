@@ -6,6 +6,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import school.redrover.page.base.BasePage;
+import school.redrover.runner.TestUtils;
 
 public class PipelineSyntaxPage extends BasePage {
     public PipelineSyntaxPage(WebDriver driver) { super(driver); }
@@ -30,7 +31,9 @@ public class PipelineSyntaxPage extends BasePage {
     }
 
     public PipelineSyntaxPage clickCopy() {
-        getDriver().findElement(By.xpath("//button[@tooltip = 'Copy']")).click();
+        TestUtils.scrollToBottom(getDriver());
+        getWait5().until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//button[@tooltip = 'Copy']")))
+                .click();
 
         return this;
     }

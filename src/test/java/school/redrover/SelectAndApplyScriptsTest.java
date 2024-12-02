@@ -2,6 +2,7 @@ package school.redrover;
 
 import org.testng.Assert;
 import org.testng.annotations.Test;
+import school.redrover.page.PipelineConfigurePage;
 import school.redrover.page.PipelineProjectPage;
 import school.redrover.page.PipelineSyntaxPage;
 import school.redrover.runner.BaseTest;
@@ -26,13 +27,11 @@ public class SelectAndApplyScriptsTest extends BaseTest {
 
     @Test(dependsOnMethods = "testPipelineSyntaxPageIsPresent")
     public void testSelectScript() {
-        String selectItem = new PipelineProjectPage(getDriver())
+        String selectItem = new PipelineSyntaxPage(getDriver())
                 .gotoHomePage()
                 .openPipelineProject(PIPELINE_NAME)
                 .gotoPipelineSyntaxPageFromLeftPanel(PIPELINE_NAME)
                 .selectNewStep("bat: Windows Batch Script")
-                .clickGeneratePipelineScript()
-                .clickCopy()
                 .getTitleOfSelectedScript("bat: Windows Batch Script");
 
         Assert.assertEquals(selectItem, "bat");
@@ -40,11 +39,17 @@ public class SelectAndApplyScriptsTest extends BaseTest {
 
     @Test(dependsOnMethods = "testSelectScript")
     public void testCopyAndPasteScript() {
-        String pastedText = new PipelineSyntaxPage(getDriver())
+        String pastedText = new PipelineConfigurePage(getDriver())
+                .gotoHomePage()
+                .openPipelineProject(PIPELINE_NAME)
+                .gotoPipelineSyntaxPageFromLeftPanel(PIPELINE_NAME)
+                .selectNewStep("bat: Windows Batch Script")
+                .clickGeneratePipelineScript()
+                .clickCopy()
                 .gotoHomePage()
                 .openPipelineProject(PIPELINE_NAME)
                 .clickConfigureSidebar(PIPELINE_NAME)
-                .pastScript()
+                .pasteScript()
                 .getScriptText();
 
         Assert.assertEquals(pastedText, "bat ''");

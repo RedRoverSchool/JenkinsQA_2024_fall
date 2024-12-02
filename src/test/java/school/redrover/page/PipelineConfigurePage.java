@@ -67,7 +67,7 @@ public class PipelineConfigurePage extends BaseConfigPage<PipelineConfigurePage,
 
         return this;
     }
-    public PipelineConfigurePage pastScript() {
+    public PipelineConfigurePage pasteScript() {
         TestUtils.scrollToBottom(getDriver());
 
         getWait2().until(ExpectedConditions.visibilityOfElementLocated(By.id("workflow-editor-1")))
