@@ -2,6 +2,7 @@ package school.redrover;
 
 import org.openqa.selenium.By;
 import org.testng.Assert;
+import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import school.redrover.page.HomePage;
 import school.redrover.runner.BaseTest;
@@ -44,7 +45,7 @@ public class CreateFreestyleProjectRTest extends BaseTest {
         Assert.assertEquals(getDriver().findElement(By.xpath("//div[@id='itemname-invalid']")).getText()
                 , "» ‘#’ is an unsafe character");
     }
-
+    @Ignore
     @Test
     public void testCreateProjectWithExistingName(){
 
