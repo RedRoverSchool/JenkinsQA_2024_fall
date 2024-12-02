@@ -5,6 +5,9 @@ import org.testng.annotations.Test;
 import school.redrover.page.HomePage;
 import school.redrover.runner.BaseTest;
 
+import java.util.List;
+
+
 public class FreestyleProjectTest extends BaseTest {
 
     private static final String PROJECT_NAME = "MyFreestyleProject";
@@ -98,5 +101,18 @@ public class FreestyleProjectTest extends BaseTest {
                 .getWelcomeTitle();
 
         Assert.assertEquals(pageTitle, "Welcome to Jenkins!");
+    }
+
+    @Test
+    public void testCheckSidebarMenuItemsOnProjectPage() {
+        final List<String> templateSidebarMenu = List.of(
+                "Status", "Changes", "Workspace", "Build Now", "Configure", "Delete Project", "Rename");
+
+        List<String> actualSidebarMenu = new HomePage(getDriver())
+                .createFreestyleProject(PROJECT_NAME)
+                .openFreestyleProject(PROJECT_NAME)
+                .getSidebarOptionList();
+
+        Assert.assertEquals(actualSidebarMenu, templateSidebarMenu);
     }
 }
