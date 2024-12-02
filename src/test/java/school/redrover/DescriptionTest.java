@@ -8,6 +8,7 @@ import school.redrover.runner.BaseTest;
 public class DescriptionTest extends BaseTest {
 
     private static final String DESCRIPTION_TEXT = "It's my workspace";
+    private static final String NEW_TEXT = "Hello! ";
 
     @Test
     public void testAdd() {
@@ -21,14 +22,15 @@ public class DescriptionTest extends BaseTest {
         Assert.assertEquals(textDescription, DESCRIPTION_TEXT);
     }
 
-    @Test
+    @Test(dependsOnMethods = "testAdd")
     public void testEditDescription() {
 
-        String descriptionText = new HomePage(getDriver())
-                .createDescription(DESCRIPTION_TEXT)
-                .createDescription("123")
+        String newText = new HomePage(getDriver())
+                .clickAddDescription()
+                .enterDescription(NEW_TEXT)
+                .clickSaveButton()
                 .getDescriptionText();
 
-        Assert.assertEquals(descriptionText, "123" + DESCRIPTION_TEXT);
+        Assert.assertEquals(newText, NEW_TEXT + DESCRIPTION_TEXT);
     }
 }
