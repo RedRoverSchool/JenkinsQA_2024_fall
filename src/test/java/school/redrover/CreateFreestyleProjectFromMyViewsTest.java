@@ -7,12 +7,12 @@ import school.redrover.runner.BaseTest;
 
 public class CreateFreestyleProjectFromMyViewsTest extends BaseTest {
 
-    private final String NEW_PROJECT = "My new project";
+    private static final String NEW_PROJECT = "My new project";
 
     @Test
         public void testCreate() {
 
-        String nameOfProject = new HomePage(getDriver())
+        String projectName = new HomePage(getDriver())
                 .clickMyViewsButton()
                 .clickCreateJob()
                 .enterItemName(NEW_PROJECT)
@@ -21,7 +21,7 @@ public class CreateFreestyleProjectFromMyViewsTest extends BaseTest {
                 .clickSaveButton()
                 .getProjectName();
 
-       Assert.assertEquals(nameOfProject, NEW_PROJECT);
+       Assert.assertEquals(projectName, NEW_PROJECT);
     }
 }
 
