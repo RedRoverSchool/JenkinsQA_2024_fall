@@ -78,35 +78,6 @@ public class FreestyleProject3Test extends BaseTest {
             By.xpath("//a[@data-title='Wipe Out Current Workspace']"))).click();
     }
 
-    @Test
-    public void testDeleteProjectViaChevron() {
-        createProjectViaSidebarMenu(PROJECT_NAME);
-
-        getDriver().findElement(By.xpath("//a[text()='Dashboard']")).click();
-
-        WebElement projectToDelete = getWait10().until(ExpectedConditions.visibilityOfElementLocated(
-                By.xpath("//a[@href='job/" + PROJECT_NAME.replace(" ", "%20") + "/']")));
-        Actions actions = new Actions(getDriver());
-        actions.moveToElement(projectToDelete)
-                .pause(100)
-                .perform();
-
-        WebElement chevron = getWait10().until(ExpectedConditions.visibilityOfElementLocated(
-                By.xpath("//a[@href='job/" + PROJECT_NAME.replace(" ", "%20") + "/']//button")));
-
-        TestUtils.moveAndClickWithJavaScript(getDriver(), chevron);
-
-        WebElement deleteButton = getWait10().until(ExpectedConditions.visibilityOfElementLocated(
-                By.xpath("//button[contains(@href, 'doDelete')]")));
-        deleteButton.click();
-
-        WebElement deleteAlert = getWait10().until(ExpectedConditions.elementToBeClickable(
-                By.xpath("//button[@data-id='ok']")));
-        deleteAlert.click();
-
-        Assert.assertFalse(getDriver().findElement(By.id("main-panel")).getText().contains(PROJECT_NAME));
-    }
-
     @Ignore
     @Test
     public void testAddBuildStepsExecuteShellCommandWhenConfigureProject() {

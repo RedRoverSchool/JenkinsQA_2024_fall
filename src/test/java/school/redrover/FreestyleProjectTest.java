@@ -1,7 +1,6 @@
 package school.redrover;
 
 import org.testng.Assert;
-import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import school.redrover.page.HomePage;
 import school.redrover.runner.BaseTest;
@@ -66,8 +65,7 @@ public class FreestyleProjectTest extends BaseTest {
         Assert.assertEquals(actualProjectName, PROJECT_NAME);
     }
 
-    @Ignore
-    @Test(dependsOnMethods = "testCreateProjectViaSidebarMenu")
+   @Test(dependsOnMethods = "testCreateProjectViaCreateJobButton")
     public void testEditDescriptionOnProjectPage() {
         final String newDescription = "New " + DESCRIPTION;
 
@@ -92,6 +90,17 @@ public class FreestyleProjectTest extends BaseTest {
                 .getProjectName();
 
         Assert.assertEquals(actualProjectName, newName);
+    }
+
+    @Test
+    public void testDeleteProjectViaChevron() {
+        String pageTitle = new HomePage(getDriver())
+                .createFreestyleProject(PROJECT_NAME)
+                .selectDeleteFromItemMenu(PROJECT_NAME)
+                .clickYesForConfirmDelete()
+                .getWelcomeTitle();
+
+        Assert.assertEquals(pageTitle, "Welcome to Jenkins!");
     }
 
     @Test
