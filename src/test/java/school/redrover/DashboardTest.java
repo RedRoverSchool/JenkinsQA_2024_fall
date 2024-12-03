@@ -1,5 +1,7 @@
 package school.redrover;
 
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import school.redrover.page.HomePage;
@@ -8,6 +10,8 @@ import school.redrover.runner.BaseTest;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class DashboardTest extends BaseTest {
 
