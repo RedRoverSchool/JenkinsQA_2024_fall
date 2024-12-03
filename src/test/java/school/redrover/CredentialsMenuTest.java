@@ -73,14 +73,14 @@ public class CredentialsMenuTest extends BaseTest {
         WebElement element = getDriver().findElement(By.cssSelector(".model-link.inside.jenkins-table__link"));
         new Actions(getDriver()).moveToElement(element).perform();
 
-        WebElement element1 = getDriver().findElement(By.xpath("//button[@data-href=" +
-                "'http://localhost:8080/user/admin/credentials/store/user' and @aria-expanded='false']"));
+        // Находим элемент
+        WebElement element1 = getDriver().findElement(By.xpath(
+                "//a[@href='/user/admin/credentials/store/user']/button"));
+        //and @aria-expanded='false']
 
-        new Actions(getDriver())
-                .moveToElement(element1)
-                .pause(Duration.ofMillis(1000))// Наводимся на элемент
-                .click() // Кликаем
-                .perform();
+// Выполняем JavaScript для клика по элементу
+        JavascriptExecutor jsExecutor = (JavascriptExecutor) getDriver();
+        jsExecutor.executeScript("arguments[0].click();", element1);
 
 
 
