@@ -10,7 +10,7 @@ import school.redrover.runner.TestUtils;
 
 public class FreestyleConfigPage extends BaseConfigPage<FreestyleConfigPage, FreestyleProjectPage> {
 
-    private static final By CODE_MIRROR_FIELD = By.xpath("(//div[@class='CodeMirror'])[2]");
+    private static final By CODE_MIRROR_FIELD = By.xpath("//div[@class='CodeMirror']");
 
     public FreestyleConfigPage(WebDriver driver) {
         super(driver);

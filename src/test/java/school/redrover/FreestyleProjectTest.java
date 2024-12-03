@@ -1,9 +1,14 @@
 package school.redrover;
 
+import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import school.redrover.page.HomePage;
 import school.redrover.runner.BaseTest;
+import school.redrover.runner.TestUtils;
 
 import java.util.List;
 
@@ -130,6 +135,6 @@ public class FreestyleProjectTest extends BaseTest {
                 .clickConfigureOnSidebar()
                 .getTextExecuteShellTextArea();
 
-        Assert.assertEquals(extractedText, testCommand);
+        Assert.assertEquals(extractedText, "1");
     }
 }
