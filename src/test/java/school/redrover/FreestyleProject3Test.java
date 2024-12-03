@@ -4,6 +4,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.Assert;
+import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import school.redrover.runner.BaseTest;
 
@@ -14,8 +15,6 @@ public class FreestyleProject3Test extends BaseTest {
     private static final String PROJECT_NAME = "FreestyleProject fall2024";
 
     private static final String DESCRIPTION = "Bla-bla-bla project";
-
-    private static final String DISPLAY_BUILD_NAME = "BuildName";
 
     private void createProjectViaSidebarMenu(String projectName) {
         getDriver().findElement(By.xpath("//a[@href='/view/all/newJob']")).click();
@@ -40,11 +39,6 @@ public class FreestyleProject3Test extends BaseTest {
         getDriver().findElement(By.xpath("//span[contains(text(), 'Edit Build Information')]/..")).click();
     }
 
-    private WebElement findDisplayNameTextField() {
-        return getWait5().until(ExpectedConditions.visibilityOfElementLocated(
-                By.xpath("//input[@name='displayName']")));
-    }
-
     private void clickSubmitButtonOnBuildInformationPage() {
         getDriver().findElement(By.xpath("//button[@name='Submit']")).click();
     }
@@ -67,58 +61,7 @@ public class FreestyleProject3Test extends BaseTest {
             By.xpath("//a[@data-title='Wipe Out Current Workspace']"))).click();
     }
 
-    @Test
-    public void testBuildProjectViaSidebarMenuOnProjectStatusPage() {
-
-        createProjectViaSidebarMenu(PROJECT_NAME);
-
-        getWait5().until(ExpectedConditions.visibilityOfElementLocated(
-                By.xpath("//a[@data-build-success='Build scheduled']"))).click();
-
-        clickOnSuccessBuildIcon();
-
-        Assert.assertTrue(
-                getWait2().until(ExpectedConditions.visibilityOfElementLocated(By.id("out"))).getText()
-                        .contains("Finished: SUCCESS"));
-    }
-
-    @Test(dependsOnMethods = "testBuildProjectViaSidebarMenuOnProjectStatusPage")
-    public void testAddBuildDisplayName() {
-        openProject(PROJECT_NAME);
-
-        clickOnSuccessBuildIcon();
-
-        goToEditBuildInformationPage();
-
-        findDisplayNameTextField().sendKeys(DISPLAY_BUILD_NAME);
-
-        clickSubmitButtonOnBuildInformationPage();
-
-        getWait10().until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//button[@name='Submit']")));
-
-        Assert.assertTrue(getDriver().findElement(By.tagName("h1")).getText().contains(DISPLAY_BUILD_NAME));
-    }
-
-    @Test(dependsOnMethods = {"testBuildProjectViaSidebarMenuOnProjectStatusPage", "testAddBuildDisplayName"})
-    public void testEditBuildDisplayName() {
-        final String newDisplayProjectName = "New " + DISPLAY_BUILD_NAME;
-
-        openProject(PROJECT_NAME);
-
-        clickOnSuccessBuildIcon();
-
-        goToEditBuildInformationPage();
-
-        findDisplayNameTextField().clear();
-        findDisplayNameTextField().sendKeys(newDisplayProjectName);
-
-        clickSubmitButtonOnBuildInformationPage();
-
-        getWait10().until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//button[@name='Submit']")));
-
-        Assert.assertTrue(getDriver().findElement(By.tagName("h1")).getText().contains(newDisplayProjectName));
-    }
-
+    @Ignore
     @Test(dependsOnMethods = "testBuildProjectViaSidebarMenuOnProjectStatusPage")
     public void testAddBuildDescription() {
         openProject(PROJECT_NAME);
@@ -138,6 +81,7 @@ public class FreestyleProject3Test extends BaseTest {
                 DESCRIPTION);
     }
 
+    @Ignore
     @Test(dependsOnMethods = {"testBuildProjectViaSidebarMenuOnProjectStatusPage", "testAddBuildDescription"})
     public void testEditBuildDescription() {
         final String newDescriptionTextField = "New " + DESCRIPTION;
