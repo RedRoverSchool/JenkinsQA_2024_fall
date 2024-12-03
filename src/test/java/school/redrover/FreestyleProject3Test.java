@@ -67,23 +67,6 @@ public class FreestyleProject3Test extends BaseTest {
             By.xpath("//a[@data-title='Wipe Out Current Workspace']"))).click();
     }
 
-    @Test(dependsOnMethods = "testBuildProjectViaSidebarMenuOnProjectStatusPage")
-    public void testAddBuildDisplayName() {
-        openProject(PROJECT_NAME);
-
-        clickOnSuccessBuildIcon();
-
-        goToEditBuildInformationPage();
-
-        findDisplayNameTextField().sendKeys(DISPLAY_BUILD_NAME);
-
-        clickSubmitButtonOnBuildInformationPage();
-
-        getWait10().until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//button[@name='Submit']")));
-
-        Assert.assertTrue(getDriver().findElement(By.tagName("h1")).getText().contains(DISPLAY_BUILD_NAME));
-    }
-
     @Test(dependsOnMethods = {"testBuildProjectViaSidebarMenuOnProjectStatusPage", "testAddBuildDisplayName"})
     public void testEditBuildDisplayName() {
         final String newDisplayProjectName = "New " + DISPLAY_BUILD_NAME;

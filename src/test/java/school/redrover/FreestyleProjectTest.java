@@ -13,6 +13,8 @@ public class FreestyleProjectTest extends BaseTest {
 
     private static final String DESCRIPTION = "Bla-bla-bla project";
 
+    private static final String BUILD_NAME = "BuildName";
+
     @Test
     public void testCreateFreestyleProjectWithEmptyName() {
         String emptyNameMessage = new HomePage(getDriver())
@@ -157,5 +159,18 @@ public class FreestyleProjectTest extends BaseTest {
                 .getConsoleOutputText();
 
         Assert.assertTrue(buildInfo.contains("Finished: SUCCESS"));
+    }
+
+    @Test(dependsOnMethods = "testBuildProjectViaSidebarMenuOnProjectPage")
+    public void testAddBuildDisplayName() {
+        String actualBuildName = new HomePage(getDriver())
+                .openFreestyleProject(PROJECT_NAME)
+                .clickOnSuccessBuildIcon()
+                .clickEditBuildInformationSidebar()
+                .addDisplayName(BUILD_NAME)
+                .clickSaveButton()
+                .getStatusTitle();
+
+        Assert.assertTrue(actualBuildName.contains(BUILD_NAME), "Title doesn't contain build name");
     }
 }
