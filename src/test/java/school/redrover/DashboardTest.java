@@ -60,7 +60,6 @@ public class DashboardTest extends BaseTest {
     public void testVerifyDisplayIconDownArrowNextToNameByDefault() {
         String titleTableHeader = new HomePage(getDriver())
                 .getTitleTableHeaderWithDownArrow();
-        System.out.println(titleTableHeader);
 
         Assert.assertEquals(titleTableHeader, "Name");
     }
@@ -79,30 +78,34 @@ public class DashboardTest extends BaseTest {
     public void testVerifyProjectOrderByStatusASCByDefault() {
         final String invalidPipelineScriptFile = "InvalidPipelineScript.txt";
         final String validPipelineScriptFile = "ValidPipelineScript.txt";
+        final String pSuccessBuild = "FPipelineProject";
+        final String pDisable = "APipelineProject";
+        final String pFailedBuild = "ZPipelineProject";
+        final String pNoBuild = "1PipelineProject";
 
         List<String> projectNameList = new HomePage(getDriver())
                 .clickNewItem()
-                .enterItemName("FPipelineProject")
+                .enterItemName(pSuccessBuild)
                 .selectPipelineAndClickOk()
                 .enterScriptFromFile(validPipelineScriptFile)
                 .clickSaveButton()
                 .gotoHomePage()
-                .selectBuildNowFromItemMenu("FPipelineProject")
+                .selectBuildNowFromItemMenu(pSuccessBuild)
                 .clickNewItem()
-                .enterItemName("APipelineProject")
+                .enterItemName(pDisable)
                 .selectPipelineAndClickOk()
                 .clickToggleToDisableOrEnableProject()
                 .clickSaveButton()
                 .gotoHomePage()
                 .clickNewItem()
-                .enterItemName("ZPipelineProject")
+                .enterItemName(pFailedBuild)
                 .selectPipelineAndClickOk()
                 .enterScriptFromFile(invalidPipelineScriptFile)
                 .clickSaveButton()
                 .gotoHomePage()
-                .selectBuildNowFromItemMenu("ZPipelineProject")
+                .selectBuildNowFromItemMenu(pFailedBuild)
                 .clickNewItem()
-                .enterItemName("1PipelineProject")
+                .enterItemName(pNoBuild)
                 .selectPipelineAndClickOk()
                 .enterScriptFromFile(invalidPipelineScriptFile)
                 .clickSaveButton()
@@ -110,7 +113,7 @@ public class DashboardTest extends BaseTest {
                 .clickStatusTableHeaderChangeOrder()
                 .getItemList();
 
-        Assert.assertEquals(projectNameList, List.of("1PipelineProject", "APipelineProject", "FPipelineProject", "ZPipelineProject"));
+        Assert.assertEquals(projectNameList, List.of(pNoBuild, pDisable, pSuccessBuild, pFailedBuild));
     }
 
 }
