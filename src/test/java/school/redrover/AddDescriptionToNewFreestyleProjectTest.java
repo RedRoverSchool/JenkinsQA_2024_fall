@@ -1,48 +1,35 @@
 package school.redrover;
 
-import org.openqa.selenium.By;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.Assert;
-import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
+import school.redrover.page.HomePage;
 import school.redrover.runner.BaseTest;
-import school.redrover.runner.TestUtils;
-import static school.redrover.runner.TestUtils.newItemsData;
 
 public class AddDescriptionToNewFreestyleProjectTest extends BaseTest {
 
-    private String getDescription () {
-        return getWait10().until(ExpectedConditions.visibilityOfElementLocated(By.id("description"))).getText();
-    }
-
-    private void clickOnSave () {
-        getDriver().findElement(By.name("Submit")).click();
-    }
+    private static final String PROJECT_NAME = "FreeStyleProjectTest";
+    private static final String DESCRIPTION = "It's a simple test project";
+    private static final String DESCRIPTION_EDITED = "It's a simple test project new version";
 
     @Test
     public void testAddDescription () {
-        newItemsData(this,"FreeStyleProjectTest",
-                "//*[@id='j-add-item-type-standalone-projects']/ul/li[1]/div[2]/label");
+        String getDescription = new HomePage(getDriver())
+                .createFreestyleProject(PROJECT_NAME, DESCRIPTION)
+                .openFreestyleProject(PROJECT_NAME)
+                .getDescription();
 
-        getWait10().until(ExpectedConditions.visibilityOfElementLocated(
-                By.name("description"))).sendKeys("It's a simple test project");
-        getDriver().findElement(By.name("Submit")).click();
-
-        Assert.assertEquals(getDescription(), "It's a simple test project");
+        Assert.assertEquals(getDescription, DESCRIPTION);
     }
 
 
     @Test (dependsOnMethods = "testAddDescription")
     public void testAddDescriptionToExisting () {
-        getWait10().until(ExpectedConditions.elementToBeClickable(By.id("description-link"))).click();
+        String getDescription = new HomePage(getDriver())
+                .openFreestyleProject(PROJECT_NAME)
+                .clearDescription()
+                .editDescription(DESCRIPTION_EDITED)
+                .getDescription();
 
-        getWait10().until(ExpectedConditions.visibilityOfElementLocated(
-                By.name("description"))).clear();
-        getWait10().until(ExpectedConditions.visibilityOfElementLocated(
-                By.name("description"))).sendKeys("It's a description for an existing project");
-        clickOnSave();
-
-        Assert.assertEquals(getDescription(), "It's a description for an existing project\n" +
-                "Edit description");
+        Assert.assertEquals(getDescription, DESCRIPTION_EDITED);
     }
 }
