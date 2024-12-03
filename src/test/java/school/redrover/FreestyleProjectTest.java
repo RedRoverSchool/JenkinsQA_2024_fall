@@ -7,7 +7,6 @@ import school.redrover.runner.BaseTest;
 
 import java.util.List;
 
-
 public class FreestyleProjectTest extends BaseTest {
 
     private static final String PROJECT_NAME = "MyFreestyleProject";
@@ -65,6 +64,20 @@ public class FreestyleProjectTest extends BaseTest {
         Assert.assertEquals(actualProjectName, PROJECT_NAME);
     }
 
+    @Test
+    public void testCreateFreestyleProjectFromMyViews() {
+        String projectName = new HomePage(getDriver())
+                .clickMyViewsButton()
+                .clickCreateJob()
+                .enterItemName(PROJECT_NAME)
+                .selectFreestyleProject()
+                .clickOkToSubmit()
+                .clickSaveButton()
+                .getProjectName();
+
+        Assert.assertEquals(projectName, PROJECT_NAME);
+    }
+
    @Test(dependsOnMethods = "testCreateProjectViaCreateJobButton")
     public void testEditDescriptionOnProjectPage() {
         final String newDescription = "New " + DESCRIPTION;
@@ -114,5 +127,23 @@ public class FreestyleProjectTest extends BaseTest {
                 .getSidebarOptionList();
 
         Assert.assertEquals(actualSidebarMenu, templateSidebarMenu);
+    }
+
+    @Test
+    public void testConfigureProjectAddBuildStepsExecuteShellCommand() {
+        final String testCommand = "echo \"TEST! Hello Jenkins!\"";
+
+        String extractedText = new HomePage(getDriver())
+                .createFreestyleProject(PROJECT_NAME)
+                .openFreestyleProject(PROJECT_NAME)
+                .clickConfigureOnSidebar()
+                .clickAddBuildStep()
+                .selectExecuteShellBuildStep()
+                .addExecuteShellCommand(testCommand)
+                .clickSaveButton()
+                .clickConfigureOnSidebar()
+                .getTextExecuteShellTextArea();
+
+        Assert.assertEquals(extractedText, testCommand);
     }
 }
