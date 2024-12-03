@@ -146,4 +146,16 @@ public class FreestyleProjectTest extends BaseTest {
 
         Assert.assertEquals(extractedText, testCommand);
     }
+
+    @Test
+    public void testBuildProjectViaSidebarMenuOnProjectPage() {
+        String buildInfo = new HomePage(getDriver())
+                .createFreestyleProject(PROJECT_NAME)
+                .openFreestyleProject(PROJECT_NAME)
+                .clickBuildNowOnSidebar()
+                .clickOnSuccessBuildIcon()
+                .getConsoleOutputText();
+
+        Assert.assertTrue(buildInfo.contains("Finished: SUCCESS"));
+    }
 }

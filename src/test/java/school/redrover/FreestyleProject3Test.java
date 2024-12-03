@@ -67,21 +67,6 @@ public class FreestyleProject3Test extends BaseTest {
             By.xpath("//a[@data-title='Wipe Out Current Workspace']"))).click();
     }
 
-    @Test
-    public void testBuildProjectViaSidebarMenuOnProjectStatusPage() {
-
-        createProjectViaSidebarMenu(PROJECT_NAME);
-
-        getWait5().until(ExpectedConditions.visibilityOfElementLocated(
-                By.xpath("//a[@data-build-success='Build scheduled']"))).click();
-
-        clickOnSuccessBuildIcon();
-
-        Assert.assertTrue(
-                getWait2().until(ExpectedConditions.visibilityOfElementLocated(By.id("out"))).getText()
-                        .contains("Finished: SUCCESS"));
-    }
-
     @Test(dependsOnMethods = "testBuildProjectViaSidebarMenuOnProjectStatusPage")
     public void testAddBuildDisplayName() {
         openProject(PROJECT_NAME);
