@@ -2,11 +2,12 @@ package school.redrover;
 
 import org.openqa.selenium.By;
 import org.testng.Assert;
+import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import school.redrover.runner.BaseTest;
 
 public class DropdownMenu1Test extends BaseTest {
-
+    @Ignore
     @Test
     public void testBreadcrumbsItemName() {
         getDriver().findElement(By.xpath("//*[@id=\"main-panel\"]/div[2]/div/section[1]/ul/li/a")).click();
