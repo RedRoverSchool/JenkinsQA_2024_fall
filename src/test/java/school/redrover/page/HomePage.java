@@ -233,7 +233,7 @@ public class HomePage extends BasePage {
 
     public List<String> getItemList() {
 
-        return getDriver().findElements(By.xpath("//td/a[contains(@href,'job/')]"))
+        return getDriver().findElements(By.xpath("//tr/td/a[@class='jenkins-table__link model-link inside']"))
                 .stream()
                 .map(WebElement::getText)
                 .toList();
