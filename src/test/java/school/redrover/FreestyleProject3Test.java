@@ -1,15 +1,11 @@
 package school.redrover;
 
 import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.Assert;
-import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import school.redrover.runner.BaseTest;
-import school.redrover.runner.TestUtils;
 
 import java.util.List;
 
@@ -18,8 +14,6 @@ public class FreestyleProject3Test extends BaseTest {
     private static final String PROJECT_NAME = "FreestyleProject fall2024";
 
     private static final String DESCRIPTION = "Bla-bla-bla project";
-
-    private static final By CODE_MIRROR_EDITOR = By.cssSelector(".CodeMirror");
 
     private static final String DISPLAY_BUILD_NAME = "BuildName";
 
@@ -31,11 +25,6 @@ public class FreestyleProject3Test extends BaseTest {
         getDriver().findElement(By.id("ok-button")).click();
 
         getDriver().findElement(By.name("Submit")).click();
-    }
-
-    private void clickConfigureInSidebarMenuOnProjectStatusPage() {
-        getWait2().until(ExpectedConditions.visibilityOfElementLocated(
-                By.xpath("//a[contains(@href, 'configure')]"))).click();
     }
 
     private void openProject(String name) {
@@ -76,46 +65,6 @@ public class FreestyleProject3Test extends BaseTest {
     private void wipeOutCurrentWorkspace() {
     getWait10().until(ExpectedConditions.visibilityOfElementLocated(
             By.xpath("//a[@data-title='Wipe Out Current Workspace']"))).click();
-    }
-
-    @Ignore
-    @Test
-    public void testAddBuildStepsExecuteShellCommandWhenConfigureProject() {
-        final String testCommand = "echo \"TEST! Hello Jenkins!\"";
-
-        createProjectViaSidebarMenu(PROJECT_NAME);
-
-        clickConfigureInSidebarMenuOnProjectStatusPage();
-
-        TestUtils.scrollToBottom(getDriver());
-
-        getWait10().until(ExpectedConditions.elementToBeClickable(
-                By.xpath("//button[contains(text(), 'Add build step')]"))).click();
-
-        getWait2().until(ExpectedConditions.elementToBeClickable(
-                By.xpath("//button[contains(text(), 'Execute shell')]"))).click();
-
-        JavascriptExecutor js = (JavascriptExecutor) getDriver();
-        js.executeScript("arguments[0].CodeMirror.focus();", getDriver().findElement(CODE_MIRROR_EDITOR));
-
-        Actions actions = new Actions(getDriver());
-        actions.click(getDriver().findElement(CODE_MIRROR_EDITOR));
-        for (char c : testCommand.toCharArray()) {
-            actions.sendKeys(String.valueOf(c));
-        }
-        actions.build().perform();
-
-        TestUtils.scrollToBottom(getDriver());
-        getWait2().until(ExpectedConditions.elementToBeClickable(By.name("Submit"))).click();
-
-        clickConfigureInSidebarMenuOnProjectStatusPage();
-
-        TestUtils.scrollToBottom(getDriver());
-
-        String extractedText = (String) js.executeScript(
-                "return arguments[0].CodeMirror.getValue();", getDriver().findElement(CODE_MIRROR_EDITOR));
-
-        Assert.assertEquals(extractedText, testCommand);
     }
 
     @Test
