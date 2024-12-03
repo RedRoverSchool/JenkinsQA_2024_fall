@@ -77,8 +77,8 @@ public class FreestyleProjectTest extends BaseTest {
                 .gotoHomePage()
                 .getItemList();
 
-        Assert.assertEquals(projectName.size(), 0);
-        Assert.assertEquals(projectName.get(1), PROJECT_NAME);
+        Assert.assertEquals(projectName.size(), 1);
+        Assert.assertEquals(projectName.get(0), PROJECT_NAME);
     }
 
    @Test(dependsOnMethods = "testCreateProjectViaCreateJobButton")
