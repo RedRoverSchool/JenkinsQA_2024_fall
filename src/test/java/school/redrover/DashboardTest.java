@@ -1,12 +1,17 @@
 package school.redrover;
 
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import school.redrover.page.HomePage;
 import school.redrover.runner.BaseTest;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class DashboardTest extends BaseTest {
 
@@ -69,4 +74,43 @@ public class DashboardTest extends BaseTest {
 
         Assert.assertEquals(titleTableHeader, "S");
     }
+
+    @Test
+    public void testVerifyProjectOrderByStatusASCByDefault() {
+        final String invalidPipelineScriptFile = "InvalidPipelineScript.txt";
+        final String validPipelineScriptFile = "ValidPipelineScript.txt";
+
+        List<String> projectNameList = new HomePage(getDriver())
+                .clickNewItem()
+                .enterItemName("FPipelineProject")
+                .selectPipelineAndClickOk()
+                .enterScriptFromFile(validPipelineScriptFile)
+                .clickSaveButton()
+                .gotoHomePage()
+                .selectBuildNowFromItemMenu("FPipelineProject")
+                .clickNewItem()
+                .enterItemName("APipelineProject")
+                .selectPipelineAndClickOk()
+                .clickToggleToDisableOrEnableProject()
+                .clickSaveButton()
+                .gotoHomePage()
+                .clickNewItem()
+                .enterItemName("ZPipelineProject")
+                .selectPipelineAndClickOk()
+                .enterScriptFromFile(invalidPipelineScriptFile)
+                .clickSaveButton()
+                .gotoHomePage()
+                .selectBuildNowFromItemMenu("ZPipelineProject")
+                .clickNewItem()
+                .enterItemName("1PipelineProject")
+                .selectPipelineAndClickOk()
+                .enterScriptFromFile(invalidPipelineScriptFile)
+                .clickSaveButton()
+                .gotoHomePage()
+                .clickStatusTableHeaderChangeOrder()
+                .getItemList();
+
+        Assert.assertEquals(projectNameList, List.of("1PipelineProject", "APipelineProject", "FPipelineProject", "ZPipelineProject"));
+    }
+
 }
