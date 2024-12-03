@@ -11,7 +11,7 @@ import school.redrover.runner.TestUtils;
 public class FreestyleConfigPage extends BaseConfigPage<FreestyleConfigPage, FreestyleProjectPage> {
 
     private static final By CODE_MIRROR_FIELD = By.xpath("//div[@class='CodeMirror']");
-//div[@class='CodeMirror']//textarea
+
     public FreestyleConfigPage(WebDriver driver) {
         super(driver);
     }
@@ -80,6 +80,7 @@ public class FreestyleConfigPage extends BaseConfigPage<FreestyleConfigPage, Fre
     }
 
     public String getTextExecuteShellTextArea() {
+        TestUtils.scrollToBottom(getDriver());
         return (String) ((JavascriptExecutor) getDriver()).executeScript(
                 "return arguments[0].CodeMirror.getValue();", getDriver().findElement(CODE_MIRROR_FIELD));
     }
