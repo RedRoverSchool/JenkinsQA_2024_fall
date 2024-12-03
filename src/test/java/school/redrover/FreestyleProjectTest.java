@@ -188,4 +188,17 @@ public class FreestyleProjectTest extends BaseTest {
 
         Assert.assertTrue(actualBuildName.contains(newDisplayName));
     }
+
+    @Test(dependsOnMethods = "testBuildProjectViaSidebarMenuOnProjectPage")
+    public void testAddBuildDescription() {
+        String actualDescription = new HomePage(getDriver())
+                .openFreestyleProject(PROJECT_NAME)
+                .clickOnSuccessBuildIcon()
+                .clickEditBuildInformationSidebar()
+                .addBuildDescription(DESCRIPTION)
+                .clickSaveButton()
+                .getBuildDescription();
+
+        Assert.assertEquals(actualDescription, DESCRIPTION);
+    }
 }
