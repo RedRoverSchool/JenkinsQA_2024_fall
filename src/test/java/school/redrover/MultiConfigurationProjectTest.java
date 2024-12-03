@@ -13,7 +13,6 @@ import school.redrover.page.HomePage;
 import school.redrover.page.MultiConfigurationConfigPage;
 import school.redrover.runner.BaseTest;
 
-import java.time.Duration;
 import java.util.List;
 
 public class MultiConfigurationProjectTest extends BaseTest {
