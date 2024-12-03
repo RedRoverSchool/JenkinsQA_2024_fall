@@ -1,10 +1,10 @@
 package school.redrover;
 
 import org.openqa.selenium.By;
-import org.openqa.selenium.Keys;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.Ignore;
@@ -37,6 +37,16 @@ public class ManageJenkinsTest extends BaseTest {
             ExpectedConditions.elementToBeClickable(By.xpath("//a[span[text()='Manage Jenkins']]")));
         manageJenkinsTask.click();
 
+    }
+
+    @Test
+    public void testRedirectionToManage() {
+        String urlBeforeRedirection = getDriver().getCurrentUrl();
+
+        getDriver().findElement(By.xpath("//div[@id='tasks']//a[@href='/manage']")).click();
+        String currentURL = getDriver().getCurrentUrl();
+
+        Assert.assertEquals(currentURL, urlBeforeRedirection + "manage/");
     }
 
     @Test
@@ -202,5 +212,57 @@ public class ManageJenkinsTest extends BaseTest {
                                 .getCurrentUrl();
 
         Assert.assertTrue(currentUrl.endsWith("/manage/configureCredentials/"));
+    }
+
+    @Test
+    public void testSystemButton() {
+        getDriver().findElement(By.xpath("//a[@href='/manage']")).click();
+        getDriver().findElement(By.xpath("//a[@href='configure']")).click();
+
+        String currentUrl = getDriver().getCurrentUrl();
+        String getSystemText = getDriver().findElement(By.xpath("//div[@id='main-panel']")).getText().toLowerCase();
+
+        Assert.assertEquals(currentUrl, ProjectUtils.getUrl() + "manage/configure",
+                "Current URL does not meet requirement. ");
+        Assert.assertTrue(getSystemText.contains("system"), "Current page does not contain the word 'System'");
+    }
+
+    @Test
+    public void testSystemMessagePreview() {
+        getDriver().findElement(By.xpath("//a[contains(@href, '/manage')]")).click();
+        getWait10().until(ExpectedConditions.elementToBeClickable(By.xpath("//a[contains(@href, 'configureSecurity')]"))).click();
+        getWait5().until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//option[text() = 'Plain text']/..")));
+
+        new Select(getDriver().findElement(By.xpath("//option[text() = 'Plain text']/..")))
+                .selectByVisibleText("Safe HTML");
+
+        getDriver().findElement(By.name("Apply")).click();
+        getWait5().until(ExpectedConditions.elementToBeClickable(By.name("Submit"))).click();
+
+        getWait5().until(ExpectedConditions.elementToBeClickable(By.xpath("(//a[contains(@href, 'configure')])[1]"))).click();
+
+        getWait5().until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//textarea[@name = 'system_message']/.."))).click();
+        getDriver().findElement(By.xpath("//div[@class = 'CodeMirror']/div/textarea")).sendKeys("<h2>Hello</h2>");
+
+        getWait5().until(ExpectedConditions.elementToBeClickable(By.xpath("//a[@previewendpoint = '/markupFormatter/previewDescription']"))).click();
+
+        Assert.assertEquals(getDriver().findElement(By.xpath("//div[@class = 'textarea-preview']/h2")).getText(), "Hello");
+    }
+
+    @Test
+    public void testVisitPageThreadDumps (){
+        getDriver().findElement(By.xpath("//a[@href ='/manage']")).click();
+
+        JavascriptExecutor scrollPage = (JavascriptExecutor) getDriver();
+        scrollPage.executeScript("window.scrollBy(0,5000)");
+
+        getDriver().findElement(By.xpath("//a[@href ='systemInfo']")).click();
+
+        getDriver().findElement(By.xpath("//*[contains(text(),'Thread Dumps')]")).click();
+
+        getDriver().findElement(By.xpath("//a[@href ='threadDump']")).click();
+
+        Assert.assertEquals(getDriver().findElement
+                (By.xpath("//div/h1")).getText(), "Thread Dump");
     }
 }
