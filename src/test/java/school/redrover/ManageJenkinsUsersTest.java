@@ -9,12 +9,11 @@ import school.redrover.runner.BaseTest;
 public class ManageJenkinsUsersTest extends BaseTest {
 
     @Test
-    public void testOpenUsersInManege(){
-        new HomePage(getDriver())
+    public void testCheckTitle(){
+        String title = new HomePage(getDriver())
                 .openManageJenkinsPage()
-                .openUsersPage();
-
-        String title = getDriver().findElement(By.xpath("//div[@class='jenkins-app-bar__content']/h1")).getText();
+                .openUsersPage()
+                .getTitle();
 
         Assert.assertTrue(title.startsWith("Users"), title);
     }
