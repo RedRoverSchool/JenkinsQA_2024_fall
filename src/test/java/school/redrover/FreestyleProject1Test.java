@@ -135,7 +135,7 @@ public class FreestyleProject1Test extends BaseTest {
     }
 
     @Test
-    public void testChevronRenameFreestyleProject() throws InterruptedException {
+    public void testChevronRenameFreestyleProject() {
         new HomePage(getDriver())
                 .createFreestyleProject(NEW_FREESTYLE_PROJECT_NAME);
 
