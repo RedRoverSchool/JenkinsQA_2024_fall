@@ -6,7 +6,7 @@ import school.redrover.page.CreateNewItemPage;
 
 public abstract class BaseCreatePage<Self extends BaseCreatePage<?>> extends BasePage {
 
-    By getOkButton = By.id("ok-button");
+    public static final By GET_OK_BUTTON = By.id("ok-button");
 
     public BaseCreatePage(WebDriver driver) {
         super(driver);
@@ -19,7 +19,7 @@ public abstract class BaseCreatePage<Self extends BaseCreatePage<?>> extends Bas
     }
 
     public Self clickOkButton() {
-        getDriver().findElement(getOkButton).click();
+        getDriver().findElement(GET_OK_BUTTON).click();
 
         return (Self) this;
     }
