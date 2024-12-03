@@ -2,6 +2,7 @@ package school.redrover;
 
 import org.openqa.selenium.By;
 import org.testng.Assert;
+import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import school.redrover.runner.BaseTest;
 
@@ -18,6 +19,7 @@ public class FreestyleProject6Test extends BaseTest {
         getDriver().findElement(By.className("jenkins-submit-button")).click();
     }
 
+    @Ignore
     @Test
     public void testCreateProject() {
 

@@ -1,7 +1,9 @@
 package school.redrover.page;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import school.redrover.page.base.BasePage;
 
@@ -11,16 +13,34 @@ public class CreateNewItemPage extends BasePage {
         super(driver);
     }
 
+    private static final By getMultiConfigurationProject = By.xpath("//li//span[text()='Multi-configuration project']");
+    private static final By getSubmitButton = By.xpath("//button[@id = 'ok-button']");
     private static final By GET_ORGANIZATION_FOLDER = By.xpath("//li[contains(@class,'jenkins_branch_OrganizationFolder')]");
+    private static final By getInputName = By.id("name");
+    private static final By getOkButton = By.id("ok-button");
 
     public CreateNewItemPage enterItemName(String name) {
-        getDriver().findElement(By.id("name")).sendKeys(name);
+        getDriver().findElement(getInputName).sendKeys(name);
 
         return this;
     }
 
     public void clickOkButton() {
-        getDriver().findElement(By.id("ok-button")).click();
+        getDriver().findElement(getOkButton).click();
+    }
+
+    public FreestyleConfigPage clickOkToSubmit() {
+        getDriver().findElement(getOkButton).click();
+
+        return new FreestyleConfigPage(getDriver());
+    }
+
+    public CreateNewItemPage selectTypeOfProject(String name ) {
+        getDriver().findElement(By.xpath("//span[text()='" +  name + "']")).click();
+
+        return new CreateNewItemPage(getDriver());
+
+
     }
 
     public CreateNewItemPage selectFolderType() {
@@ -113,5 +133,41 @@ public class CreateNewItemPage extends BasePage {
     public String getErrorMessage() {
         return getWait5().until(ExpectedConditions.visibilityOfElementLocated(
                 By.xpath("//div[@class='add-item-name']/div[@class='input-validation-message']"))).getText();
+    }
+
+    public CreateNewItemPage choseMultiConfigurationProject() {
+        getDriver().findElement(getMultiConfigurationProject).click();
+
+        return this;
+    }
+
+    public MultiConfigurationProjectPage submitCreationProject() {
+        getDriver().findElement(getSubmitButton).click();
+
+        return new MultiConfigurationProjectPage(getDriver());
+    }
+
+    public OrganizationFolderConfigurationPage clickOrganizationFolderAndClickOk() {
+        getDriver().findElement(GET_ORGANIZATION_FOLDER).click();
+        clickOkButton();
+
+        return new OrganizationFolderConfigurationPage(getDriver());
+    }
+
+    public CreateNewItemPage scrollToCopyFromFieldAndEnterName(String name) {
+        final WebElement copyFromField = getDriver().findElement(By.id("from"));
+
+        JavascriptExecutor js = (JavascriptExecutor) getDriver();
+        js.executeScript("arguments[0].scrollIntoView(true);", copyFromField);
+
+        copyFromField.sendKeys(name);
+
+        return this;
+    }
+
+    public PipelineConfigurePage clickOkAndGoToPipelineConfigPage() {
+        getDriver().findElement(getOkButton).click();
+
+        return new PipelineConfigurePage(getDriver());
     }
 }

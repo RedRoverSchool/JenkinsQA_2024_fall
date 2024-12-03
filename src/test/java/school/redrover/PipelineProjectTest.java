@@ -1,5 +1,6 @@
 package school.redrover;
 
+import org.openqa.selenium.WebElement;
 import org.testng.Assert;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
@@ -13,8 +14,15 @@ import java.util.Map;
 
 public class PipelineProjectTest extends BaseTest {
 
-    private static final String PIPELINE_NAME = "PipelineName";
+    private static final String PROJECT_NAME = "PipelineName";
     private static final String NEW_PROJECT_NAME = "NewPipelineName";
+    private static final List<String> PIPELINE_STAGES = List.of("Start", "Build", "Test", "End");
+    private static final String PIPELINE_SCRIPT = """
+        pipeline {agent any\n stages {
+        stage('Build') {steps {echo 'Building the application'}}
+        stage('Test') {steps {error 'Test stage failed due to an error'}}
+        }
+        """;
 
     @DataProvider
     public Object[][] providerUnsafeCharacters() {
@@ -31,7 +39,7 @@ public class PipelineProjectTest extends BaseTest {
     public void testCreateProjectWithValidNameViaSidebar() {
         List<String> itemList = new HomePage(getDriver())
                 .clickNewItem()
-                .enterItemName(PIPELINE_NAME)
+                .enterItemName(PROJECT_NAME)
                 .selectPipelineAndClickOk()
                 .clickSaveButton()
                 .gotoHomePage()
@@ -39,14 +47,14 @@ public class PipelineProjectTest extends BaseTest {
 
         Assert.assertListContainsObject(
                 itemList,
-                PIPELINE_NAME,
+                PROJECT_NAME,
                 "Project is not created");
     }
 
     @Test(dependsOnMethods = "testCreateProjectWithValidNameViaSidebar")
     public void testVerifySidebarOptionsOnProjectPage() {
         List<String> actualSidebarOptionList = new HomePage(getDriver())
-                .openPipelineProject(PIPELINE_NAME)
+                .openPipelineProject(PROJECT_NAME)
                 .getSidebarOptionList();
 
         Assert.assertEquals(
@@ -58,8 +66,8 @@ public class PipelineProjectTest extends BaseTest {
     @Test(dependsOnMethods = "testVerifySidebarOptionsOnProjectPage")
     public void testVerifySidebarOptionsOnConfigurationPage() {
         List<String> actualSidebarOptionList = new HomePage(getDriver())
-                .openPipelineProject(PIPELINE_NAME)
-                .clickConfigureSidebar(PIPELINE_NAME)
+                .openPipelineProject(PROJECT_NAME)
+                .clickConfigureSidebar(PROJECT_NAME)
                 .getSidebarConfigurationOption();
 
         Assert.assertEquals(
@@ -71,8 +79,8 @@ public class PipelineProjectTest extends BaseTest {
     @Test(dependsOnMethods = "testVerifySidebarOptionsOnConfigurationPage")
     public void testVerifyCheckboxTooltipsContainCorrectText() {
         Map<String, String> labelToTooltipTextMap = new HomePage(getDriver())
-                .openPipelineProject(PIPELINE_NAME)
-                .clickConfigureSidebar(PIPELINE_NAME)
+                .openPipelineProject(PROJECT_NAME)
+                .clickConfigureSidebar(PROJECT_NAME)
                 .getCheckboxWithTooltipTextMap();
 
         labelToTooltipTextMap.forEach((checkbox, tooltip) ->
@@ -86,7 +94,7 @@ public class PipelineProjectTest extends BaseTest {
         final String expectedProjectDescription = "Certain_project_description";
 
         String actualDescription = new HomePage(getDriver())
-                .openPipelineProject(PIPELINE_NAME)
+                .openPipelineProject(PROJECT_NAME)
                 .editDescription(expectedProjectDescription)
                 .getDescription();
 
@@ -99,8 +107,8 @@ public class PipelineProjectTest extends BaseTest {
     @Test(dependsOnMethods = "testAddDescriptionToProject")
     public void testGetWarningMessageWhenDisableProject() {
         PipelineProjectPage pipelineProjectPage = new HomePage(getDriver())
-                .openPipelineProject(PIPELINE_NAME)
-                .clickConfigureSidebar(PIPELINE_NAME)
+                .openPipelineProject(PROJECT_NAME)
+                .clickConfigureSidebar(PROJECT_NAME)
                 .clickToggleToDisableOrEnableProject()
                 .clickSaveButton();
 
@@ -117,18 +125,18 @@ public class PipelineProjectTest extends BaseTest {
         HomePage homePage = new HomePage(getDriver());
 
         Assert.assertTrue(
-                homePage.isDisableCircleSignPresent(PIPELINE_NAME));
+                homePage.isDisableCircleSignPresent(PROJECT_NAME));
         Assert.assertFalse(
-                homePage.isGreenScheduleBuildTrianglePresent(PIPELINE_NAME));
+                homePage.isGreenScheduleBuildTrianglePresent(PROJECT_NAME));
     }
 
     @Test(dependsOnMethods = "testDisableProject")
     public void testEnableProject() {
         boolean isGreenBuildButtonPresent = new HomePage(getDriver())
-                .openPipelineProject(PIPELINE_NAME)
+                .openPipelineProject(PROJECT_NAME)
                 .clickEnableButton()
                 .gotoHomePage()
-                .isGreenScheduleBuildTrianglePresent(PIPELINE_NAME);
+                .isGreenScheduleBuildTrianglePresent(PROJECT_NAME);
 
         Assert.assertTrue(
                 isGreenBuildButtonPresent,
@@ -137,11 +145,11 @@ public class PipelineProjectTest extends BaseTest {
 
     @Test
     public void testGetPermalinksInformationUponSuccessfulBuild() {
-        TestUtils.createPipeline(this, PIPELINE_NAME);
+        TestUtils.createPipeline(this, PROJECT_NAME);
 
         List<String> permalinkList = new HomePage(getDriver())
-                .clickScheduleBuild(PIPELINE_NAME)
-                .openPipelineProject(PIPELINE_NAME)
+                .clickScheduleBuild(PROJECT_NAME)
+                .openPipelineProject(PROJECT_NAME)
                 .getPermalinkList();
 
         Assert.assertTrue(
@@ -157,7 +165,7 @@ public class PipelineProjectTest extends BaseTest {
     @Test(dependsOnMethods = "testGetPermalinksInformationUponSuccessfulBuild")
     public void testGetSuccessTooltipDisplayedWhenHoverOverGreenMark() {
         String greenMarkTooltip = new HomePage(getDriver())
-                .openPipelineProject(PIPELINE_NAME)
+                .openPipelineProject(PROJECT_NAME)
                 .hoverOverBuildStatusMark()
                 .getStatusMarkTooltipText();
 
@@ -169,10 +177,10 @@ public class PipelineProjectTest extends BaseTest {
     @Test(dependsOnMethods = "testGetSuccessTooltipDisplayedWhenHoverOverGreenMark")
     public void testKeepBuildForever() {
         boolean isDeleteOptionPresent = new HomePage(getDriver())
-                .openPipelineProject(PIPELINE_NAME)
+                .openPipelineProject(PROJECT_NAME)
                 .clickBuildStatusMark()
                 .clickKeepThisBuildForever()
-                .isDeleteBuildOptionSidebarPresent(PIPELINE_NAME);
+                .isDeleteBuildOptionSidebarPresent(PROJECT_NAME);
 
         Assert.assertFalse(
                 isDeleteOptionPresent,
@@ -182,8 +190,8 @@ public class PipelineProjectTest extends BaseTest {
     @Test(dependsOnMethods = "testEnableProject")
     public void testRenameProjectViaSidebar() {
         List<String> projectList = new HomePage(getDriver())
-                .openPipelineProject(PIPELINE_NAME)
-                .clickRenameSidebar(PIPELINE_NAME)
+                .openPipelineProject(PROJECT_NAME)
+                .clickRenameSidebar(PROJECT_NAME)
                 .cleanInputFieldAndTypeName(NEW_PROJECT_NAME)
                 .clickRenameButton()
                 .gotoHomePage()
@@ -212,15 +220,15 @@ public class PipelineProjectTest extends BaseTest {
     public void testDeleteViaChevron() {
         List<String> projectList = new HomePage(getDriver())
                 .clickNewItem()
-                .enterItemName(PIPELINE_NAME)
+                .enterItemName(PROJECT_NAME)
                 .selectPipelineAndClickOk()
                 .clickSaveButton()
                 .gotoHomePage()
-                .selectDeleteFromItemMenu(PIPELINE_NAME)
+                .selectDeleteFromItemMenu(PROJECT_NAME)
                 .clickYesForConfirmDelete()
                 .getItemList();
 
-        Assert.assertListNotContainsObject(projectList, PIPELINE_NAME, "Project is not deleted");
+        Assert.assertListNotContainsObject(projectList, PROJECT_NAME, "Project is not deleted");
     }
 
     @Test
@@ -237,16 +245,16 @@ public class PipelineProjectTest extends BaseTest {
     @Test
     public void testCreateWithDuplicateName() {
         String errorMessage = new HomePage(getDriver()).clickNewItem()
-                .enterItemName(PIPELINE_NAME)
+                .enterItemName(PROJECT_NAME)
                 .selectPipelineAndClickOk()
                 .clickSaveButton()
                 .gotoHomePage()
                 .clickNewItem()
-                .enterItemName(PIPELINE_NAME)
+                .enterItemName(PROJECT_NAME)
                 .selectPipeline()
                 .getErrorMessage();
 
-        Assert.assertEquals(errorMessage, "» A job already exists with the name ‘%s’".formatted(PIPELINE_NAME));
+        Assert.assertEquals(errorMessage, "» A job already exists with the name ‘%s’".formatted(PROJECT_NAME));
     }
 
     @Test(dataProvider = "providerUnsafeCharacters")
@@ -264,29 +272,29 @@ public class PipelineProjectTest extends BaseTest {
     public void testRename() {
         PipelineProjectPage projectPage = new HomePage(getDriver())
                 .clickNewItem()
-                .enterItemName(PIPELINE_NAME)
+                .enterItemName(PROJECT_NAME)
                 .selectPipelineAndClickOk()
                 .clickSaveButton()
                 .gotoHomePage()
-                .clickOnPipelineName(PIPELINE_NAME)
-                .clickRenameSidebar(PIPELINE_NAME)
+                .openPipelineProject(PROJECT_NAME)
+                .clickRenameSidebar(PROJECT_NAME)
                 .cleanInputFieldAndTypeName(NEW_PROJECT_NAME)
                 .clickRenameButton();
 
         Assert.assertEquals(projectPage.getTitle(), NEW_PROJECT_NAME);
-        Assert.assertEquals(projectPage.getProjectNameBreadcrumb(),NEW_PROJECT_NAME);
+        Assert.assertEquals(projectPage.getProjectNameBreadcrumb(), NEW_PROJECT_NAME);
     }
 
     @Test()
     public void testWarningMessageOnRenameProjectPage() {
         String actualWarningMessage = new HomePage(getDriver())
                 .clickNewItem()
-                .enterItemName(PIPELINE_NAME)
+                .enterItemName(PROJECT_NAME)
                 .selectPipelineAndClickOk()
                 .clickSaveButton()
                 .gotoHomePage()
-                .clickOnPipelineName(PIPELINE_NAME)
-                .clickRenameSidebar(PIPELINE_NAME)
+                .openPipelineProject(PROJECT_NAME)
+                .clickRenameSidebar(PROJECT_NAME)
                 .getWarningMessage();
 
         Assert.assertEquals(actualWarningMessage, "The new name is the same as the current name.");
@@ -296,11 +304,11 @@ public class PipelineProjectTest extends BaseTest {
     public void testRenameByChevronDashboard() {
         PipelineProjectPage projectPage = new HomePage(getDriver())
                 .clickNewItem()
-                .enterItemName(PIPELINE_NAME)
+                .enterItemName(PROJECT_NAME)
                 .selectPipelineAndClickOk()
                 .clickSaveButton()
                 .gotoHomePage()
-                .goToPipelineRenamePageViaDropdown(PIPELINE_NAME)
+                .goToPipelineRenamePageViaDropdown(PROJECT_NAME)
                 .cleanInputFieldAndTypeName(NEW_PROJECT_NAME)
                 .clickRenameButton();
 
@@ -321,11 +329,11 @@ public class PipelineProjectTest extends BaseTest {
     public void testDeleteByChevronBreadcrumb() {
         String welcomeTitle = new HomePage(getDriver())
                 .clickNewItem()
-                .enterItemName(PIPELINE_NAME)
+                .enterItemName(PROJECT_NAME)
                 .selectPipelineAndClickOk()
                 .gotoHomePage()
-                .openPipelineProject(PIPELINE_NAME)
-                .openDropDownMenuByChevronBreadcrumb(PIPELINE_NAME)
+                .openPipelineProject(PROJECT_NAME)
+                .openDropDownMenuByChevronBreadcrumb(PROJECT_NAME)
                 .clickDeletePipelineSidebarAndConfirmDeletion()
                 .getWelcomeTitle();
 
@@ -336,12 +344,12 @@ public class PipelineProjectTest extends BaseTest {
     public void testPipelineDisabledTooltipOnHomePage() {
         String tooltipValue = new HomePage(getDriver())
                 .clickNewItem()
-                .enterItemName(PIPELINE_NAME)
+                .enterItemName(PROJECT_NAME)
                 .selectPipelineAndClickOk()
                 .clickToggleToDisableOrEnableProject()
                 .clickSaveButton()
                 .gotoHomePage()
-                .getTooltipValue(PIPELINE_NAME);
+                .getStatusBuild(PROJECT_NAME);
 
         Assert.assertEquals(tooltipValue, "Disabled");
     }
@@ -349,36 +357,118 @@ public class PipelineProjectTest extends BaseTest {
     @Test
     public void testBuildWithValidPipelineScript() {
         final String validPipelineScriptFile = "ValidPipelineScript.txt";
-        final String status = "Success";
 
         String statusBuild = new HomePage(getDriver())
                 .clickNewItem()
-                .enterItemName(PIPELINE_NAME)
+                .enterItemName(PROJECT_NAME)
                 .selectPipelineAndClickOk()
                 .enterScriptFromFile(validPipelineScriptFile)
                 .clickSaveButton()
                 .gotoHomePage()
-                .clickBuildNowViaDropdown(PIPELINE_NAME)
-                .getStatusBuild(PIPELINE_NAME, status);
+                .selectBuildNowFromItemMenu(PROJECT_NAME)
+                .refreshAfterBuild()
+                .getStatusBuild(PROJECT_NAME);
 
-        Assert.assertEquals(statusBuild, status);
+        Assert.assertEquals(statusBuild, "Success");
     }
 
     @Test
     public void testBuildWithInvalidPipelineScript() {
         final String invalidPipelineScriptFile = "InvalidPipelineScript.txt";
-        final String status = "Failed";
 
         String statusBuild = new HomePage(getDriver())
                 .clickNewItem()
-                .enterItemName(PIPELINE_NAME)
+                .enterItemName(PROJECT_NAME)
                 .selectPipelineAndClickOk()
                 .enterScriptFromFile(invalidPipelineScriptFile)
                 .clickSaveButton()
                 .gotoHomePage()
-                .clickBuildNowViaDropdown(PIPELINE_NAME)
-                .getStatusBuild(PIPELINE_NAME, status);
+                .selectBuildNowFromItemMenu(PROJECT_NAME)
+                .refreshAfterBuild()
+                .getStatusBuild(PROJECT_NAME);
 
-        Assert.assertEquals(statusBuild, status);
+        Assert.assertEquals(statusBuild, "Failed");
     }
+
+    @Test
+    public void testVerifyListOfActionsOnSidebar() {
+
+        List<String> actualListActions = new HomePage(getDriver())
+                .clickNewItem()
+                .enterItemName(PROJECT_NAME)
+                .selectPipelineAndClickOk()
+                .clickSaveButton()
+                .gotoHomePage()
+                .openPipelineProject(PROJECT_NAME)
+                .getSidebarOptionList();
+
+        Assert.assertEquals(actualListActions,
+                List.of("Status", "Changes", "Build Now", "Configure", "Delete Pipeline", "Stages", "Rename", "Pipeline Syntax"));
+    }
+
+    @Test
+    public void testListOfRecentBuildsISDisplayedOnStages() {
+
+        List<WebElement> pipelineBuilds = new HomePage(getDriver())
+                .clickNewItem()
+                .enterItemName(PROJECT_NAME)
+                .selectPipelineAndClickOk()
+                .clickSaveButton()
+                .clickOnBuildNowItemOnSidePanelAndWait()
+                .clickOnStagesItemOnSidePanel()
+                .getAllPipelineBuilds();
+
+        Assert.assertFalse(pipelineBuilds.isEmpty());
+    }
+
+    @Test
+    public void testStagesAreDisplayedInPipelineGraph() {
+
+        List<String> stagesNames = new HomePage(getDriver())
+                .clickNewItem()
+                .enterItemName(PROJECT_NAME)
+                .selectPipelineAndClickOk()
+                .addScriptToPipeline(PIPELINE_SCRIPT)
+                .clickSaveButton()
+                .clickOnBuildNowItemOnSidePanelAndWait()
+                .clickOnStagesItemOnSidePanel()
+                .getAllStagesNames();
+
+        Assert.assertEquals(stagesNames, PIPELINE_STAGES);
+    }
+
+    @Test
+    public void testStatusIconsAreDisplayedInPipelineGraph() {
+
+        List<WebElement> icons = new HomePage(getDriver())
+                .clickNewItem()
+                .enterItemName(PROJECT_NAME)
+                .selectPipelineAndClickOk()
+                .addScriptToPipeline(PIPELINE_SCRIPT)
+                .clickSaveButton()
+                .clickOnBuildNowItemOnSidePanelAndWait()
+                .clickOnStagesItemOnSidePanel()
+                .getGreenAndRedIcons();
+
+        Assert.assertTrue(icons.get(0).isDisplayed(), "Green Icon must be displayed");
+        Assert.assertTrue(icons.get(1).isDisplayed(), "Red Icon must be displayed");
+    }
+
+    @Test
+    public void testStatusIconsColor() {
+
+        List<WebElement> icons = new HomePage(getDriver())
+                .clickNewItem()
+                .enterItemName(PROJECT_NAME)
+                .selectPipelineAndClickOk()
+                .addScriptToPipeline(PIPELINE_SCRIPT)
+                .clickSaveButton()
+                .clickOnBuildNowItemOnSidePanelAndWait()
+                .clickOnStagesItemOnSidePanel()
+                .getGreenAndRedIcons();
+
+        Assert.assertEquals(icons.get(0).getCssValue("color"), "rgba(30, 166, 75, 1)");
+        Assert.assertEquals(icons.get(1).getCssValue("color"), "rgba(230, 0, 31, 1)");
+    }
+
 }

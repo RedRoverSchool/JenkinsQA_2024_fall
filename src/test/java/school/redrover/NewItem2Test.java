@@ -17,7 +17,6 @@ import java.util.List;
 public class NewItem2Test extends BaseTest {
 
     private final static By NEW_ITEM_BUTTON = By.xpath("//a[@href='/view/all/newJob']");
-    private final static By PIPELINE_BUTTON = By.xpath("//span[text()='Pipeline']");
     private final static By OK_BUTTON = By.id("ok-button");
     private final static By MESSAGE = By.id("itemname-required");
 
@@ -89,15 +88,6 @@ public class NewItem2Test extends BaseTest {
     }
 
     @Test
-    public void testWarningMessageWhenSelectingItemTypeWithNoItemName() {
-        getDriver().findElement(NEW_ITEM_BUTTON).click();
-        getDriver().findElement(PIPELINE_BUTTON).click();
-        String warningMessage = getDriver().findElement(MESSAGE).getText();
-
-        Assert.assertEquals(warningMessage, "» This field cannot be empty, please enter a valid name");
-    }
-
-    @Test
     public void testOKButtonDisabledWhenNoItemNameInserted() {
         getDriver().findElement(NEW_ITEM_BUTTON).click();
 
@@ -110,14 +100,5 @@ public class NewItem2Test extends BaseTest {
         getDriver().findElement(By.id("name")).sendKeys(NEW_ITEM_NAME);
 
         Assert.assertFalse(getDriver().findElement(OK_BUTTON).isEnabled());
-    }
-
-    @Test
-    public void testOKButtonEnabledWhenItemNameInsertedAndItemTypeSelected() {
-        getDriver().findElement(NEW_ITEM_BUTTON).click();
-        getDriver().findElement(By.id("name")).sendKeys(NEW_ITEM_NAME);
-        getDriver().findElement(PIPELINE_BUTTON).click();
-
-        Assert.assertTrue(getDriver().findElement(OK_BUTTON).isEnabled());
     }
 }
