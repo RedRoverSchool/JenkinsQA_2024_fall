@@ -64,6 +64,20 @@ public class FreestyleProjectTest extends BaseTest {
         Assert.assertEquals(actualProjectName, PROJECT_NAME);
     }
 
+    @Test
+    public void testCreateFreestyleProjectFromMyViews() {
+        String projectName = new HomePage(getDriver())
+                .clickMyViewsButton()
+                .clickCreateJob()
+                .enterItemName(PROJECT_NAME)
+                .selectFreestyleProject()
+                .clickOkToSubmit()
+                .clickSaveButton()
+                .getProjectName();
+
+        Assert.assertEquals(projectName, PROJECT_NAME);
+    }
+
    @Test(dependsOnMethods = "testCreateProjectViaCreateJobButton")
     public void testEditDescriptionOnProjectPage() {
         final String newDescription = "New " + DESCRIPTION;

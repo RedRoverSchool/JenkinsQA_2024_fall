@@ -3,6 +3,7 @@ package school.redrover.page;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import school.redrover.page.base.BasePage;
 
@@ -159,5 +160,22 @@ public class CreateNewItemPage extends BasePage {
         clickOkButton();
 
         return new OrganizationFolderConfigurationPage(getDriver());
+    }
+
+    public CreateNewItemPage scrollToCopyFromFieldAndEnterName(String name) {
+        final WebElement copyFromField = getDriver().findElement(By.id("from"));
+
+        JavascriptExecutor js = (JavascriptExecutor) getDriver();
+        js.executeScript("arguments[0].scrollIntoView(true);", copyFromField);
+
+        copyFromField.sendKeys(name);
+
+        return this;
+    }
+
+    public PipelineConfigurePage clickOkAndGoToPipelineConfigPage() {
+        getDriver().findElement(getOkButton).click();
+
+        return new PipelineConfigurePage(getDriver());
     }
 }
