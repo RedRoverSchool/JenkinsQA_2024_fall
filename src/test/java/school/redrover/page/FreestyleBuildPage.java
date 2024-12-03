@@ -1,9 +1,7 @@
 package school.redrover.page;
 
 import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import school.redrover.page.base.BasePage;
 
@@ -49,9 +47,7 @@ public class FreestyleBuildPage extends BasePage {
     }
 
     public FreestyleBuildPage addBuildDescription(String description) {
-        //getWait5().until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@class='CodeMirror']//textarea"))).sendKeys(description);
-        WebElement codeMirror = getDriver().findElement(By.cssSelector(".CodeMirror"));
-        //((JavascriptExecutor) getDriver()).executeScript("")
+        getWait5().until(ExpectedConditions.visibilityOfElementLocated(By.name("description"))).sendKeys(description);
 
         return this;
     }

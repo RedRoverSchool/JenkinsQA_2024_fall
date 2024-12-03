@@ -62,26 +62,6 @@ public class FreestyleProject3Test extends BaseTest {
     }
 
     @Ignore
-    @Test(dependsOnMethods = "testBuildProjectViaSidebarMenuOnProjectStatusPage")
-    public void testAddBuildDescription() {
-        openProject(PROJECT_NAME);
-
-        clickOnSuccessBuildIcon();
-
-        goToEditBuildInformationPage();
-
-        WebElement descriptionTextField = getWait5().until(ExpectedConditions.visibilityOfElementLocated(
-                By.xpath("//textarea")));
-        descriptionTextField.sendKeys(DESCRIPTION);
-
-        clickSubmitButtonOnBuildInformationPage();
-
-        Assert.assertEquals(
-                getWait5().until(ExpectedConditions.visibilityOfElementLocated(By.id("description"))).getText(),
-                DESCRIPTION);
-    }
-
-    @Ignore
     @Test(dependsOnMethods = {"testBuildProjectViaSidebarMenuOnProjectStatusPage", "testAddBuildDescription"})
     public void testEditBuildDescription() {
         final String newDescriptionTextField = "New " + DESCRIPTION;
