@@ -2,15 +2,16 @@ package school.redrover;
 
 import org.testng.Assert;
 import org.testng.annotations.Test;
-import school.redrover.page.PipelineConfigurePage;
+import school.redrover.page.HomePage;
 import school.redrover.page.PipelineProjectPage;
 import school.redrover.page.PipelineSyntaxPage;
 import school.redrover.runner.BaseTest;
 
 public class SelectAndApplyScriptsTest extends BaseTest {
 
-    private static final String PIPELINE_NAME = "TestName";
-    private final static String SELECT_VALUE = "bat: Windows Batch Script";
+    private final static String PIPELINE_NAME = "TestName";
+    private final static String SELECT_VALUE = "cleanWs: Delete workspace when build is done";
+    private final static String EXPECTED_RESULT = SELECT_VALUE.split(":")[0].trim();
 
     @Test
     public void testPipelineSyntaxPageIsPresent() {
@@ -35,13 +36,12 @@ public class SelectAndApplyScriptsTest extends BaseTest {
                 .selectNewStep(SELECT_VALUE)
                 .getTitleOfSelectedScript(SELECT_VALUE);
 
-        Assert.assertEquals(selectItem, "bat");
+        Assert.assertEquals(selectItem, EXPECTED_RESULT);
     }
 
     @Test(dependsOnMethods = "testSelectScript")
     public void testCopyAndPasteScript() {
-        String pastedText = new PipelineConfigurePage(getDriver())
-                .gotoHomePage()
+        String pastedText = new HomePage(getDriver())
                 .openPipelineProject(PIPELINE_NAME)
                 .gotoPipelineSyntaxPageFromLeftPanel(PIPELINE_NAME)
                 .selectNewStep(SELECT_VALUE)
@@ -53,6 +53,6 @@ public class SelectAndApplyScriptsTest extends BaseTest {
                 .pasteScript()
                 .getScriptText();
 
-        Assert.assertEquals(pastedText, "bat ''");
+        Assert.assertEquals(pastedText, EXPECTED_RESULT);
     }
 }
