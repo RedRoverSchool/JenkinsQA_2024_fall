@@ -1,7 +1,6 @@
 package school.redrover;
 
 import org.testng.Assert;
-import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import school.redrover.page.HomePage;
 import school.redrover.runner.BaseTest;
@@ -42,13 +41,12 @@ public class CreateNewItem1Test extends BaseTest {
         Assert.assertEquals(items.get(0), ITEM_NAME);
     }
 
-    @Ignore
     @Test(dependsOnMethods = "testWithLinkInSidebar")
     public void testCheckUniqueItemName() {
         String error = new HomePage(getDriver())
                 .clickNewItem()
                 .enterItemName(ITEM_NAME)
-                .selectFreestyleProject()
+                .selectTypeProject(FREESTYLE_PROJECT)
                 .getInvalidNameMessage();
 
         Assert.assertEquals(error, "» A job already exists with the name ‘%s’".formatted(ITEM_NAME));
@@ -59,7 +57,7 @@ public class CreateNewItem1Test extends BaseTest {
         String errorMessage = new HomePage(getDriver())
                 .clickNewItem()
                 .enterItemName("<{]_  -&")
-                .selectFreestyleProject()
+                .selectTypeProject(FREESTYLE_PROJECT)
                 .getErrorMessage();
 
         Assert.assertTrue(errorMessage.contains("is an unsafe character"));
