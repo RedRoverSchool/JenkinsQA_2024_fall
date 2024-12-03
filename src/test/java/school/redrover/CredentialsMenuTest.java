@@ -68,27 +68,20 @@ public class CredentialsMenuTest extends BaseTest {
 
         getCredentialsPage();
 
-
-
         WebElement element = getDriver().findElement(By.cssSelector(".model-link.inside.jenkins-table__link"));
         new Actions(getDriver()).moveToElement(element).perform();
 
-        // Находим элемент
         WebElement element1 = getDriver().findElement(By.xpath(
                 "//a[@href='/user/admin/credentials/store/user']/button"));
-        //and @aria-expanded='false']
 
-// Выполняем JavaScript для клика по элементу
         JavascriptExecutor jsExecutor = (JavascriptExecutor) getDriver();
         jsExecutor.executeScript("arguments[0].click();", element1);
-
-
 
         WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(50));
         WebElement element2 = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[contains(@class, 'tippy-box')]")));
         ((JavascriptExecutor) getDriver()).executeScript("arguments[0].click();", element2);
 
-        //assertTrue(addDomainElement.isDisplayed());
+        assertTrue(element2.isDisplayed());
 
     }
 
