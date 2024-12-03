@@ -173,4 +173,19 @@ public class FreestyleProjectTest extends BaseTest {
 
         Assert.assertTrue(actualBuildName.contains(BUILD_NAME), "Title doesn't contain build name");
     }
+
+    @Test(dependsOnMethods = {"testBuildProjectViaSidebarMenuOnProjectPage", "testAddBuildDisplayName"})
+    public void testEditBuildDisplayName() {
+        final String newDisplayName = "New " + BUILD_NAME;
+
+        String actualBuildName = new HomePage(getDriver())
+                .openFreestyleProject(PROJECT_NAME)
+                .clickOnSuccessBuildIcon()
+                .clickEditBuildInformationSidebar()
+                .editDisplayName(newDisplayName)
+                .clickSaveButton()
+                .getStatusTitle();
+
+        Assert.assertTrue(actualBuildName.contains(newDisplayName));
+    }
 }

@@ -7,6 +7,8 @@ import school.redrover.page.base.BasePage;
 
 public class FreestyleBuildPage extends BasePage {
 
+    private static final By DISPLAY_NAME_FIELD = By.xpath("//input[@name='displayName']");
+
     public FreestyleBuildPage(WebDriver driver) {
         super(driver);
     }
@@ -28,8 +30,14 @@ public class FreestyleBuildPage extends BasePage {
     }
 
     public FreestyleBuildPage addDisplayName(String name) {
-        getWait5().until(ExpectedConditions.visibilityOfElementLocated(
-                By.xpath("//input[@name='displayName']"))).sendKeys(name);
+        getWait5().until(ExpectedConditions.visibilityOfElementLocated(DISPLAY_NAME_FIELD)).sendKeys(name);
+
+        return this;
+    }
+
+    public FreestyleBuildPage editDisplayName(String newName) {
+        getWait5().until(ExpectedConditions.visibilityOfElementLocated(DISPLAY_NAME_FIELD)).clear();
+        getWait5().until(ExpectedConditions.visibilityOfElementLocated(DISPLAY_NAME_FIELD)).sendKeys(newName);
 
         return this;
     }

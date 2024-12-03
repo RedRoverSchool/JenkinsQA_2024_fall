@@ -16,8 +16,6 @@ public class FreestyleProject3Test extends BaseTest {
 
     private static final String DESCRIPTION = "Bla-bla-bla project";
 
-    private static final String DISPLAY_BUILD_NAME = "BuildName";
-
     private void createProjectViaSidebarMenu(String projectName) {
         getDriver().findElement(By.xpath("//a[@href='/view/all/newJob']")).click();
 
@@ -41,11 +39,6 @@ public class FreestyleProject3Test extends BaseTest {
         getDriver().findElement(By.xpath("//span[contains(text(), 'Edit Build Information')]/..")).click();
     }
 
-    private WebElement findDisplayNameTextField() {
-        return getWait5().until(ExpectedConditions.visibilityOfElementLocated(
-                By.xpath("//input[@name='displayName']")));
-    }
-
     private void clickSubmitButtonOnBuildInformationPage() {
         getDriver().findElement(By.xpath("//button[@name='Submit']")).click();
     }
@@ -66,26 +59,6 @@ public class FreestyleProject3Test extends BaseTest {
     private void wipeOutCurrentWorkspace() {
     getWait10().until(ExpectedConditions.visibilityOfElementLocated(
             By.xpath("//a[@data-title='Wipe Out Current Workspace']"))).click();
-    }
-
-    @Test(dependsOnMethods = {"testBuildProjectViaSidebarMenuOnProjectStatusPage", "testAddBuildDisplayName"})
-    public void testEditBuildDisplayName() {
-        final String newDisplayProjectName = "New " + DISPLAY_BUILD_NAME;
-
-        openProject(PROJECT_NAME);
-
-        clickOnSuccessBuildIcon();
-
-        goToEditBuildInformationPage();
-
-        findDisplayNameTextField().clear();
-        findDisplayNameTextField().sendKeys(newDisplayProjectName);
-
-        clickSubmitButtonOnBuildInformationPage();
-
-        getWait10().until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//button[@name='Submit']")));
-
-        Assert.assertTrue(getDriver().findElement(By.tagName("h1")).getText().contains(newDisplayProjectName));
     }
 
     @Ignore
