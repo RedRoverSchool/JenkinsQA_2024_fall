@@ -72,6 +72,7 @@ public class FreestyleConfigPage extends BaseConfigPage<FreestyleConfigPage, Fre
     }
 
     public FreestyleConfigPage addExecuteShellCommand(String command) {
+        getWait10().until(ExpectedConditions.visibilityOfElementLocated(CODE_MIRROR_FIELD));
         ((JavascriptExecutor) getDriver()).executeScript("arguments[0].focus();", getDriver().findElement(CODE_MIRROR_FIELD));
         new Actions(getDriver()).click(getDriver().findElement(CODE_MIRROR_FIELD)).sendKeys(command).perform();
 
