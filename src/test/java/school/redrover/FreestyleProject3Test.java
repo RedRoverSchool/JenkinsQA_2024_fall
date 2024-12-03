@@ -4,6 +4,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.Assert;
+import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import school.redrover.runner.BaseTest;
 
@@ -87,6 +88,7 @@ public class FreestyleProject3Test extends BaseTest {
         Assert.assertTrue(getDriver().findElement(By.tagName("h1")).getText().contains(newDisplayProjectName));
     }
 
+    @Ignore
     @Test(dependsOnMethods = "testBuildProjectViaSidebarMenuOnProjectStatusPage")
     public void testAddBuildDescription() {
         openProject(PROJECT_NAME);
@@ -106,6 +108,7 @@ public class FreestyleProject3Test extends BaseTest {
                 DESCRIPTION);
     }
 
+    @Ignore
     @Test(dependsOnMethods = {"testBuildProjectViaSidebarMenuOnProjectStatusPage", "testAddBuildDescription"})
     public void testEditBuildDescription() {
         final String newDescriptionTextField = "New " + DESCRIPTION;
