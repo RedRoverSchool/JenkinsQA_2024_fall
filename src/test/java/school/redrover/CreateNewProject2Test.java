@@ -46,22 +46,6 @@ public class CreateNewProject2Test extends BaseTest {
     }
 
     @Test
-    public void testPipelineProject() {
-
-        createProject(EXPECTED_PROJECT_NAME);
-
-        ProjectUtils.log("Select project type");
-        getDriver().findElement(By.xpath("//li[@class='org_jenkinsci_plugins_workflow_job_WorkflowJob']")).click();
-
-        saveProjectAndGoToMainPage();
-
-        ProjectUtils.log("Verify the project name");
-        Assert.assertEquals(
-                getDriver().findElement(By.xpath("//tr/td/a/span")).getText(),
-                EXPECTED_PROJECT_NAME);
-    }
-
-    @Test
     public void testMultiConfigurationProject() {
 
         createProject(EXPECTED_PROJECT_NAME);

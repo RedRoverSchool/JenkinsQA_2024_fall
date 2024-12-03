@@ -4,12 +4,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.testng.Assert;
 import org.testng.annotations.Test;
-import school.redrover.page.CreateNewItemPage;
-import school.redrover.page.FolderProjectPage;
-import school.redrover.page.HomePage;
 import school.redrover.runner.BaseTest;
-
-import static java.lang.Thread.sleep;
 
 public class NewFolderTest extends BaseTest {
 
@@ -41,50 +36,7 @@ public class NewFolderTest extends BaseTest {
         Thread.sleep(5000);
         Assert.assertEquals(folderName, FOLDER_NAME);
 
-
     }
-
-//    @Test(dependsOnMethods = "testNewItemFolder")
-//    public void testDeleteFolder() throws InterruptedException {
-//        getDriver().findElement(By.xpath("//*[@id='job_FirstFolder']/td[3]/a/span")).click();
-//        Thread.sleep(5000);
-//        getDriver().findElement(By.xpath("//span/a/span[1]")).click();
-//        //getDriver().findElement(By.xpath("//*[@id='jenkins']/dialog/div[3]/button[1]")).click();
-//
-//
-//
-//
-//        }
-
-
-
-//    @Test
-//    public void testCreateMinNameLength() {
-//
-//        new HomePage(getDriver())
-//                .clickNewItem().enterItemName("A")
-//                .selectProjectTypeAndSave(CreateNewItemPage.ItemType.FOLDER)
-//                .gotoHomePage();
-//
-//        Assert.assertEquals(getDriver().findElement(By.xpath("//td/a/span")).getText(),"A");
-//    }
-//
-//    @Test(dependsOnMethods = "testCreateMinNameLength")
-//    public void testConfigureNameByChevron() {
-//
-//        String configurationName = new HomePage(getDriver())
-//                .selectConfigureFromItemMenu("A")
-//                .enterName(FIRST_FOLDER_NAME)
-//                .clickSaveButton()
-//                .getDisplayName();
-//
-//        Assert.assertEquals(configurationName, FIRST_FOLDER_NAME);
-//        Assert.assertEquals(new FolderProjectPage(getDriver()).getFolderName(), "A");
-//    }
-//
-//
-
-
 
 }
 
