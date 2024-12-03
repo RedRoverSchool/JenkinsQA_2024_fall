@@ -11,17 +11,10 @@ public class FreestyleProjectPage extends BaseProjectPage<FreestyleProjectPage> 
         super(driver);
     }
 
-    By getHomeIcon = By.xpath("//a[@id='jenkins-home-link']");
-
     public String getProjectName() {
         return getDriver().findElement(By.tagName("h1")).getText();
     }
 
-    public HomePage goHome() {
-        getDriver().findElement(getHomeIcon).click();
-
-        return new HomePage(getDriver());
-    }
 
     public FreestyleRenamePage clickRenameOnSidebar() {
         getWait10().until(ExpectedConditions.visibilityOfElementLocated(
