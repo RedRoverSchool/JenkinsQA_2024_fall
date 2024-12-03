@@ -10,15 +10,17 @@ import java.util.List;
 
 public class CreateNewItem1Test extends BaseTest {
 
-    private final String ITEM_NAME = "CreateNewItem";
+    private static final String ITEM_NAME = "CreateNewItem";
+    private static final String FREESTYLE_PROJECT = "Freestyle project";
+    private static final String PIPELINE = "Pipeline";
 
     @Test
     public void testWithButton() {
         List<String> items = new HomePage(getDriver())
                 .clickCreateJob()
                 .enterItemName(ITEM_NAME)
-                .selectFreestyleProjectAndClickOk()
-                .clickSaveButton()
+                .selectTypeOfProject(FREESTYLE_PROJECT)
+                .clickOkButton()
                 .gotoHomePage()
                 .getItemList();
 
@@ -31,7 +33,8 @@ public class CreateNewItem1Test extends BaseTest {
         List<String> items = new HomePage(getDriver())
                 .clickNewItem()
                 .enterItemName(ITEM_NAME)
-                .selectFreestyleProjectAndClickOk()
+                .selectTypeProject(PIPELINE)
+                .clickOkButton()
                 .gotoHomePage()
                 .getItemList();
 

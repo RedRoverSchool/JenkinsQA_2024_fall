@@ -31,10 +31,9 @@ public class FreestyleProject1Test extends BaseTest {
                 .clickNewItem()
                 .enterItemName(NEW_FREESTYLE_PROJECT_NAME)
                 .selectTypeOfProject(FREESTYLE_PROJECT_NAME)
-                .clickOkToSubmit()
-                .clickSubmitButton()
-                .goHome()
-                .showCreatedProject();
+                .clickOkButton()
+                .gotoHomePage()
+                .getItemList();
 
         Assert.assertTrue(createProject.contains(NEW_FREESTYLE_PROJECT_NAME));
     }
