@@ -2,9 +2,6 @@ package school.redrover;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
@@ -12,25 +9,19 @@ import school.redrover.page.HomePage;
 import school.redrover.page.MultiConfigurationConfigPage;
 import school.redrover.runner.BaseTest;
 
-import java.time.Duration;
 import java.util.List;
 
 public class MultiConfigurationProjectTest extends BaseTest {
     private static final String NAME_OF_PROJECT = "Multi-configuration project";
     private static final String DESCRIPTIONS = "Descriptions of project";
 
-    private void waitTimeUntilVisibilityElement(Integer time, WebElement element) {
-        new WebDriverWait(getDriver(), Duration.ofSeconds(time)).until(ExpectedConditions.visibilityOf(element));
-    }
-
     @Test(description = "Create project without descriptions")
     public void testCreateProjectWithoutDescription() {
         List<String> itemList = new HomePage(getDriver())
                 .clickNewItem()
                 .enterItemName(NAME_OF_PROJECT)
-                .selectTypeOfProject(NAME_OF_PROJECT)
-                .submitCreationProject()
-                .goHome()
+                .selectMultiConfigurationAndClickOk()
+                .gotoHomePage()
                 .showCreatedProject();
         Assert.assertTrue(itemList.contains(NAME_OF_PROJECT));
     }
