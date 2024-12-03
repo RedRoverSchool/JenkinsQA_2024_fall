@@ -5,7 +5,6 @@ import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import school.redrover.page.base.BaseConfigPage;
 import school.redrover.page.base.BasePage;
 
 public class CreateNewItemPage extends BasePage {
@@ -174,21 +173,9 @@ public class CreateNewItemPage extends BasePage {
         return this;
     }
 
-    public BaseConfigPage clickOkAndGoToConfigPage(String projectType) {
-        clickOkButton();
-        switch (projectType) {
-            case "Freestyle project":
-                return new FreestyleConfigPage(getDriver());
-            case "Pipeline":
-                return new PipelineConfigurePage(getDriver());
-            case "Multi-configuration project":
-                return new MultiConfigurationConfigPage(getDriver());
-            case "Folder":
-                return new FolderConfigPage(getDriver());
-            case "Multibranch Pipeline":
-                return new MultibranchPipelineConfigPage(getDriver());
-            default:
-                throw new IllegalArgumentException("Unsupported project type: " + projectType);
-        }
+    public PipelineConfigurePage clickOkAndGoToPipelineConfigPage() {
+        getDriver().findElement(getOkButton).click();
+
+        return new PipelineConfigurePage(getDriver());
     }
 }
