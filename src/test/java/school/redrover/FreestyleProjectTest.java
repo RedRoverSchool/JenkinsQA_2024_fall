@@ -201,4 +201,20 @@ public class FreestyleProjectTest extends BaseTest {
 
         Assert.assertEquals(actualDescription, DESCRIPTION);
     }
+
+    @Test(dependsOnMethods = {"testBuildProjectViaSidebarMenuOnProjectPage", "testAddBuildDescription"})
+    public void testEditBuildDescription() {
+        final String newDescription = "New " + DESCRIPTION;
+
+        String actualDescription = new HomePage(getDriver())
+                .openFreestyleProject(PROJECT_NAME)
+                .clickOnSuccessBuildIcon()
+                .clickEditBuildInformationSidebar()
+                .editBuildDescription(newDescription)
+                .clickSaveButton()
+                .getBuildDescription();
+
+        Assert.assertEquals(actualDescription, newDescription);
+
+    }
 }

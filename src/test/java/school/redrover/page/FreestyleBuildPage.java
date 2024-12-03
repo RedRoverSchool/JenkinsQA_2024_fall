@@ -9,6 +9,8 @@ public class FreestyleBuildPage extends BasePage {
 
     private static final By DISPLAY_NAME_FIELD = By.xpath("//input[@name='displayName']");
 
+    private static final By DESCRIPTION_FIELD = By.name("description");
+
     public FreestyleBuildPage(WebDriver driver) {
         super(driver);
     }
@@ -48,6 +50,13 @@ public class FreestyleBuildPage extends BasePage {
 
     public FreestyleBuildPage addBuildDescription(String description) {
         getWait5().until(ExpectedConditions.visibilityOfElementLocated(By.name("description"))).sendKeys(description);
+
+        return this;
+    }
+
+    public FreestyleBuildPage editBuildDescription(String newDescription) {
+        getWait5().until(ExpectedConditions.visibilityOfElementLocated(DESCRIPTION_FIELD)).clear();
+        getDriver().findElement(DESCRIPTION_FIELD).sendKeys(newDescription);
 
         return this;
     }
