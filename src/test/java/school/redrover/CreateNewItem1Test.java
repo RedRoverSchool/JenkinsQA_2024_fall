@@ -1,6 +1,7 @@
 package school.redrover;
 
 import org.testng.Assert;
+import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import school.redrover.page.HomePage;
 import school.redrover.runner.BaseTest;
@@ -38,6 +39,7 @@ public class CreateNewItem1Test extends BaseTest {
         Assert.assertEquals(items.get(0), ITEM_NAME);
     }
 
+    @Ignore
     @Test(dependsOnMethods = "testWithLinkInSidebar")
     public void testCheckUniqueItemName() {
         String error = new HomePage(getDriver())

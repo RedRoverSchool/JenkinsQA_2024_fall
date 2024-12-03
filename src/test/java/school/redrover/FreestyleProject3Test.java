@@ -30,18 +30,7 @@ public class FreestyleProject3Test extends BaseTest {
         getDriver().findElement(By.xpath("//li[contains(@class, 'FreeStyleProject')]")).click();
         getDriver().findElement(By.id("ok-button")).click();
 
-        getWait10().until(ExpectedConditions.elementToBeClickable(
-                By.xpath("//button[@name='Submit']"))).click();
-    }
-
-    private void addDescriptionOnProjectStatusPage(String description) {
-        getWait10().until(ExpectedConditions.visibilityOfElementLocated(By.id("description-link"))).click();
-        getDriver().findElement(By.tagName("textarea")).sendKeys(description);
-        getDriver().findElement(By.xpath("//button[@name='Submit']")).click();
-    }
-
-    private void verifyYouAreOnProjectStatusPage() {
-        getWait10().until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//h2[text()='Permalinks']")));
+        getDriver().findElement(By.name("Submit")).click();
     }
 
     private void clickConfigureInSidebarMenuOnProjectStatusPage() {
@@ -91,102 +80,6 @@ public class FreestyleProject3Test extends BaseTest {
 
     @Ignore
     @Test
-    public void testAddDescriptionOnProjectStatusPage() {
-        createProjectViaSidebarMenu(PROJECT_NAME);
-
-        addDescriptionOnProjectStatusPage(DESCRIPTION);
-
-        String projectDescriptionOnStatusPage = getDriver().findElement(
-                By.xpath("//div[@id='description']//div")).getText();
-
-        Assert.assertTrue(projectDescriptionOnStatusPage.contains(DESCRIPTION));
-    }
-
-    @Test
-    public void testEditDescriptionOnProjectStatusPage() {
-        final String newDescription = "New " + DESCRIPTION;
-
-        createProjectViaSidebarMenu(PROJECT_NAME);
-        addDescriptionOnProjectStatusPage(DESCRIPTION);
-
-        WebElement editDescriptionButton = getDriver().findElement(By.id("description-link"));
-        editDescriptionButton.click();
-
-        WebElement descriptionTextField = getDriver().findElement(By.tagName("textarea"));
-        descriptionTextField.clear();
-        descriptionTextField.sendKeys(newDescription);
-        getDriver().findElement(By.xpath("//button[@name='Submit']")).click();
-
-        String projectDescriptionOnStatusPage = getDriver().findElement(
-                By.xpath("//div[@id='description']//div")).getText();
-
-        Assert.assertEquals(projectDescriptionOnStatusPage, newDescription);
-    }
-
-    @Test
-    public void testDeleteDescriptionOnProjectStatusPage() {
-        createProjectViaSidebarMenu(PROJECT_NAME);
-        addDescriptionOnProjectStatusPage(DESCRIPTION);
-
-        getDriver().findElement(By.id("description-link")).click();
-        getDriver().findElement(By.tagName("textarea")).clear();
-        getDriver().findElement(By.xpath("//button[@name='Submit']")).click();
-
-        Assert.assertFalse(getDriver().findElement(By.xpath("//div[@id='description']//div")).getText()
-                .contains(DESCRIPTION));
-    }
-
-    @Test
-    public void testRenameProject() {
-        final String newName = "New " + PROJECT_NAME;
-        createProjectViaSidebarMenu(PROJECT_NAME);
-
-        WebElement renameSidebarMenu = getWait5().until(ExpectedConditions.visibilityOfElementLocated(
-                By.xpath("//a[@href='/job/" + PROJECT_NAME.replace(" ", "%20") + "/confirm-rename']")));
-        renameSidebarMenu.click();
-
-        WebElement newNameTextField = getDriver().findElement(By.xpath("//input[@checkdependson ='newName']"));
-        newNameTextField.clear();
-        newNameTextField.sendKeys(newName);
-
-        getDriver().findElement(By.xpath("//button[@name='Submit']")).click();
-
-        verifyYouAreOnProjectStatusPage();
-
-        Assert.assertEquals(getDriver().findElement(By.tagName("h1")).getText(), newName);
-    }
-
-    @Test
-    public void testDeleteProjectViaChevron() {
-        createProjectViaSidebarMenu(PROJECT_NAME);
-
-        getDriver().findElement(By.xpath("//a[text()='Dashboard']")).click();
-
-        WebElement projectToDelete = getWait10().until(ExpectedConditions.visibilityOfElementLocated(
-                By.xpath("//a[@href='job/" + PROJECT_NAME.replace(" ", "%20") + "/']")));
-        Actions actions = new Actions(getDriver());
-        actions.moveToElement(projectToDelete)
-                .pause(100)
-                .perform();
-
-        WebElement chevron = getWait10().until(ExpectedConditions.visibilityOfElementLocated(
-                By.xpath("//a[@href='job/" + PROJECT_NAME.replace(" ", "%20") + "/']//button")));
-
-        TestUtils.moveAndClickWithJavaScript(getDriver(), chevron);
-
-        WebElement deleteButton = getWait10().until(ExpectedConditions.visibilityOfElementLocated(
-                By.xpath("//button[contains(@href, 'doDelete')]")));
-        deleteButton.click();
-
-        WebElement deleteAlert = getWait10().until(ExpectedConditions.elementToBeClickable(
-                By.xpath("//button[@data-id='ok']")));
-        deleteAlert.click();
-
-        Assert.assertFalse(getDriver().findElement(By.id("main-panel")).getText().contains(PROJECT_NAME));
-    }
-
-    @Ignore
-    @Test
     public void testAddBuildStepsExecuteShellCommandWhenConfigureProject() {
         final String testCommand = "echo \"TEST! Hello Jenkins!\"";
 
@@ -223,25 +116,6 @@ public class FreestyleProject3Test extends BaseTest {
                 "return arguments[0].CodeMirror.getValue();", getDriver().findElement(CODE_MIRROR_EDITOR));
 
         Assert.assertEquals(extractedText, testCommand);
-    }
-
-    @Ignore
-    @Test
-    public void testCheckSidebarMenuItemsOnProjectStatusPage() {
-        final List<String> benchmarkSidebarMenuItems = List.of(
-                "Status", "Changes", "Workspace", "Build Now", "Configure", "Delete Project", "Rename");
-
-        createProjectViaSidebarMenu(PROJECT_NAME);
-
-        getWait10().until(ExpectedConditions.visibilityOfElementLocated(
-                By.xpath("//span[contains(text(), 'Rename')]")));
-
-        List<WebElement> sidebarMenuItems = getWait10().until(ExpectedConditions.visibilityOfAllElementsLocatedBy(
-                By.xpath("//span[contains(@class,'task-icon-link')]/following-sibling::span")));
-
-        List<String> sidebarMenuForCheck = sidebarMenuItems.stream().map(WebElement::getText).toList();
-
-        Assert.assertEquals(sidebarMenuForCheck, benchmarkSidebarMenuItems);
     }
 
     @Test

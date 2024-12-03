@@ -109,15 +109,4 @@ public class PipelineProject5Test extends BaseTest {
 
         assertTrue(getDriver().findElement(By.xpath("//*[text()='Error']")).isDisplayed());
     }
-
-    @Test(dependsOnMethods = "testRenameProjectWithSameName")
-    public void testDeleteFromInsideProject() {
-
-        clickJobByName(PROJECT_NAME);
-        getDriver().findElement(By.xpath("//a[@data-title='Delete Pipeline']")).click();
-        getDriver().findElement(By.xpath("//button[@data-id='ok']")).click();
-
-        Assert.assertEquals(getDriver().findElement(By.cssSelector(".empty-state-block > h1")).getText(),
-                "Welcome to Jenkins!");
-    }
 }

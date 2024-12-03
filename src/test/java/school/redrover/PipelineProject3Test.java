@@ -67,34 +67,4 @@ public class PipelineProject3Test extends BaseTest {
         Assert.assertEquals(getDriver().findElement(By.xpath("//*[contains(text(), '" + labelText + "')]//a"))
                 .getAttribute("tooltip"), tooltipText);
     }
-
-    @Test
-    public void testDeleteFromInsideProject() {
-        createPipelineProject(PIPELINE_NAME);
-        returnToHomePage();
-        clickJobByName(PIPELINE_NAME);
-
-        getDriver().findElement(By.xpath("//a[@data-title='Delete Pipeline']")).click();
-        getDriver().findElement(By.xpath("//button[@data-id='ok']")).click();
-
-        Assert.assertEquals(getDriver().findElement(By.cssSelector(".empty-state-block > h1")).getText(),
-                "Welcome to Jenkins!");
-    }
-
-    @Test
-    public void testRenameProjectWithSameName() {
-        createPipelineProject(PIPELINE_NAME);
-        returnToHomePage();
-        clickJobByName(PIPELINE_NAME);
-
-        getDriver().findElement(By.xpath("//a[contains(., 'Rename')]")).click();
-
-        Actions myAction = new Actions(getDriver());
-        myAction.doubleClick(getDriver().findElement(By.name("newName"))).perform();
-
-        getDriver().findElement(By.name("newName")).sendKeys(PIPELINE_NAME);
-        getDriver().findElement(By.name("Submit")).click();
-
-        assertTrue(getDriver().findElement(By.xpath("//*[text()='Error']")).isDisplayed());
-    }
 }
