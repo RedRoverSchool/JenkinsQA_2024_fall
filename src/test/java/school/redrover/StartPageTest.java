@@ -58,7 +58,9 @@ public class StartPageTest extends BaseTest {
     public void testCreateDescription() {
 
         String actualDescription = new HomePage(getDriver())
-                .createDescription(DESCRIPTIONS_TEXT)
+                .clickDescriptionButton()
+                .enterDescription(DESCRIPTIONS_TEXT)
+                .clickSaveButton()
                 .getDescriptionText();
 
 

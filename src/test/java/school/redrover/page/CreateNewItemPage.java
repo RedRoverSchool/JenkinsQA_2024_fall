@@ -147,11 +147,11 @@ public class CreateNewItemPage extends BasePage {
         return new MultiConfigurationProjectPage(getDriver());
     }
 
-    public OrganizationFolderConfigurationPage clickOrganizationFolderAndClickOk() {
+    public OrganizationFolderConfigPage clickOrganizationFolderAndClickOk() {
         getDriver().findElement(GET_ORGANIZATION_FOLDER).click();
         clickOkButton();
 
-        return new OrganizationFolderConfigurationPage(getDriver());
+        return new OrganizationFolderConfigPage(getDriver());
     }
 
     public CreateNewItemPage scrollToCopyFromFieldAndEnterName(String name) {
