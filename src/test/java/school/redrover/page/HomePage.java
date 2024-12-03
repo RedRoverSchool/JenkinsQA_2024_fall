@@ -435,7 +435,7 @@ public class HomePage extends BasePage {
                         By.xpath("//table[@id='projectstatus']/thead/tr/th/a/span[contains(text(), '  ↑')]/.."))
                 .getText().split(" ")[0].trim();
     }
-    public HomePage clickAddDescription() {
+    public HomePage clickDescriptionButton() {
         getDriver().findElement(By.xpath("//a[@id='description-link']")).click();
         return this;
     }
@@ -447,6 +447,11 @@ public class HomePage extends BasePage {
         getDriver().findElement(By.xpath("//button[@name='Submit']")).click();
         return this;
     }
-
-
+    public HomePage clearDescription() {
+        getDriver().findElement(By.xpath("//textarea[@name='description']")).clear();
+        return this;
+    }
+    public String getTextDescriptionButton() {
+        return getDriver().findElement(By.id("description-link")).getText();
+    }
 }
