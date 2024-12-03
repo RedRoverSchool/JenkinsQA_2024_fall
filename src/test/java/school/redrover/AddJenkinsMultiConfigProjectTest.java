@@ -9,7 +9,7 @@ import org.testng.annotations.Test;
 import school.redrover.runner.BaseTest;
 
 
-public class AddJenkinsPipelineTest extends BaseTest {
+public class AddJenkinsMultiConfigProjectTest extends BaseTest {
 
     @Test
     public void testCreateMultiConfigProject() {
