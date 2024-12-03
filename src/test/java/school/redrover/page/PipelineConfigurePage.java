@@ -79,6 +79,7 @@ public class PipelineConfigurePage extends BaseConfigPage<PipelineConfigurePage,
     }
 
     public String getScriptText() {
-        return getDriver().findElement(By.xpath("//div[@class='ace_content']")).getText();
+        return getWait2().until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@class='ace_content']")))
+                .findElement(By.xpath("//div[@class='ace_content']")).getText();
     }
 }

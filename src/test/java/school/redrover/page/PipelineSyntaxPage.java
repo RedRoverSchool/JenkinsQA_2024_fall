@@ -17,8 +17,7 @@ public class PipelineSyntaxPage extends BasePage {
 
     public PipelineSyntaxPage selectNewStep(String value) {
         final WebElement selectList = getDriver().findElement(By.xpath("//select[@class='jenkins-select__input dropdownList']"));
-        Select select = new Select(selectList);
-        select.selectByValue(value);
+        new Select(selectList).selectByValue(value);
 
         return this;
     }

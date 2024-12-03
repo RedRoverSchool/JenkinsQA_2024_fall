@@ -10,6 +10,7 @@ import school.redrover.runner.BaseTest;
 public class SelectAndApplyScriptsTest extends BaseTest {
 
     private static final String PIPELINE_NAME = "TestName";
+    private final static String SELECT_VALUE = "bat: Windows Batch Script";
 
     @Test
     public void testPipelineSyntaxPageIsPresent() {
@@ -31,8 +32,8 @@ public class SelectAndApplyScriptsTest extends BaseTest {
                 .gotoHomePage()
                 .openPipelineProject(PIPELINE_NAME)
                 .gotoPipelineSyntaxPageFromLeftPanel(PIPELINE_NAME)
-                .selectNewStep("bat: Windows Batch Script")
-                .getTitleOfSelectedScript("bat: Windows Batch Script");
+                .selectNewStep(SELECT_VALUE)
+                .getTitleOfSelectedScript(SELECT_VALUE);
 
         Assert.assertEquals(selectItem, "bat");
     }
@@ -43,7 +44,7 @@ public class SelectAndApplyScriptsTest extends BaseTest {
                 .gotoHomePage()
                 .openPipelineProject(PIPELINE_NAME)
                 .gotoPipelineSyntaxPageFromLeftPanel(PIPELINE_NAME)
-                .selectNewStep("bat: Windows Batch Script")
+                .selectNewStep(SELECT_VALUE)
                 .clickGeneratePipelineScript()
                 .clickCopy()
                 .gotoHomePage()
