@@ -15,7 +15,7 @@ public class NewItemFromOtherExistingTest extends BaseTest {
     private HomePage createProject(String projectName, String projectType){
         return new HomePage(getDriver())
                 .clickNewItem()
-                .enterItemName(FIRST_ITEM_NAME)
+                .enterItemName(projectName)
                 .selectTypeOfProject(projectType)
                 .clickOkAndGoToConfigPage(projectType)
                 .gotoHomePage();
