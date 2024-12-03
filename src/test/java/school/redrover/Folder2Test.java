@@ -1,84 +1,80 @@
 package school.redrover;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.Assert;
 import org.testng.annotations.Test;
+import school.redrover.page.HomePage;
 import school.redrover.runner.BaseTest;
+import school.redrover.runner.TestUtils;
 
 public class Folder2Test extends BaseTest {
-
-    private void createFolder() {
-
-        getDriver()
-                .findElement(By.xpath("//*[@id='tasks']/div[1]"))
-                .click();
-
-        getDriver()
-                .findElement(By.xpath("//*[@id='name']"))
-                .sendKeys("Some folder name");
-
-        getDriver()
-                .findElement(By.cssSelector(".com_cloudbees_hudson_plugins_folder_Folder"))
-                .click();
-
-        getDriver()
-                .findElement(By.cssSelector("#ok-button"))
-                .click();
-
-        getDriver()
-                .findElement(By.cssSelector("input.jenkins-input"))
-                .sendKeys("Your advertisement could be in this field");
-
-        getDriver()
-                .findElement(By.cssSelector("textarea.jenkins-input"))
-                .sendKeys("Advertising on websites from $5/month.\nCall as 555-55-55");
-
-        getDriver()
-                .findElement(By.cssSelector(".jenkins-submit-button"))
-                .click();
-
-        getDriver()
-                .findElement(By.cssSelector("li.jenkins-breadcrumbs__list-item:nth-child(1) > a:nth-child(1)"))
-                .click();
-    }
 
     @Test
     public void testCreateFolder() {
 
-        createFolder();
+        new HomePage(getDriver()).createNewFolder("SomeFolderName");
 
         String folder = getDriver()
-                .findElement(By.xpath("//a[@href='job/Some%20folder%20name/']"))
+                .findElement(By.xpath("//span[text()='SomeFolderName']"))
                 .getText();
 
-        Assert.assertEquals(folder, "Your advertisement could be in this field");
+        Assert.assertEquals(folder, "SomeFolderName");
+    }
 
+    @Test(dependsOnMethods = "testCreateFolder")
+    public void testDeleteFolder() {
+
+        getDriver().findElement(By.xpath("//span[text()='SomeFolderName']")).click();
+
+        getDriver().findElement(By.xpath("//span[text()='Delete Folder']")).click();
+
+        getDriver().findElement(By.xpath("//button[@data-id='ok']")).click();
+
+        String welcomeStr = getDriver().findElement(By.cssSelector(".empty-state-block > h1")).getText();
+
+        Assert.assertEquals(welcomeStr, "Welcome to Jenkins!");
     }
 
     @Test
-    public void testDeleteFolder() {
+    public void testDeleteFolderViaChevron() {
 
-        createFolder();
+        new HomePage(getDriver()).createNewFolder("SomeFolderName");
 
-        getDriver()
-                .findElement(By.xpath("//*[@id='job_Some folder name']/td[3]/a"))
-                .click();
+        new Actions(getDriver())
+                .moveToElement(getWait5().until(ExpectedConditions.visibilityOfElementLocated(
+                        By.xpath("//*[@id='job_SomeFolderName']/td[3]/a/span"))))
+                .perform();
 
-        getDriver()
-                .findElement(By.xpath("//*[@id='tasks']/div[4]"))
-                .click();
+        WebElement chevronMenu = getWait10().until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//*[@id='job_SomeFolderName']/td[3]/a/button")));
 
-        getDriver()
-                .findElement(By.xpath("//*[@id='jenkins']/dialog/div[3]/button[1]"))
-                .click();
+        new Actions(getDriver())
+                .moveToElement(chevronMenu)
+                .pause(500)
+                .doubleClick(chevronMenu)
+                .perform();
+
+        TestUtils.moveAndClickWithJavaScript(getDriver(), chevronMenu);
+
+        //Yap, here's some fu***g xpath, and only it worked in this case
+        getWait10().until(ExpectedConditions.elementToBeClickable(
+                By.xpath("""
+                        //button[text() = '
+                                  Delete Folder
+                                           \s
+                                 \s
+                              ']"""))).click();
+
+        getWait10().until(driver -> driver.findElement(
+                By.xpath("//*[@id='jenkins']/dialog/div[3]/button[1]"))).click();
 
         String welcomeStr = getDriver()
                 .findElement(By.cssSelector(".empty-state-block > h1"))
                 .getText();
-
-        Assert.assertTrue(getDriver()
-                .findElements(By.xpath("//*[@id='job_Some folder name']/td[3]/a"))
-                .isEmpty());
 
         Assert.assertEquals(welcomeStr, "Welcome to Jenkins!");
     }

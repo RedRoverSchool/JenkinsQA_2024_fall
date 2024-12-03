@@ -1,58 +1,50 @@
 package school.redrover;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.Assert;
 import org.testng.annotations.Test;
+import school.redrover.page.HomePage;
+import school.redrover.page.PluginsPage;
 import school.redrover.runner.BaseTest;
-import java.util.List;
 
 public class PluginTest extends BaseTest {
-
-    private void goTiPluginPage() {
-
-        getDriver().findElement(By.xpath("//a[@href = '/manage']")).click();
-        getWait10().until(ExpectedConditions.visibilityOfElementLocated((By.xpath("//a[@href='pluginManager']")))).click();
-
-    }
 
     @Test
     public void testNumberOfUpdatePlugin() {
 
-        goTiPluginPage();
+        int indicatorCount = new HomePage(getDriver())
+                .openManageJenkinsPage()
+                .openPluginsPage()
+                .getUpdateCountFromIndicator();
 
-        List<WebElement> pluginsForUpdate = getDriver().findElements(By.className("app-plugin-manager__categories"));
+        int countPluginsFromUpdateTable = new PluginsPage(getDriver())
+                .getPluginsCountFromUpdateTable();
 
-        Assert.assertEquals(getDriver().findElement(By.xpath(
-                "//span[contains(@tooltip, 'updates available')]")).getText() , "" + pluginsForUpdate.size());
+        Assert.assertEquals(indicatorCount, countPluginsFromUpdateTable);
 
     }
 
-    @Test
+    @Test(dependsOnMethods = "testNumberOfUpdatePlugin")
     public void testNubmerOfAllUpdatePlugin() {
 
-        goTiPluginPage();
-        getWait10().until(ExpectedConditions.visibilityOfElementLocated((By.xpath("//a[@href='/manage/pluginManager/available']")))).click();
+        int countAvailablePlugins = new HomePage(getDriver())
+                .openManageJenkinsPage()
+                .openPluginsPage()
+                .getCountAvailablePlugins();
 
-        List<WebElement> pluginsForUpdate = getDriver().findElements(By.className("except"));
-
-        Assert.assertTrue(pluginsForUpdate.size() >= Integer.parseInt(getDriver().findElement(By.xpath(
-                "//span[contains(@tooltip, 'updates available')]")).getText()));
+        Assert.assertEquals(countAvailablePlugins, 50);
 
     }
 
-    @Test
+    @Test (dependsOnMethods = "testNubmerOfAllUpdatePlugin")
     public void testSearchPluginViaTag() {
 
-        goTiPluginPage();
-        getWait10().until(ExpectedConditions.visibilityOfElementLocated((By.xpath("//a[@href='/manage/pluginManager/installed']")))).click();
+        int countOfPluginsFound = new HomePage(getDriver())
+                .openManageJenkinsPage()
+                .openPluginsPage()
+                .searchInstalledPlugin("Theme Manager")
+                .getCountOfPluginsFound();
 
-        getWait5().until(ExpectedConditions.visibilityOfElementLocated(By.id("filter-box"))).sendKeys("Theme Manager");
-
-        Assert.assertTrue(getWait5().until(ExpectedConditions.visibilityOfElementLocated
-                (By.xpath("//tr[@data-plugin-name='Theme Manager']"))).isDisplayed());
-
-        Assert.assertEquals(getDriver().findElements(By.cssSelector(".plugin.has-dependents:not(.jenkins-hidden)")).size(), 1);
+        Assert.assertEquals(countOfPluginsFound, 1);
 
     }
+
 }

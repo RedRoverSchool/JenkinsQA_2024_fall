@@ -5,6 +5,7 @@ import org.openqa.selenium.support.ui.ExpectedCondition;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Paths;
 
 public class TestUtils {
@@ -75,6 +76,7 @@ public class TestUtils {
         baseTest.getDriver().findElement(By.xpath("//button[@type='submit']")).click();
 
         baseTest.getDriver().findElement(By.xpath("//button[@name='Submit']")).click();
+        baseTest.getDriver().findElement(By.id("jenkins-home-link")).click();
     }
 
     public static void newItemsData(BaseTest baseTest, String itemName, String itemXpath) {
@@ -84,14 +86,21 @@ public class TestUtils {
         baseTest.getDriver().findElement(By.id("ok-button")).click();
     }
 
-    public static String readFileAndRefactoringAutoComplete(String fileName) {
-        try (FileInputStream fis = new FileInputStream(Paths.get("test_data", fileName).toString())) {
-            String fileContent = new String(fis.readAllBytes());
-            fileContent = fileContent.replaceAll(" {4}|\t", "");
-            return fileContent;
+    public static void pasteTextWithJavaScript(WebDriver driver, WebElement element, String text) {
+        ((JavascriptExecutor) driver)
+                .executeScript("arguments[0].value = arguments[1];", element, text);
+        ((JavascriptExecutor) driver)
+                .executeScript("arguments[0].dispatchEvent(new Event('input', { bubbles: true }));", element);
+    }
+
+    public static String readFile(String fileName) {
+        try (FileInputStream fileInputStream = new FileInputStream(Paths.get("test_data", fileName).toString())) {
+            return new String(fileInputStream.readAllBytes(), StandardCharsets.UTF_8);
         } catch (IOException e) {
             ProjectUtils.log("File not found");
             return null;
         }
     }
+
+
 }
