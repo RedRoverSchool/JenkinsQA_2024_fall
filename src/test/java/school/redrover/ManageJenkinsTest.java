@@ -14,6 +14,7 @@ import school.redrover.runner.BaseTest;
 import school.redrover.runner.ProjectUtils;
 
 import java.time.Duration;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -264,5 +265,46 @@ public class ManageJenkinsTest extends BaseTest {
 
         Assert.assertEquals(getDriver().findElement
                 (By.xpath("//div/h1")).getText(), "Thread Dump");
+    }
+
+    @Test
+    public void testCreateNewAgent() {
+        getDriver().findElement(By.xpath("//a[contains(.,'Manage Jenkins')]")).click();
+
+        getDriver().findElement(By.xpath("//dt[.='Nodes']")).click();
+        getDriver().findElement(By.cssSelector(".jenkins-button--primary")).click();
+        getDriver().findElement(By.xpath("//input[@id='name']")).sendKeys("NewAgent");
+        getDriver().findElement(By.tagName("label")).click();
+        getDriver().findElement(By.xpath("//button[@id='ok']")).click();
+        getDriver().findElement(By.name("Submit")).click();
+
+        WebElement newAgent = getDriver().findElement(By.xpath("//a[.='NewAgent']"));
+
+        Assert.assertTrue(newAgent.isDisplayed());
+    }
+
+    @Test
+    public void testCreationAndDisplayNewNameOnNodesPage() {
+        final String myNodeName = "My name of node";
+        getDriver().findElement(By.xpath("//a[@href='/manage']")).click();
+
+        getDriver().findElement(By.xpath("//dt[.='Nodes']")).click();
+
+        getDriver().findElement(By.xpath("//a[@href='new']")).click();
+
+        getDriver().findElement(By.xpath("//*[@id='name']")).sendKeys(myNodeName);
+        getDriver().findElement(By.xpath("//*[.='Permanent Agent']")).click();
+        getDriver().findElement(By.xpath("//button[@name='Submit']")).click();
+
+        getDriver().findElement(By.xpath("//button[@name='Submit']")).click();
+
+        List<WebElement> nodes = getDriver().findElements(By.xpath("//a[@class='jenkins-table__link model-link inside']"));
+        List<String> nodesNames = new ArrayList<>();
+        for (WebElement element : nodes) {
+            String text = element.getText();
+            nodesNames.add(text);
+        }
+
+        Assert.assertListContainsObject(nodesNames,myNodeName, myNodeName);
     }
 }
