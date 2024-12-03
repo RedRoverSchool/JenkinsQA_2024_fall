@@ -2,12 +2,7 @@ package school.redrover;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
-import org.openqa.selenium.support.ui.Select;
 import org.testng.Assert;
-import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import school.redrover.page.HomePage;
 import school.redrover.page.MultiConfigurationConfigPage;
@@ -18,17 +13,6 @@ import java.util.List;
 public class MultiConfigurationProjectTest extends BaseTest {
     private static final String NAME_OF_PROJECT = "Multi-configuration project";
     private static final String DESCRIPTIONS = "Descriptions of project";
-
-    private void waitTimeUntilVisibilityElement(Integer time, WebElement element) {
-        new WebDriverWait(getDriver(), Duration.ofSeconds(time)).until(ExpectedConditions.visibilityOf(element));
-    }
-
-    private void createMultiConfigProject() {
-        getDriver().findElement(By.cssSelector("[href$='newJob']")).click();
-        getDriver().findElement(By.id("name")).sendKeys("MultiConfigProject");
-        getDriver().findElement(By.xpath("//span[text()='Multi-configuration project']")).click();
-        getDriver().findElement(By.id("ok-button")).click();
-    }
 
     @Test(description = "Create project without descriptions")
     public void testCreateProjectWithoutDescription() {
