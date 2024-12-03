@@ -7,12 +7,13 @@ import school.redrover.runner.BaseTest;
 
 import java.util.List;
 
-
 public class FreestyleProjectTest extends BaseTest {
 
     private static final String PROJECT_NAME = "MyFreestyleProject";
 
     private static final String DESCRIPTION = "Bla-bla-bla project";
+
+    private static final String BUILD_NAME = "BuildName";
 
     @Test
     public void testCreateFreestyleProjectWithEmptyName() {
@@ -128,5 +129,63 @@ public class FreestyleProjectTest extends BaseTest {
                 .getSidebarOptionList();
 
         Assert.assertEquals(actualSidebarMenu, templateSidebarMenu);
+    }
+
+    @Test
+    public void testConfigureProjectAddBuildStepsExecuteShellCommand() {
+        final String testCommand = "echo \"TEST! Hello Jenkins!\"";
+
+        String extractedText = new HomePage(getDriver())
+                .createFreestyleProject(PROJECT_NAME)
+                .openFreestyleProject(PROJECT_NAME)
+                .clickConfigureOnSidebar()
+                .clickAddBuildStep()
+                .selectExecuteShellBuildStep()
+                .addExecuteShellCommand(testCommand)
+                .clickSaveButton()
+                .clickConfigureOnSidebar()
+                .getTextExecuteShellTextArea();
+
+        Assert.assertEquals(extractedText, testCommand);
+    }
+
+    @Test
+    public void testBuildProjectViaSidebarMenuOnProjectPage() {
+        String buildInfo = new HomePage(getDriver())
+                .createFreestyleProject(PROJECT_NAME)
+                .openFreestyleProject(PROJECT_NAME)
+                .clickBuildNowOnSidebar()
+                .clickOnSuccessBuildIcon()
+                .getConsoleOutputText();
+
+        Assert.assertTrue(buildInfo.contains("Finished: SUCCESS"));
+    }
+
+    @Test(dependsOnMethods = "testBuildProjectViaSidebarMenuOnProjectPage")
+    public void testAddBuildDisplayName() {
+        String actualBuildName = new HomePage(getDriver())
+                .openFreestyleProject(PROJECT_NAME)
+                .clickOnSuccessBuildIcon()
+                .clickEditBuildInformationSidebar()
+                .addDisplayName(BUILD_NAME)
+                .clickSaveButton()
+                .getStatusTitle();
+
+        Assert.assertTrue(actualBuildName.contains(BUILD_NAME), "Title doesn't contain build name");
+    }
+
+    @Test(dependsOnMethods = {"testBuildProjectViaSidebarMenuOnProjectPage", "testAddBuildDisplayName"})
+    public void testEditBuildDisplayName() {
+        final String newDisplayName = "New " + BUILD_NAME;
+
+        String actualBuildName = new HomePage(getDriver())
+                .openFreestyleProject(PROJECT_NAME)
+                .clickOnSuccessBuildIcon()
+                .clickEditBuildInformationSidebar()
+                .editDisplayName(newDisplayName)
+                .clickSaveButton()
+                .getStatusTitle();
+
+        Assert.assertTrue(actualBuildName.contains(newDisplayName));
     }
 }

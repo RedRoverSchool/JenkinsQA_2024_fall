@@ -22,6 +22,12 @@ public class ManageJenkinsPage extends BasePage {
         return new PluginsPage(getDriver());
     }
 
+    public UsersPage openUsersPage() {
+        getWait10().until(ExpectedConditions.visibilityOfElementLocated((By.xpath("//a[@href='securityRealm/']")))).click();
+
+        return new UsersPage(getDriver());
+    }
+
     public List<String> getAllSections() {
         List<WebElement> sections = getDriver().findElements(By.xpath("//h2[@class='jenkins-section__title']"));
 
