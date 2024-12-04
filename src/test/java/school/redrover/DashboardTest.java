@@ -10,29 +10,45 @@ import java.util.List;
 
 public class DashboardTest extends BaseTest {
 
+    final String invalidPipelineScriptFile = """
+                error_pipeline {{{
+                    agent any
+                    stages {
+                        stage('Checkout') {
+                            steps {echo 'Step: Checkout code from repository'}
+                        }
+                     }
+                }
+                """;
+
+    final String validPipelineScriptFile = """
+                pipeline {
+                    agent any
+                    stages {
+                        stage('Checkout') {
+                            steps {echo 'Step: Checkout code from repository'}
+                        }
+                     }
+                }
+                """;
+
+    final String pSuccessBuild = "FPipelineProject";
+    final String pDisable = "APipelineProject";
+    final String pFailedBuild = "ZPipelineProject";
+    final String pNoBuild = "1PipelineProject";
+
     @Test
     public void testVerifyProjectOrderByNameASCByDefault() {
+        testPreparationCreateNoBuildProject("FPipelineProject");
+        testPreparationCreateNoBuildProject("APipelineProject");
+        testPreparationCreateNoBuildProject("ZPipelineProject");
+
         List<String> projectNameList = new HomePage(getDriver())
-                .clickNewItem()
-                .enterItemName("FPipelineProject")
-                .selectPipelineAndClickOk()
-                .clickSaveButton()
-                .gotoHomePage()
-                .clickNewItem()
-                .enterItemName("APipelineProject")
-                .selectPipelineAndClickOk()
-                .clickToggleToDisableOrEnableProject()
-                .clickSaveButton()
-                .gotoHomePage()
-                .clickNewItem()
-                .enterItemName("ZPipelineProject")
-                .selectPipelineAndClickOk()
-                .clickSaveButton()
-                .gotoHomePage()
                 .getItemList();
 
         List<String> expectedList = projectNameList.stream().sorted().toList();
 
+        Assert.assertEquals(projectNameList.size(), 3);
         Assert.assertEquals(projectNameList, expectedList);
     }
 
@@ -71,64 +87,61 @@ public class DashboardTest extends BaseTest {
 
     @Test
     public void testVerifyProjectOrderByStatusASCByDefault() {
-        final String invalidPipelineScriptFile = """
-                error_pipeline {{{
-                    agent any
-                    stages {
-                        stage('Checkout') {
-                            steps {echo 'Step: Checkout code from repository'}
-                        }
-                     }
-                }
-                """;
 
-        final String validPipelineScriptFile = """
-                pipeline {
-                    agent any
-                    stages {
-                        stage('Checkout') {
-                            steps {echo 'Step: Checkout code from repository'}
-                        }
-                     }
-                }
-                """;
+        testPreparationCreateNoBuildProject(pNoBuild);
+        testPreparationCreateDisableProject(pDisable);
+        testPreparationCreateSuccessBuildProject(pSuccessBuild);
+        testPreparationCreateFailedBuildProject(pFailedBuild);
 
-        final String pSuccessBuild = "FPipelineProject";
-        final String pDisable = "APipelineProject";
-        final String pFailedBuild = "ZPipelineProject";
-        final String pNoBuild = "1PipelineProject";
 
         List<String> projectNameList = new HomePage(getDriver())
+                .clickStatusTableHeaderChangeOrder()
+                .getItemList();
+
+        Assert.assertEquals(projectNameList.size(), 4);
+        Assert.assertEquals(projectNameList, List.of(pNoBuild, pDisable, pSuccessBuild, pFailedBuild));
+    }
+
+    private void testPreparationCreateNoBuildProject(String projectName) {
+        new HomePage(getDriver())
                 .clickNewItem()
-                .enterItemName(pSuccessBuild)
+                .enterItemName(projectName)
+                .selectPipelineAndClickOk()
+                .clickSaveButton()
+                .gotoHomePage();
+    }
+
+    private void testPreparationCreateDisableProject(String projectName) {
+        new HomePage(getDriver())
+                .clickNewItem()
+                .enterItemName(projectName)
+                .selectPipelineAndClickOk()
+                .clickToggleToDisableOrEnableProject()
+                .clickSaveButton()
+                .gotoHomePage();
+    }
+
+    private void testPreparationCreateSuccessBuildProject(String projectName) {
+        new HomePage(getDriver())
+                .clickNewItem()
+                .enterItemName(projectName)
                 .selectPipelineAndClickOk()
                 .enterScriptFromFile(validPipelineScriptFile)
                 .clickSaveButton()
                 .gotoHomePage()
-                .selectBuildNowFromItemMenu(pSuccessBuild)
-                .clickNewItem()
-                .enterItemName(pDisable)
-                .selectPipelineAndClickOk()
-                .clickToggleToDisableOrEnableProject()
-                .clickSaveButton()
-                .gotoHomePage()
-                .clickNewItem()
-                .enterItemName(pFailedBuild)
-                .selectPipelineAndClickOk()
-                .enterScriptFromFile(invalidPipelineScriptFile)
-                .clickSaveButton()
-                .gotoHomePage()
-                .selectBuildNowFromItemMenu(pFailedBuild)
-                .clickNewItem()
-                .enterItemName(pNoBuild)
-                .selectPipelineAndClickOk()
-                .enterScriptFromFile(invalidPipelineScriptFile)
-                .clickSaveButton()
-                .gotoHomePage()
-                .clickStatusTableHeaderChangeOrder()
-                .getItemList();
-
-        Assert.assertEquals(projectNameList, List.of(pNoBuild, pDisable, pSuccessBuild, pFailedBuild));
+                .selectBuildNowFromItemMenu(projectName);
     }
+
+    private void testPreparationCreateFailedBuildProject(String projectName) {
+        new HomePage(getDriver())
+                .clickNewItem()
+                .enterItemName(projectName)
+                .selectPipelineAndClickOk()
+                .enterScriptFromFile(invalidPipelineScriptFile)
+                .clickSaveButton()
+                .gotoHomePage()
+                .selectBuildNowFromItemMenu(projectName);
+    }
+
 
 }
