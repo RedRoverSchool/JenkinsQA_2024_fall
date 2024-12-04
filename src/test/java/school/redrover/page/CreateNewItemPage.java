@@ -72,12 +72,6 @@ public class CreateNewItemPage extends BaseCreatePage<CreateNewItemPage> {
         return getDriver().findElement(By.id("itemname-required")).getText();
     }
 
-    public ErrorPage saveInvalidData() {
-        clickOkButton();
-
-        return new ErrorPage(getDriver());
-    }
-
     public String getErrorMessage() {
         return getWait5().until(ExpectedConditions.visibilityOfElementLocated(
                 By.xpath("//div[@class='add-item-name']/div[@class='input-validation-message']"))).getText();

@@ -140,7 +140,7 @@ public class FolderTest extends BaseTest {
                 .enterItemName("Folder.")
                 .selectTypeProject(TYPE_FOLDER)
                 .selectTypeProject(TYPE_FOLDER)
-                .saveInvalidData()
+                .clickOkButton()
                 .getErrorMessage();
 
         Assert.assertEquals(errorMessage, "A name cannot end with ‘.’");
