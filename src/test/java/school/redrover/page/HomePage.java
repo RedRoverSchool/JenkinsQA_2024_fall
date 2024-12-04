@@ -442,4 +442,14 @@ public class HomePage extends BasePage {
 
         return new OrganizationFolderProjectPage(getDriver());
     }
+
+    public HomePage clickPreviewButton() {
+        getDriver().findElement(By.cssSelector("[class$='textarea-show-preview']")).click();
+
+        return this;
+    }
+
+    public String getTextPreview() {
+        return getDriver().findElement(By.xpath("//div[@class='textarea-preview']")).getText();
+    }
 }
