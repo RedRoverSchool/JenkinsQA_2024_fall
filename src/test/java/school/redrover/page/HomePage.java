@@ -437,9 +437,9 @@ public class HomePage extends BasePage {
         return getDriver().findElement(By.id("description-link")).getText();
     }
 
-//    public OrganizationFolderPage clickItemName() {
-//        itemName.click();
-//
-//        return new OrganizationFolderPage(getDriver());
-//    }
+    public OrganizationFolderProjectPage clickItemName() {
+        itemName.click();
+
+        return new OrganizationFolderProjectPage(getDriver());
+    }
 }
