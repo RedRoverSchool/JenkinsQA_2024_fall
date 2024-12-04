@@ -27,7 +27,7 @@ public class FreestyleProject1Test extends BaseTest {
 
     @Test
     public void testCreate() {
-        List<String> createProject = new HomePage(getDriver())
+        List<String> itemList = new HomePage(getDriver())
                 .clickNewItem()
                 .enterItemName(FREESTYLE_PROJECT_NAME)
                 .selectTypeProject(TYPE_FREESTYLE_PROJECT)
@@ -35,7 +35,7 @@ public class FreestyleProject1Test extends BaseTest {
                 .gotoHomePage()
                 .getItemList();
 
-        Assert.assertTrue(createProject.contains(FREESTYLE_PROJECT_NAME));
+        Assert.assertTrue(itemList.contains(FREESTYLE_PROJECT_NAME));
     }
 
     @Test(dependsOnMethods = "testCreate")
@@ -107,7 +107,6 @@ public class FreestyleProject1Test extends BaseTest {
     public void testChevronDeleteFreestyleProject() {
         new HomePage(getDriver())
                 .createFreestyleProject(FREESTYLE_PROJECT_NAME);
-
 
         Actions actions = new Actions(getDriver());
 

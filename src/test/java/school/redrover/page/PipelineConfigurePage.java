@@ -60,10 +60,9 @@ public class PipelineConfigurePage extends BaseConfigPage<PipelineConfigurePage,
         return this;
     }
 
-    public PipelineConfigurePage enterScriptFromFile(String fileName) {
-        String pipelineScript = TestUtils.readFile(fileName);
+    public PipelineConfigurePage enterScriptFromFile(String script) {
         WebElement textArea = getDriver().findElement(By.xpath("//textarea[@class='ace_text-input']"));
-        TestUtils.pasteTextWithJavaScript(getDriver(), textArea, pipelineScript);
+        TestUtils.pasteTextWithJavaScript(getDriver(), textArea, script);
 
         return this;
     }

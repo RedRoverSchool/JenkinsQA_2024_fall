@@ -1,17 +1,12 @@
 package school.redrover;
 
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebElement;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import school.redrover.page.HomePage;
 import school.redrover.runner.BaseTest;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class DashboardTest extends BaseTest {
 
@@ -77,8 +72,27 @@ public class DashboardTest extends BaseTest {
 
     @Test
     public void testVerifyProjectOrderByStatusASCByDefault() {
-        final String invalidPipelineScriptFile = "InvalidPipelineScript.txt";
-        final String validPipelineScriptFile = "ValidPipelineScript.txt";
+        final String invalidPipelineScriptFile = """
+                error_pipeline {{{
+                    agent any
+                    stages {
+                        stage('Checkout') {
+                            steps {echo 'Step: Checkout code from repository'}
+                        }
+                     }
+                }
+                """;
+
+        final String validPipelineScriptFile = """
+                pipeline {
+                    agent any
+                    stages {
+                        stage('Checkout') {
+                            steps {echo 'Step: Checkout code from repository'}
+                        }
+                     }
+                }
+                """;
 
         List<String> projectNameList = new HomePage(getDriver())
                 .clickNewItem()

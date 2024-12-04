@@ -3,11 +3,6 @@ package school.redrover.runner;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Paths;
-
 public class TestUtils {
 
     public static class ExpectedConditions {
@@ -92,15 +87,5 @@ public class TestUtils {
         ((JavascriptExecutor) driver)
                 .executeScript("arguments[0].dispatchEvent(new Event('input', { bubbles: true }));", element);
     }
-
-    public static String readFile(String fileName) {
-        try (FileInputStream fileInputStream = new FileInputStream(Paths.get("test_data", fileName).toString())) {
-            return new String(fileInputStream.readAllBytes(), StandardCharsets.UTF_8);
-        } catch (IOException e) {
-            ProjectUtils.log("File not found");
-            return null;
-        }
-    }
-
 
 }
