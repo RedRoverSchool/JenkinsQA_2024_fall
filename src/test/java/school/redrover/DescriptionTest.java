@@ -38,12 +38,24 @@ public class DescriptionTest extends BaseTest {
     @Test(dependsOnMethods = "testEdit")
     public void testDelete() {
 
-        String noText = new HomePage(getDriver())
+        String descriptionButton = new HomePage(getDriver())
                 .clickDescriptionButton()
                 .clearDescription()
                 .clickSaveButton()
                 .getTextDescriptionButton();
 
-        Assert.assertTrue(true, TEXT_DESCRIPTION_BUTTON);
+        Assert.assertEquals(descriptionButton, TEXT_DESCRIPTION_BUTTON);
+    }
+
+    @Test
+    public void testPreview() {
+
+        String textPreview = new HomePage(getDriver())
+                .clickDescriptionButton()
+                .enterDescription(DESCRIPTION_TEXT)
+                .clickPreviewButton()
+                .getTextPreview();
+
+        Assert.assertEquals(textPreview, DESCRIPTION_TEXT);
     }
 }
