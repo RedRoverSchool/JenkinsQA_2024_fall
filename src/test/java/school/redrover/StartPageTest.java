@@ -68,12 +68,14 @@ public class StartPageTest extends BaseTest {
     @Test
     public void testCreateNewFolder() {
 
-
-        String actualName = new HomePage(getDriver())
+        List<String> projectList = new HomePage(getDriver())
                 .createNewFolder(NEW_FOLDER_NAME)
-                .getFirstFolderName();
+                .getItemList();
 
-        Assert.assertEquals(actualName, NEW_FOLDER_NAME);
+        Assert.assertListContainsObject(
+                projectList,
+                NEW_FOLDER_NAME,
+                "Folder is not created");
     }
 
     @Test(dependsOnMethods = "testCreateNewFolder")
@@ -81,7 +83,7 @@ public class StartPageTest extends BaseTest {
 
         String welcomeText = new HomePage(getDriver())
                 .deleteFolder(NEW_FOLDER_NAME)
-                .getWelcomeText();
+                .getWelcomeDescriptionText();
 
         Assert.assertEquals(welcomeText,
                 "This page is where your Jenkins jobs will be displayed. To get started, you can set up distributed builds or start building a software project.");
@@ -93,7 +95,7 @@ public class StartPageTest extends BaseTest {
         String welcomeText = new HomePage(getDriver())
                 .createNewFolder(NEW_FOLDER_NAME)
                 .deleteFolderViaChevron(NEW_FOLDER_NAME)
-                .getWelcomeText();
+                .getWelcomeDescriptionText();
 
         Assert.assertEquals(welcomeText,
                 "This page is where your Jenkins jobs will be displayed. To get started, you can set up distributed builds or start building a software project.");

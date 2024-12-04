@@ -7,11 +7,13 @@ import school.redrover.page.base.BasePage;
 
 public class OrganizationFolderConfigurationPage extends BasePage {
 
-    private final By LOGO_JENKINS = By.id("jenkins-home-link");
-
     public OrganizationFolderConfigurationPage(WebDriver driver) {
         super(driver);
     }
+
+    private final By LOGO_JENKINS = By.id("jenkins-home-link");
+    private final By DISPLAY_NAME = By.name("_.displayNameOrNull");
+    private final By BUTTON_SAVE = By.name("Submit");
 
     public String getTooltipGeneralText() {
 
@@ -49,6 +51,18 @@ public class OrganizationFolderConfigurationPage extends BasePage {
         getDriver().findElement(LOGO_JENKINS).click();
 
         return new HomePage(getDriver());
+    }
+
+    public OrganizationFolderConfigurationPage setDisplayName(String name) {
+        getDriver().findElement(DISPLAY_NAME).sendKeys(name);
+
+        return this;
+    }
+
+    public OrganizationFolderPage clickSave() {
+        getDriver().findElement(BUTTON_SAVE).click();
+
+        return new OrganizationFolderPage(getDriver());
     }
 }
 

@@ -5,20 +5,19 @@ import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import school.redrover.page.base.BasePage;
+import school.redrover.page.base.BaseCreatePage;
 
-public class CreateNewItemPage extends BasePage {
+public class CreateNewItemPage extends BaseCreatePage {
 
     public CreateNewItemPage(WebDriver driver) {
         super(driver);
     }
 
-    By getMultiConfigurationProject = By.xpath("//li//span[text()='Multi-configuration project']");
-    By getSubmitButton = By.xpath("//button[@id = 'ok-button']");
-    private final By GET_ORGANIZATION_FOLDER = By.xpath("//li[contains(@class,'jenkins_branch_OrganizationFolder')]");
-    By getInputName = By.id("name");
-    By getOkButton = By.id("ok-button");
-
+    private static final By getMultiConfigurationProject = By.xpath("//li//span[text()='Multi-configuration project']");
+    private static final By getSubmitButton = By.xpath("//button[@id = 'ok-button']");
+    private static final By GET_ORGANIZATION_FOLDER = By.xpath("//li[contains(@class,'jenkins_branch_OrganizationFolder')]");
+    private static final By getInputName = By.id("name");
+    private static final By getOkButton = By.id("ok-button");
 
     public CreateNewItemPage enterItemName(String name) {
         getDriver().findElement(getInputName).sendKeys(name);
@@ -26,22 +25,10 @@ public class CreateNewItemPage extends BasePage {
         return this;
     }
 
-    public void clickOkButton() {
-        getDriver().findElement(getOkButton).click();
-    }
-
-    public FreestyleConfigPage clickOkToSubmit() {
-        getDriver().findElement(getOkButton).click();
-
-        return new FreestyleConfigPage(getDriver());
-    }
-
-    public CreateNewItemPage selectTypeOfProject(String name ) {
-        getDriver().findElement(By.xpath("//span[text()='" +  name + "']")).click();
+    public CreateNewItemPage selectTypeOfProject(String name) {
+        getDriver().findElement(By.xpath("//span[text()='" + name + "']")).click();
 
         return new CreateNewItemPage(getDriver());
-
-
     }
 
     public CreateNewItemPage selectFolderType() {
@@ -133,9 +120,8 @@ public class CreateNewItemPage extends BasePage {
     }
 
     public CreateNewItemPage selectFreestyleProject() {
-        getWait10().until(ExpectedConditions.elementToBeClickable(
-                By.xpath(("//div[@id='items']//label/span[text()= 'Freestyle project']")))).click();
-        return new CreateNewItemPage(getDriver());
+        getDriver().findElement(By.xpath(("//span[text()= 'Freestyle project']"))).click();
+        return this;
     }
 
     public String getErrorMessage() {
