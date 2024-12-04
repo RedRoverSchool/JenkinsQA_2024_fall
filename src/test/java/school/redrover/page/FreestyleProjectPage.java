@@ -2,8 +2,11 @@ package school.redrover.page;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import school.redrover.page.base.BaseProjectPage;
+
+import java.util.List;
 
 public class FreestyleProjectPage extends BaseProjectPage<FreestyleProjectPage> {
 
@@ -15,6 +18,16 @@ public class FreestyleProjectPage extends BaseProjectPage<FreestyleProjectPage> 
         return getDriver().findElement(By.tagName("h1")).getText();
     }
 
+    public String getLastBuildNumber() {
+        return getDriver().findElement(By.xpath("//tbody//tr[2]//td//a[contains(@class, 'display-name')]")).getText();
+    }
+
+    public List<String> getListOfBuilds() {
+        return getWait5().until(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.xpath("//tr")))
+                .stream()
+                .map(WebElement::getText)
+                .toList();
+    }
 
     public FreestyleRenamePage clickRenameOnSidebar() {
         getWait10().until(ExpectedConditions.visibilityOfElementLocated(
@@ -37,9 +50,9 @@ public class FreestyleProjectPage extends BaseProjectPage<FreestyleProjectPage> 
         return this;
     }
 
-    public FreestyleBuildPage clickOnSuccessBuildIcon() {
+    public FreestyleBuildPage clickOnSuccessBuildIconForLastBuild() {
         getWait10().until(ExpectedConditions.visibilityOfElementLocated(
-                By.xpath("//a[@tooltip='Success > Console Output']"))).click();
+                By.xpath("//tbody//tr[2]//a"))).click();
 
         return new FreestyleBuildPage(getDriver());
     }
