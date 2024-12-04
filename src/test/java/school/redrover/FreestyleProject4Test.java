@@ -10,6 +10,7 @@ public class FreestyleProject4Test extends BaseTest {
 
     private static final String PROJECT_NAME = "NewFreestyleProject";
     private static final String PROJECT_DESCRIPTION = "About my new freestyle project";
+    private static final String TYPE_FREESTYLE_PROJECT = "Freestyle project";
 
     @Test
     public void testCheckProjectName() {
@@ -17,8 +18,8 @@ public class FreestyleProject4Test extends BaseTest {
         List<String> itemList = new HomePage(getDriver())
                 .clickNewItem()
                 .enterItemName(PROJECT_NAME)
-                .selectFreestyleProjectAndClickOk()
-                .clickSubmitButton()
+                .selectTypeProject(TYPE_FREESTYLE_PROJECT)
+                .clickOkButton()
                 .gotoHomePage()
                 .getItemList();
 

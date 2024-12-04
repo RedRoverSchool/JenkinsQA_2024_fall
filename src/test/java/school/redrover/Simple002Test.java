@@ -13,6 +13,7 @@ public class Simple002Test extends BaseTest {
 
     private static final String PROJECT_NAME = "NewFreestyleProject";
     private static final String PROJECT_DESCRIPTION = "About my new freestyle project";
+    private static final String TYPE_FREESTYLE_PROJECT = "Freestyle project";
 
     @Test
     public void testLinkLogOut() {
@@ -33,7 +34,7 @@ public class Simple002Test extends BaseTest {
     @Test
     public void testLinkSetUpDistriBuildCloud() {
 
-        WebElement linkSetUpDistriBuildCloud= getDriver().findElement(By.cssSelector("a[href$='cloud/']"));
+        WebElement linkSetUpDistriBuildCloud = getDriver().findElement(By.cssSelector("a[href$='cloud/']"));
 
         Assert.assertNotNull(linkSetUpDistriBuildCloud);
     }
@@ -49,20 +50,21 @@ public class Simple002Test extends BaseTest {
     @Test
     public void testCheckProjectName() {
 
-       List<String> projectList = new HomePage(getDriver())
+        List<String> projectList = new HomePage(getDriver())
                 .clickNewItem()
                 .enterItemName(PROJECT_NAME)
-                .selectFreestyleProjectAndClickOk()
+                .selectTypeProject(TYPE_FREESTYLE_PROJECT)
+                .clickOkButton()
                 .gotoHomePage()
                 .getItemList();
 
         Assert.assertTrue(projectList.contains(PROJECT_NAME));
     }
 
-    @Test (dependsOnMethods = "testCheckProjectName")
+    @Test(dependsOnMethods = "testCheckProjectName")
     public void testAddDescription() {
 
-        String  textDescription = new HomePage(getDriver())
+        String textDescription = new HomePage(getDriver())
                 .openFreestyleProject(PROJECT_NAME)
                 .editDescription(PROJECT_DESCRIPTION)
                 .getDescription();

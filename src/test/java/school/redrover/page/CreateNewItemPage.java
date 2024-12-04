@@ -85,11 +85,6 @@ public class CreateNewItemPage extends BaseCreatePage<CreateNewItemPage> {
         return new CreateNewItemPage(getDriver());
     }
 
-    public CreateNewItemPage selectFreestyleProject() {
-        getDriver().findElement(By.xpath(("//span[text()= 'Freestyle project']"))).click();
-        return this;
-    }
-
     public String getErrorMessage() {
         return getWait5().until(ExpectedConditions.visibilityOfElementLocated(
                 By.xpath("//div[@class='add-item-name']/div[@class='input-validation-message']"))).getText();

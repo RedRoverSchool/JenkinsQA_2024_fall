@@ -12,6 +12,8 @@ public class NewItemFromOtherExistingTest extends BaseTest {
 
     private final static String FIRST_ITEM_NAME = "My_First_Project";
     private final static String SECOND_ITEM_NAME = "My_Second_Project";
+    private static final String TYPE_FREESTYLE_PROJECT = "Freestyle project";
+
 
     private CreateNewItemPage goToNewItemPageAndEnterName(String projectName) {
         return new HomePage(getDriver())
@@ -27,7 +29,8 @@ public class NewItemFromOtherExistingTest extends BaseTest {
 
     private HomePage createFreestyleProject(String projectName) {
         return goToNewItemPageAndEnterName(projectName)
-                .selectFreestyleProjectAndClickOk()
+                .selectTypeProject(TYPE_FREESTYLE_PROJECT)
+                .clickOkButton()
                 .gotoHomePage();
     }
 

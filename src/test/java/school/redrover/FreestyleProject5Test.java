@@ -13,8 +13,10 @@ import school.redrover.runner.BaseTest;
 public class FreestyleProject5Test extends BaseTest {
 
     private final String FREESTYLE_PROJECT = "First project";
-
+    private static final String TYPE_FREESTYLE_PROJECT = "Freestyle project";
     private final String DESCRIPTION_NAME = "Project description";
+    private final String EMPTY_NAME = "";
+
     @Test
     public void testCreateFreestyleProjectValidName() {
 
@@ -23,9 +25,8 @@ public class FreestyleProject5Test extends BaseTest {
                 .nameAndSelectFreestyleProject(FREESTYLE_PROJECT)
                 .typeDescription(DESCRIPTION_NAME)
                 .getProjectName();
+
         Assert.assertEquals(createProject, FREESTYLE_PROJECT);
-
-
     }
 
     @Test
@@ -47,16 +48,15 @@ public class FreestyleProject5Test extends BaseTest {
 
     }
 
-    private final String EMPTY_NAME = "";
     @Test
     public void testCreateFreestyleProjectEmptyName() {
         String errorMessage = new HomePage(getDriver())
                 .clickNewItem()
                 .enterItemName(EMPTY_NAME)
-                .selectFreestyleProject()
+                .selectTypeProject(TYPE_FREESTYLE_PROJECT)
                 .getErrorMessage();
-        Assert.assertEquals(errorMessage,"» This field cannot be empty, please enter a valid name" );
 
+        Assert.assertEquals(errorMessage,"» This field cannot be empty, please enter a valid name" );
     }
 
     @Test
@@ -76,8 +76,7 @@ public class FreestyleProject5Test extends BaseTest {
         getDriver().findElement(By.xpath("//div[5]//span[1]//a[1]")).click();
 
         var period = getDriver().findElement(By.xpath("//*[@name='_.durationName']")).getAttribute("value");
+
         Assert.assertEquals(period, "minute");
-
     }
-
 }

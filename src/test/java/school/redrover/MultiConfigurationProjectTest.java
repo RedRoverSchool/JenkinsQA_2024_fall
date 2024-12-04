@@ -78,7 +78,7 @@ public class MultiConfigurationProjectTest extends BaseTest {
         String errorMessage = new HomePage(getDriver())
                 .clickNewItem()
                 .enterItemName(NAME_OF_PROJECT)
-                .selectFreestyleProject()
+                .selectTypeProject(TYPE_MULTICONFIG_PROJECT)
                 .getErrorMessage();
 
         Assert.assertEquals(errorMessage, "» A job already exists with the name ‘%s’".formatted(NAME_OF_PROJECT));

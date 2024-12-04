@@ -12,7 +12,7 @@ public class FreestyleProjectTest extends BaseTest {
     private static final String PROJECT_NAME = "MyFreestyleProject";
     private static final String FREESTYLE_PROJECT = "Freestyle project";
     private static final String DESCRIPTION = "Bla-bla-bla project";
-
+    private static final String TYPE_FREESTYLE_PROJECT = "Freestyle project";
     private static final String BUILD_NAME = "BuildName";
 
     @Test
@@ -20,7 +20,7 @@ public class FreestyleProjectTest extends BaseTest {
         String emptyNameMessage = new HomePage(getDriver())
                 .clickNewItem()
                 .enterItemName("")
-                .selectFreestyleProject()
+                .selectTypeProject(TYPE_FREESTYLE_PROJECT)
                 .getEmptyNameMessage();
 
         Assert.assertEquals(emptyNameMessage, "» This field cannot be empty, please enter a valid name");
@@ -31,12 +31,12 @@ public class FreestyleProjectTest extends BaseTest {
         String errorMessage = new HomePage(getDriver())
                 .clickNewItem()
                 .enterItemName(PROJECT_NAME)
-                .selectFreestyleProjectAndClickOk()
-                .clickSaveButton()
+                .selectTypeProject(TYPE_FREESTYLE_PROJECT)
+                .clickOkButton()
                 .gotoHomePage()
                 .clickNewItem()
                 .enterItemName(PROJECT_NAME)
-                .selectFreestyleProject()
+                .selectTypeProject(TYPE_FREESTYLE_PROJECT)
                 .getErrorMessage();
 
         Assert.assertEquals(errorMessage, "» A job already exists with the name ‘%s’".formatted(PROJECT_NAME));
