@@ -53,6 +53,19 @@ public class HomePage extends BasePage {
         return this;
     }
 
+    public HomePage createFreestyleProject(String name, String description) {
+        getDriver().findElement(By.xpath("//*[@href='/view/all/newJob']")).click();
+        getDriver().findElement(By.className("hudson_model_FreeStyleProject")).click();
+        getDriver().findElement(By.name("name")).sendKeys(name);
+        getDriver().findElement(By.id("ok-button")).click();
+        getWait10().until(ExpectedConditions.visibilityOfElementLocated(
+                By.name("description"))).sendKeys(description);
+        getDriver().findElement(By.name("Submit")).click();
+
+        getDriver().findElement(By.id("jenkins-name-icon")).click();
+        return this;
+    }
+
     public HomePage createNewFolder(String name) {
 
         getDriver().findElement(By.xpath("//a[@href = 'newJob']")).click();
