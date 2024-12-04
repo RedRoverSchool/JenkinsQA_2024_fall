@@ -42,22 +42,6 @@ public class FreestyleProject3Test extends BaseTest {
     }
 
     @Test
-    public void testDeleteProjectViaSidebarMenuOnProjectStatusPage() {
-        createProjectViaSidebarMenu(PROJECT_NAME);
-
-        getWait10().until(ExpectedConditions.visibilityOfElementLocated(
-                By.xpath("//a[@data-title='Delete Project']"))).click();
-
-        getWait10().until(ExpectedConditions.elementToBeClickable(
-                By.xpath("//button[@data-id='ok']"))).click();
-
-        Assert.assertEquals(
-                getWait10().until(ExpectedConditions.visibilityOfElementLocated(By.tagName("h1"))).getText(),
-                "Welcome to Jenkins!",
-                "There were more than one project on Dashboard");
-    }
-
-    @Test
     public void testDeleteProjectViaSidebarMenuOnProjectStatusPageWhenSeveralProjectsExist() {
         createProjectViaSidebarMenu(PROJECT_NAME + 2);
 

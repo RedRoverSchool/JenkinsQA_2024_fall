@@ -29,21 +29,21 @@ public class FreestyleProjectPage extends BaseProjectPage<FreestyleProjectPage> 
                 .toList();
     }
 
-    public FreestyleRenamePage clickRenameOnSidebar() {
+    public FreestyleRenamePage clickRenameSidebar() {
         getWait10().until(ExpectedConditions.visibilityOfElementLocated(
                 By.xpath("//span[text()='Rename']/.."))).click();
 
         return new FreestyleRenamePage(getDriver());
     }
 
-    public FreestyleConfigPage clickConfigureOnSidebar() {
+    public FreestyleConfigPage clickConfigureSidebar() {
         getWait5().until(ExpectedConditions.visibilityOfElementLocated(
                 By.xpath("//a[contains(@href, 'configure')]"))).click();
 
         return new FreestyleConfigPage(getDriver());
     }
 
-    public FreestyleProjectPage clickBuildNowOnSidebar() {
+    public FreestyleProjectPage clickBuildNowSidebar() {
         getWait5().until(ExpectedConditions.visibilityOfElementLocated(
                 By.xpath("//a[@data-build-success='Build scheduled']"))).click();
 
@@ -55,5 +55,18 @@ public class FreestyleProjectPage extends BaseProjectPage<FreestyleProjectPage> 
                 By.xpath("//tbody//tr[2]//a"))).click();
 
         return new FreestyleBuildPage(getDriver());
+    }
+
+    public FreestyleProjectPage clickDeleteProjectSidebar() {
+        getWait10().until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//a[@data-title='Delete Project']"))).click();
+
+        return this;
+    }
+
+    public HomePage clickYesToConfirmDelete() {
+        getWait10().until(ExpectedConditions.elementToBeClickable(By.xpath("//button[@data-id='ok']"))).click();
+
+        return new HomePage(getDriver());
     }
 }
