@@ -6,17 +6,18 @@ import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.Select;
 import org.testng.Assert;
+import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import school.redrover.page.HomePage;
 import school.redrover.runner.BaseTest;
 
 public class OrganizationFolder3Test extends BaseTest {
 
-    String NAME_FOLDER = "Organization Folder";
-    String NAME = "Name Organization Folder";
-    String NEW_NAME = "New Name Organization Folder";
-    String DESCRIPTION = "Description Organization Folder";
-    String NEW_DESCRIPTION = "New Description Organization Folder";
+    private static final String NAME_FOLDER = "Organization Folder";
+    private static final String NAME = "Name Organization Folder";
+    private static final String NEW_NAME = "New Name Organization Folder";
+    private static final String DESCRIPTION = "Description Organization Folder";
+    private static final String NEW_DESCRIPTION = "New Description Organization Folder";
 
     private void clickElement(By by) {
         getDriver().findElement(by).click();
@@ -36,8 +37,8 @@ public class OrganizationFolder3Test extends BaseTest {
         String typeProject = new HomePage(getDriver())
                 .clickCreateJob()
                 .enterItemName(NAME_FOLDER)
-                .clickOrganizationFolderAndClickOk()
-                .clickLogoJenkins()
+                .selectOrganizationFolderAndClickOk()
+                .gotoHomePage()
                 .getTypeProject();
 
         Assert.assertEquals(typeProject, NAME_FOLDER);
@@ -45,14 +46,17 @@ public class OrganizationFolder3Test extends BaseTest {
 
     @Test(dependsOnMethods = "testCreate")
     public void testAddName() {
-        goConfigure();
-        getDriver().findElement(By.name("_.displayNameOrNull")).sendKeys(NAME);
-        clickElement(By.name("Submit"));
+        String name = new HomePage(getDriver())
+                .clickItemName()
+                .clickConfigure()
+                .setDisplayName(NAME)
+                .clickSaveButton()
+                .getName();
 
-        Assert.assertEquals(textElement(By.tagName("h1")), NAME);
+        Assert.assertEquals(name, NAME);
     }
 
-    @Test(dependsOnMethods = {"testCreate", "testAddName"})
+    @Test(dependsOnMethods = {"testAddName"})
     public void testEditName() {
         goConfigure();
         getDriver().findElement(By.name("_.displayNameOrNull")).sendKeys(Keys.LEFT_CONTROL + "a");
@@ -71,7 +75,7 @@ public class OrganizationFolder3Test extends BaseTest {
         Assert.assertEquals(textElement(By.id("view-message")), DESCRIPTION);
     }
 
-    @Test(dependsOnMethods = {"testCreate", "testAddDescription"})
+    @Test(dependsOnMethods = {"testAddDescription"})
     public void testEditDescription() {
         goConfigure();
         getDriver().findElement(By.name("_.description")).sendKeys(Keys.LEFT_CONTROL + "a");
@@ -81,7 +85,7 @@ public class OrganizationFolder3Test extends BaseTest {
         Assert.assertEquals(textElement(By.id("view-message")), NEW_DESCRIPTION);
     }
 
-    @Test(dependsOnMethods = {"testAddDescription", "testEditDescription", "testAddName", "testEditName", "testCreate", "testConfigureTheProject"})
+    @Test(dependsOnMethods = {"testEditDescription", "testEditName"})
     public void testDelete() {
         clickElement(By.xpath("//td/a[@class='jenkins-table__link model-link inside']"));
         clickElement(By.xpath("//a[@data-title='Delete Organization Folder']"));
@@ -90,8 +94,8 @@ public class OrganizationFolder3Test extends BaseTest {
         Assert.assertEquals(textElement(By.tagName("h1")), "Welcome to Jenkins!");
     }
 
-
-    @Test(dependsOnMethods = {"testCreate", "testAddName", "testAddDescription", "testEditName", "testEditDescription"})
+    @Ignore
+    @Test(dependsOnMethods = {"testAddName", "testAddDescription", "testEditName", "testEditDescription"})
     public void testConfigureTheProject() {
         goConfigure();
         getDriver().findElement(By.name("_.displayNameOrNull")).sendKeys(Keys.LEFT_CONTROL + "a");

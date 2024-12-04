@@ -50,7 +50,7 @@ public class NewItemFromOtherExistingTest extends BaseTest {
                 .clickNewItem()
                 .enterItemName(SECOND_ITEM_NAME)
                 .scrollToCopyFromFieldAndEnterName(FIRST_ITEM_NAME)
-                .clickOkToSubmit()
+                .clickOkButton()
                 .gotoHomePage()
                 .getItemList();
 

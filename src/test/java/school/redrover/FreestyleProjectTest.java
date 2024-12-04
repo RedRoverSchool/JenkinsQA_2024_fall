@@ -10,7 +10,7 @@ import java.util.List;
 public class FreestyleProjectTest extends BaseTest {
 
     private static final String PROJECT_NAME = "MyFreestyleProject";
-
+    private static final String FREESTYLE_PROJECT = "Freestyle project";
     private static final String DESCRIPTION = "Bla-bla-bla project";
 
     private static final String BUILD_NAME = "BuildName";
@@ -68,16 +68,17 @@ public class FreestyleProjectTest extends BaseTest {
 
     @Test
     public void testCreateFreestyleProjectFromMyViews() {
-        String projectName = new HomePage(getDriver())
+        List<String> projectName = new HomePage(getDriver())
                 .clickMyViewsButton()
                 .clickCreateJob()
                 .enterItemName(PROJECT_NAME)
-                .selectFreestyleProject()
-                .clickOkToSubmit()
-                .clickSaveButton()
-                .getProjectName();
+                .selectTypeProject(FREESTYLE_PROJECT)
+                .clickOkButton()
+                .gotoHomePage()
+                .getItemList();
 
-        Assert.assertEquals(projectName, PROJECT_NAME);
+        Assert.assertEquals(projectName.size(), 1);
+        Assert.assertEquals(projectName.get(0), PROJECT_NAME);
     }
 
    @Test(dependsOnMethods = "testCreateProjectViaCreateJobButton")
