@@ -3,7 +3,6 @@ package school.redrover;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.testng.Assert;
-import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import school.redrover.page.HomePage;
 import school.redrover.page.MultiConfigurationConfigPage;
@@ -13,6 +12,7 @@ import java.util.List;
 
 public class MultiConfigurationProjectTest extends BaseTest {
     private static final String NAME_OF_PROJECT = "Multi-configuration project";
+    private static final String TYPE_MULTICONFIG_PROJECT = "Multi-configuration project";
     private static final String DESCRIPTIONS = "Descriptions of project";
 
     @Test(description = "Create project without descriptions")
@@ -20,7 +20,8 @@ public class MultiConfigurationProjectTest extends BaseTest {
         List<String> itemList = new HomePage(getDriver())
                 .clickNewItem()
                 .enterItemName(NAME_OF_PROJECT)
-                .selectMultiConfigurationAndClickOk()
+                .selectTypeProject(TYPE_MULTICONFIG_PROJECT)
+                .clickOkButton()
                 .gotoHomePage()
                 .getItemList();
 

@@ -12,12 +12,14 @@ import school.redrover.runner.BaseTest;
 public class DeleteMulticonfigurationProjectTest extends BaseTest {
 
     private static final String PROJECT_NAME = "MulticonfigurationProject";
+    private static final String TYPE_MULTICONFIG_PROJECT = "Multi-configuration project";
 
     private HomePage createMulticonfigurationProject(String projectName) {
         return new HomePage(getDriver())
                 .clickNewItem()
                 .enterItemName(projectName)
-                .selectMultiConfigurationAndClickOk()
+                .selectTypeProject(TYPE_MULTICONFIG_PROJECT)
+                .clickOkButton()
                 .gotoHomePage();
     }
 
