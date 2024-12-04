@@ -37,8 +37,8 @@ public class OrganizationFolder3Test extends BaseTest {
         String typeProject = new HomePage(getDriver())
                 .clickCreateJob()
                 .enterItemName(NAME_FOLDER)
-                .clickOrganizationFolderAndClickOk()
-                .clickLogoJenkins()
+                .selectOrganizationFolderAndClickOk()
+                .gotoHomePage()
                 .getTypeProject();
 
         Assert.assertEquals(typeProject, NAME_FOLDER);
@@ -50,7 +50,7 @@ public class OrganizationFolder3Test extends BaseTest {
                 .clickItemName()
                 .clickConfigure()
                 .setDisplayName(NAME)
-                .clickSave()
+                .clickSaveButton()
                 .getName();
 
         Assert.assertEquals(name, NAME);

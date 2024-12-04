@@ -24,7 +24,8 @@ public class MultiConfigurationProjectTest extends BaseTest {
                 .gotoHomePage()
                 .getItemList();
 
-        Assert.assertTrue(itemList.contains(NAME_OF_PROJECT));
+        Assert.assertEquals(itemList.size(), 1);
+        Assert.assertEquals(itemList.get(0), NAME_OF_PROJECT);
     }
 
     @Test(description = " MultiConfigurationProjectTest | Add descriptions to existing project")
@@ -71,17 +72,14 @@ public class MultiConfigurationProjectTest extends BaseTest {
         }
     }
 
-    @Ignore
-    @Test
+    @Test(dependsOnMethods = "testCreateProjectWithoutDescription")
     public void testCreateWithExistingName() {
-        testCreateProjectWithoutDescription();
         String errorMessage = new HomePage(getDriver())
                 .clickNewItem()
                 .enterItemName(NAME_OF_PROJECT)
-                .choseMultiConfigurationProject()
-                .saveInvalidData()
+                .selectFreestyleProject()
                 .getErrorMessage();
 
-        Assert.assertTrue(errorMessage.matches("A job already exists with the name ‘MTC project’"));
+        Assert.assertEquals(errorMessage, "» A job already exists with the name ‘%s’".formatted(NAME_OF_PROJECT));
     }
 }
