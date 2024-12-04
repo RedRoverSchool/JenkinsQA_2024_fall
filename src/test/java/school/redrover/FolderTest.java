@@ -1,6 +1,5 @@
 package school.redrover;
 
-import org.openqa.selenium.By;
 import org.testng.Assert;
 import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
@@ -58,13 +57,10 @@ public class FolderTest extends BaseTest {
         Assert.assertEquals(new FolderProjectPage(getDriver()).getFolderName(), "F");
     }
 
-    @Test
+    @Test(dependsOnMethods = "testConfigureNameByChevron")
     public void testConfigureDescriptionByChevron() {
 
        String desc =  new HomePage(getDriver())
-               .clickNewItem()
-               .nameAndSelectFolderType(FIRST_FOLDER_NAME)
-               .gotoHomePage()
                .selectConfigureFromItemMenu(FIRST_FOLDER_NAME)
                .enterDescription("This is new description")
                .clickSaveButton()
