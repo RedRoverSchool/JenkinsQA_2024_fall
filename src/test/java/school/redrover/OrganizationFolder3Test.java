@@ -18,6 +18,7 @@ public class OrganizationFolder3Test extends BaseTest {
     private static final String NEW_NAME = "New Name Organization Folder";
     private static final String DESCRIPTION = "Description Organization Folder";
     private static final String NEW_DESCRIPTION = "New Description Organization Folder";
+    private static final String TYPE_ORGANIZATION_FOLDER = "Organization Folder";
 
     private void clickElement(By by) {
         getDriver().findElement(by).click();
@@ -37,7 +38,8 @@ public class OrganizationFolder3Test extends BaseTest {
         String typeProject = new HomePage(getDriver())
                 .clickCreateJob()
                 .enterItemName(NAME_FOLDER)
-                .selectOrganizationFolderAndClickOk()
+                .selectTypeProject(TYPE_ORGANIZATION_FOLDER)
+                .clickOkButton()
                 .gotoHomePage()
                 .getTypeProject();
 

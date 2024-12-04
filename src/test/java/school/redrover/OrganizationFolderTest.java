@@ -2,16 +2,13 @@ package school.redrover;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
-import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
-import school.redrover.page.CreateNewItemPage;
 import school.redrover.page.HomePage;
 import school.redrover.runner.BaseTest;
 
@@ -19,9 +16,11 @@ import java.time.Duration;
 import java.util.List;
 
 public class OrganizationFolderTest extends BaseTest {
+
     private static final String ITEM_NAME = "Item Name";
     private static final String DISPLAY_NAME = "Display Name";
     private static final String DESCRIPTION = "Description";
+    private static final String TYPE_ORGANIZATION_FOLDER = "Organization Folder";
 
     private void scrollPage() {
 
@@ -35,7 +34,8 @@ public class OrganizationFolderTest extends BaseTest {
         new HomePage(getDriver())
                 .clickNewItem()
                 .enterItemName(ITEM_NAME)
-                .selectOrganizationFolderAndClickOk();
+                .selectTypeProject(TYPE_ORGANIZATION_FOLDER)
+                .clickOkButton();
 
         Assert.assertEquals(
                 getDriver().findElement(By.id("general")).getText(),
