@@ -16,10 +16,10 @@ import java.util.List;
 
 public class FreestyleProject1Test extends BaseTest {
 
-    private static final String NEW_FREESTYLE_PROJECT_NAME = "New freestyle project";
     private static final String FREESTYLE_PROJECT_NAME = "Freestyle project";
     private static final String RENAMED_FREESTYLE_PROJECT_NAME = "Renamed freestyle project";
     private static final String DESCRIPTION = "Some description";
+    private static final String TYPE_FREESTYLE_PROJECT = "Freestyle project";
 
     private void openProject(String name) {
         getDriver().findElement(By.xpath("//td/a/span[text() = '%s']/..".formatted(name))).click();
@@ -29,19 +29,19 @@ public class FreestyleProject1Test extends BaseTest {
     public void testCreate() {
         List<String> createProject = new HomePage(getDriver())
                 .clickNewItem()
-                .enterItemName(NEW_FREESTYLE_PROJECT_NAME)
-                .selectTypeOfProject(FREESTYLE_PROJECT_NAME)
+                .enterItemName(FREESTYLE_PROJECT_NAME)
+                .selectTypeProject(TYPE_FREESTYLE_PROJECT)
                 .clickOkButton()
                 .gotoHomePage()
                 .getItemList();
 
-        Assert.assertTrue(createProject.contains(NEW_FREESTYLE_PROJECT_NAME));
+        Assert.assertTrue(createProject.contains(FREESTYLE_PROJECT_NAME));
     }
 
     @Test(dependsOnMethods = "testCreate")
     public void testAddDescription() {
         String description = new HomePage(getDriver())
-                .openFreestyleProject(NEW_FREESTYLE_PROJECT_NAME)
+                .openFreestyleProject(FREESTYLE_PROJECT_NAME)
                 .editDescription(DESCRIPTION)
                 .getDescription();
 
@@ -51,7 +51,7 @@ public class FreestyleProject1Test extends BaseTest {
     @Test(dependsOnMethods = "testAddDescription")
     public void testDeleteDescription() {
         String description = new HomePage(getDriver())
-                .openFreestyleProject(NEW_FREESTYLE_PROJECT_NAME)
+                .openFreestyleProject(FREESTYLE_PROJECT_NAME)
                 .clearDescription()
                 .getDescription();
 
@@ -60,7 +60,7 @@ public class FreestyleProject1Test extends BaseTest {
 
     @Test(dependsOnMethods = "testDeleteDescription")
     public void testRename() throws InterruptedException {
-        openProject(NEW_FREESTYLE_PROJECT_NAME);
+        openProject(FREESTYLE_PROJECT_NAME);
 
         getDriver().findElement((By.xpath("//*[contains(@href,'confirm-rename')]"))).click();
         getDriver().findElement(By.xpath("//input[@name='newName']")).clear();
@@ -92,7 +92,7 @@ public class FreestyleProject1Test extends BaseTest {
     @Test
     public void testFreestyleProjectDescriptionPreview() {
         new HomePage(getDriver())
-                .createFreestyleProject(NEW_FREESTYLE_PROJECT_NAME);
+                .createFreestyleProject(FREESTYLE_PROJECT_NAME);
 
         getDriver().findElement(By.id("description-link")).click();
         getDriver().findElement(By.name("description")).sendKeys(DESCRIPTION);
@@ -106,19 +106,19 @@ public class FreestyleProject1Test extends BaseTest {
     @Test
     public void testChevronDeleteFreestyleProject() {
         new HomePage(getDriver())
-                .createFreestyleProject(NEW_FREESTYLE_PROJECT_NAME);
+                .createFreestyleProject(FREESTYLE_PROJECT_NAME);
 
 
         Actions actions = new Actions(getDriver());
 
         WebElement projectName = getDriver()
-                .findElement(By.xpath("//span[contains(text(),'" + NEW_FREESTYLE_PROJECT_NAME + "')]"));
+                .findElement(By.xpath("//span[contains(text(),'" + FREESTYLE_PROJECT_NAME + "')]"));
         actions
                 .moveToElement(projectName)
                 .perform();
 
         WebElement chevron = getDriver()
-                .findElement(By.xpath("//*[@id='job_" + NEW_FREESTYLE_PROJECT_NAME + "']/td[3]/a/button"));
+                .findElement(By.xpath("//*[@id='job_" + FREESTYLE_PROJECT_NAME + "']/td[3]/a/button"));
 
         TestUtils.moveAndClickWithJavaScript(getDriver(), chevron);
 
@@ -137,19 +137,19 @@ public class FreestyleProject1Test extends BaseTest {
     @Test
     public void testChevronRenameFreestyleProject() {
         new HomePage(getDriver())
-                .createFreestyleProject(NEW_FREESTYLE_PROJECT_NAME);
+                .createFreestyleProject(FREESTYLE_PROJECT_NAME);
 
 
         Actions actions = new Actions(getDriver());
 
         WebElement projectName = getDriver()
-                .findElement(By.xpath("//span[contains(text(),'" + NEW_FREESTYLE_PROJECT_NAME + "')]"));
+                .findElement(By.xpath("//span[contains(text(),'" + FREESTYLE_PROJECT_NAME + "')]"));
         actions
                 .moveToElement(projectName)
                 .perform();
 
         WebElement chevron = getDriver()
-                .findElement(By.xpath("//*[@id='job_" + NEW_FREESTYLE_PROJECT_NAME + "']/td[3]/a/button"));
+                .findElement(By.xpath("//*[@id='job_" + FREESTYLE_PROJECT_NAME + "']/td[3]/a/button"));
 
         TestUtils.moveAndClickWithJavaScript(getDriver(), chevron);
 
