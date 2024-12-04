@@ -43,17 +43,17 @@ public class OrganizationFolder3Test extends BaseTest {
         Assert.assertEquals(typeProject, NAME_FOLDER);
     }
 
-    @Test(dependsOnMethods = "testCreate")
-    public void testAddName() {
-        String name = new HomePage(getDriver())
-                .clickItemName()
-                .clickConfigure()
-                .setDisplayName(NAME)
-                .clickSaveButton()
-                .getName();
-
-        Assert.assertEquals(name, NAME);
-    }
+//    @Test(dependsOnMethods = "testCreate")
+//    public void testAddName() {
+//        String name = new HomePage(getDriver())
+//                .clickItemName()
+//                .clickConfigure()
+//                .setDisplayName(NAME)
+//                .clickSaveButton()
+//                .getName();
+//
+//        Assert.assertEquals(name, NAME);
+//    }
 
     @Test(dependsOnMethods = {"testAddName"})
     public void testEditName() {

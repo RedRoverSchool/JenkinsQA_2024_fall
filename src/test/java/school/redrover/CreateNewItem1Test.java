@@ -7,7 +7,7 @@ import school.redrover.runner.BaseTest;
 
 import java.util.List;
 
-public class CreateNewItem1Test extends BaseTest<> {
+public class CreateNewItem1Test extends BaseTest {
 
     private static final String ITEM_NAME = "CreateNewItem";
     private static final String FREESTYLE_PROJECT = "Freestyle project";

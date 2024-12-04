@@ -428,10 +428,4 @@ public class HomePage extends BasePage {
     public String getTextDescriptionButton() {
         return getDriver().findElement(By.id("description-link")).getText();
     }
-
-    public OrganizationFolderPage clickItemName() {
-        getDriver().findElement(GET_ITEM_NAME).click();
-
-        return new OrganizationFolderPage(getDriver());
-    }
 }
