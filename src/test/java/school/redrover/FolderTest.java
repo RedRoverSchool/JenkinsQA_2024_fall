@@ -155,7 +155,7 @@ public class FolderTest extends BaseTest {
 
         Assert.assertEquals(errorMessage, "» This field cannot be empty, please enter a valid name");
     }
-    
+
     @Test(dependsOnMethods = "testOpenBuildHistoryByChevron")
     public void testErrorDuplicateNameCreation() {
 
