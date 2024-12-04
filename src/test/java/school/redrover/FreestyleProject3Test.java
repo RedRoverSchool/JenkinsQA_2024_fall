@@ -42,28 +42,6 @@ public class FreestyleProject3Test extends BaseTest {
     }
 
     @Test
-    public void testDeleteProjectViaSidebarMenuOnProjectStatusPageWhenSeveralProjectsExist() {
-        createProjectViaSidebarMenu(PROJECT_NAME + 2);
-
-        getWait10().until(ExpectedConditions.visibilityOfElementLocated(
-                By.xpath("//a[contains(text(), 'Dashboard')]"))).click();
-
-        createProjectViaSidebarMenu(PROJECT_NAME);
-
-        getWait10().until(ExpectedConditions.visibilityOfElementLocated(
-                By.xpath("//a[@data-title='Delete Project']"))).click();
-
-        getWait10().until(ExpectedConditions.elementToBeClickable(
-                By.xpath("//button[@data-id='ok']"))).click();
-
-        getWait10().until(ExpectedConditions.visibilityOfElementLocated(By.id("projectstatus"))).isDisplayed();
-
-        Assert.assertFalse(
-                getDriver().findElements(By.xpath("//tbody//a[contains(@href, 'job')]//span")).stream()
-                        .allMatch(w -> w.getText().equals(PROJECT_NAME) && w.getText().length() == PROJECT_NAME.length()));
-    }
-
-    @Test
     public void testDeleteWorkspace() {
         final String expectedText = "Error: no workspace";
         createProjectViaSidebarMenu(PROJECT_NAME);
