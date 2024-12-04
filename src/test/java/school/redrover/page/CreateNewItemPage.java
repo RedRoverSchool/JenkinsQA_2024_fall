@@ -15,7 +15,6 @@ public class CreateNewItemPage extends BaseCreatePage<CreateNewItemPage> {
 
     private static final By GET_ORGANIZATION_FOLDER = By.xpath("//li[contains(@class,'jenkins_branch_OrganizationFolder')]");
     private static final By getInputName = By.id("name");
-    private static final By getOkButton = By.id("ok-button");
 
     public CreateNewItemPage enterItemName(String name) {
         getDriver().findElement(getInputName).sendKeys(name);
@@ -77,12 +76,6 @@ public class CreateNewItemPage extends BaseCreatePage<CreateNewItemPage> {
         clickOkButton();
 
         return new ErrorPage(getDriver());
-    }
-
-    public CreateNewItemPage selectPipeline() {
-        getWait10().until(ExpectedConditions.elementToBeClickable(
-                By.xpath(("//div[@id='items']//label/span[text()= 'Pipeline']")))).click();
-        return new CreateNewItemPage(getDriver());
     }
 
     public String getErrorMessage() {

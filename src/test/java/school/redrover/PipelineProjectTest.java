@@ -14,6 +14,7 @@ import java.util.Map;
 
 public class PipelineProjectTest extends BaseTest {
 
+    private static final String TYPE_PIPELINE = "Pipeline";
     private static final String PROJECT_NAME = "PipelineName";
     private static final String NEW_PROJECT_NAME = "NewPipelineName";
     private static final List<String> PIPELINE_STAGES = List.of("Start", "Build", "Test", "End");
@@ -236,7 +237,7 @@ public class PipelineProjectTest extends BaseTest {
         String emptyNameMessage = new HomePage(getDriver())
                 .clickNewItem()
                 .enterItemName("")
-                .selectPipeline()
+                .selectTypeProject(TYPE_PIPELINE)
                 .getEmptyNameMessage();
 
         Assert.assertEquals(emptyNameMessage, "» This field cannot be empty, please enter a valid name");
@@ -251,7 +252,7 @@ public class PipelineProjectTest extends BaseTest {
                 .gotoHomePage()
                 .clickNewItem()
                 .enterItemName(PROJECT_NAME)
-                .selectPipeline()
+                .selectTypeProject(TYPE_PIPELINE)
                 .getErrorMessage();
 
         Assert.assertEquals(errorMessage, "» A job already exists with the name ‘%s’".formatted(PROJECT_NAME));
@@ -262,7 +263,7 @@ public class PipelineProjectTest extends BaseTest {
         String invalidNameMessage = new HomePage(getDriver())
                 .clickNewItem()
                 .enterItemName(unsafeCharacter)
-                .selectPipeline()
+                .selectTypeProject(TYPE_PIPELINE)
                 .getInvalidNameMessage();
 
         Assert.assertEquals(invalidNameMessage, "» ‘%s’ is an unsafe character".formatted(unsafeCharacter));
