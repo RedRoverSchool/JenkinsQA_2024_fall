@@ -7,7 +7,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import school.redrover.page.base.BaseCreatePage;
 
-public class CreateNewItemPage extends BaseCreatePage {
+public class CreateNewItemPage extends BaseCreatePage<CreateNewItemPage> {
 
     public CreateNewItemPage(WebDriver driver) {
         super(driver);
@@ -23,12 +23,6 @@ public class CreateNewItemPage extends BaseCreatePage {
         getDriver().findElement(getInputName).sendKeys(name);
 
         return this;
-    }
-
-    public CreateNewItemPage selectTypeOfProject(String name) {
-        getDriver().findElement(By.xpath("//span[text()='" + name + "']")).click();
-
-        return new CreateNewItemPage(getDriver());
     }
 
     public CreateNewItemPage selectFolderType() {

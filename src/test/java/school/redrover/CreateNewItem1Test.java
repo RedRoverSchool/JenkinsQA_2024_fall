@@ -10,15 +10,15 @@ import java.util.List;
 public class CreateNewItem1Test extends BaseTest {
 
     private static final String ITEM_NAME = "CreateNewItem";
-    private static final String FREESTYLE_PROJECT = "Freestyle project";
-    private static final String PIPELINE = "Pipeline";
+    private static final String TYPE_FREESTYLE_PROJECT = "Freestyle project";
+    private static final String TYPE_PIPELINE = "Pipeline";
 
     @Test
     public void testWithButton() {
         List<String> items = new HomePage(getDriver())
                 .clickCreateJob()
                 .enterItemName(ITEM_NAME)
-                .selectTypeOfProject(FREESTYLE_PROJECT)
+                .selectTypeProject(TYPE_FREESTYLE_PROJECT)
                 .clickOkButton()
                 .gotoHomePage()
                 .getItemList();
@@ -32,7 +32,7 @@ public class CreateNewItem1Test extends BaseTest {
         List<String> items = new HomePage(getDriver())
                 .clickNewItem()
                 .enterItemName(ITEM_NAME)
-                .selectTypeProject(PIPELINE)
+                .selectTypeProject(TYPE_PIPELINE)
                 .clickOkButton()
                 .gotoHomePage()
                 .getItemList();
@@ -46,7 +46,7 @@ public class CreateNewItem1Test extends BaseTest {
         String error = new HomePage(getDriver())
                 .clickNewItem()
                 .enterItemName(ITEM_NAME)
-                .selectTypeProject(FREESTYLE_PROJECT)
+                .selectTypeProject(TYPE_FREESTYLE_PROJECT)
                 .getInvalidNameMessage();
 
         Assert.assertEquals(error, "» A job already exists with the name ‘%s’".formatted(ITEM_NAME));
@@ -57,7 +57,7 @@ public class CreateNewItem1Test extends BaseTest {
         String errorMessage = new HomePage(getDriver())
                 .clickNewItem()
                 .enterItemName("<{]_  -&")
-                .selectTypeProject(FREESTYLE_PROJECT)
+                .selectTypeProject(TYPE_FREESTYLE_PROJECT)
                 .getErrorMessage();
 
         Assert.assertTrue(errorMessage.contains("is an unsafe character"));
