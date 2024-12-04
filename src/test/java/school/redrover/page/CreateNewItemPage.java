@@ -4,20 +4,24 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import school.redrover.page.base.BaseCreatePage;
 
 public class CreateNewItemPage extends BaseCreatePage<CreateNewItemPage> {
 
+    @FindBy(xpath = "//li[contains(@class,'jenkins_branch_OrganizationFolder')]")
+    WebElement getOrganizationFolder;
+
+    @FindBy(id = "name")
+    WebElement getInputName;
+
     public CreateNewItemPage(WebDriver driver) {
         super(driver);
     }
 
-    private static final By GET_ORGANIZATION_FOLDER = By.xpath("//li[contains(@class,'jenkins_branch_OrganizationFolder')]");
-    private static final By getInputName = By.id("name");
-
     public CreateNewItemPage enterItemName(String name) {
-        getDriver().findElement(getInputName).sendKeys(name);
+        getInputName.sendKeys(name);
 
         return this;
     }
@@ -58,7 +62,7 @@ public class CreateNewItemPage extends BaseCreatePage<CreateNewItemPage> {
     }
 
     public OrganizationFolderConfigPage selectOrganizationFolderAndClickOk() {
-        getDriver().findElement(GET_ORGANIZATION_FOLDER).click();
+        getOrganizationFolder.click();
         clickOkButton();
 
         return new OrganizationFolderConfigPage(getDriver());
