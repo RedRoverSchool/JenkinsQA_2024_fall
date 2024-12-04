@@ -14,6 +14,7 @@ public class FolderTest extends BaseTest {
     private static final String FIRST_FOLDER_NAME = "Freestyle projects";
     private static final String FREESTYLE_PROJECT_NAME = "First freestyle project job";
     private static final String FOLDER_NAME_MAX_LENGTH = "012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234";
+    private static final String TYPE_FOLDER = "Folder";
 
     @Test
     public void testCreateWithMaxNameLength() {
@@ -21,7 +22,8 @@ public class FolderTest extends BaseTest {
         String folderName = new HomePage(getDriver())
                 .clickNewItem()
                 .enterItemName(FOLDER_NAME_MAX_LENGTH)
-                .selectFolderAndClickOk()
+                .selectTypeProject(TYPE_FOLDER)
+                .clickOkButton()
                 .gotoHomePage()
                 .getItemNameByOrder(1);
 
@@ -34,7 +36,8 @@ public class FolderTest extends BaseTest {
         List<String> itemList = new HomePage(getDriver())
                 .clickNewItem()
                 .enterItemName("F")
-                .selectFolderAndClickOk()
+                .selectTypeProject(TYPE_FOLDER)
+                .clickOkButton()
                 .gotoHomePage()
                 .getItemList();
 
@@ -125,7 +128,7 @@ public class FolderTest extends BaseTest {
         String errorMessage = new HomePage(getDriver())
                 .clickNewItem()
                 .enterItemName("Folder.")
-                .selectFolderType()
+                .selectTypeProject(TYPE_FOLDER)
                 .getInvalidNameMessage();
 
         Assert.assertEquals(errorMessage, "» A name cannot end with ‘.’");
@@ -137,8 +140,8 @@ public class FolderTest extends BaseTest {
         String errorMessage = new HomePage(getDriver())
                 .clickNewItem()
                 .enterItemName("Folder.")
-                .selectFolderType()
-                .selectFolderType()
+                .selectTypeProject(TYPE_FOLDER)
+                .selectTypeProject(TYPE_FOLDER)
                 .saveInvalidData()
                 .getErrorMessage();
 
@@ -150,7 +153,7 @@ public class FolderTest extends BaseTest {
 
         String errorMessage = new HomePage(getDriver())
                 .clickNewItem()
-                .selectFolderType()
+                .selectTypeProject(TYPE_FOLDER)
                 .getEmptyNameMessage();
 
         Assert.assertEquals(errorMessage, "» This field cannot be empty, please enter a valid name");
