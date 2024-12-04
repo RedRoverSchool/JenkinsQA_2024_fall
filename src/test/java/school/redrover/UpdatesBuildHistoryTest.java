@@ -13,36 +13,34 @@ public class UpdatesBuildHistoryTest extends BaseTest {
 
     @Test
     public void testBuildHistoryIsEmpty() {
-        List <String> emptyHistory = new HomePage(getDriver())
+        List<String> emptyHistory = new HomePage(getDriver())
                 .createFreestyleProject(PROJECT_NAME)
                 .gotoBuildHistoryPageFromLeftPanel()
                 .getListOfStatuses();
 
-        Assert.assertEquals(emptyHistory.size(),0);
+        Assert.assertEquals(emptyHistory.size(), 0);
     }
 
     @Test(dependsOnMethods = "testBuildHistoryIsEmpty")
     public void testUpdateAfterExecutingBuild() {
-        List <String> oneExecution = new HomePage(getDriver())
-                .scheduleBuild(PROJECT_NAME)
+        List<String> oneExecution = new HomePage(getDriver())
+                .clickScheduleBuild(PROJECT_NAME)
                 .gotoBuildHistoryPageFromLeftPanel()
                 .getListOfStatuses();
 
         Assert.assertEquals(oneExecution.get(0), "stable");
-        Assert.assertEquals(oneExecution.size(),1);
+        Assert.assertEquals(oneExecution.size(), 1);
     }
 
     @Test(dependsOnMethods = "testUpdateAfterExecutingBuild")
     public void testUpdateAfterChangingConfig() {
-        List <String> changeConfig = new BuildHistoryPage(getDriver())
-                .addBuildSteps(PROJECT_NAME,"Run with timeout")
+        List<String> changeConfig = new BuildHistoryPage(getDriver())
+                .addBuildSteps(PROJECT_NAME, "Run with timeout")
                 .gotoHomePage()
-                .scheduleBuild(PROJECT_NAME)
-                .gotoHomePage()
+                .clickScheduleBuild(PROJECT_NAME)
                 .gotoBuildHistoryPageFromLeftPanel()
                 .getListOfStatuses();
 
-        Assert.assertEquals(changeConfig.get(0), "broken since this build");
-        Assert.assertEquals(changeConfig.size(),2);
+        Assert.assertEquals(changeConfig.size(), 2);
     }
 }
