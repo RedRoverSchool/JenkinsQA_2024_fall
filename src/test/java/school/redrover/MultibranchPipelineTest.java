@@ -1,11 +1,9 @@
 package school.redrover;
-
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.Select;
 import org.testng.Assert;
 import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
@@ -16,11 +14,6 @@ import java.util.List;
 
 public class MultibranchPipelineTest extends BaseTest {
 
-    private static final String MP_NAME = "NewItem";
-    private static final By NAME_INPUT = By.id("name");
-    private static final By CREATE_A_JOB_BUTTON = By.cssSelector("[href='newJob']");
-    private static final By MULTIBRANCH_PIPELINE_PROJECT = By.cssSelector("[class$='MultiBranchProject']");
-    private static final By OK_BUTTON = By.id("ok-button");
     private static final String MULTIBRANCH_PIPELINE_NAME = "NewMultibranchName";
     private static final String MULTIBRANCH_PIPELINE_NAME2 = "NewMultibranchName2";
 
@@ -46,7 +39,7 @@ public class MultibranchPipelineTest extends BaseTest {
 
         String actualDescription = new HomePage(getDriver())
                 .clickNewItem()
-                .enterItemName(MP_NAME)
+                .enterItemName(MULTIBRANCH_PIPELINE_NAME)
                 .selectMultibranchPipelineAndClickOk()
                 .enterDescription(description)
                 .clickSaveButton()
@@ -58,9 +51,9 @@ public class MultibranchPipelineTest extends BaseTest {
     @Test
     public void testDeleteItemFromStatusPage() {
 
-        createJob(MP_NAME);
+        createJob(MULTIBRANCH_PIPELINE_NAME);
 
-        getDriver().findElement(By.xpath(("//a[contains(@href,'%s')]").formatted(MP_NAME))).click();
+        getDriver().findElement(By.xpath(("//a[contains(@href,'%s')]").formatted(MULTIBRANCH_PIPELINE_NAME))).click();
 
         getDriver().findElement(By.cssSelector("[data-message*='Delete the Multibranch Pipeline']")).click();
 
@@ -125,35 +118,30 @@ public class MultibranchPipelineTest extends BaseTest {
 
     @Ignore
     @Test
-    public void testSelectingTriggersScanPeriodFromConfigPage() throws InterruptedException {
+    public void testSelectingTriggersScanPeriodFromConfigPage() {
+        WebElement selectedValue = new HomePage(getDriver())
+                .clickNewItem()
+                .enterItemName(MULTIBRANCH_PIPELINE_NAME)
+                .selectMultibranchPipelineAndClickOk()
+                .clickScanMultibranchPipelineButton()
+                .clickPeriodicalScanningCheckbox()
+                .selectingIntervalValue()
+                .getSelectedValue();
 
-        getDriver().findElement(CREATE_A_JOB_BUTTON).click();
-
-        getDriver().findElement(NAME_INPUT).sendKeys(MP_NAME);
-        getDriver().findElement(MULTIBRANCH_PIPELINE_PROJECT).click();
-        getDriver().findElement(OK_BUTTON).click();
-
-        getDriver().findElement(By.cssSelector("[data-section-id='scan-multibranch-pipeline-triggers']")).click();
-        Thread.sleep(500);
-        getDriver().findElement(By.cssSelector("[class='jenkins-checkbox']")).click();
-        Select select = new Select(getDriver().findElement(By.cssSelector("[name*='interval']")));
-        select.selectByValue("12h");
-
-        WebElement selectedValue = getDriver().findElement(By.cssSelector("[value='12h']"));
         Assert.assertTrue(selectedValue.isSelected());
     }
 
     @Test
     public void testCreateOneJobAndDisplayOnStartPage() {
-        String actualJobName = new HomePage(getDriver())
+        List<String> itemList = new HomePage(getDriver())
                 .clickNewItem()
                 .enterItemName(MULTIBRANCH_PIPELINE_NAME)
                 .selectMultibranchPipelineAndClickOk()
                 .clickSaveButton()
                 .gotoHomePage()
-                .getItemName(MULTIBRANCH_PIPELINE_NAME);
+                .getItemList();
 
-        Assert.assertEquals(actualJobName, MULTIBRANCH_PIPELINE_NAME);
+        Assert.assertTrue(itemList.contains(MULTIBRANCH_PIPELINE_NAME));
     }
 
     @Test

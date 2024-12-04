@@ -1,46 +1,39 @@
 package school.redrover;
-
-import org.openqa.selenium.By;
 import org.testng.Assert;
 import org.testng.annotations.Test;
+import school.redrover.page.HomePage;
 import school.redrover.runner.BaseTest;
+
+import java.util.List;
 
 public class FreestyleProject4Test extends BaseTest {
 
-    private static final String PROJECT_NAME = "New_Freestyle_Project";
+    private static final String PROJECT_NAME = "NewFreestyleProject";
     private static final String PROJECT_DESCRIPTION = "About my new freestyle project";
-
-    private void createNewFreestyleProject() {
-
-        getDriver().findElement(By.xpath("//a[@href='/view/all/newJob']")).click();
-        getDriver().findElement(By.xpath("//input[@class='jenkins-input']")).sendKeys(PROJECT_NAME);
-        getDriver().findElement(By.xpath("//li[@class='hudson_model_FreeStyleProject']")).click();
-        getDriver().findElement(By.id("ok-button")).click();
-        getDriver().findElement(By.xpath("//button[@name='Submit']")).click();
-    }
 
     @Test
     public void testCheckProjectName() {
 
-        createNewFreestyleProject();
+        List<String> itemList = new HomePage(getDriver())
+                .clickNewItem()
+                .enterItemName(PROJECT_NAME)
+                .selectFreestyleProjectAndClickOk()
+                .clickSubmitButton()
+                .gotoHomePage()
+                .getItemList();
 
-        Assert.assertEquals(
-                getDriver().findElement(By.xpath("//h1[@class='job-index-headline page-headline']")).getText(),
-                PROJECT_NAME);
+        Assert.assertTrue(itemList.contains(PROJECT_NAME));
     }
 
-    @Test
+    @Test (dependsOnMethods = "testCheckProjectName")
     public void testAddDescription() {
 
-        createNewFreestyleProject();
+        String textDescription = new HomePage(getDriver())
+                .openFreestyleProject(PROJECT_NAME)
+                .editDescription(PROJECT_DESCRIPTION)
+                .getDescription();
 
-        getDriver().findElement(By.xpath("//a[@id='description-link']")).click();
-        getDriver().findElement(By.xpath("//textarea[@name='description']")).sendKeys(PROJECT_DESCRIPTION);
-        getDriver().findElement(By.xpath("//button[@name='Submit']")).click();
-
-        Assert.assertEquals(
-                getDriver().findElement(By.xpath("//*[@id='description']/div")).getText(),
-                PROJECT_DESCRIPTION);
+        Assert.assertEquals(textDescription, PROJECT_DESCRIPTION);
     }
 }
 

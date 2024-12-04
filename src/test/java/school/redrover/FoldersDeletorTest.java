@@ -1,113 +1,60 @@
 package school.redrover;
 
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.interactions.Action;
-import org.openqa.selenium.interactions.Actions;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.Assert;
-import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
+import school.redrover.page.HomePage;
 import school.redrover.runner.BaseTest;
-import school.redrover.runner.TestUtils;
-
-import static school.redrover.runner.TestUtils.newItemsData;
+import java.util.List;
 
 public class FoldersDeletorTest extends BaseTest {
 
-    private void clickOnSave () {
-        getDriver().findElement(By.name("Submit")).click();
-    }
+    private static final String FOLDER_NAME = "FolderToDelete";
 
     @Test
     public void testViaMainPageChevron () {
-        newItemsData(this,"FolderToRemove",
-                "//*[@id='j-add-item-type-nested-projects']/ul/li[1]/div[2]/div");
-        clickOnSave();
+        List<String> setOfProjects = new HomePage(getDriver())
+                .createNewFolder(FOLDER_NAME)
+                .gotoHomePage()
+                .deleteFolderViaChevron(FOLDER_NAME)
+                .getItemList();
 
-        getWait10().until(ExpectedConditions.elementToBeClickable(By.xpath("/html/body/div[1]/ol/li[1]/a"))).click();
-
-        WebElement projectName = getWait10().until(ExpectedConditions.presenceOfElementLocated(
-                By.xpath("/html/body/div[2]/div[2]/div[2]/div[2]/table/tbody/tr[1]/td[3]/a/span")));
-        Actions actions = new Actions(getDriver());
-        actions.moveToElement(projectName).perform();
-
-        WebElement chooseAction = getWait10().until(ExpectedConditions.presenceOfElementLocated(
-                By.xpath("//*[@id='job_FolderToRemove']/td[3]/a/button")));
-        actions.moveToElement(chooseAction).pause(500).click().perform();
-
-        TestUtils.moveAndClickWithJavaScript(getDriver(), chooseAction);
-
-        getWait10().until(ExpectedConditions.elementToBeClickable(
-                By.xpath("/html/body/div[3]/div/div/div/button"))).click();
-        getWait10().until(ExpectedConditions.elementToBeClickable(
-                By.xpath("/html/body/dialog/div[3]/button[1]"))).click();
-
-        Assert.assertEquals(getWait10().until(ExpectedConditions.visibilityOfElementLocated(
-                By.xpath("/html/body/div[2]/div[2]/div[2]/div/p"))).getText(),
-                "This page is where your Jenkins jobs will be displayed. To get started, you can set up distributed builds or start building a software project.");
+        Assert.assertTrue(setOfProjects.isEmpty());
     }
 
     @Test
     public void testFromProjectPage () {
-        newItemsData(this,"FolderToRemove",
-                "//*[@id='j-add-item-type-nested-projects']/ul/li[1]/div[2]/div");
-        clickOnSave();
+        List<String> setOfProjects = new HomePage(getDriver())
+                .createNewFolder(FOLDER_NAME)
+                .deleteFolder(FOLDER_NAME)
+                .gotoHomePage()
+                .getItemList();
 
-        getWait10().until(ExpectedConditions.elementToBeClickable(
-                By.xpath("/html/body/div[2]/div[1]/div[1]/div[4]/span/a"))).click();
-        getWait10().until(ExpectedConditions.elementToBeClickable(By.xpath("/html/body/dialog/div[3]/button[1]"))).click();
-
-        Assert.assertEquals(getWait10().until(ExpectedConditions.visibilityOfElementLocated(
-                        By.xpath("/html/body/div[2]/div[2]/div[2]/div/p"))).getText(),
-                "This page is where your Jenkins jobs will be displayed. To get started, you can set up distributed builds or start building a software project.");
+       Assert.assertTrue(setOfProjects.isEmpty());
     }
 
     @Test
     public void testViaMyViewChevron () {
-        newItemsData(this,"FolderToRemove",
-                "//*[@id='j-add-item-type-nested-projects']/ul/li[1]/div[2]/div");
-        clickOnSave();
+        List<String> setOfProjects = new HomePage(getDriver())
+                .createNewFolder(FOLDER_NAME)
+                .gotoHomePage()
+                .clickMyViewsButton()
+                .deleteItemViaChevronItem(FOLDER_NAME)
+                .gotoHomePage()
+                .getItemList();
 
-        getWait10().until(ExpectedConditions.elementToBeClickable(
-                By.xpath("/html/body/div[1]/ol/li[1]/a"))).click();
-        getWait10().until(ExpectedConditions.elementToBeClickable(
-                By.xpath("/html/body/div[2]/div[1]/div[1]/div[4]/span/a"))).click();
-
-        WebElement projectName = getWait10().until(ExpectedConditions.presenceOfElementLocated(
-                By.xpath("/html/body/div[2]/div[2]/div[2]/div[2]/table/tbody/tr[1]/td[3]/a/span")));
-        Actions actions = new Actions(getDriver());
-        actions.moveToElement(projectName).perform();
-
-        WebElement chooseAction = getWait10().until(ExpectedConditions.presenceOfElementLocated(
-                By.xpath("//*[@id='job_FolderToRemove']/td[3]/a/button")));
-        actions.moveToElement(chooseAction).pause(500).click().perform();
-
-        TestUtils.moveAndClickWithJavaScript(getDriver(), chooseAction);
-
-        getWait10().until(ExpectedConditions.elementToBeClickable(
-                By.xpath("/html/body/div[3]/div/div/div/button"))).click();
-        getWait10().until(ExpectedConditions.elementToBeClickable(
-                By.xpath("/html/body/dialog/div[3]/button[1]"))).click();
-
-        Assert.assertEquals(getWait10().until(ExpectedConditions.visibilityOfElementLocated(
-                        By.xpath("/html/body/div[2]/div[2]/div[2]/div/section/h2"))).getText(),
-                "This folder is empty");
+        Assert.assertTrue(setOfProjects.isEmpty());
     }
 
     @Test
     public void testCancelDeleting () {
-        newItemsData(this,"FolderToRemove",
-                "//*[@id='j-add-item-type-nested-projects']/ul/li[1]/div[2]/div");
-        clickOnSave();
+        List<String> setOfProjects = new HomePage(getDriver())
+                .createNewFolder(FOLDER_NAME)
+                .gotoHomePage()
+                .openFolder(FOLDER_NAME)
+                .cancelDeletingViaModalWindow()
+                .gotoHomePage()
+                .getItemList();
 
-        getWait10().until(ExpectedConditions.elementToBeClickable(
-                By.xpath("/html/body/div[2]/div[1]/div[1]/div[4]/span/a"))).click();
-        getWait10().until(ExpectedConditions.elementToBeClickable(
-                By.xpath("/html/body/dialog/div[3]/button[2]"))).click();
-
-        Assert.assertEquals(getWait10().until(ExpectedConditions.visibilityOfElementLocated(
-                        By.xpath("/html/body/div[2]/div[2]/h1"))).getText(),
-                "FolderToRemove");
+        Assert.assertTrue(setOfProjects.contains(FOLDER_NAME));
     }
 }

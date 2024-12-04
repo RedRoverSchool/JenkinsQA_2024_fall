@@ -1,8 +1,10 @@
 package school.redrover.page;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import school.redrover.page.base.BaseConfigPage;
 import school.redrover.runner.TestUtils;
@@ -58,11 +60,25 @@ public class PipelineConfigurePage extends BaseConfigPage<PipelineConfigurePage,
         return this;
     }
 
-    public PipelineConfigurePage enterScriptFromFile(String fileName) {
-        String pipelineScript = TestUtils.readFile(fileName);
+    public PipelineConfigurePage enterScriptFromFile(String script) {
         WebElement textArea = getDriver().findElement(By.xpath("//textarea[@class='ace_text-input']"));
-        TestUtils.pasteTextWithJavaScript(getDriver(), textArea, pipelineScript);
+        TestUtils.pasteTextWithJavaScript(getDriver(), textArea, script);
 
         return this;
+    }
+    public PipelineConfigurePage pasteScript() {
+        TestUtils.scrollToBottom(getDriver());
+
+        getWait2().until(ExpectedConditions.visibilityOfElementLocated(By.id("workflow-editor-1")))
+                .click();
+        new Actions(getDriver())
+                .keyDown(Keys.CONTROL).sendKeys("v").keyUp(Keys.CONTROL).build().perform();
+
+        return this;
+    }
+
+    public String getScriptText() {
+        return getWait2().until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//span[@class = 'ace_identifier']")))
+                .getText();
     }
 }

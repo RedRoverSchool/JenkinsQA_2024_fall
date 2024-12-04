@@ -8,8 +8,6 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import school.redrover.page.base.BasePage;
 import school.redrover.runner.TestUtils;
 
-import static java.sql.DriverManager.getDriver;
-
 public class MyViewsPage extends BasePage {
 
     public MyViewsPage(WebDriver driver) {
@@ -39,5 +37,25 @@ public class MyViewsPage extends BasePage {
         return this;
     }
 
+    public MyViewsPage openDropdownViaChevron(String projectName) {
+        new Actions(getDriver()).moveToElement(getDriver().findElement(By.xpath("//a[@href='job/%s/']/span".formatted(projectName))))
+                .pause(500)
+                .perform();
+        WebElement chevron = getDriver().findElement(By.xpath("//td//button[@aria-expanded='false']"));
+        TestUtils.moveAndClickWithJavaScript(getDriver(), chevron);
+        getWait5().until(ExpectedConditions.attributeToBe(chevron, "aria-expanded", "true"));
 
+        return this;
+    }
+
+    public MyViewsPage clickDeleteInProjectDropdown(String projectName) {
+        getDriver().findElement(By.xpath("//button[@href='/me/my-views/view/all/job/%s/doDelete']".formatted(projectName))).click();
+
+        return this;
+    }
+
+    public WebElement getDeletionPopup() {
+        return getWait5().until(ExpectedConditions.visibilityOf(getDriver().findElement(
+                By.xpath("//footer/following-sibling::dialog"))));
+    }
 }
