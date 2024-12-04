@@ -6,6 +6,7 @@ import org.testng.annotations.Test;
 import school.redrover.page.HomePage;
 import school.redrover.page.FolderProjectPage;
 import school.redrover.runner.BaseTest;
+
 import java.util.List;
 
 public class FolderTest extends BaseTest {
@@ -40,8 +41,8 @@ public class FolderTest extends BaseTest {
                 .gotoHomePage()
                 .getItemList();
 
-        Assert.assertEquals(itemList.size(),1);
-        Assert.assertEquals(itemList.get(0),"F");
+        Assert.assertEquals(itemList.size(), 1);
+        Assert.assertEquals(itemList.get(0), "F");
     }
 
     @Test(dependsOnMethods = "testCreateWithMinNameLength")
@@ -60,11 +61,11 @@ public class FolderTest extends BaseTest {
     @Test(dependsOnMethods = "testConfigureNameByChevron")
     public void testConfigureDescriptionByChevron() {
 
-       String desc =  new HomePage(getDriver())
-               .selectConfigureFromItemMenu(FIRST_FOLDER_NAME)
-               .enterDescription("This is new description")
-               .clickSaveButton()
-               .getFolderDescription();
+        String desc = new HomePage(getDriver())
+                .selectConfigureFromItemMenu(FIRST_FOLDER_NAME)
+                .enterDescription("This is new description")
+                .clickSaveButton()
+                .getFolderDescription();
 
         Assert.assertEquals(desc,
                 "This is new description");
@@ -89,7 +90,7 @@ public class FolderTest extends BaseTest {
     @Test
     public void testCreateNewItemFromFolderPage() {
 
-        String projectName =  new HomePage(getDriver())
+        String projectName = new HomePage(getDriver())
                 .clickNewItem()
                 .nameAndSelectFolderType(FIRST_FOLDER_NAME)
                 .gotoHomePage()
@@ -154,13 +155,14 @@ public class FolderTest extends BaseTest {
 
         Assert.assertEquals(errorMessage, "» This field cannot be empty, please enter a valid name");
     }
-
-    @Ignore
+    
     @Test(dependsOnMethods = "testOpenBuildHistoryByChevron")
     public void testErrorDuplicateNameCreation() {
 
         String errorMessage = new HomePage(getDriver())
-                .clickNewItem().enterItemName(FIRST_FOLDER_NAME)
+                .clickNewItem()
+                .enterItemName(FIRST_FOLDER_NAME)
+                .selectTypeProject(TYPE_FOLDER)
                 .getInvalidNameMessage();
 
         Assert.assertEquals(errorMessage, "» A job already exists with the name ‘Freestyle projects’");
