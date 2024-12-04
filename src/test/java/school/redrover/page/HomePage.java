@@ -4,7 +4,6 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
-import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import school.redrover.page.base.BasePage;
 import school.redrover.runner.TestUtils;
@@ -432,5 +431,11 @@ public class HomePage extends BasePage {
 
     public String getTextDescriptionButton() {
         return getDriver().findElement(By.id("description-link")).getText();
+    }
+
+    public OrganizationFolderPage clickItemName() {
+        getDriver().findElement(GET_ITEM_NAME).click();
+
+        return new OrganizationFolderPage(getDriver());
     }
 }
