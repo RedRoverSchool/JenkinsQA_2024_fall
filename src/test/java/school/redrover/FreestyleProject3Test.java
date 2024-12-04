@@ -40,28 +40,4 @@ public class FreestyleProject3Test extends BaseTest {
     getWait10().until(ExpectedConditions.visibilityOfElementLocated(
             By.xpath("//a[@data-title='Wipe Out Current Workspace']"))).click();
     }
-
-    @Test
-    public void testDeleteWorkspaceConfirmationOptions() {
-        List<String> dialogOptions = List.of("Are you sure about wiping out the workspace?", "Cancel", "Yes");
-        createProjectViaSidebarMenu(PROJECT_NAME);
-
-        clickBuildNowAndWaitForBuildHistoryUpdate();
-
-        clickWorkspaceSidebarMenu();
-
-        wipeOutCurrentWorkspace();
-
-        getWait10().until(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.tagName("dialog")));
-
-        List<String> confirmationDialog = getDriver().findElements(By.cssSelector("dialog *")).stream()
-                .map(WebElement::getText)
-                .toList();
-
-        confirmationDialog.forEach(System.out::println);
-
-        for (String option : dialogOptions) {
-            Assert.assertTrue(confirmationDialog.contains(option), "Missing option: " + option);
-        }
-    }
 }

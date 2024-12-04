@@ -250,4 +250,17 @@ public class FreestyleProjectTest extends BaseTest {
 
         Assert.assertEquals(workspaceText, "Error: no workspace");
     }
+
+    @Test (dependsOnMethods = "testBuildProjectViaSidebarMenuOnProjectPage")
+    public void testDeleteWorkspaceConfirmationOptions() {
+        List<String> dialogOptions = List.of("Wipe Out Current Workspace", "Are you sure about wiping out the workspace?", "Cancel", "Yes");
+
+        boolean areAllConfirmationDialogOptionsPresent = new HomePage(getDriver())
+                .openFreestyleProject(PROJECT_NAME)
+                .clickWorkspaceSidebar()
+                .clickWipeOutCurrentWorkspaceSidebar()
+                .verifyConfirmationDialogOptionsPresence(dialogOptions);
+
+        Assert.assertTrue(areAllConfirmationDialogOptionsPresent, "Some dialog options weren't found");
+    }
 }

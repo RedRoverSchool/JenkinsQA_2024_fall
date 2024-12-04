@@ -33,6 +33,19 @@ public class FreestyleProjectPage extends BaseProjectPage<FreestyleProjectPage> 
                 .toList();
     }
 
+    public boolean verifyConfirmationDialogOptionsPresence(List<String> dialogOptions) {
+        getWait10().until(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.tagName("dialog")));
+        List<String> confirmationDialogOptions = getDriver().findElements(By.cssSelector("dialog *")).stream()
+                .map(WebElement::getText)
+                .toList();
+
+        for (String option : dialogOptions) {
+            if (!confirmationDialogOptions.contains(option))
+                return false;
+        }
+        return true;
+    }
+
     public FreestyleRenamePage clickRenameSidebar() {
         getWait10().until(ExpectedConditions.visibilityOfElementLocated(
                 By.xpath("//span[text()='Rename']/.."))).click();
