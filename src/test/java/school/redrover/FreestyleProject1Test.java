@@ -33,7 +33,7 @@ public class FreestyleProject1Test extends BaseTest {
                 .selectTypeOfProject(FREESTYLE_PROJECT_NAME)
                 .clickOkToSubmit()
                 .clickSubmitButton()
-                .goHome()
+                .gotoHomePage()
                 .showCreatedProject();
 
         Assert.assertTrue(createProject.contains(NEW_FREESTYLE_PROJECT_NAME));
@@ -136,7 +136,7 @@ public class FreestyleProject1Test extends BaseTest {
     }
 
     @Test
-    public void testChevronRenameFreestyleProject() throws InterruptedException {
+    public void testChevronRenameFreestyleProject() {
         new HomePage(getDriver())
                 .createFreestyleProject(NEW_FREESTYLE_PROJECT_NAME);
 
