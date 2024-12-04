@@ -237,4 +237,17 @@ public class FreestyleProjectTest extends BaseTest {
 
         Assert.assertEquals(welcomeText, "Welcome to Jenkins!", "There is a project on Dashboard");
     }
+
+    @Test(dependsOnMethods = "testBuildProjectViaSidebarMenuOnProjectPage")
+    public void testDeleteWorkspace() {
+        String workspaceText = new HomePage(getDriver())
+                .openFreestyleProject(PROJECT_NAME)
+                .clickWorkspaceSidebar()
+                .clickWipeOutCurrentWorkspaceSidebar()
+                .clickYesToWipeOutCurrentWorkspace()
+                .clickWorkspaceSidebar()
+                .getWorkspaceText();
+
+        Assert.assertEquals(workspaceText, "Error: no workspace");
+    }
 }

@@ -22,6 +22,10 @@ public class FreestyleProjectPage extends BaseProjectPage<FreestyleProjectPage> 
         return getDriver().findElement(By.xpath("//tbody//tr[2]//td//a[contains(@class, 'display-name')]")).getText();
     }
 
+    public String getWorkspaceText() {
+        return getDriver().findElement(By.tagName("h1")).getText();
+    }
+
     public List<String> getListOfBuilds() {
         return getWait5().until(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.xpath("//tr")))
                 .stream()
@@ -68,5 +72,23 @@ public class FreestyleProjectPage extends BaseProjectPage<FreestyleProjectPage> 
         getWait10().until(ExpectedConditions.elementToBeClickable(By.xpath("//button[@data-id='ok']"))).click();
 
         return new HomePage(getDriver());
+    }
+
+    public FreestyleProjectPage clickWorkspaceSidebar() {
+        getWait10().until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//span[text()='Workspace']/.."))).click();
+
+        return this;
+    }
+
+    public FreestyleProjectPage clickWipeOutCurrentWorkspaceSidebar() {
+        getWait10().until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//a[@data-title='Wipe Out Current Workspace']"))).click();
+
+        return this;
+    }
+
+    public FreestyleProjectPage clickYesToWipeOutCurrentWorkspace() {
+        getWait10().until(ExpectedConditions.elementToBeClickable(By.xpath("//button[@data-id='ok']"))).click();
+
+        return this;
     }
 }

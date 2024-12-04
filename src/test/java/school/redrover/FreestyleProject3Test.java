@@ -42,24 +42,6 @@ public class FreestyleProject3Test extends BaseTest {
     }
 
     @Test
-    public void testDeleteWorkspace() {
-        final String expectedText = "Error: no workspace";
-        createProjectViaSidebarMenu(PROJECT_NAME);
-
-        clickBuildNowAndWaitForBuildHistoryUpdate();
-
-        clickWorkspaceSidebarMenu();
-
-        wipeOutCurrentWorkspace();
-
-        getWait10().until(ExpectedConditions.elementToBeClickable(By.xpath("//button[@data-id='ok']"))).click();
-
-        clickWorkspaceSidebarMenu();
-
-        Assert.assertEquals(getDriver().findElement(By.tagName("h1")).getText(), expectedText);
-    }
-
-    @Test
     public void testDeleteWorkspaceConfirmationOptions() {
         List<String> dialogOptions = List.of("Are you sure about wiping out the workspace?", "Cancel", "Yes");
         createProjectViaSidebarMenu(PROJECT_NAME);
