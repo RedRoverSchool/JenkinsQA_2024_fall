@@ -31,8 +31,7 @@ public class FreestyleProject1Test extends BaseTest {
                 .clickNewItem()
                 .enterItemName(NEW_FREESTYLE_PROJECT_NAME)
                 .selectTypeOfProject(FREESTYLE_PROJECT_NAME)
-                .clickOkToSubmit()
-                .clickSubmitButton()
+                .clickOkButton()
                 .gotoHomePage()
                 .getItemList();
 
