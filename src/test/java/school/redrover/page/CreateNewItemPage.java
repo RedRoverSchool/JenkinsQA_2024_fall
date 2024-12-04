@@ -86,17 +86,11 @@ public class CreateNewItemPage extends BaseCreatePage {
         return new PipelineConfigurePage(getDriver());
     }
 
-    public OrganizationFolderConfigurationPage selectOrganizationFolderAndClickOk() {
-
-        JavascriptExecutor js = (JavascriptExecutor) getDriver();
-        js.executeScript("window.scrollTo(0, document.body.scrollHeight);");
-
-        getDriver()
-                .findElement(By.xpath("//li[@class='jenkins_branch_OrganizationFolder']"))
-                .click();
+    public OrganizationFolderConfigPage selectOrganizationFolderAndClickOk() {
+        getDriver().findElement(GET_ORGANIZATION_FOLDER).click();
         clickOkButton();
 
-        return new OrganizationFolderConfigurationPage(getDriver());
+        return new OrganizationFolderConfigPage(getDriver());
     }
 
     public String getInvalidNameMessage() {
@@ -141,11 +135,11 @@ public class CreateNewItemPage extends BaseCreatePage {
         return new MultiConfigurationProjectPage(getDriver());
     }
 
-    public OrganizationFolderConfigurationPage clickOrganizationFolderAndClickOk() {
+    public OrganizationFolderConfigPage clickOrganizationFolderAndClickOk() {
         getDriver().findElement(GET_ORGANIZATION_FOLDER).click();
         clickOkButton();
 
-        return new OrganizationFolderConfigurationPage(getDriver());
+        return new OrganizationFolderConfigPage(getDriver());
     }
 
     public CreateNewItemPage scrollToCopyFromFieldAndEnterName(String name) {

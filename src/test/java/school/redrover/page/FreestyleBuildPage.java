@@ -9,6 +9,8 @@ public class FreestyleBuildPage extends BasePage {
 
     private static final By DISPLAY_NAME_FIELD = By.xpath("//input[@name='displayName']");
 
+    private static final By DESCRIPTION_FIELD = By.name("description");
+
     public FreestyleBuildPage(WebDriver driver) {
         super(driver);
     }
@@ -16,6 +18,10 @@ public class FreestyleBuildPage extends BasePage {
     public String getStatusTitle() {
         getWait10().until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("svg[tooltip='Success']")));
         return getDriver().findElement(By.tagName("h1")).getText();
+    }
+
+    public String getBuildDescription() {
+        return getWait10().until(ExpectedConditions.visibilityOfElementLocated(By.id("description"))).getText();
     }
 
     public String getConsoleOutputText() {
@@ -42,10 +48,22 @@ public class FreestyleBuildPage extends BasePage {
         return this;
     }
 
+    public FreestyleBuildPage addBuildDescription(String description) {
+        getWait5().until(ExpectedConditions.visibilityOfElementLocated(By.name("description"))).sendKeys(description);
+
+        return this;
+    }
+
+    public FreestyleBuildPage editBuildDescription(String newDescription) {
+        getWait5().until(ExpectedConditions.visibilityOfElementLocated(DESCRIPTION_FIELD)).clear();
+        getDriver().findElement(DESCRIPTION_FIELD).sendKeys(newDescription);
+
+        return this;
+    }
+
     public FreestyleBuildPage clickSaveButton() {
         getDriver().findElement(By.name("Submit")).click();
 
         return this;
     }
-
 }

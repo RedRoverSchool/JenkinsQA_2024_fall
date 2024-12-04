@@ -18,11 +18,11 @@ public class PipelineProjectTest extends BaseTest {
     private static final String NEW_PROJECT_NAME = "NewPipelineName";
     private static final List<String> PIPELINE_STAGES = List.of("Start", "Build", "Test", "End");
     private static final String PIPELINE_SCRIPT = """
-        pipeline {agent any\n stages {
-        stage('Build') {steps {echo 'Building the application'}}
-        stage('Test') {steps {error 'Test stage failed due to an error'}}
-        }
-        """;
+            pipeline {agent any\n stages {
+            stage('Build') {steps {echo 'Building the application'}}
+            stage('Test') {steps {error 'Test stage failed due to an error'}}
+            }
+            """;
 
     @DataProvider
     public Object[][] providerUnsafeCharacters() {
@@ -356,7 +356,16 @@ public class PipelineProjectTest extends BaseTest {
 
     @Test
     public void testBuildWithValidPipelineScript() {
-        final String validPipelineScriptFile = "ValidPipelineScript.txt";
+        final String validPipelineScriptFile = """
+                pipeline {
+                    agent any
+                    stages {
+                        stage('Checkout') {
+                            steps {echo 'Step: Checkout code from repository'}
+                        }
+                     }
+                }
+                """;
 
         String statusBuild = new HomePage(getDriver())
                 .clickNewItem()
@@ -374,7 +383,16 @@ public class PipelineProjectTest extends BaseTest {
 
     @Test
     public void testBuildWithInvalidPipelineScript() {
-        final String invalidPipelineScriptFile = "InvalidPipelineScript.txt";
+        final String invalidPipelineScriptFile = """
+                error_pipeline {{{
+                    agent any
+                    stages {
+                        stage('Checkout') {
+                            steps {echo 'Step: Checkout code from repository'}
+                        }
+                     }
+                }
+                """;
 
         String statusBuild = new HomePage(getDriver())
                 .clickNewItem()

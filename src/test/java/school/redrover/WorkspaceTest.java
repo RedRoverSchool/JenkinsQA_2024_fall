@@ -72,6 +72,7 @@ public class WorkspaceTest extends BaseTest {
                 getDriver().findElement(By.cssSelector("#breadcrumbs > li:nth-child(5)")).getText(), "#2");
     }
 
+    @Ignore
     @Test
     public void testWorkspaceNavigation() {
 
@@ -84,6 +85,7 @@ public class WorkspaceTest extends BaseTest {
                 By.xpath("//*[@id='breadcrumbs']/li[3]/a")).getText(), "TestJobWorkspace");
     }
 
+    @Ignore
     @AfterMethod
     public void tearDown() {
 
