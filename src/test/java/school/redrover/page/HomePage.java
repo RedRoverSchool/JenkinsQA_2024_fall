@@ -1,7 +1,6 @@
 package school.redrover.page;
 
 import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
@@ -11,7 +10,6 @@ import school.redrover.runner.TestUtils;
 
 import java.util.List;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 
 public class HomePage extends BasePage {
 
@@ -19,7 +17,6 @@ public class HomePage extends BasePage {
         super(driver);
     }
 
-    By listOfProjects = By.xpath("//a[@class = 'jenkins-table__link model-link inside'] /span");
     private final By GET_PROJECT_TYPE = By.xpath("//div[contains(@class,'jenkins-table__cell__button-wrapper')]");
     By getNewJob = By.cssSelector(("[href$='/newJob']"));
 
@@ -51,7 +48,8 @@ public class HomePage extends BasePage {
         getDriver().findElement(By.id("ok-button")).click();
         getDriver().findElement(By.name("Submit")).click();
 
-        getDriver().findElement(By.id("jenkins-name-icon")).click();
+        gotoHomePage();
+
         return this;
     }
 
@@ -83,11 +81,8 @@ public class HomePage extends BasePage {
     }
 
     public HomePage createDescription(String text) {
-
         getDriver().findElement(By.id("description-link")).click();
-
         getDriver().findElement(By.xpath("//textarea[contains(@class, 'jenkins-input')]")).sendKeys(text);
-
         getDriver().findElement(By.name("Submit")).click();
 
         return this;
@@ -103,30 +98,16 @@ public class HomePage extends BasePage {
     }
 
     public HomePage deleteFolderViaChevron(String name) {
-
-        Actions actions = new Actions(getDriver());
-        actions.moveToElement(getDriver().findElement(By.xpath("//span[contains(text(), '" + name + "')]")))
-                .perform();
-
         TestUtils.moveAndClickWithJavaScript(getDriver(),
-                getDriver().findElement(By.xpath("//button[@data-href='http://localhost:8080/job/" + name + "/']")));
+                getDriver().findElement(By.xpath("//td/a/span[text() = '%s']/../button".formatted(name))));
 
-        WebElement deleteButton = getWait5().until(ExpectedConditions.presenceOfElementLocated(
-                By.xpath("//button[contains(@href, 'doDelete')]")));
-        actions
-                .moveToElement(deleteButton)
-                .click()
-                .perform();
+      getWait5().until(ExpectedConditions.presenceOfElementLocated(
+                By.xpath("//button[contains(@href, 'doDelete')]"))).click();
 
-        WebElement buttonOk = getWait5().until(ExpectedConditions.elementToBeClickable(getDriver().findElement(By.xpath(
-                "//button[@data-id= 'ok']"))));
-        buttonOk.click();
+        getWait5().until(ExpectedConditions.elementToBeClickable(getDriver().findElement(By.xpath(
+                "//button[@data-id= 'ok']")))).click();
 
         return this;
-    }
-
-    public String getFirstFolderName() {
-        return getDriver().findElement(By.className("jenkins-table__link")).getText();
     }
 
     public ManageJenkinsPage openManageJenkinsPage() {
@@ -156,8 +137,6 @@ public class HomePage extends BasePage {
     }
 
     public void selectMenuFromItemDropdown(String itemName, String menuName) {
-        new Actions(getDriver()).moveToElement(getDriver().findElement(By.xpath("//td/a/span[text() = '%s']/.."
-                .formatted(itemName)))).perform();
         TestUtils.moveAndClickWithJavaScript(getDriver(), getDriver().findElement(
                 By.xpath("//td/a/span[text() = '%s']/../button".formatted(itemName))));
 
@@ -204,22 +183,14 @@ public class HomePage extends BasePage {
     }
 
     public HomePage openDropdownViaChevron(String projectName) {
-        new Actions(getDriver()).moveToElement(getDriver().findElement(By.xpath("//a[@href='job/%s/']/span".formatted(projectName))))
-                .pause(500)
-                .perform();
-        WebElement chevron = getDriver().findElement(By.xpath("//td//button[@aria-expanded='false']"));
+        WebElement chevron = getDriver().findElement(By.xpath("//td/a/span[text() = '%s']/../button".formatted(projectName)));
         TestUtils.moveAndClickWithJavaScript(getDriver(), chevron);
         getWait5().until(ExpectedConditions.attributeToBe(chevron, "aria-expanded", "true"));
 
         return this;
     }
 
-    public String getItemName(String projectName) {
-
-        return getDriver().findElement(By.xpath("//td/a[@href='job/%s/']".formatted(projectName))).getText();
-    }
-
-    public String getWelcomeText() {
+    public String getWelcomeDescriptionText() {
         return getDriver().findElement(By.xpath("//p[contains(text(), 'This page is where')]")).getText();
     }
 
@@ -261,17 +232,10 @@ public class HomePage extends BasePage {
     }
 
     public HomePage deleteItemViaChevronItem(String itemName) {
-        WebElement jobName = getDriver().findElement(
-                By.xpath("//td/a/span[text() = '%s']/..".formatted(itemName)));
-        new Actions(getDriver()).moveToElement(jobName).perform();
-
         WebElement chevronButton = getWait5().until(ExpectedConditions.visibilityOfElementLocated(
                 By.xpath("//td/a/span[text() = '%s']/../button".formatted(itemName))));
 
-        ((JavascriptExecutor) getDriver())
-                .executeScript("arguments[0].dispatchEvent(new Event('mouseenter'));", chevronButton);
-        ((JavascriptExecutor) getDriver())
-                .executeScript("arguments[0].dispatchEvent(new Event('click'));", chevronButton);
+        TestUtils.moveAndClickWithJavaScript(getDriver(), chevronButton);
 
         getDriver().findElement(By.xpath("//button[contains(@href,'Delete')]")).click();
         getDriver().findElement(By.xpath("//button[@data-id='ok']")).click();
@@ -306,12 +270,6 @@ public class HomePage extends BasePage {
         return this;
     }
 
-    public HomePage scheduleBuild(String projectName) {
-        getDriver().findElement(By.xpath("//a[@title = 'Schedule a Build for %s']".formatted(projectName))).click();
-
-        return new HomePage(getDriver());
-    }
-
     public BuildHistoryPage gotoBuildHistoryPageFromLeftPanel() {
         getDriver().findElement(By.xpath("//a[@href = '/view/all/builds']")).click();
 
@@ -334,13 +292,6 @@ public class HomePage extends BasePage {
         getDriver().findElement(By.xpath("//a[@href='/job/%s/confirm-rename']".formatted(name))).click();
 
         return new PipelineRenamePage(getDriver());
-    }
-
-    public List<String> showCreatedProject() {
-        List<WebElement> itemList = getDriver().findElements(listOfProjects);
-
-        return itemList.stream().map(WebElement::getText).collect(Collectors.toList());
-
     }
 
     public HomePage refreshAfterBuild() {
@@ -409,6 +360,7 @@ public class HomePage extends BasePage {
 
     public HomePage clickDeleteInProjectDropdown(String projectName) {
         getDriver().findElement(By.xpath("//button[@href='/job/%s/doDelete']".formatted(projectName))).click();
+
         return this;
     }
 
@@ -448,22 +400,30 @@ public class HomePage extends BasePage {
                         By.xpath("//table[@id='projectstatus']/thead/tr/th/a/span[contains(text(), '  ↑')]/.."))
                 .getText().split(" ")[0].trim();
     }
+
     public HomePage clickDescriptionButton() {
         getDriver().findElement(By.xpath("//a[@id='description-link']")).click();
+
         return this;
     }
-    public  HomePage enterDescription(String description) {
-      getDriver().findElement(By.xpath("//textarea[contains(@class, 'jenkins-input')]")).sendKeys(description);
-      return this;
+
+    public HomePage enterDescription(String description) {
+        getDriver().findElement(By.xpath("//textarea[contains(@class, 'jenkins-input')]")).sendKeys(description);
+
+        return this;
     }
+
     public HomePage clickSaveButton() {
         getDriver().findElement(By.xpath("//button[@name='Submit']")).click();
         return this;
     }
+
     public HomePage clearDescription() {
         getDriver().findElement(By.xpath("//textarea[@name='description']")).clear();
+
         return this;
     }
+
     public String getTextDescriptionButton() {
         return getDriver().findElement(By.id("description-link")).getText();
     }

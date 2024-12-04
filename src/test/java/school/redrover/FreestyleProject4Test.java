@@ -14,16 +14,15 @@ public class FreestyleProject4Test extends BaseTest {
     @Test
     public void testCheckProjectName() {
 
-        String projectName = new HomePage(getDriver())
+        List<String> itemList = new HomePage(getDriver())
                 .clickNewItem()
                 .enterItemName(PROJECT_NAME)
                 .selectFreestyleProjectAndClickOk()
                 .clickSubmitButton()
                 .gotoHomePage()
-                .getItemName(PROJECT_NAME);
+                .getItemList();
 
-
-        Assert.assertEquals(projectName, PROJECT_NAME);
+        Assert.assertTrue(itemList.contains(PROJECT_NAME));
     }
 
     @Test (dependsOnMethods = "testCheckProjectName")
