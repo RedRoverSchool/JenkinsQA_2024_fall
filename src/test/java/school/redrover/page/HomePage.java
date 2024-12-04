@@ -4,41 +4,47 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import school.redrover.page.base.BasePage;
 import school.redrover.runner.TestUtils;
 
 import java.util.List;
-import java.util.function.Function;
 
 public class HomePage extends BasePage {
+
+    @FindBy(xpath = "//div[contains(@class,'jenkins-table__cell__button-wrapper')]")
+    WebElement projectType;
+
+    @FindBy(css = "[href$='/newJob']")
+    WebElement newJob;
 
     public HomePage(WebDriver driver) {
         super(driver);
     }
 
-    private final By GET_PROJECT_TYPE = By.xpath("//div[contains(@class,'jenkins-table__cell__button-wrapper')]");
-    By getNewJob = By.cssSelector(("[href$='/newJob']"));
-
-    private <T> T openItem(String name, Function<WebDriver, T> page) {
+    private void openItem(String name) {
         getDriver().findElement(By.xpath("//td/a/span[text() = '%s']/..".formatted(name))).click();
-        return page.apply(getDriver());
     }
 
     public FreestyleProjectPage openFreestyleProject(String name) {
-        return openItem(name, FreestyleProjectPage::new);
+        openItem(name);
+        return new FreestyleProjectPage(getDriver());
     }
 
     public PipelineProjectPage openPipelineProject(String name) {
-        return openItem(name, PipelineProjectPage::new);
+        openItem(name);
+        return new PipelineProjectPage(getDriver());
     }
 
     public MultiConfigurationProjectPage openMultiConfigurationProject(String name) {
-        return openItem(name, MultiConfigurationProjectPage::new);
+        openItem(name);
+        return new MultiConfigurationProjectPage(getDriver());
     }
 
     public FolderProjectPage openFolder(String name) {
-        return openItem(name, FolderProjectPage::new);
+        openItem(name);
+        return new FolderProjectPage(getDriver());
     }
 
     public HomePage createFreestyleProject(String name) {
@@ -117,7 +123,7 @@ public class HomePage extends BasePage {
     }
 
     public CreateNewItemPage clickNewItem() {
-        getDriver().findElement(getNewJob).click();
+        newJob.click();
 
         return new CreateNewItemPage(getDriver());
     }
@@ -304,7 +310,7 @@ public class HomePage extends BasePage {
     }
 
     public String getTypeProject() {
-        return getDriver().findElement(GET_PROJECT_TYPE).getText();
+        return projectType.getText();
     }
 
     public String getNotificationBarStatus() {
