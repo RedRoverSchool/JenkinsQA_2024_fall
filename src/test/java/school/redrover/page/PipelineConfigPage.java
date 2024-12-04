@@ -13,9 +13,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class PipelineConfigurePage extends BaseConfigPage<PipelineConfigurePage, PipelineProjectPage> {
+public class PipelineConfigPage extends BaseConfigPage<PipelineConfigPage, PipelineProjectPage> {
 
-    public PipelineConfigurePage(WebDriver driver) {
+    public PipelineConfigPage(WebDriver driver) {
         super(driver);
     }
 
@@ -45,14 +45,14 @@ public class PipelineConfigurePage extends BaseConfigPage<PipelineConfigurePage,
         return labelToTooltipTextMap;
     }
 
-    public PipelineConfigurePage clickToggleToDisableOrEnableProject() {
+    public PipelineConfigPage clickToggleToDisableOrEnableProject() {
         getWait5().until(ExpectedConditions.elementToBeClickable(
                 By.xpath("//label[@data-title='Disabled']"))).click();
 
         return this;
     }
 
-    public PipelineConfigurePage addScriptToPipeline(String script) {
+    public PipelineConfigPage addScriptToPipeline(String script) {
 
         TestUtils.scrollToBottom(getDriver());
         getDriver().findElement(By.cssSelector("textarea[class='ace_text-input']")).sendKeys(script);
@@ -60,13 +60,13 @@ public class PipelineConfigurePage extends BaseConfigPage<PipelineConfigurePage,
         return this;
     }
 
-    public PipelineConfigurePage enterScriptFromFile(String script) {
+    public PipelineConfigPage enterScriptFromFile(String script) {
         WebElement textArea = getDriver().findElement(By.xpath("//textarea[@class='ace_text-input']"));
         TestUtils.pasteTextWithJavaScript(getDriver(), textArea, script);
 
         return this;
     }
-    public PipelineConfigurePage pasteScript() {
+    public PipelineConfigPage pasteScript() {
         TestUtils.scrollToBottom(getDriver());
 
         getWait2().until(ExpectedConditions.visibilityOfElementLocated(By.id("workflow-editor-1")))

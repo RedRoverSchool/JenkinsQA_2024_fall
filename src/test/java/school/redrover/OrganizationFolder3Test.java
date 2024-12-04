@@ -40,6 +40,7 @@ public class OrganizationFolder3Test extends BaseTest {
                 .enterItemName(NAME_FOLDER)
                 .selectTypeProject(TYPE_ORGANIZATION_FOLDER)
                 .clickOkButton()
+                .clickSaveButton()
                 .gotoHomePage()
                 .getTypeProject();
 

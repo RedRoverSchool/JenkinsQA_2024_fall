@@ -54,11 +54,11 @@ public class PipelineProjectPage extends BaseProjectPage<PipelineProjectPage> {
     }
 
 
-    public PipelineConfigurePage clickConfigureSidebar(String name) {
+    public PipelineConfigPage clickConfigureSidebar(String name) {
         getWait2().until(ExpectedConditions.elementToBeClickable(
                 By.xpath("//a[@href='/job/%s/configure']".formatted(name)))).click();
 
-        return new PipelineConfigurePage(getDriver());
+        return new PipelineConfigPage(getDriver());
     }
 
     public PipelineProjectPage clickEnableButton() {

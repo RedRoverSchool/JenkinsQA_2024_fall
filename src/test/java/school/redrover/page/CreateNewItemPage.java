@@ -8,7 +8,7 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import school.redrover.page.base.BaseCreatePage;
 
-public class CreateNewItemPage extends BaseCreatePage<CreateNewItemPage> {
+public class CreateNewItemPage extends BaseCreatePage {
 
     @FindBy(xpath = "//li[contains(@class,'jenkins_branch_OrganizationFolder')]")
     WebElement getOrganizationFolder;
@@ -23,7 +23,7 @@ public class CreateNewItemPage extends BaseCreatePage<CreateNewItemPage> {
     public CreateNewItemPage enterItemName(String name) {
         getInputName.sendKeys(name);
 
-        return this;
+        return new CreateNewItemPage(getDriver());
     }
 
     public MultiConfigurationConfigPage selectMultiConfigurationAndClickOk() {
@@ -54,11 +54,11 @@ public class CreateNewItemPage extends BaseCreatePage<CreateNewItemPage> {
         return new MultibranchPipelineConfigPage(getDriver());
     }
 
-    public PipelineConfigurePage selectPipelineAndClickOk() {
+    public PipelineConfigPage selectPipelineAndClickOk() {
         getDriver().findElement(By.xpath("//li[@class='org_jenkinsci_plugins_workflow_job_WorkflowJob']")).click();
         clickOkButton();
 
-        return new PipelineConfigurePage(getDriver());
+        return new PipelineConfigPage(getDriver());
     }
 
     public OrganizationFolderConfigPage selectOrganizationFolderAndClickOk() {

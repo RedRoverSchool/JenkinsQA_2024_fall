@@ -2,16 +2,19 @@ package school.redrover.page;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.FindBy;
 import school.redrover.page.base.BaseConfigPage;
 
 public class OrganizationFolderConfigPage extends BaseConfigPage<OrganizationFolderConfigPage, OrganizationFolderProjectPage> {
 
+    @FindBy(name = "_.displayNameOrNull")
+    WebElement nameTitle;
+
     public OrganizationFolderConfigPage(WebDriver driver) {
         super(driver);
     }
-
-    private static final By DISPLAY_NAME = By.name("_.displayNameOrNull");
 
     @Override
     protected OrganizationFolderProjectPage createProjectPage() {
@@ -50,7 +53,7 @@ public class OrganizationFolderConfigPage extends BaseConfigPage<OrganizationFol
     }
 
     public OrganizationFolderConfigPage setDisplayName(String name) {
-        getDriver().findElement(DISPLAY_NAME).sendKeys(name);
+        nameTitle.sendKeys(name);
 
         return this;
     }
