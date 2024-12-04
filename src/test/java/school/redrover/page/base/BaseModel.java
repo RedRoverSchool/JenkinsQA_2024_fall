@@ -1,6 +1,7 @@
 package school.redrover.page.base;
 
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
@@ -15,6 +16,8 @@ public abstract class BaseModel {
 
     public BaseModel(WebDriver driver) {
         this.driver = driver;
+
+        PageFactory.initElements(driver, this);
     }
 
     protected WebDriver getDriver() {
