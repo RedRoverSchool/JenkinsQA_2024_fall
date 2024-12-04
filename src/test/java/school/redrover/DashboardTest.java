@@ -99,6 +99,21 @@ public class DashboardTest extends BaseTest {
         Assert.assertEquals(projectNameList, List.of(NotBuilt, Disabled, SuccessBuilt, FailedBuilt));
     }
 
+    @Test
+    public void testMethod() {
+        List<String> projectNameList = new HomePage(getDriver())
+                .clickNewItem()
+                .enterItemName("projectName")
+                .selectPipelineAndClickOk()
+                .addScriptToPipeline(validPipelineScriptFile)
+                .clickSaveButton()
+                .clickOnBuildNowItemOnSidePanelAndWait()
+                .gotoHomePage()
+                .getItemList();
+
+        Assert.assertEquals(projectNameList.size(),1);
+    }
+
     private void testPreparationCreateNotBuiltProject(String projectName) {
         new HomePage(getDriver())
                 .clickNewItem()
