@@ -23,11 +23,6 @@ public class FreestyleProject3Test extends BaseTest {
         getDriver().findElement(By.name("Submit")).click();
     }
 
-    private void clickOnSuccessBuildIcon() {
-        getWait10().until(ExpectedConditions.visibilityOfElementLocated(
-                By.xpath("//a[@tooltip='Success > Console Output']"))).click();
-    }
-
     private void clickWorkspaceSidebarMenu() {
         getWait5().until(ExpectedConditions.visibilityOfElementLocated(
                 By.xpath("//span[text()='Workspace']/.."))).click();
@@ -44,28 +39,6 @@ public class FreestyleProject3Test extends BaseTest {
     private void wipeOutCurrentWorkspace() {
     getWait10().until(ExpectedConditions.visibilityOfElementLocated(
             By.xpath("//a[@data-title='Wipe Out Current Workspace']"))).click();
-    }
-
-    @Test
-    public void testDeleteLastBuild() {
-        createProjectViaSidebarMenu(PROJECT_NAME);
-
-        getWait10().until(ExpectedConditions.visibilityOfElementLocated(
-                By.xpath("//a[@data-build-success='Build scheduled']"))).click();
-
-        clickOnSuccessBuildIcon();
-
-        String buildName = getWait5().until(ExpectedConditions.visibilityOfElementLocated(
-                By.xpath("//span[contains(text(), 'Delete build')]"))).getText();
-        getDriver().findElement(By.xpath("//span[contains(text(), 'Delete build')]/..")).click();
-
-        getWait10().until(ExpectedConditions.visibilityOfElementLocated(By.name("Submit"))).click();
-
-        List<String> buildHistory = getDriver().findElements(By.xpath("//tr")).stream()
-                .map(WebElement::getText)
-                .toList();
-
-        Assert.assertFalse(buildHistory.contains(buildName));
     }
 
     @Test

@@ -66,4 +66,16 @@ public class FreestyleBuildPage extends BasePage {
 
         return this;
     }
+
+    public FreestyleBuildPage clickDeleteBuildSidebar() {
+        getDriver().findElement(By.xpath("//span[contains(text(), 'Delete build')]/..")).click();
+
+        return this;
+    }
+
+    public FreestyleProjectPage confirmDeleteBuild() {
+        getWait10().until(ExpectedConditions.visibilityOfElementLocated(By.name("Submit"))).click();
+
+        return new FreestyleProjectPage(getDriver());
+    }
 }
