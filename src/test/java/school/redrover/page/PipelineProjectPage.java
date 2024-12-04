@@ -33,6 +33,12 @@ public class PipelineProjectPage extends BaseProjectPage<PipelineProjectPage> {
         return this;
     }
 
+    public PipelineProjectPage clickOnBuiltNowOnSidebar() {
+        getDriver().findElement(By.xpath("//a[@data-build-success='Build scheduled']")).click();
+
+        return new PipelineProjectPage(getDriver());
+    }
+
     public PipelineStagesPage clickOnStagesItemOnSidePanel() {
         getDriver().findElement(By.cssSelector("a[href$='multi-pipeline-graph']")).click();
 
