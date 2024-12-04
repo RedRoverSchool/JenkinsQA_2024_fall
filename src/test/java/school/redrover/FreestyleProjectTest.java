@@ -2,6 +2,7 @@ package school.redrover;
 
 import org.testng.Assert;
 import org.testng.annotations.Test;
+import school.redrover.page.FreestyleProjectPage;
 import school.redrover.page.HomePage;
 import school.redrover.runner.BaseTest;
 
@@ -156,7 +157,7 @@ public class FreestyleProjectTest extends BaseTest {
                 .createFreestyleProject(PROJECT_NAME)
                 .openFreestyleProject(PROJECT_NAME)
                 .clickBuildNowOnSidebar()
-                .clickOnSuccessBuildIcon()
+                .clickOnSuccessBuildIconForLastBuild()
                 .getConsoleOutputText();
 
         Assert.assertTrue(buildInfo.contains("Finished: SUCCESS"));
@@ -166,7 +167,7 @@ public class FreestyleProjectTest extends BaseTest {
     public void testAddBuildDisplayName() {
         String actualBuildName = new HomePage(getDriver())
                 .openFreestyleProject(PROJECT_NAME)
-                .clickOnSuccessBuildIcon()
+                .clickOnSuccessBuildIconForLastBuild()
                 .clickEditBuildInformationSidebar()
                 .addDisplayName(BUILD_NAME)
                 .clickSaveButton()
@@ -181,12 +182,56 @@ public class FreestyleProjectTest extends BaseTest {
 
         String actualBuildName = new HomePage(getDriver())
                 .openFreestyleProject(PROJECT_NAME)
-                .clickOnSuccessBuildIcon()
+                .clickOnSuccessBuildIconForLastBuild()
                 .clickEditBuildInformationSidebar()
                 .editDisplayName(newDisplayName)
                 .clickSaveButton()
                 .getStatusTitle();
 
         Assert.assertTrue(actualBuildName.contains(newDisplayName));
+    }
+
+    @Test(dependsOnMethods = "testBuildProjectViaSidebarMenuOnProjectPage")
+    public void testAddBuildDescription() {
+        String actualDescription = new HomePage(getDriver())
+                .openFreestyleProject(PROJECT_NAME)
+                .clickOnSuccessBuildIconForLastBuild()
+                .clickEditBuildInformationSidebar()
+                .addBuildDescription(DESCRIPTION)
+                .clickSaveButton()
+                .getBuildDescription();
+
+        Assert.assertEquals(actualDescription, DESCRIPTION);
+    }
+
+    @Test(dependsOnMethods = {"testBuildProjectViaSidebarMenuOnProjectPage", "testAddBuildDescription"})
+    public void testEditBuildDescription() {
+        final String newDescription = "New " + DESCRIPTION;
+
+        String actualDescription = new HomePage(getDriver())
+                .openFreestyleProject(PROJECT_NAME)
+                .clickOnSuccessBuildIconForLastBuild()
+                .clickEditBuildInformationSidebar()
+                .editBuildDescription(newDescription)
+                .clickSaveButton()
+                .getBuildDescription();
+
+        Assert.assertEquals(actualDescription, newDescription);
+    }
+
+    @Test
+    public void testDeleteLastBuild() {
+        FreestyleProjectPage freestyleProjectPage = new HomePage(getDriver())
+                .createFreestyleProject(PROJECT_NAME)
+                .openFreestyleProject(PROJECT_NAME)
+                .clickBuildNowOnSidebar();
+        String lastBuildNumber = freestyleProjectPage.getLastBuildNumber();
+
+                freestyleProjectPage
+                .clickOnSuccessBuildIconForLastBuild()
+                .clickDeleteBuildSidebar()
+                .confirmDeleteBuild();
+
+        Assert.assertListNotContainsObject(freestyleProjectPage.getListOfBuilds(), lastBuildNumber, "The last build wasn't deleted");
     }
 }
