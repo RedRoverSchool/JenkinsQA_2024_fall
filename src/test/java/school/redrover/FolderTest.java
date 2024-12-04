@@ -1,7 +1,6 @@
 package school.redrover;
 
 import org.testng.Assert;
-import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import school.redrover.page.HomePage;
 import school.redrover.page.FolderProjectPage;
@@ -92,7 +91,9 @@ public class FolderTest extends BaseTest {
 
         String projectName = new HomePage(getDriver())
                 .clickNewItem()
-                .nameAndSelectFolderType(FIRST_FOLDER_NAME)
+                .enterItemName(FIRST_FOLDER_NAME)
+                .selectTypeProject(TYPE_FOLDER)
+                .clickOkButton()
                 .gotoHomePage()
                 .openFolder(FIRST_FOLDER_NAME)
                 .clickNewItem()

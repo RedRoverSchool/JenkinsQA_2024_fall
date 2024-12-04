@@ -13,8 +13,6 @@ public class CreateNewItemPage extends BaseCreatePage<CreateNewItemPage> {
         super(driver);
     }
 
-    private static final By getMultiConfigurationProject = By.xpath("//li//span[text()='Multi-configuration project']");
-    private static final By getSubmitButton = By.xpath("//button[@id = 'ok-button']");
     private static final By GET_ORGANIZATION_FOLDER = By.xpath("//li[contains(@class,'jenkins_branch_OrganizationFolder')]");
     private static final By getInputName = By.id("name");
     private static final By getOkButton = By.id("ok-button");
@@ -23,26 +21,6 @@ public class CreateNewItemPage extends BaseCreatePage<CreateNewItemPage> {
         getDriver().findElement(getInputName).sendKeys(name);
 
         return this;
-    }
-
-    public CreateNewItemPage selectFolderType() {
-        getDriver().findElement(By.xpath("//span[text()='Folder']")).click();
-
-        return this;
-    }
-
-    public FolderConfigPage selectFolderAndClickOk() {
-        selectFolderType();
-        clickOkButton();
-
-        return new FolderConfigPage(getDriver());
-    }
-
-    public FolderConfigPage nameAndSelectFolderType(String itemName) {
-        enterItemName(itemName);
-        selectFolderAndClickOk();
-
-        return new FolderConfigPage(getDriver());
     }
 
     public MultiConfigurationConfigPage selectMultiConfigurationAndClickOk() {
@@ -115,25 +93,6 @@ public class CreateNewItemPage extends BaseCreatePage<CreateNewItemPage> {
     public String getErrorMessage() {
         return getWait5().until(ExpectedConditions.visibilityOfElementLocated(
                 By.xpath("//div[@class='add-item-name']/div[@class='input-validation-message']"))).getText();
-    }
-
-    public CreateNewItemPage choseMultiConfigurationProject() {
-        getDriver().findElement(getMultiConfigurationProject).click();
-
-        return this;
-    }
-
-    public MultiConfigurationProjectPage submitCreationProject() {
-        getDriver().findElement(getSubmitButton).click();
-
-        return new MultiConfigurationProjectPage(getDriver());
-    }
-
-    public OrganizationFolderConfigPage clickOrganizationFolderAndClickOk() {
-        getDriver().findElement(GET_ORGANIZATION_FOLDER).click();
-        clickOkButton();
-
-        return new OrganizationFolderConfigPage(getDriver());
     }
 
     public CreateNewItemPage scrollToCopyFromFieldAndEnterName(String name) {
