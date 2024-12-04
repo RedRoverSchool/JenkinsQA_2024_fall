@@ -27,21 +27,19 @@ public class DashboardTest extends BaseTest {
                     stages {
                         stage('Checkout') {
                             steps {echo 'Step: Checkout code from repository'}
-                        }
-                     }
-                }
+             
                 """;
 
-    final String pSuccessBuild = "FPipelineProject";
-    final String pDisable = "APipelineProject";
-    final String pFailedBuild = "ZPipelineProject";
-    final String pNoBuild = "1PipelineProject";
+    final String SuccessBuilt = "FPipelineProject";
+    final String Disabled = "APipelineProject";
+    final String FailedBuilt = "ZPipelineProject";
+    final String NotBuilt = "1PipelineProject";
 
     @Test
     public void testVerifyProjectOrderByNameASCByDefault() {
-        testPreparationCreateNoBuildProject("FPipelineProject");
-        testPreparationCreateNoBuildProject("APipelineProject");
-        testPreparationCreateNoBuildProject("ZPipelineProject");
+        testPreparationCreateNotBuiltProject("FPipelineProject");
+        testPreparationCreateNotBuiltProject("APipelineProject");
+        testPreparationCreateNotBuiltProject("ZPipelineProject");
 
         List<String> projectNameList = new HomePage(getDriver())
                 .getItemList();
@@ -88,21 +86,20 @@ public class DashboardTest extends BaseTest {
     @Test
     public void testVerifyProjectOrderByStatusASCByDefault() {
 
-        testPreparationCreateNoBuildProject(pNoBuild);
-        testPreparationCreateDisableProject(pDisable);
-        testPreparationCreateSuccessBuildProject(pSuccessBuild);
-        testPreparationCreateFailedBuildProject(pFailedBuild);
-
+        testPreparationCreateNotBuiltProject(NotBuilt);
+        testPreparationCreateDisableProject(Disabled);
+        testPreparationCreateSuccessBuiltProject(SuccessBuilt);
+        testPreparationCreateFailedBuiltProject(FailedBuilt);
 
         List<String> projectNameList = new HomePage(getDriver())
                 .clickStatusTableHeaderChangeOrder()
                 .getItemList();
 
         Assert.assertEquals(projectNameList.size(), 4);
-        Assert.assertEquals(projectNameList, List.of(pNoBuild, pDisable, pSuccessBuild, pFailedBuild));
+        Assert.assertEquals(projectNameList, List.of(NotBuilt, Disabled, SuccessBuilt, FailedBuilt));
     }
 
-    private void testPreparationCreateNoBuildProject(String projectName) {
+    private void testPreparationCreateNotBuiltProject(String projectName) {
         new HomePage(getDriver())
                 .clickNewItem()
                 .enterItemName(projectName)
@@ -121,26 +118,27 @@ public class DashboardTest extends BaseTest {
                 .gotoHomePage();
     }
 
-    private void testPreparationCreateSuccessBuildProject(String projectName) {
+    private void testPreparationCreateSuccessBuiltProject(String projectName) {
         new HomePage(getDriver())
                 .clickNewItem()
                 .enterItemName(projectName)
                 .selectPipelineAndClickOk()
-                .enterScriptFromFile(validPipelineScriptFile)
+                .addScriptToPipeline(validPipelineScriptFile)
                 .clickSaveButton()
-                .gotoHomePage()
-                .selectBuildNowFromItemMenu(projectName);
+                .clickOnBuiltNowOnSidebar()
+                .gotoHomePage();
+
     }
 
-    private void testPreparationCreateFailedBuildProject(String projectName) {
+    private void testPreparationCreateFailedBuiltProject(String projectName) {
         new HomePage(getDriver())
                 .clickNewItem()
                 .enterItemName(projectName)
                 .selectPipelineAndClickOk()
-                .enterScriptFromFile(invalidPipelineScriptFile)
+                .addScriptToPipeline(invalidPipelineScriptFile)
                 .clickSaveButton()
-                .gotoHomePage()
-                .selectBuildNowFromItemMenu(projectName);
+                .clickOnBuiltNowOnSidebar()
+                .gotoHomePage();
     }
 
 
