@@ -100,10 +100,4 @@ public class CreateNewItemPage extends BaseCreatePage<CreateNewItemPage> {
 
         return this;
     }
-
-    public PipelineConfigurePage clickOkAndGoToPipelineConfigPage() {
-        getDriver().findElement(getOkButton).click();
-
-        return new PipelineConfigurePage(getDriver());
-    }
 }

@@ -13,6 +13,7 @@ public class NewItemFromOtherExistingTest extends BaseTest {
     private final static String FIRST_ITEM_NAME = "My_First_Project";
     private final static String SECOND_ITEM_NAME = "My_Second_Project";
     private static final String TYPE_FREESTYLE_PROJECT = "Freestyle project";
+    private static final String TYPE_PIPELINE = "Pipeline";
 
 
     private CreateNewItemPage goToNewItemPageAndEnterName(String projectName) {
@@ -40,7 +41,7 @@ public class NewItemFromOtherExistingTest extends BaseTest {
                 .clickNewItem()
                 .enterItemName(SECOND_ITEM_NAME)
                 .scrollToCopyFromFieldAndEnterName(FIRST_ITEM_NAME)
-                .clickOkAndGoToPipelineConfigPage()
+                .selectTypeProject(TYPE_PIPELINE)
                 .gotoHomePage()
                 .getItemList();
 
