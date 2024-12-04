@@ -4,6 +4,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import school.redrover.page.base.BasePage;
 import school.redrover.runner.TestUtils;
@@ -17,6 +18,9 @@ public class HomePage extends BasePage {
 
     @FindBy(css = "[href$='/newJob']")
     WebElement newJob;
+
+    @FindBy(xpath = "//td/a[@class='jenkins-table__link model-link inside']")
+    WebElement itemName;
 
     public HomePage(WebDriver driver) {
         super(driver);
@@ -434,7 +438,7 @@ public class HomePage extends BasePage {
     }
 
     public OrganizationFolderPage clickItemName() {
-        getDriver().findElement(GET_ITEM_NAME).click();
+        itemName.click();
 
         return new OrganizationFolderPage(getDriver());
     }
