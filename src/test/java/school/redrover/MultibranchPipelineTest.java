@@ -133,15 +133,15 @@ public class MultibranchPipelineTest extends BaseTest {
 
     @Test
     public void testCreateOneJobAndDisplayOnStartPage() {
-        String actualJobName = new HomePage(getDriver())
+        List<String> itemList = new HomePage(getDriver())
                 .clickNewItem()
                 .enterItemName(MULTIBRANCH_PIPELINE_NAME)
                 .selectMultibranchPipelineAndClickOk()
                 .clickSaveButton()
                 .gotoHomePage()
-                .getItemName(MULTIBRANCH_PIPELINE_NAME);
+                .getItemList();
 
-        Assert.assertEquals(actualJobName, MULTIBRANCH_PIPELINE_NAME);
+        Assert.assertTrue(itemList.contains(MULTIBRANCH_PIPELINE_NAME));
     }
 
     @Test

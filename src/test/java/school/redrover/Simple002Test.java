@@ -7,6 +7,8 @@ import org.testng.annotations.Test;
 import school.redrover.page.HomePage;
 import school.redrover.runner.BaseTest;
 
+import java.util.List;
+
 public class Simple002Test extends BaseTest {
 
     private static final String PROJECT_NAME = "NewFreestyleProject";
@@ -47,14 +49,14 @@ public class Simple002Test extends BaseTest {
     @Test
     public void testCheckProjectName() {
 
-        String projectName = new HomePage(getDriver())
+       List<String> projectList = new HomePage(getDriver())
                 .clickNewItem()
                 .enterItemName(PROJECT_NAME)
                 .selectFreestyleProjectAndClickOk()
                 .gotoHomePage()
-                .getItemName(PROJECT_NAME);
+                .getItemList();
 
-        Assert.assertEquals(projectName, PROJECT_NAME);
+        Assert.assertTrue(projectList.contains(PROJECT_NAME));
     }
 
     @Test (dependsOnMethods = "testCheckProjectName")

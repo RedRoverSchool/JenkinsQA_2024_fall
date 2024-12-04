@@ -22,7 +22,8 @@ public class MultiConfigurationProjectTest extends BaseTest {
                 .enterItemName(NAME_OF_PROJECT)
                 .selectMultiConfigurationAndClickOk()
                 .gotoHomePage()
-                .showCreatedProject();
+                .getItemList();
+
         Assert.assertTrue(itemList.contains(NAME_OF_PROJECT));
     }
 
