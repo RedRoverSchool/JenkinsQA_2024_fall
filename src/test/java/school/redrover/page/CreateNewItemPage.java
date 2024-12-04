@@ -5,9 +5,9 @@ import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import school.redrover.page.base.BasePage;
+import school.redrover.page.base.BaseCreatePage;
 
-public class CreateNewItemPage extends BasePage {
+public class CreateNewItemPage extends BaseCreatePage {
 
     public CreateNewItemPage(WebDriver driver) {
         super(driver);
@@ -25,22 +25,10 @@ public class CreateNewItemPage extends BasePage {
         return this;
     }
 
-    public void clickOkButton() {
-        getDriver().findElement(getOkButton).click();
-    }
-
-    public FreestyleConfigPage clickOkToSubmit() {
-        getDriver().findElement(getOkButton).click();
-
-        return new FreestyleConfigPage(getDriver());
-    }
-
-    public CreateNewItemPage selectTypeOfProject(String name ) {
-        getDriver().findElement(By.xpath("//span[text()='" +  name + "']")).click();
+    public CreateNewItemPage selectTypeOfProject(String name) {
+        getDriver().findElement(By.xpath("//span[text()='" + name + "']")).click();
 
         return new CreateNewItemPage(getDriver());
-
-
     }
 
     public CreateNewItemPage selectFolderType() {

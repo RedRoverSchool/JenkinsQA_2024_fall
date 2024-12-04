@@ -17,9 +17,9 @@ public class HomePage extends BasePage {
         super(driver);
     }
 
-    private static final By GET_ITEM_NAME = By.xpath("//td/a[@class='jenkins-table__link model-link inside']");
-    private static final By GET_PROJECT_TYPE = By.xpath("//div[contains(@class,'jenkins-table__cell__button-wrapper')]");
-    private static final By getNewJob = By.cssSelector(("[href$='/newJob']"));
+    private final By GET_PROJECT_TYPE = By.xpath("//div[contains(@class,'jenkins-table__cell__button-wrapper')]");
+    private final By GET_ITEM_NAME = By.xpath("//td/a[@class='jenkins-table__link model-link inside']");
+    By getNewJob = By.cssSelector(("[href$='/newJob']"));
 
     private <T> T openItem(String name, Function<WebDriver, T> page) {
         getDriver().findElement(By.xpath("//td/a/span[text() = '%s']/..".formatted(name))).click();
@@ -429,9 +429,9 @@ public class HomePage extends BasePage {
         return getDriver().findElement(By.id("description-link")).getText();
     }
 
-    public OrganizationFolderProjectPage clickItemName() {
+    public OrganizationFolderPage clickItemName() {
         getDriver().findElement(GET_ITEM_NAME).click();
 
-        return new OrganizationFolderProjectPage(getDriver());
+        return new OrganizationFolderPage(getDriver());
     }
 }
