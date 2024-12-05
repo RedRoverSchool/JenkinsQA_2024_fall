@@ -31,7 +31,7 @@ public abstract class BaseProjectPage<Self extends BaseProjectPage<?>> extends B
     @FindBy(name = "newName")
     WebElement newNameField;
 
-    @FindBy(id = "error-message")
+    @FindBy(xpath = "//div[@id='main-panel']/p")
     WebElement errorMessage;
 
     @FindBy(xpath = "//div[@class='task ']//span[2]")
