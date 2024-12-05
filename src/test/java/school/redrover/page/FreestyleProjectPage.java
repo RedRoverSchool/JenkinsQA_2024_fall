@@ -68,6 +68,42 @@ public class FreestyleProjectPage extends BaseProjectPage<FreestyleProjectPage> 
         return workspaceTitle.getText();
     }
 
+    public FreestyleProjectPage clickWorkspaceSidebar() {
+        getWait10().until(ExpectedConditions.visibilityOf(workspaceSidebar)).click();
+
+        return this;
+    }
+
+    public FreestyleProjectPage clickWipeOutCurrentWorkspaceSidebar() {
+        getWait10().until(ExpectedConditions.visibilityOf(wipeOutCurrentWorkspaceSidebar)).click();
+
+        return this;
+    }
+
+    public FreestyleProjectPage clickBuildNowSidebar() {
+        getWait5().until(ExpectedConditions.visibilityOf(buildNowSidebar)).click();
+
+        return this;
+    }
+
+    public FreestyleConfigPage clickConfigureSidebar() {
+        getWait5().until(ExpectedConditions.visibilityOf(configureSidebar)).click();
+
+        return new FreestyleConfigPage(getDriver());
+    }
+
+    public FreestyleProjectPage clickDeleteProjectSidebar() {
+        getWait10().until(ExpectedConditions.visibilityOf(deleteProjectSidebar)).click();
+
+        return this;
+    }
+
+    public FreestyleRenamePage clickRenameSidebar() {
+        getWait10().until(ExpectedConditions.visibilityOf(renameSidebar)).click();
+
+        return new FreestyleRenamePage(getDriver());
+    }
+
     public List<String> getListOfBuilds() {
         return getWait5().until(ExpectedConditions.visibilityOfAllElements(listOfBuilds))
                 .stream()
@@ -88,52 +124,16 @@ public class FreestyleProjectPage extends BaseProjectPage<FreestyleProjectPage> 
         return true;
     }
 
-    public FreestyleRenamePage clickRenameSidebar() {
-        getWait10().until(ExpectedConditions.visibilityOf(renameSidebar)).click();
-
-        return new FreestyleRenamePage(getDriver());
-    }
-
-    public FreestyleConfigPage clickConfigureSidebar() {
-        getWait5().until(ExpectedConditions.visibilityOf(configureSidebar)).click();
-
-        return new FreestyleConfigPage(getDriver());
-    }
-
-    public FreestyleProjectPage clickBuildNowSidebar() {
-        getWait5().until(ExpectedConditions.visibilityOf(buildNowSidebar)).click();
-
-        return this;
-    }
-
     public FreestyleBuildPage clickOnSuccessBuildIconForLastBuild() {
         getWait10().until(ExpectedConditions.visibilityOf(lastBuildSuccessBuildIcon)).click();
 
         return new FreestyleBuildPage(getDriver());
     }
 
-    public FreestyleProjectPage clickDeleteProjectSidebar() {
-        getWait10().until(ExpectedConditions.visibilityOf(deleteProjectSidebar)).click();
-
-        return this;
-    }
-
     public HomePage clickYesToConfirmDelete() {
         getWait10().until(ExpectedConditions.elementToBeClickable(yesButton)).click();
 
         return new HomePage(getDriver());
-    }
-
-    public FreestyleProjectPage clickWorkspaceSidebar() {
-        getWait10().until(ExpectedConditions.visibilityOf(workspaceSidebar)).click();
-
-        return this;
-    }
-
-    public FreestyleProjectPage clickWipeOutCurrentWorkspaceSidebar() {
-        getWait10().until(ExpectedConditions.visibilityOf(wipeOutCurrentWorkspaceSidebar)).click();
-
-        return this;
     }
 
     public FreestyleProjectPage clickYesToWipeOutCurrentWorkspace() {
