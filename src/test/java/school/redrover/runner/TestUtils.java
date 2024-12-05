@@ -5,6 +5,21 @@ import org.openqa.selenium.support.ui.ExpectedCondition;
 
 public class TestUtils {
 
+    public static ExpectedCondition<Boolean> isElementInViewPort(WebElement element) {
+        return new ExpectedCondition<>() {
+            @Override
+            public Boolean apply(WebDriver driver) {
+                JavascriptExecutor js = (JavascriptExecutor) driver;
+                return (Boolean) js.executeScript(
+                        "let rect = arguments[0].getBoundingClientRect();" +
+                                "return (rect.top >= 0 && rect.left >= 0 && " +
+                                "rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) && " +
+                                "rect.right <= (window.innerWidth || document.documentElement.clientWidth));",
+                        element);
+            }
+        };
+    }
+
     public static class ExpectedConditions {
         public static ExpectedCondition<WebElement> elementIsNotMoving(final By locator) {
             return new ExpectedCondition<>() {

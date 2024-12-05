@@ -4,6 +4,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.Select;
 import school.redrover.page.base.BaseConfigPage;
+import school.redrover.runner.TestUtils;
 
 public class MultibranchPipelineConfigPage extends BaseConfigPage<MultibranchPipelineConfigPage, MultibranchPipelineProjectPage> {
 
@@ -25,7 +26,7 @@ public class MultibranchPipelineConfigPage extends BaseConfigPage<MultibranchPip
     public MultibranchPipelineConfigPage clickPeriodicalScanningCheckbox() {
         WebElement periodicalScanningCheckbox =
                 getDriver().findElement(By.cssSelector("[name$='PeriodicFolderTrigger'][id='cb0'] + label"));
-        getWait2().until(isElementInViewPort(periodicalScanningCheckbox));
+        getWait2().until(TestUtils.isElementInViewPort(periodicalScanningCheckbox));
         periodicalScanningCheckbox.click();
 
         return this;
