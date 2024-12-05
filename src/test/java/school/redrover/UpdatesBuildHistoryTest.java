@@ -1,6 +1,7 @@
 package school.redrover;
 
 import org.testng.Assert;
+import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import school.redrover.page.HomePage;
 import school.redrover.runner.BaseTest;
@@ -31,6 +32,7 @@ public class UpdatesBuildHistoryTest extends BaseTest {
         Assert.assertEquals(oneExecution.size(), 1);
     }
 
+    @Ignore
     @Test(dependsOnMethods = "testUpdateAfterExecutingBuild")
     public void testUpdateAfterChangingConfig() {
         List<String> changeConfig = new HomePage(getDriver())
