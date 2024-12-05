@@ -18,9 +18,8 @@ public class BuildHistoryPage extends BasePage {
     }
 
     public List<String> getListOfStatuses() {
+
         return getDriver().findElements(By.xpath("//*[@id='projectStatus']/tbody/tr/td[4]"))
-                .stream()
-                .map(WebElement::getText)
-                .toList();
+                .stream().map(WebElement::getText).toList();
     }
 }

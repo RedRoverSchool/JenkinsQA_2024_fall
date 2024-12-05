@@ -331,6 +331,12 @@ public class HomePage extends BasePage {
         return this;
     }
 
+    public AboutPage gotoAboutPage() {
+        getDriver().findElement(By.xpath("//a[normalize-space()='About Jenkins']")).click();
+
+        return new AboutPage(getDriver());
+    }
+
     public String getAboutJenkinsDropdownLabelText() {
         return getWait2().until(ExpectedConditions.visibilityOfElementLocated(
                 By.cssSelector("[href='/manage/about']"))).getText();
