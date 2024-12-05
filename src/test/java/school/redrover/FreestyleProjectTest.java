@@ -246,7 +246,7 @@ public class FreestyleProjectTest extends BaseTest {
                 .clickWipeOutCurrentWorkspaceSidebar()
                 .clickYesToWipeOutCurrentWorkspace()
                 .clickWorkspaceSidebar()
-                .getWorkspaceText();
+                .getWorkspaceTitle();
 
         Assert.assertEquals(workspaceText, "Error: no workspace");
     }
