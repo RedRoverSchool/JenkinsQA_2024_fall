@@ -1,9 +1,16 @@
 package school.redrover.page.base;
 
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
 
 public abstract class BaseConfigPage<Self extends BaseConfigPage<?, ?>, ProjectPage extends BaseProjectPage> extends BasePage {
+
+    @FindBy(css = "[name$='description']")
+    WebElement descriptionField;
+
+    @FindBy(name = "Submit")
+    WebElement saveButton;
 
     public BaseConfigPage(WebDriver driver) {
         super(driver);
@@ -12,13 +19,13 @@ public abstract class BaseConfigPage<Self extends BaseConfigPage<?, ?>, ProjectP
     protected abstract ProjectPage createProjectPage();
 
     public Self enterDescription(String description) {
-        getDriver().findElement(By.cssSelector("[name$='description']")).sendKeys(description);
+        descriptionField.sendKeys(description);
 
-        return (Self)this;
+        return (Self) this;
     }
 
     public ProjectPage clickSaveButton() {
-        getDriver().findElement(By.name("Submit")).click();
+        saveButton.click();
 
         return createProjectPage();
     }
