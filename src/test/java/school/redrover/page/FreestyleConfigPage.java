@@ -10,7 +10,8 @@ import school.redrover.runner.TestUtils;
 
 public class FreestyleConfigPage extends BaseConfigPage<FreestyleConfigPage, FreestyleProjectPage> {
 
-    private static final By CODE_MIRROR_FIELD = By.xpath("//div[@class='CodeMirror']");
+    private final By CODE_MIRROR_FIELD = By.xpath("//div[@class='CodeMirror']");
+    private final By SUBMIT_BUTTON = By.xpath("//button[@name = 'Submit']");
 
     public FreestyleConfigPage(WebDriver driver) {
         super(driver);
@@ -21,24 +22,19 @@ public class FreestyleConfigPage extends BaseConfigPage<FreestyleConfigPage, Fre
         return new FreestyleProjectPage(getDriver());
     }
 
-    By getSubmitButton = By.xpath("//button[@name = 'Submit']");
-
-    By getInputName = By.xpath("//textarea[@name='description']");
-    By getButtonSubmit = By.xpath("//button[@name='Submit']");
-
     public FreestyleProjectPage typeDescription (String description) {
-        getDriver().findElement(getInputName).sendKeys(description);
-        getDriver().findElement(getButtonSubmit).click();
+        getDriver().findElement(By.xpath("//textarea[@name='description']")).sendKeys(description);
+        getDriver().findElement(SUBMIT_BUTTON).click();
 
         return new FreestyleProjectPage(getDriver());
     }
 
     public FreestyleConfigPage addBuildStep(String buildStep) {
+        TestUtils.scrollToBottom(getDriver());
         getDriver().findElement(By.xpath("//button[contains(text(),'Add build step')]")).click();
         getDriver().findElement(By.xpath("//button[contains(text(),'%s')]".formatted(buildStep))).click();
 
         return this;
-
     }
 
     public FreestyleConfigPage addExecuteWindowsBatchCommand(String command) {
@@ -52,7 +48,7 @@ public class FreestyleConfigPage extends BaseConfigPage<FreestyleConfigPage, Fre
     }
 
     public FreestyleProjectPage clickSubmitButton() {
-        getDriver().findElement(getSubmitButton).click();
+        getDriver().findElement(SUBMIT_BUTTON).click();
 
         return  new FreestyleProjectPage(getDriver());
     }
@@ -81,6 +77,7 @@ public class FreestyleConfigPage extends BaseConfigPage<FreestyleConfigPage, Fre
 
     public String getTextExecuteShellTextArea() {
         TestUtils.scrollToBottom(getDriver());
+
         return (String) ((JavascriptExecutor) getDriver()).executeScript(
                 "return arguments[0].CodeMirror.getValue();", getDriver().findElement(CODE_MIRROR_FIELD));
     }

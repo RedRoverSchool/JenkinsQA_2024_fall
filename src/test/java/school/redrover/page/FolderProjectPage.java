@@ -51,4 +51,11 @@ public class FolderProjectPage extends BaseProjectPage<FolderProjectPage> {
                 By.xpath("/html/body/dialog/div[3]/button[2]"))).click();
         return this;
     }
+
+    public FolderConfigPage clickConfigureSidebar(String name) {
+        getWait2().until(ExpectedConditions.elementToBeClickable(
+                By.xpath("//a[@href='/job/%s/configure']".formatted(name)))).click();
+
+        return new FolderConfigPage(getDriver());
+    }
 }

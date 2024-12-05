@@ -3,8 +3,6 @@ package school.redrover;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import school.redrover.page.HomePage;
-import school.redrover.page.PipelineProjectPage;
-import school.redrover.page.PipelineSyntaxPage;
 import school.redrover.runner.BaseTest;
 
 public class SelectAndApplyScriptsTest extends BaseTest {
@@ -15,7 +13,7 @@ public class SelectAndApplyScriptsTest extends BaseTest {
 
     @Test
     public void testPipelineSyntaxPageIsPresent() {
-        String bredCrumbs = new PipelineProjectPage(getDriver())
+        String bredCrumbs = new HomePage(getDriver())
                 .clickNewItem()
                 .enterItemName(PIPELINE_NAME)
                 .selectPipelineAndClickOk()
@@ -29,8 +27,7 @@ public class SelectAndApplyScriptsTest extends BaseTest {
 
     @Test(dependsOnMethods = "testPipelineSyntaxPageIsPresent")
     public void testSelectScript() {
-        String selectItem = new PipelineSyntaxPage(getDriver())
-                .gotoHomePage()
+        String selectItem = new HomePage(getDriver())
                 .openPipelineProject(PIPELINE_NAME)
                 .gotoPipelineSyntaxPageFromLeftPanel(PIPELINE_NAME)
                 .selectNewStep(SELECT_VALUE)

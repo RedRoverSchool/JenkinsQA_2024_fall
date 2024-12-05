@@ -1,18 +1,18 @@
 package school.redrover;
 
-import org.openqa.selenium.By;
 import org.testng.Assert;
 import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import school.redrover.page.HomePage;
 import school.redrover.page.FolderProjectPage;
 import school.redrover.runner.BaseTest;
+
 import java.util.List;
 
 public class FolderTest extends BaseTest {
 
-    private static final String FIRST_FOLDER_NAME = "Freestyle projects";
-    private static final String FREESTYLE_PROJECT_NAME = "First freestyle project job";
+    private static final String FIRST_FOLDER_NAME = "FreestyleProjects";
+    private static final String FREESTYLE_PROJECT_NAME = "FirstFreestyleProjectJob";
     private static final String FOLDER_NAME_MAX_LENGTH = "012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234";
 
     @Test
@@ -38,8 +38,8 @@ public class FolderTest extends BaseTest {
                 .gotoHomePage()
                 .getItemList();
 
-        Assert.assertEquals(itemList.size(),1);
-        Assert.assertEquals(itemList.get(0),"F");
+        Assert.assertEquals(itemList.size(), 1);
+        Assert.assertEquals(itemList.get(0), "F");
     }
 
     @Test(dependsOnMethods = "testCreateWithMinNameLength")
@@ -58,14 +58,14 @@ public class FolderTest extends BaseTest {
     @Test
     public void testConfigureDescriptionByChevron() {
 
-       String desc =  new HomePage(getDriver())
-               .clickNewItem()
-               .nameAndSelectFolderType(FIRST_FOLDER_NAME)
-               .gotoHomePage()
-               .selectConfigureFromItemMenu(FIRST_FOLDER_NAME)
-               .enterDescription("This is new description")
-               .clickSaveButton()
-               .getFolderDescription();
+        String desc = new HomePage(getDriver())
+                .clickNewItem()
+                .nameAndSelectFolderType(FIRST_FOLDER_NAME)
+                .gotoHomePage()
+                .selectConfigureFromItemMenu(FIRST_FOLDER_NAME)
+                .enterDescription("This is new description")
+                .clickSaveButton()
+                .getFolderDescription();
 
         Assert.assertEquals(desc,
                 "This is new description");
@@ -90,7 +90,7 @@ public class FolderTest extends BaseTest {
     @Test
     public void testCreateNewItemFromFolderPage() {
 
-        String projectName =  new HomePage(getDriver())
+        String projectName = new HomePage(getDriver())
                 .clickNewItem()
                 .nameAndSelectFolderType(FIRST_FOLDER_NAME)
                 .gotoHomePage()
@@ -117,6 +117,21 @@ public class FolderTest extends BaseTest {
                 .getBuildName();
 
         Assert.assertEquals(buildHistoryName, "%s » %s".formatted(FIRST_FOLDER_NAME, FREESTYLE_PROJECT_NAME));
+    }
+
+    @Test(dependsOnMethods = "testOpenBuildHistoryByChevron")
+    public void testAddDisplayName() {
+        final String displayName = "DisplayName";
+
+        List<String> projectList = new HomePage(getDriver())
+                .openFolder(FIRST_FOLDER_NAME)
+                .clickConfigureSidebar(FIRST_FOLDER_NAME)
+                .enterConfigurationName(displayName)
+                .clickSaveButton()
+                .gotoHomePage()
+                .getItemList();
+
+        Assert.assertListContainsObject(projectList, displayName, "Display name is not added");
     }
 
     @Test
