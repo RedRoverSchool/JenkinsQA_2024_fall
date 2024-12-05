@@ -101,23 +101,12 @@ public class FreestyleProjectTest extends BaseTest {
 
         String actualProjectName = new HomePage(getDriver())
                 .openFreestyleProject(PROJECT_NAME)
-                .clickRenameOnSidebar()
+                .clickRenameSidebar()
                 .clearOldAndInputNewProjectName(newName)
                 .clickRenameButton()
                 .getProjectName();
 
         Assert.assertEquals(actualProjectName, newName);
-    }
-
-    @Test
-    public void testDeleteProjectViaChevron() {
-        String pageTitle = new HomePage(getDriver())
-                .createFreestyleProject(PROJECT_NAME)
-                .selectDeleteFromItemMenu(PROJECT_NAME)
-                .clickYesForConfirmDelete()
-                .getWelcomeTitle();
-
-        Assert.assertEquals(pageTitle, "Welcome to Jenkins!");
     }
 
     @Test
@@ -140,12 +129,12 @@ public class FreestyleProjectTest extends BaseTest {
         String extractedText = new HomePage(getDriver())
                 .createFreestyleProject(PROJECT_NAME)
                 .openFreestyleProject(PROJECT_NAME)
-                .clickConfigureOnSidebar()
+                .clickConfigureSidebar()
                 .clickAddBuildStep()
                 .selectExecuteShellBuildStep()
                 .addExecuteShellCommand(testCommand)
                 .clickSaveButton()
-                .clickConfigureOnSidebar()
+                .clickConfigureSidebar()
                 .getTextExecuteShellTextArea();
 
         Assert.assertEquals(extractedText, testCommand);
@@ -156,7 +145,7 @@ public class FreestyleProjectTest extends BaseTest {
         String buildInfo = new HomePage(getDriver())
                 .createFreestyleProject(PROJECT_NAME)
                 .openFreestyleProject(PROJECT_NAME)
-                .clickBuildNowOnSidebar()
+                .clickBuildNowSidebar()
                 .clickOnSuccessBuildIconForLastBuild()
                 .getConsoleOutputText();
 
@@ -224,7 +213,7 @@ public class FreestyleProjectTest extends BaseTest {
         FreestyleProjectPage freestyleProjectPage = new HomePage(getDriver())
                 .createFreestyleProject(PROJECT_NAME)
                 .openFreestyleProject(PROJECT_NAME)
-                .clickBuildNowOnSidebar();
+                .clickBuildNowSidebar();
         String lastBuildNumber = freestyleProjectPage.getLastBuildNumber();
 
                 freestyleProjectPage
@@ -233,5 +222,45 @@ public class FreestyleProjectTest extends BaseTest {
                 .confirmDeleteBuild();
 
         Assert.assertListNotContainsObject(freestyleProjectPage.getListOfBuilds(), lastBuildNumber, "The last build wasn't deleted");
+    }
+
+    @Test
+    public void testDeleteProjectViaSidebarMenuOnProjectPage() {
+        String welcomeText = new HomePage(getDriver())
+                .clickNewItem()
+                .enterItemName(PROJECT_NAME)
+                .selectFreestyleProjectAndClickOk()
+                .clickSaveButton()
+                .clickDeleteProjectSidebar()
+                .clickYesToConfirmDelete()
+                .getWelcomeTitle();
+
+        Assert.assertEquals(welcomeText, "Welcome to Jenkins!", "There is a project on Dashboard");
+    }
+
+    @Test(dependsOnMethods = "testBuildProjectViaSidebarMenuOnProjectPage")
+    public void testDeleteWorkspace() {
+        String workspaceText = new HomePage(getDriver())
+                .openFreestyleProject(PROJECT_NAME)
+                .clickWorkspaceSidebar()
+                .clickWipeOutCurrentWorkspaceSidebar()
+                .clickYesToWipeOutCurrentWorkspace()
+                .clickWorkspaceSidebar()
+                .getWorkspaceText();
+
+        Assert.assertEquals(workspaceText, "Error: no workspace");
+    }
+
+    @Test (dependsOnMethods = "testBuildProjectViaSidebarMenuOnProjectPage")
+    public void testDeleteWorkspaceConfirmationOptions() {
+        List<String> dialogOptions = List.of("Wipe Out Current Workspace", "Are you sure about wiping out the workspace?", "Cancel", "Yes");
+
+        boolean areAllConfirmationDialogOptionsPresent = new HomePage(getDriver())
+                .openFreestyleProject(PROJECT_NAME)
+                .clickWorkspaceSidebar()
+                .clickWipeOutCurrentWorkspaceSidebar()
+                .verifyConfirmationDialogOptionsPresence(dialogOptions);
+
+        Assert.assertTrue(areAllConfirmationDialogOptionsPresent, "Some dialog options weren't found");
     }
 }
