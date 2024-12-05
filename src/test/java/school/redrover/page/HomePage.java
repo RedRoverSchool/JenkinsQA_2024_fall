@@ -89,14 +89,6 @@ public class HomePage extends BasePage {
         return this;
     }
 
-    public HomePage createDescription(String text) {
-        getDriver().findElement(By.id("description-link")).click();
-        getDriver().findElement(By.xpath("//textarea[contains(@class, 'jenkins-input')]")).sendKeys(text);
-        getDriver().findElement(By.name("Submit")).click();
-
-        return this;
-    }
-
     public HomePage deleteFolder(String name) {
         getDriver().findElement(By.xpath("//span[text()='" + name + "']")).click();
 
@@ -212,7 +204,6 @@ public class HomePage extends BasePage {
     }
 
     public List<WebElement> getSideContent() {
-
         getWait5().until(ExpectedConditions.elementToBeClickable(By.xpath(
                 "//span[contains(text(), 'My Views')]")));
 
@@ -271,10 +262,8 @@ public class HomePage extends BasePage {
     }
 
     public HomePage clickScheduleBuild(String name) {
-        getWait10().until(ExpectedConditions.elementToBeClickable(
-                By.xpath("//td[@class='jenkins-table__cell--tight']//a[@tooltip='Schedule a Build for %s']".formatted(name)))).click();
-        getWait10().until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@class='tippy-content']")));
-        getWait10().until(ExpectedConditions.invisibilityOfElementLocated(By.xpath("//div[@class='tippy-content']")));
+        getDriver().findElement(By.xpath("//td[@class='jenkins-table__cell--tight']//a[@tooltip='Schedule a Build for %s']".formatted(name)))
+                .click();
 
         return this;
     }
