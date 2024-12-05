@@ -10,8 +10,8 @@ import java.util.List;
 
 public class DeleteFreestyleProjectTest extends BaseTest {
 
-    final String FIRST_PROJECT = "First";
-    final String SECOND_PROJECT = "Second";
+    private final String FIRST_PROJECT = "First";
+    private final String SECOND_PROJECT = "Second";
 
     @Test
     public void testDeleteFirstProjectViaChevron() {

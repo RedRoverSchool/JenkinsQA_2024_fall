@@ -2,7 +2,6 @@ package school.redrover;
 
 import org.testng.Assert;
 import org.testng.annotations.Test;
-import school.redrover.page.BuildHistoryPage;
 import school.redrover.page.HomePage;
 import school.redrover.runner.BaseTest;
 
@@ -34,8 +33,10 @@ public class UpdatesBuildHistoryTest extends BaseTest {
 
     @Test(dependsOnMethods = "testUpdateAfterExecutingBuild")
     public void testUpdateAfterChangingConfig() {
-        List<String> changeConfig = new BuildHistoryPage(getDriver())
-                .addBuildSteps(PROJECT_NAME, "Run with timeout")
+        List<String> changeConfig = new HomePage(getDriver())
+                .openFreestyleProject(PROJECT_NAME)
+                .clickConfigureOnSidebar()
+                .addBuildStep("Run with timeout")
                 .gotoHomePage()
                 .clickScheduleBuild(PROJECT_NAME)
                 .gotoBuildHistoryPageFromLeftPanel()
