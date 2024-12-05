@@ -58,4 +58,12 @@ public class FolderProjectPage extends BaseProjectPage<FolderProjectPage> {
 
         return new FolderConfigPage(getDriver());
     }
+
+    public String getDescriptionViaPreview () {
+        getWait5().until(ExpectedConditions.elementToBeClickable(By.id("description-link"))).click();
+        getWait5().until(ExpectedConditions.elementToBeClickable(
+                By.xpath("//*[@id='description']/form/div[1]/div[1]/div[1]/a[1]"))).click();
+        return getWait10().until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//*[@id='description']/form/div[1]/div[1]/div[2]"))).getText();
+    }
 }

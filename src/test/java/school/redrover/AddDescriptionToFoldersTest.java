@@ -2,42 +2,43 @@ package school.redrover;
 
 import org.testng.Assert;
 import org.testng.annotations.Test;
-import school.redrover.page.FolderDescriptionPage;
+import school.redrover.page.HomePage;
 import school.redrover.runner.BaseTest;
 
 public class AddDescriptionToFoldersTest extends BaseTest {
 
     private static final String FOLDER_NAME = "FolderTest";
-    private static final String FOLDER_BUTTON_XPATH = "//*[@id='j-add-item-type-nested-projects']/ul/li[1]/div[2]";
+    private static final String DESCRIPTION = "Description text";
 
     @Test
     public void testExistingFolderWithNoDescription () {
-        String finalResult = new FolderDescriptionPage(getDriver())
-                .createFolder(FOLDER_NAME, FOLDER_BUTTON_XPATH)
-                .clickOnSave()
-                .provideDescription("Description text")
-                .clickOnSave()
-                .getCurrentDescription();
+        String finalResult = new HomePage(getDriver())
+                .createNewFolder(FOLDER_NAME)
+                .openFolder(FOLDER_NAME)
+                .editDescription(DESCRIPTION)
+                .getDescription();
 
-        Assert.assertEquals(finalResult, "Description text");
+        Assert.assertEquals(finalResult, "Description text\n" +
+                "Edit description");
     }
 
     @Test(dependsOnMethods = "testExistingFolderWithNoDescription")
     public void testEditExistingDescription () {
-        String finalResult = new FolderDescriptionPage(getDriver())
+        String finalResult = new HomePage(getDriver())
+                .gotoHomePage()
                 .openFolder(FOLDER_NAME)
-                .provideDescription("Edited ")
-                .clickOnSave()
-                .getCurrentDescription();
+                .editDescription("Edited ")
+                .getDescription();
 
-        Assert.assertEquals(finalResult, "Edited Description text");
+        Assert.assertEquals(finalResult, "Edited Description text\n" +
+                "Edit description");
     }
 
     @Test(dependsOnMethods = "testEditExistingDescription")
     public void testDescriptionsPreviewButton () {
-        String finalResult = new FolderDescriptionPage(getDriver())
+        String finalResult = new HomePage(getDriver())
+                .gotoHomePage()
                 .openFolder(FOLDER_NAME)
-                .enablePreview()
                 .getDescriptionViaPreview();
 
         Assert.assertEquals(finalResult, "Edited Description text");
@@ -45,12 +46,12 @@ public class AddDescriptionToFoldersTest extends BaseTest {
 
     @Test(dependsOnMethods = "testDescriptionsPreviewButton")
     public void testClearDescription () {
-        String finalResult = new FolderDescriptionPage(getDriver())
+        String finalResult = new HomePage(getDriver())
+                .gotoHomePage()
                 .openFolder(FOLDER_NAME)
                 .clearDescription()
-                .clickOnSave()
-                .getCurrentDescription();
+                .getDescription();
 
-        Assert.assertEquals(finalResult, "");
+        Assert.assertEquals(finalResult, "Add description");
     }
 }
