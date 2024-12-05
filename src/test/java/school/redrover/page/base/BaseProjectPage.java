@@ -37,6 +37,9 @@ public abstract class BaseProjectPage<Self extends BaseProjectPage<?>> extends B
     @FindBy(xpath = "//div[@class='task ']//span[2]")
     List<WebElement> sidebarElementList;
 
+    @FindBy(xpath = "//*[@id='main-panel']/h1")
+    WebElement itemName;
+
     public BaseProjectPage(WebDriver driver) {
         super(driver);
     }
@@ -65,7 +68,7 @@ public abstract class BaseProjectPage<Self extends BaseProjectPage<?>> extends B
         return (Self) this;
     }
 
-    public Self renameProject(String newName) {
+    public Self renameItem(String newName) {
         renameButtonViaSidebar.click();
         newNameField.clear();
         newNameField.sendKeys(newName);
@@ -75,6 +78,10 @@ public abstract class BaseProjectPage<Self extends BaseProjectPage<?>> extends B
 
     public String getRenameWarningMessage() {
         return getWait10().until(ExpectedConditions.visibilityOf(errorMessage)).getText();
+    }
+
+    public String getItemName() {
+        return getWait10().until(ExpectedConditions.visibilityOf(itemName)).getText();
     }
 
     public String getDescription() {
