@@ -5,6 +5,7 @@ import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.Select;
 import school.redrover.page.base.BaseConfigPage;
 import school.redrover.runner.TestUtils;
 
@@ -81,4 +82,17 @@ public class FreestyleConfigPage extends BaseConfigPage<FreestyleConfigPage, Fre
         return (String) ((JavascriptExecutor) getDriver()).executeScript(
                 "return arguments[0].CodeMirror.getValue();", getDriver().findElement(CODE_MIRROR_FIELD));
     }
+
+    public FreestyleConfigPage selectDurationCheckbox (String durationPeriod) {
+        getDriver().findElement(By.xpath("//label[normalize-space()='Throttle builds']")).click();
+        new Select(getDriver().findElement(By.xpath("//select[@name='_.durationName']")))
+                .selectByValue(durationPeriod);
+
+        return this;
+    }
+
+    public String getTimePeriod() {
+        return getDriver().findElement(By.xpath("//*[@name='_.durationName']")).getAttribute("value");
+    }
 }
+
