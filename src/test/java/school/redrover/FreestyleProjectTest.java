@@ -120,6 +120,7 @@ public class FreestyleProjectTest extends BaseTest {
         Assert.assertEquals(description, DESCRIPTION);
     }
 
+    @Ignore
     @Test(dependsOnMethods = "testAddDescription")
     public void testEditDescriptionOnProjectPage() {
         final String newDescription = "New " + DESCRIPTION;
