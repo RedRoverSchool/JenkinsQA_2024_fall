@@ -472,4 +472,10 @@ public class HomePage extends BasePage {
     public String getTextPreview() {
         return getDriver().findElement(By.xpath("//div[@class='textarea-preview']")).getText();
     }
+
+    public FreestyleRenamePage clickRenameInProjectDropdown(String projectName) {
+        getDriver().findElement(By.xpath("//a[@href='/job/%s/confirm-rename']".formatted(projectName))).click();
+
+        return new FreestyleRenamePage(getDriver());
+    }
 }
