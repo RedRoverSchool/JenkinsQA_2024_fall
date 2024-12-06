@@ -3,6 +3,7 @@ package school.redrover.page;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import school.redrover.page.base.BasePage;
 
@@ -68,5 +69,14 @@ public class NewViewPage extends BasePage {
         }
 
         return typeToDescriptionMap;
+    }
+
+    public NewViewPage selectViewType(String viewType) {
+        WebElement button  = getDriver().findElement(By.xpath("//input[@id = 'hudson.model." + viewType + "']"));
+        boolean selectState = button.isSelected();
+        if(selectState == false) {
+            new Actions(getDriver()).moveToElement(button).click().build().perform();
+        }
+        return this;
     }
 }
