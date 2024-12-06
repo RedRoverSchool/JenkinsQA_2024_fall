@@ -14,13 +14,46 @@ import java.util.List;
 public class HomePage extends BasePage {
 
     @FindBy(xpath = "//div[contains(@class,'jenkins-table__cell__button-wrapper')]")
-    WebElement projectType;
+    private WebElement projectType;
 
     @FindBy(css = "[href$='/newJob']")
-    WebElement newJob;
+    private WebElement newJob;
 
     @FindBy(xpath = "//td/a[@class='jenkins-table__link model-link inside']")
-    WebElement itemName;
+    private WebElement itemName;
+
+    @FindBy(xpath = "//a[@href = '/manage']")
+    private WebElement manageJenkinsSidebar;
+
+    @FindBy(xpath = "//a[@href='newJob']")
+    private WebElement createAJobOption;
+
+    @FindBy(xpath = "//button[@data-id='ok']")
+    private WebElement yesButton;
+
+    @FindBy(xpath = "//p[contains(text(), 'This page is where')]")
+    private WebElement headerDescription;
+
+    @FindBy(xpath = "//div[@class='empty-state-block']/h1")
+    private WebElement welcomeTitle;
+
+    @FindBy(xpath = "//div[@id='description']/div[1]")
+    private WebElement description;
+
+    @FindBy(xpath = "//a[contains(@class, 'task-link-no-confirm')]")
+    private List<WebElement> sideBarOptionList;
+
+    @FindBy(className = "content-block")
+    private List<WebElement> contentBlock;
+
+    @FindBy(xpath = "//tr/td/a[@class='jenkins-table__link model-link inside']")
+    private List<WebElement> projectList;
+
+    @FindBy(xpath = "//button[contains(@href,'Delete')]")
+    private WebElement deleteOption;
+
+    @FindBy(xpath = "//div[@class='tippy-content']")
+    private WebElement buildScheduledTooltip;
 
     public HomePage(WebDriver driver) {
         super(driver);
@@ -50,7 +83,7 @@ public class HomePage extends BasePage {
         return new OrganizationFolderProjectPage(getDriver());
     }
 
-    public MultibranchPipelineProjectPage openMultibranchProject(String name) {
+    public MultibranchPipelineProjectPage openMultibranchPipelineProject(String name) {
         openItem(name);
         return new MultibranchPipelineProjectPage(getDriver());
     }
@@ -122,7 +155,7 @@ public class HomePage extends BasePage {
     }
 
     public ManageJenkinsPage openManageJenkinsPage() {
-        getDriver().findElement(By.xpath("//a[@href = '/manage']")).click();
+        manageJenkinsSidebar.click();
 
         return new ManageJenkinsPage(getDriver());
     }
@@ -134,7 +167,7 @@ public class HomePage extends BasePage {
     }
 
     public CreateNewItemPage clickCreateJob() {
-        getDriver().findElement(By.xpath("//a[@href='newJob']")).click();
+        createAJobOption.click();
 
         return new CreateNewItemPage(getDriver());
     }
@@ -169,8 +202,7 @@ public class HomePage extends BasePage {
     }
 
     public HomePage clickYesForConfirmDelete() {
-        getWait5().until(ExpectedConditions.visibilityOfElementLocated(
-                By.xpath("//button[@data-id='ok']"))).click();
+        getWait5().until(ExpectedConditions.visibilityOf(yesButton)).click();
 
         return this;
     }
@@ -208,43 +240,30 @@ public class HomePage extends BasePage {
     }
 
     public String getWelcomeDescriptionText() {
-        return getDriver().findElement(By.xpath("//p[contains(text(), 'This page is where')]")).getText();
+        return headerDescription.getText();
     }
 
     public String getWelcomeTitle() {
-        return getDriver().findElement(By.xpath("//div[@class='empty-state-block']/h1")).getText();
+        return welcomeTitle.getText();
     }
 
     public String getDescriptionText() {
-        return getWait5().until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@id='description']/div[1]"))).getText();
+        return getWait5().until(ExpectedConditions.visibilityOf(description)).getText();
     }
 
     public List<WebElement> getSideContent() {
-        getWait5().until(ExpectedConditions.elementToBeClickable(By.xpath(
-                "//span[contains(text(), 'My Views')]")));
-
-        return getDriver().findElements(By.xpath("//a[contains(@class, 'task-link-no-confirm')]"));
+        return getWait2().until(ExpectedConditions.visibilityOfAllElements(sideBarOptionList));
     }
 
     public List<WebElement> getContentBlock() {
-
-        return getDriver().findElements(By.className("content-block"));
+        return contentBlock;
     }
 
     public List<String> getItemList() {
-
-        return getDriver().findElements(By.xpath("//tr/td/a[@class='jenkins-table__link model-link inside']"))
+        return projectList
                 .stream()
                 .map(WebElement::getText)
                 .toList();
-    }
-
-    public MultibranchPipelineProjectPage clickOnCreatedItem(String itemName) {
-        getDriver().findElement(
-                By.xpath(("//a[contains(@href,'%s')][@class='jenkins-table__link model-link inside']")
-                        .formatted(itemName))).click();
-
-        return new MultibranchPipelineProjectPage(getDriver());
     }
 
     public HomePage deleteItemViaChevronItem(String itemName) {
@@ -253,18 +272,16 @@ public class HomePage extends BasePage {
 
         TestUtils.moveAndClickWithJavaScript(getDriver(), chevronButton);
 
-        getDriver().findElement(By.xpath("//button[contains(@href,'Delete')]")).click();
-        getDriver().findElement(By.xpath("//button[@data-id='ok']")).click();
+        deleteOption.click();
+        yesButton.click();
 
         return this;
     }
 
     public boolean isDisableCircleSignPresent(String name) {
         try {
-            WebElement disableCircleSign = getWait5().until(ExpectedConditions.visibilityOfElementLocated(
-                    By.xpath("//tr[@id='job_%s']//*[@tooltip='Disabled']".formatted(name))));
-
-            return disableCircleSign.isDisplayed();
+            return getWait5().until(ExpectedConditions.visibilityOfElementLocated(
+                    By.xpath("//tr[@id='job_%s']//*[@tooltip='Disabled']".formatted(name)))).isDisplayed();
 
         } catch (Exception e) {
             return false;
@@ -280,6 +297,8 @@ public class HomePage extends BasePage {
     public HomePage clickScheduleBuild(String name) {
         getDriver().findElement(By.xpath("//td[@class='jenkins-table__cell--tight']//a[@tooltip='Schedule a Build for %s']".formatted(name)))
                 .click();
+        getWait10().until(ExpectedConditions.visibilityOf(buildScheduledTooltip));
+        getWait10().until(ExpectedConditions.invisibilityOf(buildScheduledTooltip));
 
         return this;
     }
@@ -315,10 +334,6 @@ public class HomePage extends BasePage {
         getDriver().navigate().refresh();
 
         return this;
-    }
-
-    public String getTypeProject() {
-        return projectType.getText();
     }
 
     public String getNotificationBarStatus() {
@@ -462,5 +477,11 @@ public class HomePage extends BasePage {
 
     public String getTextPreview() {
         return getDriver().findElement(By.xpath("//div[@class='textarea-preview']")).getText();
+    }
+
+    public FreestyleRenamePage clickRenameInProjectDropdown(String projectName) {
+        getDriver().findElement(By.xpath("//a[@href='/job/%s/confirm-rename']".formatted(projectName))).click();
+
+        return new FreestyleRenamePage(getDriver());
     }
 }
