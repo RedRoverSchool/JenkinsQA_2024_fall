@@ -28,6 +28,7 @@ public class AddDescriptionToNewFreestyleProjectTest extends BaseTest {
                 .openFreestyleProject(PROJECT_NAME)
                 .clearDescription()
                 .editDescription(DESCRIPTION_EDITED)
+                .clickSubmitButton()
                 .getDescription();
 
         Assert.assertEquals(getDescription, DESCRIPTION_EDITED);

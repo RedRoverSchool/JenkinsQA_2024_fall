@@ -16,6 +16,7 @@ public class AddDescriptionToFoldersTest extends BaseTest {
                 .createNewFolder(FOLDER_NAME)
                 .openFolder(FOLDER_NAME)
                 .editDescription(DESCRIPTION)
+                .clickSubmitButton()
                 .getDescription();
 
         Assert.assertEquals(finalResult, "Description text\n" +
@@ -28,6 +29,7 @@ public class AddDescriptionToFoldersTest extends BaseTest {
                 .gotoHomePage()
                 .openFolder(FOLDER_NAME)
                 .editDescription("Edited ")
+                .clickSubmitButton()
                 .getDescription();
 
         Assert.assertEquals(finalResult, "Edited Description text\n" +

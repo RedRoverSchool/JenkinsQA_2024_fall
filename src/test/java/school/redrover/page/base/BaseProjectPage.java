@@ -40,6 +40,12 @@ public abstract class BaseProjectPage<Self extends BaseProjectPage<?>> extends B
     @FindBy(xpath = "//*[@id='main-panel']/h1")
     private WebElement itemName;
 
+    @FindBy(className = "textarea-show-preview")
+    private WebElement previewOption;
+
+    @FindBy(className = "textarea-preview")
+    private WebElement previewDescriptionText;
+
     public BaseProjectPage(WebDriver driver) {
         super(driver);
     }
@@ -52,10 +58,14 @@ public abstract class BaseProjectPage<Self extends BaseProjectPage<?>> extends B
 
     public Self editDescription(String text) {
         descriptionButton.click();
+        descriptionField.clear();
         descriptionField.sendKeys(text);
-        submitButton.click();
 
-        getWait2().until(ExpectedConditions.textToBePresentInElement(descriptionText, text));
+        return (Self) this;
+    }
+
+    public Self clickSubmitButton() {
+        submitButton.click();
 
         return (Self) this;
     }
@@ -68,12 +78,22 @@ public abstract class BaseProjectPage<Self extends BaseProjectPage<?>> extends B
         return (Self) this;
     }
 
+    public Self clickPreview() {
+        previewOption.click();
+
+        return (Self) this;
+    }
+
     public Self renameItem(String newName) {
         renameButtonViaSidebar.click();
         newNameField.clear();
         newNameField.sendKeys(newName);
         submitButton.click();
         return (Self) this;
+    }
+
+    public String getPreviewDescriptionText() {
+        return previewDescriptionText.getText();
     }
 
     public String getRenameWarningMessage() {

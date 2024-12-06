@@ -9,6 +9,7 @@ import org.testng.annotations.Test;
 import school.redrover.page.FreestyleProjectPage;
 import school.redrover.page.HomePage;
 import school.redrover.runner.BaseTest;
+import school.redrover.runner.TestUtils;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -97,6 +98,7 @@ public class FreestyleProjectTest extends BaseTest {
         Assert.assertEquals(projectName.size(), 1);
         Assert.assertEquals(projectName.get(0), PROJECT_NAME);
     }
+
     @Test
     public void testCreateFreestyleProjectWithDurationCheckbox() {
         String periodCheckbox = new HomePage(getDriver())
@@ -119,6 +121,7 @@ public class FreestyleProjectTest extends BaseTest {
         String description = new HomePage(getDriver())
                 .openFreestyleProject(PROJECT_NAME)
                 .editDescription(DESCRIPTION)
+                .clickSubmitButton()
                 .getDescription();
 
         Assert.assertEquals(description, DESCRIPTION);
@@ -133,6 +136,7 @@ public class FreestyleProjectTest extends BaseTest {
                 .openFreestyleProject(PROJECT_NAME)
                 .clearDescription()
                 .editDescription(newDescription)
+                .clickSubmitButton()
                 .getDescription();
 
         Assert.assertEquals(actualDescription, newDescription);
@@ -360,18 +364,17 @@ public class FreestyleProjectTest extends BaseTest {
         Assert.assertEquals(invalidNameMessage, "» ‘%s’ is an unsafe character".formatted(unsafeCharacter));
     }
 
-     @Test
+    @Test
     public void testFreestyleProjectDescriptionPreview() {
-        new HomePage(getDriver())
-                .createFreestyleProject(FREESTYLE_PROJECT);
+        TestUtils.createFreestyleProject(this, FREESTYLE_PROJECT);
 
-        getDriver().findElement(By.id("description-link")).click();
-        getDriver().findElement(By.name("description")).sendKeys(DESCRIPTION);
-        getDriver().findElement(By.className("textarea-show-preview")).click();
+        String descriptionPreview = new HomePage(getDriver())
+                .openFreestyleProject(FREESTYLE_PROJECT)
+                .editDescription(DESCRIPTION)
+                .clickPreview()
+                .getPreviewDescriptionText();
 
-        String preview = getDriver().findElement(By.className("textarea-preview")).getText();
-
-        Assert.assertEquals(preview, DESCRIPTION);
+        Assert.assertEquals(descriptionPreview, DESCRIPTION);
     }
 
     @Test
