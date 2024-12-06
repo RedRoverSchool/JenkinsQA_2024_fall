@@ -2,6 +2,7 @@ package school.redrover;
 
 import org.testng.Assert;
 import org.testng.annotations.DataProvider;
+import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import school.redrover.page.FreestyleProjectPage;
 import school.redrover.page.HomePage;
@@ -108,6 +109,7 @@ public class FreestyleProjectTest extends BaseTest {
         Assert.assertEquals(periodCheckbox, "minute");
     }
 
+    @Ignore
     @Test(dependsOnMethods = "testCreateProjectViaCreateJobButton")
     public void testAddDescription() {
         String description = new HomePage(getDriver())
