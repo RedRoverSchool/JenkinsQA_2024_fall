@@ -1,6 +1,7 @@
 package school.redrover;
 
 import org.testng.Assert;
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 import school.redrover.page.FreestyleProjectPage;
 import school.redrover.page.HomePage;
@@ -15,6 +16,17 @@ public class FreestyleProjectTest extends BaseTest {
     private static final String DESCRIPTION = "Bla-bla-bla project";
 
     private static final String BUILD_NAME = "BuildName";
+
+    @DataProvider
+    public Object[][] providerUnsafeCharacters() {
+
+        return new Object[][]{
+                {"\\"}, {"]"}, {":"}, {"#"}, {"&"}, {"?"}, {"!"}, {"@"},
+                {"$"}, {"%"}, {"^"}, {"*"}, {"|"}, {"/"}, {"<"}, {">"},
+                {"["}, {";"}
+        };
+
+    }
 
     @Test
     public void testCreateFreestyleProjectWithEmptyName() {
@@ -82,7 +94,7 @@ public class FreestyleProjectTest extends BaseTest {
         Assert.assertEquals(projectName.get(0), PROJECT_NAME);
     }
 
-   @Test(dependsOnMethods = "testCreateProjectViaCreateJobButton")
+    @Test(dependsOnMethods = "testCreateProjectViaCreateJobButton")
     public void testEditDescriptionOnProjectPage() {
         final String newDescription = "New " + DESCRIPTION;
 
@@ -216,7 +228,7 @@ public class FreestyleProjectTest extends BaseTest {
                 .clickBuildNowSidebar();
         String lastBuildNumber = freestyleProjectPage.getLastBuildNumber();
 
-                freestyleProjectPage
+        freestyleProjectPage
                 .clickOnSuccessBuildIconForLastBuild()
                 .clickDeleteBuildSidebar()
                 .confirmDeleteBuild();
@@ -251,7 +263,7 @@ public class FreestyleProjectTest extends BaseTest {
         Assert.assertEquals(workspaceText, "Error: no workspace");
     }
 
-    @Test (dependsOnMethods = "testBuildProjectViaSidebarMenuOnProjectPage")
+    @Test(dependsOnMethods = "testBuildProjectViaSidebarMenuOnProjectPage")
     public void testDeleteWorkspaceConfirmationOptions() {
         List<String> dialogOptions = List.of("Wipe Out Current Workspace", "Are you sure about wiping out the workspace?", "Cancel", "Yes");
 
@@ -263,4 +275,16 @@ public class FreestyleProjectTest extends BaseTest {
 
         Assert.assertTrue(areAllConfirmationDialogOptionsPresent, "Some dialog options weren't found");
     }
+
+    @Test(dataProvider = "providerUnsafeCharacters")
+    public void testErrorMessageDisplayedForInvalidCharactersInProjectName(String unsafeCharacter) {
+        String invalidNameMessage = new HomePage(getDriver())
+                .clickNewItem()
+                .enterItemName(unsafeCharacter)
+                .selectFreestyleProject()
+                .getInvalidNameMessage();
+
+        Assert.assertEquals(invalidNameMessage, "» ‘%s’ is an unsafe character".formatted(unsafeCharacter));
+    }
+
 }
