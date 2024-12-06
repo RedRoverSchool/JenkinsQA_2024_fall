@@ -10,11 +10,11 @@ import java.util.List;
 
 public class BuildHistoryPage extends BasePage {
 
-    private @FindBy(xpath = "//a[@class='jenkins-table__link model-link']/span")
-    WebElement lastBuildName;
+    @FindBy(xpath = "//a[@class='jenkins-table__link model-link']/span")
+    private WebElement lastBuildName;
 
-    private @FindBy(xpath = "//*[@id='projectStatus']/tbody/tr/td[4]")
-    List<WebElement> statusList;
+    @FindBy(xpath = "//*[@id='projectStatus']/tbody/tr/td[4]")
+    private List<WebElement> statusList;
 
     public BuildHistoryPage(WebDriver driver) {
         super(driver);
