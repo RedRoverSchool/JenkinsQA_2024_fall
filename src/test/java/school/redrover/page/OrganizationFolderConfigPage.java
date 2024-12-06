@@ -11,7 +11,7 @@ import school.redrover.page.base.BaseConfigPage;
 public class OrganizationFolderConfigPage extends BaseConfigPage<OrganizationFolderConfigPage, OrganizationFolderProjectPage> {
 
     @FindBy(name = "_.displayNameOrNull")
-    WebElement displayNameInput;
+    private WebElement displayNameInput;
 
     public OrganizationFolderConfigPage(WebDriver driver) {
         super(driver);
