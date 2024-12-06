@@ -45,6 +45,11 @@ public class HomePage extends BasePage {
         return new MultiConfigurationProjectPage(getDriver());
     }
 
+    public OrganizationFolderProjectPage openOrganisationFolderProject(String name) {
+        openItem(name);
+        return new OrganizationFolderProjectPage(getDriver());
+    }
+
     public MultibranchPipelineProjectPage openMultibranchProject(String name) {
         openItem(name);
         return new MultibranchPipelineProjectPage(getDriver());
