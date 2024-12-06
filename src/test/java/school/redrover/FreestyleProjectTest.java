@@ -14,7 +14,6 @@ public class FreestyleProjectTest extends BaseTest {
     private static final String PROJECT_NAME = "MyFreestyleProject";
     private static final String FREESTYLE_PROJECT = "Freestyle project";
     private static final String DESCRIPTION = "Bla-bla-bla project";
-
     private static final String BUILD_NAME = "BuildName";
 
     @DataProvider
@@ -92,6 +91,21 @@ public class FreestyleProjectTest extends BaseTest {
 
         Assert.assertEquals(projectName.size(), 1);
         Assert.assertEquals(projectName.get(0), PROJECT_NAME);
+    }
+    @Test
+    public void testCreateFreestyleProjectWithDurationCheckbox() {
+        String periodCheckbox = new HomePage(getDriver())
+                .clickNewItem()
+                .enterItemName(PROJECT_NAME)
+                .selectFreestyleProjectAndClickOk()
+                .selectDurationCheckbox("minute")
+                .clickSaveButton()
+                .gotoHomePage()
+                .openFreestyleProject(PROJECT_NAME)
+                .clickConfigureSidebar()
+                .getTimePeriod();
+
+        Assert.assertEquals(periodCheckbox, "minute");
     }
 
     @Test(dependsOnMethods = "testCreateProjectViaCreateJobButton")
@@ -258,7 +272,7 @@ public class FreestyleProjectTest extends BaseTest {
                 .clickWipeOutCurrentWorkspaceSidebar()
                 .clickYesToWipeOutCurrentWorkspace()
                 .clickWorkspaceSidebar()
-                .getWorkspaceText();
+                .getWorkspaceTitle();
 
         Assert.assertEquals(workspaceText, "Error: no workspace");
     }
