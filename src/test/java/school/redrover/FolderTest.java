@@ -15,6 +15,10 @@ public class FolderTest extends BaseTest {
     private static final String FREESTYLE_PROJECT_NAME = "FirstFreestyleProjectJob";
     private static final String FOLDER_NAME_MAX_LENGTH = "012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234";
 
+    private static final String FOLDER_MOVE_PARENT_NAME = "FolderParent";
+    private static final String FOLDER_MOVE_CHILD_NAME = "FolderChild";
+    private static final String FOLDER_MOVE_CHILD2_NAME = "FolderChild2";
+
     @Test
     public void testCreateWithMaxNameLength() {
 
@@ -224,5 +228,122 @@ public class FolderTest extends BaseTest {
                 .getItemList();
 
         Assert.assertTrue(setOfProjects.isEmpty());
+    }
+
+    @Test
+    public void testMoveFromFoldersPage() {
+
+        List<String> nameProjectList = new HomePage(getDriver())
+                .clickNewItem()
+                .enterItemName(FOLDER_MOVE_PARENT_NAME)
+                .selectFolderAndClickOk()
+                .gotoHomePage()
+
+                .clickNewItem()
+                .enterItemName(FOLDER_MOVE_CHILD_NAME)
+                .selectFolderAndClickOk()
+                .gotoHomePage()
+
+                .openFolder(FOLDER_MOVE_CHILD_NAME)
+                .clickMoveOnSidebar()
+                .selectParentFolderAndClickMove(FOLDER_MOVE_PARENT_NAME)
+                .getBreadcrumsBarItemsList();
+
+        Assert.assertEquals(nameProjectList, List.of("Dashboard", FOLDER_MOVE_PARENT_NAME, FOLDER_MOVE_CHILD_NAME));
+    }
+
+    @Test(dependsOnMethods = "testMoveFromFoldersPage")
+    public void testMoveFromTheSameLevel() {
+        List<String> nameProjectsList = new HomePage(getDriver())
+                .openFolder(FOLDER_MOVE_PARENT_NAME)
+                .clickNewItem()
+                .enterItemName(FOLDER_MOVE_CHILD2_NAME)
+                .selectFolderAndClickOk()
+                .clickSaveButton()
+                .gotoHomePage()
+                .openFolder(FOLDER_MOVE_PARENT_NAME)
+                .openFolder(FOLDER_MOVE_CHILD2_NAME)
+                .clickMoveOnSidebar()
+                .selectParentFolderAndClickMove(FOLDER_MOVE_PARENT_NAME +"/" + FOLDER_MOVE_CHILD_NAME)
+                .getBreadcrumsBarItemsList();
+
+        Assert.assertEquals(nameProjectsList, List.of("Dashboard", FOLDER_MOVE_PARENT_NAME, FOLDER_MOVE_CHILD_NAME, FOLDER_MOVE_CHILD2_NAME));
+    }
+
+    @Test(dependsOnMethods = "testMoveFromTheSameLevel")
+    public void testTryToMoveInTheSamePlace () {
+        List<String> nameProjectsListBreadcrumbs = new HomePage(getDriver())
+                .openFolder(FOLDER_MOVE_PARENT_NAME)
+                .openFolder(FOLDER_MOVE_CHILD_NAME)
+                .clickMoveOnSidebar()
+                .selectParentFolderAndClickMove(FOLDER_MOVE_PARENT_NAME)
+                .getBreadcrumsBarItemsList();
+
+        Assert.assertEquals(nameProjectsListBreadcrumbs, List.of("Dashboard", FOLDER_MOVE_PARENT_NAME, FOLDER_MOVE_CHILD_NAME, "Move"));
+    }
+
+    @Test(dependsOnMethods = "testMoveFromTheSameLevel")
+    public void testMoveOnTheHigherLevel() {
+        List<String> nameProjectsList = new HomePage(getDriver())
+                .openFolder(FOLDER_MOVE_PARENT_NAME)
+                .openFolder(FOLDER_MOVE_CHILD_NAME)
+                .openFolder(FOLDER_MOVE_CHILD2_NAME)
+                .clickMoveOnSidebar()
+                .selectParentFolderAndClickMove(FOLDER_MOVE_PARENT_NAME)
+                .getBreadcrumsBarItemsList();
+
+        Assert.assertEquals(nameProjectsList, List.of("Dashboard", FOLDER_MOVE_PARENT_NAME, FOLDER_MOVE_CHILD_NAME));
+    }
+
+    @Test(dependsOnMethods = "testMoveOnTheHigherLevel")
+    public void testNoOptionsToMoveParentIntoChild () {
+        List<String> itemsSidebar = new HomePage(getDriver())
+                .openFolder(FOLDER_MOVE_PARENT_NAME)
+                .getListOfItemsSidebar();
+
+        Assert.assertListNotContains(itemsSidebar, item->item.contains("Move"), "list of sidebar items contains Move");
+    }
+
+    @Test
+    public void testMoveViaChevronMainPage () {
+
+        List<String> nameProjectsList =  new HomePage(getDriver())
+                .clickNewItem()
+                .enterItemName(FOLDER_MOVE_PARENT_NAME)
+                .selectFolderAndClickOk()
+                .gotoHomePage()
+
+                .clickNewItem()
+                .enterItemName(FOLDER_MOVE_CHILD_NAME)
+                .selectFolderAndClickOk()
+                .gotoHomePage()
+
+                .selectMoveFromItemMenuByChevron(FOLDER_MOVE_CHILD_NAME)
+                .selectParentFolderAndClickMove(FOLDER_MOVE_PARENT_NAME)
+                .getBreadcrumsBarItemsList();
+
+        Assert.assertEquals(nameProjectsList, List.of("Dashboard", FOLDER_MOVE_PARENT_NAME, FOLDER_MOVE_CHILD_NAME));
+    }
+
+    @Test
+    public void testMoveViaChevronMyView () {
+
+        List<String> nameProjectsList =  new HomePage(getDriver())
+                .clickNewItem()
+                .enterItemName(FOLDER_MOVE_PARENT_NAME)
+                .selectFolderAndClickOk()
+                .gotoHomePage()
+
+                .clickNewItem()
+                .enterItemName(FOLDER_MOVE_CHILD_NAME)
+                .selectFolderAndClickOk()
+                .gotoHomePage()
+
+                .clickMyViewsButton()
+                .selectMoveFromItemMenuByChevron(FOLDER_MOVE_CHILD_NAME)
+                .selectParentFolderAndClickMove(FOLDER_MOVE_PARENT_NAME)
+                .getBreadcrumsBarItemsList();
+
+        Assert.assertEquals(nameProjectsList, List.of("Dashboard", FOLDER_MOVE_PARENT_NAME, FOLDER_MOVE_CHILD_NAME));
     }
 }
