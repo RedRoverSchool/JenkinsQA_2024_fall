@@ -7,6 +7,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.testng.Assert;
 import org.testng.annotations.Test;
+import school.redrover.page.HomePage;
 import school.redrover.runner.BaseTest;
 import school.redrover.runner.TestUtils;
 
@@ -18,31 +19,31 @@ public class FoldersMovingTest extends BaseTest {
 
     private static final String FOLDER_BUTTON_XPATH = "//*[@id='j-add-item-type-nested-projects']/ul/li[1]/div[2]/div";
 
-    private void clickOnSave () {
+    private void clickOnSave() {
         getDriver().findElement(By.name("Submit")).click();
     }
 
-    private String getFolderExtension () {
+    private String getFolderExtension() {
         return getDriver().findElement(By.id("breadcrumbBar")).getText();
     }
 
-    private void setDestinationFolder (String selectPath) {
+    private void setDestinationFolder(String selectPath) {
         WebElement folderDestination = getWait10().until(ExpectedConditions.visibilityOfElementLocated(By.name("destination")));
         Select select = new Select(folderDestination);
         select.selectByVisibleText(selectPath);
         getDriver().findElement(By.name("Submit")).click();
     }
 
-    private void clickOnMove () {
+    private void clickOnMove() {
         getWait10().until(ExpectedConditions.visibilityOfElementLocated(
                 By.xpath("/html/body/div[2]/div[1]/div[1]/div[6]/span/a"))).click();
     }
 
-    private void goToTheMainPage () {
+    private void goToTheMainPage() {
         getWait10().until(ExpectedConditions.elementToBeClickable(By.xpath("//*[@id='breadcrumbs']/li[1]/a"))).click();
     }
 
-    private void useChevron () {
+    private void useChevron() {
         WebElement folder = getDriver().findElement(
                 By.xpath("/html/body/div[2]/div[2]/div[2]/div[2]/table/tbody/tr[1]/td[3]/a/span"));
         Actions actions = new Actions(getDriver());
@@ -58,12 +59,12 @@ public class FoldersMovingTest extends BaseTest {
         setDestinationFolder("Jenkins » FolderTwo");
     }
 
-    private void goToMyView () {
+    private void goToMyView() {
         getWait10().until(ExpectedConditions.elementToBeClickable(
                 By.xpath("/html/body/div[2]/div[1]/div[1]/div[4]/span/a"))).click();
     }
 
-    private void goThroughFoldersOnLowerLevel () {
+    private void goThroughFoldersOnLowerLevel() {
         getWait10().until(ExpectedConditions.visibilityOfElementLocated(
                 By.xpath("/html/body/div[2]/div[2]/div[2]/div[2]/table/tbody/tr/td[3]/a/span"))).click();
         getWait10().until(ExpectedConditions.visibilityOfElementLocated(
@@ -71,104 +72,121 @@ public class FoldersMovingTest extends BaseTest {
     }
 
     @Test
-    public void testMoveFromFoldersPage () {
-        newItemsData(this, "FolderOne", FOLDER_BUTTON_XPATH);
-        clickOnSave();
-        goToTheMainPage();
+    public void testMoveFromFoldersPage() {
 
-        newItemsData(this, "FolderTwo", FOLDER_BUTTON_XPATH);
-        clickOnSave();
-        clickOnMove();
-        setDestinationFolder("Jenkins » FolderOne");
+        List<String> nameProjectList = new HomePage(getDriver())
+                .clickNewItem()
+                .enterItemName("FolderParent")
+                .selectFolderAndClickOk()
+                .gotoHomePage()
 
-        Assert.assertEquals(getFolderExtension(), "Dashboard\n" +
-                "FolderOne\n" +
-                "FolderTwo");
+                .clickNewItem()
+                .enterItemName("FolderChild")
+                .selectFolderAndClickOk()
+                .gotoHomePage()
+
+                .openFolder("FolderChild")
+                .clickMoveOnSidebar()
+                .selectParentFolderAndClickMove("FolderParent")
+                .getBreadcrumsBarItemsList();
+
+        Assert.assertEquals(nameProjectList, List.of("Dashboard", "FolderParent", "FolderChild"));
     }
 
     @Test(dependsOnMethods = "testMoveFromFoldersPage")
-    public void testMoveFromTheSameLevel () {
-        newItemsData(this, "FolderThree", FOLDER_BUTTON_XPATH);
-        clickOnSave();
-        clickOnMove();
-        setDestinationFolder("Jenkins » FolderOne");
+    public void testMoveFromTheSameLevel() {
+        List<String> nameProjectsList = new HomePage(getDriver())
+                .openFolder("FolderParent")
+                .clickNewItem()
+                .enterItemName("FolderChild2")
+                .selectFolderAndClickOk()
+                .clickSaveButton()
+                .gotoHomePage()
+                .openFolder("FolderParent")
+                .openFolder("FolderChild2")
+                .clickMoveOnSidebar()
+                .selectParentFolderAndClickMove("FolderParent/FolderChild")
+                .getBreadcrumsBarItemsList();
 
-        Assert.assertEquals(getFolderExtension(), "Dashboard\n" +
-                "FolderOne\n" +
-                "FolderThree");
+        Assert.assertEquals(nameProjectsList, List.of("Dashboard", "FolderParent", "FolderChild", "FolderChild2"));
     }
 
     @Test(dependsOnMethods = "testMoveFromTheSameLevel")
     public void testTryToMoveInTheSamePlace () {
-        goThroughFoldersOnLowerLevel();
+        List<String> nameProjectsListBreadcrumbs = new HomePage(getDriver())
+                .openFolder("FolderParent")
+                .openFolder("FolderChild")
+                .clickMoveOnSidebar()
+                .selectParentFolderAndClickMove("FolderParent")
+                .getBreadcrumsBarItemsList();
 
-        clickOnMove();
-        setDestinationFolder("Jenkins » FolderOne");
-
-        Assert.assertEquals(getFolderExtension(), "Dashboard\n" +
-                "FolderOne\n" +
-                "FolderThree\n" +
-                "Move");
+        Assert.assertEquals(nameProjectsListBreadcrumbs, List.of("Dashboard", "FolderParent", "FolderChild", "Move"));
     }
 
-    @Test(dependsOnMethods = "testTryToMoveInTheSamePlace")
-    public void testMoveOnTheHigherLevel () {
-        goThroughFoldersOnLowerLevel();
+    @Test(dependsOnMethods = "testMoveFromTheSameLevel")
+    public void testMoveOnTheHigherLevel() {
+        List<String> nameProjectsList = new HomePage(getDriver())
+                .openFolder("FolderParent")
+                .openFolder("FolderChild")
+                .openFolder("FolderChild2")
+                .clickMoveOnSidebar()
+                .selectParentFolderAndClickMove("FolderParent")
+                .getBreadcrumsBarItemsList();
 
-        clickOnMove();
-        setDestinationFolder("Jenkins");
-
-        Assert.assertEquals(getFolderExtension(), "Dashboard\n" +
-                "FolderThree");
+        Assert.assertEquals(nameProjectsList, List.of("Dashboard", "FolderParent", "FolderChild2"));
     }
 
     @Test(dependsOnMethods = "testMoveOnTheHigherLevel")
     public void testNoOptionsToMoveParentIntoChild () {
-        getWait10().until(ExpectedConditions.visibilityOfElementLocated(
-                By.xpath("/html/body/div[2]/div[2]/div[2]/div[2]/table/tbody/tr/td[3]/a/span"))).click();
-        clickOnMove();
+        List<String> itemsSidebar = new HomePage(getDriver())
+                .openFolder("FolderParent")
+                .getListOfItemsSidebar();
 
-        List<String> available = getDriver().findElements(By.name("destination")).stream()
-                .map(WebElement::getText)
-                .toList();
-
-        Assert.assertFalse(available.toString().contains("FolderTwo"));
+        Assert.assertListNotContains(itemsSidebar, item->item.contains("Move"), "list of sidebar items contains Move");
     }
 
     @Test
     public void testMoveViaChevronMainPage () {
-        newItemsData(this, "FolderOne", FOLDER_BUTTON_XPATH);
-        clickOnSave();
-        goToTheMainPage();
 
-        newItemsData(this, "FolderTwo", FOLDER_BUTTON_XPATH);
-        clickOnSave();
+       List<String> nameProjectsList =  new HomePage(getDriver())
+                .clickNewItem()
+                .enterItemName("FolderParent")
+                .selectFolderAndClickOk()
+                .gotoHomePage()
 
-        goToTheMainPage();
+                .clickNewItem()
+                .enterItemName("FolderChild")
+                .selectFolderAndClickOk()
+                .gotoHomePage()
 
-        useChevron();
+                .selectMoveFromItemMenuByChevron("FolderChild")
+                .selectParentFolderAndClickMove("FolderParent")
+                .getBreadcrumsBarItemsList();
 
-        Assert.assertEquals(getFolderExtension(), "Dashboard\n" +
-                "FolderTwo\n" +
-                "FolderOne");
+        Assert.assertEquals(nameProjectsList, List.of("Dashboard", "FolderParent", "FolderChild"));
     }
 
     @Test
     public void testMoveViaChevronMyView () {
-        newItemsData(this, "FolderOne", FOLDER_BUTTON_XPATH);
-        clickOnSave();
-        goToTheMainPage();
 
-        newItemsData(this, "FolderTwo", FOLDER_BUTTON_XPATH);
-        clickOnSave();
-        goToTheMainPage();
+        List<String> nameProjectsList =  new HomePage(getDriver())
+                .clickNewItem()
+                .enterItemName("FolderParent")
+                .selectFolderAndClickOk()
+                .gotoHomePage()
 
-        goToMyView();
+                .clickNewItem()
+                .enterItemName("FolderChild")
+                .selectFolderAndClickOk()
+                .gotoHomePage()
 
-        useChevron();
+                .clickMyViewsButton()
+                .selectMoveFromItemMenuByChevron("FolderChild")
+                .selectParentFolderAndClickMove("FolderParent")
+                .getBreadcrumsBarItemsList();
 
-        Assert.assertEquals(getFolderExtension(), "Dashboard\n" +
-                "FolderTwo\n" +
-                "FolderOne");
+        Assert.assertEquals(nameProjectsList, List.of("Dashboard", "FolderParent", "FolderChild"));
     }
+
 }
+
