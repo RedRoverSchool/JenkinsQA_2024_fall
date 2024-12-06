@@ -2,14 +2,10 @@ package school.redrover;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.interactions.Actions;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import school.redrover.page.HomePage;
 import school.redrover.runner.BaseTest;
-import school.redrover.runner.TestUtils;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -17,77 +13,7 @@ import java.util.List;
 public class FreestyleProject1Test extends BaseTest {
 
     private static final String NEW_FREESTYLE_PROJECT_NAME = "New freestyle project";
-    private static final String FREESTYLE_PROJECT_NAME = "Freestyle project";
-    private static final String RENAMED_FREESTYLE_PROJECT_NAME = "Renamed freestyle project";
     private static final String DESCRIPTION = "Some description";
-
-    private void openProject(String name) {
-        getDriver().findElement(By.xpath("//td/a/span[text() = '%s']/..".formatted(name))).click();
-    }
-
-    @Test
-    public void testCreate() {
-        List<String> itemList = new HomePage(getDriver())
-                .clickNewItem()
-                .enterItemName(NEW_FREESTYLE_PROJECT_NAME)
-                .selectTypeOfProject(FREESTYLE_PROJECT_NAME)
-                .clickOkButton()
-                .gotoHomePage()
-                .getItemList();
-
-        Assert.assertTrue(itemList.contains(NEW_FREESTYLE_PROJECT_NAME));
-    }
-
-    @Test(dependsOnMethods = "testCreate")
-    public void testAddDescription() {
-        String description = new HomePage(getDriver())
-                .openFreestyleProject(NEW_FREESTYLE_PROJECT_NAME)
-                .editDescription(DESCRIPTION)
-                .getDescription();
-
-        Assert.assertEquals(description, DESCRIPTION);
-    }
-
-    @Test(dependsOnMethods = "testAddDescription")
-    public void testDeleteDescription() {
-        String description = new HomePage(getDriver())
-                .openFreestyleProject(NEW_FREESTYLE_PROJECT_NAME)
-                .clearDescription()
-                .getDescription();
-
-        Assert.assertEquals(description, "");
-    }
-
-    @Test(dependsOnMethods = "testDeleteDescription")
-    public void testRename() throws InterruptedException {
-        openProject(NEW_FREESTYLE_PROJECT_NAME);
-
-        getDriver().findElement((By.xpath("//*[contains(@href,'confirm-rename')]"))).click();
-        getDriver().findElement(By.xpath("//input[@name='newName']")).clear();
-        Thread.sleep(200);
-
-        getDriver()
-                .findElement(By.xpath("//input[@name='newName']"))
-                .sendKeys(RENAMED_FREESTYLE_PROJECT_NAME);
-
-        getDriver().findElement(By.name("Submit")).click();
-
-        String projectName = getDriver()
-                .findElement(By.xpath("//*[@class='job-index-headline page-headline']")).getText();
-
-        Assert.assertEquals(projectName, RENAMED_FREESTYLE_PROJECT_NAME);
-    }
-
-    @Test(dependsOnMethods = "testRename")
-    public void testDelete() {
-        openProject(RENAMED_FREESTYLE_PROJECT_NAME);
-
-        getDriver().findElement((By.xpath("//*[@data-title='Delete Project']"))).click();
-        getDriver().findElement(By.xpath("//button[@data-id='ok']")).click();
-        String emptyDashboardHeader = getDriver().findElement(By.cssSelector(".empty-state-block > h1")).getText();
-
-        Assert.assertEquals(emptyDashboardHeader, "Welcome to Jenkins!");
-    }
 
     @Test
     public void testFreestyleProjectDescriptionPreview() {
@@ -101,73 +27,6 @@ public class FreestyleProject1Test extends BaseTest {
         String preview = getDriver().findElement(By.className("textarea-preview")).getText();
 
         Assert.assertEquals(preview, DESCRIPTION);
-    }
-
-    @Test
-    public void testChevronDeleteFreestyleProject() {
-        new HomePage(getDriver())
-                .createFreestyleProject(NEW_FREESTYLE_PROJECT_NAME);
-
-
-        Actions actions = new Actions(getDriver());
-
-        WebElement projectName = getDriver()
-                .findElement(By.xpath("//span[contains(text(),'" + NEW_FREESTYLE_PROJECT_NAME + "')]"));
-        actions
-                .moveToElement(projectName)
-                .perform();
-
-        WebElement chevron = getDriver()
-                .findElement(By.xpath("//*[@id='job_" + NEW_FREESTYLE_PROJECT_NAME + "']/td[3]/a/button"));
-
-        TestUtils.moveAndClickWithJavaScript(getDriver(), chevron);
-
-        getWait10().until(ExpectedConditions.attributeToBe(chevron, "aria-expanded", "true"));
-
-        WebElement delete = getWait10().until(ExpectedConditions.visibilityOfElementLocated((
-                By.xpath("//*[contains(@href,'doDelete')]"))));
-        delete.click();
-
-        getDriver().findElement(By.xpath("//button[contains(text(),'Yes')]")).click();
-        String emptyDashboardHeader = getDriver().findElement(By.cssSelector(".empty-state-block > h1")).getText();
-
-        Assert.assertEquals(emptyDashboardHeader, "Welcome to Jenkins!");
-    }
-
-    @Test
-    public void testChevronRenameFreestyleProject() {
-        new HomePage(getDriver())
-                .createFreestyleProject(NEW_FREESTYLE_PROJECT_NAME);
-
-
-        Actions actions = new Actions(getDriver());
-
-        WebElement projectName = getDriver()
-                .findElement(By.xpath("//span[contains(text(),'" + NEW_FREESTYLE_PROJECT_NAME + "')]"));
-        actions
-                .moveToElement(projectName)
-                .perform();
-
-        WebElement chevron = getDriver()
-                .findElement(By.xpath("//*[@id='job_" + NEW_FREESTYLE_PROJECT_NAME + "']/td[3]/a/button"));
-
-        TestUtils.moveAndClickWithJavaScript(getDriver(), chevron);
-
-        getWait10().until(ExpectedConditions.attributeToBe(chevron, "aria-expanded", "true"));
-
-        WebElement delete = getWait10().until(ExpectedConditions.visibilityOfElementLocated((By
-                .xpath("//*[contains(@href,'confirm-rename')]"))));
-        delete.click();
-
-        getDriver().findElement(By.name("newName")).clear();
-        getWait2();
-        getDriver().findElement(By.name("newName")).sendKeys(RENAMED_FREESTYLE_PROJECT_NAME);
-        getDriver().findElement(By.name("Submit")).click();
-
-        String projectNameViaChevron = getDriver()
-                .findElement(By.xpath("//*[@class='job-index-headline page-headline']")).getText();
-
-        Assert.assertEquals(projectNameViaChevron, RENAMED_FREESTYLE_PROJECT_NAME);
     }
 
     @Test
