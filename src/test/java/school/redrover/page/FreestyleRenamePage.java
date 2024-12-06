@@ -1,26 +1,31 @@
 package school.redrover.page;
 
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
 import school.redrover.page.base.BasePage;
 
 public class FreestyleRenamePage extends BasePage {
 
-    private static final By inputField = By.xpath("//input[@checkdependson ='newName']");
+    @FindBy(xpath = "//input[@checkdependson ='newName']")
+    WebElement inputField;
+
+    @FindBy(name = "Submit")
+    WebElement renameButton;
 
     public FreestyleRenamePage(WebDriver driver) {
         super(driver);
     }
 
     public FreestyleRenamePage clearOldAndInputNewProjectName(String newName) {
-        getDriver().findElement(inputField).clear();
-        getDriver().findElement(inputField).sendKeys(newName);
+        inputField.clear();
+        inputField.sendKeys(newName);
 
         return this;
     }
 
     public FreestyleProjectPage clickRenameButton() {
-        getDriver().findElement(By.name("Submit")).click();
+        renameButton.click();
 
         return new FreestyleProjectPage(getDriver());
     }
