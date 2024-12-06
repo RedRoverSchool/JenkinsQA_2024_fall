@@ -50,6 +50,11 @@ public class HomePage extends BasePage {
         return new OrganizationFolderProjectPage(getDriver());
     }
 
+    public MultibranchPipelineProjectPage openMultibranchProject(String name) {
+        openItem(name);
+        return new MultibranchPipelineProjectPage(getDriver());
+    }
+
     public FolderProjectPage openFolder(String name) {
         openItem(name);
         return new FolderProjectPage(getDriver());
@@ -304,6 +309,10 @@ public class HomePage extends BasePage {
         getDriver().navigate().refresh();
 
         return this;
+    }
+
+    public String getTypeProject() {
+        return projectType.getText();
     }
 
     public String getNotificationBarStatus() {
