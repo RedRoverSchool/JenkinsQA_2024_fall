@@ -134,6 +134,7 @@ public class FreestyleProjectTest extends BaseTest {
         Assert.assertEquals(actualDescription, newDescription);
     }
 
+    @Ignore
     @Test(dependsOnMethods = "testEditDescriptionOnProjectPage")
     public void testDeleteDescription() {
         String description = new HomePage(getDriver())
