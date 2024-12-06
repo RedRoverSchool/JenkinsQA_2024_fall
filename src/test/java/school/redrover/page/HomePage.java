@@ -193,6 +193,12 @@ public class HomePage extends BasePage {
         return this;
     }
 
+    public FolderProjectPage selectMoveFromItemMenuByChevron(String itemName) {
+        selectMenuFromItemDropdown(itemName, "Move");
+
+        return new FolderProjectPage(getDriver());
+    }
+
     public HomePage openDropdownViaChevron(String projectName) {
         WebElement chevron = getDriver().findElement(By.xpath("//td/a/span[text() = '%s']/../button".formatted(projectName)));
         TestUtils.moveAndClickWithJavaScript(getDriver(), chevron);

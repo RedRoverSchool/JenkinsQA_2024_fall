@@ -2,10 +2,14 @@ package school.redrover.page;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.Select;
 import school.redrover.page.base.BaseProjectPage;
+import school.redrover.runner.TestUtils;
 
 import java.util.Arrays;
+import java.util.List;
 
 public class FolderProjectPage extends BaseProjectPage<FolderProjectPage> {
 
@@ -65,5 +69,44 @@ public class FolderProjectPage extends BaseProjectPage<FolderProjectPage> {
                 By.xpath("//*[@id='description']/form/div[1]/div[1]/div[1]/a[1]"))).click();
         return getWait10().until(ExpectedConditions.visibilityOfElementLocated(
                 By.xpath("//*[@id='description']/form/div[1]/div[1]/div[2]"))).getText();
+    }
+
+    public FolderProjectPage clickMoveOnSidebar() {
+        getDriver().findElement(By.xpath("//span[contains(text(), 'Move')]/..")).click();
+
+        return this;
+    }
+    public FolderProjectPage selectParentFolderAndClickMove(String folderName) {
+        WebElement selectElement = getWait5().until(ExpectedConditions.visibilityOfElementLocated(By.name("destination")));
+        Select select = new Select(selectElement);
+        select.selectByValue("/%s".formatted(folderName));
+
+        getDriver().findElement(By.xpath("//button[@name='Submit']")).click();
+
+        return this;
+    }
+
+    public List<String> getBreadcrumsBarItemsList() {
+        return getDriver().findElements(
+                By.xpath("//div[@id='breadcrumbBar']//li[@class='jenkins-breadcrumbs__list-item']"))
+                .stream()
+                .map(WebElement::getText)
+                .toList();
+    }
+
+    private void openItem(String name) {
+        getDriver().findElement(By.xpath("//td/a/span[text() = '%s']/..".formatted(name))).click();
+    }
+
+    public FolderProjectPage openFolder(String name) {
+        openItem(name);
+        return new FolderProjectPage(getDriver());
+    }
+
+    public List<String> getListOfItemsSidebar() {
+        return getDriver().findElements(By.xpath("//div[@id='tasks']/div"))
+                .stream()
+                .map(WebElement::getText)
+                .toList();
     }
 }
