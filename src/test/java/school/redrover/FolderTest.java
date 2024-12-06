@@ -292,7 +292,7 @@ public class FolderTest extends BaseTest {
                 .selectParentFolderAndClickMove(FOLDER_MOVE_PARENT_NAME)
                 .getBreadcrumsBarItemsList();
 
-        Assert.assertEquals(nameProjectsList, List.of("Dashboard", FOLDER_MOVE_PARENT_NAME, FOLDER_MOVE_CHILD_NAME));
+        Assert.assertEquals(nameProjectsList, List.of("Dashboard", FOLDER_MOVE_PARENT_NAME, FOLDER_MOVE_CHILD2_NAME));
     }
 
     @Test(dependsOnMethods = "testMoveOnTheHigherLevel")
