@@ -1,11 +1,17 @@
 package school.redrover.page;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.FindBy;
 import school.redrover.page.base.BaseConfigPage;
 
 public class OrganizationFolderConfigPage extends BaseConfigPage<OrganizationFolderConfigPage, OrganizationFolderProjectPage> {
+
+    @FindBy(name = "_.displayNameOrNull")
+    WebElement displayNameInput;
 
     public OrganizationFolderConfigPage(WebDriver driver) {
         super(driver);
@@ -51,6 +57,13 @@ public class OrganizationFolderConfigPage extends BaseConfigPage<OrganizationFol
 
     public OrganizationFolderConfigPage setDisplayName(String name) {
         getDriver().findElement(DISPLAY_NAME).sendKeys(name);
+
+        return this;
+    }
+
+    public OrganizationFolderConfigPage editDisplayName(String name) {
+        displayNameInput.sendKeys(Keys.LEFT_CONTROL + "a");
+        displayNameInput.sendKeys(name);
 
         return this;
     }

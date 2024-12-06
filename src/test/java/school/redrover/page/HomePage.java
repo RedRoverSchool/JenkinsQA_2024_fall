@@ -45,6 +45,11 @@ public class HomePage extends BasePage {
         return new MultiConfigurationProjectPage(getDriver());
     }
 
+    public OrganizationFolderProjectPage openOrganisationFolderProject(String name) {
+        openItem(name);
+        return new OrganizationFolderProjectPage(getDriver());
+    }
+
     public FolderProjectPage openFolder(String name) {
         openItem(name);
         return new FolderProjectPage(getDriver());
@@ -102,7 +107,7 @@ public class HomePage extends BasePage {
         TestUtils.moveAndClickWithJavaScript(getDriver(),
                 getDriver().findElement(By.xpath("//td/a/span[text() = '%s']/../button".formatted(name))));
 
-      getWait5().until(ExpectedConditions.presenceOfElementLocated(
+        getWait5().until(ExpectedConditions.presenceOfElementLocated(
                 By.xpath("//button[contains(@href, 'doDelete')]"))).click();
 
         getWait5().until(ExpectedConditions.elementToBeClickable(getDriver().findElement(By.xpath(
@@ -299,10 +304,6 @@ public class HomePage extends BasePage {
         getDriver().navigate().refresh();
 
         return this;
-    }
-
-    public String getTypeProject() {
-        return projectType.getText();
     }
 
     public String getNotificationBarStatus() {
