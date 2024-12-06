@@ -45,6 +45,11 @@ public class HomePage extends BasePage {
         return new MultiConfigurationProjectPage(getDriver());
     }
 
+    public MultibranchPipelineProjectPage openMultibranchProject(String name) {
+        openItem(name);
+        return new MultibranchPipelineProjectPage(getDriver());
+    }
+
     public FolderProjectPage openFolder(String name) {
         openItem(name);
         return new FolderProjectPage(getDriver());
@@ -102,7 +107,7 @@ public class HomePage extends BasePage {
         TestUtils.moveAndClickWithJavaScript(getDriver(),
                 getDriver().findElement(By.xpath("//td/a/span[text() = '%s']/../button".formatted(name))));
 
-      getWait5().until(ExpectedConditions.presenceOfElementLocated(
+        getWait5().until(ExpectedConditions.presenceOfElementLocated(
                 By.xpath("//button[contains(@href, 'doDelete')]"))).click();
 
         getWait5().until(ExpectedConditions.elementToBeClickable(getDriver().findElement(By.xpath(

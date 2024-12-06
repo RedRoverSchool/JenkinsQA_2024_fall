@@ -4,10 +4,14 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import school.redrover.page.base.BaseCreatePage;
 
 public class CreateNewItemPage extends BaseCreatePage {
+
+    @FindBy(xpath = "//span[text()= 'Multibranch Pipeline']")
+    WebElement multibranchPipelineType;
 
     public CreateNewItemPage(WebDriver driver) {
         super(driver);
@@ -115,6 +119,11 @@ public class CreateNewItemPage extends BaseCreatePage {
 
     public CreateNewItemPage selectFreestyleProject() {
         getDriver().findElement(By.xpath(("//span[text()= 'Freestyle project']"))).click();
+        return this;
+    }
+
+    public CreateNewItemPage selectMultibranchPipelineProject() {
+        multibranchPipelineType.click();
         return this;
     }
 

@@ -43,4 +43,11 @@ public class MultibranchPipelineProjectPage extends BaseProjectPage<MultibranchP
 
         return new HomePage(getDriver());
     }
+
+    public MultibranchPipelineConfigPage clickConfigureSidebar(String name) {
+        getWait2().until(ExpectedConditions.elementToBeClickable(
+                By.xpath("//a[@href='/job/%s/configure']".formatted(name)))).click();
+
+        return new MultibranchPipelineConfigPage(getDriver());
+    }
 }

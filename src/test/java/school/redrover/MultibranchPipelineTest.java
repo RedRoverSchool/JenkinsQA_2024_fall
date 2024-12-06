@@ -1,6 +1,6 @@
 package school.redrover;
+
 import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -28,35 +28,27 @@ public class MultibranchPipelineTest extends BaseTest {
         getDriver().findElement(By.id("jenkins-name-icon")).click();
     }
 
-    private void scrollDown() {
-        JavascriptExecutor scroll = (JavascriptExecutor) getDriver();
-        scroll.executeScript("window.scrollTo(0, document.body.scrollHeight);");
+    @Test
+    public void testCreate() {
+        List<String> projectList = new HomePage(getDriver())
+                .clickCreateJob()
+                .enterItemName(MULTIBRANCH_PIPELINE_NAME)
+                .selectMultibranchPipelineAndClickOk()
+                .clickSaveButton()
+                .gotoHomePage()
+                .getItemList();
+
+        Assert.assertListContainsObject(projectList, MULTIBRANCH_PIPELINE_NAME,
+                "Project is not created");
     }
 
-    @Test
-    public void testCreateMultibranchPipeline() {
-        getDriver().findElement(By.xpath("//a[@href='newJob']")).click();
-        getDriver().findElement(By.xpath("//input[@class='jenkins-input']"))
-                .sendKeys("First Multibranch Pipeline project");
-        getDriver().findElement(By.xpath("//div[@id='j-add-item-type-standalone-projects']/ul/li[3]"))
-                .click();
-        getDriver().findElement(By.xpath("//button[@id='ok-button']")).click();
-
-        WebElement actualMultibranchPipelineName = getDriver().
-                findElement(By.xpath("//div[@id='breadcrumbBar']//li[3]"));
-
-        Assert.assertEquals(actualMultibranchPipelineName.
-                getText(),"First Multibranch Pipeline project");
-    }
-
-    @Test
-    public void testAddDescriptionCreatingMultibranch() {
+    @Test(dependsOnMethods = "testCreate")
+    public void testAddDescription() {
         final String description = "AddedDescription";
 
         String actualDescription = new HomePage(getDriver())
-                .clickNewItem()
-                .enterItemName(MULTIBRANCH_PIPELINE_NAME)
-                .selectMultibranchPipelineAndClickOk()
+                .openMultibranchProject(MULTIBRANCH_PIPELINE_NAME)
+                .clickConfigureSidebar(MULTIBRANCH_PIPELINE_NAME)
                 .enterDescription(description)
                 .clickSaveButton()
                 .getDescription();
@@ -64,20 +56,35 @@ public class MultibranchPipelineTest extends BaseTest {
         Assert.assertEquals(actualDescription, description);
     }
 
+    @Test(dependsOnMethods = "testAddDescription")
+    public void testVerifyErrorMessageWhenCreateWithSameName() {
+        String errorMessage = new HomePage(getDriver())
+                .clickNewItem()
+                .enterItemName(MULTIBRANCH_PIPELINE_NAME)
+                .selectMultibranchPipelineProject()
+                .getErrorMessage();
+
+        Assert.assertEquals(errorMessage, "» A job already exists with the name ‘%s’".formatted(MULTIBRANCH_PIPELINE_NAME));
+    }
+
     @Test
-    public void testDeleteItemFromStatusPage() {
+    public void testVerifyErrorMessageWhenCreateWithDot() {
+        String errorMessage = new HomePage(getDriver())
+                .clickNewItem()
+                .enterItemName(".")
+                .getErrorMessage();
 
-        createJob(MULTIBRANCH_PIPELINE_NAME);
+        Assert.assertEquals(errorMessage, "» “.” is not an allowed name");
+    }
 
-        getDriver().findElement(By.xpath(("//a[contains(@href,'%s')]").formatted(MULTIBRANCH_PIPELINE_NAME))).click();
+    @Test
+    public void testVerifyErrorMessageWhenCreateWithEmptyName() {
+        String errorMessage = new HomePage(getDriver())
+                .clickNewItem()
+                .selectMultibranchPipelineProject()
+                .getErrorMessage();
 
-        getDriver().findElement(By.cssSelector("[data-message*='Delete the Multibranch Pipeline']")).click();
-
-        getDriver().findElement(By.cssSelector("[data-id='ok']")).click();
-
-        String dashboardText = getDriver().findElement(By.tagName("h1")).getText();
-
-        Assert.assertEquals(dashboardText, "Welcome to Jenkins!");
+        Assert.assertEquals(errorMessage, "» This field cannot be empty, please enter a valid name");
     }
 
     @Test
@@ -102,38 +109,6 @@ public class MultibranchPipelineTest extends BaseTest {
 
     @Ignore
     @Test
-    public void testTryCreateProjectExistName() {
-        final String projectName = "MultiBuild";
-        final String errorMessage = "» A job already exists with the name " + "‘" + projectName + "’";
-
-        getDriver().findElement(By.cssSelector("[href$='/newJob']")).click();
-        getDriver().findElement(By.id("name")).sendKeys(projectName);
-
-        scrollDown();
-
-        getDriver().findElement(By.cssSelector("[class$='MultiBranchProject']")).click();
-        getDriver().findElement(By.id("ok-button")).click();
-
-        scrollDown();
-
-        getDriver().findElement(By.xpath("//*[@id='bottom-sticker']/div/button[1]")).click();
-        getDriver().findElement(By.xpath("//*[@id='jenkins-home-link']")).click();
-
-        getDriver().findElement(By.cssSelector("[href$='/newJob']")).click();
-
-        scrollDown();
-
-        getDriver().findElement(By.cssSelector("[class$='MultiBranchProject']")).click();
-        getDriver().findElement(By.id("name")).sendKeys(projectName);
-
-        String actualMessage = getWait5().until(ExpectedConditions.visibilityOfElementLocated(By
-                .xpath("//*[@id='itemname-invalid']"))).getText();
-
-        Assert.assertEquals(actualMessage, errorMessage);
-    }
-
-    @Ignore
-    @Test
     public void testSelectingTriggersScanPeriodFromConfigPage() {
         WebElement selectedValue = new HomePage(getDriver())
                 .clickNewItem()
@@ -145,19 +120,6 @@ public class MultibranchPipelineTest extends BaseTest {
                 .getSelectedValue();
 
         Assert.assertTrue(selectedValue.isSelected());
-    }
-
-    @Test
-    public void testCreateOneJobAndDisplayOnStartPage() {
-        List<String> itemList = new HomePage(getDriver())
-                .clickNewItem()
-                .enterItemName(MULTIBRANCH_PIPELINE_NAME)
-                .selectMultibranchPipelineAndClickOk()
-                .clickSaveButton()
-                .gotoHomePage()
-                .getItemList();
-
-        Assert.assertTrue(itemList.contains(MULTIBRANCH_PIPELINE_NAME));
     }
 
     @Test
@@ -188,28 +150,6 @@ public class MultibranchPipelineTest extends BaseTest {
     }
 
     @Test
-    public void testEnterInvalidNameDotAndSeesAppropriateMessages() {
-        getDriver().findElement(By.xpath("//a[@href='/view/all/newJob']")).click();
-
-        getDriver().findElement(By.name("name")).sendKeys(".");
-
-        Assert.assertEquals(
-                getWait2().until(ExpectedConditions.visibilityOfElementLocated(By.id("itemname-invalid"))).getText(),
-                "» “.” is not an allowed name");
-    }
-
-    @Test
-    public void testEnterInvalidNameEmptyAndSeesAppropriateMessages() {
-        getDriver().findElement(By.xpath("//a[@href='/view/all/newJob']")).click();
-
-        getDriver().findElement(By.xpath("//li[contains(@class,'MultiBranchProject')]")).click();
-
-        Assert.assertEquals(
-                getWait2().until(ExpectedConditions.visibilityOfElementLocated(By.id("itemname-required"))).getText(),
-                "» This field cannot be empty, please enter a valid name");
-    }
-
-    @Test
     public void testCreateJobAndJobNameVisibleOnStatusPage() {
         createJob(MULTIBRANCH_PIPELINE_NAME);
 
@@ -233,45 +173,48 @@ public class MultibranchPipelineTest extends BaseTest {
 
     @Test
     public void testDeleteJobUsingSidebarStatusPage() {
-        new HomePage(getDriver())
+        List<String> projectList = new HomePage(getDriver())
                 .clickNewItem()
                 .enterItemName(MULTIBRANCH_PIPELINE_NAME)
                 .selectMultibranchPipelineAndClickOk()
                 .clickSaveButton()
                 .gotoHomePage()
                 .clickOnCreatedItem(MULTIBRANCH_PIPELINE_NAME)
-                .deleteItemBySidebar();
+                .deleteItemBySidebar()
+                .getItemList();
 
-        Assert.assertTrue(getDriver().findElements(
-                By.xpath("//span[text()='%s']".formatted(MULTIBRANCH_PIPELINE_NAME))).isEmpty());
+        Assert.assertListNotContainsObject(projectList, MULTIBRANCH_PIPELINE_NAME,
+                "Project is not deleted");
     }
 
     @Test
     public void testDeleteJobUsingItemDropdownOnDashboard() {
-        new HomePage(getDriver())
+        List<String> projectList = new HomePage(getDriver())
                 .clickNewItem()
                 .enterItemName(MULTIBRANCH_PIPELINE_NAME)
                 .selectMultibranchPipelineAndClickOk()
                 .clickSaveButton()
                 .gotoHomePage()
-                .deleteItemViaChevronItem(MULTIBRANCH_PIPELINE_NAME);
+                .deleteItemViaChevronItem(MULTIBRANCH_PIPELINE_NAME)
+                .getItemList();
 
-        Assert.assertTrue(getDriver().findElements(
-                By.xpath("//span[text()='%s']".formatted(MULTIBRANCH_PIPELINE_NAME))).isEmpty());
+        Assert.assertListNotContainsObject(projectList, MULTIBRANCH_PIPELINE_NAME,
+                "Project is not deleted");
     }
 
     @Test
     public void testDeleteJobUsingDropdownBreadcrumbJobPage() {
-        new HomePage(getDriver())
+        List<String> projectList = new HomePage(getDriver())
                 .clickNewItem()
                 .enterItemName(MULTIBRANCH_PIPELINE_NAME)
                 .selectMultibranchPipelineAndClickOk()
                 .clickSaveButton()
                 .gotoHomePage()
                 .clickOnCreatedItem(MULTIBRANCH_PIPELINE_NAME)
-                .deleteJobUsingDropdownBreadcrumbJobPage();
+                .deleteJobUsingDropdownBreadcrumbJobPage()
+                .getItemList();
 
-        Assert.assertTrue(getDriver().findElements(
-                By.xpath("//span[text()='%s']".formatted(MULTIBRANCH_PIPELINE_NAME))).isEmpty());
+        Assert.assertListNotContainsObject(projectList, MULTIBRANCH_PIPELINE_NAME,
+                "Project is not deleted");
     }
 }
