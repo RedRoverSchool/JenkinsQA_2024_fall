@@ -47,7 +47,7 @@ public class MultibranchPipelineTest extends BaseTest {
         final String description = "AddedDescription";
 
         String actualDescription = new HomePage(getDriver())
-                .openMultibranchProject(MULTIBRANCH_PIPELINE_NAME)
+                .openMultibranchPipelineProject(MULTIBRANCH_PIPELINE_NAME)
                 .clickConfigureSidebar(MULTIBRANCH_PIPELINE_NAME)
                 .enterDescription(description)
                 .clickSaveButton()
@@ -179,7 +179,7 @@ public class MultibranchPipelineTest extends BaseTest {
                 .selectMultibranchPipelineAndClickOk()
                 .clickSaveButton()
                 .gotoHomePage()
-                .clickOnCreatedItem(MULTIBRANCH_PIPELINE_NAME)
+                .openMultibranchPipelineProject(MULTIBRANCH_PIPELINE_NAME)
                 .deleteItemBySidebar()
                 .getItemList();
 
@@ -210,7 +210,7 @@ public class MultibranchPipelineTest extends BaseTest {
                 .selectMultibranchPipelineAndClickOk()
                 .clickSaveButton()
                 .gotoHomePage()
-                .clickOnCreatedItem(MULTIBRANCH_PIPELINE_NAME)
+                .openMultibranchPipelineProject(MULTIBRANCH_PIPELINE_NAME)
                 .deleteJobUsingDropdownBreadcrumbJobPage()
                 .getItemList();
 
