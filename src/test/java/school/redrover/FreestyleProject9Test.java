@@ -12,13 +12,6 @@ import java.util.List;
 
 public class FreestyleProject9Test extends BaseTest {
 
-    private static final String FREESTYLE_NAME = "FREESTYLE_NAME";
-
-    @Test
-    public void test() {
-        createFreestyleProject(FREESTYLE_NAME);
-    }
-
     @Test
     public void testSortFreestyleProjects() {
         final List<String> nameOfFreestyleJob = List.of("8", "0", "3");
