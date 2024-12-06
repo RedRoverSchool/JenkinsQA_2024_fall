@@ -182,5 +182,47 @@ public class FolderTest extends BaseTest {
         Assert.assertEquals(errorMessage, "» A job already exists with the name ‘Freestyle projects’");
     }
 
+    @Test
+    public void testDeleteViaMainPageChevron () {
+        List<String> setOfProjects = new HomePage(getDriver())
+                .createNewFolder(FIRST_FOLDER_NAME)
+                .deleteFolderViaChevron(FIRST_FOLDER_NAME)
+                .getItemList();
 
+        Assert.assertTrue(setOfProjects.isEmpty());
+    }
+
+    @Test
+    public void testDeleteViaSidebarFromProjectPage () {
+        List<String> setOfProjects = new HomePage(getDriver())
+                .createNewFolder(FIRST_FOLDER_NAME)
+                .deleteFolder(FIRST_FOLDER_NAME)
+                .getItemList();
+
+        Assert.assertTrue(setOfProjects.isEmpty());
+    }
+
+    @Test
+    public void testCancelDeletingViaSidebarProjectPage () {
+        List<String> setOfProjects = new HomePage(getDriver())
+                .createNewFolder(FIRST_FOLDER_NAME)
+                .openFolder(FIRST_FOLDER_NAME)
+                .cancelDeletingViaModalWindow()
+                .gotoHomePage()
+                .getItemList();
+
+        Assert.assertTrue(setOfProjects.contains(FIRST_FOLDER_NAME));
+    }
+
+    @Test
+    public void testDeleteViaMyViewChevron () {
+        List<String> setOfProjects = new HomePage(getDriver())
+                .createNewFolder(FIRST_FOLDER_NAME)
+                .clickMyViewsButton()
+                .deleteItemViaChevronItem(FIRST_FOLDER_NAME)
+                .gotoHomePage()
+                .getItemList();
+
+        Assert.assertTrue(setOfProjects.isEmpty());
+    }
 }
