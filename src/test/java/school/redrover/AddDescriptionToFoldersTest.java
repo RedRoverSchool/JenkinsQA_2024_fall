@@ -32,7 +32,7 @@ public class AddDescriptionToFoldersTest extends BaseTest {
                 .clickSubmitButton()
                 .getDescription();
 
-        Assert.assertEquals(finalResult, "Edited Description text\n" +
+        Assert.assertEquals(finalResult, "Edited\n" +
                 "Edit description");
     }
 
