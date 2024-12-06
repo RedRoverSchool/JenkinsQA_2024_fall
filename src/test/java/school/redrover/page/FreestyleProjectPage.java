@@ -11,46 +11,46 @@ import java.util.List;
 public class FreestyleProjectPage extends BaseProjectPage<FreestyleProjectPage> {
 
     @FindBy(tagName = "h1")
-    WebElement projectName;
+    private WebElement projectName;
 
     @FindBy(xpath = "//tbody//tr[2]//td//a[contains(@class, 'display-name')]")
-    WebElement lastBuildNumber;
+    private WebElement lastBuildNumber;
 
     @FindBy(tagName = "h1")
-    WebElement workspaceTitle;
+    private WebElement workspaceTitle;
 
     @FindBy(xpath = "//tr")
-    List<WebElement> listOfBuilds;
+    private List<WebElement> listOfBuilds;
 
     @FindBy(tagName = "dialog")
-    List<WebElement> wipeOutCurrentWorkspaceDialog;
+    private List<WebElement> wipeOutCurrentWorkspaceDialog;
 
     @FindBy(css = "dialog *")
-    List<WebElement> wipeOutCurrentWorkspaceDialogOptions;
+    private List<WebElement> wipeOutCurrentWorkspaceDialogOptions;
 
-    @FindBy(xpath = "//span[text()='Rename']/..")
+    private @FindBy(xpath = "//span[text()='Rename']/..")
     WebElement renameSidebar;
 
     @FindBy(xpath = "//a[contains(@href, 'configure')]")
-    WebElement configureSidebar;
+    private WebElement configureSidebar;
 
     @FindBy(xpath = "//a[@data-build-success='Build scheduled']")
-    WebElement buildNowSidebar;
+    private WebElement buildNowSidebar;
 
     @FindBy(xpath = "//tbody//tr[2]//a")
-    WebElement lastBuildSuccessBuildIcon;
+    private WebElement lastBuildSuccessBuildIcon;
 
     @FindBy(xpath = "//a[@data-title='Delete Project']")
-    WebElement deleteProjectSidebar;
+    private WebElement deleteProjectSidebar;
 
     @FindBy(xpath = "//button[@data-id='ok']")
-    WebElement yesButton;
+    private WebElement yesButton;
 
     @FindBy(xpath = "//span[text()='Workspace']/..")
-    WebElement workspaceSidebar;
+    private WebElement workspaceSidebar;
 
     @FindBy(xpath = "//a[@data-title='Wipe Out Current Workspace']")
-    WebElement wipeOutCurrentWorkspaceSidebar;
+    private WebElement wipeOutCurrentWorkspaceSidebar;
 
     public FreestyleProjectPage(WebDriver driver) {
         super(driver);

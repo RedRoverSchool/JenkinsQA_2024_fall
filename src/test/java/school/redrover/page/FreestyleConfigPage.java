@@ -14,25 +14,25 @@ import school.redrover.runner.TestUtils;
 public class FreestyleConfigPage extends BaseConfigPage<FreestyleConfigPage, FreestyleProjectPage> {
 
     @FindBy(xpath = "//div[@class='CodeMirror']")
-    WebElement executeShellCommandField;
+    private WebElement executeShellCommandField;
 
     @FindBy(xpath = "//button[@name = 'Submit']")
-    WebElement submitButton;
+    private WebElement submitButton;
 
     @FindBy(xpath = "//textarea[@name='description']")
-    WebElement descriptionField;
+    private WebElement descriptionField;
 
     @FindBy(xpath = "//button[contains(text(),'Add build step')]")
-    WebElement addBuildStepButton;
+    private WebElement addBuildStepButton;
 
     @FindBy(xpath = "//span[contains(text(),'Build Steps')]/..")
-    WebElement buildStepsSidebar;
+    private WebElement buildStepsSidebar;
 
     @FindBy(xpath = "//textarea[@name='command']")
-    WebElement executeWindowsBatchCommandField;
+    private WebElement executeWindowsBatchCommandField;
 
     @FindBy(xpath = "//button[contains(text(), 'Execute shell')]")
-    WebElement executeShellBuildStep;
+    private WebElement executeShellBuildStep;
 
     public FreestyleConfigPage(WebDriver driver) {
         super(driver);

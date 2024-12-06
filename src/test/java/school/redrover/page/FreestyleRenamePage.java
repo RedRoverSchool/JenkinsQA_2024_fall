@@ -8,10 +8,10 @@ import school.redrover.page.base.BasePage;
 public class FreestyleRenamePage extends BasePage {
 
     @FindBy(xpath = "//input[@checkdependson ='newName']")
-    WebElement inputField;
+    private WebElement inputField;
 
     @FindBy(name = "Submit")
-    WebElement renameButton;
+    private WebElement renameButton;
 
     public FreestyleRenamePage(WebDriver driver) {
         super(driver);

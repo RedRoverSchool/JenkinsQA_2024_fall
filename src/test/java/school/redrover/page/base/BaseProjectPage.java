@@ -11,34 +11,34 @@ import java.util.List;
 public abstract class BaseProjectPage<Self extends BaseProjectPage<?>> extends BasePage {
 
     @FindBy(id = "description-link")
-    WebElement descriptionButton;
+    private WebElement descriptionButton;
 
     @FindBy(xpath = "//span[text()='New Item']/ancestor::a")
-    WebElement newItem;
+    private WebElement newItem;
 
     @FindBy(name = "description")
-    WebElement descriptionField;
+    private WebElement descriptionField;
 
     @FindBy(name = "Submit")
-    WebElement submitButton;
+    private WebElement submitButton;
 
     @FindBy(id = "description")
-    WebElement descriptionText;
+    private WebElement descriptionText;
 
     @FindBy(xpath = "//a[contains(@href,'rename')]")
-    WebElement renameButtonViaSidebar;
+    private WebElement renameButtonViaSidebar;
 
     @FindBy(name = "newName")
-    WebElement newNameField;
+    private WebElement newNameField;
 
     @FindBy(xpath = "//div[@id='main-panel']/p")
-    WebElement errorMessage;
+    private WebElement errorMessage;
 
     @FindBy(xpath = "//div[@class='task ']//span[2]")
-    List<WebElement> sidebarElementList;
+    private List<WebElement> sidebarElementList;
 
     @FindBy(xpath = "//*[@id='main-panel']/h1")
-    WebElement itemName;
+    private WebElement itemName;
 
     public BaseProjectPage(WebDriver driver) {
         super(driver);
