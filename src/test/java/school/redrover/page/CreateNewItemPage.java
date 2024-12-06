@@ -11,37 +11,37 @@ import school.redrover.page.base.BaseCreatePage;
 public class CreateNewItemPage extends BaseCreatePage {
 
     @FindBy(xpath = "//span[text()= 'Multibranch Pipeline']")
-    WebElement multibranchPipeline;
+    private WebElement multibranchPipeline;
 
     @FindBy(xpath = "//span[text()='Folder']")
-    WebElement folder;
+    private WebElement folder;
 
     @FindBy(xpath = "//span[text()='Multi-configuration project']")
-    WebElement multiConfigurationProject;
+    private WebElement multiConfigurationProject;
 
     @FindBy(xpath = "//span[text()='Freestyle project']")
-    WebElement freestyleProject;
+    private WebElement freestyleProject;
 
     @FindBy(xpath = "//li[@class='org_jenkinsci_plugins_workflow_job_WorkflowJob']")
-    WebElement pipeline;
+    private WebElement pipeline;
 
     @FindBy(id = "itemname-required")
-    WebElement emptyNameMessage;
+    private WebElement emptyNameMessage;
 
     @FindBy(xpath = "//div[@class='add-item-name']/div[@class='input-validation-message']")
-    WebElement invalidOrSameNameMessage;
+    private WebElement invalidOrSameNameMessage;
 
     @FindBy(id = "from")
-    WebElement copyFromField;
+    private WebElement copyFromField;
 
     @FindBy(xpath = "//button[@id = 'ok-button']")
-    WebElement okButton;
+    private WebElement okButton;
 
     @FindBy(xpath = "//li[contains(@class,'jenkins_branch_OrganizationFolder')]")
-    WebElement organizationFolder;
+    private WebElement organizationFolder;
 
     @FindBy(id = "name")
-    WebElement nameField;
+    private WebElement nameField;
 
     public CreateNewItemPage(WebDriver driver) {
         super(driver);
