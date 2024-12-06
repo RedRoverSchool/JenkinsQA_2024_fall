@@ -109,6 +109,16 @@ public class FreestyleProjectTest extends BaseTest {
     }
 
     @Test(dependsOnMethods = "testCreateProjectViaCreateJobButton")
+    public void testAddDescription() {
+        String description = new HomePage(getDriver())
+                .openFreestyleProject(PROJECT_NAME)
+                .editDescription(DESCRIPTION)
+                .getDescription();
+
+        Assert.assertEquals(description, DESCRIPTION);
+    }
+
+    @Test(dependsOnMethods = "testAddDescription")
     public void testEditDescriptionOnProjectPage() {
         final String newDescription = "New " + DESCRIPTION;
 
@@ -121,6 +131,16 @@ public class FreestyleProjectTest extends BaseTest {
         Assert.assertEquals(actualDescription, newDescription);
     }
 
+    @Test(dependsOnMethods = "testEditDescriptionOnProjectPage")
+    public void testDeleteDescription() {
+        String description = new HomePage(getDriver())
+                .openFreestyleProject(PROJECT_NAME)
+                .clearDescription()
+                .getDescription();
+
+        Assert.assertEquals(description, "");
+    }
+
     @Test(dependsOnMethods = "testCreateProjectViaSidebarMenu")
     public void testRenameProjectViaSidebarMenu() {
         final String newName = "New " + PROJECT_NAME;
@@ -128,6 +148,20 @@ public class FreestyleProjectTest extends BaseTest {
         String actualProjectName = new HomePage(getDriver())
                 .openFreestyleProject(PROJECT_NAME)
                 .clickRenameSidebar()
+                .clearOldAndInputNewProjectName(newName)
+                .clickRenameButton()
+                .getProjectName();
+
+        Assert.assertEquals(actualProjectName, newName);
+    }
+
+    @Test(dependsOnMethods = "testCreateProjectViaCreateJobButton")
+    public void testRenameProjectViaDropdown() {
+        final String newName = "New " + PROJECT_NAME;
+
+        String actualProjectName = new HomePage(getDriver())
+                .openDropdownViaChevron(PROJECT_NAME)
+                .clickRenameInProjectDropdown(PROJECT_NAME)
                 .clearOldAndInputNewProjectName(newName)
                 .clickRenameButton()
                 .getProjectName();
@@ -262,6 +296,23 @@ public class FreestyleProjectTest extends BaseTest {
                 .getWelcomeTitle();
 
         Assert.assertEquals(welcomeText, "Welcome to Jenkins!", "There is a project on Dashboard");
+    }
+
+    @Test
+    public void testDeleteProjectViaDropdown() {
+        String welcomeText = new HomePage(getDriver())
+                .clickNewItem()
+                .enterItemName(PROJECT_NAME)
+                .selectFreestyleProjectAndClickOk()
+                .clickSaveButton()
+                .gotoHomePage()
+
+                .openDropdownViaChevron(PROJECT_NAME)
+                .clickDeleteInProjectDropdown(PROJECT_NAME)
+                .clickYesForConfirmDelete()
+                .getWelcomeTitle();
+
+        Assert.assertEquals(welcomeText, "Welcome to Jenkins!");
     }
 
     @Test(dependsOnMethods = "testBuildProjectViaSidebarMenuOnProjectPage")
