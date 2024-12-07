@@ -20,8 +20,7 @@ public class DeleteFreestyleProjectTest extends BaseTest {
         TestUtils.createFreestyleProject(getDriver(), SECOND_PROJECT);
 
         List<String> projectsList = new HomePage(getDriver())
-                .selectDeleteFromItemMenu(FIRST_PROJECT)
-                .clickYesForConfirmDelete()
+                .selectDeleteFromItemMenuAndClickYes(FIRST_PROJECT)
                 .getItemList();
 
         Assert.assertEquals(projectsList.size(),1);
@@ -31,8 +30,7 @@ public class DeleteFreestyleProjectTest extends BaseTest {
     @Test(dependsOnMethods = "testDeleteFirstProjectViaChevron")
     public void testDeleteAllProjectsViaChevron() {
         List<String> projectsList = new HomePage(getDriver())
-                .selectDeleteFromItemMenu(SECOND_PROJECT)
-                .clickYesForConfirmDelete()
+                .selectDeleteFromItemMenuAndClickYes(SECOND_PROJECT)
                 .getItemList();
 
         Assert.assertEquals(projectsList.size(), 0);

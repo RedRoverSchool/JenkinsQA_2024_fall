@@ -97,7 +97,7 @@ public class StartPageTest extends BaseTest {
         TestUtils.createFolder(getDriver(), NEW_FOLDER_NAME);
 
         String welcomeText = new HomePage(getDriver())
-                .deleteFolderViaChevron(NEW_FOLDER_NAME)
+                .selectDeleteFromItemMenuAndClickYes(NEW_FOLDER_NAME)
                 .getWelcomeDescriptionText();
 
         Assert.assertEquals(welcomeText,

@@ -172,7 +172,6 @@ public class FreestyleProjectTest extends BaseTest {
         final String newName = "New " + PROJECT_NAME;
 
         String actualProjectName = new HomePage(getDriver())
-                .openDropdownViaChevron(PROJECT_NAME)
                 .clickRenameInProjectDropdown(PROJECT_NAME)
                 .clearOldAndInputNewProjectName(newName)
                 .clickRenameButton()
@@ -323,9 +322,7 @@ public class FreestyleProjectTest extends BaseTest {
                 .clickSaveButton()
                 .gotoHomePage()
 
-                .openDropdownViaChevron(PROJECT_NAME)
-                .clickDeleteInProjectDropdown(PROJECT_NAME)
-                .clickYesForConfirmDelete()
+                .selectDeleteFromItemMenuAndClickYes(PROJECT_NAME)
                 .getWelcomeTitle();
 
         Assert.assertEquals(welcomeText, "Welcome to Jenkins!");

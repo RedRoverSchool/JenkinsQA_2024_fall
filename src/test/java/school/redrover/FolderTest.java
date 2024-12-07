@@ -191,7 +191,7 @@ public class FolderTest extends BaseTest {
         TestUtils.createFolder(getDriver(), FIRST_FOLDER_NAME);
 
         List<String> setOfProjects = new HomePage(getDriver())
-                .deleteFolderViaChevron(FIRST_FOLDER_NAME)
+                .selectDeleteFromItemMenuAndClickYes(FIRST_FOLDER_NAME)
                 .getItemList();
 
         Assert.assertTrue(setOfProjects.isEmpty());
@@ -202,7 +202,7 @@ public class FolderTest extends BaseTest {
         TestUtils.createFolder(getDriver(), FIRST_FOLDER_NAME);
 
         List<String> setOfProjects = new HomePage(getDriver())
-                .deleteFolder(FIRST_FOLDER_NAME)
+                .selectDeleteFromItemMenuAndClickYes(FIRST_FOLDER_NAME)
                 .getItemList();
 
         Assert.assertTrue(setOfProjects.isEmpty());
@@ -227,7 +227,7 @@ public class FolderTest extends BaseTest {
 
         List<String> setOfProjects = new HomePage(getDriver())
                 .clickMyViewsButton()
-                .deleteItemViaChevronItem(FIRST_FOLDER_NAME)
+                .selectDeleteFromItemMenuAndClickYes(FIRST_FOLDER_NAME)
                 .gotoHomePage()
                 .getItemList();
 
