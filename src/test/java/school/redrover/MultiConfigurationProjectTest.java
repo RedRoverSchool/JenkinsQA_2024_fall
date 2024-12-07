@@ -29,16 +29,15 @@ public class MultiConfigurationProjectTest extends BaseTest {
         Assert.assertEquals(itemList.get(0), PROJECT_NAME);
     }
 
-    @Test(description = " MultiConfigurationProjectTest | Add descriptions to existing project")
+    @Test(dependsOnMethods = "testCreateProjectWithoutDescription")
     public void testAddDescriptions() {
-        testCreateProjectWithoutDescription();
-        getDriver().findElement(By.xpath("//td/a[@href='job/Multi-configuration%20project/']")).click();
-        getDriver().findElement(By.xpath("//a[@id='description-link']")).click();
-        getDriver().findElement(By.xpath("//textarea[@name = 'description']")).sendKeys(DESCRIPTIONS);
-        getDriver().findElement(By.xpath("//div/button[@name = 'Submit']")).submit();
+        String description = new HomePage(getDriver())
+                .openMultiConfigurationProject(PROJECT_NAME)
+                .editDescription(DESCRIPTIONS)
+                .clickSubmitButton()
+                .getDescription();
 
-        Assert.assertEquals(getDriver().findElement(By.xpath("//div[@id='description']/div[1]")).getText(), DESCRIPTIONS);
-
+        Assert.assertEquals(description, DESCRIPTIONS);
     }
 
     @Test
