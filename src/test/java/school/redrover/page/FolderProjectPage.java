@@ -135,4 +135,11 @@ public class FolderProjectPage extends BaseProjectPage<FolderProjectPage, Folder
                 .map(WebElement::getText)
                 .toList();
     }
+
+    public HomePage deleteFolderViaSidebar() {
+        getDriver().findElement(By.xpath("//span[contains(text(),'Delete')]")).click();
+        getDriver().findElement(By.xpath("//button[@data-id= 'ok']")).click();
+
+        return new HomePage(getDriver());
+    }
 }

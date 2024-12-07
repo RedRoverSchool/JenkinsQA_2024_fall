@@ -129,4 +129,13 @@ public class TestUtils {
                 .gotoHomePage();
     }
 
+    public static void createMultiConfigurationProject(WebDriver driver, String name) {
+        new HomePage(driver)
+                .clickNewItem()
+                .enterItemName(name)
+                .selectMultiConfigurationAndClickOk()
+                .clickSaveButton()
+                .gotoHomePage();
+    }
+
 }
