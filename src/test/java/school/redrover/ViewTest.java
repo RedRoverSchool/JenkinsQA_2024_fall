@@ -91,8 +91,9 @@ public class ViewTest extends BaseTest {
 
     @Test
     public void testCreateNewViewForm() {
+        TestUtils.createFolder(getDriver(), "NewFolder");
+
         NewViewPage newViewPage = new HomePage(getDriver())
-                .createNewFolder("NewFolder")
                 .gotoHomePage()
                 .clickCreateNewViewButton();
 

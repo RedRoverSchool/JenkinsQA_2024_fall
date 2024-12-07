@@ -5,17 +5,26 @@ import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import school.redrover.page.base.BaseProjectPage;
 
-public class MultibranchPipelineProjectPage extends BaseProjectPage<MultibranchPipelineProjectPage> {
+public class MultibranchPipelineProjectPage extends BaseProjectPage<MultibranchPipelineProjectPage, MultibranchPipelineConfigPage> {
+
+    @FindBy(id = "view-message")
+    private WebElement description;
 
     public MultibranchPipelineProjectPage(WebDriver driver) {
         super(driver);
     }
 
+    @Override
+    public MultibranchPipelineConfigPage createProjectConfigPage() {
+        return new MultibranchPipelineConfigPage(getDriver());
+    }
+
     public String getDescription() {
-        return getWait5().until(ExpectedConditions.visibilityOfElementLocated(By.id("view-message"))).getText();
+        return getWait5().until(ExpectedConditions.visibilityOf(description)).getText();
     }
 
     public HomePage deleteItemBySidebar() {

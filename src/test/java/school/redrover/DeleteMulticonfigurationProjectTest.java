@@ -77,7 +77,7 @@ public class DeleteMulticonfigurationProjectTest extends BaseTest {
 
         getDriver().findElement(By.xpath("//button[@data-id='ok']")).click();
 
-        Assert.assertTrue(getDriver().getPageSource().contains("Welcome to Jenkins"));
+        Assert.assertEquals(getWait10().until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//h1"))).getText(), "Welcome to Jenkins!");
     }
 
     @Test

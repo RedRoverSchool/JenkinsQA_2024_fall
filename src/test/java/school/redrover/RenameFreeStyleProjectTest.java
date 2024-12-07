@@ -4,6 +4,7 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 import school.redrover.page.HomePage;
 import school.redrover.runner.BaseTest;
+import school.redrover.runner.TestUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,10 +17,11 @@ public class RenameFreeStyleProjectTest extends BaseTest {
 
     @Test
     public void testCorrectName () {
+        TestUtils.createFreestyleProject(getDriver(), PROJECT_NAME);
+
         String renamingResult = new HomePage(getDriver())
-                .createFreestyleProject(PROJECT_NAME)
                 .openFreestyleProject(PROJECT_NAME)
-                .renameProject(PROJECT_NAME_EDITED)
+                .renameItem(PROJECT_NAME_EDITED)
                 .getProjectName();
 
         Assert.assertEquals(renamingResult, PROJECT_NAME_EDITED);
@@ -29,7 +31,7 @@ public class RenameFreeStyleProjectTest extends BaseTest {
     public void testTheSameName () {
         String theSameNameWarning = new HomePage(getDriver())
                 .openFreestyleProject(PROJECT_NAME_EDITED)
-                .renameProject(PROJECT_NAME_EDITED)
+                .renameItem(PROJECT_NAME_EDITED)
                 .getRenameWarningMessage();
 
         Assert.assertEquals(theSameNameWarning, "The new name is the same as the current name.");
@@ -39,7 +41,7 @@ public class RenameFreeStyleProjectTest extends BaseTest {
     public void testEmptyName () {
         String emptyNameWarning = new HomePage(getDriver())
                 .openFreestyleProject(PROJECT_NAME_EDITED)
-                .renameProject("")
+                .renameItem("")
                 .getRenameWarningMessage();
 
         Assert.assertEquals(emptyNameWarning, "No name is specified");
@@ -51,7 +53,7 @@ public class RenameFreeStyleProjectTest extends BaseTest {
             String incorrectSymbolsMessage = new HomePage(getDriver())
                     .gotoHomePage()
                     .openFreestyleProject(PROJECT_NAME_EDITED)
-                    .renameProject(symbols)
+                    .renameItem(symbols)
                     .getRenameWarningMessage();
 
             Assert.assertEquals(incorrectSymbolsMessage,"‘%s’ is an unsafe character".formatted(symbols));

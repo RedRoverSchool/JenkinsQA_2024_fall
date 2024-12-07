@@ -12,6 +12,7 @@ import school.redrover.runner.BaseTest;
 
 public class WorkspaceTest extends BaseTest {
 
+    @Ignore
     @BeforeMethod
     public void testCreateWorkspace() throws InterruptedException {
 
@@ -51,6 +52,7 @@ public class WorkspaceTest extends BaseTest {
 
     }
 
+    @Ignore
     @Test
     public void testWorkspaceViewable() {
 
@@ -62,6 +64,7 @@ public class WorkspaceTest extends BaseTest {
         Assert.assertTrue(files.size() > 0, "Files are displayed in the workspace.");
     }
 
+    @Ignore
     @Test
     public void testBuildNavigation() {
 

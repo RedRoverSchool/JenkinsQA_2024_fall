@@ -1,63 +1,135 @@
 package school.redrover.page.base;
 
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import school.redrover.page.CreateNewItemPage;
 
 import java.util.List;
 
-public abstract class BaseProjectPage<Self extends BaseProjectPage<?>> extends BasePage {
+public abstract class BaseProjectPage<Self extends BaseProjectPage<?, ?>, ProjectConfigPage> extends BasePage {
+
+    @FindBy(id = "description-link")
+    private WebElement descriptionButton;
+
+    @FindBy(xpath = "//span[text()='New Item']/ancestor::a")
+    private WebElement newItem;
+
+    @FindBy(name = "description")
+    private WebElement descriptionField;
+
+    @FindBy(name = "Submit")
+    private WebElement submitButton;
+
+    @FindBy(xpath = "//div[@id='description']/div[1]")
+    private WebElement descriptionText;
+
+    @FindBy(xpath = "//a[contains(@href,'rename')]")
+    private WebElement renameButtonViaSidebar;
+
+    @FindBy(name = "newName")
+    private WebElement newNameField;
+
+    @FindBy(xpath = "//div[@id='main-panel']/p")
+    private WebElement errorMessage;
+
+    @FindBy(xpath = "//div[@class='task ']//span[2]")
+    private List<WebElement> sidebarElementList;
+
+    @FindBy(xpath = "//*[@id='main-panel']/h1")
+    private WebElement itemName;
+
+    @FindBy(className = "textarea-show-preview")
+    private WebElement previewOption;
+
+    @FindBy(className = "textarea-preview")
+    private WebElement previewDescriptionText;
+
+    @FindBy(xpath = "//a[@id='description-link']/text()")
+    private WebElement descriptionButtonText;
+
+    @FindBy(css = "[class*='task-link-wrapper'] [href$='/configure']")
+    private WebElement sidebarConfigureButton;
 
     public BaseProjectPage(WebDriver driver) {
         super(driver);
     }
 
+    protected abstract ProjectConfigPage createProjectConfigPage();
+
     public CreateNewItemPage clickNewItem() {
-        getDriver().findElement(By.xpath("//span[text()='New Item']/ancestor::a")).click();
+        newItem.click();
 
         return new CreateNewItemPage(getDriver());
     }
 
     public Self editDescription(String text) {
-        getDriver().findElement(By.id("description-link")).click();
-        getDriver().findElement(By.name("description")).sendKeys(text);
-        getDriver().findElement(By.name("Submit")).click();
+        descriptionButton.click();
+        descriptionField.clear();
+        descriptionField.sendKeys(text);
 
-        getWait2().until(ExpectedConditions.textToBe(By.id("description"), text));
+        return (Self) this;
+    }
+
+    public Self clickSubmitButton() {
+        submitButton.click();
 
         return (Self) this;
     }
 
     public Self clearDescription() {
-        getDriver().findElement(By.id("description-link")).click();
-        getDriver().findElement(By.name("description")).clear();
-        getDriver().findElement(By.name("Submit")).click();
+        descriptionButton.click();
+        descriptionField.clear();
+        submitButton.click();
 
         return (Self) this;
     }
 
-    public Self renameProject (String newName) {
-        getWait10().until(ExpectedConditions.visibilityOfElementLocated(
-                By.xpath("/html/body/div[2]/div[1]/div[1]/div[7]/span/a"))).click();
-        getWait10().until(ExpectedConditions.visibilityOfElementLocated(By.name("newName"))).clear();
-        getWait10().until(ExpectedConditions.visibilityOfElementLocated(By.name("newName"))).sendKeys(newName);
-        getDriver().findElement(By.name("Submit")).click();
+    public Self clickPreview() {
+        previewOption.click();
+
         return (Self) this;
     }
 
-    public String getRenameWarningMessage () {
-        return getWait10().until(ExpectedConditions.visibilityOfElementLocated(
-                By.xpath("/html/body/div[2]/div[2]/p"))).getText();
+    public Self renameItem(String newName) {
+        renameButtonViaSidebar.click();
+        newNameField.clear();
+        newNameField.sendKeys(newName);
+        submitButton.click();
+        return (Self) this;
+    }
+
+    public String getPreviewDescriptionText() {
+        return previewDescriptionText.getText();
+    }
+
+    public String getRenameWarningMessage() {
+        return getWait10().until(ExpectedConditions.visibilityOf(errorMessage)).getText();
+    }
+
+    public String getItemName() {
+        return getWait10().until(ExpectedConditions.visibilityOf(itemName)).getText();
     }
 
     public String getDescription() {
-        return getDriver().findElement(By.id("description")).getText();
+        return descriptionText.getText();
+    }
+
+    public String getDescriptionButtonText() {
+        return descriptionButton.getText();
     }
 
     public List<String> getSidebarOptionList() {
-        return getWait5().until(ExpectedConditions.visibilityOfAllElementsLocatedBy(
-                By.xpath("//div[@class='task ']//span[2]"))).stream().map(WebElement::getText).toList();
+        return getWait5().until(ExpectedConditions.visibilityOfAllElements(sidebarElementList))
+                .stream()
+                .map(WebElement::getText)
+                .toList();
+    }
+
+    public ProjectConfigPage clickSidebarConfigButton() {
+        getWait2().until(ExpectedConditions.elementToBeClickable(sidebarConfigureButton)).click();
+
+        return createProjectConfigPage();
     }
 }
