@@ -54,7 +54,7 @@ public class ManageJenkinsTest extends BaseTest {
                 .getCreatedUserName();
 
         Assert.assertEquals(userList.size(),2);
-        Assert.assertEquals(userList.get(0), fullName);
+        Assert.assertEquals(userList.get(1), fullName);
     }
 
     @Ignore
