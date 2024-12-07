@@ -7,10 +7,10 @@ import org.openqa.selenium.support.FindBy;
 public abstract class BaseConfigPage<Self extends BaseConfigPage<?, ?>, ProjectPage extends BaseProjectPage> extends BasePage {
 
     @FindBy(css = "[name$='description']")
-    WebElement descriptionField;
+    private WebElement descriptionField;
 
     @FindBy(name = "Submit")
-    WebElement saveButton;
+    private WebElement saveButton;
 
     public BaseConfigPage(WebDriver driver) {
         super(driver);

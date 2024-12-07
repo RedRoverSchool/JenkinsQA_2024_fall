@@ -6,15 +6,19 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import school.redrover.page.base.BaseProjectPage;
-import school.redrover.runner.TestUtils;
 
 import java.util.Arrays;
 import java.util.List;
 
-public class FolderProjectPage extends BaseProjectPage<FolderProjectPage> {
+public class FolderProjectPage extends BaseProjectPage<FolderProjectPage, FolderConfigPage> {
 
     public FolderProjectPage(WebDriver driver) {
         super(driver);
+    }
+
+    @Override
+    public FolderConfigPage createProjectConfigPage() {
+        return new FolderConfigPage(getDriver());
     }
 
     public String getFolderDescription() {
@@ -54,13 +58,6 @@ public class FolderProjectPage extends BaseProjectPage<FolderProjectPage> {
         getWait10().until(ExpectedConditions.elementToBeClickable(
                 By.xpath("/html/body/dialog/div[3]/button[2]"))).click();
         return this;
-    }
-
-    public FolderConfigPage clickConfigureSidebar(String name) {
-        getWait2().until(ExpectedConditions.elementToBeClickable(
-                By.xpath("//a[@href='/job/%s/configure']".formatted(name)))).click();
-
-        return new FolderConfigPage(getDriver());
     }
 
     public String getDescriptionViaPreview () {

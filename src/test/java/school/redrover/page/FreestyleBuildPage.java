@@ -9,34 +9,34 @@ import school.redrover.page.base.BasePage;
 public class FreestyleBuildPage extends BasePage {
 
     @FindBy(xpath = "//input[@name='displayName']")
-    WebElement displayNameField;
+    private WebElement displayNameField;
 
     @FindBy(name = "description")
-    WebElement descriptionField;
+    private WebElement descriptionField;
 
     @FindBy(css = "svg[tooltip='Success']")
-    WebElement successIcon;
+    private WebElement successIcon;
 
     @FindBy(tagName = "h1")
-    WebElement statusSectionTitle;
+    private WebElement statusSectionTitle;
 
     @FindBy(id = "description")
-    WebElement buildDescription;
+    private WebElement buildDescription;
 
     @FindBy(id = "out")
-    WebElement consoleOutputMessage;
+    private WebElement consoleOutputMessage;
 
     @FindBy(xpath = "//span[contains(text(), 'Edit Build Information')]/..")
-    WebElement editBuildInformationSidebar;
+    private WebElement editBuildInformationSidebar;
 
     @FindBy(name = "Submit")
-    WebElement saveButton;
+    private WebElement saveButton;
 
     @FindBy(xpath = "//span[contains(text(), 'Delete build')]/..")
-    WebElement deleteBuildSidebar;
+    private WebElement deleteBuildSidebar;
 
     @FindBy(name = "Submit")
-    WebElement deleteButton;
+    private WebElement deleteButton;
 
     public FreestyleBuildPage(WebDriver driver) {
         super(driver);

@@ -67,7 +67,7 @@ public class PipelineProjectTest extends BaseTest {
     public void testVerifySidebarOptionsOnConfigurationPage() {
         List<String> actualSidebarOptionList = new HomePage(getDriver())
                 .openPipelineProject(PROJECT_NAME)
-                .clickConfigureSidebar(PROJECT_NAME)
+                .clickSidebarConfigButton()
                 .getSidebarConfigurationOption();
 
         Assert.assertEquals(
@@ -80,7 +80,7 @@ public class PipelineProjectTest extends BaseTest {
     public void testVerifyCheckboxTooltipsContainCorrectText() {
         Map<String, String> labelToTooltipTextMap = new HomePage(getDriver())
                 .openPipelineProject(PROJECT_NAME)
-                .clickConfigureSidebar(PROJECT_NAME)
+                .clickSidebarConfigButton()
                 .getCheckboxWithTooltipTextMap();
 
         labelToTooltipTextMap.forEach((checkbox, tooltip) ->
@@ -96,6 +96,7 @@ public class PipelineProjectTest extends BaseTest {
         String actualDescription = new HomePage(getDriver())
                 .openPipelineProject(PROJECT_NAME)
                 .editDescription(expectedProjectDescription)
+                .clickSubmitButton()
                 .getDescription();
 
         Assert.assertEquals(
@@ -108,7 +109,7 @@ public class PipelineProjectTest extends BaseTest {
     public void testGetWarningMessageWhenDisableProject() {
         PipelineProjectPage pipelineProjectPage = new HomePage(getDriver())
                 .openPipelineProject(PROJECT_NAME)
-                .clickConfigureSidebar(PROJECT_NAME)
+                .clickSidebarConfigButton()
                 .clickToggleToDisableOrEnableProject()
                 .clickSaveButton();
 

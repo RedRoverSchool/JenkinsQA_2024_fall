@@ -8,7 +8,7 @@ import school.redrover.page.HomePage;
 public abstract class BasePage extends BaseModel {
 
     @FindBy(id = "jenkins-home-link")
-    WebElement logo;
+    private WebElement logo;
 
     public BasePage(WebDriver driver) {
         super(driver);

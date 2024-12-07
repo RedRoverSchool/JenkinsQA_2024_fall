@@ -2,6 +2,7 @@ package school.redrover.runner;
 
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedCondition;
+import school.redrover.page.HomePage;
 
 public class TestUtils {
 
@@ -79,14 +80,21 @@ public class TestUtils {
     }
 
     public static void createPipeline(BaseTest baseTest, String name) {
-        baseTest.getDriver().findElement(By.xpath("//a[@href='/view/all/newJob']")).click();
+        new HomePage(baseTest.getDriver())
+                .clickNewItem()
+                .enterItemName(name)
+                .selectPipelineAndClickOk()
+                .clickSaveButton()
+                .gotoHomePage();
+    }
 
-        baseTest.getDriver().findElement(By.xpath("//input[@name='name']")).sendKeys(name);
-        baseTest.getDriver().findElement(By.xpath("//li[@class='org_jenkinsci_plugins_workflow_job_WorkflowJob']")).click();
-        baseTest.getDriver().findElement(By.xpath("//button[@type='submit']")).click();
-
-        baseTest.getDriver().findElement(By.xpath("//button[@name='Submit']")).click();
-        baseTest.getDriver().findElement(By.id("jenkins-home-link")).click();
+    public static void createFreestyleProject(BaseTest baseTest, String name) {
+        new HomePage(baseTest.getDriver())
+                .clickNewItem()
+                .enterItemName(name)
+                .selectFreestyleProjectAndClickOk()
+                .clickSaveButton()
+                .gotoHomePage();
     }
 
     public static void newItemsData(BaseTest baseTest, String itemName, String itemXpath) {

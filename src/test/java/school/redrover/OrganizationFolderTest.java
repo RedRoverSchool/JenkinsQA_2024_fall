@@ -72,7 +72,7 @@ public class OrganizationFolderTest extends BaseTest {
     public void testEditDisplayName() {
         String newDisplayName = new HomePage(getDriver())
                 .openOrganisationFolderProject(DISPLAY_NAME)
-                .clickConfigureSidebar(FOLDER_NAME)
+                .clickSidebarConfigButton()
                 .editDisplayName(NEW_DISPLAY_NAME)
                 .clickSaveButton()
                 .getName();
