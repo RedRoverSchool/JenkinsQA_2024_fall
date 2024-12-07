@@ -1,29 +1,37 @@
 package school.redrover.page;
 
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
 import school.redrover.page.base.BasePage;
 
 import java.util.List;
 
 public class UsersPage extends BasePage {
 
+    @FindBy(css = ".jenkins-button--primary")
+    private WebElement createUserButton;
+
+    @FindBy(css = ".jenkins-table > tbody > tr > td:nth-child(3)")
+    private List<WebElement> userNameList;
+
+    @FindBy(xpath = "//div[@class='jenkins-app-bar__content']/h1")
+    private WebElement usersTitle;
+
     public UsersPage(WebDriver driver) {
         super(driver);
     }
 
     public String getTitle() {
-        return getDriver().findElement(By.xpath("//div[@class='jenkins-app-bar__content']/h1")).getText();
+        return usersTitle.getText();
     }
 
     public CreateUserPage clickCreateUser() {
-        getDriver().findElement(By.cssSelector(".jenkins-button--primary")).click();
+        createUserButton.click();
         return new CreateUserPage(getDriver());
     }
 
     public List<String> getCreatedUserName() {
-        return  getDriver().findElements(By.cssSelector(".jenkins-table > tbody > tr > td:nth-child(3)"))
-                .stream().map(WebElement::getText).toList();
+        return  userNameList.stream().map(WebElement::getText).toList();
     }
 }
