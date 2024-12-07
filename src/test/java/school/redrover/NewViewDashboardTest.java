@@ -8,6 +8,7 @@ import org.testng.annotations.Test;
 import school.redrover.page.HomePage;
 import school.redrover.page.ViewPage;
 import school.redrover.runner.BaseTest;
+import school.redrover.runner.TestUtils;
 
 import java.util.List;
 
@@ -19,8 +20,9 @@ public class NewViewDashboardTest extends BaseTest {
 
     @Test
     public void testAddNewMyView() {
+        TestUtils.createFreestyleProject(getDriver(), PROJECT_NAME);
+
         new HomePage(getDriver())
-                .createFreestyleProject(PROJECT_NAME)
                 .clickCreateNewViewButton()
                 .typeNameIntoInputField(MY_VIEW)
                 .selectViewType(MY_VIEW)
@@ -32,8 +34,9 @@ public class NewViewDashboardTest extends BaseTest {
 
     @Test
     public void testAddNewListView() {
+        TestUtils.createFreestyleProject(getDriver(), PROJECT_NAME);
+
         new HomePage(getDriver())
-                .createFreestyleProject(PROJECT_NAME)
                 .clickCreateNewViewButton()
                 .typeNameIntoInputField(LIST_VIEW)
                 .selectViewType(LIST_VIEW)

@@ -88,14 +88,6 @@ public class TestUtils {
                 .gotoHomePage();
     }
 
-    public static void createFreestyleProject(BaseTest baseTest, String name) {
-        new HomePage(baseTest.getDriver())
-                .clickNewItem()
-                .enterItemName(name)
-                .selectFreestyleProjectAndClickOk()
-                .clickSaveButton()
-                .gotoHomePage();
-    }
 
     public static void newItemsData(BaseTest baseTest, String itemName, String itemXpath) {
         baseTest.getDriver().findElement(By.xpath("//*[@id='tasks']/div[1]/span/a")).click();
@@ -109,6 +101,32 @@ public class TestUtils {
                 .executeScript("arguments[0].value = arguments[1];", element, text);
         ((JavascriptExecutor) driver)
                 .executeScript("arguments[0].dispatchEvent(new Event('input', { bubbles: true }));", element);
+    }
+    public static void createFreestyleProject(WebDriver driver, String name) {
+        new HomePage(driver)
+                .clickNewItem()
+                .enterItemName(name)
+                .selectFreestyleProjectAndClickOk()
+                .clickSaveButton()
+                .gotoHomePage();
+    }
+
+    public static void createPipelineProject(WebDriver driver, String name) {
+        new HomePage(driver)
+                .clickNewItem()
+                .enterItemName(name)
+                .selectPipelineAndClickOk()
+                .clickSaveButton()
+                .gotoHomePage();
+    }
+
+    public static void createFolder(WebDriver driver, String name) {
+        new HomePage(driver)
+                .clickNewItem()
+                .enterItemName(name)
+                .selectFolderAndClickOk()
+                .clickSaveButton()
+                .gotoHomePage();
     }
 
 }
