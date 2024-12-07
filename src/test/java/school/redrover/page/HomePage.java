@@ -92,15 +92,6 @@ public class HomePage extends BasePage {
         return new FolderProjectPage(getDriver());
     }
 
-    public HomePage deleteFolder(String name) {
-        getDriver().findElement(By.xpath("//span[text()='" + name + "']")).click();
-
-        getDriver().findElement(By.xpath("//span[text()='Delete Folder']")).click();
-        getDriver().findElement(By.xpath("//button[@data-id= 'ok']")).click();
-
-        return this;
-    }
-
     public ManageJenkinsPage openManageJenkinsPage() {
         manageJenkinsSidebar.click();
 
@@ -160,14 +151,6 @@ public class HomePage extends BasePage {
         selectMenuFromItemDropdown(itemName, "Move");
 
         return new FolderProjectPage(getDriver());
-    }
-
-    public HomePage openDropdownViaChevron(String projectName) {
-        WebElement chevron = getDriver().findElement(By.xpath("//td/a/span[text() = '%s']/../button".formatted(projectName)));
-        TestUtils.moveAndClickWithJavaScript(getDriver(), chevron);
-        getWait5().until(ExpectedConditions.attributeToBe(chevron, "aria-expanded", "true"));
-
-        return this;
     }
 
     public String getItemNameByOrder(int order) {

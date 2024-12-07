@@ -28,4 +28,11 @@ public class MultiConfigurationProjectPage extends BaseProjectPage<MultiConfigur
         return getWait5().until(ExpectedConditions.visibilityOf(getDriver().findElement(
                 By.xpath("//footer/following-sibling::dialog"))));
     }
+
+    public HomePage clickDeleteOnSidebarAndConfirmDeletion() {
+        getDriver().findElement(By.xpath("//a[contains(@data-title,'Delete')]")).click();
+        getDriver().findElement(By.xpath("//button[@data-id='ok']")).click();
+
+        return new HomePage(getDriver());
+    }
 }
