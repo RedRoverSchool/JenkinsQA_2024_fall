@@ -10,8 +10,11 @@ import school.redrover.page.base.BaseCreatePage;
 
 public class CreateNewItemPage extends BaseCreatePage {
 
-    @FindBy(xpath = "//span[text()= 'Multibranch Pipeline']")
+    @FindBy(css = "[class$='MultiBranchProject']")
     private WebElement multibranchPipelineType;
+
+    @FindBy(id = "name")
+    private WebElement nameInput;
 
     public CreateNewItemPage(WebDriver driver) {
         super(driver);
@@ -24,7 +27,7 @@ public class CreateNewItemPage extends BaseCreatePage {
     private static final By getOkButton = By.id("ok-button");
 
     public CreateNewItemPage enterItemName(String name) {
-        getDriver().findElement(getInputName).sendKeys(name);
+        nameInput.sendKeys(name);
 
         return this;
     }
@@ -77,7 +80,7 @@ public class CreateNewItemPage extends BaseCreatePage {
     }
 
     public MultibranchPipelineConfigPage selectMultibranchPipelineAndClickOk() {
-        getDriver().findElement(By.cssSelector("[class$='MultiBranchProject']")).click();
+        multibranchPipelineType.click();
         clickOkButton();
 
         return new MultibranchPipelineConfigPage(getDriver());

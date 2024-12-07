@@ -10,10 +10,15 @@ import school.redrover.runner.TestUtils;
 
 import java.util.List;
 
-public class PipelineProjectPage extends BaseProjectPage<PipelineProjectPage> {
+public class PipelineProjectPage extends BaseProjectPage<PipelineProjectPage, PipelineConfigurePage> {
 
     public PipelineProjectPage(WebDriver driver) {
         super(driver);
+    }
+
+    @Override
+    public PipelineConfigurePage createProjectConfigPage() {
+        return new PipelineConfigurePage(getDriver());
     }
 
     public String getWarningDisabledMessage() {
@@ -52,7 +57,6 @@ public class PipelineProjectPage extends BaseProjectPage<PipelineProjectPage> {
         return getDriver().findElement(
                 By.xpath("//ol[@id='breadcrumbs']/li[@class='jenkins-breadcrumbs__list-item'][2]")).getText();
     }
-
 
     public PipelineConfigurePage clickConfigureSidebar(String name) {
         getWait2().until(ExpectedConditions.elementToBeClickable(

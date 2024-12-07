@@ -6,10 +6,15 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import school.redrover.page.base.BaseProjectPage;
 
-public class MultiConfigurationProjectPage extends BaseProjectPage<MultiConfigurationProjectPage> {
+public class MultiConfigurationProjectPage extends BaseProjectPage<MultiConfigurationProjectPage, MultiConfigurationConfigPage> {
 
     public MultiConfigurationProjectPage(WebDriver driver) {
         super(driver);
+    }
+
+    @Override
+    public MultiConfigurationConfigPage createProjectConfigPage() {
+        return new MultiConfigurationConfigPage(getDriver());
     }
 
     By getHomeIcon = By.xpath( "//a[@id='jenkins-home-link']");
