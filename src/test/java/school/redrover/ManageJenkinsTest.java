@@ -53,7 +53,7 @@ public class ManageJenkinsTest extends BaseTest {
                 .fillFormByValidDataToCreateUser(fullName)
                 .getCreatedUserName();
 
-        Assert.assertEquals(userList.size(),2);
+        Assert.assertEquals(userList.size(), 2);
         Assert.assertEquals(userList.get(1), fullName);
     }
 
