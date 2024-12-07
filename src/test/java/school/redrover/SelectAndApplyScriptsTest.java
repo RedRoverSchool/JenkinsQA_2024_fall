@@ -46,7 +46,7 @@ public class SelectAndApplyScriptsTest extends BaseTest {
                 .clickCopy()
                 .gotoHomePage()
                 .openPipelineProject(PIPELINE_NAME)
-                .clickConfigureSidebar(PIPELINE_NAME)
+                .clickSidebarConfigButton()
                 .pasteScript()
                 .getScriptText();
 
