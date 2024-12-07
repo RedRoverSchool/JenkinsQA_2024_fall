@@ -23,9 +23,9 @@ public class MultibranchPipelineProjectPage extends BaseProjectPage<MultibranchP
         return new MultibranchPipelineConfigPage(getDriver());
     }
 
-    public String getDescription() {
-        return getWait5().until(ExpectedConditions.visibilityOf(description)).getText();
-    }
+//    public String getDescription() {
+//        return getWait5().until(ExpectedConditions.visibilityOf(description)).getText();
+//    }
 
     public HomePage deleteItemBySidebar() {
         getDriver().findElement(By.xpath("//a[@data-title='Delete Multibranch Pipeline']")).click();
