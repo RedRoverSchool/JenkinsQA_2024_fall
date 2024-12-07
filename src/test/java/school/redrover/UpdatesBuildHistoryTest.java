@@ -4,6 +4,7 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 import school.redrover.page.HomePage;
 import school.redrover.runner.BaseTest;
+import school.redrover.runner.TestUtils;
 
 import java.util.List;
 
@@ -12,8 +13,9 @@ public class UpdatesBuildHistoryTest extends BaseTest {
 
     @Test
     public void testBuildHistoryIsEmpty() {
+        TestUtils.createFreestyleProject(getDriver(), PROJECT_NAME);
+
         List<String> emptyHistory = new HomePage(getDriver())
-                .createFreestyleProject(PROJECT_NAME)
                 .gotoBuildHistoryPageFromLeftPanel()
                 .getListOfStatuses();
 

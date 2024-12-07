@@ -4,6 +4,7 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 import school.redrover.page.HomePage;
 import school.redrover.runner.BaseTest;
+import school.redrover.runner.TestUtils;
 
 public class RunProjectViaBuildNowTest extends BaseTest {
 
@@ -11,8 +12,9 @@ public class RunProjectViaBuildNowTest extends BaseTest {
 
     @Test
     public void testNotificationBarAppears() {
+        TestUtils.createFreestyleProject(getDriver(), PROJECT_NAME);
+
         String notificationBar = new HomePage(getDriver())
-                .createFreestyleProject(PROJECT_NAME)
                 .selectBuildNowFromItemMenu(PROJECT_NAME)
                 .getNotificationBarStatus();
 

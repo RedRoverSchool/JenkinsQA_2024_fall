@@ -245,11 +245,9 @@ public class PipelineProjectTest extends BaseTest {
 
     @Test
     public void testCreateWithDuplicateName() {
-        String errorMessage = new HomePage(getDriver()).clickNewItem()
-                .enterItemName(PROJECT_NAME)
-                .selectPipelineAndClickOk()
-                .clickSaveButton()
-                .gotoHomePage()
+        TestUtils.createPipelineProject(getDriver(), PROJECT_NAME);
+
+        String errorMessage = new HomePage(getDriver())
                 .clickNewItem()
                 .enterItemName(PROJECT_NAME)
                 .selectPipeline()
@@ -411,13 +409,9 @@ public class PipelineProjectTest extends BaseTest {
 
     @Test
     public void testVerifyListOfActionsOnSidebar() {
+        TestUtils.createPipelineProject(getDriver(), PROJECT_NAME);
 
         List<String> actualListActions = new HomePage(getDriver())
-                .clickNewItem()
-                .enterItemName(PROJECT_NAME)
-                .selectPipelineAndClickOk()
-                .clickSaveButton()
-                .gotoHomePage()
                 .openPipelineProject(PROJECT_NAME)
                 .getSidebarOptionList();
 

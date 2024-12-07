@@ -4,6 +4,7 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 import school.redrover.page.HomePage;
 import school.redrover.runner.BaseTest;
+import school.redrover.runner.TestUtils;
 
 public class AddDescriptionToFoldersTest extends BaseTest {
 
@@ -12,8 +13,9 @@ public class AddDescriptionToFoldersTest extends BaseTest {
 
     @Test
     public void testExistingFolderWithNoDescription () {
+        TestUtils.createFolder(getDriver(), FOLDER_NAME);
+
         String finalResult = new HomePage(getDriver())
-                .createNewFolder(FOLDER_NAME)
                 .openFolder(FOLDER_NAME)
                 .editDescription(DESCRIPTION)
                 .clickSubmitButton()

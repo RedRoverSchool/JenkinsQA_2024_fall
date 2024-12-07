@@ -5,6 +5,7 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 import school.redrover.page.HomePage;
 import school.redrover.runner.BaseTest;
+import school.redrover.runner.TestUtils;
 
 import java.util.List;
 
@@ -15,9 +16,10 @@ public class DeleteFreestyleProjectTest extends BaseTest {
 
     @Test
     public void testDeleteFirstProjectViaChevron() {
+        TestUtils.createFreestyleProject(getDriver(), FIRST_PROJECT);
+        TestUtils.createFreestyleProject(getDriver(), SECOND_PROJECT);
+
         List<String> projectsList = new HomePage(getDriver())
-                .createFreestyleProject(FIRST_PROJECT)
-                .createFreestyleProject(SECOND_PROJECT)
                 .selectDeleteFromItemMenu(FIRST_PROJECT)
                 .clickYesForConfirmDelete()
                 .getItemList();

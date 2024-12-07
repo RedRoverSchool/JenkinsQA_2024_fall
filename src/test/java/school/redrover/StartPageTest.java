@@ -5,6 +5,7 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 import school.redrover.page.HomePage;
 import school.redrover.runner.BaseTest;
+import school.redrover.runner.TestUtils;
 
 import java.util.List;
 
@@ -69,9 +70,9 @@ public class StartPageTest extends BaseTest {
 
     @Test
     public void testCreateNewFolder() {
+        TestUtils.createFolder(getDriver(), NEW_FOLDER_NAME);
 
         List<String> projectList = new HomePage(getDriver())
-                .createNewFolder(NEW_FOLDER_NAME)
                 .getItemList();
 
         Assert.assertListContainsObject(
@@ -93,9 +94,9 @@ public class StartPageTest extends BaseTest {
 
     @Test
     public void testDeleteNewFolderViaChevron() {
+        TestUtils.createFolder(getDriver(), NEW_FOLDER_NAME);
 
         String welcomeText = new HomePage(getDriver())
-                .createNewFolder(NEW_FOLDER_NAME)
                 .deleteFolderViaChevron(NEW_FOLDER_NAME)
                 .getWelcomeDescriptionText();
 

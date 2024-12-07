@@ -6,16 +6,12 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import school.redrover.NewViewDashboardTest;
 import school.redrover.page.base.BasePage;
 import school.redrover.runner.TestUtils;
 
 import java.util.List;
 
 public class HomePage extends BasePage {
-
-    @FindBy(xpath = "//div[contains(@class,'jenkins-table__cell__button-wrapper')]")
-    private WebElement projectType;
 
     @FindBy(css = "[href$='/newJob']")
     private WebElement newJob;
@@ -92,45 +88,6 @@ public class HomePage extends BasePage {
     public FolderProjectPage openFolder(String name) {
         openItem(name);
         return new FolderProjectPage(getDriver());
-    }
-
-    public HomePage createFreestyleProject(String name) {
-        getDriver().findElement(By.xpath("//*[@href='/view/all/newJob']")).click();
-        getDriver().findElement(By.className("hudson_model_FreeStyleProject")).click();
-        getDriver().findElement(By.name("name")).sendKeys(name);
-        getDriver().findElement(By.id("ok-button")).click();
-        getDriver().findElement(By.name("Submit")).click();
-
-        gotoHomePage();
-
-        return this;
-    }
-
-    public HomePage createFreestyleProject(String name, String description) {
-        getDriver().findElement(By.xpath("//*[@href='/view/all/newJob']")).click();
-        getDriver().findElement(By.className("hudson_model_FreeStyleProject")).click();
-        getDriver().findElement(By.name("name")).sendKeys(name);
-        getDriver().findElement(By.id("ok-button")).click();
-        getWait10().until(ExpectedConditions.visibilityOfElementLocated(
-                By.name("description"))).sendKeys(description);
-        getDriver().findElement(By.name("Submit")).click();
-
-        getDriver().findElement(By.id("jenkins-name-icon")).click();
-        return this;
-    }
-
-    public HomePage createNewFolder(String name) {
-
-        getDriver().findElement(By.xpath("//a[@href = 'newJob']")).click();
-        getDriver().findElement(By.name("name")).sendKeys(name);
-        getDriver().findElement(By.xpath("//span[text() = 'Folder']")).click();
-        getDriver().findElement(By.id("ok-button")).click();
-        getDriver().findElement(By.name("Apply")).click();
-
-        getDriver().findElement(By.xpath("//a[contains(text(), 'Dashboard')]")).click();
-        getWait5().until(ExpectedConditions.elementToBeClickable(getDriver().findElement(By.id("projectstatus"))));
-
-        return this;
     }
 
     public HomePage deleteFolder(String name) {

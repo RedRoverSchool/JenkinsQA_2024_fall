@@ -186,8 +186,9 @@ public class FreestyleProjectTest extends BaseTest {
         final List<String> templateSidebarMenu = List.of(
                 "Status", "Changes", "Workspace", "Build Now", "Configure", "Delete Project", "Rename");
 
+        TestUtils.createFreestyleProject(getDriver(), PROJECT_NAME);
+
         List<String> actualSidebarMenu = new HomePage(getDriver())
-                .createFreestyleProject(PROJECT_NAME)
                 .openFreestyleProject(PROJECT_NAME)
                 .getSidebarOptionList();
 
@@ -198,8 +199,9 @@ public class FreestyleProjectTest extends BaseTest {
     public void testConfigureProjectAddBuildStepsExecuteShellCommand() {
         final String testCommand = "echo \"TEST! Hello Jenkins!\"";
 
+        TestUtils.createFreestyleProject(getDriver(), PROJECT_NAME);
+
         String extractedText = new HomePage(getDriver())
-                .createFreestyleProject(PROJECT_NAME)
                 .openFreestyleProject(PROJECT_NAME)
                 .clickSidebarConfigButton()
                 .clickAddBuildStep()
@@ -214,8 +216,9 @@ public class FreestyleProjectTest extends BaseTest {
 
     @Test
     public void testBuildProjectViaSidebarMenuOnProjectPage() {
+        TestUtils.createFreestyleProject(getDriver(), PROJECT_NAME);
+
         String buildInfo = new HomePage(getDriver())
-                .createFreestyleProject(PROJECT_NAME)
                 .openFreestyleProject(PROJECT_NAME)
                 .clickBuildNowSidebar()
                 .clickOnSuccessBuildIconForLastBuild()
@@ -282,8 +285,9 @@ public class FreestyleProjectTest extends BaseTest {
 
     @Test
     public void testDeleteLastBuild() {
+        TestUtils.createFreestyleProject(getDriver(), PROJECT_NAME);
+
         FreestyleProjectPage freestyleProjectPage = new HomePage(getDriver())
-                .createFreestyleProject(PROJECT_NAME)
                 .openFreestyleProject(PROJECT_NAME)
                 .clickBuildNowSidebar();
         String lastBuildNumber = freestyleProjectPage.getLastBuildNumber();
@@ -366,7 +370,7 @@ public class FreestyleProjectTest extends BaseTest {
 
     @Test
     public void testFreestyleProjectDescriptionPreview() {
-        TestUtils.createFreestyleProject(this, FREESTYLE_PROJECT);
+        TestUtils.createFreestyleProject(getDriver(), FREESTYLE_PROJECT);
 
         String descriptionPreview = new HomePage(getDriver())
                 .openFreestyleProject(FREESTYLE_PROJECT)
@@ -379,26 +383,21 @@ public class FreestyleProjectTest extends BaseTest {
 
     @Test
     public void testJobNameSorting() {
-        HomePage homePage = new HomePage(getDriver());
 
         List<String> projectNames = List.of("aaa", "bbb", "aabb");
-        projectNames.forEach(homePage::createFreestyleProject);
+        projectNames.forEach(name -> TestUtils.createFreestyleProject(getDriver(), name));
 
-        // This XPath targets the links containing the job names
         List<WebElement> jobLinks = getDriver()
                 .findElements(By.xpath("//table[@id='projectstatus']//tbody//tr/td[3]/a"));
 
-        // Extract text from the elements
         List<String> actualOrder = new ArrayList<>();
         for (WebElement link : jobLinks) {
             actualOrder.add(link.getText().trim());
         }
 
-        // Create a copy of the list and sort it alphabetically for expected order
         List<String> expectedOrder = new ArrayList<>(actualOrder);
-        Collections.sort(expectedOrder); // Ascending order
+        Collections.sort(expectedOrder);
 
-        // Verify if the actual order matches the expected order
         Assert.assertEquals(actualOrder, expectedOrder);
     }
 

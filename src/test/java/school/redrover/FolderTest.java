@@ -6,6 +6,7 @@ import org.testng.annotations.Test;
 import school.redrover.page.HomePage;
 import school.redrover.page.FolderProjectPage;
 import school.redrover.runner.BaseTest;
+import school.redrover.runner.TestUtils;
 
 import java.util.List;
 
@@ -187,8 +188,9 @@ public class FolderTest extends BaseTest {
 
     @Test
     public void testDeleteViaMainPageChevron () {
+        TestUtils.createFolder(getDriver(), FIRST_FOLDER_NAME);
+
         List<String> setOfProjects = new HomePage(getDriver())
-                .createNewFolder(FIRST_FOLDER_NAME)
                 .deleteFolderViaChevron(FIRST_FOLDER_NAME)
                 .getItemList();
 
@@ -197,8 +199,9 @@ public class FolderTest extends BaseTest {
 
     @Test
     public void testDeleteViaSidebarFromProjectPage () {
+        TestUtils.createFolder(getDriver(), FIRST_FOLDER_NAME);
+
         List<String> setOfProjects = new HomePage(getDriver())
-                .createNewFolder(FIRST_FOLDER_NAME)
                 .deleteFolder(FIRST_FOLDER_NAME)
                 .getItemList();
 
@@ -207,8 +210,9 @@ public class FolderTest extends BaseTest {
 
     @Test
     public void testCancelDeletingViaSidebarProjectPage () {
+        TestUtils.createFolder(getDriver(), FIRST_FOLDER_NAME);
+
         List<String> setOfProjects = new HomePage(getDriver())
-                .createNewFolder(FIRST_FOLDER_NAME)
                 .openFolder(FIRST_FOLDER_NAME)
                 .cancelDeletingViaModalWindow()
                 .gotoHomePage()
@@ -219,8 +223,9 @@ public class FolderTest extends BaseTest {
 
     @Test
     public void testDeleteViaMyViewChevron () {
+        TestUtils.createFolder(getDriver(), FIRST_FOLDER_NAME);
+
         List<String> setOfProjects = new HomePage(getDriver())
-                .createNewFolder(FIRST_FOLDER_NAME)
                 .clickMyViewsButton()
                 .deleteItemViaChevronItem(FIRST_FOLDER_NAME)
                 .gotoHomePage()
