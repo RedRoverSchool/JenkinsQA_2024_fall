@@ -221,7 +221,7 @@ public class HomePage extends BasePage {
 
     public String getStatusBuild(String projectName) {
 
-        return getDriver().findElement(By.cssSelector("#job_" + projectName + "> td:nth-of-type(1) > div > svg")).getAttribute("tooltip");
+        return getDriver().findElement(By.cssSelector("#job_%s> td:nth-of-type(1) > div > svg".formatted(projectName))).getAttribute("tooltip");
     }
 
     public PipelineRenamePage goToPipelineRenamePageViaDropdown(String name) {

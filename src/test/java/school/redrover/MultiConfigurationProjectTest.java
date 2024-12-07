@@ -2,8 +2,8 @@ package school.redrover;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.WebElement;
 import org.testng.Assert;
-import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import school.redrover.page.HomePage;
 import school.redrover.page.MultiConfigurationConfigPage;
@@ -29,10 +29,10 @@ public class MultiConfigurationProjectTest extends BaseTest {
         Assert.assertEquals(itemList.get(0), PROJECT_NAME);
     }
 
-    @Test (dependsOnMethods = "testCreateProjectWithoutDescription", description = " MultiConfigurationProjectTest | Add descriptions to existing project")
+    @Test(dependsOnMethods = "testCreateProjectWithoutDescription", description = " MultiConfigurationProjectTest | Add descriptions to existing project")
     public void testAddDescriptions() {
         String addDescription = new HomePage(getDriver())
-                .openMultiConfigurationProject(NAME_OF_PROJECT)
+                .openMultiConfigurationProject(PROJECT_NAME)
                 .clearDescription()
                 .editDescription(DESCRIPTIONS)
                 .clickSubmitButton()
