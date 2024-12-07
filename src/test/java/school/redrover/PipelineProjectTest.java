@@ -225,8 +225,7 @@ public class PipelineProjectTest extends BaseTest {
                 .selectPipelineAndClickOk()
                 .clickSaveButton()
                 .gotoHomePage()
-                .selectDeleteFromItemMenu(PROJECT_NAME)
-                .clickYesForConfirmDelete()
+                .selectDeleteFromItemMenuAndClickYes(PROJECT_NAME)
                 .getItemList();
 
         Assert.assertListNotContainsObject(projectList, PROJECT_NAME, "Project is not deleted");

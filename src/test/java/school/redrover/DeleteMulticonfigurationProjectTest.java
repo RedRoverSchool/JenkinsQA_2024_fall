@@ -34,8 +34,7 @@ public class DeleteMulticonfigurationProjectTest extends BaseTest {
     @Test(dependsOnMethods = "testDeletionPopupAppearsOnProjectPage")
     public void testDeletionPopupAppearsOnMainPage() {
         WebElement deletionPopup = new HomePage(getDriver())
-                .openDropdownViaChevron(PROJECT_NAME)
-                .clickDeleteInProjectDropdown(PROJECT_NAME)
+                .selectDeleteFromItemMenu(PROJECT_NAME)
                 .getDeletionPopup();
 
         Assert.assertTrue(deletionPopup.isDisplayed());

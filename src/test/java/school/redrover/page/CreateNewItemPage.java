@@ -7,6 +7,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import school.redrover.page.base.BaseCreatePage;
+import school.redrover.runner.TestUtils;
 
 public class CreateNewItemPage extends BaseCreatePage {
 
@@ -101,6 +102,8 @@ public class CreateNewItemPage extends BaseCreatePage {
     }
 
     public MultibranchPipelineConfigPage selectMultibranchPipelineAndClickOk() {
+        TestUtils.scrollToBottom(getDriver());
+
         multibranchPipeline.click();
         clickOkButton();
 
@@ -115,6 +118,7 @@ public class CreateNewItemPage extends BaseCreatePage {
     }
 
     public OrganizationFolderConfigPage selectOrganizationFolderAndClickOk() {
+        TestUtils.scrollToBottom(getDriver());
         organizationFolder.click();
         clickOkButton();
 
@@ -152,25 +156,6 @@ public class CreateNewItemPage extends BaseCreatePage {
 
     public String getErrorMessage() {
         return getWait5().until(ExpectedConditions.visibilityOf(invalidOrSameNameMessage)).getText();
-    }
-
-    public CreateNewItemPage chooseMultiConfigurationProject() {
-        multiConfigurationProject.click();
-
-        return this;
-    }
-
-    public MultiConfigurationProjectPage submitCreationProject() {
-        okButton.click();
-
-        return new MultiConfigurationProjectPage(getDriver());
-    }
-
-    public OrganizationFolderConfigPage clickOrganizationFolderAndClickOk() {
-        organizationFolder.click();
-        clickOkButton();
-
-        return new OrganizationFolderConfigPage(getDriver());
     }
 
     public CreateNewItemPage scrollToCopyFromFieldAndEnterName(String name) {
