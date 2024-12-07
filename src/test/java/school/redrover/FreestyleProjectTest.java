@@ -261,7 +261,7 @@ public class FreestyleProjectTest extends BaseTest {
                 .clickOnSuccessBuildIconForLastBuild()
                 .clickEditBuildInformationSidebar()
                 .addBuildDescription(DESCRIPTION)
-                .clickSaveButton()
+                       .clickSaveButton()
                 .getBuildDescription();
 
         Assert.assertEquals(actualDescription, DESCRIPTION);
