@@ -3,6 +3,7 @@ package school.redrover.page;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import school.redrover.page.base.BaseProjectPage;
@@ -11,6 +12,39 @@ import java.util.Arrays;
 import java.util.List;
 
 public class FolderProjectPage extends BaseProjectPage<FolderProjectPage, FolderConfigPage> {
+
+    @FindBy(tagName= "h1")
+    private WebElement pageTitle;
+
+    @FindBy(id = "description-link")
+    private WebElement addDescriptionButton;
+
+    @FindBy(xpath = "//*[@id='description']//div/a[contains(text(), 'Preview')]")
+    private WebElement descriptionPreviewLink;
+
+    @FindBy(xpath = "//*[@id='description']//div[@class='textarea-preview']")
+    private WebElement descriptionTextareaPreview;
+
+    @FindBy(xpath = "//span[contains(text(), 'Move')]/..")
+    private WebElement moveSidebarButton;
+
+    @FindBy(xpath = "//select[@name='destination']")
+    private WebElement selectFolderDestinationSelect;
+
+    @FindBy(xpath = "//button[@name='Submit']")
+    private WebElement submitButton;
+
+    @FindBy(xpath = "//a[@data-title ='Delete Folder']")
+    private WebElement deleteFolderButton;
+
+    @FindBy(xpath = "//button[@data-id='cancel']")
+    private WebElement cancelDeleteButton;
+
+    @FindBy(xpath = "//div[@id='breadcrumbBar']//li[@class='jenkins-breadcrumbs__list-item']")
+    private List<WebElement> breadcrumbsItemList;
+
+    @FindBy(xpath = "//div[@id='tasks']/div")
+    private List<WebElement> sidebarItemsNameList;
 
     public FolderProjectPage(WebDriver driver) {
         super(driver);
@@ -26,7 +60,7 @@ public class FolderProjectPage extends BaseProjectPage<FolderProjectPage, Folder
     }
 
     public String getConfigurationName() {
-        return getDriver().findElement(By.tagName("h1")).getText();
+        return pageTitle.getText();
     }
 
     public String getFolderName() {
@@ -53,39 +87,34 @@ public class FolderProjectPage extends BaseProjectPage<FolderProjectPage, Folder
     }
 
     public FolderProjectPage cancelDeletingViaModalWindow () {
-        getWait10().until(ExpectedConditions.elementToBeClickable(
-                By.xpath("/html/body/div[2]/div[1]/div[1]/div[4]/span/a"))).click();
-        getWait10().until(ExpectedConditions.elementToBeClickable(
-                By.xpath("/html/body/dialog/div[3]/button[2]"))).click();
+        getWait10().until(ExpectedConditions.elementToBeClickable(deleteFolderButton)).click();
+        getWait10().until(ExpectedConditions.elementToBeClickable(cancelDeleteButton)).click();
         return this;
     }
 
     public String getDescriptionViaPreview () {
-        getWait5().until(ExpectedConditions.elementToBeClickable(By.id("description-link"))).click();
-        getWait5().until(ExpectedConditions.elementToBeClickable(
-                By.xpath("//*[@id='description']/form/div[1]/div[1]/div[1]/a[1]"))).click();
-        return getWait10().until(ExpectedConditions.visibilityOfElementLocated(
-                By.xpath("//*[@id='description']/form/div[1]/div[1]/div[2]"))).getText();
+        getWait5().until(ExpectedConditions.elementToBeClickable(addDescriptionButton)).click();
+        getWait5().until(ExpectedConditions.elementToBeClickable(descriptionPreviewLink)).click();
+        return getWait10().until(ExpectedConditions.visibilityOf(descriptionTextareaPreview)).getText();
     }
 
     public FolderProjectPage clickMoveOnSidebar() {
-        getDriver().findElement(By.xpath("//span[contains(text(), 'Move')]/..")).click();
+        moveSidebarButton.click();
 
         return this;
     }
     public FolderProjectPage selectParentFolderAndClickMove(String folderName) {
-        WebElement selectElement = getWait5().until(ExpectedConditions.visibilityOfElementLocated(By.name("destination")));
+        WebElement selectElement = getWait5().until(ExpectedConditions.visibilityOf(selectFolderDestinationSelect));
         Select select = new Select(selectElement);
         select.selectByValue("/%s".formatted(folderName));
 
-        getDriver().findElement(By.xpath("//button[@name='Submit']")).click();
+        submitButton.click();
 
         return this;
     }
 
     public List<String> getBreadcrumsBarItemsList() {
-        return getDriver().findElements(
-                By.xpath("//div[@id='breadcrumbBar']//li[@class='jenkins-breadcrumbs__list-item']"))
+        return breadcrumbsItemList
                 .stream()
                 .map(WebElement::getText)
                 .toList();
@@ -101,7 +130,7 @@ public class FolderProjectPage extends BaseProjectPage<FolderProjectPage, Folder
     }
 
     public List<String> getListOfItemsSidebar() {
-        return getDriver().findElements(By.xpath("//div[@id='tasks']/div"))
+        return sidebarItemsNameList
                 .stream()
                 .map(WebElement::getText)
                 .toList();
