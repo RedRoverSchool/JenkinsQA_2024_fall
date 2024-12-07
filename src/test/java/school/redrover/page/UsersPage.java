@@ -22,14 +22,8 @@ public class UsersPage extends BasePage {
         return new CreateUserPage(getDriver());
     }
 
-    public String getCreatedUserName() {
-        List<WebElement> UsersLists = getDriver().findElements(By.cssSelector(".jenkins-table > tbody > tr > td:nth-child(3)"));
-        for (WebElement UsersList : UsersLists) {
-            String userName = UsersList.getText();
-            if (userName.equals("Ivan Petrov")) {
-                return userName;
-            }
-        }
-        return null;
+    public List<String> getCreatedUserName() {
+        return  getDriver().findElements(By.cssSelector(".jenkins-table > tbody > tr > td:nth-child(3)"))
+                .stream().map(WebElement::getText).toList();
     }
 }

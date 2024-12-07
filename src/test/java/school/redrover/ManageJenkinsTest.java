@@ -37,21 +37,24 @@ public class ManageJenkinsTest extends BaseTest {
                 .openUsersPage()
                 .clickCreateUser()
                 .clickCreateUserButton()
-                .getValidationNessage();
+                .getValidationMessage();
 
         Assert.assertEquals(title, "\"\" is prohibited as a username for security reasons.");
     }
 
     @Test
     public void testCreateNewUser() {
-        String userName = new HomePage(getDriver())
+        final String fullName = "Ivan Petrov";
+
+        List<String> userList = new HomePage(getDriver())
                 .openManageJenkinsPage()
                 .openUsersPage()
                 .clickCreateUser()
-                .fillFormByValidDataToCreateUser()
+                .fillFormByValidDataToCreateUser(fullName)
                 .getCreatedUserName();
 
-        Assert.assertEquals(userName, "Ivan Petrov");
+        Assert.assertEquals(userList.size(),2);
+        Assert.assertEquals(userList.get(0), fullName);
     }
 
     @Ignore
