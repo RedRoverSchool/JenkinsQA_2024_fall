@@ -22,7 +22,7 @@ public abstract class BaseProjectPage<Self extends BaseProjectPage<?>> extends B
     @FindBy(name = "Submit")
     private WebElement submitButton;
 
-    @FindBy(id = "description")
+    @FindBy(xpath = "//div[@id='description']/div[1]")
     private WebElement descriptionText;
 
     @FindBy(xpath = "//a[contains(@href,'rename')]")
@@ -45,6 +45,9 @@ public abstract class BaseProjectPage<Self extends BaseProjectPage<?>> extends B
 
     @FindBy(className = "textarea-preview")
     private WebElement previewDescriptionText;
+
+    @FindBy(xpath = "//a[@id='description-link']/text()")
+    private WebElement descriptionButtonText;
 
     public BaseProjectPage(WebDriver driver) {
         super(driver);
@@ -106,6 +109,10 @@ public abstract class BaseProjectPage<Self extends BaseProjectPage<?>> extends B
 
     public String getDescription() {
         return descriptionText.getText();
+    }
+
+    public String getDescriptionButtonText() {
+        return descriptionButton.getText();
     }
 
     public List<String> getSidebarOptionList() {
