@@ -11,20 +11,44 @@ import school.redrover.page.base.BaseCreatePage;
 public class CreateNewItemPage extends BaseCreatePage {
 
     @FindBy(xpath = "//span[text()= 'Multibranch Pipeline']")
-    private WebElement multibranchPipelineType;
+    private WebElement multibranchPipeline;
+
+    @FindBy(xpath = "//span[text()='Folder']")
+    private WebElement folder;
+
+    @FindBy(xpath = "//span[text()='Multi-configuration project']")
+    private WebElement multiConfigurationProject;
+
+    @FindBy(xpath = "//span[text()='Freestyle project']")
+    private WebElement freestyleProject;
+
+    @FindBy(xpath = "//li[@class='org_jenkinsci_plugins_workflow_job_WorkflowJob']")
+    private WebElement pipeline;
+
+    @FindBy(id = "itemname-required")
+    private WebElement emptyNameMessage;
+
+    @FindBy(xpath = "//div[@class='add-item-name']/div[@class='input-validation-message']")
+    private WebElement invalidOrSameNameMessage;
+
+    @FindBy(id = "from")
+    private WebElement copyFromField;
+
+    @FindBy(xpath = "//button[@id = 'ok-button']")
+    private WebElement okButton;
+
+    @FindBy(xpath = "//li[contains(@class,'jenkins_branch_OrganizationFolder')]")
+    private WebElement organizationFolder;
+
+    @FindBy(id = "name")
+    private WebElement nameField;
 
     public CreateNewItemPage(WebDriver driver) {
         super(driver);
     }
 
-    private static final By getMultiConfigurationProject = By.xpath("//li//span[text()='Multi-configuration project']");
-    private static final By getSubmitButton = By.xpath("//button[@id = 'ok-button']");
-    private static final By GET_ORGANIZATION_FOLDER = By.xpath("//li[contains(@class,'jenkins_branch_OrganizationFolder')]");
-    private static final By getInputName = By.id("name");
-    private static final By getOkButton = By.id("ok-button");
-
     public CreateNewItemPage enterItemName(String name) {
-        getDriver().findElement(getInputName).sendKeys(name);
+        nameField.sendKeys(name);
 
         return this;
     }
@@ -36,7 +60,7 @@ public class CreateNewItemPage extends BaseCreatePage {
     }
 
     public CreateNewItemPage selectFolderType() {
-        getDriver().findElement(By.xpath("//span[text()='Folder']")).click();
+        folder.click();
 
         return this;
     }
@@ -56,14 +80,14 @@ public class CreateNewItemPage extends BaseCreatePage {
     }
 
     public MultiConfigurationConfigPage selectMultiConfigurationAndClickOk() {
-        getDriver().findElement(By.xpath("//span[text()='Multi-configuration project']")).click();
+        multiConfigurationProject.click();
         clickOkButton();
 
         return new MultiConfigurationConfigPage(getDriver());
     }
 
     public FreestyleConfigPage selectFreestyleProjectAndClickOk() {
-        getDriver().findElement(By.xpath("//span[text()='Freestyle project']")).click();
+        freestyleProject.click();
         clickOkButton();
 
         return new FreestyleConfigPage(getDriver());
@@ -77,32 +101,32 @@ public class CreateNewItemPage extends BaseCreatePage {
     }
 
     public MultibranchPipelineConfigPage selectMultibranchPipelineAndClickOk() {
-        getDriver().findElement(By.cssSelector("[class$='MultiBranchProject']")).click();
+        multibranchPipeline.click();
         clickOkButton();
 
         return new MultibranchPipelineConfigPage(getDriver());
     }
 
     public PipelineConfigurePage selectPipelineAndClickOk() {
-        getDriver().findElement(By.xpath("//li[@class='org_jenkinsci_plugins_workflow_job_WorkflowJob']")).click();
+        pipeline.click();
         clickOkButton();
 
         return new PipelineConfigurePage(getDriver());
     }
 
     public OrganizationFolderConfigPage selectOrganizationFolderAndClickOk() {
-        getDriver().findElement(GET_ORGANIZATION_FOLDER).click();
+        organizationFolder.click();
         clickOkButton();
 
         return new OrganizationFolderConfigPage(getDriver());
     }
 
     public String getInvalidNameMessage() {
-        return getDriver().findElement(By.id("itemname-invalid")).getText();
+        return invalidOrSameNameMessage.getText();
     }
 
     public String getEmptyNameMessage() {
-        return getDriver().findElement(By.id("itemname-required")).getText();
+        return emptyNameMessage.getText();
     }
 
     public ErrorPage saveInvalidData() {
@@ -112,48 +136,44 @@ public class CreateNewItemPage extends BaseCreatePage {
     }
 
     public CreateNewItemPage selectPipeline() {
-        getWait10().until(ExpectedConditions.elementToBeClickable(
-                By.xpath(("//div[@id='items']//label/span[text()= 'Pipeline']")))).click();
+        getWait10().until(ExpectedConditions.elementToBeClickable(pipeline)).click();
         return new CreateNewItemPage(getDriver());
     }
 
     public CreateNewItemPage selectFreestyleProject() {
-        getDriver().findElement(By.xpath(("//span[text()= 'Freestyle project']"))).click();
+        freestyleProject.click();
         return this;
     }
 
     public CreateNewItemPage selectMultibranchPipelineProject() {
-        multibranchPipelineType.click();
+        multibranchPipeline.click();
         return this;
     }
 
     public String getErrorMessage() {
-        return getWait5().until(ExpectedConditions.visibilityOfElementLocated(
-                By.xpath("//div[@class='add-item-name']/div[@class='input-validation-message']"))).getText();
+        return getWait5().until(ExpectedConditions.visibilityOf(invalidOrSameNameMessage)).getText();
     }
 
-    public CreateNewItemPage choseMultiConfigurationProject() {
-        getDriver().findElement(getMultiConfigurationProject).click();
+    public CreateNewItemPage chooseMultiConfigurationProject() {
+        multiConfigurationProject.click();
 
         return this;
     }
 
     public MultiConfigurationProjectPage submitCreationProject() {
-        getDriver().findElement(getSubmitButton).click();
+        okButton.click();
 
         return new MultiConfigurationProjectPage(getDriver());
     }
 
     public OrganizationFolderConfigPage clickOrganizationFolderAndClickOk() {
-        getDriver().findElement(GET_ORGANIZATION_FOLDER).click();
+        organizationFolder.click();
         clickOkButton();
 
         return new OrganizationFolderConfigPage(getDriver());
     }
 
     public CreateNewItemPage scrollToCopyFromFieldAndEnterName(String name) {
-        final WebElement copyFromField = getDriver().findElement(By.id("from"));
-
         JavascriptExecutor js = (JavascriptExecutor) getDriver();
         js.executeScript("arguments[0].scrollIntoView(true);", copyFromField);
 
@@ -163,7 +183,7 @@ public class CreateNewItemPage extends BaseCreatePage {
     }
 
     public PipelineConfigurePage clickOkAndGoToPipelineConfigPage() {
-        getDriver().findElement(getOkButton).click();
+        okButton.click();
 
         return new PipelineConfigurePage(getDriver());
     }

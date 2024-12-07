@@ -109,7 +109,7 @@ public class FreestyleProjectTest extends BaseTest {
                 .clickSaveButton()
                 .gotoHomePage()
                 .openFreestyleProject(PROJECT_NAME)
-                .clickConfigureSidebar()
+                .clickSidebarConfigButton()
                 .getTimePeriod();
 
         Assert.assertEquals(periodCheckbox, "minute");
@@ -201,12 +201,12 @@ public class FreestyleProjectTest extends BaseTest {
         String extractedText = new HomePage(getDriver())
                 .createFreestyleProject(PROJECT_NAME)
                 .openFreestyleProject(PROJECT_NAME)
-                .clickConfigureSidebar()
+                .clickSidebarConfigButton()
                 .clickAddBuildStep()
                 .selectExecuteShellBuildStep()
                 .addExecuteShellCommand(testCommand)
                 .clickSaveButton()
-                .clickConfigureSidebar()
+                .clickSidebarConfigButton()
                 .getTextExecuteShellTextArea();
 
         Assert.assertEquals(extractedText, testCommand);
