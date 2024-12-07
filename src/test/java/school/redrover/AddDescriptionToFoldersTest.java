@@ -16,10 +16,10 @@ public class AddDescriptionToFoldersTest extends BaseTest {
                 .createNewFolder(FOLDER_NAME)
                 .openFolder(FOLDER_NAME)
                 .editDescription(DESCRIPTION)
+                .clickSubmitButton()
                 .getDescription();
 
-        Assert.assertEquals(finalResult, "Description text\n" +
-                "Edit description");
+        Assert.assertEquals(finalResult, DESCRIPTION);
     }
 
     @Test(dependsOnMethods = "testExistingFolderWithNoDescription")
@@ -28,10 +28,10 @@ public class AddDescriptionToFoldersTest extends BaseTest {
                 .gotoHomePage()
                 .openFolder(FOLDER_NAME)
                 .editDescription("Edited ")
+                .clickSubmitButton()
                 .getDescription();
 
-        Assert.assertEquals(finalResult, "Edited Description text\n" +
-                "Edit description");
+        Assert.assertEquals(finalResult, "Edited");
     }
 
     @Test(dependsOnMethods = "testEditExistingDescription")
@@ -41,7 +41,7 @@ public class AddDescriptionToFoldersTest extends BaseTest {
                 .openFolder(FOLDER_NAME)
                 .getDescriptionViaPreview();
 
-        Assert.assertEquals(finalResult, "Edited Description text");
+        Assert.assertEquals(finalResult, "Edited");
     }
 
     @Test(dependsOnMethods = "testDescriptionsPreviewButton")
@@ -50,7 +50,7 @@ public class AddDescriptionToFoldersTest extends BaseTest {
                 .gotoHomePage()
                 .openFolder(FOLDER_NAME)
                 .clearDescription()
-                .getDescription();
+                .getDescriptionButtonText();
 
         Assert.assertEquals(finalResult, "Add description");
     }

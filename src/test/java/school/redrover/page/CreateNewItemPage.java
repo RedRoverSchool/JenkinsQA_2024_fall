@@ -11,7 +11,7 @@ import school.redrover.page.base.BaseCreatePage;
 public class CreateNewItemPage extends BaseCreatePage {
 
     @FindBy(xpath = "//span[text()= 'Multibranch Pipeline']")
-    WebElement multibranchPipelineType;
+    private WebElement multibranchPipelineType;
 
     public CreateNewItemPage(WebDriver driver) {
         super(driver);

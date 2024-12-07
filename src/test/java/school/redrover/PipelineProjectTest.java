@@ -96,6 +96,7 @@ public class PipelineProjectTest extends BaseTest {
         String actualDescription = new HomePage(getDriver())
                 .openPipelineProject(PROJECT_NAME)
                 .editDescription(expectedProjectDescription)
+                .clickSubmitButton()
                 .getDescription();
 
         Assert.assertEquals(
