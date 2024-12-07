@@ -3,7 +3,6 @@ package school.redrover.page;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import school.redrover.page.base.BasePage;
@@ -15,9 +14,6 @@ public class HomePage extends BasePage {
 
     @FindBy(css = "[href$='/newJob']")
     private WebElement newJob;
-
-    @FindBy(xpath = "//td/a[@class='jenkins-table__link model-link inside']")
-    private WebElement itemName;
 
     @FindBy(xpath = "//a[@href = '/manage']")
     private WebElement manageJenkinsSidebar;
@@ -46,9 +42,6 @@ public class HomePage extends BasePage {
     @FindBy(xpath = "//tr/td/a[@class='jenkins-table__link model-link inside']")
     private List<WebElement> projectList;
 
-    @FindBy(xpath = "//button[contains(@href,'Delete')]")
-    private WebElement deleteOption;
-
     @FindBy(xpath = "//div[@class='tippy-content']")
     private WebElement buildScheduledTooltip;
 
@@ -58,6 +51,15 @@ public class HomePage extends BasePage {
 
     private void openItem(String name) {
         getDriver().findElement(By.xpath("//td/a/span[text() = '%s']/..".formatted(name))).click();
+    }
+
+    private void selectMenuFromItemDropdown(String itemName, String menuName) {
+        TestUtils.moveAndClickWithJavaScript(getDriver(), getDriver().findElement(
+                By.xpath("//td/a/span[text() = '%s']/../button".formatted(itemName))));
+
+        getWait10().until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//div[@class='jenkins-dropdown__item__icon']/parent::*[contains(., '%s')]"
+                        .formatted(menuName)))).click();
     }
 
     public FreestyleProjectPage openFreestyleProject(String name) {
@@ -99,19 +101,6 @@ public class HomePage extends BasePage {
         return this;
     }
 
-    public HomePage deleteFolderViaChevron(String name) {
-        TestUtils.moveAndClickWithJavaScript(getDriver(),
-                getDriver().findElement(By.xpath("//td/a/span[text() = '%s']/../button".formatted(name))));
-
-        getWait5().until(ExpectedConditions.presenceOfElementLocated(
-                By.xpath("//button[contains(@href, 'doDelete')]"))).click();
-
-        getWait5().until(ExpectedConditions.elementToBeClickable(getDriver().findElement(By.xpath(
-                "//button[@data-id= 'ok']")))).click();
-
-        return this;
-    }
-
     public ManageJenkinsPage openManageJenkinsPage() {
         manageJenkinsSidebar.click();
 
@@ -130,23 +119,6 @@ public class HomePage extends BasePage {
         return new CreateNewItemPage(getDriver());
     }
 
-    public String getItemNameByOrder(int order) {
-
-        return getDriver().findElements(By.xpath("//td/a/span")).stream()
-                .skip(order - 1)
-                .findFirst().orElseThrow(() -> new IllegalArgumentException("Некорректный порядок: " + order))
-                .getText();
-    }
-
-    public void selectMenuFromItemDropdown(String itemName, String menuName) {
-        TestUtils.moveAndClickWithJavaScript(getDriver(), getDriver().findElement(
-                By.xpath("//td/a/span[text() = '%s']/../button".formatted(itemName))));
-
-        getWait10().until(ExpectedConditions.visibilityOfElementLocated(
-                By.xpath("//div[@class='jenkins-dropdown__item__icon']/parent::*[contains(., '%s')]"
-                        .formatted(menuName)))).click();
-    }
-
     public FolderConfigPage selectConfigureFromItemMenu(String itemName) {
         selectMenuFromItemDropdown(itemName, "Configure");
 
@@ -159,7 +131,8 @@ public class HomePage extends BasePage {
         return this;
     }
 
-    public HomePage clickYesForConfirmDelete() {
+    public HomePage selectDeleteFromItemMenuAndClickYes(String itemName) {
+        selectDeleteFromItemMenu(itemName);
         getWait5().until(ExpectedConditions.visibilityOf(yesButton)).click();
 
         return this;
@@ -197,6 +170,14 @@ public class HomePage extends BasePage {
         return this;
     }
 
+    public String getItemNameByOrder(int order) {
+
+        return getDriver().findElements(By.xpath("//td/a/span")).stream()
+                .skip(order - 1)
+                .findFirst().orElseThrow(() -> new IllegalArgumentException("Некорректный порядок: " + order))
+                .getText();
+    }
+
     public String getWelcomeDescriptionText() {
         return headerDescription.getText();
     }
@@ -222,18 +203,6 @@ public class HomePage extends BasePage {
                 .stream()
                 .map(WebElement::getText)
                 .toList();
-    }
-
-    public HomePage deleteItemViaChevronItem(String itemName) {
-        WebElement chevronButton = getWait5().until(ExpectedConditions.visibilityOfElementLocated(
-                By.xpath("//td/a/span[text() = '%s']/../button".formatted(itemName))));
-
-        TestUtils.moveAndClickWithJavaScript(getDriver(), chevronButton);
-
-        deleteOption.click();
-        yesButton.click();
-
-        return this;
     }
 
     public boolean isDisableCircleSignPresent(String name) {
@@ -273,14 +242,7 @@ public class HomePage extends BasePage {
     }
 
     public PipelineRenamePage goToPipelineRenamePageViaDropdown(String name) {
-        new Actions(getDriver()).moveToElement(getDriver().findElement(By.xpath("//a[@href='job/%s/']/span".formatted(name))))
-                .pause(500)
-                .perform();
-        WebElement chevron = getDriver().findElement(By.xpath("//td//button[@aria-expanded='false']"));
-        TestUtils.moveAndClickWithJavaScript(getDriver(), chevron);
-        getWait5().until(ExpectedConditions.attributeToBe(chevron, "aria-expanded", "true"));
-
-        getDriver().findElement(By.xpath("//a[@href='/job/%s/confirm-rename']".formatted(name))).click();
+        selectMenuFromItemDropdown(name, "Rename");
 
         return new PipelineRenamePage(getDriver());
     }
@@ -351,12 +313,6 @@ public class HomePage extends BasePage {
         return new ViewPage(getDriver());
     }
 
-    public HomePage clickDeleteInProjectDropdown(String projectName) {
-        getDriver().findElement(By.xpath("//button[@href='/job/%s/doDelete']".formatted(projectName))).click();
-
-        return this;
-    }
-
     public WebElement getDeletionPopup() {
         return getWait5().until(ExpectedConditions.visibilityOf(getDriver().findElement(
                 By.xpath("//footer/following-sibling::dialog"))));
@@ -421,12 +377,6 @@ public class HomePage extends BasePage {
         return getDriver().findElement(By.id("description-link")).getText();
     }
 
-    public OrganizationFolderProjectPage clickItemName() {
-        itemName.click();
-
-        return new OrganizationFolderProjectPage(getDriver());
-    }
-
     public HomePage clickPreviewButton() {
         getDriver().findElement(By.cssSelector("[class$='textarea-show-preview']")).click();
 
@@ -438,7 +388,7 @@ public class HomePage extends BasePage {
     }
 
     public FreestyleRenamePage clickRenameInProjectDropdown(String projectName) {
-        getDriver().findElement(By.xpath("//a[@href='/job/%s/confirm-rename']".formatted(projectName))).click();
+        selectMenuFromItemDropdown(projectName, "Rename");
 
         return new FreestyleRenamePage(getDriver());
     }

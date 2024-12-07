@@ -46,7 +46,7 @@ public class OrganizationFolderTest extends BaseTest {
     @Test
     public void testCreate() {
         List<String> projectList = new HomePage(getDriver())
-                .clickCreateJob()
+                .clickNewItem()
                 .enterItemName(FOLDER_NAME)
                 .selectOrganizationFolderAndClickOk()
                 .gotoHomePage()
@@ -59,7 +59,7 @@ public class OrganizationFolderTest extends BaseTest {
     @Test(dependsOnMethods = "testCreate")
     public void testAddDisplayName() {
         String displayName = new HomePage(getDriver())
-                .clickItemName()
+                .openOrganisationFolderProject(FOLDER_NAME)
                 .clickConfigure()
                 .setDisplayName(DISPLAY_NAME)
                 .clickSaveButton()
