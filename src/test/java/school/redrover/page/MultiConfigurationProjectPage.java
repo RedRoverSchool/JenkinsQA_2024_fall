@@ -17,14 +17,6 @@ public class MultiConfigurationProjectPage extends BaseProjectPage<MultiConfigur
         return new MultiConfigurationConfigPage(getDriver());
     }
 
-    By getHomeIcon = By.xpath( "//a[@id='jenkins-home-link']");
-    public HomePage goHome() {
-        getDriver().findElement(getHomeIcon).click();
-
-        return  new HomePage(getDriver());
-
-    }
-
     public MultiConfigurationProjectPage clickDeleteProject() {
         getDriver().findElement(
                 By.xpath("//div[@id='side-panel']//span[text()='Delete Multi-configuration project']")).click();
