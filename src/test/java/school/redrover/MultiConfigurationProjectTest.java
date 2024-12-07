@@ -12,7 +12,7 @@ import school.redrover.runner.BaseTest;
 import java.util.List;
 
 public class MultiConfigurationProjectTest extends BaseTest {
-    private static final String NAME_OF_PROJECT = "Multi-configuration project";
+    private static final String NAME_OF_PROJECT = "MultiConfiguration";
     private static final String DESCRIPTIONS = "Descriptions of project";
 
     @Test(description = "Create project without descriptions")
@@ -28,16 +28,17 @@ public class MultiConfigurationProjectTest extends BaseTest {
         Assert.assertEquals(itemList.get(0), NAME_OF_PROJECT);
     }
 
-    @Test(description = " MultiConfigurationProjectTest | Add descriptions to existing project")
+    @Test (dependsOnMethods = "testCreateProjectWithoutDescription", description = " MultiConfigurationProjectTest | Add descriptions to existing project")
     public void testAddDescriptions() {
-        testCreateProjectWithoutDescription();
-        getDriver().findElement(By.xpath("//td/a[@href='job/Multi-configuration%20project/']")).click();
-        getDriver().findElement(By.xpath("//a[@id='description-link']")).click();
-        getDriver().findElement(By.xpath("//textarea[@name = 'description']")).sendKeys(DESCRIPTIONS);
-        getDriver().findElement(By.xpath("//div/button[@name = 'Submit']")).submit();
+        String addDescription = new HomePage(getDriver())
+                .openMultiConfigurationProject(NAME_OF_PROJECT)
+                .clearDescription()
+                .editDescription(DESCRIPTIONS)
+                .clickSubmitButton()
+                .getDescription();
 
-        Assert.assertEquals(getDriver().findElement(By.xpath("//div[@id='description']/div[1]")).getText(), DESCRIPTIONS);
 
+        Assert.assertEquals(addDescription, DESCRIPTIONS);
     }
 
     @Test
