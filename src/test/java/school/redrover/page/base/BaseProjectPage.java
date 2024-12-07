@@ -8,7 +8,7 @@ import school.redrover.page.CreateNewItemPage;
 
 import java.util.List;
 
-public abstract class BaseProjectPage<Self extends BaseProjectPage<?>> extends BasePage {
+public abstract class BaseProjectPage<Self extends BaseProjectPage<?, ?>, ProjectConfigPage> extends BasePage {
 
     @FindBy(id = "description-link")
     private WebElement descriptionButton;
@@ -49,9 +49,14 @@ public abstract class BaseProjectPage<Self extends BaseProjectPage<?>> extends B
     @FindBy(xpath = "//a[@id='description-link']/text()")
     private WebElement descriptionButtonText;
 
+    @FindBy(css = "[class*='task-link-wrapper'] [href$='/configure']")
+    private WebElement sidebarConfigureButton;
+
     public BaseProjectPage(WebDriver driver) {
         super(driver);
     }
+
+    protected abstract ProjectConfigPage createProjectConfigPage();
 
     public CreateNewItemPage clickNewItem() {
         newItem.click();
@@ -120,5 +125,11 @@ public abstract class BaseProjectPage<Self extends BaseProjectPage<?>> extends B
                 .stream()
                 .map(WebElement::getText)
                 .toList();
+    }
+
+    public ProjectConfigPage clickSidebarConfigButton() {
+        getWait2().until(ExpectedConditions.elementToBeClickable(sidebarConfigureButton)).click();
+
+        return createProjectConfigPage();
     }
 }

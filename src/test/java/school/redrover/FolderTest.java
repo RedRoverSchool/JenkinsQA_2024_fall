@@ -128,7 +128,7 @@ public class FolderTest extends BaseTest {
 
         List<String> projectList = new HomePage(getDriver())
                 .openFolder(FIRST_FOLDER_NAME)
-                .clickConfigureSidebar(FIRST_FOLDER_NAME)
+                .clickSidebarConfigButton()
                 .enterConfigurationName(displayName)
                 .clickSaveButton()
                 .gotoHomePage()

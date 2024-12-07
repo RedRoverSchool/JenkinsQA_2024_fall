@@ -14,8 +14,8 @@ import java.util.List;
 
 public class MultibranchPipelineTest extends BaseTest {
 
-    private static final String MULTIBRANCH_PIPELINE_NAME = "NewMultibranchName";
-    private static final String MULTIBRANCH_PIPELINE_NAME2 = "NewMultibranchName2";
+    private static final String MULTIBRANCH_PIPELINE_NAME = "MultibranchName";
+    private static final String MULTIBRANCH_PIPELINE_NAME2 = "NewMultibranchName";
 
     private void createJob(String jobName) {
         getDriver().findElement(By.xpath("//a[@href='/view/all/newJob']")).click();
@@ -42,13 +42,14 @@ public class MultibranchPipelineTest extends BaseTest {
                 "Project is not created");
     }
 
-    @Test(dependsOnMethods = "testCreate")
-    public void testAddDescription() {
+    @Test
+    public void testAddDescriptionCreatingProject() {
         final String description = "AddedDescription";
 
         String actualDescription = new HomePage(getDriver())
-                .openMultibranchPipelineProject(MULTIBRANCH_PIPELINE_NAME)
-                .clickConfigureSidebar(MULTIBRANCH_PIPELINE_NAME)
+                .clickNewItem()
+                .enterItemName(MULTIBRANCH_PIPELINE_NAME)
+                .selectMultibranchPipelineAndClickOk()
                 .enterDescription(description)
                 .clickSaveButton()
                 .getDescription();
@@ -56,7 +57,7 @@ public class MultibranchPipelineTest extends BaseTest {
         Assert.assertEquals(actualDescription, description);
     }
 
-    @Test(dependsOnMethods = "testAddDescription")
+    @Test(dependsOnMethods = "testCreate")
     public void testVerifyErrorMessageWhenCreateWithSameName() {
         String errorMessage = new HomePage(getDriver())
                 .clickNewItem()

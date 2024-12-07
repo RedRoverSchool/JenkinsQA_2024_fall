@@ -35,7 +35,7 @@ public class UpdatesBuildHistoryTest extends BaseTest {
     public void testUpdateAfterChangingConfig() {
         List<String> changeConfig = new HomePage(getDriver())
                 .openFreestyleProject(PROJECT_NAME)
-                .clickConfigureSidebar()
+                .clickSidebarConfigButton()
                 .addBuildStep("Run with timeout")
                 .gotoHomePage()
                 .clickScheduleBuild(PROJECT_NAME)

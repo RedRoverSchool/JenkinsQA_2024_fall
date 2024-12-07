@@ -11,7 +11,7 @@ import school.redrover.page.base.BaseProjectPage;
 import java.util.Arrays;
 import java.util.List;
 
-public class FolderProjectPage extends BaseProjectPage<FolderProjectPage> {
+public class FolderProjectPage extends BaseProjectPage<FolderProjectPage, FolderConfigPage> {
 
     @FindBy(tagName= "h1")
     private WebElement pageTitle;
@@ -50,6 +50,11 @@ public class FolderProjectPage extends BaseProjectPage<FolderProjectPage> {
         super(driver);
     }
 
+    @Override
+    public FolderConfigPage createProjectConfigPage() {
+        return new FolderConfigPage(getDriver());
+    }
+
     public String getFolderDescription() {
         return getDriver().findElement(By.id("view-message")).getText();
     }
@@ -85,13 +90,6 @@ public class FolderProjectPage extends BaseProjectPage<FolderProjectPage> {
         getWait10().until(ExpectedConditions.elementToBeClickable(deleteFolderButton)).click();
         getWait10().until(ExpectedConditions.elementToBeClickable(cancelDeleteButton)).click();
         return this;
-    }
-
-    public FolderConfigPage clickConfigureSidebar(String name) {
-        getWait2().until(ExpectedConditions.elementToBeClickable(
-                By.xpath("//a[@href='/job/%s/configure']".formatted(name)))).click();
-
-        return new FolderConfigPage(getDriver());
     }
 
     public String getDescriptionViaPreview () {

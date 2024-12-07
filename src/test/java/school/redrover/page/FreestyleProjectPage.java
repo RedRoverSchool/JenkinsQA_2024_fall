@@ -8,7 +8,7 @@ import school.redrover.page.base.BaseProjectPage;
 
 import java.util.List;
 
-public class FreestyleProjectPage extends BaseProjectPage<FreestyleProjectPage> {
+public class FreestyleProjectPage extends BaseProjectPage<FreestyleProjectPage, FreestyleConfigPage> {
 
     @FindBy(tagName = "h1")
     private WebElement projectName;
@@ -56,6 +56,11 @@ public class FreestyleProjectPage extends BaseProjectPage<FreestyleProjectPage> 
         super(driver);
     }
 
+    @Override
+    public FreestyleConfigPage createProjectConfigPage() {
+        return new FreestyleConfigPage(getDriver());
+    }
+
     public String getProjectName() {
         return projectName.getText();
     }
@@ -84,12 +89,6 @@ public class FreestyleProjectPage extends BaseProjectPage<FreestyleProjectPage> 
         getWait5().until(ExpectedConditions.visibilityOf(buildNowSidebar)).click();
 
         return this;
-    }
-
-    public FreestyleConfigPage clickConfigureSidebar() {
-        getWait5().until(ExpectedConditions.visibilityOf(configureSidebar)).click();
-
-        return new FreestyleConfigPage(getDriver());
     }
 
     public FreestyleProjectPage clickDeleteProjectSidebar() {
