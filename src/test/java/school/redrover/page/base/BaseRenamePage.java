@@ -22,7 +22,7 @@ public abstract class BaseRenamePage<Self extends BaseRenamePage<?, ?>, ProjectP
 
     protected abstract ProjectPage createProjectPage();
 
-    public Self clearOldAndInputNewProjectName(String newName) {
+    public Self cleanInputFieldAndTypeName(String newName) {
         inputField.clear();
         inputField.sendKeys(newName);
 
