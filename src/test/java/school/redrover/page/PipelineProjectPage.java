@@ -44,11 +44,6 @@ public class PipelineProjectPage extends BaseProjectPage<PipelineProjectPage, Pi
         return new PipelineStagesPage(getDriver());
     }
 
-    public String getDescription() {
-        return getWait5().until(ExpectedConditions.visibilityOfElementLocated(
-                By.xpath("//div[@id='description']"))).getText();
-    }
-
     public String getTitle() {
         return getDriver().findElement(By.xpath("//div[@class='jenkins-app-bar']//h1")).getText();
     }
