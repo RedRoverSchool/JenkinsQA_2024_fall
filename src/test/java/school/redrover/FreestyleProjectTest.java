@@ -261,7 +261,7 @@ public class FreestyleProjectTest extends BaseTest {
                 .clickOnSuccessBuildIconForLastBuild()
                 .clickEditBuildInformationSidebar()
                 .addBuildDescription(DESCRIPTION)
-                       .clickSaveButton()
+                .clickSaveButton()
                 .getBuildDescription();
 
         Assert.assertEquals(actualDescription, DESCRIPTION);
@@ -306,8 +306,7 @@ public class FreestyleProjectTest extends BaseTest {
                 .enterItemName(PROJECT_NAME)
                 .selectFreestyleProjectAndClickOk()
                 .clickSaveButton()
-                .clickDeleteProjectSidebar()
-                .clickYesToConfirmDelete()
+                .clickDeleteButtonSidebarAndConfirm()
                 .getWelcomeTitle();
 
         Assert.assertEquals(welcomeText, "Welcome to Jenkins!", "There is a project on Dashboard");
