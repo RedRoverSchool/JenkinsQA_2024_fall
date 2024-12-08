@@ -51,8 +51,7 @@ public class NewViewDashboardTest extends BaseTest {
     public void testDeleteMyView() {
         new ViewPage(getDriver())
                 .selectViewTypeToDelete(MY_VIEW)
-                .deleteView()
-                .clickYesInPopUp();
+                .deleteView();
 
         getWait5().until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@class = 'tabBar']")));
         List<WebElement> listOfViews = getDriver().findElements(By.xpath("//div[@class = 'tabBar']//a"));
@@ -63,8 +62,7 @@ public class NewViewDashboardTest extends BaseTest {
     public void testDeleteListView() {
         new ViewPage(getDriver())
                 .selectViewTypeToDelete(LIST_VIEW)
-                .deleteView()
-                .clickYesInPopUp();
+                .deleteView();
 
         getWait5().until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@class = 'tabBar']")));
         List<WebElement> listOfViews = getDriver().findElements(By.xpath("//div[@class = 'tabBar']//a"));

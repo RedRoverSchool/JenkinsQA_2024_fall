@@ -3,13 +3,24 @@ package school.redrover.page;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
-import javax.swing.text.View;
 import java.util.List;
 
 public class ViewPage extends HomePage {
+
+    @FindBy(xpath = "//a[@class= 'task-link  confirmation-link']")
+    private WebElement deleteMenuButton;
+
+    @FindBy(xpath = "//dialog[@class = 'jenkins-dialog']")
+    private WebElement deleteDialog;
+
+    @FindBy(xpath = "//thead//th")
+    private List <WebElement> listOfColumnNamesForExistingProject;
+
+    @FindBy(xpath = "//button[@data-id = 'ok']")
+    private WebElement okButtonInDeleteDialog;
 
     public ViewPage(WebDriver driver) {
         super(driver);
@@ -23,7 +34,7 @@ public class ViewPage extends HomePage {
     }
 
     public List<String> getColumnList() {
-        return getWait5().until(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.xpath("//thead//th")))
+        return getWait5().until(ExpectedConditions.visibilityOfAllElements(listOfColumnNamesForExistingProject))
                 .stream()
                 .map(WebElement::getText)
                 .toList();
@@ -35,15 +46,11 @@ public class ViewPage extends HomePage {
     }
 
     public ViewPage deleteView() {
-        getDriver().findElement(By.xpath("//a[@class= 'task-link  confirmation-link']")).click();
 
+        deleteMenuButton.click();
+        getWait5().until(ExpectedConditions.visibilityOf(deleteDialog));
+        okButtonInDeleteDialog.click();
         return this;
     }
 
-    public ViewPage clickYesInPopUp(){
-        getWait5().until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//dialog[@class = 'jenkins-dialog']")));
-        getDriver().findElement(By.xpath("//button[@data-id = 'ok']")).click();
-
-        return this;
-    }
 }
