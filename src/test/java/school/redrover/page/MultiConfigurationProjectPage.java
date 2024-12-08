@@ -6,7 +6,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import school.redrover.page.base.BaseProjectPage;
 
-public class MultiConfigurationProjectPage extends BaseProjectPage<MultiConfigurationProjectPage, MultiConfigurationConfigPage> {
+public class MultiConfigurationProjectPage extends BaseProjectPage<MultiConfigurationProjectPage, MultiConfigurationConfigPage, MultiConfigurationRenamePage> {
 
     public MultiConfigurationProjectPage(WebDriver driver) {
         super(driver);
@@ -15,6 +15,11 @@ public class MultiConfigurationProjectPage extends BaseProjectPage<MultiConfigur
     @Override
     public MultiConfigurationConfigPage createProjectConfigPage() {
         return new MultiConfigurationConfigPage(getDriver());
+    }
+
+    @Override
+    public MultiConfigurationRenamePage createProjectRenamePage() {
+        return new MultiConfigurationRenamePage(getDriver());
     }
 
     public MultiConfigurationProjectPage clickDeleteProject() {

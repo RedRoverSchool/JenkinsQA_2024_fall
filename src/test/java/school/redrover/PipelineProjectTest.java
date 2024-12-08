@@ -192,7 +192,7 @@ public class PipelineProjectTest extends BaseTest {
     public void testRenameProjectViaSidebar() {
         List<String> projectList = new HomePage(getDriver())
                 .openPipelineProject(PROJECT_NAME)
-                .clickRenameSidebar(PROJECT_NAME)
+                .clickRenameSidebarButton()
                 .cleanInputFieldAndTypeName(NEW_PROJECT_NAME)
                 .clickRenameButton()
                 .gotoHomePage()
@@ -275,7 +275,7 @@ public class PipelineProjectTest extends BaseTest {
                 .clickSaveButton()
                 .gotoHomePage()
                 .openPipelineProject(PROJECT_NAME)
-                .clickRenameSidebar(PROJECT_NAME)
+                .clickRenameSidebarButton()
                 .cleanInputFieldAndTypeName(NEW_PROJECT_NAME)
                 .clickRenameButton();
 
@@ -292,7 +292,7 @@ public class PipelineProjectTest extends BaseTest {
                 .clickSaveButton()
                 .gotoHomePage()
                 .openPipelineProject(PROJECT_NAME)
-                .clickRenameSidebar(PROJECT_NAME)
+                .clickRenameSidebarButton()
                 .getWarningMessage();
 
         Assert.assertEquals(actualWarningMessage, "The new name is the same as the current name.");

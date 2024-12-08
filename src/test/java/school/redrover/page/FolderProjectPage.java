@@ -11,7 +11,7 @@ import school.redrover.page.base.BaseProjectPage;
 import java.util.Arrays;
 import java.util.List;
 
-public class FolderProjectPage extends BaseProjectPage<FolderProjectPage, FolderConfigPage> {
+public class FolderProjectPage extends BaseProjectPage<FolderProjectPage, FolderConfigPage, FolderRenamePage> {
 
     @FindBy(tagName= "h1")
     private WebElement pageTitle;
@@ -53,6 +53,11 @@ public class FolderProjectPage extends BaseProjectPage<FolderProjectPage, Folder
     @Override
     public FolderConfigPage createProjectConfigPage() {
         return new FolderConfigPage(getDriver());
+    }
+
+    @Override
+    public FolderRenamePage createProjectRenamePage() {
+        return new FolderRenamePage(getDriver());
     }
 
     public String getFolderDescription() {
