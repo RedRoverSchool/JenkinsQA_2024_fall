@@ -86,7 +86,7 @@ public class StartPageTest extends BaseTest {
 
         String welcomeText = new HomePage(getDriver())
                 .openFolder(NEW_FOLDER_NAME)
-                .deleteFolderViaSidebar()
+                .clickDeleteButtonSidebarAndConfirm()
                 .getWelcomeDescriptionText();
 
         Assert.assertEquals(welcomeText,

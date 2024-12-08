@@ -91,12 +91,6 @@ public class FreestyleProjectPage extends BaseProjectPage<FreestyleProjectPage, 
         return this;
     }
 
-    public FreestyleProjectPage clickDeleteProjectSidebar() {
-        getWait10().until(ExpectedConditions.visibilityOf(deleteProjectSidebar)).click();
-
-        return this;
-    }
-
     public FreestyleRenamePage clickRenameSidebar() {
         getWait10().until(ExpectedConditions.visibilityOf(renameSidebar)).click();
 
@@ -127,12 +121,6 @@ public class FreestyleProjectPage extends BaseProjectPage<FreestyleProjectPage, 
         getWait10().until(ExpectedConditions.visibilityOf(lastBuildSuccessBuildIcon)).click();
 
         return new FreestyleBuildPage(getDriver());
-    }
-
-    public HomePage clickYesToConfirmDelete() {
-        getWait10().until(ExpectedConditions.elementToBeClickable(yesButton)).click();
-
-        return new HomePage(getDriver());
     }
 
     public FreestyleProjectPage clickYesToWipeOutCurrentWorkspace() {
