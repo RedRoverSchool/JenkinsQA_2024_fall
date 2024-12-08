@@ -4,7 +4,6 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.testng.Assert;
 import org.testng.annotations.DataProvider;
-import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import school.redrover.page.FreestyleProjectPage;
 import school.redrover.page.HomePage;
@@ -115,7 +114,6 @@ public class FreestyleProjectTest extends BaseTest {
         Assert.assertEquals(periodCheckbox, "minute");
     }
 
-    @Ignore
     @Test(dependsOnMethods = "testCreateProjectViaCreateJobButton")
     public void testAddDescription() {
         String description = new HomePage(getDriver())
@@ -127,7 +125,6 @@ public class FreestyleProjectTest extends BaseTest {
         Assert.assertEquals(description, DESCRIPTION);
     }
 
-    @Ignore
     @Test(dependsOnMethods = "testAddDescription")
     public void testEditDescriptionOnProjectPage() {
         final String newDescription = "New " + DESCRIPTION;
@@ -142,7 +139,6 @@ public class FreestyleProjectTest extends BaseTest {
         Assert.assertEquals(actualDescription, newDescription);
     }
 
-    @Ignore
     @Test(dependsOnMethods = "testEditDescriptionOnProjectPage")
     public void testDeleteDescription() {
         String description = new HomePage(getDriver())
@@ -167,8 +163,10 @@ public class FreestyleProjectTest extends BaseTest {
         Assert.assertEquals(actualProjectName, newName);
     }
 
-    @Test(dependsOnMethods = "testCreateProjectViaCreateJobButton")
+    @Test
     public void testRenameProjectViaDropdown() {
+        TestUtils.createFreestyleProject(getDriver(), PROJECT_NAME);
+
         final String newName = "New " + PROJECT_NAME;
 
         String actualProjectName = new HomePage(getDriver())
