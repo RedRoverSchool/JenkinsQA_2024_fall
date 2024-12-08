@@ -1,5 +1,6 @@
 package school.redrover.page.base;
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -8,7 +9,7 @@ import school.redrover.page.CreateNewItemPage;
 
 import java.util.List;
 
-public abstract class BaseProjectPage<Self extends BaseProjectPage<?, ?>, ProjectConfigPage> extends BasePage {
+public abstract class BaseProjectPage<Self extends BaseProjectPage<?, ?, ?>, ProjectConfigPage, ProjectRenamePage> extends BasePage {
 
     @FindBy(id = "description-link")
     private WebElement descriptionButton;
@@ -52,11 +53,15 @@ public abstract class BaseProjectPage<Self extends BaseProjectPage<?, ?>, Projec
     @FindBy(css = "[class*='task-link-wrapper'] [href$='/configure']")
     private WebElement sidebarConfigureButton;
 
+    @FindBy(xpath = "//a[contains(@href, 'confirm-rename')]")
+    private WebElement renameSidebarButton;
+
     public BaseProjectPage(WebDriver driver) {
         super(driver);
     }
 
     protected abstract ProjectConfigPage createProjectConfigPage();
+    protected abstract ProjectRenamePage createProjectRenamePage();
 
     public CreateNewItemPage clickNewItem() {
         newItem.click();
@@ -131,5 +136,11 @@ public abstract class BaseProjectPage<Self extends BaseProjectPage<?, ?>, Projec
         getWait2().until(ExpectedConditions.elementToBeClickable(sidebarConfigureButton)).click();
 
         return createProjectConfigPage();
+    }
+
+    public ProjectRenamePage clickRenameSidebarButton() {
+        getWait2().until(ExpectedConditions.elementToBeClickable(renameSidebarButton)).click();
+
+        return createProjectRenamePage();
     }
 }

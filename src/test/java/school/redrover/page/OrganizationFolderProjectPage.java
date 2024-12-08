@@ -4,7 +4,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import school.redrover.page.base.BaseProjectPage;
 
-public class OrganizationFolderProjectPage extends BaseProjectPage<OrganizationFolderProjectPage, OrganizationFolderConfigPage> {
+public class OrganizationFolderProjectPage extends BaseProjectPage<OrganizationFolderProjectPage, OrganizationFolderConfigPage, OrganizationFolderRenamePage> {
 
     public OrganizationFolderProjectPage(WebDriver driver) {
         super(driver);
@@ -13,6 +13,11 @@ public class OrganizationFolderProjectPage extends BaseProjectPage<OrganizationF
     @Override
     protected OrganizationFolderConfigPage createProjectConfigPage() {
         return new OrganizationFolderConfigPage(getDriver());
+    }
+
+    @Override
+    public OrganizationFolderRenamePage createProjectRenamePage() {
+        return new OrganizationFolderRenamePage(getDriver());
     }
 
     private final By GET_CONFIGURE = By.xpath("//a[@href='./configure']");

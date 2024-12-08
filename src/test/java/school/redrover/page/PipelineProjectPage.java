@@ -10,7 +10,7 @@ import school.redrover.runner.TestUtils;
 
 import java.util.List;
 
-public class PipelineProjectPage extends BaseProjectPage<PipelineProjectPage, PipelineConfigurePage> {
+public class PipelineProjectPage extends BaseProjectPage<PipelineProjectPage, PipelineConfigurePage, PipelineRenamePage> {
 
     public PipelineProjectPage(WebDriver driver) {
         super(driver);
@@ -21,13 +21,18 @@ public class PipelineProjectPage extends BaseProjectPage<PipelineProjectPage, Pi
         return new PipelineConfigurePage(getDriver());
     }
 
+    @Override
+    public PipelineRenamePage createProjectRenamePage() {
+        return new PipelineRenamePage(getDriver());
+    }
+
     public String getWarningDisabledMessage() {
         return getWait5().until(ExpectedConditions.visibilityOfElementLocated(
                 By.xpath("//form[@id='enable-project']"))).getText().split("\n")[0];
     }
 
     public String getStatusButtonText() {
-        return  getWait2().until(ExpectedConditions.visibilityOfElementLocated(
+        return getWait2().until(ExpectedConditions.visibilityOfElementLocated(
                 By.xpath("//form[@id='enable-project']/button[@name='Submit']"))).getText();
     }
 
@@ -91,12 +96,6 @@ public class PipelineProjectPage extends BaseProjectPage<PipelineProjectPage, Pi
         return new PipelineBuildPage(getDriver());
     }
 
-    public PipelineRenamePage clickRenameSidebar(String name) {
-        getDriver().findElement(By.xpath("//a[@href='/job/%s/confirm-rename']".formatted(name))).click();
-
-        return new PipelineRenamePage(getDriver());
-    }
-
     public HomePage clickDeletePipelineSidebarAndConfirmDeletion() {
         getDriver().findElement(By.xpath("//a[@data-title='Delete Pipeline']")).click();
         getDriver().findElement(By.xpath("//button[@data-id='ok']")).click();
@@ -111,18 +110,6 @@ public class PipelineProjectPage extends BaseProjectPage<PipelineProjectPage, Pi
                 .map(WebElement::getText)
                 .map(string -> string.split("\\(#")[0].trim())
                 .toList();
-    }
-
-    public PipelineProjectPage clickAddDescriptionButton() {
-        getDriver().findElement(By.xpath("//a[@href='editDescription']")).click();
-
-        return new PipelineProjectPage(getDriver());
-    }
-
-    public PipelineProjectPage enterDescription(String text) {
-        getWait5().until(ExpectedConditions.presenceOfElementLocated(
-                By.xpath("//textarea[@name='description']"))).sendKeys(text);
-        return new PipelineProjectPage(getDriver());
     }
 
     public PipelineProjectPage clickSaveButton() {

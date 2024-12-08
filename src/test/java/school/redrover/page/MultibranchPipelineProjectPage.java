@@ -9,7 +9,7 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import school.redrover.page.base.BaseProjectPage;
 
-public class MultibranchPipelineProjectPage extends BaseProjectPage<MultibranchPipelineProjectPage, MultibranchPipelineConfigPage> {
+public class MultibranchPipelineProjectPage extends BaseProjectPage<MultibranchPipelineProjectPage, MultibranchPipelineConfigPage, MultibranchPipelineRenamePage> {
 
     @FindBy(id = "view-message")
     private WebElement description;
@@ -21,6 +21,11 @@ public class MultibranchPipelineProjectPage extends BaseProjectPage<MultibranchP
     @Override
     public MultibranchPipelineConfigPage createProjectConfigPage() {
         return new MultibranchPipelineConfigPage(getDriver());
+    }
+
+    @Override
+    public MultibranchPipelineRenamePage createProjectRenamePage() {
+        return new MultibranchPipelineRenamePage(getDriver());
     }
 
     public String getDescription() {
