@@ -6,6 +6,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import school.redrover.page.CreateNewItemPage;
+import school.redrover.page.HomePage;
 
 import java.util.List;
 
@@ -55,6 +56,12 @@ public abstract class BaseProjectPage<Self extends BaseProjectPage<?, ?, ?>, Pro
 
     @FindBy(xpath = "//a[contains(@href, 'confirm-rename')]")
     private WebElement renameSidebarButton;
+
+    @FindBy(xpath = "//span[contains(text(),'Delete')]")
+    private WebElement deleteButtonSidebar;
+
+    @FindBy(xpath = "//button[@data-id='ok']")
+    private WebElement yesButton;
 
     public BaseProjectPage(WebDriver driver) {
         super(driver);
@@ -136,6 +143,13 @@ public abstract class BaseProjectPage<Self extends BaseProjectPage<?, ?, ?>, Pro
         getWait2().until(ExpectedConditions.elementToBeClickable(sidebarConfigureButton)).click();
 
         return createProjectConfigPage();
+    }
+
+    public HomePage clickDeleteButtonSidebarAndConfirm() {
+        getWait2().until(ExpectedConditions.elementToBeClickable(deleteButtonSidebar)).click();
+        getWait2().until(ExpectedConditions.elementToBeClickable(yesButton)).click();
+
+        return new HomePage(getDriver());
     }
 
     public ProjectRenamePage clickRenameSidebarButton() {

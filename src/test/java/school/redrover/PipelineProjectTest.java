@@ -208,7 +208,7 @@ public class PipelineProjectTest extends BaseTest {
     public void testDeleteProjectViaSidebar() {
         List<String> projectList = new HomePage(getDriver())
                 .openPipelineProject(NEW_PROJECT_NAME)
-                .clickDeletePipelineSidebarAndConfirmDeletion()
+                .clickDeleteButtonSidebarAndConfirm()
                 .getItemList();
 
         Assert.assertListNotContainsObject(
@@ -332,7 +332,7 @@ public class PipelineProjectTest extends BaseTest {
                 .gotoHomePage()
                 .openPipelineProject(PROJECT_NAME)
                 .openDropDownMenuByChevronBreadcrumb(PROJECT_NAME)
-                .clickDeletePipelineSidebarAndConfirmDeletion()
+                .clickDeleteButtonSidebarAndConfirm()
                 .getWelcomeTitle();
 
         Assert.assertEquals(welcomeTitle, "Welcome to Jenkins!");
