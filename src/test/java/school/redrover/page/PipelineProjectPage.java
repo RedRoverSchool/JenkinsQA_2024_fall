@@ -91,13 +91,6 @@ public class PipelineProjectPage extends BaseProjectPage<PipelineProjectPage, Pi
         return new PipelineBuildPage(getDriver());
     }
 
-    public HomePage clickDeletePipelineSidebarAndConfirmDeletion() {
-        getDriver().findElement(By.xpath("//a[@data-title='Delete Pipeline']")).click();
-        getDriver().findElement(By.xpath("//button[@data-id='ok']")).click();
-
-        return new HomePage(getDriver());
-    }
-
     public List<String> getPermalinkList() {
         return getWait10().until(ExpectedConditions.visibilityOfAllElementsLocatedBy(
                         By.xpath("//li[@class='permalink-item']")))

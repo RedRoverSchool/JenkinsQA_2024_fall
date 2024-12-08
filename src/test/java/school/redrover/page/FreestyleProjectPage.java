@@ -96,12 +96,6 @@ public class FreestyleProjectPage extends BaseProjectPage<FreestyleProjectPage, 
         return this;
     }
 
-    public FreestyleProjectPage clickDeleteProjectSidebar() {
-        getWait10().until(ExpectedConditions.visibilityOf(deleteProjectSidebar)).click();
-
-        return this;
-    }
-
     public List<String> getListOfBuilds() {
         return getWait5().until(ExpectedConditions.visibilityOfAllElements(listOfBuilds))
                 .stream()
