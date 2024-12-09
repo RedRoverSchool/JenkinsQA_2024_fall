@@ -6,7 +6,6 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import school.redrover.page.base.BasePage;
 
-
 public class UserPage extends BasePage {
 
     @FindBy(xpath = "//a[@href='/user/admin/configure']")

@@ -87,9 +87,6 @@ public class HomePage extends BasePage {
     @FindBy(xpath = "//div[@class='tab' and not(.//a[@tooltip='New View'])]")
     private List<WebElement> viewList;
 
-    @FindBy(xpath = "//a[@href='/view/%s/']")
-    private WebElement viewLink;
-
     @FindBy(xpath = "//footer/following-sibling::dialog")
     private WebElement deletionPopup;
 
