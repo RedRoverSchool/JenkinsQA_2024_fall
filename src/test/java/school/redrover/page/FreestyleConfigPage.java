@@ -112,5 +112,22 @@ public class FreestyleConfigPage extends BaseConfigPage<FreestyleConfigPage, Fre
     public String getTimePeriod() {
         return getDriver().findElement(By.xpath("//*[@name='_.durationName']")).getAttribute("value");
     }
+
+    public boolean getEnablingCurrentState() {
+        return getWait10().until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//*[@id='toggle-switch-enable-disable-project']/label"))).isEnabled();
+    }
+
+    public FreestyleConfigPage changeEnablingState() {
+        getWait10().until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//*[@id='toggle-switch-enable-disable-project']/label"))).click();
+        getDriver().findElement(By.name("Submit")).click();
+
+        return this;
+    }
+
+    public String getDisabledProjectIndicator() {
+        return getWait10().until(ExpectedConditions.visibilityOfElementLocated(By.id("enable-project"))).getText();
+    }
 }
 
