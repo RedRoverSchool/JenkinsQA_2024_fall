@@ -14,6 +14,15 @@ public class MyViewsPage extends BasePage {
     @FindBy(xpath = "//button[@data-id='ok']")
     private WebElement yesButton;
 
+    @FindBy(css = ".h4")
+    private WebElement folderText;
+
+    @FindBy(xpath = "//footer/following-sibling::dialog")
+    private WebElement deletionPopup;
+
+    @FindBy(xpath = "//td//button[@aria-expanded='false']")
+    private WebElement chevronButton;
+
     public MyViewsPage(WebDriver driver) {
         super(driver);
     }
@@ -38,9 +47,8 @@ public class MyViewsPage extends BasePage {
         new Actions(getDriver()).moveToElement(getDriver().findElement(By.xpath("//a[@href='job/%s/']/span".formatted(projectName))))
                 .pause(500)
                 .perform();
-        WebElement chevron = getDriver().findElement(By.xpath("//td//button[@aria-expanded='false']"));
-        TestUtils.moveAndClickWithJS(getDriver(), chevron);
-        getWait5().until(ExpectedConditions.attributeToBe(chevron, "aria-expanded", "true"));
+        TestUtils.moveAndClickWithJS(getDriver(), chevronButton);
+        getWait5().until(ExpectedConditions.attributeToBe(chevronButton, "aria-expanded", "true"));
 
         return this;
     }
@@ -52,11 +60,10 @@ public class MyViewsPage extends BasePage {
     }
 
     public WebElement getDeletionPopup() {
-        return getWait5().until(ExpectedConditions.visibilityOf(getDriver().findElement(
-                By.xpath("//footer/following-sibling::dialog"))));
+        return getWait5().until(ExpectedConditions.visibilityOf(deletionPopup));
     }
 
     public String getTextEmptyFolder() {
-        return getWait5().until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".h4"))).getText();
+        return getWait5().until(ExpectedConditions.visibilityOf(folderText)).getText();
     }
 }
