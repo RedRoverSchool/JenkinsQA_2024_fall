@@ -1,5 +1,6 @@
 package school.redrover.page;
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -125,5 +126,12 @@ public class FreestyleProjectPage extends BaseProjectPage<FreestyleProjectPage, 
     public FreestyleProjectPage clickYesToWipeOutCurrentWorkspace() {
         getWait10().until(ExpectedConditions.elementToBeClickable(yesButton)).click();
         return this;
+    }
+
+    public FreestyleConfigPage changeEnablingStateViaIndicator() {
+        getWait10().until(ExpectedConditions.visibilityOfElementLocated(
+                By.name("Submit"))).click();
+
+        return new FreestyleConfigPage(getDriver());
     }
 }
