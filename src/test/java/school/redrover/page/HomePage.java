@@ -3,6 +3,7 @@ package school.redrover.page;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import school.redrover.page.base.BasePage;
@@ -44,6 +45,18 @@ public class HomePage extends BasePage {
 
     @FindBy(xpath = "//div[@class='tippy-content']")
     private WebElement buildScheduledTooltip;
+
+    @FindBy(xpath = "(//button[@class='jenkins-menu-dropdown-chevron'])[1]")
+    private WebElement adminDropdown;
+
+    @FindBy(xpath = "//a[contains(@href,'/user/admin/configure')]")
+    private WebElement configureAdminDropdown;
+
+    @FindBy(xpath = "//*[@href='/user/admin']")
+    private WebElement admin;
+
+    @FindBy(css= "a[href^='/logout']")
+    private WebElement logOut;
 
     public HomePage(WebDriver driver) {
         super(driver);
@@ -374,5 +387,29 @@ public class HomePage extends BasePage {
         selectMenuFromItemDropdown(projectName, "Rename");
 
         return new FreestyleRenamePage(getDriver());
+    }
+
+    public UserPage clickAdmin() {
+        admin.click();
+
+        return new UserPage(getDriver());
+    }
+
+    public HomePage openAdminDropdownMenu() {
+        new Actions(getDriver()).moveToElement(adminDropdown).click().perform();
+
+        return this;
+    }
+
+    public UserConfigPage clickConfigureAdminDropdownMenu() {
+        getWait2().until(ExpectedConditions.elementToBeClickable(configureAdminDropdown)).click();
+
+        return new UserConfigPage(getDriver());
+    }
+
+    public SignInPage clickLogOut() {
+        logOut.click();
+
+        return new SignInPage(getDriver());
     }
 }
