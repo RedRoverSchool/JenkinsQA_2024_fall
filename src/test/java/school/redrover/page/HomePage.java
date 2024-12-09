@@ -57,6 +57,9 @@ public class HomePage extends BasePage {
     @FindBy(xpath = "//*[@href='/user/admin']")
     private WebElement admin;
 
+    @FindBy(xpath = "//a[contains(@href,'/user/admin/credentials')]")
+    private WebElement credentialsDropdown;
+
     @FindBy(css = "a[href^='/logout']")
     private WebElement logOut;
 
@@ -89,9 +92,6 @@ public class HomePage extends BasePage {
 
     @FindBy(xpath = "//div[@class='tab' and not(.//a[@tooltip='New View'])]")
     private List<WebElement> viewList;
-
-    @FindBy(xpath = "//a[@href='/view/%s/']")
-    private WebElement viewLink;
 
     @FindBy(xpath = "//footer/following-sibling::dialog")
     private WebElement deletionPopup;
@@ -481,5 +481,11 @@ public class HomePage extends BasePage {
         logOut.click();
 
         return new SignInPage(getDriver());
+    }
+
+    public CredentialsPage clickCredentialsAdminDropdownMenu() {
+        getWait2().until(ExpectedConditions.elementToBeClickable(credentialsDropdown)).click();
+
+        return new CredentialsPage(getDriver());
     }
 }
