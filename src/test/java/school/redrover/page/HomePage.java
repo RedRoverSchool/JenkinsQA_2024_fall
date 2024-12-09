@@ -18,6 +18,9 @@ public class HomePage extends BasePage {
     @FindBy(css = "[href$='/newJob']")
     private WebElement newJob;
 
+    @FindBy(xpath = "//a[@href='newJob']")
+    private WebElement newJobContentBlock;
+
     @FindBy(xpath = "//a[@href = '/manage']")
     private WebElement manageJenkinsSidebar;
 
@@ -181,6 +184,12 @@ public class HomePage extends BasePage {
 
     public CreateNewItemPage clickNewItem() {
         newJob.click();
+
+        return new CreateNewItemPage(getDriver());
+    }
+
+    public CreateNewItemPage clickNewItemContentBlock() {
+        newJobContentBlock.click();
 
         return new CreateNewItemPage(getDriver());
     }
