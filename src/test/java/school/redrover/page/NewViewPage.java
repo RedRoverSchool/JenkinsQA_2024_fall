@@ -89,7 +89,7 @@ public class NewViewPage extends BasePage {
     }
 
     public NewViewPage selectViewType(String viewType) {
-        WebElement button = getDriver().findElement(By.xpath("//input[@id = 'hudson.model.%S']".formatted(viewType)));
+        WebElement button = getWait10().until(ExpectedConditions.elementToBeClickable(By.xpath("//input[@id = 'hudson.model.%S']".formatted(viewType))));
         boolean selectState = button.isSelected();
         if (!selectState) {
             new Actions(getDriver()).moveToElement(button).click().build().perform();

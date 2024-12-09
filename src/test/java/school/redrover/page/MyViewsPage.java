@@ -54,7 +54,8 @@ public class MyViewsPage extends BasePage {
     }
 
     public MyViewsPage clickDeleteInProjectDropdown(String projectName) {
-        getDriver().findElement(By.xpath("//button[@href='/me/my-views/view/all/job/%s/doDelete']".formatted(projectName))).click();
+        getWait10().until(ExpectedConditions.elementToBeClickable(
+                By.xpath("//button[@href='/me/my-views/view/all/job/%s/doDelete']".formatted(projectName)))).click();
 
         return this;
     }
