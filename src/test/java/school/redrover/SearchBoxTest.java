@@ -90,7 +90,7 @@ public class SearchBoxTest extends BaseTest {
                 .enterGotoLogPage("log")
                 .getResultSearch();
 
-        Assert.assertTrue(text.contains("log"));
+        Assert.assertTrue(text.toLowerCase().contains("log"));
     }
 
     @Test

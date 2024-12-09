@@ -6,6 +6,8 @@ import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.Assert;
 import org.testng.annotations.Test;
+import school.redrover.page.CreateNewItemPage;
+import school.redrover.page.HomePage;
 import school.redrover.runner.BaseTest;
 import school.redrover.runner.TestUtils;
 
@@ -14,13 +16,32 @@ import java.util.Arrays;
 import java.util.List;
 
 
-public class NewItem2Test extends BaseTest {
+public class NewItemTest extends BaseTest {
 
     private final static By NEW_ITEM_BUTTON = By.xpath("//a[@href='/view/all/newJob']");
     private final static By OK_BUTTON = By.id("ok-button");
     private final static By MESSAGE = By.id("itemname-required");
-
     private final static String NEW_ITEM_NAME = "New Project";
+    private final static String FIRST_ITEM_NAME = "My_First_Project";
+    private final static String SECOND_ITEM_NAME = "My_Second_Project";
+
+    private CreateNewItemPage goToNewItemPageAndEnterName(String projectName) {
+        return new HomePage(getDriver())
+                .clickNewItem()
+                .enterItemName(projectName);
+    }
+
+    private HomePage createPipelineProject(String projectName) {
+        return goToNewItemPageAndEnterName(projectName)
+                .selectPipelineAndClickOk()
+                .gotoHomePage();
+    }
+
+    private HomePage createFreestyleProject(String projectName) {
+        return goToNewItemPageAndEnterName(projectName)
+                .selectFreestyleProjectAndClickOk()
+                .gotoHomePage();
+    }
 
     private List<String> getTextList(List<WebElement> listOfElements) {
 
@@ -31,6 +52,32 @@ public class NewItem2Test extends BaseTest {
         }
 
         return textList;
+    }
+
+    @Test
+    public void testCreatePipelineFromExistingOne () {
+        List<String> itemNameList = createPipelineProject(FIRST_ITEM_NAME)
+                .clickNewItem()
+                .enterItemName(SECOND_ITEM_NAME)
+                .scrollToCopyFromFieldAndEnterName(FIRST_ITEM_NAME)
+                .clickOkAndGoToPipelineConfigPage()
+                .gotoHomePage()
+                .getItemList();
+
+        Assert.assertTrue(itemNameList.contains(SECOND_ITEM_NAME));
+    }
+
+    @Test
+    public void testCreateFreestyleProjectFromExistingOne () {
+        List<String> itemNameList = createFreestyleProject(FIRST_ITEM_NAME)
+                .clickNewItem()
+                .enterItemName(SECOND_ITEM_NAME)
+                .scrollToCopyFromFieldAndEnterName(FIRST_ITEM_NAME)
+                .clickOkButton()
+                .gotoHomePage()
+                .getItemList();
+
+        Assert.assertTrue(itemNameList.contains(SECOND_ITEM_NAME));
     }
 
     @Test
