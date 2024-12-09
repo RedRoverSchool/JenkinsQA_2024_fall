@@ -8,7 +8,7 @@ import school.redrover.page.base.BasePage;
 public class SystemPage extends BasePage {
 
     @FindBy(id = "breadcrumbs")
-    private static WebElement breadcrumbs;
+    private WebElement breadcrumbs;
 
     public SystemPage(WebDriver driver) {
         super(driver);

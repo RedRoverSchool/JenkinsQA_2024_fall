@@ -8,7 +8,7 @@ import school.redrover.page.base.BaseModel;
 public class SearchBoxPage extends BaseModel {
 
     @FindBy(xpath = "//h1")
-    private static WebElement title;
+    private WebElement title;
 
     public SearchBoxPage(WebDriver driver) {
         super(driver);

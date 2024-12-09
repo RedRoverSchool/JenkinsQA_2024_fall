@@ -8,13 +8,13 @@ import school.redrover.page.base.BasePage;
 public class SearchPage extends BasePage {
 
     @FindBy(xpath = "//li[@id = 'item_Built-In Node']/a")
-    private static WebElement resultSearch;
+    private WebElement resultSearch;
 
     @FindBy(xpath = "//h1")
-    private static WebElement title;
+    private WebElement title;
 
     @FindBy(className = "error")
-    private static WebElement messageError;
+    private WebElement messageError;
 
     public SearchPage(WebDriver driver) {
         super(driver);
