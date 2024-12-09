@@ -9,6 +9,8 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import school.redrover.page.base.BasePage;
 import school.redrover.runner.TestUtils;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class HomePage extends BasePage {
@@ -387,6 +389,14 @@ public class HomePage extends BasePage {
         selectMenuFromItemDropdown(projectName, "Rename");
 
         return new FreestyleRenamePage(getDriver());
+    }
+
+    public Boolean isInAlphabeticalOrder() {
+        List<String> actualOrder = getItemList();
+        List<String> expectedOrder = new ArrayList<>(actualOrder);
+        Collections.sort(expectedOrder);
+
+        return actualOrder.equals(expectedOrder);
     }
 
     public UserPage clickAdmin() {

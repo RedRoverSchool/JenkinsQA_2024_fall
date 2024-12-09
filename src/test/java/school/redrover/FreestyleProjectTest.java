@@ -156,7 +156,7 @@ public class FreestyleProjectTest extends BaseTest {
         String actualProjectName = new HomePage(getDriver())
                 .openFreestyleProject(PROJECT_NAME)
                 .clickRenameSidebarButton()
-                .clearOldAndInputNewProjectName(newName)
+                .clearInputFieldAndTypeName(newName)
                 .clickRenameButton()
                 .getProjectName();
 
@@ -171,7 +171,7 @@ public class FreestyleProjectTest extends BaseTest {
 
         String actualProjectName = new HomePage(getDriver())
                 .clickRenameInProjectDropdown(PROJECT_NAME)
-                .clearOldAndInputNewProjectName(newName)
+                .clearInputFieldAndTypeName(newName)
                 .clickRenameButton()
                 .getProjectName();
 
@@ -377,22 +377,78 @@ public class FreestyleProjectTest extends BaseTest {
 
     @Test
     public void testJobNameSorting() {
-
         List<String> projectNames = List.of("aaa", "bbb", "aabb");
         projectNames.forEach(name -> TestUtils.createFreestyleProject(getDriver(), name));
 
-        List<WebElement> jobLinks = getDriver()
-                .findElements(By.xpath("//table[@id='projectstatus']//tbody//tr/td[3]/a"));
+        Boolean isSorted = new HomePage(getDriver())
+                .isInAlphabeticalOrder();
 
-        List<String> actualOrder = new ArrayList<>();
-        for (WebElement link : jobLinks) {
-            actualOrder.add(link.getText().trim());
-        }
-
-        List<String> expectedOrder = new ArrayList<>(actualOrder);
-        Collections.sort(expectedOrder);
-
-        Assert.assertEquals(actualOrder, expectedOrder);
+        Assert.assertTrue(isSorted, "Projects is not sorted alphabetically");
     }
 
+    @Test
+    public void testNotificationBarAppears() {
+        TestUtils.createFreestyleProject(getDriver(), PROJECT_NAME);
+
+        String notificationBar = new HomePage(getDriver())
+                .selectBuildNowFromItemMenu(PROJECT_NAME)
+                .getNotificationBarStatus();
+
+        Assert.assertEquals(notificationBar, "Build Now: Done.");
+    }
+
+    @Test(dependsOnMethods = "testNotificationBarAppears")
+    public void testCounterOfRunsIncrease() {
+        String progressBar = new HomePage(getDriver())
+                .selectBuildNowFromItemMenu(PROJECT_NAME)
+                .refreshAfterBuild()
+                .getNumberOfRuns();
+
+        Assert.assertEquals(progressBar, "#2");
+    }
+
+    @Test(dependsOnMethods = "testCounterOfRunsIncrease")
+    public void testStatusOnHomePageIsSuccess() {
+
+        String statusBuild = new HomePage(getDriver())
+                .getStatusBuild(PROJECT_NAME);
+
+        Assert.assertEquals(statusBuild, "Success");
+    }
+
+    @Test
+    public void testBuildHistoryIsEmpty() {
+        TestUtils.createFreestyleProject(getDriver(), PROJECT_NAME);
+
+        List<String> emptyHistory = new HomePage(getDriver())
+                .gotoBuildHistoryPageFromLeftPanel()
+                .getListOfStatuses();
+
+        Assert.assertEquals(emptyHistory.size(), 0);
+    }
+
+    @Test(dependsOnMethods = "testBuildHistoryIsEmpty")
+    public void testUpdateAfterExecutingBuild() {
+        List<String> oneExecution = new HomePage(getDriver())
+                .clickScheduleBuild(PROJECT_NAME)
+                .gotoBuildHistoryPageFromLeftPanel()
+                .getListOfStatuses();
+
+        Assert.assertEquals(oneExecution.get(0), "stable");
+        Assert.assertEquals(oneExecution.size(), 1);
+    }
+
+    @Test(dependsOnMethods = "testUpdateAfterExecutingBuild")
+    public void testUpdateAfterChangingConfig() {
+        List<String> changeConfig = new HomePage(getDriver())
+                .openFreestyleProject(PROJECT_NAME)
+                .clickSidebarConfigButton()
+                .addBuildStep("Run with timeout")
+                .gotoHomePage()
+                .clickScheduleBuild(PROJECT_NAME)
+                .gotoBuildHistoryPageFromLeftPanel()
+                .getListOfStatuses();
+
+        Assert.assertEquals(changeConfig.size(), 2);
+    }
 }

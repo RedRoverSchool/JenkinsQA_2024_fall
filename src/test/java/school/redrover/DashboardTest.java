@@ -10,33 +10,34 @@ import java.util.List;
 
 public class DashboardTest extends BaseTest {
 
-    final String invalidPipelineScriptFile = """
-                error_pipeline {{{
-                    agent any
-                    stages {
-                        stage('Checkout') {
-                            steps {echo 'Step: Checkout code from repository'}
-                        }
-                     }
-                }
-                """;
+    private static final String invalidPipelineScriptFile = """
+            error_pipeline {{{
+                agent any
+                stages {
+                    stage('Checkout') {
+                        steps {echo 'Step: Checkout code from repository'}
+                    }
+                 }
+            }
+            """;
 
-    final String validPipelineScriptFile = """
-                pipeline {
-                    agent any
-                    stages {
-                        stage('Checkout') {
-                            steps {echo 'Step: Checkout code from repository'}
-             
-                """;
+    private static final String validPipelineScriptFile = """
+            pipeline {
+                agent any
+                stages {
+                    stage('Checkout') {
+                        steps {echo 'Step: Checkout code from repository'}
+                         
+            """;
 
-    final String SuccessBuilt = "FPipelineProject";
-    final String Disabled = "APipelineProject";
-    final String FailedBuilt = "ZPipelineProject";
-    final String NotBuilt = "1PipelineProject";
+    private static final String SuccessBuilt = "FPipelineProject";
+    private static final String Disabled = "APipelineProject";
+    private static final String FailedBuilt = "ZPipelineProject";
+    private static final String NotBuilt = "1PipelineProject";
 
     @Test
     public void testVerifyProjectOrderByNameASCByDefault() {
+
         testPreparationCreateNotBuiltProject("FPipelineProject");
         testPreparationCreateNotBuiltProject("APipelineProject");
         testPreparationCreateNotBuiltProject("ZPipelineProject");
