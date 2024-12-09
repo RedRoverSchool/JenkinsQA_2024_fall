@@ -1,10 +1,17 @@
 package school.redrover.page;
 
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
 import school.redrover.page.base.BaseProjectPage;
 
 public class OrganizationFolderProjectPage extends BaseProjectPage<OrganizationFolderProjectPage, OrganizationFolderConfigPage, OrganizationFolderRenamePage> {
+
+    @FindBy(xpath = "//a[@href='./configure']")
+    private WebElement configureButton;
+
+    @FindBy(tagName = "h1")
+    private WebElement name;
 
     public OrganizationFolderProjectPage(WebDriver driver) {
         super(driver);
@@ -20,16 +27,13 @@ public class OrganizationFolderProjectPage extends BaseProjectPage<OrganizationF
         return new OrganizationFolderRenamePage(getDriver());
     }
 
-    private final By GET_CONFIGURE = By.xpath("//a[@href='./configure']");
-    private final By NAME_H1 = By.tagName("h1");
-
     public OrganizationFolderConfigPage clickConfigure() {
-        getDriver().findElement(GET_CONFIGURE).click();
+        configureButton.click();
 
         return new OrganizationFolderConfigPage(getDriver());
     }
 
     public String getName() {
-        return getDriver().findElement(NAME_H1).getText();
+        return name.getText();
     }
 }

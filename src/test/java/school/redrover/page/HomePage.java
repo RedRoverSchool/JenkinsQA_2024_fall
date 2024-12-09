@@ -18,6 +18,9 @@ public class HomePage extends BasePage {
     @FindBy(css = "[href$='/newJob']")
     private WebElement newJob;
 
+    @FindBy(xpath = "//a[@href='newJob']")
+    private WebElement newJobContentBlock;
+
     @FindBy(xpath = "//a[@href = '/manage']")
     private WebElement manageJenkinsSidebar;
 
@@ -53,6 +56,9 @@ public class HomePage extends BasePage {
 
     @FindBy(xpath = "//*[@href='/user/admin']")
     private WebElement admin;
+
+    @FindBy(xpath = "//a[contains(@href,'/user/admin/credentials')]")
+    private WebElement credentialsDropdown;
 
     @FindBy(css = "a[href^='/logout']")
     private WebElement logOut;
@@ -178,6 +184,12 @@ public class HomePage extends BasePage {
 
     public CreateNewItemPage clickNewItem() {
         newJob.click();
+
+        return new CreateNewItemPage(getDriver());
+    }
+
+    public CreateNewItemPage clickNewItemContentBlock() {
+        newJobContentBlock.click();
 
         return new CreateNewItemPage(getDriver());
     }
@@ -469,5 +481,11 @@ public class HomePage extends BasePage {
         logOut.click();
 
         return new SignInPage(getDriver());
+    }
+
+    public CredentialsPage clickCredentialsAdminDropdownMenu() {
+        getWait2().until(ExpectedConditions.elementToBeClickable(credentialsDropdown)).click();
+
+        return new CredentialsPage(getDriver());
     }
 }

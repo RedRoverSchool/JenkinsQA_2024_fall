@@ -1,12 +1,24 @@
 package school.redrover.page;
 
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import school.redrover.page.base.BaseProjectPage;
 
 public class MultiConfigurationProjectPage extends BaseProjectPage<MultiConfigurationProjectPage, MultiConfigurationConfigPage, MultiConfigurationRenamePage> {
+
+    @FindBy(xpath = "//div[@id='side-panel']//span[text()='Delete Multi-configuration project']")
+    private WebElement deleteProjectButton;
+
+    @FindBy(xpath = "//footer/following-sibling::dialog")
+    private WebElement deletionPopup;
+
+    @FindBy(xpath = "//a[contains(@data-title,'Delete')]")
+    private WebElement deleteSidebarButton;
+
+    @FindBy(xpath = "//button[@data-id='ok']")
+    private WebElement confirmDeletionButton;
 
     public MultiConfigurationProjectPage(WebDriver driver) {
         super(driver);
@@ -23,20 +35,18 @@ public class MultiConfigurationProjectPage extends BaseProjectPage<MultiConfigur
     }
 
     public MultiConfigurationProjectPage clickDeleteProject() {
-        getDriver().findElement(
-                By.xpath("//div[@id='side-panel']//span[text()='Delete Multi-configuration project']")).click();
+        deleteProjectButton.click();
 
         return this;
     }
 
     public WebElement getDeletionPopup() {
-        return getWait5().until(ExpectedConditions.visibilityOf(getDriver().findElement(
-                By.xpath("//footer/following-sibling::dialog"))));
+        return getWait5().until(ExpectedConditions.visibilityOf(deletionPopup));
     }
 
     public HomePage clickDeleteOnSidebarAndConfirmDeletion() {
-        getDriver().findElement(By.xpath("//a[contains(@data-title,'Delete')]")).click();
-        getDriver().findElement(By.xpath("//button[@data-id='ok']")).click();
+        deleteSidebarButton.click();
+        confirmDeletionButton.click();
 
         return new HomePage(getDriver());
     }

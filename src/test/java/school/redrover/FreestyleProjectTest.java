@@ -56,9 +56,9 @@ public class FreestyleProjectTest extends BaseTest {
     }
 
     @Test
-    public void testCreateProjectViaCreateJobButton() {
+    public void testCreateProjectViaContentBlockButton() {
         String actualProjectName = new HomePage(getDriver())
-                .clickNewItem()
+                .clickNewItemContentBlock()
                 .enterItemName(PROJECT_NAME)
                 .selectFreestyleProjectAndClickOk()
                 .clickSaveButton()
@@ -110,7 +110,7 @@ public class FreestyleProjectTest extends BaseTest {
         Assert.assertEquals(periodCheckbox, "minute");
     }
 
-    @Test(dependsOnMethods = "testCreateProjectViaCreateJobButton")
+    @Test(dependsOnMethods = "testCreateProjectViaContentBlockButton")
     public void testAddDescription() {
         String description = new HomePage(getDriver())
                 .openFreestyleProject(PROJECT_NAME)

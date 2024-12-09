@@ -25,7 +25,7 @@ public class NewViewDashboardTest extends BaseTest {
         new HomePage(getDriver())
                 .clickCreateNewViewButton()
                 .typeNameIntoInputField(MY_VIEW)
-                .selectViewType(MY_VIEW)
+                .selectMyViewType()
                 .clickCreateButton();
 
         List<WebElement> listOfViews = getDriver().findElements(By.xpath("//div[@class = 'tabBar']//a"));
@@ -39,7 +39,7 @@ public class NewViewDashboardTest extends BaseTest {
         new HomePage(getDriver())
                 .clickCreateNewViewButton()
                 .typeNameIntoInputField(LIST_VIEW)
-                .selectViewType(LIST_VIEW)
+                .selectListViewType()
                 .clickCreateButton()
                 .clickOkButton();
 

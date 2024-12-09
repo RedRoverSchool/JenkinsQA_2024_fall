@@ -1,14 +1,20 @@
 package school.redrover.page;
 
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.Select;
 import school.redrover.page.base.BaseConfigPage;
 
 import java.util.List;
 
 public class MultiConfigurationConfigPage extends BaseConfigPage<MultiConfigurationConfigPage, MultiConfigurationProjectPage> {
+
+    @FindBy(xpath = "//span[@class='jenkins-checkbox']/label[text()='Throttle builds']")
+    private WebElement throttleBuildsCheckbox;
+
+    @FindBy(xpath = "//select[@name='_.durationName']")
+    private WebElement durationItemsSelect;
 
     public MultiConfigurationConfigPage(WebDriver driver) {
         super(driver);
@@ -21,13 +27,12 @@ public class MultiConfigurationConfigPage extends BaseConfigPage<MultiConfigurat
     }
 
     public MultiConfigurationConfigPage clickThrottleBuildsCheckbox() {
-        getDriver().findElement(By.xpath("//span[@class='jenkins-checkbox']/label[text()='Throttle builds']")).click();
+        throttleBuildsCheckbox.click();
 
         return this;
     }
 
     public MultiConfigurationConfigPage selectDurationItem(String item) {
-        WebElement durationItemsSelect = getDriver().findElement(By.xpath("//select[@name='_.durationName']"));
         Select select = new Select(durationItemsSelect);
         select.selectByValue(item);
 
@@ -35,18 +40,15 @@ public class MultiConfigurationConfigPage extends BaseConfigPage<MultiConfigurat
     }
 
     public String getSelectedDurationItemText() {
-        WebElement durationItemsSelect = getDriver().findElement(By.xpath("//select[@name='_.durationName']"));
         Select select = new Select(durationItemsSelect);
 
         return select.getFirstSelectedOption().getText().toLowerCase();
     }
 
     public List<String> getAllDurationItemsFromSelect() {
-        WebElement durationItemsSelect = getDriver().findElement(By.xpath("//select[@name='_.durationName']"));
-        Select select = new Select(durationItemsSelect);
-
-        return select.getOptions().stream()
-                   .map(option -> option.getAttribute("value"))
-                   .toList();
+        return new Select(durationItemsSelect).getOptions().stream()
+                .map(option -> option.getAttribute("value"))
+                .toList();
     }
+
 }

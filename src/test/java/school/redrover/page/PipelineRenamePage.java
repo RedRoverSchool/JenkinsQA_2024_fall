@@ -15,9 +15,4 @@ public class PipelineRenamePage extends BaseRenamePage<PipelineRenamePage, Pipel
         return new PipelineProjectPage(getDriver());
     }
 
-    public ErrorPage clickRenameButtonAndRedirectToErrorPage() {
-        getDriver().findElement(By.xpath("//button[@name='Submit']")).click();
-
-        return new ErrorPage(getDriver());
-    }
 }
