@@ -80,7 +80,7 @@ public class MultiConfigurationProjectTest extends BaseTest {
                 .clickNewItem()
                 .enterItemName(PROJECT_NAME)
                 .selectFreestyleProject()
-                .getErrorMessage();
+                .getInvalidNameMessage();
 
         Assert.assertEquals(errorMessage, "» A job already exists with the name ‘%s’".formatted(PROJECT_NAME));
     }
@@ -111,7 +111,7 @@ public class MultiConfigurationProjectTest extends BaseTest {
         WebElement deletionPopup = new HomePage(getDriver())
                 .goToMyViews()
                 .openDropdownViaChevron(PROJECT_NAME)
-                .clickDeleteInProjectDropdown(PROJECT_NAME)
+                .clickDeleteInProjectDropdown()
                 .getDeletionPopup();
 
         Assert.assertTrue(deletionPopup.isDisplayed());
