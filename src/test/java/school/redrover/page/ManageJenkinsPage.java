@@ -95,7 +95,7 @@ public class ManageJenkinsPage extends BasePage {
     }
 
     public String getNoResultLabelText() {
-        return noResultLabel.getText();
+        return getWait10().until(ExpectedConditions.visibilityOf(noResultLabel)).getText();
     }
 
     public CloudsPage pressEnterAfterInput(String text) {
@@ -129,7 +129,7 @@ public class ManageJenkinsPage extends BasePage {
     }
 
     public List<String> getSearchResults() {
-        return searchResultElements.stream().map(WebElement::getText).toList();
+        return getWait5().until(ExpectedConditions.visibilityOfAllElements(searchResultElements)).stream().map(WebElement::getText).toList();
     }
 
     public CredentialsConfigurePage clickConfigureCredentialsItem() {
