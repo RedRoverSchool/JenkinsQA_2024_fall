@@ -13,7 +13,7 @@ import java.util.List;
 
 public class FolderProjectPage extends BaseProjectPage<FolderProjectPage, FolderConfigPage, FolderRenamePage> {
 
-    @FindBy(tagName= "h1")
+    @FindBy(tagName = "h1")
     private WebElement pageTitle;
 
     @FindBy(id = "description-link")
@@ -46,6 +46,15 @@ public class FolderProjectPage extends BaseProjectPage<FolderProjectPage, Folder
     @FindBy(xpath = "//div[@id='tasks']/div")
     private List<WebElement> sidebarItemsNameList;
 
+    @FindBy(id = "view-message")
+    private WebElement folderDescription;
+
+    @FindBy(xpath = "//div[@id='main-panel']")
+    private WebElement mainPanel;
+
+    @FindBy(xpath = "//td/a/span")
+    private List<WebElement> itemNames;
+
     public FolderProjectPage(WebDriver driver) {
         super(driver);
     }
@@ -61,7 +70,7 @@ public class FolderProjectPage extends BaseProjectPage<FolderProjectPage, Folder
     }
 
     public String getFolderDescription() {
-        return getDriver().findElement(By.id("view-message")).getText();
+        return folderDescription.getText();
     }
 
     public String getConfigurationName() {
@@ -69,7 +78,8 @@ public class FolderProjectPage extends BaseProjectPage<FolderProjectPage, Folder
     }
 
     public String getFolderName() {
-        String fullText = getDriver().findElement(By.xpath("//div[@id='main-panel']")).getText();
+        String fullText = mainPanel.getText();
+
         return Arrays.stream(fullText.split("\n"))
                 .filter(line -> line.startsWith("Folder name: "))
                 .map(line -> line.replace("Folder name: ", "").trim())
@@ -79,7 +89,8 @@ public class FolderProjectPage extends BaseProjectPage<FolderProjectPage, Folder
 
     public String getItemNameByOrder(int order) {
 
-        return getDriver().findElements(By.xpath("//td/a/span")).stream()
+        return itemNames
+                .stream()
                 .skip(order - 1)
                 .findFirst().orElseThrow(() -> new IllegalArgumentException("Некорректный порядок: " + order))
                 .getText();
@@ -91,13 +102,13 @@ public class FolderProjectPage extends BaseProjectPage<FolderProjectPage, Folder
         return this;
     }
 
-    public FolderProjectPage cancelDeletingViaModalWindow () {
+    public FolderProjectPage cancelDeletingViaModalWindow() {
         getWait10().until(ExpectedConditions.elementToBeClickable(deleteFolderButton)).click();
         getWait10().until(ExpectedConditions.elementToBeClickable(cancelDeleteButton)).click();
         return this;
     }
 
-    public String getDescriptionViaPreview () {
+    public String getDescriptionViaPreview() {
         getWait5().until(ExpectedConditions.elementToBeClickable(addDescriptionButton)).click();
         getWait5().until(ExpectedConditions.elementToBeClickable(descriptionPreviewLink)).click();
         return getWait10().until(ExpectedConditions.visibilityOf(descriptionTextareaPreview)).getText();
@@ -108,6 +119,7 @@ public class FolderProjectPage extends BaseProjectPage<FolderProjectPage, Folder
 
         return this;
     }
+
     public FolderProjectPage selectParentFolderAndClickMove(String folderName) {
         WebElement selectElement = getWait5().until(ExpectedConditions.visibilityOf(selectFolderDestinationSelect));
         Select select = new Select(selectElement);

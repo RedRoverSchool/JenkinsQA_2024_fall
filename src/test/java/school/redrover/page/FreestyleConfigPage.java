@@ -51,7 +51,7 @@ public class FreestyleConfigPage extends BaseConfigPage<FreestyleConfigPage, Fre
     }
 
     public FreestyleConfigPage addBuildStep(String buildStep) {
-        TestUtils.scrollToBottom(getDriver());
+        TestUtils.scrollToBottomWithJS(getDriver());
         addBuildStepButton.click();
         getDriver().findElement(By.xpath("//button[contains(text(),'%s')]".formatted(buildStep))).click();
 
@@ -60,7 +60,7 @@ public class FreestyleConfigPage extends BaseConfigPage<FreestyleConfigPage, Fre
 
     public FreestyleConfigPage addExecuteWindowsBatchCommand(String command) {
         getWait10().until(ExpectedConditions.visibilityOf(buildStepsSidebar)).click();
-        TestUtils.scrollToBottom(getDriver());
+        TestUtils.scrollToBottomWithJS(getDriver());
         addBuildStep("Execute Windows batch command");
         executeWindowsBatchCommandField.sendKeys(command);
 
@@ -74,7 +74,7 @@ public class FreestyleConfigPage extends BaseConfigPage<FreestyleConfigPage, Fre
     }
 
     public FreestyleConfigPage clickAddBuildStep() {
-        TestUtils.scrollToBottom(getDriver());
+        TestUtils.scrollToBottomWithJS(getDriver());
         getWait10().until(ExpectedConditions.elementToBeClickable(addBuildStepButton)).click();
 
         return this;
@@ -95,7 +95,7 @@ public class FreestyleConfigPage extends BaseConfigPage<FreestyleConfigPage, Fre
     }
 
     public String getTextExecuteShellTextArea() {
-        TestUtils.scrollToBottom(getDriver());
+        TestUtils.scrollToBottomWithJS(getDriver());
 
         return (String) ((JavascriptExecutor) getDriver()).executeScript(
                 "return arguments[0].CodeMirror.getValue();", executeShellCommandField);

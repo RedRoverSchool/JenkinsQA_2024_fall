@@ -58,13 +58,6 @@ public class PipelineProjectPage extends BaseProjectPage<PipelineProjectPage, Pi
                 By.xpath("//ol[@id='breadcrumbs']/li[@class='jenkins-breadcrumbs__list-item'][2]")).getText();
     }
 
-    public PipelineConfigurePage clickConfigureSidebar(String name) {
-        getWait2().until(ExpectedConditions.elementToBeClickable(
-                By.xpath("//a[@href='/job/%s/configure']".formatted(name)))).click();
-
-        return new PipelineConfigurePage(getDriver());
-    }
-
     public PipelineProjectPage clickEnableButton() {
         getWait2().until(ExpectedConditions.elementToBeClickable(By.xpath("//button[@formNoValidate='formNoValidate']"))).click();
 
@@ -117,7 +110,7 @@ public class PipelineProjectPage extends BaseProjectPage<PipelineProjectPage, Pi
                 By.xpath("//a[@href ='/job/%s/']/button[@class='jenkins-menu-dropdown-chevron']"
                         .formatted(name))));
 
-        TestUtils.moveAndClickWithJavaScript(getDriver(), buttonChevron);
+        TestUtils.moveAndClickWithJS(getDriver(), buttonChevron);
 
         return new PipelineProjectPage(getDriver());
     }

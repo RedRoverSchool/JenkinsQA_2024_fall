@@ -54,7 +54,7 @@ public class PipelineConfigurePage extends BaseConfigPage<PipelineConfigurePage,
 
     public PipelineConfigurePage addScriptToPipeline(String script) {
 
-        TestUtils.scrollToBottom(getDriver());
+        TestUtils.scrollToBottomWithJS(getDriver());
         getDriver().findElement(By.cssSelector("textarea[class='ace_text-input']")).sendKeys(script);
 
         return this;
@@ -67,7 +67,7 @@ public class PipelineConfigurePage extends BaseConfigPage<PipelineConfigurePage,
         return this;
     }
     public PipelineConfigurePage pasteScript() {
-        TestUtils.scrollToBottom(getDriver());
+        TestUtils.scrollToBottomWithJS(getDriver());
 
         getWait2().until(ExpectedConditions.visibilityOfElementLocated(By.id("workflow-editor-1")))
                 .click();

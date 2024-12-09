@@ -1,7 +1,5 @@
 package school.redrover;
 
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebElement;
 import org.testng.Assert;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
@@ -10,8 +8,6 @@ import school.redrover.page.HomePage;
 import school.redrover.runner.BaseTest;
 import school.redrover.runner.TestUtils;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class FreestyleProjectTest extends BaseTest {
@@ -62,7 +58,7 @@ public class FreestyleProjectTest extends BaseTest {
     @Test
     public void testCreateProjectViaCreateJobButton() {
         String actualProjectName = new HomePage(getDriver())
-                .clickCreateJob()
+                .clickNewItem()
                 .enterItemName(PROJECT_NAME)
                 .selectFreestyleProjectAndClickOk()
                 .clickSaveButton()
@@ -87,7 +83,7 @@ public class FreestyleProjectTest extends BaseTest {
     public void testCreateFreestyleProjectFromMyViews() {
         List<String> projectName = new HomePage(getDriver())
                 .clickMyViewsButton()
-                .clickCreateJob()
+                .clickNewItem()
                 .enterItemName(PROJECT_NAME)
                 .selectTypeProject(FREESTYLE_PROJECT)
                 .clickOkButton()

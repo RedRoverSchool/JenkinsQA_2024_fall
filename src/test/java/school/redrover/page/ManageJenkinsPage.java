@@ -1,6 +1,5 @@
 package school.redrover.page;
 
-import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -14,7 +13,46 @@ import java.util.List;
 public class ManageJenkinsPage extends BasePage {
 
     @FindBy(xpath = "//h1")
-    private static WebElement title;
+    private WebElement title;
+
+    @FindBy(xpath = "//a[@href='pluginManager']")
+    private WebElement pluginsButton;
+
+    @FindBy(xpath = "//a[@href='securityRealm/']")
+    private WebElement usersButton;
+
+    @FindBy(xpath = "//h2[@class='jenkins-section__title']")
+    private List<WebElement> sections;
+
+    @FindBy(xpath = "(//div[@class='jenkins-section__items'])[1]//dt")
+    private List<WebElement> systemConfigItems;
+
+    @FindBy(css = "a[href='configure']")
+    private WebElement systemSectionButton;
+
+    @FindBy(css = "input[id=settings-search-bar]")
+    private WebElement searchInputField;
+
+    @FindBy(css = "[class$='no-results-label']")
+    private WebElement noResultLabel;
+
+    @FindBy(css = "input[id=settings-search-bar]")
+    private WebElement searchFieldForPressEnter;
+
+    @FindBy(css = "[class='jenkins-search__shortcut']")
+    private WebElement tooltip;
+
+    @FindBy(xpath = "//div[@aria-describedby='tippy-6']")
+    private WebElement hiddenTooltipValue;
+
+    @FindBy(xpath = "//div[@class='jenkins-search__results']//a")
+    private List<WebElement> searchResultElements;
+
+    @FindBy(css = "a[href$='configureCredentials']")
+    private WebElement configureCredentialsItem;
+
+    @FindBy(className = "jenkins-search__results-item--selected")
+    private WebElement selectedSearchResultItem;
 
     public ManageJenkinsPage(WebDriver driver) {
         super(driver);
@@ -25,68 +63,52 @@ public class ManageJenkinsPage extends BasePage {
     }
 
     public PluginsPage openPluginsPage() {
-        getWait10().until(ExpectedConditions.visibilityOfElementLocated((By.xpath("//a[@href='pluginManager']")))).click();
+        pluginsButton.click();
 
         return new PluginsPage(getDriver());
     }
 
     public UsersPage openUsersPage() {
-        getWait10().until(ExpectedConditions.visibilityOfElementLocated((By.xpath("//a[@href='securityRealm/']")))).click();
+        usersButton.click();
 
         return new UsersPage(getDriver());
     }
 
     public List<String> getAllSections() {
-        List<WebElement> sections = getDriver().findElements(By.xpath("//h2[@class='jenkins-section__title']"));
-
         return sections.stream().map(WebElement::getText).toList();
     }
 
     public List<String> getSystemConfigurationItems() {
-        List<WebElement> systemConfigItems = getDriver()
-                                                 .findElements(By.xpath("(//div[@class='jenkins-section__items'])[1]//dt"));
-
-       return systemConfigItems.stream().map(WebElement::getText).toList();
+        return systemConfigItems.stream().map(WebElement::getText).toList();
     }
 
     public SystemPage clickSystemSection() {
-        getDriver().findElement(By.cssSelector("a[href='configure']")).click();
+        systemSectionButton.click();
 
         return new SystemPage(getDriver());
     }
 
     public ManageJenkinsPage typeSearchInputField(String text) {
-        getDriver().findElement(By.cssSelector("input[id=settings-search-bar]")).sendKeys(text);
+        getWait10().until(ExpectedConditions.visibilityOf(searchInputField)).sendKeys(text);
 
         return this;
     }
 
     public String getNoResultLabelText() {
-        WebElement noResultLabel = getWait5().until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("[class$='no-results-label']")));
-
-        return noResultLabel.getText();
+        return getWait10().until(ExpectedConditions.visibilityOf(noResultLabel)).getText();
     }
 
     public CloudsPage pressEnterAfterInput(String text) {
-        WebElement searchSettingInput = getDriver().findElement(By.cssSelector("input[id=settings-search-bar]"));
-
-        searchSettingInput.sendKeys(text);
-
-        getWait5().until(ExpectedConditions.visibilityOfElementLocated(By.className("jenkins-search__results-item--selected")));
-
-        searchSettingInput.sendKeys(Keys.ENTER);
+        searchFieldForPressEnter.sendKeys(text);
+        getWait5().until(ExpectedConditions.visibilityOf(selectedSearchResultItem));
+        searchFieldForPressEnter.sendKeys(Keys.ENTER);
 
         return new CloudsPage(getDriver());
     }
 
     public boolean isHiddenShortcutTooltipDisplayed() {
-        WebElement tooltip = getDriver().findElement(By.cssSelector("[class='jenkins-search__shortcut']"));
-
         Actions actions = new Actions(getDriver());
         actions.moveToElement(tooltip).perform();
-
-        WebElement hiddenTooltipValue = getWait5().until(ExpectedConditions
-                                                  .visibilityOfElementLocated(By.xpath("//div[@aria-describedby='tippy-6']")));
 
         return hiddenTooltipValue.isDisplayed();
     }
@@ -99,28 +121,18 @@ public class ManageJenkinsPage extends BasePage {
     }
 
     public String getInputText() {
-
-        return getDriver().findElement(By.cssSelector("input[id='settings-search-bar']")).getAttribute("value");
+        return searchInputField.getAttribute("value");
     }
 
     public boolean isSearchSettingFieldDisplayed() {
-
-        return  getDriver().findElement(By.cssSelector("input[id='settings-search-bar']")).isDisplayed();
+        return searchInputField.isDisplayed();
     }
 
     public List<String> getSearchResults() {
-
-        List<WebElement> searchResultElements = getWait5()
-                                                    .until(ExpectedConditions.visibilityOfAllElementsLocatedBy(
-                                                        By.xpath("//div[@class='jenkins-search__results']//a")));
-
-        return searchResultElements.stream().map(WebElement::getText).toList();
+        return getWait5().until(ExpectedConditions.visibilityOfAllElements(searchResultElements)).stream().map(WebElement::getText).toList();
     }
 
     public CredentialsConfigurePage clickConfigureCredentialsItem() {
-        WebElement configureCredentialsItem = getWait5()
-                                                  .until(ExpectedConditions.visibilityOfElementLocated(
-                                                      By.cssSelector("a[href$='configureCredentials']")));
         configureCredentialsItem.click();
 
         return new CredentialsConfigurePage(getDriver());

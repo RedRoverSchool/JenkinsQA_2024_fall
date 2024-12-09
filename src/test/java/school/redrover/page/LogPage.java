@@ -8,7 +8,7 @@ import school.redrover.page.base.BasePage;
 public class LogPage extends BasePage {
 
     @FindBy(xpath = "//a[@class='jenkins-table__link']")
-    private static WebElement resultSearch;
+    private WebElement resultSearch;
 
     public LogPage(WebDriver driver) {
         super(driver);

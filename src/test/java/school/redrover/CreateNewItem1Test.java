@@ -16,7 +16,7 @@ public class CreateNewItem1Test extends BaseTest {
     @Test
     public void testWithButton() {
         List<String> items = new HomePage(getDriver())
-                .clickCreateJob()
+                .clickNewItem()
                 .enterItemName(ITEM_NAME)
                 .selectTypeOfProject(FREESTYLE_PROJECT)
                 .clickOkButton()

@@ -21,9 +21,6 @@ public class HomePage extends BasePage {
     @FindBy(xpath = "//a[@href = '/manage']")
     private WebElement manageJenkinsSidebar;
 
-    @FindBy(xpath = "//a[@href='newJob']")
-    private WebElement createAJobOption;
-
     @FindBy(xpath = "//button[@data-id='ok']")
     private WebElement yesButton;
 
@@ -57,8 +54,77 @@ public class HomePage extends BasePage {
     @FindBy(xpath = "//*[@href='/user/admin']")
     private WebElement admin;
 
-    @FindBy(css= "a[href^='/logout']")
+    @FindBy(css = "a[href^='/logout']")
     private WebElement logOut;
+
+    @FindBy(xpath = "//a[@href = '/view/all/builds']")
+    private WebElement buildHistoryLink;
+
+    @FindBy(xpath = "//a[contains(@class,'app-progress-bar')]")
+    private WebElement progressBar;
+
+    @FindBy(xpath = "//div[@id = 'notification-bar']")
+    private WebElement notificationBar;
+
+    @FindBy(xpath = "//a[@class='jenkins-table__link jenkins-table__badge model-link inside']")
+    private WebElement numberOfRuns;
+
+    @FindBy(xpath = "//a[@href='/newView']")
+    private WebElement createNewViewButton;
+
+    @FindBy(css = "[class$='jenkins_ver']")
+    private WebElement jenkinsVersion;
+
+    @FindBy(xpath = "//a[normalize-space()='About Jenkins']")
+    private WebElement aboutJenkinsButton;
+
+    @FindBy(css = "[href='/manage/about']")
+    private WebElement aboutJenkinsDropdownLabel;
+
+    @FindBy(linkText = "My Views")
+    private WebElement myViewsButton;
+
+    @FindBy(xpath = "//div[@class='tab' and not(.//a[@tooltip='New View'])]")
+    private List<WebElement> viewList;
+
+    @FindBy(xpath = "//a[@href='/view/%s/']")
+    private WebElement viewLink;
+
+    @FindBy(xpath = "//footer/following-sibling::dialog")
+    private WebElement deletionPopup;
+
+    @FindBy(xpath = "//a[@href='/me/my-views']")
+    private WebElement myViewsLink;
+
+    @FindBy(xpath = "//table[@id='projectstatus']/thead/tr/th/a[contains(text(), 'Name')]")
+    private WebElement tableNameHeaderChangeOrder;
+
+    @FindBy(xpath = "//table[@id='projectstatus']/thead/tr/th/a[contains(text(), 'S')]")
+    private WebElement statusTableHeaderChangeOrder;
+
+    @FindBy(xpath = "//table[@id='projectstatus']/thead/tr/th/a/span[contains(text(), '  ↓')]/..")
+    private WebElement titleTableHeaderWithDownArrow;
+
+    @FindBy(xpath = "//table[@id='projectstatus']/thead/tr/th/a/span[contains(text(), '  ↑')]/..")
+    private WebElement titleTableHeaderWithUpArrow;
+
+    @FindBy(id = "description-link")
+    private WebElement descriptionButton;
+
+    @FindBy(xpath = "//textarea[contains(@class, 'jenkins-input')]")
+    private WebElement descriptionTextarea;
+
+    @FindBy(xpath = "//button[@name='Submit']")
+    private WebElement saveButton;
+
+    @FindBy(xpath = "//textarea[@name='description']")
+    private WebElement clearDescriptionTextarea;
+
+    @FindBy(css = "[class$='textarea-show-preview']")
+    private WebElement previewButton;
+
+    @FindBy(xpath = "//div[@class='textarea-preview']")
+    private WebElement previewText;
 
     public HomePage(WebDriver driver) {
         super(driver);
@@ -69,7 +135,7 @@ public class HomePage extends BasePage {
     }
 
     private void selectMenuFromItemDropdown(String itemName, String menuName) {
-        TestUtils.moveAndClickWithJavaScript(getDriver(), getDriver().findElement(
+        TestUtils.moveAndClickWithJS(getDriver(), getDriver().findElement(
                 By.xpath("//td/a/span[text() = '%s']/../button".formatted(itemName))));
 
         getWait10().until(ExpectedConditions.visibilityOfElementLocated(
@@ -115,12 +181,6 @@ public class HomePage extends BasePage {
 
     public CreateNewItemPage clickNewItem() {
         newJob.click();
-
-        return new CreateNewItemPage(getDriver());
-    }
-
-    public CreateNewItemPage clickCreateJob() {
-        createAJobOption.click();
 
         return new CreateNewItemPage(getDriver());
     }
@@ -229,7 +289,7 @@ public class HomePage extends BasePage {
     }
 
     public BuildHistoryPage gotoBuildHistoryPageFromLeftPanel() {
-        getDriver().findElement(By.xpath("//a[@href = '/view/all/builds']")).click();
+        buildHistoryLink.click();
 
         return new BuildHistoryPage(getDriver());
     }
@@ -246,8 +306,7 @@ public class HomePage extends BasePage {
     }
 
     public HomePage refreshAfterBuild() {
-        getWait10().until(ExpectedConditions.invisibilityOfElementLocated(
-                By.xpath("//a[contains(@class,'app-progress-bar')]")));
+        getWait10().until(ExpectedConditions.invisibilityOf(progressBar));
 
         getDriver().navigate().refresh();
 
@@ -256,49 +315,47 @@ public class HomePage extends BasePage {
 
     public String getNotificationBarStatus() {
 
-        return getWait2().until(ExpectedConditions
-                .visibilityOfElementLocated(By.xpath("//div[@id = 'notification-bar']"))).getText();
+        return getWait2().until(ExpectedConditions.visibilityOf(notificationBar)).getText();
     }
 
     public String getNumberOfRuns() {
-        return getDriver().findElement(By.xpath("//a[@class='jenkins-table__link jenkins-table__badge model-link inside']")).getText();
+        return numberOfRuns.getText();
     }
 
     public NewViewPage clickCreateNewViewButton() {
-        getDriver().findElement(By.xpath("//a[@href='/newView']")).click();
+        createNewViewButton.click();
 
         return new NewViewPage(getDriver());
     }
 
     public String getJenkinsVersion() {
-        return getDriver().findElement(By.cssSelector("[class$='jenkins_ver']")).getText();
+        return jenkinsVersion.getText();
     }
 
     public HomePage clickJenkinsVersionButton() {
-        getDriver().findElement(By.cssSelector("[class$='jenkins_ver']")).click();
+        jenkinsVersion.click();
 
         return this;
     }
 
     public AboutPage gotoAboutPage() {
-        getDriver().findElement(By.xpath("//a[normalize-space()='About Jenkins']")).click();
+        aboutJenkinsButton.click();
 
         return new AboutPage(getDriver());
     }
 
     public String getAboutJenkinsDropdownLabelText() {
-        return getWait2().until(ExpectedConditions.visibilityOfElementLocated(
-                By.cssSelector("[href='/manage/about']"))).getText();
+        return getWait2().until(ExpectedConditions.visibilityOf(aboutJenkinsDropdownLabel)).getText();
     }
 
     public HomePage clickMyViewsButton() {
-        getDriver().findElement(By.linkText("My Views")).click();
+        myViewsButton.click();
+
         return this;
     }
 
     public List<String> getViewList() {
-        return getWait2().until(ExpectedConditions.visibilityOfAllElementsLocatedBy(
-                        By.xpath("//div[@class='tab' and not(.//a[@tooltip='New View'])]")))
+        return getWait2().until(ExpectedConditions.visibilityOfAllElements(viewList))
                 .stream()
                 .map(WebElement::getText)
                 .toList();
@@ -312,77 +369,71 @@ public class HomePage extends BasePage {
     }
 
     public WebElement getDeletionPopup() {
-        return getWait5().until(ExpectedConditions.visibilityOf(getDriver().findElement(
-                By.xpath("//footer/following-sibling::dialog"))));
+        return getWait5().until(ExpectedConditions.visibilityOf(deletionPopup));
     }
 
     public MyViewsPage goToMyViews() {
-        getDriver().findElement(By.xpath("//a[@href='/me/my-views']")).click();
+        myViewsLink.click();
 
         return new MyViewsPage(getDriver());
     }
 
     public HomePage clickNameTableHeaderChangeOrder() {
-        getDriver().findElement(
-                By.xpath("//table[@id='projectstatus']/thead/tr/th/a[contains(text(), 'Name')]")).click();
+        tableNameHeaderChangeOrder.click();
 
         return new HomePage(getDriver());
     }
 
     public HomePage clickStatusTableHeaderChangeOrder() {
-        getDriver().findElement(
-                By.xpath("//table[@id='projectstatus']/thead/tr/th/a[contains(text(), 'S')]")).click();
+        statusTableHeaderChangeOrder.click();
 
         return new HomePage(getDriver());
     }
 
     public String getTitleTableHeaderWithDownArrow() {
-        return getDriver().findElement(
-                        By.xpath("//table[@id='projectstatus']/thead/tr/th/a/span[contains(text(), '  ↓')]/.."))
-                .getText().split(" ")[0].trim();
+        return titleTableHeaderWithDownArrow.getText().split(" ")[0].trim();
     }
 
     public String getTitleTableHeaderWithUpArrow() {
-        return getDriver().findElement(
-                        By.xpath("//table[@id='projectstatus']/thead/tr/th/a/span[contains(text(), '  ↑')]/.."))
-                .getText().split(" ")[0].trim();
+        return titleTableHeaderWithUpArrow.getText().split(" ")[0].trim();
     }
 
     public HomePage clickDescriptionButton() {
-        getDriver().findElement(By.xpath("//a[@id='description-link']")).click();
+        descriptionButton.click();
 
         return this;
     }
 
     public HomePage enterDescription(String description) {
-        getDriver().findElement(By.xpath("//textarea[contains(@class, 'jenkins-input')]")).sendKeys(description);
+        descriptionTextarea.sendKeys(description);
 
         return this;
     }
 
     public HomePage clickSaveButton() {
-        getDriver().findElement(By.xpath("//button[@name='Submit']")).click();
+        saveButton.click();
+
         return this;
     }
 
     public HomePage clearDescription() {
-        getDriver().findElement(By.xpath("//textarea[@name='description']")).clear();
+        clearDescriptionTextarea.clear();
 
         return this;
     }
 
     public String getTextDescriptionButton() {
-        return getDriver().findElement(By.id("description-link")).getText();
+        return descriptionButton.getText();
     }
 
     public HomePage clickPreviewButton() {
-        getDriver().findElement(By.cssSelector("[class$='textarea-show-preview']")).click();
+        previewButton.click();
 
         return this;
     }
 
     public String getTextPreview() {
-        return getDriver().findElement(By.xpath("//div[@class='textarea-preview']")).getText();
+        return previewText.getText();
     }
 
     public FreestyleRenamePage clickRenameInProjectDropdown(String projectName) {
