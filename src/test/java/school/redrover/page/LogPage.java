@@ -15,6 +15,6 @@ public class LogPage extends BasePage {
     }
 
     public String getResultSearch() {
-        return resultSearch.getText();
+        return resultSearch.getText().toLowerCase();
     }
 }

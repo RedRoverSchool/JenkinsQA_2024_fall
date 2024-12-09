@@ -88,8 +88,7 @@ public class SearchBoxTest extends BaseTest {
     public void testInputField() {
         String text = new HomePage(getDriver())
                 .enterGotoLogPage("log")
-                .getResultSearch()
-                .toLowerCase();
+                .getResultSearch();
 
         Assert.assertTrue(text.contains("log"));
     }
