@@ -156,7 +156,7 @@ public class FreestyleProjectTest extends BaseTest {
         String actualProjectName = new HomePage(getDriver())
                 .openFreestyleProject(PROJECT_NAME)
                 .clickRenameSidebarButton()
-                .cleanInputFieldAndTypeName(newName)
+                .clearInputFieldAndTypeName(newName)
                 .clickRenameButton()
                 .getProjectName();
 
@@ -171,7 +171,7 @@ public class FreestyleProjectTest extends BaseTest {
 
         String actualProjectName = new HomePage(getDriver())
                 .clickRenameInProjectDropdown(PROJECT_NAME)
-                .cleanInputFieldAndTypeName(newName)
+                .clearInputFieldAndTypeName(newName)
                 .clickRenameButton()
                 .getProjectName();
 

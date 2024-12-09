@@ -193,7 +193,7 @@ public class PipelineProjectTest extends BaseTest {
         List<String> projectList = new HomePage(getDriver())
                 .openPipelineProject(PROJECT_NAME)
                 .clickRenameSidebarButton()
-                .cleanInputFieldAndTypeName(NEW_PROJECT_NAME)
+                .clearInputFieldAndTypeName(NEW_PROJECT_NAME)
                 .clickRenameButton()
                 .gotoHomePage()
                 .getItemList();
@@ -276,7 +276,7 @@ public class PipelineProjectTest extends BaseTest {
                 .gotoHomePage()
                 .openPipelineProject(PROJECT_NAME)
                 .clickRenameSidebarButton()
-                .cleanInputFieldAndTypeName(NEW_PROJECT_NAME)
+                .clearInputFieldAndTypeName(NEW_PROJECT_NAME)
                 .clickRenameButton();
 
         Assert.assertEquals(projectPage.getTitle(), NEW_PROJECT_NAME);
@@ -307,7 +307,7 @@ public class PipelineProjectTest extends BaseTest {
                 .clickSaveButton()
                 .gotoHomePage()
                 .goToPipelineRenamePageViaDropdown(PROJECT_NAME)
-                .cleanInputFieldAndTypeName(NEW_PROJECT_NAME)
+                .clearInputFieldAndTypeName(NEW_PROJECT_NAME)
                 .clickRenameButton();
 
         Assert.assertEquals(projectPage.getTitle(), NEW_PROJECT_NAME);
