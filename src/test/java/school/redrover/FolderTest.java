@@ -1,7 +1,6 @@
 package school.redrover;
 
 import org.testng.Assert;
-import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import school.redrover.page.HomePage;
 import school.redrover.page.FolderProjectPage;
@@ -50,14 +49,13 @@ public class FolderTest extends BaseTest {
     @Test(dependsOnMethods = "testCreateWithMinNameLength")
     public void testConfigureNameByChevron() {
 
-        String configurationName = new HomePage(getDriver())
+        FolderProjectPage folderProjectPage = new HomePage(getDriver())
                 .selectConfigureFromItemMenu("F")
                 .enterConfigurationName(FIRST_FOLDER_NAME)
-                .clickSaveButton()
-                .getConfigurationName();
+                .clickSaveButton();
 
-        Assert.assertEquals(configurationName, FIRST_FOLDER_NAME);
-        Assert.assertEquals(new FolderProjectPage(getDriver()).getFolderName(), "F");
+        Assert.assertEquals(folderProjectPage.getConfigurationName(), FIRST_FOLDER_NAME);
+        Assert.assertEquals(folderProjectPage.getFolderName(), "F");
     }
 
     @Test
@@ -99,12 +97,14 @@ public class FolderTest extends BaseTest {
                 .clickNewItem()
                 .nameAndSelectFolderType(FIRST_FOLDER_NAME)
                 .gotoHomePage()
+
                 .openFolder(FIRST_FOLDER_NAME)
                 .clickNewItem()
                 .nameAndSelectFreestyleProject(FREESTYLE_PROJECT_NAME)
                 .addExecuteWindowsBatchCommand("echo 'Hello world!'")
                 .clickSaveButton()
                 .gotoHomePage()
+
                 .openFolder(FIRST_FOLDER_NAME)
                 .getItemNameByOrder(1);
 
