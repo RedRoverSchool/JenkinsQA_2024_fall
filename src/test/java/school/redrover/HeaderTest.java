@@ -49,22 +49,6 @@ public class HeaderTest extends BaseTest {
         Assert.assertEquals(adminDescription, "Jenkins User ID: admin");
     }
 
-    private void getCredentialsPage() {
-
-        WebElement clickAdmin = getDriver().findElement(By.xpath("//a[@href='/user/admin']//button[@class='jenkins-menu-dropdown-chevron' ]"));
-
-        new Actions(getDriver())
-                .moveToElement(clickAdmin)
-                .click()
-                .perform();
-
-
-        new WebDriverWait(getDriver(), Duration.ofSeconds(10))
-                .until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//a[@href='/user/admin/credentials']")))
-                .click();
-
-    }
-
     @Test
     public void testNavigateCredentialsMenu(){
 
@@ -110,6 +94,22 @@ public class HeaderTest extends BaseTest {
         ((JavascriptExecutor) getDriver()).executeScript("arguments[0].click();", element2);
 
         assertTrue(element2.isDisplayed());
+
+    }
+
+    private void getCredentialsPage() {
+
+        WebElement clickAdmin = getDriver().findElement(By.xpath("//a[@href='/user/admin']//button[@class='jenkins-menu-dropdown-chevron' ]"));
+
+        new Actions(getDriver())
+                .moveToElement(clickAdmin)
+                .click()
+                .perform();
+
+
+        new WebDriverWait(getDriver(), Duration.ofSeconds(10))
+                .until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//a[@href='/user/admin/credentials']")))
+                .click();
 
     }
 }
