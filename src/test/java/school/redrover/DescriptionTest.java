@@ -16,7 +16,7 @@ public class DescriptionTest extends BaseTest {
 
         String textDescription = new HomePage(getDriver())
                 .clickDescriptionButton()
-                .enterDescription(DESCRIPTION_TEXT)
+                .addDescription(DESCRIPTION_TEXT)
                 .clickSaveButton()
                 .getDescriptionText();
 
@@ -28,7 +28,7 @@ public class DescriptionTest extends BaseTest {
 
         String newText = new HomePage(getDriver())
                 .clickDescriptionButton()
-                .enterDescription(NEW_TEXT)
+                .addDescription(NEW_TEXT)
                 .clickSaveButton()
                 .getDescriptionText();
 
@@ -42,7 +42,7 @@ public class DescriptionTest extends BaseTest {
                 .clickDescriptionButton()
                 .clearDescription()
                 .clickSaveButton()
-                .getTextDescriptionButton();
+                .getDescriptionButtonTitle();
 
         Assert.assertEquals(descriptionButton, TEXT_DESCRIPTION_BUTTON);
     }
@@ -52,7 +52,7 @@ public class DescriptionTest extends BaseTest {
 
         String textPreview = new HomePage(getDriver())
                 .clickDescriptionButton()
-                .enterDescription(DESCRIPTION_TEXT)
+                .addDescription(DESCRIPTION_TEXT)
                 .clickPreviewButton()
                 .getTextPreview();
 
