@@ -8,6 +8,7 @@ import school.redrover.page.FolderProjectPage;
 import school.redrover.runner.BaseTest;
 import school.redrover.runner.TestUtils;
 
+
 import java.util.List;
 
 public class FolderTest extends BaseTest {
@@ -175,15 +176,19 @@ public class FolderTest extends BaseTest {
         Assert.assertEquals(errorMessage, "» This field cannot be empty, please enter a valid name");
     }
 
-    @Ignore
-    @Test(dependsOnMethods = "testOpenBuildHistoryByChevron")
+    @Test()
     public void testErrorDuplicateNameCreation() {
 
         String errorMessage = new HomePage(getDriver())
-                .clickNewItem().enterItemName(FIRST_FOLDER_NAME)
+                .clickNewItem()
+                .nameAndSelectFolderType(FIRST_FOLDER_NAME)
+                .gotoHomePage()
+
+                .clickNewItem()
+                .enterItemName(FIRST_FOLDER_NAME).selectFolderType()
                 .getInvalidNameMessage();
 
-        Assert.assertEquals(errorMessage, "» A job already exists with the name ‘Freestyle projects’");
+        Assert.assertEquals(errorMessage, "» A job already exists with the name ‘%s’".formatted(FIRST_FOLDER_NAME));
     }
 
     @Test
