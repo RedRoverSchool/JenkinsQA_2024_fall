@@ -48,14 +48,13 @@ public class MyViewsPage extends BasePage {
                 .pause(500)
                 .perform();
         TestUtils.moveAndClickWithJS(getDriver(), chevronButton);
-        getWait5().until(ExpectedConditions.attributeToBe(chevronButton, "aria-expanded", "true"));
 
         return this;
     }
 
-    public MyViewsPage clickDeleteInProjectDropdown(String projectName) {
-        getWait10().until(ExpectedConditions.elementToBeClickable(
-                By.xpath("//button[@href='/me/my-views/view/all/job/%s/doDelete']".formatted(projectName)))).click();
+    public MyViewsPage clickDeleteInProjectDropdown() {
+        getWait10().until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//div[@class='jenkins-dropdown__item__icon']/parent::*[contains(., 'Delete')]"))).click();
 
         return this;
     }

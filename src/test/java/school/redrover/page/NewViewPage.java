@@ -68,6 +68,12 @@ public class NewViewPage extends BasePage {
         return this;
     }
 
+    public NewViewPage selectMyViewType() {
+        getWait2().until(ExpectedConditions.elementToBeClickable(radioButtonMyView)).click();
+
+        return this;
+    }
+
     public ListViewConfigPage clickCreateButton() {
         submitButton.click();
 
@@ -88,13 +94,4 @@ public class NewViewPage extends BasePage {
         return typeToDescriptionMap;
     }
 
-    public NewViewPage selectViewType(String viewType) {
-        WebElement button = getWait10().until(ExpectedConditions.elementToBeClickable(By.xpath("//input[@id = 'hudson.model.%S']".formatted(viewType))));
-        boolean selectState = button.isSelected();
-        if (!selectState) {
-            new Actions(getDriver()).moveToElement(button).click().build().perform();
-        }
-
-        return this;
-    }
 }
