@@ -31,7 +31,7 @@ public class MultibranchPipelineTest extends BaseTest {
     @Test
     public void testCreate() {
         List<String> projectList = new HomePage(getDriver())
-                .clickCreateJob()
+                .clickNewItem()
                 .enterItemName(MULTIBRANCH_PIPELINE_NAME)
                 .selectMultibranchPipelineAndClickOk()
                 .clickSaveButton()

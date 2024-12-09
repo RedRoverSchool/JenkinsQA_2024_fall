@@ -19,7 +19,7 @@ public class MyViewsPage extends BasePage {
     }
 
     private void selectMenuFromItemDropdown(String itemName, String menuName) {
-        TestUtils.moveAndClickWithJavaScript(getDriver(), getDriver().findElement(
+        TestUtils.moveAndClickWithJS(getDriver(), getDriver().findElement(
                 By.xpath("//td/a/span[text() = '%s']/../button".formatted(itemName))));
 
         getWait10().until(ExpectedConditions.visibilityOfElementLocated(
@@ -39,7 +39,7 @@ public class MyViewsPage extends BasePage {
                 .pause(500)
                 .perform();
         WebElement chevron = getDriver().findElement(By.xpath("//td//button[@aria-expanded='false']"));
-        TestUtils.moveAndClickWithJavaScript(getDriver(), chevron);
+        TestUtils.moveAndClickWithJS(getDriver(), chevron);
         getWait5().until(ExpectedConditions.attributeToBe(chevron, "aria-expanded", "true"));
 
         return this;

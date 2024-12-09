@@ -59,7 +59,7 @@ public class NewItemTest extends BaseTest {
         List<String> itemNameList = createPipelineProject(FIRST_ITEM_NAME)
                 .clickNewItem()
                 .enterItemName(SECOND_ITEM_NAME)
-                .scrollToCopyFromFieldAndEnterName(FIRST_ITEM_NAME)
+                .enterName(FIRST_ITEM_NAME)
                 .clickOkAndGoToPipelineConfigPage()
                 .gotoHomePage()
                 .getItemList();
@@ -72,7 +72,7 @@ public class NewItemTest extends BaseTest {
         List<String> itemNameList = createFreestyleProject(FIRST_ITEM_NAME)
                 .clickNewItem()
                 .enterItemName(SECOND_ITEM_NAME)
-                .scrollToCopyFromFieldAndEnterName(FIRST_ITEM_NAME)
+                .enterName(FIRST_ITEM_NAME)
                 .clickOkButton()
                 .gotoHomePage()
                 .getItemList();
@@ -89,7 +89,7 @@ public class NewItemTest extends BaseTest {
         WebElement breadCrumbChevron = getWait5().until(ExpectedConditions.visibilityOfElementLocated(
                 By.xpath("//div[@id='breadcrumbBar']//a/button")));
 
-        TestUtils.moveAndClickWithJavaScript(getDriver(), breadCrumbChevron);
+        TestUtils.moveAndClickWithJS(getDriver(), breadCrumbChevron);
 
         List<WebElement> breadCrumbItemsList = getDriver().findElements(By.xpath("//div[@class='tippy-box']//a"));
 

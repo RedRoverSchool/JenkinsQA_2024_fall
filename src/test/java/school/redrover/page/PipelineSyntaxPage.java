@@ -30,7 +30,7 @@ public class PipelineSyntaxPage extends BasePage {
     }
 
     public PipelineSyntaxPage clickCopy() {
-        TestUtils.scrollToBottom(getDriver());
+        TestUtils.scrollToBottomWithJS(getDriver());
         getWait5().until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//button[@tooltip = 'Copy']")))
                 .click();
 

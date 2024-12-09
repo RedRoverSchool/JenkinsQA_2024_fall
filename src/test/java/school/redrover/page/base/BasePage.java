@@ -5,7 +5,6 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.FindBys;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import school.redrover.page.*;
 
@@ -14,25 +13,25 @@ import java.util.List;
 public abstract class BasePage extends BaseModel {
 
     @FindBy(id = "jenkins-home-link")
-    private static WebElement logo;
+    private WebElement logo;
 
     @FindBy(xpath = "//a[contains(@class,'main-search')]")
-    private static WebElement iconQuestion;
+    private WebElement iconQuestion;
 
     @FindBy(id = "search-box")
-    private static WebElement searchBox;
+    private WebElement searchBox;
 
     @FindBy(xpath = "//div[@class='yui-ac-bd']/ul/li[1]")
-    private static WebElement firstSuggestion;
+    private WebElement firstSuggestion;
 
     @FindBy(css = "a[id='visible-am-button'] svg")
-    private static WebElement iconBell;
+    private WebElement iconBell;
 
     @FindBy(xpath = "//div[@class='am-list']/p/a")
-    private static WebElement linkWithPopup;
+    private WebElement linkWithPopup;
 
     @FindBy(xpath = "//div[@class='yui-ac-bd']/ul/li[not(contains(@style, 'display: none'))]")
-    private static List<WebElement> listSuggestion;
+    private List<WebElement> listSuggestion;
 
     public BasePage(WebDriver driver) {
         super(driver);
