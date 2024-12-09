@@ -404,7 +404,7 @@ public class HomePage extends BasePage {
         return this;
     }
 
-    public HomePage enterDescription(String description) {
+    public HomePage addDescription(String description) {
         descriptionTextarea.sendKeys(description);
 
         return this;
@@ -422,7 +422,7 @@ public class HomePage extends BasePage {
         return this;
     }
 
-    public String getTextDescriptionButton() {
+    public String getDescriptionButtonTitle() {
         return descriptionButton.getText();
     }
 
