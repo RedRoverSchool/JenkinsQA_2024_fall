@@ -89,7 +89,7 @@ public class ManageJenkinsPage extends BasePage {
     }
 
     public ManageJenkinsPage typeSearchInputField(String text) {
-        searchInputField.sendKeys(text);
+        getWait10().until(ExpectedConditions.visibilityOf(searchInputField)).sendKeys(text);
 
         return this;
     }
