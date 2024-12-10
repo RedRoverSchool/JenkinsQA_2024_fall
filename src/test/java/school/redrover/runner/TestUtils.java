@@ -84,8 +84,8 @@ public class TestUtils {
         js.executeScript("arguments[0].scrollIntoView(true);", element);
     }
 
-    public static void createPipeline(BaseTest baseTest, String name) {
-        new HomePage(baseTest.getDriver())
+    public static void createPipeline(WebDriver driver, String name) {
+        new HomePage(driver)
                 .clickNewItem()
                 .enterItemName(name)
                 .selectPipelineAndClickOk()
@@ -143,4 +143,12 @@ public class TestUtils {
                 .gotoHomePage();
     }
 
+    public static void createOrganizationFolder(WebDriver driver, String name) {
+        new HomePage(driver)
+                .clickNewItem()
+                .enterItemName(name)
+                .selectOrganizationFolderAndClickOk()
+                .clickSaveButton()
+                .gotoHomePage();
+    }
 }

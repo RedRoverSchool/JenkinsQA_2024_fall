@@ -1,5 +1,6 @@
 package school.redrover.page.organizationFolder;
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -17,9 +18,6 @@ public class OrganizationFolderConfigPage extends BaseConfigPage<OrganizationFol
 
     @FindBy(xpath = "//div[@class='jenkins-app-bar__controls']/span")
     private WebElement tooltip;
-
-    @FindBy(xpath = "//div/input[@name='_.displayNameOrNull']")
-    private WebElement displayNameInputField;
 
     @FindBy(xpath = "//div/textarea[@name='_.description']")
     private WebElement descriptionInputField;
@@ -50,18 +48,6 @@ public class OrganizationFolderConfigPage extends BaseConfigPage<OrganizationFol
         return tooltip.getAttribute("tooltip");
     }
 
-    public OrganizationFolderConfigPage enterName(String text) {
-        displayNameInputField.sendKeys(text);
-
-        return new OrganizationFolderConfigPage(getDriver());
-    }
-
-    public OrganizationFolderConfigPage enterDescription(String text) {
-        descriptionInputField.sendKeys(text);
-
-        return new OrganizationFolderConfigPage(getDriver());
-    }
-
     public OrganizationFolderConfigPage changeDescriptionPreviewState() {
 
         if (textareaPreview.getAttribute("style").equals("display: none;")) {
@@ -84,6 +70,10 @@ public class OrganizationFolderConfigPage extends BaseConfigPage<OrganizationFol
         displayNameInput.sendKeys(name);
 
         return this;
+    }
+
+    public String getPreviewStyleAttribute() {
+        return getDriver().findElement(By.xpath("//div/div[@class='textarea-preview']")).getAttribute("style");
     }
 }
 
