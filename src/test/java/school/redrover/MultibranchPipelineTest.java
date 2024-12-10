@@ -88,24 +88,18 @@ public class MultibranchPipelineTest extends BaseTest {
         Assert.assertEquals(errorMessage, "» This field cannot be empty, please enter a valid name");
     }
 
-    @Test
+    @Test(dependsOnMethods = "testVerifyErrorMessageWhenCreateWithSameName")
     public void testRenameMultibranchViaSideBar() {
+        List<String> projectList = new HomePage(getDriver())
+                .openMultibranchPipelineProject(MULTIBRANCH_PIPELINE_NAME)
+                .clickRenameSidebarButton()
+                .clearInputFieldAndTypeName(MULTIBRANCH_PIPELINE_NAME2)
+                .clickRenameButton()
+                .gotoHomePage()
+                .getItemList();
 
-        getDriver().findElement(By.cssSelector("[href='newJob']")).click();
-
-        getDriver().findElement(By.id("name")).sendKeys("Hilton");
-        getDriver().findElement(By.cssSelector("[class*='MultiBranchProject']")).click();
-        getDriver().findElement(By.id("ok-button")).click();
-
-        getDriver().findElement(By.name("Submit")).click();
-
-        getDriver().findElement(By.xpath("//*[@id=\"tasks\"]/div[7]")).click();
-
-        getDriver().findElement(By.cssSelector("[class*='input validated']")).clear();
-        getDriver().findElement(By.cssSelector("[class*='input validated']")).sendKeys("Hilton Hotels");
-        getDriver().findElement(By.cssSelector("[class*='submit']")).click();
-
-        Assert.assertEquals(getDriver().findElement(By.xpath("//h1")).getText(), "Hilton Hotels");
+        Assert.assertListContainsObject(projectList, MULTIBRANCH_PIPELINE_NAME2,
+                "Project is not renamed");
     }
 
     @Ignore

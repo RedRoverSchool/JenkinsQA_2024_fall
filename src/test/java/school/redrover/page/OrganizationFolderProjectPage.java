@@ -3,6 +3,7 @@ package school.redrover.page;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import school.redrover.page.base.BaseProjectPage;
 
 public class OrganizationFolderProjectPage extends BaseProjectPage<OrganizationFolderProjectPage, OrganizationFolderConfigPage, OrganizationFolderRenamePage> {
@@ -12,6 +13,9 @@ public class OrganizationFolderProjectPage extends BaseProjectPage<OrganizationF
 
     @FindBy(tagName = "h1")
     private WebElement name;
+
+    @FindBy(id="view-message")
+    private WebElement descriptionText;
 
     public OrganizationFolderProjectPage(WebDriver driver) {
         super(driver);
@@ -35,5 +39,9 @@ public class OrganizationFolderProjectPage extends BaseProjectPage<OrganizationF
 
     public String getName() {
         return name.getText();
+    }
+
+    public String getDescription() {
+        return getWait5().until(ExpectedConditions.visibilityOf(descriptionText)).getText();
     }
 }
