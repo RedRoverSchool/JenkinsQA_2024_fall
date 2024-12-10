@@ -9,7 +9,6 @@ import school.redrover.runner.BaseTest;
 import school.redrover.runner.TestUtils;
 
 import java.util.List;
-import java.util.UUID;
 
 public class FolderTest extends BaseTest {
 
