@@ -18,6 +18,8 @@ public class FolderTest extends BaseTest {
     private static final String FOLDER_MOVE_PARENT_NAME = "FolderParent";
     private static final String FOLDER_MOVE_CHILD_NAME = "FolderChild";
     private static final String FOLDER_MOVE_CHILD2_NAME = "FolderChild2";
+    private static final String FOLDER_NAME = "FolderName";
+    private static final String NEW_FOLDER_NAME = "NewFolderName";
 
     @Test
     public void testCreateWithMaxNameLength() {
@@ -350,4 +352,19 @@ public class FolderTest extends BaseTest {
 
         Assert.assertEquals(nameProjectsList, List.of("Dashboard", FOLDER_MOVE_PARENT_NAME, FOLDER_MOVE_CHILD_NAME));
     }
+
+    @Test
+    public void testRenameFolderFromDashboardViaFolderPage() {
+        TestUtils.createFolder(getDriver(), FOLDER_NAME);
+
+            List<String> projectList = new HomePage(getDriver())
+                    .openFolder(FOLDER_NAME)
+                    .clickRenameSidebarButton()
+                    .clearInputFieldAndTypeName(NEW_FOLDER_NAME)
+                    .clickRenameButton()
+                    .gotoHomePage()
+                    .getItemList();
+
+            Assert.assertListContainsObject(projectList,NEW_FOLDER_NAME,"Folder is not renamed");
+        }
 }
