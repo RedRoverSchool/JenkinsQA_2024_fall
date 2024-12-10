@@ -156,6 +156,12 @@ public class CreateNewItemPage extends BaseCreatePage {
         return this;
     }
 
+    public CreateNewItemPage selectMultiConfigurationProject() {
+        multiConfigurationProject.click();
+
+        return this;
+    }
+
     public String getErrorMessage() {
         return getWait5().until(ExpectedConditions.visibilityOf(invalidOrSameNameMessage)).getText();
     }
@@ -172,4 +178,6 @@ public class CreateNewItemPage extends BaseCreatePage {
 
         return new PipelineConfigurePage(getDriver());
     }
+
+
 }

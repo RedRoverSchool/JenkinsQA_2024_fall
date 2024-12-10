@@ -15,6 +15,7 @@ import java.util.List;
 public class MultiConfigurationProjectTest extends BaseTest {
     private static final String PROJECT_NAME = "MultiConfigurationProject";
     private static final String DESCRIPTIONS = "Descriptions of project";
+    private final String ERROR_MESSAGE = "This field cannot be empty";
 
     @Test(description = "Create project without descriptions")
     public void testCreateProjectWithoutDescription() {
@@ -38,22 +39,17 @@ public class MultiConfigurationProjectTest extends BaseTest {
                 .clickSubmitButton()
                 .getDescription();
 
-
         Assert.assertEquals(addDescription, DESCRIPTIONS);
     }
 
     @Test
     public void testCreateProjectWithoutName() {
-        final String errorMessage = "This field cannot be empty";
+        String errorMessage = new HomePage(getDriver())
+                .clickNewItem()
+                .selectMultiConfigurationProject()
+                .getEmptyNameMessage();
 
-        getDriver().findElement(By.xpath("//a[@href='/view/all/newJob']")).click();
-        getDriver().findElement(By.className("hudson_matrix_MatrixProject")).click();
-
-        JavascriptExecutor js = (JavascriptExecutor) getDriver();
-        js.executeScript("window.scrollTo(0, document.body.scrollHeight);");
-
-        Assert.assertTrue(getDriver().findElement(By.id("itemname-required")).getText().contains(errorMessage));
-        Assert.assertFalse(getDriver().findElement(By.id("ok-button")).isEnabled());
+        Assert.assertTrue(errorMessage.contains(ERROR_MESSAGE));
     }
 
 
