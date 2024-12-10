@@ -5,7 +5,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import school.redrover.page.base.BasePage;
 
-public class LogPage extends BasePage {
+public class LogPage extends BasePage<LogPage> {
 
     @FindBy(xpath = "//a[@class='jenkins-table__link']")
     private WebElement resultSearch;

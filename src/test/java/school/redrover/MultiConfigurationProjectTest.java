@@ -22,6 +22,7 @@ public class MultiConfigurationProjectTest extends BaseTest {
                 .clickNewItem()
                 .enterItemName(PROJECT_NAME)
                 .selectMultiConfigurationAndClickOk()
+                .getHeader()
                 .gotoHomePage()
                 .getItemList();
 

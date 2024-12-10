@@ -7,7 +7,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import school.redrover.page.base.BasePage;
 
 
-public class UserPage extends BasePage {
+public class UserPage extends BasePage<UserPage> {
 
     @FindBy(xpath = "//a[@href='/user/admin/configure']")
     private WebElement configureSidebar;

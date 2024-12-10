@@ -7,7 +7,7 @@ import school.redrover.page.base.BasePage;
 
 import java.util.List;
 
-public class UsersPage extends BasePage {
+public class UsersPage extends BasePage<UsersPage> {
 
     @FindBy(css = ".jenkins-button--primary")
     private WebElement createUserButton;

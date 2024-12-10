@@ -7,7 +7,7 @@ import school.redrover.page.base.BasePage;
 
 import java.util.List;
 
-public class BuildHistoryPage extends BasePage {
+public class BuildHistoryPage extends BasePage<BuildHistoryPage> {
 
     @FindBy(xpath = "//a[@class='jenkins-table__link model-link']/span")
     private WebElement lastBuildName;

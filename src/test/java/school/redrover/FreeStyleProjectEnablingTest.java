@@ -39,6 +39,7 @@ public class FreeStyleProjectEnablingTest extends BaseTest {
         boolean currentState = new HomePage(getDriver())
                 .openFreestyleProject(PROJECT_NAME)
                 .changeEnablingStateViaIndicator()
+                .getHeader()
                 .gotoHomePage()
                 .openFreestyleProject(PROJECT_NAME)
                 .clickSidebarConfigButton()
@@ -52,11 +53,16 @@ public class FreeStyleProjectEnablingTest extends BaseTest {
         boolean currentState = new HomePage(getDriver())
                 .openFreestyleProject(PROJECT_NAME)
                 .clickSidebarConfigButton()
-                .changeEnablingState().gotoHomePage()
+                .changeEnablingState()
+                .getHeader()
+                .gotoHomePage()
+
                 .openFreestyleProject(PROJECT_NAME)
                 .clickSidebarConfigButton()
                 .changeEnablingState()
+                .getHeader()
                 .gotoHomePage()
+
                 .openFreestyleProject(PROJECT_NAME)
                 .clickSidebarConfigButton()
                 .getEnablingCurrentState();

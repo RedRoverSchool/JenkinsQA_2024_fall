@@ -26,6 +26,7 @@ public class ViewTest extends BaseTest {
                 .clickCreateButton()
                 .selectJobCheckBoxByName(PIPELINE_NAME)
                 .clickOkButton()
+                .getHeader()
                 .gotoHomePage()
                 .getViewList();
 
@@ -94,6 +95,7 @@ public class ViewTest extends BaseTest {
         TestUtils.createFolder(getDriver(), "NewFolder");
 
         NewViewPage newViewPage = new HomePage(getDriver())
+                .getHeader()
                 .gotoHomePage()
                 .clickCreateNewViewButton();
 

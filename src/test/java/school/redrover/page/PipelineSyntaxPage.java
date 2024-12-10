@@ -8,7 +8,7 @@ import org.openqa.selenium.support.ui.Select;
 import school.redrover.page.base.BasePage;
 import school.redrover.runner.TestUtils;
 
-public class PipelineSyntaxPage extends BasePage {
+public class PipelineSyntaxPage extends BasePage<PipelineSyntaxPage> {
     public PipelineSyntaxPage(WebDriver driver) { super(driver); }
 
     public String getBreadCrumb(String projectName) {

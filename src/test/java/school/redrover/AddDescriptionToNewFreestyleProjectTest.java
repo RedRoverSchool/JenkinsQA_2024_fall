@@ -19,6 +19,7 @@ public class AddDescriptionToNewFreestyleProjectTest extends BaseTest {
                 .selectFreestyleProjectAndClickOk()
                 .enterDescription(DESCRIPTION)
                 .clickSaveButton()
+                .getHeader()
                 .gotoHomePage()
                 .openFreestyleProject(PROJECT_NAME)
                 .getDescription();

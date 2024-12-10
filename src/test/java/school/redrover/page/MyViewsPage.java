@@ -9,7 +9,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import school.redrover.page.base.BasePage;
 import school.redrover.runner.TestUtils;
 
-public class MyViewsPage extends BasePage {
+public class MyViewsPage extends BasePage<MyViewsPage> {
 
     @FindBy(xpath = "//button[@data-id='ok']")
     private WebElement yesButton;

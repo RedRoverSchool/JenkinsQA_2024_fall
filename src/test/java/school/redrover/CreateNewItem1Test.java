@@ -20,6 +20,7 @@ public class CreateNewItem1Test extends BaseTest {
                 .enterItemName(ITEM_NAME)
                 .selectTypeOfProject(FREESTYLE_PROJECT)
                 .clickOkButton()
+                .getHeader()
                 .gotoHomePage()
                 .getItemList();
 
@@ -34,6 +35,7 @@ public class CreateNewItem1Test extends BaseTest {
                 .enterItemName(ITEM_NAME)
                 .selectTypeProject(PIPELINE)
                 .clickOkButton()
+                .getHeader()
                 .gotoHomePage()
                 .getItemList();
 

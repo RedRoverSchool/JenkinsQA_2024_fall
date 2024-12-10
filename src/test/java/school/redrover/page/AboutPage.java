@@ -7,7 +7,7 @@ import school.redrover.page.base.BasePage;
 
 import java.util.List;
 
-public class AboutPage extends BasePage {
+public class AboutPage extends BasePage<AboutPage> {
 
     @FindBy(xpath = "//*[@id='main-panel']/p")
     private WebElement aboutDescription;

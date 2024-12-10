@@ -8,7 +8,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import school.redrover.page.base.BaseCreatePage;
 import school.redrover.runner.TestUtils;
 
-public class CreateNewItemPage extends BaseCreatePage {
+public class CreateNewItemPage extends BaseCreatePage<CreateNewItemPage> {
 
     @FindBy(xpath = "//span[text()= 'Multibranch Pipeline']")
     private WebElement multibranchPipeline;

@@ -6,7 +6,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.Assert;
 import school.redrover.page.base.BasePage;
 
-public class PluginsPage extends BasePage {
+public class PluginsPage extends BasePage<PluginsPage> {
 
     public PluginsPage(WebDriver driver) {
         super(driver);

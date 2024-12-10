@@ -9,7 +9,7 @@ import school.redrover.runner.TestUtils;
 
 import java.util.NoSuchElementException;
 
-public class ListViewConfigPage extends BasePage {
+public class ListViewConfigPage extends BasePage<ListViewConfigPage> {
 
     public ListViewConfigPage(WebDriver driver) {
         super(driver);

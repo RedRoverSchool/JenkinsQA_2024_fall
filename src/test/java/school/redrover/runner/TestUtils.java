@@ -90,6 +90,7 @@ public class TestUtils {
                 .enterItemName(name)
                 .selectPipelineAndClickOk()
                 .clickSaveButton()
+                .getHeader()
                 .gotoHomePage();
     }
 
@@ -113,6 +114,7 @@ public class TestUtils {
                 .enterItemName(name)
                 .selectFreestyleProjectAndClickOk()
                 .clickSaveButton()
+                .getHeader()
                 .gotoHomePage();
     }
 
@@ -122,6 +124,7 @@ public class TestUtils {
                 .enterItemName(name)
                 .selectPipelineAndClickOk()
                 .clickSaveButton()
+                .getHeader()
                 .gotoHomePage();
     }
 
@@ -131,6 +134,7 @@ public class TestUtils {
                 .enterItemName(name)
                 .selectFolderAndClickOk()
                 .clickSaveButton()
+                .getHeader()
                 .gotoHomePage();
     }
 
@@ -140,6 +144,7 @@ public class TestUtils {
                 .enterItemName(name)
                 .selectMultiConfigurationAndClickOk()
                 .clickSaveButton()
+                .getHeader()
                 .gotoHomePage();
     }
 

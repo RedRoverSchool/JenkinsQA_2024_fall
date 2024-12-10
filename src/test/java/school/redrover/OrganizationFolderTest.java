@@ -49,6 +49,7 @@ public class OrganizationFolderTest extends BaseTest {
                 .clickNewItem()
                 .enterItemName(FOLDER_NAME)
                 .selectOrganizationFolderAndClickOk()
+                .getHeader()
                 .gotoHomePage()
                 .getItemList();
 

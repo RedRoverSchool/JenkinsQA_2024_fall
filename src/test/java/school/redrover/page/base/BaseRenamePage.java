@@ -5,7 +5,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
-public abstract class BaseRenamePage<Self extends BaseRenamePage<?, ?>, ProjectPage extends BaseProjectPage> extends BasePage {
+public abstract class BaseRenamePage<Self extends BaseRenamePage<?, ?>, ProjectPage extends BaseProjectPage<?, ?, ?>> extends BasePage<BaseRenamePage<?, ?>> {
 
     @FindBy(xpath = "//input[@checkdependson ='newName']")
     private WebElement inputField;

@@ -8,7 +8,7 @@ import school.redrover.page.base.BasePage;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PipelineStagesPage extends BasePage {
+public class PipelineStagesPage extends BasePage<PipelineStagesPage> {
     public PipelineStagesPage(WebDriver driver) {
         super(driver);
     }

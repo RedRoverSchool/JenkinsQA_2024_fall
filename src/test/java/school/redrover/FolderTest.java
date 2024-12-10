@@ -26,6 +26,7 @@ public class FolderTest extends BaseTest {
                 .clickNewItem()
                 .enterItemName(FOLDER_NAME_MAX_LENGTH)
                 .selectFolderAndClickOk()
+                .getHeader()
                 .gotoHomePage()
                 .getItemNameByOrder(1);
 
@@ -39,6 +40,7 @@ public class FolderTest extends BaseTest {
                 .clickNewItem()
                 .enterItemName("F")
                 .selectFolderAndClickOk()
+                .getHeader()
                 .gotoHomePage()
                 .getItemList();
 
@@ -65,6 +67,7 @@ public class FolderTest extends BaseTest {
         String desc = new HomePage(getDriver())
                 .clickNewItem()
                 .nameAndSelectFolderType(FIRST_FOLDER_NAME)
+                .getHeader()
                 .gotoHomePage()
                 .selectConfigureFromItemMenu(FIRST_FOLDER_NAME)
                 .enterDescription("This is new description")
@@ -79,11 +82,13 @@ public class FolderTest extends BaseTest {
     public void testCreateNewItemByChevron() {
 
         String projectName = new FolderProjectPage(getDriver())
+                .getHeader()
                 .gotoHomePage()
                 .selectNewItemFromFolderMenu(FIRST_FOLDER_NAME)
                 .nameAndSelectFreestyleProject(FREESTYLE_PROJECT_NAME)
                 .addExecuteWindowsBatchCommand("echo 'Hello world!'")
                 .clickSaveButton()
+                .getHeader()
                 .gotoHomePage()
                 .openFolder(FIRST_FOLDER_NAME)
                 .getItemNameByOrder(1);
@@ -97,12 +102,14 @@ public class FolderTest extends BaseTest {
         String projectName = new HomePage(getDriver())
                 .clickNewItem()
                 .nameAndSelectFolderType(FIRST_FOLDER_NAME)
+                .getHeader()
                 .gotoHomePage()
                 .openFolder(FIRST_FOLDER_NAME)
                 .clickNewItem()
                 .nameAndSelectFreestyleProject(FREESTYLE_PROJECT_NAME)
                 .addExecuteWindowsBatchCommand("echo 'Hello world!'")
                 .clickSaveButton()
+                .getHeader()
                 .gotoHomePage()
                 .openFolder(FIRST_FOLDER_NAME)
                 .getItemNameByOrder(1);
@@ -116,6 +123,7 @@ public class FolderTest extends BaseTest {
         String buildHistoryName = new HomePage(getDriver())
                 .openFolder(FIRST_FOLDER_NAME)
                 .runJob(FREESTYLE_PROJECT_NAME)
+                .getHeader()
                 .gotoHomePage()
                 .selectBuildHistoryFromItemMenu(FIRST_FOLDER_NAME)
                 .getBuildName();
@@ -132,6 +140,7 @@ public class FolderTest extends BaseTest {
                 .clickSidebarConfigButton()
                 .enterConfigurationName(displayName)
                 .clickSaveButton()
+                .getHeader()
                 .gotoHomePage()
                 .getItemList();
 
@@ -215,6 +224,7 @@ public class FolderTest extends BaseTest {
         List<String> setOfProjects = new HomePage(getDriver())
                 .openFolder(FIRST_FOLDER_NAME)
                 .cancelDeletingViaModalWindow()
+                .getHeader()
                 .gotoHomePage()
                 .getItemList();
 
@@ -228,6 +238,7 @@ public class FolderTest extends BaseTest {
         List<String> setOfProjects = new HomePage(getDriver())
                 .clickMyViewsButton()
                 .selectDeleteFromItemMenuAndClickYes(FIRST_FOLDER_NAME)
+                .getHeader()
                 .gotoHomePage()
                 .getItemList();
 
@@ -241,11 +252,13 @@ public class FolderTest extends BaseTest {
                 .clickNewItem()
                 .enterItemName(FOLDER_MOVE_PARENT_NAME)
                 .selectFolderAndClickOk()
+                .getHeader()
                 .gotoHomePage()
 
                 .clickNewItem()
                 .enterItemName(FOLDER_MOVE_CHILD_NAME)
                 .selectFolderAndClickOk()
+                .getHeader()
                 .gotoHomePage()
 
                 .openFolder(FOLDER_MOVE_CHILD_NAME)
@@ -264,6 +277,7 @@ public class FolderTest extends BaseTest {
                 .enterItemName(FOLDER_MOVE_CHILD2_NAME)
                 .selectFolderAndClickOk()
                 .clickSaveButton()
+                .getHeader()
                 .gotoHomePage()
                 .openFolder(FOLDER_MOVE_PARENT_NAME)
                 .openFolder(FOLDER_MOVE_CHILD2_NAME)
@@ -315,11 +329,13 @@ public class FolderTest extends BaseTest {
                 .clickNewItem()
                 .enterItemName(FOLDER_MOVE_PARENT_NAME)
                 .selectFolderAndClickOk()
+                .getHeader()
                 .gotoHomePage()
 
                 .clickNewItem()
                 .enterItemName(FOLDER_MOVE_CHILD_NAME)
                 .selectFolderAndClickOk()
+                .getHeader()
                 .gotoHomePage()
 
                 .selectMoveFromItemMenuByChevron(FOLDER_MOVE_CHILD_NAME)
@@ -336,11 +352,13 @@ public class FolderTest extends BaseTest {
                 .clickNewItem()
                 .enterItemName(FOLDER_MOVE_PARENT_NAME)
                 .selectFolderAndClickOk()
+                .getHeader()
                 .gotoHomePage()
 
                 .clickNewItem()
                 .enterItemName(FOLDER_MOVE_CHILD_NAME)
                 .selectFolderAndClickOk()
+                .getHeader()
                 .gotoHomePage()
 
                 .clickMyViewsButton()
