@@ -8,6 +8,7 @@ import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import school.redrover.page.FreestyleProjectPage;
 import school.redrover.page.HomePage;
+import school.redrover.page.WorkspaceCreatePage;
 import school.redrover.runner.BaseTest;
 
 import java.util.ArrayList;
@@ -397,6 +398,46 @@ public class FreestyleProjectTest extends BaseTest {
 
         // Verify if the actual order matches the expected order
         Assert.assertEquals(actualOrder, expectedOrder);
+    }
+
+    @Test
+    public void testWorkspaceCreated() {
+        WorkspaceCreatePage createWorkspace = new WorkspaceCreatePage(getDriver());
+        createWorkspace.createWorkspace();
+
+        String breadcrumbText = createWorkspace.getBreadcrumbText();
+        Assert.assertEquals(
+                breadcrumbText,
+                "Workspace of TestJobWorkspace on Built-In Node",
+                "Breadcrumb does not match the expected workspace text!");
+    }
+
+    @Test
+    public void testBuildNavigation() {
+        WorkspaceCreatePage createWorkspace = new WorkspaceCreatePage(getDriver());
+        createWorkspace.createWorkspace();
+
+        createWorkspace.clickBuildTwo();
+        String breadcrumbText = createWorkspace.getBreadcrumbText();
+        Assert.assertEquals(
+                breadcrumbText,
+                "#2",
+                "Breadcrumb does not match build number #2!");
+    }
+
+    @Test
+    public void testWorkspaceNavigation() {
+        WorkspaceCreatePage createWorkspace = new WorkspaceCreatePage(getDriver());
+        createWorkspace.createWorkspace();
+
+        createWorkspace.clickBuildTwo();
+        createWorkspace.navigateBackToWorkspace();
+
+        String workspaceBreadcrumb = createWorkspace.getWorkspaceBreadcrumbText();
+        Assert.assertEquals(
+                workspaceBreadcrumb,
+                "TestJobWorkspace",
+                "Breadcrumb does not match the expected workspace name!");
     }
 
 }
