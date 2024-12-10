@@ -2,8 +2,8 @@ package school.redrover;
 
 import org.testng.Assert;
 import org.testng.annotations.Test;
-import school.redrover.page.HomePage;
-import school.redrover.page.FolderProjectPage;
+import school.redrover.page.home.HomePage;
+import school.redrover.page.folder.FolderProjectPage;
 import school.redrover.runner.BaseTest;
 import school.redrover.runner.TestUtils;
 
