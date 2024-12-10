@@ -1,4 +1,4 @@
-package school.redrover.page;
+package school.redrover.page.systemConfiguration;
 
 import org.openqa.selenium.WebDriver;
 import school.redrover.page.base.BasePage;

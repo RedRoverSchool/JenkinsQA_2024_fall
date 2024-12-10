@@ -1,4 +1,4 @@
-package school.redrover.page;
+package school.redrover.page.organizationFolder;
 
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;

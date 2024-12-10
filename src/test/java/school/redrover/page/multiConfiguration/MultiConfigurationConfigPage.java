@@ -1,4 +1,4 @@
-package school.redrover.page;
+package school.redrover.page.multiConfiguration;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;

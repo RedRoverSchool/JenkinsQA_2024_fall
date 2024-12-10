@@ -2,7 +2,7 @@ package school.redrover.runner;
 
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedCondition;
-import school.redrover.page.HomePage;
+import school.redrover.page.home.HomePage;
 
 public class TestUtils {
 

@@ -1,4 +1,4 @@
-package school.redrover.page;
+package school.redrover.page.pipeline;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;

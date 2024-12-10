@@ -4,8 +4,8 @@ import org.openqa.selenium.WebElement;
 import org.testng.Assert;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
-import school.redrover.page.HomePage;
-import school.redrover.page.PipelineProjectPage;
+import school.redrover.page.home.HomePage;
+import school.redrover.page.pipeline.PipelineProjectPage;
 import school.redrover.runner.BaseTest;
 import school.redrover.runner.TestUtils;
 
