@@ -34,6 +34,7 @@ public abstract class BaseConfigPage<Self extends BaseConfigPage<?, ?>, ProjectP
     protected abstract ProjectPage createProjectPage();
 
     public Self enterDescription(String description) {
+        descriptionField.clear();
         descriptionField.sendKeys(description);
 
         return (Self) this;

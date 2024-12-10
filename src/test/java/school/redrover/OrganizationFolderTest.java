@@ -87,8 +87,9 @@ public class OrganizationFolderTest extends BaseTest {
 
         String description = new HomePage(getDriver())
                 .openOrganisationFolderProject(FOLDER_NAME)
-                .editDescription(DESCRIPTION)
-                .clickSubmitButton()
+                .clickSidebarConfigButton()
+                .enterDescription(DESCRIPTION)
+                .clickSaveButton()
                 .getDescription();
 
         Assert.assertEquals(description, DESCRIPTION);
@@ -98,8 +99,9 @@ public class OrganizationFolderTest extends BaseTest {
     public void testEditDescription() {
         String description = new HomePage(getDriver())
                 .openOrganisationFolderProject(FOLDER_NAME)
-                .editDescription(NEW_DESCRIPTION)
-                .clickSubmitButton()
+                .clickSidebarConfigButton()
+                .enterDescription(NEW_DESCRIPTION)
+                .clickSaveButton()
                 .getDescription();
 
         Assert.assertEquals(description, NEW_DESCRIPTION);
