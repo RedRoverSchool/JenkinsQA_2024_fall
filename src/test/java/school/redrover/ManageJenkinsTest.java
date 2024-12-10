@@ -57,26 +57,6 @@ public class ManageJenkinsTest extends BaseTest {
         Assert.assertEquals(userList.get(1), fullName);
     }
 
-    @Ignore
-    @Test
-    public void testManageJenkinsTab() {
-
-        List<WebElement> tasks = getDriver().findElements(
-                By.xpath("//div[@id='tasks']//a"));
-        Assert.assertEquals(tasks.size(), 1);
-
-        List<String> expectedTexts = Arrays.asList("New Item", "Build History", "Manage Jenkins", "My Views");
-        for (int i = 0; i < tasks.size() && i < expectedTexts.size(); i++) {
-            Assert.assertEquals(tasks.get(i).getText(), expectedTexts.get(i));
-        }
-
-        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(10));
-        WebElement manageJenkinsTask = wait.until(
-                ExpectedConditions.elementToBeClickable(By.xpath("//a[span[text()='Manage Jenkins']]")));
-        manageJenkinsTask.click();
-
-    }
-
     @Test
     public void testRedirectionToManage() {
         String urlBeforeRedirection = getDriver().getCurrentUrl();
@@ -88,33 +68,12 @@ public class ManageJenkinsTest extends BaseTest {
     }
 
     @Test
-    public void testManageJenkinsTabSections() {
-
-        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(10));
-        WebElement manageJenkinsTab = wait.until(
-                ExpectedConditions.elementToBeClickable(By.xpath("//a[span[text()='Manage Jenkins']]"))
-        );
-        manageJenkinsTab.click();
-
-        List<WebElement> sections = getDriver().findElements(
-                By.xpath("//h2[@class='jenkins-section__title']"));
-        Assert.assertEquals(sections.size(), 5);
-
-        List<String> expectedSectionTitles = Arrays.asList(
-                "System Configuration", "Security", "Status Information", "Troubleshooting", "Tools and Actions"
-        );
-        for (int i = 0; i < expectedSectionTitles.size(); i++) {
-            Assert.assertEquals(sections.get(i).getText(), expectedSectionTitles.get(i));
-
-        }
-    }
-
-    @Test
     public void testManageJenkinsSections() {
         List<String> mainSections = new HomePage(getDriver())
                 .openManageJenkinsPage()
                 .getAllSections();
 
+        Assert.assertEquals(mainSections.size(), 5);
         Assert.assertEquals(mainSections, List.of("System Configuration", "Security", "Status Information",
                 "Troubleshooting", "Tools and Actions"));
     }
@@ -142,15 +101,12 @@ public class ManageJenkinsTest extends BaseTest {
     @Test
     public void testManageJenkinsTabSearch() {
 
-        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(10));
-        WebElement manageJenkinsTab = wait.until(
-                ExpectedConditions.elementToBeClickable(By.xpath("//a[span[text()='Manage Jenkins']]"))
-        );
-        manageJenkinsTab.click();
+        String searchField = new HomePage(getDriver())
+                .openManageJenkinsPage()
+                .clickOnSearchField()
+                .getAttribute("placeholder");
 
-        WebElement searchField = getDriver().findElement(
-                By.xpath("//input[@id='settings-search-bar']"));
-        Assert.assertEquals(searchField.getAttribute("placeholder"), "Search settings");
+        Assert.assertEquals(searchField, "Search settings");
 
     }
 
@@ -374,5 +330,47 @@ public class ManageJenkinsTest extends BaseTest {
         String changedColor = changedColorArea.getCssValue("background");
 
         Assert.assertEquals(changedColor, initialColorTheme, "Color of theme did not changed");
+    }
+
+    @Ignore
+    @Test
+    public void testThemesDark() {
+        getDriver().findElement(By.cssSelector("[href='/manage']")).click();
+        getDriver().findElement(By.cssSelector("[href='appearance']")).click();
+        getDriver().findElement(By.xpath("//label[@for='radio-block-0']")).click();
+
+        getDriver().findElement(By.cssSelector("[class='attach-previous ']")).click();
+        getDriver().findElement(By.xpath("//button[@name='Apply']")).click();
+
+        Assert.assertEquals(getDriver().findElement(By.cssSelector("html[data-theme]")).
+                getAttribute("data-theme"), "dark");
+    }
+
+
+    @Test
+    public void testThemesDefault() {
+        getDriver().findElement(By.cssSelector("[href='/manage']")).click();
+        getDriver().findElement(By.cssSelector("[href='appearance']")).click();
+        getDriver().findElement(By.xpath("//label[@for='radio-block-2']")).click();
+
+        getDriver().findElement(By.cssSelector("[class='attach-previous ']")).click();
+        getDriver().findElement(By.xpath("//button[@name='Apply']")).click();
+
+        Assert.assertEquals(getDriver().findElement(By.cssSelector("html[data-theme]")).
+                getAttribute("data-theme"), "none");
+    }
+
+
+    @Test
+    public void testThemesSystem() {
+        getDriver().findElement(By.cssSelector("[href='/manage']")).click();
+        getDriver().findElement(By.cssSelector("[href='appearance']")).click();
+        getDriver().findElement(By.xpath("//label[@for='radio-block-1']")).click();
+
+        getDriver().findElement(By.cssSelector("[class='attach-previous ']")).click();
+        getDriver().findElement(By.xpath("//button[@name='Apply']")).click();
+
+        Assert.assertTrue(getDriver().findElement(By.cssSelector("html[data-theme]")).
+                getAttribute("data-theme").contains("system"));
     }
 }

@@ -146,7 +146,7 @@ public class PipelineProjectTest extends BaseTest {
 
     @Test
     public void testGetPermalinksInformationUponSuccessfulBuild() {
-        TestUtils.createPipeline(this, PROJECT_NAME);
+        TestUtils.createPipeline(getDriver(), PROJECT_NAME);
 
         List<String> permalinkList = new HomePage(getDriver())
                 .clickScheduleBuild(PROJECT_NAME)
@@ -192,8 +192,8 @@ public class PipelineProjectTest extends BaseTest {
     public void testRenameProjectViaSidebar() {
         List<String> projectList = new HomePage(getDriver())
                 .openPipelineProject(PROJECT_NAME)
-                .clickRenameSidebar(PROJECT_NAME)
-                .cleanInputFieldAndTypeName(NEW_PROJECT_NAME)
+                .clickRenameSidebarButton()
+                .clearInputFieldAndTypeName(NEW_PROJECT_NAME)
                 .clickRenameButton()
                 .gotoHomePage()
                 .getItemList();
@@ -208,7 +208,7 @@ public class PipelineProjectTest extends BaseTest {
     public void testDeleteProjectViaSidebar() {
         List<String> projectList = new HomePage(getDriver())
                 .openPipelineProject(NEW_PROJECT_NAME)
-                .clickDeletePipelineSidebarAndConfirmDeletion()
+                .clickDeleteButtonSidebarAndConfirm()
                 .getItemList();
 
         Assert.assertListNotContainsObject(
@@ -275,15 +275,15 @@ public class PipelineProjectTest extends BaseTest {
                 .clickSaveButton()
                 .gotoHomePage()
                 .openPipelineProject(PROJECT_NAME)
-                .clickRenameSidebar(PROJECT_NAME)
-                .cleanInputFieldAndTypeName(NEW_PROJECT_NAME)
+                .clickRenameSidebarButton()
+                .clearInputFieldAndTypeName(NEW_PROJECT_NAME)
                 .clickRenameButton();
 
         Assert.assertEquals(projectPage.getTitle(), NEW_PROJECT_NAME);
         Assert.assertEquals(projectPage.getProjectNameBreadcrumb(), NEW_PROJECT_NAME);
     }
 
-    @Test()
+    @Test
     public void testWarningMessageOnRenameProjectPage() {
         String actualWarningMessage = new HomePage(getDriver())
                 .clickNewItem()
@@ -292,7 +292,7 @@ public class PipelineProjectTest extends BaseTest {
                 .clickSaveButton()
                 .gotoHomePage()
                 .openPipelineProject(PROJECT_NAME)
-                .clickRenameSidebar(PROJECT_NAME)
+                .clickRenameSidebarButton()
                 .getWarningMessage();
 
         Assert.assertEquals(actualWarningMessage, "The new name is the same as the current name.");
@@ -307,7 +307,7 @@ public class PipelineProjectTest extends BaseTest {
                 .clickSaveButton()
                 .gotoHomePage()
                 .goToPipelineRenamePageViaDropdown(PROJECT_NAME)
-                .cleanInputFieldAndTypeName(NEW_PROJECT_NAME)
+                .clearInputFieldAndTypeName(NEW_PROJECT_NAME)
                 .clickRenameButton();
 
         Assert.assertEquals(projectPage.getTitle(), NEW_PROJECT_NAME);
@@ -332,7 +332,7 @@ public class PipelineProjectTest extends BaseTest {
                 .gotoHomePage()
                 .openPipelineProject(PROJECT_NAME)
                 .openDropDownMenuByChevronBreadcrumb(PROJECT_NAME)
-                .clickDeletePipelineSidebarAndConfirmDeletion()
+                .clickDeleteButtonSidebarAndConfirm()
                 .getWelcomeTitle();
 
         Assert.assertEquals(welcomeTitle, "Welcome to Jenkins!");

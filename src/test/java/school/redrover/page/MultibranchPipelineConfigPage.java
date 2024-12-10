@@ -1,12 +1,25 @@
 package school.redrover.page;
-import org.openqa.selenium.By;
+
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.Select;
 import school.redrover.page.base.BaseConfigPage;
 import school.redrover.runner.TestUtils;
 
 public class MultibranchPipelineConfigPage extends BaseConfigPage<MultibranchPipelineConfigPage, MultibranchPipelineProjectPage> {
+
+    @FindBy(css = "[data-section-id='scan-multibranch-pipeline-triggers']")
+    private WebElement scanMultibranchPipelineButton;
+
+    @FindBy(css = "[name$='PeriodicFolderTrigger'][id='cb0'] + label")
+    private WebElement periodicalScanningCheckbox;
+
+    @FindBy(css = "[name*='interval']")
+    private WebElement intervalSelect;
+
+    @FindBy(css = "[value='12h']")
+    private WebElement selectedValue;
 
     public MultibranchPipelineConfigPage(WebDriver driver) {
         super(driver);
@@ -18,14 +31,12 @@ public class MultibranchPipelineConfigPage extends BaseConfigPage<MultibranchPip
     }
 
     public MultibranchPipelineConfigPage clickScanMultibranchPipelineButton() {
-        getDriver().findElement(By.cssSelector("[data-section-id='scan-multibranch-pipeline-triggers']")).click();
+        scanMultibranchPipelineButton.click();
 
         return this;
     }
 
     public MultibranchPipelineConfigPage clickPeriodicalScanningCheckbox() {
-        WebElement periodicalScanningCheckbox =
-                getDriver().findElement(By.cssSelector("[name$='PeriodicFolderTrigger'][id='cb0'] + label"));
         getWait2().until(TestUtils.isElementInViewPort(periodicalScanningCheckbox));
         periodicalScanningCheckbox.click();
 
@@ -33,13 +44,13 @@ public class MultibranchPipelineConfigPage extends BaseConfigPage<MultibranchPip
     }
 
     public MultibranchPipelineConfigPage selectingIntervalValue() {
-        Select select = new Select(getDriver().findElement(By.cssSelector("[name*='interval']")));
+        Select select = new Select(intervalSelect);
         select.selectByValue("12h");
 
         return this;
     }
 
     public WebElement getSelectedValue() {
-        return  getDriver().findElement(By.cssSelector("[value='12h']"));
+        return selectedValue;
     }
 }

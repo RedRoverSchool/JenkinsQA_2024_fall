@@ -1,7 +1,6 @@
 package school.redrover.page;
 
 import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -102,7 +101,7 @@ public class CreateNewItemPage extends BaseCreatePage {
     }
 
     public MultibranchPipelineConfigPage selectMultibranchPipelineAndClickOk() {
-        TestUtils.scrollToBottom(getDriver());
+        TestUtils.scrollToBottomWithJS(getDriver());
 
         multibranchPipeline.click();
         clickOkButton();
@@ -118,7 +117,7 @@ public class CreateNewItemPage extends BaseCreatePage {
     }
 
     public OrganizationFolderConfigPage selectOrganizationFolderAndClickOk() {
-        TestUtils.scrollToBottom(getDriver());
+        TestUtils.scrollToBottomWithJS(getDriver());
         organizationFolder.click();
         clickOkButton();
 
@@ -141,16 +140,19 @@ public class CreateNewItemPage extends BaseCreatePage {
 
     public CreateNewItemPage selectPipeline() {
         getWait10().until(ExpectedConditions.elementToBeClickable(pipeline)).click();
+
         return new CreateNewItemPage(getDriver());
     }
 
     public CreateNewItemPage selectFreestyleProject() {
         freestyleProject.click();
+
         return this;
     }
 
     public CreateNewItemPage selectMultibranchPipelineProject() {
         multibranchPipeline.click();
+
         return this;
     }
 
@@ -158,10 +160,8 @@ public class CreateNewItemPage extends BaseCreatePage {
         return getWait5().until(ExpectedConditions.visibilityOf(invalidOrSameNameMessage)).getText();
     }
 
-    public CreateNewItemPage scrollToCopyFromFieldAndEnterName(String name) {
-        JavascriptExecutor js = (JavascriptExecutor) getDriver();
-        js.executeScript("arguments[0].scrollIntoView(true);", copyFromField);
-
+    public CreateNewItemPage enterName(String name) {
+        TestUtils.scrollToElementWithJS(getDriver(), copyFromField);
         copyFromField.sendKeys(name);
 
         return this;

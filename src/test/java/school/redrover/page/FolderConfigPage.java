@@ -1,10 +1,14 @@
 package school.redrover.page;
 
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
 import school.redrover.page.base.BaseConfigPage;
 
 public class FolderConfigPage extends BaseConfigPage<FolderConfigPage, FolderProjectPage> {
+
+    @FindBy(xpath = "//div[contains(text(),'Display Name')]/following-sibling::div[1]/input")
+    private WebElement displayNameField;
 
     public FolderConfigPage(WebDriver driver) {
         super(driver);
@@ -16,8 +20,7 @@ public class FolderConfigPage extends BaseConfigPage<FolderConfigPage, FolderPro
     }
 
     public FolderConfigPage enterConfigurationName(String name) {
-        getDriver().findElement(By.xpath("//div[contains(text(),'Display Name')]/following-sibling::div[1]/input"))
-                .sendKeys(name);
+        displayNameField.sendKeys(name);
 
         return this;
     }

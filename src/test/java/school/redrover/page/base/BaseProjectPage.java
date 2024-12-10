@@ -1,14 +1,16 @@
 package school.redrover.page.base;
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import school.redrover.page.CreateNewItemPage;
+import school.redrover.page.HomePage;
 
 import java.util.List;
 
-public abstract class BaseProjectPage<Self extends BaseProjectPage<?, ?>, ProjectConfigPage> extends BasePage {
+public abstract class BaseProjectPage<Self extends BaseProjectPage<?, ?, ?>, ProjectConfigPage, ProjectRenamePage> extends BasePage {
 
     @FindBy(id = "description-link")
     private WebElement descriptionButton;
@@ -52,11 +54,22 @@ public abstract class BaseProjectPage<Self extends BaseProjectPage<?, ?>, Projec
     @FindBy(css = "[class*='task-link-wrapper'] [href$='/configure']")
     private WebElement sidebarConfigureButton;
 
+    @FindBy(xpath = "//a[contains(@href, 'confirm-rename')]")
+    private WebElement renameSidebarButton;
+
+    @FindBy(xpath = "//span[contains(text(),'Delete')]")
+    private WebElement deleteButtonSidebar;
+
+    @FindBy(xpath = "//button[@data-id='ok']")
+    private WebElement yesButton;
+
     public BaseProjectPage(WebDriver driver) {
         super(driver);
     }
 
     protected abstract ProjectConfigPage createProjectConfigPage();
+
+    protected abstract ProjectRenamePage createProjectRenamePage();
 
     public CreateNewItemPage clickNewItem() {
         newItem.click();
@@ -131,5 +144,18 @@ public abstract class BaseProjectPage<Self extends BaseProjectPage<?, ?>, Projec
         getWait2().until(ExpectedConditions.elementToBeClickable(sidebarConfigureButton)).click();
 
         return createProjectConfigPage();
+    }
+
+    public HomePage clickDeleteButtonSidebarAndConfirm() {
+        getWait2().until(ExpectedConditions.elementToBeClickable(deleteButtonSidebar)).click();
+        getWait2().until(ExpectedConditions.elementToBeClickable(yesButton)).click();
+
+        return new HomePage(getDriver());
+    }
+
+    public ProjectRenamePage clickRenameSidebarButton() {
+        getWait2().until(ExpectedConditions.elementToBeClickable(renameSidebarButton)).click();
+
+        return createProjectRenamePage();
     }
 }

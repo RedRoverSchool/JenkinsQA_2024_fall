@@ -13,11 +13,27 @@ public class OrganizationFolderConfigPage extends BaseConfigPage<OrganizationFol
     @FindBy(name = "_.displayNameOrNull")
     private WebElement displayNameInput;
 
+    @FindBy(xpath = "//span/label[@for='enable-disable-project']")
+    private WebElement enableDisableProjectLabel;
+
+    @FindBy(xpath = "//div[@class='jenkins-app-bar__controls']/span")
+    private WebElement tooltip;
+
+    @FindBy(xpath = "//div/textarea[@name='_.description']")
+    private WebElement descriptionInputField;
+
+    @FindBy(xpath = "//div/div[@class='textarea-preview']")
+    private WebElement textareaPreview;
+
+    @FindBy(xpath = "//div/a[@class='textarea-show-preview']")
+    private WebElement showPreviewLink;
+
+    @FindBy(xpath = "//div/a[@class='textarea-hide-preview']")
+    private WebElement hidePreviewLink;
+
     public OrganizationFolderConfigPage(WebDriver driver) {
         super(driver);
     }
-
-    private static final By DISPLAY_NAME = By.name("_.displayNameOrNull");
 
     @Override
     protected OrganizationFolderProjectPage createProjectPage() {
@@ -27,36 +43,24 @@ public class OrganizationFolderConfigPage extends BaseConfigPage<OrganizationFol
     public String getTooltipGeneralText() {
 
         Actions actions = new Actions(getDriver());
-        actions.moveToElement(getDriver().findElement(By.xpath("//span/label[@for='enable-disable-project']"))).perform();
-        String tooltipText = getDriver().findElement(By.xpath("//div[@class='jenkins-app-bar__controls']/span")).getAttribute("tooltip");
+        actions.moveToElement(enableDisableProjectLabel).perform();
 
-        return tooltipText;
-    }
-
-    public OrganizationFolderConfigPage enterName(String text) {
-        getDriver().findElement(By.xpath("//div/input[@name='_.displayNameOrNull']")).sendKeys(text);
-
-        return new OrganizationFolderConfigPage(getDriver());
-    }
-
-    public OrganizationFolderConfigPage enterDescription(String text) {
-        getDriver().findElement(By.xpath("//div/textarea[@name='_.description']")).sendKeys(text);
-
-        return new OrganizationFolderConfigPage(getDriver());
+        return tooltip.getAttribute("tooltip");
     }
 
     public OrganizationFolderConfigPage changeDescriptionPreviewState() {
 
-        if (getDriver().findElement(By.xpath("//div/div[@class='textarea-preview']")).getAttribute("style").equals("display: none;")) {
-            getDriver().findElement(By.xpath("//div/a[@class='textarea-show-preview']")).click();
+        if (textareaPreview.getAttribute("style").equals("display: none;")) {
+            showPreviewLink.click();
         } else {
-            getDriver().findElement(By.xpath("//div/a[@class='textarea-hide-preview']")).click();
+            hidePreviewLink.click();
         }
+
         return new OrganizationFolderConfigPage(getDriver());
     }
 
     public OrganizationFolderConfigPage setDisplayName(String name) {
-        getDriver().findElement(DISPLAY_NAME).sendKeys(name);
+        displayNameInput.sendKeys(name);
 
         return this;
     }
@@ -66,6 +70,10 @@ public class OrganizationFolderConfigPage extends BaseConfigPage<OrganizationFol
         displayNameInput.sendKeys(name);
 
         return this;
+    }
+
+    public String getPreviewStyleAttribute() {
+        return getDriver().findElement(By.xpath("//div/div[@class='textarea-preview']")).getAttribute("style");
     }
 }
 

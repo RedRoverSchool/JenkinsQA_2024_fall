@@ -4,35 +4,41 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import school.redrover.page.base.BasePage;
 import school.redrover.runner.TestUtils;
 
 public class MyViewsPage extends BasePage {
 
+    @FindBy(xpath = "//button[@data-id='ok']")
+    private WebElement yesButton;
+
+    @FindBy(css = ".h4")
+    private WebElement folderText;
+
+    @FindBy(xpath = "//footer/following-sibling::dialog")
+    private WebElement deletionPopup;
+
+    @FindBy(xpath = "//td//button[@aria-expanded='false']")
+    private WebElement chevronButton;
+
     public MyViewsPage(WebDriver driver) {
         super(driver);
     }
 
-    public MyViewsPage deleteAnyJobViaChevron(String name) {
+    private void selectMenuFromItemDropdown(String itemName, String menuName) {
+        TestUtils.moveAndClickWithJS(getDriver(), getDriver().findElement(
+                By.xpath("//td/a/span[text() = '%s']/../button".formatted(itemName))));
 
-        Actions actions = new Actions(getDriver());
-        actions.moveToElement(getDriver().findElement(By.xpath("//span[contains(text(), '" + name + "')]")))
-                .perform();
+        getWait10().until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//div[@class='jenkins-dropdown__item__icon']/parent::*[contains(., '%s')]"
+                        .formatted(menuName)))).click();
+    }
 
-        TestUtils.moveAndClickWithJavaScript(getDriver(),
-                getDriver().findElement(By.xpath("//button[@data-href='http://localhost:8080/me/my-views/view/all/job/" + name + "/']")) );
-
-        WebElement deleteButton = getWait5().until(ExpectedConditions.presenceOfElementLocated(
-                By.xpath("//button[contains(@href, 'doDelete')]")));
-        actions
-                .moveToElement(deleteButton)
-                .click()
-                .perform();
-
-        WebElement buttonOk = getWait5().until(ExpectedConditions.elementToBeClickable(getDriver().findElement(By.xpath(
-                "//button[@data-id= 'ok']"))));
-        buttonOk.click();
+    public MyViewsPage selectDeleteFromItemMenuAndClickYes(String itemName) {
+        selectMenuFromItemDropdown(itemName, "Delete");
+        getWait5().until(ExpectedConditions.visibilityOf(yesButton)).click();
 
         return this;
     }
@@ -41,21 +47,23 @@ public class MyViewsPage extends BasePage {
         new Actions(getDriver()).moveToElement(getDriver().findElement(By.xpath("//a[@href='job/%s/']/span".formatted(projectName))))
                 .pause(500)
                 .perform();
-        WebElement chevron = getDriver().findElement(By.xpath("//td//button[@aria-expanded='false']"));
-        TestUtils.moveAndClickWithJavaScript(getDriver(), chevron);
-        getWait5().until(ExpectedConditions.attributeToBe(chevron, "aria-expanded", "true"));
+        TestUtils.moveAndClickWithJS(getDriver(), chevronButton);
 
         return this;
     }
 
-    public MyViewsPage clickDeleteInProjectDropdown(String projectName) {
-        getDriver().findElement(By.xpath("//button[@href='/me/my-views/view/all/job/%s/doDelete']".formatted(projectName))).click();
+    public MyViewsPage clickDeleteInProjectDropdown() {
+        getWait10().until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//div[@class='jenkins-dropdown__item__icon']/parent::*[contains(., 'Delete')]"))).click();
 
         return this;
     }
 
     public WebElement getDeletionPopup() {
-        return getWait5().until(ExpectedConditions.visibilityOf(getDriver().findElement(
-                By.xpath("//footer/following-sibling::dialog"))));
+        return getWait5().until(ExpectedConditions.visibilityOf(deletionPopup));
+    }
+
+    public String getTextEmptyFolder() {
+        return getWait5().until(ExpectedConditions.visibilityOf(folderText)).getText();
     }
 }

@@ -68,19 +68,24 @@ public class TestUtils {
         }
     }
 
-    public static void moveAndClickWithJavaScript(WebDriver driver, WebElement element) {
+    public static void moveAndClickWithJS(WebDriver driver, WebElement element) {
         ((JavascriptExecutor) driver)
                 .executeScript("arguments[0].dispatchEvent(new Event('mouseenter'));", element);
         ((JavascriptExecutor) driver)
                 .executeScript("arguments[0].dispatchEvent(new Event('click'));", element);
     }
 
-    public static void scrollToBottom(WebDriver driver) {
+    public static void scrollToBottomWithJS(WebDriver driver) {
         ((JavascriptExecutor) driver).executeScript("window.scrollTo(0, document.body.scrollHeight);");
     }
 
-    public static void createPipeline(BaseTest baseTest, String name) {
-        new HomePage(baseTest.getDriver())
+    public static void scrollToElementWithJS(WebDriver driver, WebElement element) {
+        JavascriptExecutor js = (JavascriptExecutor) driver;
+        js.executeScript("arguments[0].scrollIntoView(true);", element);
+    }
+
+    public static void createPipeline(WebDriver driver, String name) {
+        new HomePage(driver)
                 .clickNewItem()
                 .enterItemName(name)
                 .selectPipelineAndClickOk()
@@ -129,4 +134,21 @@ public class TestUtils {
                 .gotoHomePage();
     }
 
+    public static void createMultiConfigurationProject(WebDriver driver, String name) {
+        new HomePage(driver)
+                .clickNewItem()
+                .enterItemName(name)
+                .selectMultiConfigurationAndClickOk()
+                .clickSaveButton()
+                .gotoHomePage();
+    }
+
+    public static void createOrganizationFolder(WebDriver driver, String name) {
+        new HomePage(driver)
+                .clickNewItem()
+                .enterItemName(name)
+                .selectOrganizationFolderAndClickOk()
+                .clickSaveButton()
+                .gotoHomePage();
+    }
 }

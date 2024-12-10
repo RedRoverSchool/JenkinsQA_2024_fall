@@ -51,7 +51,7 @@ public class FreestyleConfigPage extends BaseConfigPage<FreestyleConfigPage, Fre
     }
 
     public FreestyleConfigPage addBuildStep(String buildStep) {
-        TestUtils.scrollToBottom(getDriver());
+        TestUtils.scrollToBottomWithJS(getDriver());
         addBuildStepButton.click();
         getDriver().findElement(By.xpath("//button[contains(text(),'%s')]".formatted(buildStep))).click();
 
@@ -60,7 +60,7 @@ public class FreestyleConfigPage extends BaseConfigPage<FreestyleConfigPage, Fre
 
     public FreestyleConfigPage addExecuteWindowsBatchCommand(String command) {
         getWait10().until(ExpectedConditions.visibilityOf(buildStepsSidebar)).click();
-        TestUtils.scrollToBottom(getDriver());
+        TestUtils.scrollToBottomWithJS(getDriver());
         addBuildStep("Execute Windows batch command");
         executeWindowsBatchCommandField.sendKeys(command);
 
@@ -74,7 +74,7 @@ public class FreestyleConfigPage extends BaseConfigPage<FreestyleConfigPage, Fre
     }
 
     public FreestyleConfigPage clickAddBuildStep() {
-        TestUtils.scrollToBottom(getDriver());
+        TestUtils.scrollToBottomWithJS(getDriver());
         getWait10().until(ExpectedConditions.elementToBeClickable(addBuildStepButton)).click();
 
         return this;
@@ -95,7 +95,7 @@ public class FreestyleConfigPage extends BaseConfigPage<FreestyleConfigPage, Fre
     }
 
     public String getTextExecuteShellTextArea() {
-        TestUtils.scrollToBottom(getDriver());
+        TestUtils.scrollToBottomWithJS(getDriver());
 
         return (String) ((JavascriptExecutor) getDriver()).executeScript(
                 "return arguments[0].CodeMirror.getValue();", executeShellCommandField);
@@ -111,6 +111,23 @@ public class FreestyleConfigPage extends BaseConfigPage<FreestyleConfigPage, Fre
 
     public String getTimePeriod() {
         return getDriver().findElement(By.xpath("//*[@name='_.durationName']")).getAttribute("value");
+    }
+
+    public boolean getEnablingCurrentState() {
+        return getWait10().until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//*[@id='toggle-switch-enable-disable-project']/label"))).isEnabled();
+    }
+
+    public FreestyleConfigPage changeEnablingState() {
+        getWait10().until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//*[@id='toggle-switch-enable-disable-project']/label"))).click();
+        getDriver().findElement(By.name("Submit")).click();
+
+        return this;
+    }
+
+    public String getDisabledProjectIndicator() {
+        return getWait10().until(ExpectedConditions.visibilityOfElementLocated(By.id("enable-project"))).getText();
     }
 }
 
