@@ -13,7 +13,7 @@ public class SearchBoxTest extends BaseTest {
     private static final String ITEM_NAME = "Item Name";
     private static final String SEARCH_TEXT = "g";
     private static final String SEARCH_RESULT = "manage";
-    private static final String UNVALID_SEARCH_TEXT = "444";
+    private static final String INVALID_SEARCH_TEXT = "444";
 
     @Test
     public void testVerifyTitleSearchBoxLink() {
@@ -141,7 +141,7 @@ public class SearchBoxTest extends BaseTest {
     @Test
     public void testEmptySearchField() {
         String errorMessage = new HomePage(getDriver())
-                .enterSearch(UNVALID_SEARCH_TEXT)
+                .enterSearch(INVALID_SEARCH_TEXT)
                 .enter()
                 .getMessageError();
 

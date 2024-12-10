@@ -270,25 +270,21 @@ public class OrganizationFolderTest extends BaseTest {
 
     @Test
     public void testChangeItemName() {
+        final String newName = FOLDER_NAME + "_New";
 
-        getDriver().findElement(By.xpath("//span/a[@href='/view/all/newJob']")).click();
-        getDriver().findElement(By.xpath("//div/input[@class='jenkins-input']")).sendKeys(FOLDER_NAME);
-        scrollPage();
-        getDriver().findElement(By.className("jenkins_branch_OrganizationFolder")).click();
-        getDriver().findElement(By.xpath("//div/button[@type='submit']")).click();
+        String actualName = new HomePage(getDriver())
+                .clickNewItem()
+                .enterItemName(FOLDER_NAME)
+                .selectOrganizationFolderAndClickOk()
+                .clickSaveButton()
+                .gotoHomePage()
+                .openOrganisationFolderProject(FOLDER_NAME)
+                .clickRenameSidebarButton()
+                .clearInputFieldAndTypeName(newName)
+                .clickRenameButton()
+                .getName();
 
-        getDriver().findElement(By.xpath("//div/button[@class='jenkins-button jenkins-submit-button jenkins-button--primary ']")).click();
-        getDriver().findElement(By.id("jenkins-home-link")).click();
-
-        getDriver().findElement(By.xpath("//td/a[@class='jenkins-table__link model-link inside']")).click();
-        getDriver().findElement(By.xpath("//div[7]/span/a")).click();
-        getDriver().findElement(By.xpath("//div/input[@checkdependson='newName']")).click();
-        getDriver().findElement(By.xpath("//div/input[@checkdependson='newName']")).sendKeys(" NEW");
-        getDriver().findElement(By.xpath("//button[@name='Submit']")).click();
-
-        Assert.assertEquals(
-                getDriver().findElement(By.xpath("//div/h1")).getText(),
-                FOLDER_NAME + " NEW");
+        Assert.assertEquals(actualName, newName);
     }
 
     @Test
@@ -313,23 +309,16 @@ public class OrganizationFolderTest extends BaseTest {
 
     @Test
     public void testFolderDelete() {
+        List<String> projectsList = new HomePage(getDriver())
+                .clickNewItem()
+                .enterItemName(FOLDER_NAME)
+                .selectOrganizationFolderAndClickOk()
+                .clickSaveButton()
+                .gotoHomePage()
+                .openOrganisationFolderProject(FOLDER_NAME)
+                .clickDeleteButtonSidebarAndConfirm()
+                .getItemList();
 
-        getDriver().findElement(By.xpath("//span/a[@href='/view/all/newJob']")).click();
-        getDriver().findElement(By.xpath("//div/input[@class='jenkins-input']")).sendKeys(FOLDER_NAME);
-        scrollPage();
-        getDriver().findElement(By.className("jenkins_branch_OrganizationFolder")).click();
-        getDriver().findElement(By.xpath("//div/button[@type='submit']")).click();
-
-        getDriver().findElement(By.xpath("//div/button[@class='jenkins-button jenkins-submit-button jenkins-button--primary ']")).click();
-        getDriver().findElement(By.id("jenkins-home-link")).click();
-
-        getDriver().findElement(By.xpath("//tbody/tr/td/a/span[contains(text(),ITEM_NAME)]")).click();
-        getDriver().findElement(By.xpath("//div[5]/span/a")).click();
-
-        WebDriverWait driverWait = new WebDriverWait(getDriver(), Duration.ofSeconds(3));
-        driverWait.until(ExpectedConditions.elementToBeClickable(By.xpath("//button[@ data-id='ok']"))).click();
-        List<WebElement> existingInstancesList = getDriver().findElements(By.xpath("//table[@id='projectstatus']/tbody"));
-
-        Assert.assertTrue(existingInstancesList.isEmpty());
+        Assert.assertListNotContainsObject(projectsList, FOLDER_NAME, "Project is not deleted");
     }
 }

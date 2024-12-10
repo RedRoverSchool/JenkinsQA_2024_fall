@@ -23,7 +23,7 @@ public class PluginTest extends BaseTest {
     }
 
     @Test(dependsOnMethods = "testNumberOfUpdatePlugin")
-    public void testNubmerOfAllUpdatePlugin() {
+    public void testNumberOfAllUpdatePlugin() {
 
         int countAvailablePlugins = new HomePage(getDriver())
                 .openManageJenkinsPage()
@@ -34,7 +34,7 @@ public class PluginTest extends BaseTest {
 
     }
 
-    @Test (dependsOnMethods = "testNubmerOfAllUpdatePlugin")
+    @Test (dependsOnMethods = "testNumberOfAllUpdatePlugin")
     public void testSearchPluginViaTag() {
 
         int countOfPluginsFound = new HomePage(getDriver())
