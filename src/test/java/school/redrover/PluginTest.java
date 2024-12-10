@@ -1,8 +1,8 @@
 package school.redrover;
 import org.testng.Assert;
 import org.testng.annotations.Test;
-import school.redrover.page.HomePage;
-import school.redrover.page.PluginsPage;
+import school.redrover.page.home.HomePage;
+import school.redrover.page.systemConfiguration.PluginsPage;
 import school.redrover.runner.BaseTest;
 
 public class PluginTest extends BaseTest {
@@ -23,7 +23,7 @@ public class PluginTest extends BaseTest {
     }
 
     @Test(dependsOnMethods = "testNumberOfUpdatePlugin")
-    public void testNubmerOfAllUpdatePlugin() {
+    public void testNumberOfAllUpdatePlugin() {
 
         int countAvailablePlugins = new HomePage(getDriver())
                 .openManageJenkinsPage()
@@ -34,7 +34,7 @@ public class PluginTest extends BaseTest {
 
     }
 
-    @Test (dependsOnMethods = "testNubmerOfAllUpdatePlugin")
+    @Test (dependsOnMethods = "testNumberOfAllUpdatePlugin")
     public void testSearchPluginViaTag() {
 
         int countOfPluginsFound = new HomePage(getDriver())

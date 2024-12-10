@@ -5,8 +5,8 @@ import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
 import org.testng.Assert;
 import org.testng.annotations.Test;
-import school.redrover.page.HomePage;
-import school.redrover.page.MultiConfigurationConfigPage;
+import school.redrover.page.home.HomePage;
+import school.redrover.page.multiConfiguration.MultiConfigurationConfigPage;
 import school.redrover.runner.BaseTest;
 import school.redrover.runner.TestUtils;
 

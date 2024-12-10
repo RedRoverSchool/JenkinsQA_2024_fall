@@ -4,8 +4,8 @@ import org.openqa.selenium.WebElement;
 import org.testng.Assert;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
-import school.redrover.page.HomePage;
-import school.redrover.page.PipelineProjectPage;
+import school.redrover.page.home.HomePage;
+import school.redrover.page.pipeline.PipelineProjectPage;
 import school.redrover.runner.BaseTest;
 import school.redrover.runner.TestUtils;
 
@@ -146,7 +146,7 @@ public class PipelineProjectTest extends BaseTest {
 
     @Test
     public void testGetPermalinksInformationUponSuccessfulBuild() {
-        TestUtils.createPipeline(this, PROJECT_NAME);
+        TestUtils.createPipeline(getDriver(), PROJECT_NAME);
 
         List<String> permalinkList = new HomePage(getDriver())
                 .clickScheduleBuild(PROJECT_NAME)
