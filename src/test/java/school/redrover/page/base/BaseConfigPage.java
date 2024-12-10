@@ -12,6 +12,21 @@ public abstract class BaseConfigPage<Self extends BaseConfigPage<?, ?>, ProjectP
     @FindBy(name = "Submit")
     private WebElement saveButton;
 
+    @FindBy(xpath = "//div/input[@name='_.displayNameOrNull']")
+    private WebElement displayNameInputField;
+
+    @FindBy(xpath = "//div/div[@class='textarea-preview']")
+    private WebElement textareaPreview;
+
+    @FindBy(xpath = "//div/a[@class='textarea-show-preview']")
+    private WebElement showPreviewLink;
+
+    @FindBy(xpath = "//div/a[@class='textarea-hide-preview']")
+    private WebElement hidePreviewLink;
+
+    @FindBy(xpath = "//div/div[@class='textarea-preview']")
+    private WebElement descriptionPreviewText;
+
     public BaseConfigPage(WebDriver driver) {
         super(driver);
     }
@@ -28,5 +43,26 @@ public abstract class BaseConfigPage<Self extends BaseConfigPage<?, ?>, ProjectP
         saveButton.click();
 
         return createProjectPage();
+    }
+
+    public Self enterDisplayName(String text) {
+        displayNameInputField.sendKeys(text);
+
+        return (Self) this;
+    }
+
+    public Self changeDescriptionPreviewState() {
+
+        if (textareaPreview.getAttribute("style").equals("display: none;")) {
+            showPreviewLink.click();
+        } else {
+            hidePreviewLink.click();
+        }
+
+        return (Self) this;
+    }
+
+    public String getDescriptionPreviewText() {
+        return descriptionPreviewText.getText();
     }
 }

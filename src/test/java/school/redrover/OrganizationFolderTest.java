@@ -13,6 +13,7 @@ import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import school.redrover.page.HomePage;
 import school.redrover.runner.BaseTest;
+import school.redrover.runner.TestUtils;
 
 import java.time.Duration;
 import java.util.List;
@@ -21,8 +22,8 @@ public class OrganizationFolderTest extends BaseTest {
     private static final String FOLDER_NAME = "FolderName";
     private static final String DISPLAY_NAME = "DisplayName";
     private static final String DESCRIPTION = "Description";
-    private static final String NEW_DISPLAY_NAME = "New Name Organization Folder";
-    private static final String NEW_DESCRIPTION = "New Description Organization Folder";
+    private static final String NEW_DISPLAY_NAME = "NewNameOrganizationFolder";
+    private static final String NEW_DESCRIPTION = "NewDescription";
 
     private void clickElement(By by) {
         getDriver().findElement(by).click();
@@ -80,23 +81,28 @@ public class OrganizationFolderTest extends BaseTest {
         Assert.assertEquals(newDisplayName, NEW_DISPLAY_NAME);
     }
 
-    @Test(dependsOnMethods = "testCreate")
+    @Test
     public void testAddDescription() {
-        goConfigure();
-        getDriver().findElement(By.name("_.description")).sendKeys(DESCRIPTION);
-        clickElement(By.name("Submit"));
+        TestUtils.createOrganizationFolder(getDriver(), FOLDER_NAME);
 
-        Assert.assertEquals(textElement(By.id("view-message")), DESCRIPTION);
+        String description = new HomePage(getDriver())
+                .openOrganisationFolderProject(FOLDER_NAME)
+                .editDescription(DESCRIPTION)
+                .clickSubmitButton()
+                .getDescription();
+
+        Assert.assertEquals(description, DESCRIPTION);
     }
 
     @Test(dependsOnMethods = {"testAddDescription"})
     public void testEditDescription() {
-        goConfigure();
-        getDriver().findElement(By.name("_.description")).sendKeys(Keys.LEFT_CONTROL + "a");
-        getDriver().findElement(By.name("_.description")).sendKeys(NEW_DESCRIPTION);
-        clickElement(By.name("Submit"));
+        String description = new HomePage(getDriver())
+                .openOrganisationFolderProject(FOLDER_NAME)
+                .editDescription(NEW_DESCRIPTION)
+                .clickSubmitButton()
+                .getDescription();
 
-        Assert.assertEquals(textElement(By.id("view-message")), NEW_DESCRIPTION);
+        Assert.assertEquals(description, NEW_DESCRIPTION);
     }
 
     @Test(dependsOnMethods = {"testEditDescription", "testEditDisplayName"})
@@ -162,33 +168,34 @@ public class OrganizationFolderTest extends BaseTest {
     @Test
     public void testDescriptionPreview() {
 
-        new HomePage(getDriver())
+        String descriptionPreview = new HomePage(getDriver())
                 .clickNewItem()
                 .enterItemName(FOLDER_NAME)
                 .selectOrganizationFolderAndClickOk()
-                .enterName(DISPLAY_NAME)
+                .enterDisplayName(DISPLAY_NAME)
                 .enterDescription(DESCRIPTION)
-                .changeDescriptionPreviewState();
+                .changeDescriptionPreviewState()
+                .getDescriptionPreviewText();
 
         Assert.assertEquals(
-                getDriver().findElement(By.xpath("//div/div[@class='textarea-preview']")).getText(),
+                descriptionPreview,
                 DESCRIPTION);
     }
 
     @Test
     public void testDescriptionPreviewHide() {
-
-        new HomePage(getDriver())
+        String displayPreview = new HomePage(getDriver())
                 .clickNewItem()
                 .enterItemName(FOLDER_NAME)
                 .selectOrganizationFolderAndClickOk()
-                .enterName(DISPLAY_NAME)
+                .enterDisplayName(DISPLAY_NAME)
                 .enterDescription(DESCRIPTION)
                 .changeDescriptionPreviewState()
-                .changeDescriptionPreviewState();
+                .changeDescriptionPreviewState()
+                .getPreviewStyleAttribute();
 
         Assert.assertEquals(
-                getDriver().findElement(By.xpath("//div/div[@class='textarea-preview']")).getAttribute("style"),
+                displayPreview,
                 "display: none;");
     }
 
