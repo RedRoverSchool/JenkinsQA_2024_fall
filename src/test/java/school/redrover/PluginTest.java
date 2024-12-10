@@ -46,5 +46,4 @@ public class PluginTest extends BaseTest {
         Assert.assertEquals(countOfPluginsFound, 1);
 
     }
-
 }

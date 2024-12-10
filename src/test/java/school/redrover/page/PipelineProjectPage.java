@@ -4,6 +4,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import school.redrover.page.base.BaseProjectPage;
 import school.redrover.runner.TestUtils;
@@ -11,6 +12,36 @@ import school.redrover.runner.TestUtils;
 import java.util.List;
 
 public class PipelineProjectPage extends BaseProjectPage<PipelineProjectPage, PipelineConfigurePage, PipelineRenamePage> {
+
+    @FindBy(xpath = "//form[@id='enable-project']")
+    private WebElement warningDisabledMessage;
+
+    @FindBy(xpath = "//form[@id='enable-project']/button[@name='Submit']")
+    private WebElement enableDisableStatusButton;
+
+    @FindBy(css = "a[data-build-success='Build scheduled']")
+    private WebElement buildNowSidebarButton;
+
+    @FindBy(css = "a[tooltip$='> Console Output']")
+    private WebElement buildIcon;
+
+    @FindBy(css = "a[href$='multi-pipeline-graph']")
+    private WebElement stagesSidebarButton;
+
+    @FindBy(xpath = "//div[@class='jenkins-app-bar']//h1")
+    private WebElement projectPageTitle;
+
+    @FindBy(xpath = "//ol[@id='breadcrumbs']/li[@class='jenkins-breadcrumbs__list-item'][2]")
+    private WebElement projectNameBreadcrumbs;
+
+    @FindBy(xpath = "//*[local-name()='svg' and @tooltip]")
+    private WebElement buildStatusMark;
+
+    @FindBy(xpath = "//div[@class='tippy-content']")
+    private WebElement statusMarkTooltip;
+
+    @FindBy(xpath = "//li[@class='permalink-item']")
+    private List<WebElement> permalinks;
 
     public PipelineProjectPage(WebDriver driver) {
         super(driver);
@@ -27,76 +58,64 @@ public class PipelineProjectPage extends BaseProjectPage<PipelineProjectPage, Pi
     }
 
     public String getWarningDisabledMessage() {
-        return getWait5().until(ExpectedConditions.visibilityOfElementLocated(
-                By.xpath("//form[@id='enable-project']"))).getText().split("\n")[0];
+        return getWait5().until(ExpectedConditions.visibilityOf(warningDisabledMessage)).getText().split("\n")[0];
     }
 
     public String getStatusButtonText() {
-        return getWait2().until(ExpectedConditions.visibilityOfElementLocated(
-                By.xpath("//form[@id='enable-project']/button[@name='Submit']"))).getText();
+        return getWait2().until(ExpectedConditions.visibilityOf(enableDisableStatusButton)).getText();
     }
 
     public PipelineProjectPage clickOnBuildNowItemOnSidePanelAndWait() {
-        getDriver().findElement(By.cssSelector("a[data-build-success='Build scheduled']")).click();
-        getWait5().until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("a[tooltip$='> Console Output']")));
+        buildNowSidebarButton.click();
+        getWait5().until(ExpectedConditions.visibilityOf(buildIcon));
 
         return this;
     }
 
     public PipelineStagesPage clickOnStagesItemOnSidePanel() {
-        getDriver().findElement(By.cssSelector("a[href$='multi-pipeline-graph']")).click();
+        stagesSidebarButton.click();
 
         return new PipelineStagesPage(getDriver());
     }
 
     public String getTitle() {
-        return getDriver().findElement(By.xpath("//div[@class='jenkins-app-bar']//h1")).getText();
+        return projectPageTitle.getText();
     }
 
     public String getProjectNameBreadcrumb() {
-        return getDriver().findElement(
-                By.xpath("//ol[@id='breadcrumbs']/li[@class='jenkins-breadcrumbs__list-item'][2]")).getText();
+        return projectNameBreadcrumbs.getText();
     }
 
     public PipelineProjectPage clickEnableButton() {
-        getWait2().until(ExpectedConditions.elementToBeClickable(By.xpath("//button[@formNoValidate='formNoValidate']"))).click();
+        getWait2().until(ExpectedConditions.elementToBeClickable(enableDisableStatusButton)).click();
 
         return this;
     }
 
     public PipelineProjectPage hoverOverBuildStatusMark() {
         new Actions(getDriver())
-                .moveToElement(getWait10().until(ExpectedConditions.visibilityOfElementLocated(
-                        By.xpath("//*[local-name()='svg' and @tooltip]"))))
+                .moveToElement(getWait10().until(ExpectedConditions.visibilityOf(buildStatusMark)))
                 .perform();
 
         return this;
     }
 
     public String getStatusMarkTooltipText() {
-        return getWait10().until(ExpectedConditions.visibilityOfElementLocated(
-                By.xpath("//div[@class='tippy-content']"))).getText();
+        return getWait10().until(ExpectedConditions.visibilityOf(statusMarkTooltip)).getText();
     }
 
     public PipelineBuildPage clickBuildStatusMark() {
-        getWait10().until(ExpectedConditions.elementToBeClickable(By.xpath("//*[@title='Success']"))).click();
+        getWait10().until(ExpectedConditions.elementToBeClickable(buildStatusMark)).click();
 
         return new PipelineBuildPage(getDriver());
     }
 
     public List<String> getPermalinkList() {
-        return getWait10().until(ExpectedConditions.visibilityOfAllElementsLocatedBy(
-                        By.xpath("//li[@class='permalink-item']")))
+        return getWait10().until(ExpectedConditions.visibilityOfAllElements(permalinks))
                 .stream()
                 .map(WebElement::getText)
                 .map(string -> string.split("\\(#")[0].trim())
                 .toList();
-    }
-
-    public PipelineProjectPage clickSaveButton() {
-        getDriver().findElement(By.xpath("//button[@name='Submit']")).click();
-
-        return new PipelineProjectPage(getDriver());
     }
 
     public PipelineProjectPage openDropDownMenuByChevronBreadcrumb(String name) {
