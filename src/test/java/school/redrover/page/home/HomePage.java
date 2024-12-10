@@ -7,6 +7,17 @@ import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import school.redrover.page.base.BasePage;
+import school.redrover.page.folder.FolderConfigPage;
+import school.redrover.page.folder.FolderProjectPage;
+import school.redrover.page.freestyle.FreestyleProjectPage;
+import school.redrover.page.freestyle.FreestyleRenamePage;
+import school.redrover.page.multiConfiguration.MultiConfigurationProjectPage;
+import school.redrover.page.multibranch.MultibranchPipelineProjectPage;
+import school.redrover.page.organizationFolder.OrganizationFolderProjectPage;
+import school.redrover.page.pipeline.PipelineProjectPage;
+import school.redrover.page.pipeline.PipelineRenamePage;
+import school.redrover.page.user.UserConfigPage;
+import school.redrover.page.user.UserPage;
 import school.redrover.runner.TestUtils;
 
 import java.util.ArrayList;
