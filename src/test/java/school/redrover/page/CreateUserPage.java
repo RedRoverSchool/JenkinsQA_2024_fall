@@ -5,7 +5,6 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import school.redrover.page.base.BasePage;
 
-
 public class CreateUserPage extends BasePage {
 
     @FindBy(css = ".jenkins-submit-button")
