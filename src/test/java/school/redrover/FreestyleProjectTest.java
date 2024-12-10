@@ -3,8 +3,8 @@ package school.redrover;
 import org.testng.Assert;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
-import school.redrover.page.FreestyleProjectPage;
-import school.redrover.page.HomePage;
+import school.redrover.page.freestyle.FreestyleProjectPage;
+import school.redrover.page.home.HomePage;
 import school.redrover.runner.BaseTest;
 import school.redrover.runner.TestUtils;
 

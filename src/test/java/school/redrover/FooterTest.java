@@ -3,7 +3,7 @@ package school.redrover;
 import org.openqa.selenium.By;
 import org.testng.Assert;
 import org.testng.annotations.Test;
-import school.redrover.page.HomePage;
+import school.redrover.page.home.HomePage;
 import school.redrover.runner.BaseTest;
 
 public class FooterTest extends BaseTest {

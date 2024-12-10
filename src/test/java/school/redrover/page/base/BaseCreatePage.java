@@ -4,7 +4,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import school.redrover.page.CreateNewItemPage;
+import school.redrover.page.home.CreateNewItemPage;
 
 public abstract class BaseCreatePage<Self extends BaseCreatePage<?>> extends BasePage {
 
