@@ -107,15 +107,19 @@ public class ManageJenkinsPage extends BasePage {
     }
 
     public boolean isHiddenShortcutTooltipDisplayed() {
-        Actions actions = new Actions(getDriver());
-        actions.moveToElement(tooltip).perform();
+        new Actions(getDriver()).moveToElement(tooltip).perform();
 
         return hiddenTooltipValue.isDisplayed();
     }
 
     public ManageJenkinsPage switchFocusToSearchFieldAndTypeText(String text) {
-        Actions actions = new Actions(getDriver());
-        actions.sendKeys(Keys.chord("/", text)).perform();
+         new Actions(getDriver()).sendKeys(Keys.chord("/", text)).perform();
+
+        return this;
+    }
+
+    public ManageJenkinsPage clickOnSearchField() {
+        searchInputField.click();
 
         return this;
     }
@@ -136,5 +140,9 @@ public class ManageJenkinsPage extends BasePage {
         configureCredentialsItem.click();
 
         return new CredentialsConfigurePage(getDriver());
+    }
+
+    public String getAttribute(String attributeName) {
+        return searchInputField.getAttribute(attributeName);
     }
 }
