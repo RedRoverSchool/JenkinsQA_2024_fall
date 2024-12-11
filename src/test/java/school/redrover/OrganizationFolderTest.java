@@ -338,4 +338,5 @@ public class OrganizationFolderTest extends BaseTest {
 
         Assert.assertListNotContainsObject(projectsList, FOLDER_NAME, "Project is not deleted");
     }
+
 }
