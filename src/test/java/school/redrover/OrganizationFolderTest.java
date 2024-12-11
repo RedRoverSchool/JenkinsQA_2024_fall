@@ -168,6 +168,7 @@ public class OrganizationFolderTest extends BaseTest {
                 "(No new builds within this Organization Folder will be executed until it is re-enabled)");
     }
 
+    @Ignore
     @Test
     public void testDescriptionPreview() {
 

@@ -18,12 +18,6 @@ public class OrganizationFolderProjectPage extends BaseProjectPage<OrganizationF
     @FindBy(id="view-message")
     private WebElement descriptionText;
 
-    @FindBy(xpath = "//a[@data-title='Delete Organization Folder']")
-    private WebElement deleteButton;
-
-    @FindBy(xpath = "//button[@data-id='ok']")
-    private WebElement confirmDeleteButton;
-
 
     public OrganizationFolderProjectPage(WebDriver driver) {
         super(driver);
@@ -51,11 +45,5 @@ public class OrganizationFolderProjectPage extends BaseProjectPage<OrganizationF
 
     public String getDescription() {
         return getWait5().until(ExpectedConditions.visibilityOf(descriptionText)).getText();
-    }
-
-    public HomePage clickDeleteFromSidebarMenuAndConfirm() {
-        deleteButton.click();
-        confirmDeleteButton.click();
-        return new HomePage(getDriver());
     }
 }
