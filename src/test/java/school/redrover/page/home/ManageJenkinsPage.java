@@ -6,6 +6,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import school.redrover.page.AppearancePage;
 import school.redrover.page.systemConfiguration.CloudsPage;
 import school.redrover.page.CredentialsConfigurePage;
 import school.redrover.page.systemConfiguration.PluginsPage;
@@ -59,12 +60,21 @@ public class ManageJenkinsPage extends BasePage {
     @FindBy(className = "jenkins-search__results-item--selected")
     private WebElement selectedSearchResultItem;
 
+    @FindBy(xpath = "//a[@href='appearance']")
+    private WebElement appearanceButton;
+
     public ManageJenkinsPage(WebDriver driver) {
         super(driver);
     }
 
     public String getTitle() {
         return title.getText();
+    }
+
+    public AppearancePage clickAppearanceButton() {
+        appearanceButton.click();
+
+        return new AppearancePage(getDriver());
     }
 
     public PluginsPage openPluginsPage() {
