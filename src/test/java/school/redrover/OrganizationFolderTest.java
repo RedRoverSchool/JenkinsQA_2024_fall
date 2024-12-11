@@ -196,9 +196,7 @@ public class OrganizationFolderTest extends BaseTest {
                 .changeDescriptionPreviewState()
                 .getPreviewStyleAttribute();
 
-        Assert.assertEquals(
-                displayPreview,
-                "display: none;");
+        Assert.assertEquals(displayPreview, "display: none;");
     }
 
     @Test
@@ -248,24 +246,16 @@ public class OrganizationFolderTest extends BaseTest {
     }
 
     @Test
+    public void testAddDescriptionOnConfigurePage() {
+        String actualDescription = new HomePage(getDriver())
+                .clickNewItem()
+                .enterItemName(FOLDER_NAME)
+                .selectOrganizationFolderAndClickOk()
+                .enterDescription(DESCRIPTION)
+                .clickSaveButton()
+                .getDescription();
 
-    public void testDescriptionAfterCreation() {
-
-        getDriver().findElement(By.xpath("//span/a[@href='/view/all/newJob']")).click();
-        getDriver().findElement(By.xpath("//div/input[@class='jenkins-input']")).sendKeys(FOLDER_NAME);
-        scrollPage();
-        getDriver().findElement(By.className("jenkins_branch_OrganizationFolder")).click();
-        getDriver().findElement(By.xpath("//div/button[@type='submit']")).click();
-
-        getDriver().findElement(By.xpath("//div/textarea[@name='_.description']")).sendKeys(DESCRIPTION);
-        getDriver().findElement(By.xpath("//div/button[@class='jenkins-button jenkins-submit-button jenkins-button--primary ']")).click();
-
-        WebDriverWait driverWait = new WebDriverWait(getDriver(), Duration.ofSeconds(10));
-        driverWait.until(ExpectedConditions.visibilityOfElementLocated(By.id("view-message")));
-
-        Assert.assertEquals(
-                getDriver().findElement(By.id("view-message")).getText(),
-                DESCRIPTION);
+        Assert.assertEquals(actualDescription, DESCRIPTION);
     }
 
     @Test
@@ -289,22 +279,15 @@ public class OrganizationFolderTest extends BaseTest {
 
     @Test
     public void testCreateOrganizationFolderWithDefaultIcon() {
-        getDriver().findElement(By.cssSelector("[href$='/newJob']")).click();
-        getDriver().findElement(By.id("name")).sendKeys("Organization_Folder");
+        String iconName = new HomePage(getDriver())
+                .clickNewItem()
+                .enterItemName(FOLDER_NAME)
+                .selectOrganizationFolderAndClickOk()
+                .selectDefaultIcon()
+                .clickSaveButton()
+                .getIconAttributeTitle();
 
-        scrollPage();
-
-        getDriver().findElement(By.cssSelector("[class$='OrganizationFolder']")).click();
-        getDriver().findElement(By.id("ok-button")).click();
-
-        new Select(getDriver().findElement(By.xpath("(//select[contains(@class, 'dropdownList')])[2]")))
-                .selectByVisibleText("Default Icon");
-
-        scrollPage();
-
-        getDriver().findElement(By.name("Submit")).click();
-
-        Assert.assertEquals(getDriver().findElement(By.cssSelector("h1 > svg")).getAttribute("title"), "Folder");
+        Assert.assertEquals(iconName, "Folder");
     }
 
     @Test
