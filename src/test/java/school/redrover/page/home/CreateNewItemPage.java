@@ -49,6 +49,12 @@ public class CreateNewItemPage extends BasePage {
     @FindBy(id = "ok-button")
     private WebElement okButton;
 
+    @FindBy (id="add-item-panel")
+    private WebElement pageField;
+
+    @FindBy (id="itemname-required")
+    private WebElement warningMessage;
+
     public CreateNewItemPage(WebDriver driver) {
         super(driver);
     }
@@ -177,5 +183,17 @@ public class CreateNewItemPage extends BasePage {
         okButton.click();
 
         return new PipelineConfigurePage(getDriver());
+    }
+
+
+    public CreateNewItemPage clickSomewhere() {
+        pageField.click();
+        return this;
+    }
+    public String getWarningMessageText() {
+        return warningMessage.getText();
+    }
+    public boolean getOkButton() {
+        return okButton.isEnabled();
     }
 }
