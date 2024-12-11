@@ -148,20 +148,18 @@ public class MultibranchPipelineTest extends BaseTest {
     public void testCreateJobAndJobNameVisibleOnStatusPage() {
         String title = new HomePage(getDriver())
                 .openMultibranchPipelineProject(MULTIBRANCH_PIPELINE_NAME)
-                .getTitle();
+                .getItemName();
 
         Assert.assertEquals(title, MULTIBRANCH_PIPELINE_NAME);
     }
 
-    @Test
+    @Test(dependsOnMethods = "testCreate")
     public void testCreateJobAndJobNameVisibleOnBreadcrumb() {
-        createJob(MULTIBRANCH_PIPELINE_NAME);
+        String breadcrumbName = new HomePage(getDriver())
+                .openMultibranchPipelineProject(MULTIBRANCH_PIPELINE_NAME)
+                .getBreadcrumbName();
 
-        getDriver().findElement(By.xpath(("//a[contains(@href,'%s')]").formatted(MULTIBRANCH_PIPELINE_NAME))).click();
-
-        Assert.assertEquals(
-                getDriver().findElement(By.xpath("//a[contains(@href,'job')][@class='model-link']")).getText(),
-                MULTIBRANCH_PIPELINE_NAME);
+        Assert.assertEquals(breadcrumbName, MULTIBRANCH_PIPELINE_NAME);
     }
 
     @Test

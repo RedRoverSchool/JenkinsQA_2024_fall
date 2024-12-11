@@ -26,9 +26,6 @@ public class MultibranchPipelineProjectPage extends BaseProjectPage<MultibranchP
     @FindBy(xpath = "//button[@data-id='ok']")
     private WebElement confirmDeletionButton;
 
-    @FindBy(tagName = "h1")
-    private WebElement title;
-
     public MultibranchPipelineProjectPage(WebDriver driver) {
         super(driver);
     }
@@ -43,8 +40,9 @@ public class MultibranchPipelineProjectPage extends BaseProjectPage<MultibranchP
         return new MultibranchPipelineRenamePage(getDriver());
     }
 
-    public String getTitle() {
-        return title.getText();
+    public String getBreadcrumbName() {
+
+        return jobNameToMenu.getText();
     }
 
     public String getDescription() {
