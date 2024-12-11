@@ -16,8 +16,6 @@ public class FreestyleProjectTest extends BaseTest {
     private static final String FREESTYLE_PROJECT = "Freestyle project";
     private static final String DESCRIPTION = "Bla-bla-bla project";
     private static final String BUILD_NAME = "BuildName";
-    private HomePage homePage;
-
 
     @DataProvider
     public Object[][] providerUnsafeCharacters() {
@@ -91,8 +89,7 @@ public class FreestyleProjectTest extends BaseTest {
                 .clickMyViewsButton()
                 .clickNewItem()
                 .enterItemName(PROJECT_NAME)
-                .selectTypeProject(FREESTYLE_PROJECT)
-                .clickOkButton()
+                .selectFreestyleProjectAndClickOk()
                 .gotoHomePage()
                 .getItemList();
 
@@ -456,25 +453,30 @@ public class FreestyleProjectTest extends BaseTest {
         Assert.assertEquals(changeConfig.size(), 2);
     }
     @Test
-    public void testWorkspaceCreated() {
-        homePage = new HomePage(getDriver());
-        homePage.createWorkspace();
+    public void testWorkspaceIsOpened() {
+        String workspace = new HomePage(getDriver())
+                .clickNewItem()
+                .enterItemName(PROJECT_NAME)
+                .selectFreestyleProject()
+                .selectFreestyleProjectAndClickOk()
+                .clickSaveButton()
+                .clickBuildNowSidebar()
+                .clickWorkspaceSidebar()
+                .getBreadCrumb();
 
-        String breadcrumbText = homePage.getBreadcrumbText();
-
-        Assert.assertEquals(
-                breadcrumbText,
-                "Workspace of TestJobWorkspace on Built-In Node");
+        Assert.assertEquals(workspace, "Workspace of " + PROJECT_NAME + " on Built-In Node");
     }
 
-    @Test(dependsOnMethods = "testWorkspaceCreated")
-    public void testBuildNavigation() {
-        homePage.clickBuildTwo();
+    @Test(dependsOnMethods = "testWorkspaceIsOpened")
+    public void testLastBuildIsOpened() {
 
-        String breadcrumbText = homePage.getBreadcrumbText();
+        String secondBuild = new HomePage(getDriver())
+                .openFreestyleProject(PROJECT_NAME)
+                .clickBuildNowSidebar()
+                .clickWorkspaceSidebar()
+                .clickOnSuccessBuildIconForLastBuild()
+                .getBreadCrumb();
 
-        Assert.assertEquals(
-                breadcrumbText,
-                "#2");
+        Assert.assertEquals(secondBuild, "#2");
     }
 }
