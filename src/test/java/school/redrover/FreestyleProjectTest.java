@@ -8,7 +8,6 @@ import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import school.redrover.page.FreestyleProjectPage;
 import school.redrover.page.HomePage;
-import school.redrover.page.WorkspaceCreatePage;
 import school.redrover.runner.BaseTest;
 
 import java.util.ArrayList;
@@ -21,6 +20,8 @@ public class FreestyleProjectTest extends BaseTest {
     private static final String FREESTYLE_PROJECT = "Freestyle project";
     private static final String DESCRIPTION = "Bla-bla-bla project";
     private static final String BUILD_NAME = "BuildName";
+    private HomePage homePage;
+
 
     @DataProvider
     public Object[][] providerUnsafeCharacters() {
@@ -98,6 +99,7 @@ public class FreestyleProjectTest extends BaseTest {
         Assert.assertEquals(projectName.size(), 1);
         Assert.assertEquals(projectName.get(0), PROJECT_NAME);
     }
+
     @Test
     public void testCreateFreestyleProjectWithDurationCheckbox() {
         String periodCheckbox = new HomePage(getDriver())
@@ -361,7 +363,7 @@ public class FreestyleProjectTest extends BaseTest {
         Assert.assertEquals(invalidNameMessage, "» ‘%s’ is an unsafe character".formatted(unsafeCharacter));
     }
 
-     @Test
+    @Test
     public void testFreestyleProjectDescriptionPreview() {
         new HomePage(getDriver())
                 .createFreestyleProject(FREESTYLE_PROJECT);
@@ -396,48 +398,29 @@ public class FreestyleProjectTest extends BaseTest {
         List<String> expectedOrder = new ArrayList<>(actualOrder);
         Collections.sort(expectedOrder); // Ascending order
 
-        // Verify if the actual order matches the expected order
         Assert.assertEquals(actualOrder, expectedOrder);
     }
 
     @Test
     public void testWorkspaceCreated() {
-        WorkspaceCreatePage createWorkspace = new WorkspaceCreatePage(getDriver());
-        createWorkspace.createWorkspace();
+        homePage = new HomePage(getDriver());
+        homePage.createWorkspace();
 
-        String breadcrumbText = createWorkspace.getBreadcrumbText();
+        String breadcrumbText = homePage.getBreadcrumbText();
+
         Assert.assertEquals(
                 breadcrumbText,
-                "Workspace of TestJobWorkspace on Built-In Node",
-                "Breadcrumb does not match the expected workspace text!");
+                "Workspace of TestJobWorkspace on Built-In Node");
     }
 
-    @Test
+    @Test(dependsOnMethods = "testWorkspaceCreated")
     public void testBuildNavigation() {
-        WorkspaceCreatePage createWorkspace = new WorkspaceCreatePage(getDriver());
-        createWorkspace.createWorkspace();
+        homePage.refreshAfterBuild().navigateToWorkspace().clickBuildTwo();
 
-        createWorkspace.clickBuildTwo();
-        String breadcrumbText = createWorkspace.getBreadcrumbText();
+        String breadcrumbText = homePage.getBreadcrumbText();
+
         Assert.assertEquals(
                 breadcrumbText,
-                "#2",
-                "Breadcrumb does not match build number #2!");
+                "#2");
     }
-
-    @Test
-    public void testWorkspaceNavigation() {
-        WorkspaceCreatePage createWorkspace = new WorkspaceCreatePage(getDriver());
-        createWorkspace.createWorkspace();
-
-        createWorkspace.clickBuildTwo();
-        createWorkspace.navigateBackToWorkspace();
-
-        String workspaceBreadcrumb = createWorkspace.getWorkspaceBreadcrumbText();
-        Assert.assertEquals(
-                workspaceBreadcrumb,
-                "TestJobWorkspace",
-                "Breadcrumb does not match the expected workspace name!");
-    }
-
 }

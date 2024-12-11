@@ -485,4 +485,65 @@ public class HomePage extends BasePage {
 
         return new FreestyleRenamePage(getDriver());
     }
+
+    public void createWorkspace() {
+
+        getWait10().until(ExpectedConditions.elementToBeClickable(
+                By.xpath("//*[@id='tasks']/div[1]/span/a"))).click();
+
+        WebElement jobNameField = getWait10().until(ExpectedConditions.visibilityOfElementLocated(By.id("name")));
+        jobNameField.sendKeys("TestJobWorkspace");
+
+        WebElement freestyleProjectOption = getWait5().until(ExpectedConditions.elementToBeClickable(
+                By.xpath("//*[@id='j-add-item-type-standalone-projects']/ul/li[1]")));
+        freestyleProjectOption.click();
+
+        WebElement okButton = getWait5().until(ExpectedConditions.elementToBeClickable(By.id("ok-button")));
+        okButton.click();
+
+        WebElement saveButton = getWait10().until(ExpectedConditions.elementToBeClickable(
+                By.xpath("//*[@id='bottom-sticker']/div/button[1]")));
+        saveButton.click();
+
+        performBuildActions();
+
+        WebElement workspace = getWait5().until(ExpectedConditions.elementToBeClickable(By.xpath("//*[@id='tasks']/div[3]/span/a")));
+        workspace.click();
+    }
+
+    private void performBuildActions() {
+        for (int i = 0; i < 2; i++) {
+            WebElement build = getWait5().until(ExpectedConditions.elementToBeClickable(By.xpath("//*[@id='tasks']/div[4]/span/a")));
+            build.click();
+        }
+    }
+
+    public String getBreadcrumbText() {
+        return getWait10().until(ExpectedConditions.visibilityOfElementLocated(
+                By.cssSelector("#breadcrumbs > li:nth-child(5)"))).getText();
+    }
+
+    public void clickBuildTwo() {
+        WebElement buildTwo = getWait5().until(ExpectedConditions.elementToBeClickable(
+                By.cssSelector("#jenkins-build-history > div > div:nth-child(2)")));
+        buildTwo.click();
+    }
+
+    public void navigateBackToWorkspace() {
+        WebElement workspaceBreadcrumb = getWait5().until(ExpectedConditions.elementToBeClickable(
+                By.xpath("//*[@id='breadcrumbs']/li[3]/a")));
+        workspaceBreadcrumb.click();
+    }
+
+    public HomePage navigateToWorkspace() {
+        WebElement workspacePage = getWait5().until(ExpectedConditions.elementToBeClickable(
+                By.cssSelector("#job_TestJobWorkspace > td:nth-child(3) > a > span")));
+        workspacePage.click();
+        return this;
+    }
+
+    public String getWorkspaceBreadcrumbText() {
+        return getWait10().until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//*[@id='breadcrumbs']/li[3]/a"))).getText();
+    }
 }
