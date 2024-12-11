@@ -1,6 +1,7 @@
 package school.redrover.page.home;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
@@ -539,26 +540,8 @@ public class HomePage extends BasePage {
     }
 
     public void clickBuildTwo() {
-        WebElement buildTwo = getWait5().until(ExpectedConditions.elementToBeClickable(
-                By.cssSelector("#jenkins-build-history > div > div:nth-child(2)")));
-        buildTwo.click();
-    }
-
-    public void navigateBackToWorkspace() {
-        WebElement workspaceBreadcrumb = getWait5().until(ExpectedConditions.elementToBeClickable(
-                By.xpath("//*[@id='breadcrumbs']/li[3]/a")));
-        workspaceBreadcrumb.click();
-    }
-
-    public HomePage navigateToWorkspace() {
-        WebElement workspacePage = getWait5().until(ExpectedConditions.elementToBeClickable(
-                By.cssSelector("#job_TestJobWorkspace > td:nth-child(3) > a > span")));
-        workspacePage.click();
-        return this;
-    }
-
-    public String getWorkspaceBreadcrumbText() {
-        return getWait10().until(ExpectedConditions.visibilityOfElementLocated(
-                By.xpath("//*[@id='breadcrumbs']/li[3]/a"))).getText();
+        WebElement buildTwo = getWait5().until(ExpectedConditions.presenceOfElementLocated(
+                By.cssSelector("#job_TestJobWorkspace > td:nth-child(4) a")));
+        ((JavascriptExecutor) getDriver()).executeScript("arguments[0].click();", buildTwo);
     }
 }

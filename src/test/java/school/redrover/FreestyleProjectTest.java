@@ -469,7 +469,7 @@ public class FreestyleProjectTest extends BaseTest {
 
     @Test(dependsOnMethods = "testWorkspaceCreated")
     public void testBuildNavigation() {
-        homePage.refreshAfterBuild().navigateToWorkspace().clickBuildTwo();
+        homePage.clickBuildTwo();
 
         String breadcrumbText = homePage.getBreadcrumbText();
 
