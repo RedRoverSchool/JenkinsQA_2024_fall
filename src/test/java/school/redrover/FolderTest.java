@@ -1,12 +1,13 @@
 package school.redrover;
 
 import org.testng.Assert;
-import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
-import school.redrover.page.HomePage;
-import school.redrover.page.FolderProjectPage;
+import school.redrover.page.ErrorPage;
+import school.redrover.page.home.HomePage;
+import school.redrover.page.folder.FolderProjectPage;
 import school.redrover.runner.BaseTest;
 import school.redrover.runner.TestUtils;
+
 
 import java.util.List;
 
@@ -18,6 +19,9 @@ public class FolderTest extends BaseTest {
     private static final String FOLDER_MOVE_PARENT_NAME = "FolderParent";
     private static final String FOLDER_MOVE_CHILD_NAME = "FolderChild";
     private static final String FOLDER_MOVE_CHILD2_NAME = "FolderChild2";
+    private static final String FOLDER_NAME = "FolderName";
+    private static final String NEW_FOLDER_NAME = "NewFolderName";
+    private static final String ERROR_MESSAGE_ON_RENAME_WITH_SAME_NAME = "The new name is the same as the current name.";
 
     @Test
     public void testCreateWithMaxNameLength() {
@@ -51,14 +55,13 @@ public class FolderTest extends BaseTest {
     @Test(dependsOnMethods = "testCreateWithMinNameLength")
     public void testConfigureNameByChevron() {
 
-        String configurationName = new HomePage(getDriver())
+        FolderProjectPage folderProjectPage = new HomePage(getDriver())
                 .selectConfigureFromItemMenu("F")
                 .enterConfigurationName(FIRST_FOLDER_NAME)
-                .clickSaveButton()
-                .getConfigurationName();
+                .clickSaveButton();
 
-        Assert.assertEquals(configurationName, FIRST_FOLDER_NAME);
-        Assert.assertEquals(new FolderProjectPage(getDriver()).getFolderName(), "F");
+        Assert.assertEquals(folderProjectPage.getConfigurationName(), FIRST_FOLDER_NAME);
+        Assert.assertEquals(folderProjectPage.getFolderName(), "F");
     }
 
     @Test
@@ -104,6 +107,7 @@ public class FolderTest extends BaseTest {
                 .nameAndSelectFolderType(FIRST_FOLDER_NAME)
                 .getHeader()
                 .gotoHomePage()
+
                 .openFolder(FIRST_FOLDER_NAME)
                 .clickNewItem()
                 .nameAndSelectFreestyleProject(FREESTYLE_PROJECT_NAME)
@@ -111,6 +115,7 @@ public class FolderTest extends BaseTest {
                 .clickSaveButton()
                 .getHeader()
                 .gotoHomePage()
+
                 .openFolder(FIRST_FOLDER_NAME)
                 .getItemNameByOrder(1);
 
@@ -184,15 +189,19 @@ public class FolderTest extends BaseTest {
         Assert.assertEquals(errorMessage, "» This field cannot be empty, please enter a valid name");
     }
 
-    @Ignore
-    @Test(dependsOnMethods = "testOpenBuildHistoryByChevron")
+    @Test()
     public void testErrorDuplicateNameCreation() {
 
         String errorMessage = new HomePage(getDriver())
-                .clickNewItem().enterItemName(FIRST_FOLDER_NAME)
+                .clickNewItem()
+                .nameAndSelectFolderType(FIRST_FOLDER_NAME)
+                .gotoHomePage()
+
+                .clickNewItem()
+                .enterItemName(FIRST_FOLDER_NAME).selectFolderType()
                 .getInvalidNameMessage();
 
-        Assert.assertEquals(errorMessage, "» A job already exists with the name ‘Freestyle projects’");
+        Assert.assertEquals(errorMessage, "» A job already exists with the name ‘%s’".formatted(FIRST_FOLDER_NAME));
     }
 
     @Test
@@ -367,5 +376,34 @@ public class FolderTest extends BaseTest {
                 .getBreadcrumsBarItemsList();
 
         Assert.assertEquals(nameProjectsList, List.of("Dashboard", FOLDER_MOVE_PARENT_NAME, FOLDER_MOVE_CHILD_NAME));
+    }
+
+    @Test
+    public void testRenameFolderFromDashboardViaFolderPage() {
+        TestUtils.createFolder(getDriver(), FOLDER_NAME);
+
+            List<String> projectList = new HomePage(getDriver())
+                    .openFolder(FOLDER_NAME)
+                    .clickRenameSidebarButton()
+                    .clearInputFieldAndTypeName(NEW_FOLDER_NAME)
+                    .clickRenameButton()
+                    .gotoHomePage()
+                    .getItemList();
+
+            Assert.assertListContainsObject(projectList,NEW_FOLDER_NAME,"Folder is not renamed");
+        }
+
+    @Test
+    public void testErrorMessageOnRenameFolderWithSameName() {
+        TestUtils.createFolder(getDriver(), FOLDER_NAME);
+
+        new HomePage(getDriver())
+                .openFolder(FOLDER_NAME)
+                .clickRenameSidebarButton()
+                .clickRenameButton();
+
+        String actualErrorMessage = new ErrorPage(getDriver()).getErrorMessage();
+
+        Assert.assertEquals(actualErrorMessage, ERROR_MESSAGE_ON_RENAME_WITH_SAME_NAME);
     }
 }

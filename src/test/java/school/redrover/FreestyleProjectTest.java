@@ -3,8 +3,8 @@ package school.redrover;
 import org.testng.Assert;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
-import school.redrover.page.FreestyleProjectPage;
-import school.redrover.page.HomePage;
+import school.redrover.page.freestyle.FreestyleProjectPage;
+import school.redrover.page.home.HomePage;
 import school.redrover.runner.BaseTest;
 import school.redrover.runner.TestUtils;
 
@@ -58,26 +58,30 @@ public class FreestyleProjectTest extends BaseTest {
 
     @Test
     public void testCreateProjectViaContentBlockButton() {
-        String actualProjectName = new HomePage(getDriver())
+        List<String> actualProjectsList = new HomePage(getDriver())
                 .clickNewItemContentBlock()
                 .enterItemName(PROJECT_NAME)
                 .selectFreestyleProjectAndClickOk()
                 .clickSaveButton()
-                .getProjectName();
+                .gotoHomePage()
+                .getItemList();
 
-        Assert.assertEquals(actualProjectName, PROJECT_NAME);
+        Assert.assertEquals(actualProjectsList.size(), 1);
+        Assert.assertEquals(actualProjectsList.get(0), PROJECT_NAME);
     }
 
     @Test
     public void testCreateProjectViaSidebarMenu() {
-        String actualProjectName = new HomePage(getDriver())
+        List<String> actualProjectsList = new HomePage(getDriver())
                 .clickNewItem()
                 .enterItemName(PROJECT_NAME)
                 .selectFreestyleProjectAndClickOk()
                 .clickSaveButton()
-                .getProjectName();
+                .gotoHomePage()
+                .getItemList();
 
-        Assert.assertEquals(actualProjectName, PROJECT_NAME);
+        Assert.assertEquals(actualProjectsList.size(), 1);
+        Assert.assertEquals(actualProjectsList.get(0), PROJECT_NAME);
     }
 
     @Test
@@ -98,11 +102,13 @@ public class FreestyleProjectTest extends BaseTest {
 
     @Test
     public void testCreateFreestyleProjectWithDurationCheckbox() {
+        final String durationPeriod = "minute";
+
         String periodCheckbox = new HomePage(getDriver())
                 .clickNewItem()
                 .enterItemName(PROJECT_NAME)
                 .selectFreestyleProjectAndClickOk()
-                .selectDurationCheckbox("minute")
+                .selectDurationCheckbox(durationPeriod)
                 .clickSaveButton()
                 .getHeader()
                 .gotoHomePage()
@@ -110,7 +116,7 @@ public class FreestyleProjectTest extends BaseTest {
                 .clickSidebarConfigButton()
                 .getTimePeriod();
 
-        Assert.assertEquals(periodCheckbox, "minute");
+        Assert.assertEquals(periodCheckbox, durationPeriod);
     }
 
     @Test(dependsOnMethods = "testCreateProjectViaContentBlockButton")
@@ -288,7 +294,7 @@ public class FreestyleProjectTest extends BaseTest {
                 .clickBuildNowSidebar();
         String lastBuildNumber = freestyleProjectPage.getLastBuildNumber();
 
-        freestyleProjectPage
+                freestyleProjectPage
                 .clickOnSuccessBuildIconForLastBuild()
                 .clickDeleteBuildSidebar()
                 .confirmDeleteBuild();

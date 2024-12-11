@@ -2,7 +2,7 @@ package school.redrover;
 
 import org.testng.Assert;
 import org.testng.annotations.Test;
-import school.redrover.page.HomePage;
+import school.redrover.page.home.HomePage;
 import school.redrover.page.NewViewPage;
 import school.redrover.runner.BaseTest;
 import school.redrover.runner.TestUtils;
@@ -17,7 +17,7 @@ public class ViewTest extends BaseTest {
 
     @Test
     public void testCreateListViewForSpecificJob() {
-        TestUtils.createPipeline(this, PIPELINE_NAME);
+        TestUtils.createPipeline(getDriver(), PIPELINE_NAME);
 
         List<String> viewList = new HomePage(getDriver())
                 .clickCreateNewViewButton()

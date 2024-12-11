@@ -2,6 +2,8 @@ package school.redrover.page.base;
 
 import org.openqa.selenium.WebDriver;
 import school.redrover.page.*;
+import school.redrover.page.home.HomePage;
+import school.redrover.page.home.ManageJenkinsPage;
 
 import java.util.List;
 
