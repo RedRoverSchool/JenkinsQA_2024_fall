@@ -5,7 +5,6 @@ import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.Assert;
-import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import school.redrover.page.home.HomePage;
 import school.redrover.runner.BaseTest;
@@ -102,7 +101,6 @@ public class MultibranchPipelineTest extends BaseTest {
                 "Project is not renamed");
     }
 
-    @Ignore
     @Test
     public void testSelectingTriggersScanPeriodFromConfigPage() {
         WebElement selectedValue = new HomePage(getDriver())

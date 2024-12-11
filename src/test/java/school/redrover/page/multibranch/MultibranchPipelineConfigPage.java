@@ -1,5 +1,6 @@
 package school.redrover.page.multibranch;
 
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -12,7 +13,7 @@ public class MultibranchPipelineConfigPage extends BaseConfigPage<MultibranchPip
     @FindBy(css = "[data-section-id='scan-multibranch-pipeline-triggers']")
     private WebElement scanMultibranchPipelineButton;
 
-    @FindBy(css = "[name$='PeriodicFolderTrigger'][id='cb0'] + label")
+    @FindBy(xpath = "//*[contains(@class,'group-start row-set-start')]/div/span[1]")
     private WebElement periodicalScanningCheckbox;
 
     @FindBy(css = "[name*='interval']")
@@ -38,6 +39,8 @@ public class MultibranchPipelineConfigPage extends BaseConfigPage<MultibranchPip
 
     public MultibranchPipelineConfigPage clickPeriodicalScanningCheckbox() {
         getWait2().until(TestUtils.isElementInViewPort(periodicalScanningCheckbox));
+        ((JavascriptExecutor) getDriver()).
+                executeScript("arguments[0].scrollIntoView({block: 'center'});", periodicalScanningCheckbox);
         periodicalScanningCheckbox.click();
 
         return this;

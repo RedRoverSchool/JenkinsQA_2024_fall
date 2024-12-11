@@ -17,6 +17,9 @@ public class OrganizationFolderProjectPage extends BaseProjectPage<OrganizationF
     @FindBy(id="view-message")
     private WebElement descriptionText;
 
+    @FindBy(css = "h1 > svg")
+    private WebElement titleIcon;
+
     public OrganizationFolderProjectPage(WebDriver driver) {
         super(driver);
     }
@@ -43,5 +46,9 @@ public class OrganizationFolderProjectPage extends BaseProjectPage<OrganizationF
 
     public String getDescription() {
         return getWait5().until(ExpectedConditions.visibilityOf(descriptionText)).getText();
+    }
+
+    public String getIconAttributeTitle() {
+        return titleIcon.getAttribute("title");
     }
 }
