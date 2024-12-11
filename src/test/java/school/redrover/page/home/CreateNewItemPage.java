@@ -5,6 +5,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import school.redrover.page.ErrorPage;
+import school.redrover.page.base.BasePage;
 import school.redrover.page.folder.FolderConfigPage;
 import school.redrover.page.freestyle.FreestyleConfigPage;
 import school.redrover.page.multiConfiguration.MultiConfigurationConfigPage;
@@ -13,7 +14,7 @@ import school.redrover.page.organizationFolder.OrganizationFolderConfigPage;
 import school.redrover.page.pipeline.PipelineConfigurePage;
 import school.redrover.runner.TestUtils;
 
-public class CreateNewItemPage extends school.redrover.page.base.BasePage {
+public class CreateNewItemPage extends BasePage {
 
     @FindBy(xpath = "//span[text()= 'Multibranch Pipeline']")
     private WebElement multibranchPipeline;
