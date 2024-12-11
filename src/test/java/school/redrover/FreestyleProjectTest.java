@@ -16,6 +16,8 @@ public class FreestyleProjectTest extends BaseTest {
     private static final String FREESTYLE_PROJECT = "Freestyle project";
     private static final String DESCRIPTION = "Bla-bla-bla project";
     private static final String BUILD_NAME = "BuildName";
+    private HomePage homePage;
+
 
     @DataProvider
     public Object[][] providerUnsafeCharacters() {
@@ -452,5 +454,27 @@ public class FreestyleProjectTest extends BaseTest {
                 .getListOfStatuses();
 
         Assert.assertEquals(changeConfig.size(), 2);
+    }
+    @Test
+    public void testWorkspaceCreated() {
+        homePage = new HomePage(getDriver());
+        homePage.createWorkspace();
+
+        String breadcrumbText = homePage.getBreadcrumbText();
+
+        Assert.assertEquals(
+                breadcrumbText,
+                "Workspace of TestJobWorkspace on Built-In Node");
+    }
+
+    @Test(dependsOnMethods = "testWorkspaceCreated")
+    public void testBuildNavigation() {
+        homePage.clickBuildTwo();
+
+        String breadcrumbText = homePage.getBreadcrumbText();
+
+        Assert.assertEquals(
+                breadcrumbText,
+                "#2");
     }
 }

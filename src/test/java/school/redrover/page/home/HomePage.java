@@ -150,7 +150,7 @@ public class HomePage extends BasePage {
         getDriver().findElement(By.xpath("//td/a/span[text() = '%s']/..".formatted(name))).click();
     }
 
-    public void selectMenuFromItemDropdown(String itemName, String menuName) {
+    private void selectMenuFromItemDropdown(String itemName, String menuName) {
         TestUtils.moveAndClickWithJS(getDriver(), getDriver().findElement(
                 By.xpath("//td/a/span[text() = '%s']/../button".formatted(itemName))));
 
@@ -218,6 +218,7 @@ public class HomePage extends BasePage {
 
         return this;
     }
+
     public HomePage selectDeleteFromItemMenuAndClickYes(String itemName) {
         selectDeleteFromItemMenu(itemName);
         getWait5().until(ExpectedConditions.visibilityOf(yesButton)).click();
@@ -499,5 +500,48 @@ public class HomePage extends BasePage {
         getWait2().until(ExpectedConditions.elementToBeClickable(credentialsDropdown)).click();
 
         return new CredentialsPage(getDriver());
+    }
+
+    public void createWorkspace() {
+
+        getWait10().until(ExpectedConditions.elementToBeClickable(
+                By.xpath("//*[@id='tasks']/div[1]/span/a"))).click();
+
+        WebElement jobNameField = getWait10().until(ExpectedConditions.visibilityOfElementLocated(By.id("name")));
+        jobNameField.sendKeys("TestJobWorkspace");
+
+        WebElement freestyleProjectOption = getWait5().until(ExpectedConditions.elementToBeClickable(
+                By.xpath("//*[@id='j-add-item-type-standalone-projects']/ul/li[1]")));
+        freestyleProjectOption.click();
+
+        WebElement okButton = getWait5().until(ExpectedConditions.elementToBeClickable(By.id("ok-button")));
+        okButton.click();
+
+        WebElement saveButton = getWait10().until(ExpectedConditions.elementToBeClickable(
+                By.xpath("//*[@id='bottom-sticker']/div/button[1]")));
+        saveButton.click();
+
+        performBuildActions();
+
+        WebElement workspace = getWait5().until(ExpectedConditions.elementToBeClickable(By.xpath("//*[@id='tasks']/div[3]/span/a")));
+        workspace.click();
+    }
+
+    private void performBuildActions() {
+        for (int i = 0; i < 2; i++) {
+            WebElement build = getWait5().until(ExpectedConditions.elementToBeClickable(By.xpath("//*[@id='tasks']/div[4]/span/a")));
+            build.click();
+        }
+    }
+
+    public String getBreadcrumbText() {
+        return getWait10().until(ExpectedConditions.visibilityOfElementLocated(
+                By.cssSelector("#breadcrumbs > li:nth-child(5)"))).getText();
+    }
+
+    public void clickBuildTwo() {
+        WebElement buildTwo = getWait5().until(ExpectedConditions.presenceOfElementLocated(
+                By.cssSelector("#job_TestJobWorkspace > td:nth-child(4) a")));
+        ((JavascriptExecutor) getDriver()).executeScript("arguments[0].click();", buildTwo);
     }
 }
