@@ -246,24 +246,16 @@ public class OrganizationFolderTest extends BaseTest {
     }
 
     @Test
+    public void testAddDescriptionOnConfigurePage() {
+        String actualDescription = new HomePage(getDriver())
+                .clickNewItem()
+                .enterItemName(FOLDER_NAME)
+                .selectOrganizationFolderAndClickOk()
+                .enterDescription(DESCRIPTION)
+                .clickSaveButton()
+                .getDescription();
 
-    public void testDescriptionAfterCreation() {
-
-        getDriver().findElement(By.xpath("//span/a[@href='/view/all/newJob']")).click();
-        getDriver().findElement(By.xpath("//div/input[@class='jenkins-input']")).sendKeys(FOLDER_NAME);
-        scrollPage();
-        getDriver().findElement(By.className("jenkins_branch_OrganizationFolder")).click();
-        getDriver().findElement(By.xpath("//div/button[@type='submit']")).click();
-
-        getDriver().findElement(By.xpath("//div/textarea[@name='_.description']")).sendKeys(DESCRIPTION);
-        getDriver().findElement(By.xpath("//div/button[@class='jenkins-button jenkins-submit-button jenkins-button--primary ']")).click();
-
-        WebDriverWait driverWait = new WebDriverWait(getDriver(), Duration.ofSeconds(10));
-        driverWait.until(ExpectedConditions.visibilityOfElementLocated(By.id("view-message")));
-
-        Assert.assertEquals(
-                getDriver().findElement(By.id("view-message")).getText(),
-                DESCRIPTION);
+        Assert.assertEquals(actualDescription, DESCRIPTION);
     }
 
     @Test
