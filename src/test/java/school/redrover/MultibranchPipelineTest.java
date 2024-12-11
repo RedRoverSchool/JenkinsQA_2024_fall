@@ -7,15 +7,15 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.Assert;
 import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
-import school.redrover.page.HomePage;
+import school.redrover.page.home.HomePage;
 import school.redrover.runner.BaseTest;
 
 import java.util.List;
 
 public class MultibranchPipelineTest extends BaseTest {
 
-    private static final String MULTIBRANCH_PIPELINE_NAME = "NewMultibranchName";
-    private static final String MULTIBRANCH_PIPELINE_NAME2 = "NewMultibranchName2";
+    private static final String MULTIBRANCH_PIPELINE_NAME = "MultibranchName";
+    private static final String MULTIBRANCH_PIPELINE_NAME2 = "NewMultibranchName";
 
     private void createJob(String jobName) {
         getDriver().findElement(By.xpath("//a[@href='/view/all/newJob']")).click();
@@ -31,7 +31,7 @@ public class MultibranchPipelineTest extends BaseTest {
     @Test
     public void testCreate() {
         List<String> projectList = new HomePage(getDriver())
-                .clickCreateJob()
+                .clickNewItem()
                 .enterItemName(MULTIBRANCH_PIPELINE_NAME)
                 .selectMultibranchPipelineAndClickOk()
                 .clickSaveButton()
@@ -42,13 +42,14 @@ public class MultibranchPipelineTest extends BaseTest {
                 "Project is not created");
     }
 
-    @Test(dependsOnMethods = "testCreate")
-    public void testAddDescription() {
+    @Test
+    public void testAddDescriptionCreatingProject() {
         final String description = "AddedDescription";
 
         String actualDescription = new HomePage(getDriver())
-                .openMultibranchPipelineProject(MULTIBRANCH_PIPELINE_NAME)
-                .clickConfigureSidebar(MULTIBRANCH_PIPELINE_NAME)
+                .clickNewItem()
+                .enterItemName(MULTIBRANCH_PIPELINE_NAME)
+                .selectMultibranchPipelineAndClickOk()
                 .enterDescription(description)
                 .clickSaveButton()
                 .getDescription();
@@ -56,7 +57,7 @@ public class MultibranchPipelineTest extends BaseTest {
         Assert.assertEquals(actualDescription, description);
     }
 
-    @Test(dependsOnMethods = "testAddDescription")
+    @Test(dependsOnMethods = "testCreate")
     public void testVerifyErrorMessageWhenCreateWithSameName() {
         String errorMessage = new HomePage(getDriver())
                 .clickNewItem()
@@ -87,24 +88,18 @@ public class MultibranchPipelineTest extends BaseTest {
         Assert.assertEquals(errorMessage, "» This field cannot be empty, please enter a valid name");
     }
 
-    @Test
+    @Test(dependsOnMethods = "testVerifyErrorMessageWhenCreateWithSameName")
     public void testRenameMultibranchViaSideBar() {
+        List<String> projectList = new HomePage(getDriver())
+                .openMultibranchPipelineProject(MULTIBRANCH_PIPELINE_NAME)
+                .clickRenameSidebarButton()
+                .clearInputFieldAndTypeName(MULTIBRANCH_PIPELINE_NAME2)
+                .clickRenameButton()
+                .gotoHomePage()
+                .getItemList();
 
-        getDriver().findElement(By.cssSelector("[href='newJob']")).click();
-
-        getDriver().findElement(By.id("name")).sendKeys("Hilton");
-        getDriver().findElement(By.cssSelector("[class*='MultiBranchProject']")).click();
-        getDriver().findElement(By.id("ok-button")).click();
-
-        getDriver().findElement(By.name("Submit")).click();
-
-        getDriver().findElement(By.xpath("//*[@id=\"tasks\"]/div[7]")).click();
-
-        getDriver().findElement(By.cssSelector("[class*='input validated']")).clear();
-        getDriver().findElement(By.cssSelector("[class*='input validated']")).sendKeys("Hilton Hotels");
-        getDriver().findElement(By.cssSelector("[class*='submit']")).click();
-
-        Assert.assertEquals(getDriver().findElement(By.xpath("//h1")).getText(), "Hilton Hotels");
+        Assert.assertListContainsObject(projectList, MULTIBRANCH_PIPELINE_NAME2,
+                "Project is not renamed");
     }
 
     @Ignore
@@ -180,7 +175,7 @@ public class MultibranchPipelineTest extends BaseTest {
                 .clickSaveButton()
                 .gotoHomePage()
                 .openMultibranchPipelineProject(MULTIBRANCH_PIPELINE_NAME)
-                .deleteItemBySidebar()
+                .clickDeleteButtonSidebarAndConfirm()
                 .getItemList();
 
         Assert.assertListNotContainsObject(projectList, MULTIBRANCH_PIPELINE_NAME,
@@ -195,7 +190,7 @@ public class MultibranchPipelineTest extends BaseTest {
                 .selectMultibranchPipelineAndClickOk()
                 .clickSaveButton()
                 .gotoHomePage()
-                .deleteItemViaChevronItem(MULTIBRANCH_PIPELINE_NAME)
+                .selectDeleteFromItemMenuAndClickYes(MULTIBRANCH_PIPELINE_NAME)
                 .getItemList();
 
         Assert.assertListNotContainsObject(projectList, MULTIBRANCH_PIPELINE_NAME,

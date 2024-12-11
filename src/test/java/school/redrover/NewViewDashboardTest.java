@@ -5,9 +5,10 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.Assert;
 import org.testng.annotations.Test;
-import school.redrover.page.HomePage;
+import school.redrover.page.home.HomePage;
 import school.redrover.page.ViewPage;
 import school.redrover.runner.BaseTest;
+import school.redrover.runner.TestUtils;
 
 import java.util.List;
 
@@ -19,11 +20,12 @@ public class NewViewDashboardTest extends BaseTest {
 
     @Test
     public void testAddNewMyView() {
+        TestUtils.createFreestyleProject(getDriver(), PROJECT_NAME);
+
         new HomePage(getDriver())
-                .createFreestyleProject(PROJECT_NAME)
                 .clickCreateNewViewButton()
                 .typeNameIntoInputField(MY_VIEW)
-                .selectViewType(MY_VIEW)
+                .selectMyViewType()
                 .clickCreateButton();
 
         List<WebElement> listOfViews = getDriver().findElements(By.xpath("//div[@class = 'tabBar']//a"));
@@ -32,11 +34,12 @@ public class NewViewDashboardTest extends BaseTest {
 
     @Test
     public void testAddNewListView() {
+        TestUtils.createFreestyleProject(getDriver(), PROJECT_NAME);
+
         new HomePage(getDriver())
-                .createFreestyleProject(PROJECT_NAME)
                 .clickCreateNewViewButton()
                 .typeNameIntoInputField(LIST_VIEW)
-                .selectViewType(LIST_VIEW)
+                .selectListViewType()
                 .clickCreateButton()
                 .clickOkButton();
 

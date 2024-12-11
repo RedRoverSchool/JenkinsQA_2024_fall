@@ -2,7 +2,7 @@ package school.redrover;
 
 import org.testng.Assert;
 import org.testng.annotations.Test;
-import school.redrover.page.HomePage;
+import school.redrover.page.home.HomePage;
 import school.redrover.runner.BaseTest;
 
 public class SelectAndApplyScriptsTest extends BaseTest {
@@ -46,7 +46,7 @@ public class SelectAndApplyScriptsTest extends BaseTest {
                 .clickCopy()
                 .gotoHomePage()
                 .openPipelineProject(PIPELINE_NAME)
-                .clickConfigureSidebar(PIPELINE_NAME)
+                .clickSidebarConfigButton()
                 .pasteScript()
                 .getScriptText();
 

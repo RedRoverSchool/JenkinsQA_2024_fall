@@ -2,8 +2,9 @@ package school.redrover;
 
 import org.testng.Assert;
 import org.testng.annotations.Test;
-import school.redrover.page.HomePage;
+import school.redrover.page.home.HomePage;
 import school.redrover.runner.BaseTest;
+import school.redrover.runner.TestUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,8 +17,9 @@ public class AnExistingFolderChangeTest extends BaseTest {
 
     @Test
     public void testNoChangesWarning () {
+        TestUtils.createFolder(getDriver(), FOLDER_NAME);
+
         String warningMessage = new HomePage(getDriver())
-                .createNewFolder(FOLDER_NAME)
                 .openFolder(FOLDER_NAME)
                 .renameItem(FOLDER_NAME)
                 .getRenameWarningMessage();

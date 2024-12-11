@@ -2,11 +2,14 @@ package school.redrover.page.base;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import school.redrover.page.CreateNewItemPage;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
+import school.redrover.page.home.CreateNewItemPage;
 
 public abstract class BaseCreatePage<Self extends BaseCreatePage<?>> extends BasePage {
 
-    public static final By GET_OK_BUTTON = By.id("ok-button");
+    @FindBy(id = "ok-button")
+    private WebElement okButton;
 
     public BaseCreatePage(WebDriver driver) {
         super(driver);
@@ -19,7 +22,7 @@ public abstract class BaseCreatePage<Self extends BaseCreatePage<?>> extends Bas
     }
 
     public Self clickOkButton() {
-        getDriver().findElement(GET_OK_BUTTON).click();
+        okButton.click();
 
         return (Self) this;
     }

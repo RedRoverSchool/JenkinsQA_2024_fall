@@ -28,7 +28,7 @@ public class ListViewConfigPage extends BasePage {
     }
 
     public ListViewConfigPage clickDeleteColumnByName(String name) {
-        TestUtils.scrollToBottom(getDriver());
+        TestUtils.scrollToBottomWithJS(getDriver());
 
         WebElement columnOption = getDriver().findElements(By.xpath("//div[@class='repeated-chunk__header']"))
                 .stream()
@@ -46,7 +46,7 @@ public class ListViewConfigPage extends BasePage {
     }
 
     public ListViewConfigPage clickAddColumn() {
-        TestUtils.scrollToBottom(getDriver());
+        TestUtils.scrollToBottomWithJS(getDriver());
 
         getWait5().until(ExpectedConditions.elementToBeClickable(By.xpath("//button[@suffix='columns']"))).click();
 

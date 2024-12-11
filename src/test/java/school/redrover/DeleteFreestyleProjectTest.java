@@ -3,8 +3,9 @@ package school.redrover;
 import org.openqa.selenium.By;
 import org.testng.Assert;
 import org.testng.annotations.Test;
-import school.redrover.page.HomePage;
+import school.redrover.page.home.HomePage;
 import school.redrover.runner.BaseTest;
+import school.redrover.runner.TestUtils;
 
 import java.util.List;
 
@@ -15,11 +16,11 @@ public class DeleteFreestyleProjectTest extends BaseTest {
 
     @Test
     public void testDeleteFirstProjectViaChevron() {
+        TestUtils.createFreestyleProject(getDriver(), FIRST_PROJECT);
+        TestUtils.createFreestyleProject(getDriver(), SECOND_PROJECT);
+
         List<String> projectsList = new HomePage(getDriver())
-                .createFreestyleProject(FIRST_PROJECT)
-                .createFreestyleProject(SECOND_PROJECT)
-                .selectDeleteFromItemMenu(FIRST_PROJECT)
-                .clickYesForConfirmDelete()
+                .selectDeleteFromItemMenuAndClickYes(FIRST_PROJECT)
                 .getItemList();
 
         Assert.assertEquals(projectsList.size(),1);
@@ -29,8 +30,7 @@ public class DeleteFreestyleProjectTest extends BaseTest {
     @Test(dependsOnMethods = "testDeleteFirstProjectViaChevron")
     public void testDeleteAllProjectsViaChevron() {
         List<String> projectsList = new HomePage(getDriver())
-                .selectDeleteFromItemMenu(SECOND_PROJECT)
-                .clickYesForConfirmDelete()
+                .selectDeleteFromItemMenuAndClickYes(SECOND_PROJECT)
                 .getItemList();
 
         Assert.assertEquals(projectsList.size(), 0);

@@ -2,8 +2,9 @@ package school.redrover;
 
 import org.testng.Assert;
 import org.testng.annotations.Test;
-import school.redrover.page.HomePage;
+import school.redrover.page.home.HomePage;
 import school.redrover.runner.BaseTest;
+import school.redrover.runner.TestUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,8 +17,9 @@ public class RenameFreeStyleProjectTest extends BaseTest {
 
     @Test
     public void testCorrectName () {
+        TestUtils.createFreestyleProject(getDriver(), PROJECT_NAME);
+
         String renamingResult = new HomePage(getDriver())
-                .createFreestyleProject(PROJECT_NAME)
                 .openFreestyleProject(PROJECT_NAME)
                 .renameItem(PROJECT_NAME_EDITED)
                 .getProjectName();

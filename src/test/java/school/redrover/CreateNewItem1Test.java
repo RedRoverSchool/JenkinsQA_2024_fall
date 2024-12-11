@@ -2,7 +2,7 @@ package school.redrover;
 
 import org.testng.Assert;
 import org.testng.annotations.Test;
-import school.redrover.page.HomePage;
+import school.redrover.page.home.HomePage;
 import school.redrover.runner.BaseTest;
 
 import java.util.List;
@@ -16,7 +16,7 @@ public class CreateNewItem1Test extends BaseTest {
     @Test
     public void testWithButton() {
         List<String> items = new HomePage(getDriver())
-                .clickCreateJob()
+                .clickNewItem()
                 .enterItemName(ITEM_NAME)
                 .selectTypeOfProject(FREESTYLE_PROJECT)
                 .clickOkButton()

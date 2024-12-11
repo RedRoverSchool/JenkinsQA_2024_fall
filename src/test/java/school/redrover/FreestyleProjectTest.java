@@ -1,17 +1,13 @@
 package school.redrover;
 
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebElement;
 import org.testng.Assert;
 import org.testng.annotations.DataProvider;
-import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
-import school.redrover.page.FreestyleProjectPage;
-import school.redrover.page.HomePage;
+import school.redrover.page.freestyle.FreestyleProjectPage;
+import school.redrover.page.home.HomePage;
 import school.redrover.runner.BaseTest;
+import school.redrover.runner.TestUtils;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class FreestyleProjectTest extends BaseTest {
@@ -62,34 +58,38 @@ public class FreestyleProjectTest extends BaseTest {
     }
 
     @Test
-    public void testCreateProjectViaCreateJobButton() {
-        String actualProjectName = new HomePage(getDriver())
-                .clickCreateJob()
+    public void testCreateProjectViaContentBlockButton() {
+        List<String> actualProjectsList = new HomePage(getDriver())
+                .clickNewItemContentBlock()
                 .enterItemName(PROJECT_NAME)
                 .selectFreestyleProjectAndClickOk()
                 .clickSaveButton()
-                .getProjectName();
+                .gotoHomePage()
+                .getItemList();
 
-        Assert.assertEquals(actualProjectName, PROJECT_NAME);
+        Assert.assertEquals(actualProjectsList.size(), 1);
+        Assert.assertEquals(actualProjectsList.get(0), PROJECT_NAME);
     }
 
     @Test
     public void testCreateProjectViaSidebarMenu() {
-        String actualProjectName = new HomePage(getDriver())
+        List<String> actualProjectsList = new HomePage(getDriver())
                 .clickNewItem()
                 .enterItemName(PROJECT_NAME)
                 .selectFreestyleProjectAndClickOk()
                 .clickSaveButton()
-                .getProjectName();
+                .gotoHomePage()
+                .getItemList();
 
-        Assert.assertEquals(actualProjectName, PROJECT_NAME);
+        Assert.assertEquals(actualProjectsList.size(), 1);
+        Assert.assertEquals(actualProjectsList.get(0), PROJECT_NAME);
     }
 
     @Test
     public void testCreateFreestyleProjectFromMyViews() {
         List<String> projectName = new HomePage(getDriver())
                 .clickMyViewsButton()
-                .clickCreateJob()
+                .clickNewItem()
                 .enterItemName(PROJECT_NAME)
                 .selectTypeProject(FREESTYLE_PROJECT)
                 .clickOkButton()
@@ -102,32 +102,33 @@ public class FreestyleProjectTest extends BaseTest {
 
     @Test
     public void testCreateFreestyleProjectWithDurationCheckbox() {
+        final String durationPeriod = "minute";
+
         String periodCheckbox = new HomePage(getDriver())
                 .clickNewItem()
                 .enterItemName(PROJECT_NAME)
                 .selectFreestyleProjectAndClickOk()
-                .selectDurationCheckbox("minute")
+                .selectDurationCheckbox(durationPeriod)
                 .clickSaveButton()
                 .gotoHomePage()
                 .openFreestyleProject(PROJECT_NAME)
-                .clickConfigureSidebar()
+                .clickSidebarConfigButton()
                 .getTimePeriod();
 
-        Assert.assertEquals(periodCheckbox, "minute");
+        Assert.assertEquals(periodCheckbox, durationPeriod);
     }
 
-    @Ignore
-    @Test(dependsOnMethods = "testCreateProjectViaCreateJobButton")
+    @Test(dependsOnMethods = "testCreateProjectViaContentBlockButton")
     public void testAddDescription() {
         String description = new HomePage(getDriver())
                 .openFreestyleProject(PROJECT_NAME)
                 .editDescription(DESCRIPTION)
+                .clickSubmitButton()
                 .getDescription();
 
         Assert.assertEquals(description, DESCRIPTION);
     }
 
-    @Ignore
     @Test(dependsOnMethods = "testAddDescription")
     public void testEditDescriptionOnProjectPage() {
         final String newDescription = "New " + DESCRIPTION;
@@ -136,12 +137,12 @@ public class FreestyleProjectTest extends BaseTest {
                 .openFreestyleProject(PROJECT_NAME)
                 .clearDescription()
                 .editDescription(newDescription)
+                .clickSubmitButton()
                 .getDescription();
 
         Assert.assertEquals(actualDescription, newDescription);
     }
 
-    @Ignore
     @Test(dependsOnMethods = "testEditDescriptionOnProjectPage")
     public void testDeleteDescription() {
         String description = new HomePage(getDriver())
@@ -158,22 +159,23 @@ public class FreestyleProjectTest extends BaseTest {
 
         String actualProjectName = new HomePage(getDriver())
                 .openFreestyleProject(PROJECT_NAME)
-                .clickRenameSidebar()
-                .clearOldAndInputNewProjectName(newName)
+                .clickRenameSidebarButton()
+                .clearInputFieldAndTypeName(newName)
                 .clickRenameButton()
                 .getProjectName();
 
         Assert.assertEquals(actualProjectName, newName);
     }
 
-    @Test(dependsOnMethods = "testCreateProjectViaCreateJobButton")
+    @Test
     public void testRenameProjectViaDropdown() {
+        TestUtils.createFreestyleProject(getDriver(), PROJECT_NAME);
+
         final String newName = "New " + PROJECT_NAME;
 
         String actualProjectName = new HomePage(getDriver())
-                .openDropdownViaChevron(PROJECT_NAME)
                 .clickRenameInProjectDropdown(PROJECT_NAME)
-                .clearOldAndInputNewProjectName(newName)
+                .clearInputFieldAndTypeName(newName)
                 .clickRenameButton()
                 .getProjectName();
 
@@ -185,8 +187,9 @@ public class FreestyleProjectTest extends BaseTest {
         final List<String> templateSidebarMenu = List.of(
                 "Status", "Changes", "Workspace", "Build Now", "Configure", "Delete Project", "Rename");
 
+        TestUtils.createFreestyleProject(getDriver(), PROJECT_NAME);
+
         List<String> actualSidebarMenu = new HomePage(getDriver())
-                .createFreestyleProject(PROJECT_NAME)
                 .openFreestyleProject(PROJECT_NAME)
                 .getSidebarOptionList();
 
@@ -197,15 +200,16 @@ public class FreestyleProjectTest extends BaseTest {
     public void testConfigureProjectAddBuildStepsExecuteShellCommand() {
         final String testCommand = "echo \"TEST! Hello Jenkins!\"";
 
+        TestUtils.createFreestyleProject(getDriver(), PROJECT_NAME);
+
         String extractedText = new HomePage(getDriver())
-                .createFreestyleProject(PROJECT_NAME)
                 .openFreestyleProject(PROJECT_NAME)
-                .clickConfigureSidebar()
+                .clickSidebarConfigButton()
                 .clickAddBuildStep()
                 .selectExecuteShellBuildStep()
                 .addExecuteShellCommand(testCommand)
                 .clickSaveButton()
-                .clickConfigureSidebar()
+                .clickSidebarConfigButton()
                 .getTextExecuteShellTextArea();
 
         Assert.assertEquals(extractedText, testCommand);
@@ -213,8 +217,9 @@ public class FreestyleProjectTest extends BaseTest {
 
     @Test
     public void testBuildProjectViaSidebarMenuOnProjectPage() {
+        TestUtils.createFreestyleProject(getDriver(), PROJECT_NAME);
+
         String buildInfo = new HomePage(getDriver())
-                .createFreestyleProject(PROJECT_NAME)
                 .openFreestyleProject(PROJECT_NAME)
                 .clickBuildNowSidebar()
                 .clickOnSuccessBuildIconForLastBuild()
@@ -281,13 +286,14 @@ public class FreestyleProjectTest extends BaseTest {
 
     @Test
     public void testDeleteLastBuild() {
+        TestUtils.createFreestyleProject(getDriver(), PROJECT_NAME);
+
         FreestyleProjectPage freestyleProjectPage = new HomePage(getDriver())
-                .createFreestyleProject(PROJECT_NAME)
                 .openFreestyleProject(PROJECT_NAME)
                 .clickBuildNowSidebar();
         String lastBuildNumber = freestyleProjectPage.getLastBuildNumber();
 
-        freestyleProjectPage
+                freestyleProjectPage
                 .clickOnSuccessBuildIconForLastBuild()
                 .clickDeleteBuildSidebar()
                 .confirmDeleteBuild();
@@ -302,8 +308,7 @@ public class FreestyleProjectTest extends BaseTest {
                 .enterItemName(PROJECT_NAME)
                 .selectFreestyleProjectAndClickOk()
                 .clickSaveButton()
-                .clickDeleteProjectSidebar()
-                .clickYesToConfirmDelete()
+                .clickDeleteButtonSidebarAndConfirm()
                 .getWelcomeTitle();
 
         Assert.assertEquals(welcomeText, "Welcome to Jenkins!", "There is a project on Dashboard");
@@ -318,9 +323,7 @@ public class FreestyleProjectTest extends BaseTest {
                 .clickSaveButton()
                 .gotoHomePage()
 
-                .openDropdownViaChevron(PROJECT_NAME)
-                .clickDeleteInProjectDropdown(PROJECT_NAME)
-                .clickYesForConfirmDelete()
+                .selectDeleteFromItemMenuAndClickYes(PROJECT_NAME)
                 .getWelcomeTitle();
 
         Assert.assertEquals(welcomeText, "Welcome to Jenkins!");
@@ -365,42 +368,94 @@ public class FreestyleProjectTest extends BaseTest {
 
     @Test
     public void testFreestyleProjectDescriptionPreview() {
-        new HomePage(getDriver())
-                .createFreestyleProject(FREESTYLE_PROJECT);
+        TestUtils.createFreestyleProject(getDriver(), FREESTYLE_PROJECT);
 
-        getDriver().findElement(By.id("description-link")).click();
-        getDriver().findElement(By.name("description")).sendKeys(DESCRIPTION);
-        getDriver().findElement(By.className("textarea-show-preview")).click();
+        String descriptionPreview = new HomePage(getDriver())
+                .openFreestyleProject(FREESTYLE_PROJECT)
+                .editDescription(DESCRIPTION)
+                .clickPreview()
+                .getPreviewDescriptionText();
 
-        String preview = getDriver().findElement(By.className("textarea-preview")).getText();
-
-        Assert.assertEquals(preview, DESCRIPTION);
+        Assert.assertEquals(descriptionPreview, DESCRIPTION);
     }
 
     @Test
     public void testJobNameSorting() {
-        HomePage homePage = new HomePage(getDriver());
-
         List<String> projectNames = List.of("aaa", "bbb", "aabb");
-        projectNames.forEach(homePage::createFreestyleProject);
+        projectNames.forEach(name -> TestUtils.createFreestyleProject(getDriver(), name));
 
-        // This XPath targets the links containing the job names
-        List<WebElement> jobLinks = getDriver()
-                .findElements(By.xpath("//table[@id='projectstatus']//tbody//tr/td[3]/a"));
+        Boolean isSorted = new HomePage(getDriver())
+                .isInAlphabeticalOrder();
 
-        // Extract text from the elements
-        List<String> actualOrder = new ArrayList<>();
-        for (WebElement link : jobLinks) {
-            actualOrder.add(link.getText().trim());
-        }
+        Assert.assertTrue(isSorted, "Projects is not sorted alphabetically");
+    }
 
-        // Create a copy of the list and sort it alphabetically for expected order
-        List<String> expectedOrder = new ArrayList<>(actualOrder);
-        Collections.sort(expectedOrder); // Ascending order
+    @Test
+    public void testNotificationBarAppears() {
+        TestUtils.createFreestyleProject(getDriver(), PROJECT_NAME);
 
+        String notificationBar = new HomePage(getDriver())
+                .selectBuildNowFromItemMenu(PROJECT_NAME)
+                .getNotificationBarStatus();
+
+        Assert.assertEquals(notificationBar, "Build Now: Done.");
         Assert.assertEquals(actualOrder, expectedOrder);
     }
 
+    @Test(dependsOnMethods = "testNotificationBarAppears")
+    public void testCounterOfRunsIncrease() {
+        String progressBar = new HomePage(getDriver())
+                .selectBuildNowFromItemMenu(PROJECT_NAME)
+                .refreshAfterBuild()
+                .getNumberOfRuns();
+
+        Assert.assertEquals(progressBar, "#2");
+    }
+
+    @Test(dependsOnMethods = "testCounterOfRunsIncrease")
+    public void testStatusOnHomePageIsSuccess() {
+
+        String statusBuild = new HomePage(getDriver())
+                .getStatusBuild(PROJECT_NAME);
+
+        Assert.assertEquals(statusBuild, "Success");
+    }
+
+    @Test
+    public void testBuildHistoryIsEmpty() {
+        TestUtils.createFreestyleProject(getDriver(), PROJECT_NAME);
+
+        List<String> emptyHistory = new HomePage(getDriver())
+                .gotoBuildHistoryPageFromLeftPanel()
+                .getListOfStatuses();
+
+        Assert.assertEquals(emptyHistory.size(), 0);
+    }
+
+    @Test(dependsOnMethods = "testBuildHistoryIsEmpty")
+    public void testUpdateAfterExecutingBuild() {
+        List<String> oneExecution = new HomePage(getDriver())
+                .clickScheduleBuild(PROJECT_NAME)
+                .gotoBuildHistoryPageFromLeftPanel()
+                .getListOfStatuses();
+
+        Assert.assertEquals(oneExecution.get(0), "stable");
+        Assert.assertEquals(oneExecution.size(), 1);
+    }
+
+    @Test(dependsOnMethods = "testUpdateAfterExecutingBuild")
+    public void testUpdateAfterChangingConfig() {
+        List<String> changeConfig = new HomePage(getDriver())
+                .openFreestyleProject(PROJECT_NAME)
+                .clickSidebarConfigButton()
+                .addBuildStep("Run with timeout")
+                .gotoHomePage()
+                .clickScheduleBuild(PROJECT_NAME)
+                .gotoBuildHistoryPageFromLeftPanel()
+                .getListOfStatuses();
+
+        Assert.assertEquals(changeConfig.size(), 2);
+    }
     @Test
     public void testWorkspaceCreated() {
         homePage = new HomePage(getDriver());

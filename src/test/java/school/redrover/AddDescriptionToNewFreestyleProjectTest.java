@@ -2,7 +2,7 @@ package school.redrover;
 
 import org.testng.Assert;
 import org.testng.annotations.Test;
-import school.redrover.page.HomePage;
+import school.redrover.page.home.HomePage;
 import school.redrover.runner.BaseTest;
 
 public class AddDescriptionToNewFreestyleProjectTest extends BaseTest {
@@ -14,7 +14,12 @@ public class AddDescriptionToNewFreestyleProjectTest extends BaseTest {
     @Test
     public void testAddDescription () {
         String getDescription = new HomePage(getDriver())
-                .createFreestyleProject(PROJECT_NAME, DESCRIPTION)
+                .clickNewItem()
+                .enterItemName(PROJECT_NAME)
+                .selectFreestyleProjectAndClickOk()
+                .enterDescription(DESCRIPTION)
+                .clickSaveButton()
+                .gotoHomePage()
                 .openFreestyleProject(PROJECT_NAME)
                 .getDescription();
 
@@ -28,6 +33,7 @@ public class AddDescriptionToNewFreestyleProjectTest extends BaseTest {
                 .openFreestyleProject(PROJECT_NAME)
                 .clearDescription()
                 .editDescription(DESCRIPTION_EDITED)
+                .clickSubmitButton()
                 .getDescription();
 
         Assert.assertEquals(getDescription, DESCRIPTION_EDITED);

@@ -2,6 +2,7 @@ package school.redrover.runner;
 
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedCondition;
+import school.redrover.page.home.HomePage;
 
 public class TestUtils {
 
@@ -67,27 +68,31 @@ public class TestUtils {
         }
     }
 
-    public static void moveAndClickWithJavaScript(WebDriver driver, WebElement element) {
+    public static void moveAndClickWithJS(WebDriver driver, WebElement element) {
         ((JavascriptExecutor) driver)
                 .executeScript("arguments[0].dispatchEvent(new Event('mouseenter'));", element);
         ((JavascriptExecutor) driver)
                 .executeScript("arguments[0].dispatchEvent(new Event('click'));", element);
     }
 
-    public static void scrollToBottom(WebDriver driver) {
+    public static void scrollToBottomWithJS(WebDriver driver) {
         ((JavascriptExecutor) driver).executeScript("window.scrollTo(0, document.body.scrollHeight);");
     }
 
-    public static void createPipeline(BaseTest baseTest, String name) {
-        baseTest.getDriver().findElement(By.xpath("//a[@href='/view/all/newJob']")).click();
-
-        baseTest.getDriver().findElement(By.xpath("//input[@name='name']")).sendKeys(name);
-        baseTest.getDriver().findElement(By.xpath("//li[@class='org_jenkinsci_plugins_workflow_job_WorkflowJob']")).click();
-        baseTest.getDriver().findElement(By.xpath("//button[@type='submit']")).click();
-
-        baseTest.getDriver().findElement(By.xpath("//button[@name='Submit']")).click();
-        baseTest.getDriver().findElement(By.id("jenkins-home-link")).click();
+    public static void scrollToElementWithJS(WebDriver driver, WebElement element) {
+        JavascriptExecutor js = (JavascriptExecutor) driver;
+        js.executeScript("arguments[0].scrollIntoView(true);", element);
     }
+
+    public static void createPipeline(WebDriver driver, String name) {
+        new HomePage(driver)
+                .clickNewItem()
+                .enterItemName(name)
+                .selectPipelineAndClickOk()
+                .clickSaveButton()
+                .gotoHomePage();
+    }
+
 
     public static void newItemsData(BaseTest baseTest, String itemName, String itemXpath) {
         baseTest.getDriver().findElement(By.xpath("//*[@id='tasks']/div[1]/span/a")).click();
@@ -102,5 +107,48 @@ public class TestUtils {
         ((JavascriptExecutor) driver)
                 .executeScript("arguments[0].dispatchEvent(new Event('input', { bubbles: true }));", element);
     }
+    public static void createFreestyleProject(WebDriver driver, String name) {
+        new HomePage(driver)
+                .clickNewItem()
+                .enterItemName(name)
+                .selectFreestyleProjectAndClickOk()
+                .clickSaveButton()
+                .gotoHomePage();
+    }
 
+    public static void createPipelineProject(WebDriver driver, String name) {
+        new HomePage(driver)
+                .clickNewItem()
+                .enterItemName(name)
+                .selectPipelineAndClickOk()
+                .clickSaveButton()
+                .gotoHomePage();
+    }
+
+    public static void createFolder(WebDriver driver, String name) {
+        new HomePage(driver)
+                .clickNewItem()
+                .enterItemName(name)
+                .selectFolderAndClickOk()
+                .clickSaveButton()
+                .gotoHomePage();
+    }
+
+    public static void createMultiConfigurationProject(WebDriver driver, String name) {
+        new HomePage(driver)
+                .clickNewItem()
+                .enterItemName(name)
+                .selectMultiConfigurationAndClickOk()
+                .clickSaveButton()
+                .gotoHomePage();
+    }
+
+    public static void createOrganizationFolder(WebDriver driver, String name) {
+        new HomePage(driver)
+                .clickNewItem()
+                .enterItemName(name)
+                .selectOrganizationFolderAndClickOk()
+                .clickSaveButton()
+                .gotoHomePage();
+    }
 }
