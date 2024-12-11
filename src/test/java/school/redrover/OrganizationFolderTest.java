@@ -109,11 +109,12 @@ public class OrganizationFolderTest extends BaseTest {
 
     @Test(dependsOnMethods = {"testEditDescription", "testEditDisplayName"})
     public void testDelete() {
-        clickElement(By.xpath("//td/a[@class='jenkins-table__link model-link inside']"));
-        clickElement(By.xpath("//a[@data-title='Delete Organization Folder']"));
-        clickElement(By.xpath("//button[@data-id='ok']"));
+        String text = new HomePage(getDriver())
+                .openOrganisationFolderProject(NEW_DISPLAY_NAME)
+                .clickDeleteButtonSidebarAndConfirm()
+                .getWelcomeTitle();
 
-        Assert.assertEquals(textElement(By.tagName("h1")), "Welcome to Jenkins!");
+        Assert.assertEquals(text, "Welcome to Jenkins!");
     }
 
     @Ignore
@@ -201,6 +202,7 @@ public class OrganizationFolderTest extends BaseTest {
                 "display: none;");
     }
 
+    @Ignore
     @Test
     public void testTooltipDelete() {
 

@@ -7,6 +7,8 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 import school.redrover.page.base.BaseConfigPage;
+import school.redrover.page.home.HomePage;
+
 
 public class OrganizationFolderConfigPage extends BaseConfigPage<OrganizationFolderConfigPage, OrganizationFolderProjectPage> {
 
@@ -30,6 +32,12 @@ public class OrganizationFolderConfigPage extends BaseConfigPage<OrganizationFol
 
     @FindBy(xpath = "//div/a[@class='textarea-hide-preview']")
     private WebElement hidePreviewLink;
+
+    @FindBy(xpath = "//a[@data-title='Delete Organization Folder']")
+    private WebElement deleteButton;
+
+    @FindBy(xpath = "//button[@data-id='ok']")
+    private WebElement confirmDeleteButton;
 
     public OrganizationFolderConfigPage(WebDriver driver) {
         super(driver);
@@ -74,6 +82,12 @@ public class OrganizationFolderConfigPage extends BaseConfigPage<OrganizationFol
 
     public String getPreviewStyleAttribute() {
         return getDriver().findElement(By.xpath("//div/div[@class='textarea-preview']")).getAttribute("style");
+    }
+
+    public HomePage clickDeleteFromSidebarMenuAndConfirm() {
+        deleteButton.click();
+        confirmDeleteButton.click();
+        return new HomePage(getDriver());
     }
 }
 
