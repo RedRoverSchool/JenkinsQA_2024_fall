@@ -23,8 +23,7 @@ import java.util.List;
 public class NewItemTest extends BaseTest {
 
     private final static By NEW_ITEM_BUTTON = By.xpath("//a[@href='/view/all/newJob']");
-    private final static By OK_BUTTON = By.id("ok-button");
-    private final static By MESSAGE = By.id("itemname-required");
+    private final static String MESSAGE = "» This field cannot be empty, please enter a valid name";
     private final static String NEW_ITEM_NAME = "New Project";
     private final static String FIRST_ITEM_NAME = "My_First_Project";
     private final static String SECOND_ITEM_NAME = "My_Second_Project";
@@ -127,33 +126,35 @@ public class NewItemTest extends BaseTest {
 
     @Test
     public void testWarningMessageWhenClickingAnywhereOnPageWithNoItemNameInserted() {
-        getDriver().findElement(NEW_ITEM_BUTTON).click();
+        String warningMessage = new HomePage(getDriver())
+                .clickNewItem()
+                .clickSomewhere()
+                .getWarningMessageText();
 
-        final By randomClickPoint = By.id("add-item-panel");
-
-        getDriver().findElement(randomClickPoint).click();
-
-        String warningMessage = getDriver().findElement(MESSAGE).getText();
-
-        Assert.assertEquals(warningMessage, "» This field cannot be empty, please enter a valid name");
+        Assert.assertEquals(warningMessage, MESSAGE);
     }
 
     @Test
     public void testOKButtonDisabledWhenNoItemNameInserted() {
-        getDriver().findElement(NEW_ITEM_BUTTON).click();
+        boolean okButton = new HomePage(getDriver())
+                .clickNewItem()
+                .getOkButton();
 
-        Assert.assertFalse(getDriver().findElement(OK_BUTTON).isEnabled());
+        Assert.assertFalse(okButton);
     }
 
     @Test
     public void testOKButtonDisabledWhenNoItemTypeSelected() {
-        getDriver().findElement(NEW_ITEM_BUTTON).click();
-        getDriver().findElement(By.id("name")).sendKeys(NEW_ITEM_NAME);
+        boolean okButton = new HomePage(getDriver())
+                .clickNewItem()
+                .enterItemName(NEW_ITEM_NAME)
+                .getOkButton();
 
-        Assert.assertFalse(getDriver().findElement(OK_BUTTON).isEnabled());
+        Assert.assertFalse(okButton);
     }
 
-    @Test
+
+        @Test
     public void testCreateNewItemWithEmptyNameField() {
         getDriver().findElement(By.xpath("//a[@href='newJob']")).click();
 
