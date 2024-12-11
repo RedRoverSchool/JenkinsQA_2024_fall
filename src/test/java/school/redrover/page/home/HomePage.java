@@ -1,7 +1,6 @@
 package school.redrover.page.home;
 
 import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
@@ -500,48 +499,5 @@ public class HomePage extends BasePage {
         getWait2().until(ExpectedConditions.elementToBeClickable(credentialsDropdown)).click();
 
         return new CredentialsPage(getDriver());
-    }
-
-    public void createWorkspace() {
-
-        getWait10().until(ExpectedConditions.elementToBeClickable(
-                By.xpath("//*[@id='tasks']/div[1]/span/a"))).click();
-
-        WebElement jobNameField = getWait10().until(ExpectedConditions.visibilityOfElementLocated(By.id("name")));
-        jobNameField.sendKeys("TestJobWorkspace");
-
-        WebElement freestyleProjectOption = getWait5().until(ExpectedConditions.elementToBeClickable(
-                By.xpath("//*[@id='j-add-item-type-standalone-projects']/ul/li[1]")));
-        freestyleProjectOption.click();
-
-        WebElement okButton = getWait5().until(ExpectedConditions.elementToBeClickable(By.id("ok-button")));
-        okButton.click();
-
-        WebElement saveButton = getWait10().until(ExpectedConditions.elementToBeClickable(
-                By.xpath("//*[@id='bottom-sticker']/div/button[1]")));
-        saveButton.click();
-
-        performBuildActions();
-
-        WebElement workspace = getWait5().until(ExpectedConditions.elementToBeClickable(By.xpath("//*[@id='tasks']/div[3]/span/a")));
-        workspace.click();
-    }
-
-    private void performBuildActions() {
-        for (int i = 0; i < 2; i++) {
-            WebElement build = getWait5().until(ExpectedConditions.elementToBeClickable(By.xpath("//*[@id='tasks']/div[4]/span/a")));
-            build.click();
-        }
-    }
-
-    public String getBreadcrumbText() {
-        return getWait10().until(ExpectedConditions.visibilityOfElementLocated(
-                By.cssSelector("#breadcrumbs > li:nth-child(5)"))).getText();
-    }
-
-    public void clickBuildTwo() {
-        WebElement buildTwo = getWait5().until(ExpectedConditions.presenceOfElementLocated(
-                By.cssSelector("#job_TestJobWorkspace > td:nth-child(4) a")));
-        ((JavascriptExecutor) getDriver()).executeScript("arguments[0].click();", buildTwo);
     }
 }
