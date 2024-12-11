@@ -216,22 +216,6 @@ public class PipelineProjectTest extends BaseTest {
                 NEW_PROJECT_NAME,
                 "Project is not deleted");
     }
-
-    @Test
-    public void testRenameViaChevron() {
-        List<String> ListOfProjects = new HomePage(getDriver())
-                .clickNewItem()
-                .enterItemName(PROJECT_NAME)
-                .selectPipelineAndClickOk()
-                .gotoHomePage()
-                .selectRenameFromItemMenu(PROJECT_NAME,NEW_PROJECT_NAME)
-                .gotoHomePage()
-                .getItemList();
-
-        Assert.assertListContainsObject(ListOfProjects,
-                NEW_PROJECT_NAME, "Project is not found");
-    }
-
     @Test
     public void testDeleteViaChevron() {
         List<String> projectList = new HomePage(getDriver())

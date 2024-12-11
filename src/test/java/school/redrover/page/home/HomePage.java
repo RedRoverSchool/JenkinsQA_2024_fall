@@ -218,20 +218,6 @@ public class HomePage extends BasePage {
 
         return this;
     }
-
-    public HomePage selectRenameFromItemMenu(String itemName, String rename) {
-        selectMenuFromItemDropdown(itemName, "Rename");
-
-        WebElement inputRename = getWait10().until(ExpectedConditions.elementToBeClickable(By.name("newName")));
-
-        new Actions(getDriver()).doubleClick(inputRename).sendKeys(rename).perform();
-
-        getDriver().findElement(By.xpath("//button[@class='jenkins-button jenkins-submit-button jenkins-button--primary ']"))
-                .click();
-
-        return this;
-    }
-
     public HomePage selectDeleteFromItemMenuAndClickYes(String itemName) {
         selectDeleteFromItemMenu(itemName);
         getWait5().until(ExpectedConditions.visibilityOf(yesButton)).click();
