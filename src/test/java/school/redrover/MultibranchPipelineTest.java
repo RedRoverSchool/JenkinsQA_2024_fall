@@ -102,7 +102,6 @@ public class MultibranchPipelineTest extends BaseTest {
                 "Project is not renamed");
     }
 
-    @Ignore
     @Test
     public void testSelectingTriggersScanPeriodFromConfigPage() {
         WebElement selectedValue = new HomePage(getDriver())
