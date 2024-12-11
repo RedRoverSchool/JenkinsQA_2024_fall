@@ -48,6 +48,7 @@ public class FreestyleProjectTest extends BaseTest {
                 .enterItemName(PROJECT_NAME)
                 .selectFreestyleProjectAndClickOk()
                 .clickSaveButton()
+                .getHeader()
                 .gotoHomePage()
                 .clickNewItem()
                 .enterItemName(PROJECT_NAME)
@@ -64,6 +65,7 @@ public class FreestyleProjectTest extends BaseTest {
                 .enterItemName(PROJECT_NAME)
                 .selectFreestyleProjectAndClickOk()
                 .clickSaveButton()
+                .getHeader()
                 .gotoHomePage()
                 .getItemList();
 
@@ -78,6 +80,7 @@ public class FreestyleProjectTest extends BaseTest {
                 .enterItemName(PROJECT_NAME)
                 .selectFreestyleProjectAndClickOk()
                 .clickSaveButton()
+                .getHeader()
                 .gotoHomePage()
                 .getItemList();
 
@@ -93,6 +96,7 @@ public class FreestyleProjectTest extends BaseTest {
                 .enterItemName(PROJECT_NAME)
                 .selectTypeProject(FREESTYLE_PROJECT)
                 .clickOkButton()
+                .getHeader()
                 .gotoHomePage()
                 .getItemList();
 
@@ -110,6 +114,7 @@ public class FreestyleProjectTest extends BaseTest {
                 .selectFreestyleProjectAndClickOk()
                 .selectDurationCheckbox(durationPeriod)
                 .clickSaveButton()
+                .getHeader()
                 .gotoHomePage()
                 .openFreestyleProject(PROJECT_NAME)
                 .clickSidebarConfigButton()
@@ -321,6 +326,7 @@ public class FreestyleProjectTest extends BaseTest {
                 .enterItemName(PROJECT_NAME)
                 .selectFreestyleProjectAndClickOk()
                 .clickSaveButton()
+                .getHeader()
                 .gotoHomePage()
 
                 .selectDeleteFromItemMenuAndClickYes(PROJECT_NAME)
@@ -448,6 +454,7 @@ public class FreestyleProjectTest extends BaseTest {
                 .openFreestyleProject(PROJECT_NAME)
                 .clickSidebarConfigButton()
                 .addBuildStep("Run with timeout")
+                .getHeader()
                 .gotoHomePage()
                 .clickScheduleBuild(PROJECT_NAME)
                 .gotoBuildHistoryPageFromLeftPanel()

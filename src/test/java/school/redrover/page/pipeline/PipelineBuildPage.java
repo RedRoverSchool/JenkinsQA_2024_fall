@@ -8,7 +8,7 @@ import school.redrover.page.base.BasePage;
 
 import java.util.List;
 
-public class PipelineBuildPage extends BasePage {
+public class PipelineBuildPage extends BasePage<PipelineBuildPage> {
 
     @FindBy(xpath = "//button[@name='Submit']")
     private WebElement submitButton;

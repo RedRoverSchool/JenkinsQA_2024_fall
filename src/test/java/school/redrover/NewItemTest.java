@@ -37,12 +37,14 @@ public class NewItemTest extends BaseTest {
     private HomePage createPipelineProject(String projectName) {
         return goToNewItemPageAndEnterName(projectName)
                 .selectPipelineAndClickOk()
+                .getHeader()
                 .gotoHomePage();
     }
 
     private HomePage createFreestyleProject(String projectName) {
         return goToNewItemPageAndEnterName(projectName)
                 .selectFreestyleProjectAndClickOk()
+                .getHeader()
                 .gotoHomePage();
     }
 
@@ -64,6 +66,7 @@ public class NewItemTest extends BaseTest {
                 .enterItemName(SECOND_ITEM_NAME)
                 .enterName(FIRST_ITEM_NAME)
                 .clickOkAndGoToPipelineConfigPage()
+                .getHeader()
                 .gotoHomePage()
                 .getItemList();
 
@@ -77,6 +80,7 @@ public class NewItemTest extends BaseTest {
                 .enterItemName(SECOND_ITEM_NAME)
                 .enterName(FIRST_ITEM_NAME)
                 .clickOkButton()
+                .getHeader()
                 .gotoHomePage()
                 .getItemList();
 

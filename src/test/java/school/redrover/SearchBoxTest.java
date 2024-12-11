@@ -18,6 +18,7 @@ public class SearchBoxTest extends BaseTest {
     @Test
     public void testVerifyTitleSearchBoxLink() {
         String title = new HomePage(getDriver())
+                .getHeader()
                 .gotoSearchBox()
                 .getTitle();
 
@@ -27,7 +28,9 @@ public class SearchBoxTest extends BaseTest {
     @Test
     public void testSearch() {
         String result = new HomePage(getDriver())
+                .getHeader()
                 .enterSearch("built")
+                .getHeader()
                 .enter()
                 .getResult();
 
@@ -37,8 +40,11 @@ public class SearchBoxTest extends BaseTest {
     @Test
     public void testSuggestionList() {
         String result = new HomePage(getDriver())
+                .getHeader()
                 .enterSearch("bu")
+                .getHeader()
                 .getSuggestion()
+                .getHeader()
                 .enter()
                 .getResult();
 
@@ -48,6 +54,7 @@ public class SearchBoxTest extends BaseTest {
     @Test
     public void testSearchManage() {
         String title = new HomePage(getDriver())
+                .getHeader()
                 .resultManage(SEARCH_RESULT)
                 .getTitle();
 
@@ -57,7 +64,9 @@ public class SearchBoxTest extends BaseTest {
     @Test
     public void testFindSearchTest() {
         String result = new HomePage(getDriver())
+                .getHeader()
                 .enterSearch("TestSearch")
+                .getHeader()
                 .enter()
                 .getTitle();
 
@@ -67,7 +76,9 @@ public class SearchBoxTest extends BaseTest {
     @Test
     public void testClickButtonTest() {
         String title = new HomePage(getDriver())
+                .getHeader()
                 .clickBell()
+                .getHeader()
                 .clickLinkWithPopup()
                 .getTitle();
 
@@ -77,7 +88,9 @@ public class SearchBoxTest extends BaseTest {
     @Test
     public void testSearchField() {
         String url = new HomePage(getDriver())
+                .getHeader()
                 .enterSearch("config")
+                .getHeader()
                 .enter()
                 .getCurrentUrl();
 
@@ -87,6 +100,7 @@ public class SearchBoxTest extends BaseTest {
     @Test
     public void testInputField() {
         String text = new HomePage(getDriver())
+                .getHeader()
                 .enterGotoLogPage("log")
                 .getResultSearch();
 
@@ -100,8 +114,11 @@ public class SearchBoxTest extends BaseTest {
                 .enterItemName(ITEM_NAME)
                 .selectOrganizationFolderAndClickOk()
                 .clickSaveButton()
+                .getHeader()
                 .gotoHomePage()
+                .getHeader()
                 .enterSearch(ITEM_NAME)
+                .getHeader()
                 .enter()
                 .getTitle();
 
@@ -111,7 +128,9 @@ public class SearchBoxTest extends BaseTest {
     @Test
     public void testSearchNotExistingInstance() {
         String error = new HomePage(getDriver())
+                .getHeader()
                 .enterSearch("hjk")
+                .getHeader()
                 .enter()
                 .getMessageError();
 
@@ -121,7 +140,9 @@ public class SearchBoxTest extends BaseTest {
     @Test
     public void testResultOfSearch() {
         List<String> suggestionList = new HomePage(getDriver())
+                .getHeader()
                 .enterSearch(SEARCH_TEXT)
+                .getHeader()
                 .getListSuggestion();
 
         Assert.assertEquals(suggestionList.size(), 4);
@@ -131,7 +152,9 @@ public class SearchBoxTest extends BaseTest {
     @Test
     public void testRedirectToResult() {
         String title = new HomePage(getDriver())
+                .getHeader()
                 .enterSearch(SEARCH_TEXT)
+                .getHeader()
                 .getResultManage()
                 .getTitle();
 
@@ -141,7 +164,9 @@ public class SearchBoxTest extends BaseTest {
     @Test
     public void testEmptySearchField() {
         String errorMessage = new HomePage(getDriver())
+                .getHeader()
                 .enterSearch(INVALID_SEARCH_TEXT)
+                .getHeader()
                 .enter()
                 .getMessageError();
 

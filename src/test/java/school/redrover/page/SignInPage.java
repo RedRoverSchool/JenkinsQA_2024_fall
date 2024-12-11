@@ -6,7 +6,7 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import school.redrover.page.base.BasePage;
 
-public class SignInPage extends BasePage {
+public class SignInPage extends BasePage<SignInPage> {
 
     public SignInPage(WebDriver driver) {
         super(driver);

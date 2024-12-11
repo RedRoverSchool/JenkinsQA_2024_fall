@@ -35,6 +35,7 @@ public class MultibranchPipelineTest extends BaseTest {
                 .enterItemName(MULTIBRANCH_PIPELINE_NAME)
                 .selectMultibranchPipelineAndClickOk()
                 .clickSaveButton()
+                .getHeader()
                 .gotoHomePage()
                 .getItemList();
 
@@ -95,6 +96,7 @@ public class MultibranchPipelineTest extends BaseTest {
                 .clickRenameSidebarButton()
                 .clearInputFieldAndTypeName(MULTIBRANCH_PIPELINE_NAME2)
                 .clickRenameButton()
+                .getHeader()
                 .gotoHomePage()
                 .getItemList();
 
@@ -173,6 +175,7 @@ public class MultibranchPipelineTest extends BaseTest {
                 .enterItemName(MULTIBRANCH_PIPELINE_NAME)
                 .selectMultibranchPipelineAndClickOk()
                 .clickSaveButton()
+                .getHeader()
                 .gotoHomePage()
                 .openMultibranchPipelineProject(MULTIBRANCH_PIPELINE_NAME)
                 .clickDeleteButtonSidebarAndConfirm()
@@ -189,6 +192,7 @@ public class MultibranchPipelineTest extends BaseTest {
                 .enterItemName(MULTIBRANCH_PIPELINE_NAME)
                 .selectMultibranchPipelineAndClickOk()
                 .clickSaveButton()
+                .getHeader()
                 .gotoHomePage()
                 .selectDeleteFromItemMenuAndClickYes(MULTIBRANCH_PIPELINE_NAME)
                 .getItemList();
@@ -204,6 +208,7 @@ public class MultibranchPipelineTest extends BaseTest {
                 .enterItemName(MULTIBRANCH_PIPELINE_NAME)
                 .selectMultibranchPipelineAndClickOk()
                 .clickSaveButton()
+                .getHeader()
                 .gotoHomePage()
                 .openMultibranchPipelineProject(MULTIBRANCH_PIPELINE_NAME)
                 .deleteJobUsingDropdownBreadcrumbJobPage()

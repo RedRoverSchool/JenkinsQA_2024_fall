@@ -42,6 +42,7 @@ public class PipelineProjectTest extends BaseTest {
                 .enterItemName(PROJECT_NAME)
                 .selectPipelineAndClickOk()
                 .clickSaveButton()
+                .getHeader()
                 .gotoHomePage()
                 .getItemList();
 
@@ -136,6 +137,7 @@ public class PipelineProjectTest extends BaseTest {
         boolean isGreenBuildButtonPresent = new HomePage(getDriver())
                 .openPipelineProject(PROJECT_NAME)
                 .clickEnableButton()
+                .getHeader()
                 .gotoHomePage()
                 .isGreenScheduleBuildTrianglePresent(PROJECT_NAME);
 
@@ -195,6 +197,7 @@ public class PipelineProjectTest extends BaseTest {
                 .clickRenameSidebarButton()
                 .clearInputFieldAndTypeName(NEW_PROJECT_NAME)
                 .clickRenameButton()
+                .getHeader()
                 .gotoHomePage()
                 .getItemList();
 
@@ -224,6 +227,7 @@ public class PipelineProjectTest extends BaseTest {
                 .enterItemName(PROJECT_NAME)
                 .selectPipelineAndClickOk()
                 .clickSaveButton()
+                .getHeader()
                 .gotoHomePage()
                 .selectDeleteFromItemMenuAndClickYes(PROJECT_NAME)
                 .getItemList();
@@ -273,6 +277,7 @@ public class PipelineProjectTest extends BaseTest {
                 .enterItemName(PROJECT_NAME)
                 .selectPipelineAndClickOk()
                 .clickSaveButton()
+                .getHeader()
                 .gotoHomePage()
                 .openPipelineProject(PROJECT_NAME)
                 .clickRenameSidebarButton()
@@ -290,6 +295,7 @@ public class PipelineProjectTest extends BaseTest {
                 .enterItemName(PROJECT_NAME)
                 .selectPipelineAndClickOk()
                 .clickSaveButton()
+                .getHeader()
                 .gotoHomePage()
                 .openPipelineProject(PROJECT_NAME)
                 .clickRenameSidebarButton()
@@ -305,6 +311,7 @@ public class PipelineProjectTest extends BaseTest {
                 .enterItemName(PROJECT_NAME)
                 .selectPipelineAndClickOk()
                 .clickSaveButton()
+                .getHeader()
                 .gotoHomePage()
                 .goToPipelineRenamePageViaDropdown(PROJECT_NAME)
                 .clearInputFieldAndTypeName(NEW_PROJECT_NAME)
@@ -329,6 +336,7 @@ public class PipelineProjectTest extends BaseTest {
                 .clickNewItem()
                 .enterItemName(PROJECT_NAME)
                 .selectPipelineAndClickOk()
+                .getHeader()
                 .gotoHomePage()
                 .openPipelineProject(PROJECT_NAME)
                 .openDropDownMenuByChevronBreadcrumb(PROJECT_NAME)
@@ -346,6 +354,7 @@ public class PipelineProjectTest extends BaseTest {
                 .selectPipelineAndClickOk()
                 .clickToggleToDisableOrEnableProject()
                 .clickSaveButton()
+                .getHeader()
                 .gotoHomePage()
                 .getStatusBuild(PROJECT_NAME);
 
@@ -371,6 +380,7 @@ public class PipelineProjectTest extends BaseTest {
                 .selectPipelineAndClickOk()
                 .enterScriptFromFile(validPipelineScriptFile)
                 .clickSaveButton()
+                .getHeader()
                 .gotoHomePage()
                 .selectBuildNowFromItemMenu(PROJECT_NAME)
                 .refreshAfterBuild()
@@ -398,6 +408,7 @@ public class PipelineProjectTest extends BaseTest {
                 .selectPipelineAndClickOk()
                 .enterScriptFromFile(invalidPipelineScriptFile)
                 .clickSaveButton()
+                .getHeader()
                 .gotoHomePage()
                 .selectBuildNowFromItemMenu(PROJECT_NAME)
                 .refreshAfterBuild()

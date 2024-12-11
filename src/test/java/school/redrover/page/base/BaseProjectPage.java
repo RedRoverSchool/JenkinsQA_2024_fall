@@ -9,7 +9,7 @@ import school.redrover.page.home.HomePage;
 
 import java.util.List;
 
-public abstract class BaseProjectPage<Self extends BaseProjectPage<?, ?, ?>, ProjectConfigPage, ProjectRenamePage> extends BasePage {
+public abstract class BaseProjectPage<Self extends BaseProjectPage<?, ?, ?>, ProjectConfigPage, ProjectRenamePage> extends BasePage<BaseProjectPage<?, ?, ?>> {
 
     @FindBy(id = "description-link")
     private WebElement descriptionButton;

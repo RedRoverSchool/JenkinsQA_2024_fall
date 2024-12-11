@@ -5,7 +5,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import school.redrover.page.base.BasePage;
 
-public class SystemPage extends BasePage {
+public class SystemPage extends BasePage<SystemPage> {
 
     @FindBy(id = "breadcrumbs")
     private WebElement breadcrumbs;

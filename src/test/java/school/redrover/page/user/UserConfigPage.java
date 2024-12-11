@@ -6,7 +6,7 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import school.redrover.page.base.BasePage;
 
-public class UserConfigPage extends BasePage {
+public class UserConfigPage extends BasePage<UserConfigPage> {
 
     @FindBy(xpath = "//a[@title='Help for feature: Full Name']")
     private WebElement fullNameTooltip;

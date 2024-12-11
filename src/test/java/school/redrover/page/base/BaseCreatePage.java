@@ -6,7 +6,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import school.redrover.page.home.CreateNewItemPage;
 
-public abstract class BaseCreatePage<Self extends BaseCreatePage<?>> extends BasePage {
+public abstract class BaseCreatePage<Self extends BaseCreatePage<?>> extends BasePage<BaseCreatePage<?>> {
 
     @FindBy(id = "ok-button")
     private WebElement okButton;

@@ -50,6 +50,7 @@ public class OrganizationFolderTest extends BaseTest {
                 .clickNewItem()
                 .enterItemName(FOLDER_NAME)
                 .selectOrganizationFolderAndClickOk()
+                .getHeader()
                 .gotoHomePage()
                 .getItemList();
 
@@ -277,6 +278,7 @@ public class OrganizationFolderTest extends BaseTest {
                 .enterItemName(FOLDER_NAME)
                 .selectOrganizationFolderAndClickOk()
                 .clickSaveButton()
+                .getHeader()
                 .gotoHomePage()
                 .openOrganisationFolderProject(FOLDER_NAME)
                 .clickRenameSidebarButton()
@@ -314,6 +316,7 @@ public class OrganizationFolderTest extends BaseTest {
                 .enterItemName(FOLDER_NAME)
                 .selectOrganizationFolderAndClickOk()
                 .clickSaveButton()
+                .getHeader()
                 .gotoHomePage()
                 .openOrganisationFolderProject(FOLDER_NAME)
                 .clickDeleteButtonSidebarAndConfirm()

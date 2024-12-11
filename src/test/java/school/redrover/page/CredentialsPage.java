@@ -6,7 +6,7 @@ import org.openqa.selenium.support.FindBy;
 import school.redrover.page.base.BasePage;
 import school.redrover.runner.TestUtils;
 
-public class CredentialsPage extends BasePage {
+public class CredentialsPage extends BasePage<CredentialsPage> {
 
     @FindBy(css = "h1")
     private WebElement pageTitle;

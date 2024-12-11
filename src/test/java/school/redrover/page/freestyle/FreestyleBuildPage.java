@@ -6,7 +6,7 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import school.redrover.page.base.BasePage;
 
-public class FreestyleBuildPage extends BasePage {
+public class FreestyleBuildPage extends BasePage<FreestyleBuildPage> {
 
     @FindBy(xpath = "//input[@name='displayName']")
     private WebElement displayNameField;
