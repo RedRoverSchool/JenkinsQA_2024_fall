@@ -8,6 +8,8 @@ import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 import school.redrover.page.base.BaseConfigPage;
 
+import java.util.List;
+
 public class OrganizationFolderConfigPage extends BaseConfigPage<OrganizationFolderConfigPage, OrganizationFolderProjectPage> {
 
     @FindBy(name = "_.displayNameOrNull")
@@ -30,6 +32,9 @@ public class OrganizationFolderConfigPage extends BaseConfigPage<OrganizationFol
 
     @FindBy(xpath = "//div/a[@class='textarea-hide-preview']")
     private WebElement hidePreviewLink;
+
+    @FindBy(xpath = "//div[@id='tasks']/div")
+    private List<WebElement> sidebarItemsNameList;
 
     public OrganizationFolderConfigPage(WebDriver driver) {
         super(driver);
@@ -74,6 +79,13 @@ public class OrganizationFolderConfigPage extends BaseConfigPage<OrganizationFol
 
     public String getPreviewStyleAttribute() {
         return getDriver().findElement(By.xpath("//div/div[@class='textarea-preview']")).getAttribute("style");
+    }
+
+    public List<String> getListOfItemsSidebar() {
+        return sidebarItemsNameList
+                .stream()
+                .map(WebElement::getText)
+                .toList();
     }
 }
 

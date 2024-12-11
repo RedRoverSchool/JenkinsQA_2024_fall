@@ -16,6 +16,7 @@ import school.redrover.runner.BaseTest;
 import school.redrover.runner.TestUtils;
 
 import java.time.Duration;
+import java.util.ArrayList;
 import java.util.List;
 
 public class OrganizationFolderTest extends BaseTest {
@@ -107,13 +108,29 @@ public class OrganizationFolderTest extends BaseTest {
         Assert.assertEquals(description, NEW_DESCRIPTION);
     }
 
-    @Test(dependsOnMethods = {"testEditDescription", "testEditDisplayName"})
-    public void testDelete() {
-        clickElement(By.xpath("//td/a[@class='jenkins-table__link model-link inside']"));
-        clickElement(By.xpath("//a[@data-title='Delete Organization Folder']"));
-        clickElement(By.xpath("//button[@data-id='ok']"));
+    @Test
+    public void testCheckLeftSidebarMenu() {
+        TestUtils.createOrganizationFolder(getDriver(), FOLDER_NAME);
 
-        Assert.assertEquals(textElement(By.tagName("h1")), "Welcome to Jenkins!");
+        List<String> listOfItemsSidebar = new HomePage(getDriver())
+                .openOrganisationFolderProject(FOLDER_NAME)
+                .clickConfigure()
+                .getListOfItemsSidebar();
+
+        Assert.assertEquals(listOfItemsSidebar.size(), 7);
+        Assert.assertEquals(
+                listOfItemsSidebar,
+                new ArrayList<>(List.of("General", "Projects", "Scan Organization Folder Triggers", "Orphaned Item Strategy", "Appearance", "Health metrics", "Properties")));
+    }
+
+    @Test(dependsOnMethods = {"testCheckLeftSidebarMenu"})
+    public void testDelete() {
+        HomePage homePage = new HomePage(getDriver())
+                .openOrganisationFolderProject(FOLDER_NAME)
+                .clickDeleteButtonSidebarAndConfirm();
+
+        Assert.assertEquals(homePage.getWelcomeTitle(), "Welcome to Jenkins!");
+        Assert.assertEquals(homePage.getItemList().size(), 0);
     }
 
     @Ignore
