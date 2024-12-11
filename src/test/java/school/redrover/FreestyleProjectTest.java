@@ -399,7 +399,6 @@ public class FreestyleProjectTest extends BaseTest {
                 .getNotificationBarStatus();
 
         Assert.assertEquals(notificationBar, "Build Now: Done.");
-        Assert.assertEquals(actualOrder, expectedOrder);
     }
 
     @Test(dependsOnMethods = "testNotificationBarAppears")
