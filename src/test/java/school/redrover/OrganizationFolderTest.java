@@ -196,9 +196,7 @@ public class OrganizationFolderTest extends BaseTest {
                 .changeDescriptionPreviewState()
                 .getPreviewStyleAttribute();
 
-        Assert.assertEquals(
-                displayPreview,
-                "display: none;");
+        Assert.assertEquals(displayPreview, "display: none;");
     }
 
     @Test
@@ -289,22 +287,15 @@ public class OrganizationFolderTest extends BaseTest {
 
     @Test
     public void testCreateOrganizationFolderWithDefaultIcon() {
-        getDriver().findElement(By.cssSelector("[href$='/newJob']")).click();
-        getDriver().findElement(By.id("name")).sendKeys("Organization_Folder");
+        String iconName = new HomePage(getDriver())
+                .clickNewItem()
+                .enterItemName(FOLDER_NAME)
+                .selectOrganizationFolderAndClickOk()
+                .selectDefaultIcon()
+                .clickSaveButton()
+                .getIconAttributeTitle();
 
-        scrollPage();
-
-        getDriver().findElement(By.cssSelector("[class$='OrganizationFolder']")).click();
-        getDriver().findElement(By.id("ok-button")).click();
-
-        new Select(getDriver().findElement(By.xpath("(//select[contains(@class, 'dropdownList')])[2]")))
-                .selectByVisibleText("Default Icon");
-
-        scrollPage();
-
-        getDriver().findElement(By.name("Submit")).click();
-
-        Assert.assertEquals(getDriver().findElement(By.cssSelector("h1 > svg")).getAttribute("title"), "Folder");
+        Assert.assertEquals(iconName, "Folder");
     }
 
     @Test
