@@ -53,6 +53,9 @@ public class FreestyleProjectPage extends BaseProjectPage<FreestyleProjectPage, 
     @FindBy(xpath = "//a[@data-title='Wipe Out Current Workspace']")
     private WebElement wipeOutCurrentWorkspaceSidebar;
 
+    @FindBy(xpath = "//*[@id='breadcrumbs']/li[5]")
+    private WebElement breadCrumbs;
+
     public FreestyleProjectPage(WebDriver driver) {
         super(driver);
     }
@@ -133,5 +136,9 @@ public class FreestyleProjectPage extends BaseProjectPage<FreestyleProjectPage, 
                 By.name("Submit"))).click();
 
         return new FreestyleConfigPage(getDriver());
+    }
+
+    public String getBreadCrumb() {
+        return breadCrumbs.getText();
     }
 }
