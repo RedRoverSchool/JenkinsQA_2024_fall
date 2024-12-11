@@ -219,6 +219,19 @@ public class HomePage extends BasePage {
         return this;
     }
 
+    public HomePage selectRenameFromItemMenu(String itemName, String rename) {
+        selectMenuFromItemDropdown(itemName, "Rename");
+
+        WebElement inputRename = getWait10().until(ExpectedConditions.elementToBeClickable(By.name("newName")));
+
+        new Actions(getDriver()).doubleClick(inputRename).sendKeys(rename).perform();
+
+        getDriver().findElement(By.xpath("//button[@class='jenkins-button jenkins-submit-button jenkins-button--primary ']"))
+                .click();
+
+        return this;
+    }
+
     public HomePage selectDeleteFromItemMenuAndClickYes(String itemName) {
         selectDeleteFromItemMenu(itemName);
         getWait5().until(ExpectedConditions.visibilityOf(yesButton)).click();
@@ -500,30 +513,6 @@ public class HomePage extends BasePage {
         getWait2().until(ExpectedConditions.elementToBeClickable(credentialsDropdown)).click();
 
         return new CredentialsPage(getDriver());
-    }
-
-    public HomePage deleteItemViaChevron(String itemName){
-        WebElement itemLink = getDriver().findElement(By.xpath("//a[@href='job/%s/']".formatted(itemName)));
-
-        new Actions(getDriver())
-                .moveToElement(itemLink).perform();
-
-        WebElement chevron = getDriver().findElement(
-                By.xpath("//button[@data-href='http://localhost:8080/job/%s/']".formatted(itemName)));
-
-        ((JavascriptExecutor) getDriver()).executeScript(
-                "arguments[0].dispatchEvent(new Event('mouseenter'));", chevron);
-        ((JavascriptExecutor) getDriver()).executeScript(
-                "arguments[0].dispatchEvent(new Event('click'));", chevron);
-
-        getWait5().until(ExpectedConditions.elementToBeClickable(
-                        By.xpath("//button[@href='/job/%s/doDelete']".formatted(itemName))))
-                .click();
-
-        getWait5().until(ExpectedConditions.elementToBeClickable(
-                        By.xpath("//button[@class='jenkins-button jenkins-button--primary ']")))
-                .click();
-        return this;
     }
 
     public HomePage renameViaChevron(String itemName, String rename){
