@@ -91,8 +91,7 @@ public class FreestyleProjectTest extends BaseTest {
                 .clickMyViewsButton()
                 .clickNewItem()
                 .enterItemName(PROJECT_NAME)
-                .selectTypeProject(FREESTYLE_PROJECT)
-                .clickOkButton()
+                .selectFreestyleProjectAndClickOk()
                 .gotoHomePage()
                 .getItemList();
 

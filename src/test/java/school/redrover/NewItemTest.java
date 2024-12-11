@@ -8,6 +8,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.Test;
+import school.redrover.page.freestyle.FreestyleConfigPage;
 import school.redrover.page.home.CreateNewItemPage;
 import school.redrover.page.home.HomePage;
 import school.redrover.runner.BaseTest;
@@ -76,7 +77,7 @@ public class NewItemTest extends BaseTest {
                 .clickNewItem()
                 .enterItemName(SECOND_ITEM_NAME)
                 .enterName(FIRST_ITEM_NAME)
-                .clickOkButton()
+                .clickOkLeadingToCertainPage(new FreestyleConfigPage(getDriver()))
                 .gotoHomePage()
                 .getItemList();
 
