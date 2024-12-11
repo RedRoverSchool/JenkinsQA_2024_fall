@@ -514,33 +514,4 @@ public class HomePage extends BasePage {
 
         return new CredentialsPage(getDriver());
     }
-
-    public HomePage renameViaChevron(String itemName, String rename){
-
-        WebElement itemLink = getDriver().findElement(By.xpath("//a[@href='job/%s/']".formatted(itemName)));
-
-        new Actions(getDriver())
-                .moveToElement(itemLink).perform();
-
-        WebElement chevron = getDriver().findElement(
-                By.xpath("//button[@data-href='http://localhost:8080/job/%s/']".formatted(itemName)));
-
-        ((JavascriptExecutor) getDriver()).executeScript(
-                "arguments[0].dispatchEvent(new Event('mouseenter'));", chevron);
-        ((JavascriptExecutor) getDriver()).executeScript(
-                "arguments[0].dispatchEvent(new Event('click'));", chevron);
-
-        getWait5().until(ExpectedConditions.elementToBeClickable(
-                        By.xpath("//a[@href='/job/%s/confirm-rename']".formatted(itemName))))
-                .click();
-
-        WebElement inputRename = getWait10().until(ExpectedConditions.elementToBeClickable(By.name("newName")));
-
-        new Actions(getDriver()).doubleClick(inputRename).sendKeys(rename).perform();
-
-        getDriver().findElement(By.xpath("//button[@class='jenkins-button jenkins-submit-button jenkins-button--primary ']"))
-                .click();
-
-        return this;
-    }
 }
