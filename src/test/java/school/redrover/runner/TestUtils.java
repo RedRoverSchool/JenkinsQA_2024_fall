@@ -154,6 +154,7 @@ public class TestUtils {
                 .enterItemName(name)
                 .selectOrganizationFolderAndClickOk()
                 .clickSaveButton()
+                .getHeader()
                 .gotoHomePage();
     }
 }

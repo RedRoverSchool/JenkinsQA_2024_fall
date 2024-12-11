@@ -96,6 +96,7 @@ public class MultibranchPipelineTest extends BaseTest {
                 .clickRenameSidebarButton()
                 .clearInputFieldAndTypeName(MULTIBRANCH_PIPELINE_NAME2)
                 .clickRenameButton()
+                .getHeader()
                 .gotoHomePage()
                 .getItemList();
 

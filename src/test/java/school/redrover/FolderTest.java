@@ -195,6 +195,7 @@ public class FolderTest extends BaseTest {
         String errorMessage = new HomePage(getDriver())
                 .clickNewItem()
                 .nameAndSelectFolderType(FIRST_FOLDER_NAME)
+                .getHeader()
                 .gotoHomePage()
 
                 .clickNewItem()
@@ -387,6 +388,7 @@ public class FolderTest extends BaseTest {
                     .clickRenameSidebarButton()
                     .clearInputFieldAndTypeName(NEW_FOLDER_NAME)
                     .clickRenameButton()
+                    .getHeader()
                     .gotoHomePage()
                     .getItemList();
 
