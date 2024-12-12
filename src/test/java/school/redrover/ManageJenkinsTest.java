@@ -9,6 +9,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
+import school.redrover.page.AppearancePage;
 import school.redrover.page.home.HomePage;
 import school.redrover.runner.BaseTest;
 import school.redrover.runner.ProjectUtils;
@@ -315,21 +316,16 @@ public class ManageJenkinsTest extends BaseTest {
 
     @Test
     public void testPickDarkTheme() {
-        WebElement manageButton = getDriver().findElement(By.xpath("//a[@href='/manage']"));
-        manageButton.click();
-        WebElement appearanceButton = getDriver().findElement(By.xpath("//a[@href='appearance']"));
-        appearanceButton.click();
+        String initialColorTheme = new HomePage(getDriver())
+                .openManageJenkinsPage()
+                .clickAppearanceButton()
+                .getColorBackground();
 
-        WebElement changedColorArea = getDriver().findElement(By.xpath("//section[@class='jenkins-section']"));
+        String changedColor = new AppearancePage(getDriver())
+                .clickSelectDarkThemes()
+                .getColorBackground();
 
-        String initialColorTheme = changedColorArea.getCssValue("background");
-
-        WebElement darkThemeIcon = getDriver().findElement(By.xpath("//label[@for='radio-block-0']"));
-        darkThemeIcon.click();
-
-        String changedColor = changedColorArea.getCssValue("background");
-
-        Assert.assertEquals(changedColor, initialColorTheme, "Color of theme did not changed");
+        Assert.assertEquals(initialColorTheme, changedColor);
     }
 
     @Test

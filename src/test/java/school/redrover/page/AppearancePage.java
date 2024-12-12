@@ -25,6 +25,9 @@ public class AppearancePage extends BasePage {
     @FindBy(css = "html[data-theme]")
     private WebElement dataTheme;
 
+    @FindBy(xpath = "//section[@class='jenkins-section']")
+    private WebElement colorBackground;
+
     public AppearancePage(WebDriver driver) {
         super(driver);
     }
@@ -61,5 +64,9 @@ public class AppearancePage extends BasePage {
 
     public String getAttributeData() {
         return dataTheme.getAttribute("data-theme");
+    }
+
+    public String getColorBackground() {
+        return colorBackground.getCssValue("background");
     }
 }
