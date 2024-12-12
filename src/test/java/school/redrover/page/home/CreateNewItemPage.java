@@ -49,10 +49,10 @@ public class CreateNewItemPage extends BasePage {
     @FindBy(id = "ok-button")
     private WebElement okButton;
 
-    @FindBy (id="add-item-panel")
+    @FindBy(id = "add-item-panel")
     private WebElement pageField;
 
-    @FindBy (id="itemname-required")
+    @FindBy(id = "itemname-required")
     private WebElement warningMessage;
 
     public CreateNewItemPage(WebDriver driver) {
@@ -90,6 +90,12 @@ public class CreateNewItemPage extends BasePage {
         okButton.click();
 
         return new MultiConfigurationConfigPage(getDriver());
+    }
+
+    public CreateNewItemPage selectMultiConfigurationProject() {
+        multiConfigurationProject.click();
+
+        return new CreateNewItemPage(getDriver());
     }
 
     public FreestyleConfigPage selectFreestyleProjectAndClickOk() {
@@ -185,14 +191,16 @@ public class CreateNewItemPage extends BasePage {
         return new PipelineConfigurePage(getDriver());
     }
 
-
     public CreateNewItemPage clickSomewhere() {
         pageField.click();
+
         return this;
     }
+
     public String getWarningMessageText() {
         return warningMessage.getText();
     }
+
     public boolean getOkButton() {
         return okButton.isEnabled();
     }

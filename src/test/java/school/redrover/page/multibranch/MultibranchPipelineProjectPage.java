@@ -40,6 +40,11 @@ public class MultibranchPipelineProjectPage extends BaseProjectPage<MultibranchP
         return new MultibranchPipelineRenamePage(getDriver());
     }
 
+    public String getBreadcrumbName() {
+
+        return jobNameToMenu.getText();
+    }
+
     public String getDescription() {
         return getWait5().until(ExpectedConditions.visibilityOf(description)).getText();
     }

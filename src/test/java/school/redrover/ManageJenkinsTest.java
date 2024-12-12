@@ -363,14 +363,13 @@ public class ManageJenkinsTest extends BaseTest {
 
     @Test
     public void testThemesSystem() {
-        getDriver().findElement(By.cssSelector("[href='/manage']")).click();
-        getDriver().findElement(By.cssSelector("[href='appearance']")).click();
-        getDriver().findElement(By.xpath("//label[@for='radio-block-1']")).click();
+        Boolean isThemeApplied = new HomePage(getDriver())
+                .openManageJenkinsPage()
+                .clickAppearanceButton()
+                .clickSelectDarkThemes()
+                .clickCheckboxDifferentTheme()
+                .isThemeApplied();
 
-        getDriver().findElement(By.cssSelector("[class='attach-previous ']")).click();
-        getDriver().findElement(By.xpath("//button[@name='Apply']")).click();
-
-        Assert.assertTrue(getDriver().findElement(By.cssSelector("html[data-theme]")).
-                getAttribute("data-theme").contains("system"));
+        Assert.assertTrue(isThemeApplied);
     }
 }
