@@ -23,6 +23,9 @@ public class ViewPage extends HomePage {
     @FindBy(xpath = "//button[@data-id = 'ok']")
     private WebElement yesButton;
 
+    @FindBy(xpath = "//div[@id = 'description']/div")
+    private WebElement viewDescription;
+
     public ViewPage(WebDriver driver) {
         super(driver);
     }
@@ -57,5 +60,9 @@ public class ViewPage extends HomePage {
         yesButton.click();
 
         return this;
+    }
+
+    public String getDescription() {
+        return getWait5().until(ExpectedConditions.visibilityOf(viewDescription)).getText();
     }
 }

@@ -17,6 +17,7 @@ public class NewViewDashboardTest extends BaseTest {
     private static final String PROJECT_NAME = "New Freestyle Project";
     private static final String LIST_VIEW = "ListView";
     private static final String MY_VIEW = "MyView";
+    private static final String MY_VIEW_DESCRIPTION = "This is My View description.";
 
     @Test
     public void testAddNewMyView() {
@@ -72,4 +73,15 @@ public class NewViewDashboardTest extends BaseTest {
         Assert.assertTrue(listOfViews.stream().anyMatch(item -> !LIST_VIEW.equals(item.getText())));
     }
 
+    @Test (dependsOnMethods = "testAddNewMyView")
+    public void testEditMyViewByAddingDescription() {
+        String description = new HomePage(getDriver())
+                .selectViewType(MY_VIEW)
+                .clickEditView(MY_VIEW)
+                .addDescription(MY_VIEW_DESCRIPTION)
+                .clickOkButton()
+                .getDescription();
+
+        Assert.assertEquals(description, MY_VIEW_DESCRIPTION);
+    }
 }
