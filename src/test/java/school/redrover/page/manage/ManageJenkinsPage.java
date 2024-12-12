@@ -6,6 +6,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import school.redrover.page.manage.node.NodesPage;
 import school.redrover.page.systemConfiguration.CloudsPage;
 import school.redrover.page.CredentialsConfigurePage;
 import school.redrover.page.systemConfiguration.PluginsPage;
@@ -79,10 +80,10 @@ public class ManageJenkinsPage extends BasePage {
         return new AppearancePage(getDriver());
     }
 
-    public AppearancePage clickNodesButton() {
+    public NodesPage clickNodesButton() {
         nodesButton.click();
 
-        return new AppearancePage(getDriver());
+        return new NodesPage(getDriver());
     }
 
     public PluginsPage openPluginsPage() {

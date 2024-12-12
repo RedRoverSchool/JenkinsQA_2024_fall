@@ -7,9 +7,8 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
-import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
-import school.redrover.page.AppearancePage;
+import school.redrover.page.manage.AppearancePage;
 import school.redrover.page.home.HomePage;
 import school.redrover.runner.BaseTest;
 import school.redrover.runner.ProjectUtils;
@@ -20,6 +19,8 @@ import java.util.Arrays;
 import java.util.List;
 
 public class ManageJenkinsTest extends BaseTest {
+
+    private final String MY_NODE_NAME = "My name of node";
 
     @Test
     public void testCheckTitle() {
@@ -279,27 +280,17 @@ public class ManageJenkinsTest extends BaseTest {
 
     @Test
     public void testCreationAndDisplayNewNameOnNodesPage() {
-        final String myNodeName = "My name of node";
-        getDriver().findElement(By.xpath("//a[@href='/manage']")).click();
+        List<String> itemNoteList = new HomePage(getDriver())
+                .openManageJenkinsPage()
+                .clickNodesButton()
+                .clickButtonNewNode()
+                .inputName(MY_NODE_NAME)
+                .clickCheckboxAgent()
+                .clickButtonCreate()
+                .clickButtonCreate()
+                .getNodeList();
 
-        getDriver().findElement(By.xpath("//dt[.='Nodes']")).click();
-
-        getDriver().findElement(By.xpath("//a[@href='new']")).click();
-
-        getDriver().findElement(By.xpath("//*[@id='name']")).sendKeys(myNodeName);
-        getDriver().findElement(By.xpath("//*[.='Permanent Agent']")).click();
-        getDriver().findElement(By.xpath("//button[@name='Submit']")).click();
-
-        getDriver().findElement(By.xpath("//button[@name='Submit']")).click();
-
-        List<WebElement> nodes = getDriver().findElements(By.xpath("//a[@class='jenkins-table__link model-link inside']"));
-        List<String> nodesNames = new ArrayList<>();
-        for (WebElement element : nodes) {
-            String text = element.getText();
-            nodesNames.add(text);
-        }
-
-        Assert.assertListContainsObject(nodesNames, myNodeName, myNodeName);
+        Assert.assertListContainsObject(itemNoteList, MY_NODE_NAME, MY_NODE_NAME);
     }
 
     @Test
