@@ -145,10 +145,10 @@ public class MultibranchPipelineTest extends BaseTest {
     @Test(dependsOnMethods = "testVerifyErrorMessageWhenCreateWithSameName")
     public void testCreateJobAndJobNameVisibleOnStatusPage() {
         String title = new HomePage(getDriver())
-                .openMultibranchPipelineProject(MULTIBRANCH_PIPELINE_NAME2)
+                .openMultibranchPipelineProject(MULTIBRANCH_PIPELINE_NAME)
                 .getItemName();
 
-        Assert.assertEquals(title, MULTIBRANCH_PIPELINE_NAME2);
+        Assert.assertEquals(title, MULTIBRANCH_PIPELINE_NAME);
     }
 
     @Test(dependsOnMethods = "testCreateJobAndJobNameVisibleOnStatusPage")
