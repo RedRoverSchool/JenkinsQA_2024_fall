@@ -12,6 +12,7 @@ import school.redrover.page.folder.FolderConfigPage;
 import school.redrover.page.folder.FolderProjectPage;
 import school.redrover.page.freestyle.FreestyleProjectPage;
 import school.redrover.page.freestyle.FreestyleRenamePage;
+import school.redrover.page.manage.ManageJenkinsPage;
 import school.redrover.page.multiConfiguration.MultiConfigurationProjectPage;
 import school.redrover.page.multibranch.MultibranchPipelineProjectPage;
 import school.redrover.page.organizationFolder.OrganizationFolderProjectPage;
