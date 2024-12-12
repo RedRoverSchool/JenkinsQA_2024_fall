@@ -1,9 +1,13 @@
 package school.redrover.page;
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.FindBys;
 import school.redrover.page.base.BasePage;
+
+import java.util.List;
 
 public class AppearancePage extends BasePage {
 
@@ -68,5 +72,9 @@ public class AppearancePage extends BasePage {
 
     public String getColorBackground() {
         return colorBackground.getCssValue("background");
+    }
+
+    public List<WebElement> getThemeList() {
+        return getDriver().findElements(By.xpath("//section[@class='jenkins-section']"));
     }
 }

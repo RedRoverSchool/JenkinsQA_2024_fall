@@ -304,14 +304,12 @@ public class ManageJenkinsTest extends BaseTest {
 
     @Test
     public void testThemesOnPage() {
-        WebElement manageButton = getDriver().findElement(By.xpath("//a[@href='/manage']"));
-        manageButton.click();
-        WebElement appearanceButton = getDriver().findElement(By.xpath("//a[@href='appearance']"));
-        appearanceButton.click();
+        List<WebElement> themeList = new HomePage(getDriver())
+                .openManageJenkinsPage()
+                .clickAppearanceButton()
+                .getThemeList();
 
-        List<WebElement> selectTheme = getDriver().findElements(By.xpath("//section[@class='jenkins-section']"));
-
-        Assert.assertEquals(selectTheme.size(), 3, "Number of elements is not equal 3");
+        Assert.assertEquals(themeList.size(), 3);
     }
 
     @Test
