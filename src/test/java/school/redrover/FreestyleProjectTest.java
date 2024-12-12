@@ -481,6 +481,18 @@ public class FreestyleProjectTest extends BaseTest {
         Assert.assertEquals(secondBuild, "#2");
     }
 
+
+    @Test(dependsOnMethods = "testBuildHistoryIsEmpty")
+    public void testDeleteViaBreadcrumbDropdown() {
+        List<String> projectList = new HomePage(getDriver())
+                .openFreestyleProject(PROJECT_NAME)
+                .openBreadcrumbDropdown()
+                .clickDeleteBreadcrumbDropdownAndConfirm()
+                .getItemList();
+
+        Assert.assertListNotContainsObject(projectList, PROJECT_NAME, "Project is not deleted.");
+    }
+
     @Test
     public void testCreateFreestyleProjectFromExistingOne () {
         String secondProjectName = "Second" + PROJECT_NAME;
