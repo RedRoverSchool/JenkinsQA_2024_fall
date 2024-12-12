@@ -204,7 +204,8 @@ public class MultibranchPipelineTest extends BaseTest {
                 .clickSaveButton()
                 .gotoHomePage()
                 .openMultibranchPipelineProject(MULTIBRANCH_PIPELINE_NAME)
-                .deleteJobUsingDropdownBreadcrumbJobPage()
+                .openBreadcrumbDropdown()
+                .clickDeleteBreadcrumbDropdownAndConfirm()
                 .getItemList();
 
         Assert.assertListNotContainsObject(projectList, MULTIBRANCH_PIPELINE_NAME,
