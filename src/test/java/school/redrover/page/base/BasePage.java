@@ -8,7 +8,7 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import school.redrover.page.*;
 import school.redrover.page.home.HomePage;
-import school.redrover.page.home.ManageJenkinsPage;
+import school.redrover.page.manage.ManageJenkinsPage;
 
 import java.util.List;
 
