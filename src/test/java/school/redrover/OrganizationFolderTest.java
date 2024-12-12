@@ -117,6 +117,7 @@ public class OrganizationFolderTest extends BaseTest {
                 .clickConfigure()
                 .getListOfItemsSidebar();
 
+
         Assert.assertEquals(listOfItemsSidebar.size(), 7);
         Assert.assertEquals(
                 listOfItemsSidebar,
