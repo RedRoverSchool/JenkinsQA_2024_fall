@@ -483,4 +483,19 @@ public class PipelineProjectTest extends BaseTest {
         Assert.assertEquals(icons.get(1).getCssValue("color"), "rgba(230, 0, 31, 1)");
     }
 
+    @Test
+    public void testCreatePipelineFromExistingOne () {
+        final String secondProjectName = "Second" + PROJECT_NAME;
+        TestUtils.createPipelineProject(getDriver(), PROJECT_NAME);
+
+        List<String> itemNameList = new HomePage(getDriver())
+                .clickNewItem()
+                .enterItemName(secondProjectName)
+                .enterName(PROJECT_NAME)
+                .clickOkAndGoToPipelineConfigPage()
+                .gotoHomePage()
+                .getItemList();
+
+        Assert.assertTrue(itemNameList.contains(secondProjectName));
+    }
 }
