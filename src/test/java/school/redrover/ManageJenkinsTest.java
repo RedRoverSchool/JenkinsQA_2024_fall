@@ -332,18 +332,17 @@ public class ManageJenkinsTest extends BaseTest {
         Assert.assertEquals(changedColor, initialColorTheme, "Color of theme did not changed");
     }
 
-    @Ignore
     @Test
     public void testThemesDark() {
-        getDriver().findElement(By.cssSelector("[href='/manage']")).click();
-        getDriver().findElement(By.cssSelector("[href='appearance']")).click();
-        getDriver().findElement(By.xpath("//label[@for='radio-block-0']")).click();
+        String attributeData = new HomePage(getDriver())
+                .openManageJenkinsPage()
+                .clickAppearanceButton()
+                .clickSelectDarkThemes()
+                .clickCheckboxDifferentTheme()
+                .clickApplyButton()
+                .getAttributeData();
 
-        getDriver().findElement(By.cssSelector("[class='attach-previous ']")).click();
-        getDriver().findElement(By.xpath("//button[@name='Apply']")).click();
-
-        Assert.assertEquals(getDriver().findElement(By.cssSelector("html[data-theme]")).
-                getAttribute("data-theme"), "dark");
+        Assert.assertEquals(attributeData, "dark");
     }
 
 
@@ -365,7 +364,7 @@ public class ManageJenkinsTest extends BaseTest {
         String attributeData = new HomePage(getDriver())
                 .openManageJenkinsPage()
                 .clickAppearanceButton()
-                .clickSelectDarkThemes()
+                .clickSelectSystemThemes()
                 .clickCheckboxDifferentTheme()
                 .getAttributeData();
 

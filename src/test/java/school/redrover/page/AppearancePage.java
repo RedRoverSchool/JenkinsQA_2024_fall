@@ -7,14 +7,17 @@ import school.redrover.page.base.BasePage;
 
 public class AppearancePage extends BasePage {
 
-    @FindBy(xpath = "//label[@for='radio-block-1']")
+    @FindBy(xpath = "//label[@for='radio-block-0']")
     private WebElement selectDarkThemes;
 
-    @FindBy(xpath = "//button[@name='Apply']")
-    private WebElement selectApplyButton;
+    @FindBy(xpath = "//label[@for='radio-block-1']")
+    private WebElement selectSystemThemes;
 
     @FindBy(xpath = "//label[@for='radio-block-2']")
     private WebElement selectDefaultThemes;
+
+    @FindBy(xpath = "//button[@name='Apply']")
+    private WebElement selectApplyButton;
 
     @FindBy(css = "[class='attach-previous ']")
     private WebElement checkboxDifferentTheme;
@@ -28,6 +31,12 @@ public class AppearancePage extends BasePage {
 
     public AppearancePage clickSelectDarkThemes() {
         selectDarkThemes.click();
+
+        return this;
+    }
+
+    public AppearancePage clickSelectSystemThemes() {
+        selectSystemThemes.click();
 
         return this;
     }
