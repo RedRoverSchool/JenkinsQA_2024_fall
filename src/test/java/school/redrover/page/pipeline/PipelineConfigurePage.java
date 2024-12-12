@@ -94,5 +94,4 @@ public class PipelineConfigurePage extends BaseConfigPage<PipelineConfigurePage,
         return getWait2().until(ExpectedConditions.visibilityOf(scriptText))
                 .getText();
     }
-
 }
