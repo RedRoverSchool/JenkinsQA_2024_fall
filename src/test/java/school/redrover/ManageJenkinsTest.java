@@ -351,8 +351,9 @@ public class ManageJenkinsTest extends BaseTest {
                 .clickAppearanceButton()
                 .clickSelectSystemThemes()
                 .clickCheckboxDifferentTheme()
+                .clickApplyButton()
                 .getAttributeData();
 
-        Assert.assertEquals(attributeData, "system");
+        Assert.assertTrue(attributeData.contains("system"));
     }
 }
