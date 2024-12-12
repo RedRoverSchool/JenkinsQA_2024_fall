@@ -1,6 +1,5 @@
 package school.redrover.page;
 
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -10,6 +9,12 @@ public class AppearancePage extends BasePage {
 
     @FindBy(xpath = "//label[@for='radio-block-1']")
     private WebElement selectDarkThemes;
+
+    @FindBy(xpath = "//button[@name='Apply']")
+    private WebElement selectApplyButton;
+
+    @FindBy(xpath = "//label[@for='radio-block-2']")
+    private WebElement selectDefaultThemes;
 
     @FindBy(css = "[class='attach-previous ']")
     private WebElement checkboxDifferentTheme;
@@ -27,13 +32,25 @@ public class AppearancePage extends BasePage {
         return this;
     }
 
+    public AppearancePage clickSelectDefaultThemes() {
+        selectDefaultThemes.click();
+
+        return this;
+    }
+
+    public AppearancePage clickApplyButton() {
+        selectApplyButton.click();
+
+        return this;
+    }
+
     public AppearancePage clickCheckboxDifferentTheme() {
         checkboxDifferentTheme.click();
 
         return this;
     }
 
-    public Boolean isThemeApplied() {
-        return dataTheme.getAttribute("data-theme").contains("system");
+    public String getAttributeData() {
+        return dataTheme.getAttribute("data-theme");
     }
 }

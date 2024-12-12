@@ -349,27 +349,26 @@ public class ManageJenkinsTest extends BaseTest {
 
     @Test
     public void testThemesDefault() {
-        getDriver().findElement(By.cssSelector("[href='/manage']")).click();
-        getDriver().findElement(By.cssSelector("[href='appearance']")).click();
-        getDriver().findElement(By.xpath("//label[@for='radio-block-2']")).click();
+        String attributeData = new HomePage(getDriver())
+                .openManageJenkinsPage()
+                .clickAppearanceButton()
+                .clickSelectDefaultThemes()
+                .clickCheckboxDifferentTheme()
+                .clickApplyButton()
+                .getAttributeData();
 
-        getDriver().findElement(By.cssSelector("[class='attach-previous ']")).click();
-        getDriver().findElement(By.xpath("//button[@name='Apply']")).click();
-
-        Assert.assertEquals(getDriver().findElement(By.cssSelector("html[data-theme]")).
-                getAttribute("data-theme"), "none");
+        Assert.assertEquals(attributeData, "none");
     }
-
 
     @Test
     public void testThemesSystem() {
-        Boolean isThemeApplied = new HomePage(getDriver())
+        String attributeData = new HomePage(getDriver())
                 .openManageJenkinsPage()
                 .clickAppearanceButton()
                 .clickSelectDarkThemes()
                 .clickCheckboxDifferentTheme()
-                .isThemeApplied();
+                .getAttributeData();
 
-        Assert.assertTrue(isThemeApplied);
+        Assert.assertEquals(attributeData, "system");
     }
 }
