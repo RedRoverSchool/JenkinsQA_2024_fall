@@ -7,8 +7,8 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
-import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
+import school.redrover.page.manage.AppearancePage;
 import school.redrover.page.home.HomePage;
 import school.redrover.runner.BaseTest;
 import school.redrover.runner.ProjectUtils;
@@ -19,6 +19,8 @@ import java.util.Arrays;
 import java.util.List;
 
 public class ManageJenkinsTest extends BaseTest {
+
+    private final String MY_NODE_NAME = "My name of node";
 
     @Test
     public void testCheckTitle() {
@@ -278,98 +280,80 @@ public class ManageJenkinsTest extends BaseTest {
 
     @Test
     public void testCreationAndDisplayNewNameOnNodesPage() {
-        final String myNodeName = "My name of node";
-        getDriver().findElement(By.xpath("//a[@href='/manage']")).click();
+        List<String> itemNoteList = new HomePage(getDriver())
+                .openManageJenkinsPage()
+                .clickNodesButton()
+                .clickButtonNewNode()
+                .inputName(MY_NODE_NAME)
+                .clickCheckboxAgent()
+                .clickButtonCreate()
+                .clickButtonCreate()
+                .getNodeList();
 
-        getDriver().findElement(By.xpath("//dt[.='Nodes']")).click();
-
-        getDriver().findElement(By.xpath("//a[@href='new']")).click();
-
-        getDriver().findElement(By.xpath("//*[@id='name']")).sendKeys(myNodeName);
-        getDriver().findElement(By.xpath("//*[.='Permanent Agent']")).click();
-        getDriver().findElement(By.xpath("//button[@name='Submit']")).click();
-
-        getDriver().findElement(By.xpath("//button[@name='Submit']")).click();
-
-        List<WebElement> nodes = getDriver().findElements(By.xpath("//a[@class='jenkins-table__link model-link inside']"));
-        List<String> nodesNames = new ArrayList<>();
-        for (WebElement element : nodes) {
-            String text = element.getText();
-            nodesNames.add(text);
-        }
-
-        Assert.assertListContainsObject(nodesNames, myNodeName, myNodeName);
+        Assert.assertListContainsObject(itemNoteList, MY_NODE_NAME, MY_NODE_NAME);
     }
 
     @Test
     public void testThemesOnPage() {
-        WebElement manageButton = getDriver().findElement(By.xpath("//a[@href='/manage']"));
-        manageButton.click();
-        WebElement appearanceButton = getDriver().findElement(By.xpath("//a[@href='appearance']"));
-        appearanceButton.click();
+        List<WebElement> themeList = new HomePage(getDriver())
+                .openManageJenkinsPage()
+                .clickAppearanceButton()
+                .getThemeList();
 
-        List<WebElement> selectTheme = getDriver().findElements(By.xpath("//section[@class='jenkins-section']"));
-
-        Assert.assertEquals(selectTheme.size(), 3, "Number of elements is not equal 3");
+        Assert.assertEquals(themeList.size(), 3);
     }
 
     @Test
     public void testPickDarkTheme() {
-        WebElement manageButton = getDriver().findElement(By.xpath("//a[@href='/manage']"));
-        manageButton.click();
-        WebElement appearanceButton = getDriver().findElement(By.xpath("//a[@href='appearance']"));
-        appearanceButton.click();
+        String initialColorTheme = new HomePage(getDriver())
+                .openManageJenkinsPage()
+                .clickAppearanceButton()
+                .getColorBackground();
 
-        WebElement changedColorArea = getDriver().findElement(By.xpath("//section[@class='jenkins-section']"));
+        String changedColor = new AppearancePage(getDriver())
+                .clickSelectDarkThemes()
+                .getColorBackground();
 
-        String initialColorTheme = changedColorArea.getCssValue("background");
-
-        WebElement darkThemeIcon = getDriver().findElement(By.xpath("//label[@for='radio-block-0']"));
-        darkThemeIcon.click();
-
-        String changedColor = changedColorArea.getCssValue("background");
-
-        Assert.assertEquals(changedColor, initialColorTheme, "Color of theme did not changed");
+        Assert.assertEquals(initialColorTheme, changedColor);
     }
 
-    @Ignore
     @Test
     public void testThemesDark() {
-        getDriver().findElement(By.cssSelector("[href='/manage']")).click();
-        getDriver().findElement(By.cssSelector("[href='appearance']")).click();
-        getDriver().findElement(By.xpath("//label[@for='radio-block-0']")).click();
+        String attributeData = new HomePage(getDriver())
+                .openManageJenkinsPage()
+                .clickAppearanceButton()
+                .clickSelectDarkThemes()
+                .clickCheckboxDifferentTheme()
+                .clickApplyButton()
+                .getAttributeData();
 
-        getDriver().findElement(By.cssSelector("[class='attach-previous ']")).click();
-        getDriver().findElement(By.xpath("//button[@name='Apply']")).click();
-
-        Assert.assertEquals(getDriver().findElement(By.cssSelector("html[data-theme]")).
-                getAttribute("data-theme"), "dark");
+        Assert.assertEquals(attributeData, "dark");
     }
 
 
     @Test
     public void testThemesDefault() {
-        getDriver().findElement(By.cssSelector("[href='/manage']")).click();
-        getDriver().findElement(By.cssSelector("[href='appearance']")).click();
-        getDriver().findElement(By.xpath("//label[@for='radio-block-2']")).click();
+        String attributeData = new HomePage(getDriver())
+                .openManageJenkinsPage()
+                .clickAppearanceButton()
+                .clickSelectDefaultThemes()
+                .clickCheckboxDifferentTheme()
+                .clickApplyButton()
+                .getAttributeData();
 
-        getDriver().findElement(By.cssSelector("[class='attach-previous ']")).click();
-        getDriver().findElement(By.xpath("//button[@name='Apply']")).click();
-
-        Assert.assertEquals(getDriver().findElement(By.cssSelector("html[data-theme]")).
-                getAttribute("data-theme"), "none");
+        Assert.assertEquals(attributeData, "none");
     }
-
 
     @Test
     public void testThemesSystem() {
-        Boolean isThemeApplied = new HomePage(getDriver())
+        String attributeData = new HomePage(getDriver())
                 .openManageJenkinsPage()
                 .clickAppearanceButton()
-                .clickSelectDarkThemes()
+                .clickSelectSystemThemes()
                 .clickCheckboxDifferentTheme()
-                .isThemeApplied();
+                .clickApplyButton()
+                .getAttributeData();
 
-        Assert.assertTrue(isThemeApplied);
+        Assert.assertTrue(attributeData.contains("system"));
     }
 }
