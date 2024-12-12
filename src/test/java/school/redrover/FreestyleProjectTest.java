@@ -3,6 +3,7 @@ package school.redrover;
 import org.testng.Assert;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
+import school.redrover.page.freestyle.FreestyleConfigPage;
 import school.redrover.page.freestyle.FreestyleProjectPage;
 import school.redrover.page.home.HomePage;
 import school.redrover.runner.BaseTest;
@@ -490,5 +491,21 @@ public class FreestyleProjectTest extends BaseTest {
                 .getItemList();
 
         Assert.assertListNotContainsObject(projectList, PROJECT_NAME, "Project is not deleted.");
+    }
+
+    @Test
+    public void testCreateFreestyleProjectFromExistingOne () {
+        String secondProjectName = "Second" + PROJECT_NAME;
+        TestUtils.createFreestyleProject(getDriver(), PROJECT_NAME);
+
+        List<String> itemNameList = new HomePage(getDriver())
+                .clickNewItem()
+                .enterItemName(secondProjectName)
+                .enterName(PROJECT_NAME)
+                .clickOkLeadingToCertainPage(new FreestyleConfigPage(getDriver()))
+                .gotoHomePage()
+                .getItemList();
+
+        Assert.assertTrue(itemNameList.contains(secondProjectName));
     }
 }
