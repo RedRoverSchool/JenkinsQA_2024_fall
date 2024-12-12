@@ -1,5 +1,6 @@
 package school.redrover.page.base;
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -30,6 +31,9 @@ public abstract class BaseConfigPage<Self extends BaseConfigPage<?, ?>, ProjectP
 
     @FindBy(name = "_.displayNameOrNull")
     private WebElement displayNameInput;
+
+    @FindBy(xpath = "//h1")
+    private WebElement pageTitle;
 
     public BaseConfigPage(WebDriver driver) {
         super(driver);
@@ -82,5 +86,9 @@ public abstract class BaseConfigPage<Self extends BaseConfigPage<?, ?>, ProjectP
         setDisplayName(name);
 
         return (Self) this;
+    }
+
+    public String getTitleOfConfigPage() {
+        return pageTitle.getText();
     }
 }
