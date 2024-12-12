@@ -19,6 +19,12 @@ public class OrganizationFolderConfigPage extends BaseConfigPage<OrganizationFol
     @FindBy(xpath = "(//select[contains(@class, 'dropdownList')])[2]")
     private WebElement iconOptions;
 
+    @FindBy(xpath = "//button[@title='Delete']")
+    private WebElement closeButton;
+
+    @FindBy(xpath = "//div/div[@class='textarea-preview']")
+    private WebElement textareaPreview;
+
     public OrganizationFolderConfigPage(WebDriver driver) {
         super(driver);
     }
@@ -36,13 +42,17 @@ public class OrganizationFolderConfigPage extends BaseConfigPage<OrganizationFol
     }
 
     public String getPreviewStyleAttribute() {
-        return getDriver().findElement(By.xpath("//div/div[@class='textarea-preview']")).getAttribute("style");
+        return textareaPreview.getAttribute("style");
     }
 
     public OrganizationFolderConfigPage selectDefaultIcon() {
         new Select(iconOptions).selectByVisibleText("Default Icon");
 
         return this;
+    }
+
+    public String getCloseButtonTooltip() {
+        return closeButton.getAttribute("tooltip");
     }
 }
 
