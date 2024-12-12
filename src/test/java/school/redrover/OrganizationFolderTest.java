@@ -1,6 +1,5 @@
 package school.redrover;
 
-import org.openqa.selenium.By;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import school.redrover.page.home.HomePage;
@@ -16,14 +15,6 @@ public class OrganizationFolderTest extends BaseTest {
     private static final String DESCRIPTION = "Description";
     private static final String NEW_DISPLAY_NAME = "NewNameOrganizationFolder";
     private static final String NEW_DESCRIPTION = "NewDescription";
-
-    private void clickElement(By by) {
-        getDriver().findElement(by).click();
-    }
-
-    private String textElement(By by) {
-        return getDriver().findElement(by).getText();
-    }
 
     @Test
     public void testCreate() {
@@ -90,11 +81,12 @@ public class OrganizationFolderTest extends BaseTest {
 
     @Test(dependsOnMethods = {"testEditDescription", "testEditDisplayName"})
     public void testDelete() {
-        clickElement(By.xpath("//td/a[@class='jenkins-table__link model-link inside']"));
-        clickElement(By.xpath("//a[@data-title='Delete Organization Folder']"));
-        clickElement(By.xpath("//button[@data-id='ok']"));
+        String text = new HomePage(getDriver())
+                .openOrganisationFolderProject(NEW_DISPLAY_NAME)
+                .clickDeleteButtonSidebarAndConfirm()
+                .getWelcomeTitle();
 
-        Assert.assertEquals(textElement(By.tagName("h1")), "Welcome to Jenkins!");
+        Assert.assertEquals(text, "Welcome to Jenkins!");
     }
 
     @Test
