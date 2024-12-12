@@ -26,7 +26,6 @@ public class FreestyleProjectTest extends BaseTest {
                 {"$"}, {"%"}, {"^"}, {"*"}, {"|"}, {"/"}, {"<"}, {">"},
                 {"["}, {";"}
         };
-
     }
 
     @Test
@@ -453,6 +452,7 @@ public class FreestyleProjectTest extends BaseTest {
 
         Assert.assertEquals(changeConfig.size(), 2);
     }
+
     @Test
     public void testWorkspaceIsOpened() {
         String workspace = new HomePage(getDriver())
@@ -480,7 +480,6 @@ public class FreestyleProjectTest extends BaseTest {
 
         Assert.assertEquals(secondBuild, "#2");
     }
-
 
     @Test(dependsOnMethods = "testBuildHistoryIsEmpty")
     public void testDeleteViaBreadcrumbDropdown() {

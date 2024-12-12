@@ -14,7 +14,6 @@ import school.redrover.runner.BaseTest;
 import school.redrover.runner.ProjectUtils;
 
 import java.time.Duration;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -109,7 +108,6 @@ public class ManageJenkinsTest extends BaseTest {
                 .getAttribute("placeholder");
 
         Assert.assertEquals(searchField, "Search settings");
-
     }
 
     @Test

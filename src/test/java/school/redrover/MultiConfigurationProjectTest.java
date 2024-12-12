@@ -123,7 +123,6 @@ public class MultiConfigurationProjectTest extends BaseTest {
                 .getWelcomeTitle();
 
         Assert.assertEquals(welcomeText, "Welcome to Jenkins!");
-
     }
 
     @Test
