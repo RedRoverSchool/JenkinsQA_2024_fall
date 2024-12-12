@@ -158,6 +158,8 @@ public class NewItemTest extends BaseTest {
     public void testCreateNewItemWithEmptyNameField() {
         getDriver().findElement(By.xpath("//a[@href='newJob']")).click();
 
+        // Помогите переделать мой класс по POM. Нужга ваша помощь я потерялся !!!!!!
+
         List<WebElement> items = getDriver().findElements(By.xpath("//div[@class='desc']"));
 
         JavascriptExecutor js = (JavascriptExecutor) getDriver();
