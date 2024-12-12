@@ -1,4 +1,4 @@
-package school.redrover.page.home;
+package school.redrover.page.manage;
 
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
@@ -6,7 +6,6 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import school.redrover.page.AppearancePage;
 import school.redrover.page.systemConfiguration.CloudsPage;
 import school.redrover.page.CredentialsConfigurePage;
 import school.redrover.page.systemConfiguration.PluginsPage;
@@ -63,6 +62,9 @@ public class ManageJenkinsPage extends BasePage {
     @FindBy(xpath = "//a[@href='appearance']")
     private WebElement appearanceButton;
 
+    @FindBy(xpath = "//dt[.='Nodes']")
+    private WebElement nodesButton;
+
     public ManageJenkinsPage(WebDriver driver) {
         super(driver);
     }
@@ -73,6 +75,12 @@ public class ManageJenkinsPage extends BasePage {
 
     public AppearancePage clickAppearanceButton() {
         appearanceButton.click();
+
+        return new AppearancePage(getDriver());
+    }
+
+    public AppearancePage clickNodesButton() {
+        nodesButton.click();
 
         return new AppearancePage(getDriver());
     }
