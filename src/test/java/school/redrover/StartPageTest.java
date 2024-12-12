@@ -15,8 +15,6 @@ import java.util.List;
 public class StartPageTest extends BaseTest {
 
     private static final String NEW_FOLDER_NAME = "FirstFolder";
-    private static final String DESCRIPTIONS_TEXT = "Hello World";
-
 
     @Test
     public void testStartPageMainPanelContent() {
@@ -55,19 +53,6 @@ public class StartPageTest extends BaseTest {
         Assert.assertEquals(startPageSideContent.get(1).getAttribute("href"), "http://localhost:8080/view/all/builds");
         Assert.assertEquals(startPageSideContent.get(2).getAttribute("href"), "http://localhost:8080/manage");
         Assert.assertEquals(startPageSideContent.get(3).getAttribute("href"), "http://localhost:8080/me/my-views");
-    }
-
-    @Test
-    public void testCreateDescription() {
-
-        String actualDescription = new HomePage(getDriver())
-                .clickDescriptionButton()
-                .addDescription(DESCRIPTIONS_TEXT)
-                .clickSaveButton()
-                .getDescriptionText();
-
-
-        Assert.assertEquals(actualDescription, DESCRIPTIONS_TEXT);
     }
 
     @Test

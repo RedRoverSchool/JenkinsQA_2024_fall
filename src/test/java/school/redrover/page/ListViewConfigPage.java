@@ -3,13 +3,21 @@ package school.redrover.page;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import school.redrover.page.base.BasePage;
 import school.redrover.runner.TestUtils;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 
 public class ListViewConfigPage extends BasePage {
+
+    @FindBy(xpath = "//div[@class='repeated-chunk__header']")
+    private List<WebElement> columnList;
+
+    @FindBy(xpath = "//button[@suffix='columns']")
+    private WebElement columnButton;
 
     public ListViewConfigPage(WebDriver driver) {
         super(driver);
@@ -30,7 +38,7 @@ public class ListViewConfigPage extends BasePage {
     public ListViewConfigPage clickDeleteColumnByName(String name) {
         TestUtils.scrollToBottomWithJS(getDriver());
 
-        WebElement columnOption = getDriver().findElements(By.xpath("//div[@class='repeated-chunk__header']"))
+        WebElement columnOption = columnList
                 .stream()
                 .filter(column -> column.getText().trim().equals(name))
                 .findFirst()
@@ -48,7 +56,7 @@ public class ListViewConfigPage extends BasePage {
     public ListViewConfigPage clickAddColumn() {
         TestUtils.scrollToBottomWithJS(getDriver());
 
-        getWait5().until(ExpectedConditions.elementToBeClickable(By.xpath("//button[@suffix='columns']"))).click();
+        getWait5().until(ExpectedConditions.elementToBeClickable(columnButton)).click();
 
         return this;
     }

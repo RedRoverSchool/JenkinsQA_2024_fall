@@ -89,8 +89,7 @@ public class FreestyleProjectTest extends BaseTest {
                 .clickMyViewsButton()
                 .clickNewItem()
                 .enterItemName(PROJECT_NAME)
-                .selectTypeProject(FREESTYLE_PROJECT)
-                .clickOkButton()
+                .selectFreestyleProjectAndClickOk()
                 .gotoHomePage()
                 .getItemList();
 
@@ -452,5 +451,32 @@ public class FreestyleProjectTest extends BaseTest {
                 .getListOfStatuses();
 
         Assert.assertEquals(changeConfig.size(), 2);
+    }
+    @Test
+    public void testWorkspaceIsOpened() {
+        String workspace = new HomePage(getDriver())
+                .clickNewItem()
+                .enterItemName(PROJECT_NAME)
+                .selectFreestyleProject()
+                .selectFreestyleProjectAndClickOk()
+                .clickSaveButton()
+                .clickBuildNowSidebar()
+                .clickWorkspaceSidebar()
+                .getBreadCrumb();
+
+        Assert.assertEquals(workspace, "Workspace of " + PROJECT_NAME + " on Built-In Node");
+    }
+
+    @Test(dependsOnMethods = "testWorkspaceIsOpened")
+    public void testLastBuildIsOpened() {
+
+        String secondBuild = new HomePage(getDriver())
+                .openFreestyleProject(PROJECT_NAME)
+                .clickBuildNowSidebar()
+                .clickWorkspaceSidebar()
+                .clickOnSuccessBuildIconForLastBuild()
+                .getBreadCrumb();
+
+        Assert.assertEquals(secondBuild, "#2");
     }
 }

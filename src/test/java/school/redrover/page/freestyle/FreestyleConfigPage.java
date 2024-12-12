@@ -43,13 +43,6 @@ public class FreestyleConfigPage extends BaseConfigPage<FreestyleConfigPage, Fre
         return new FreestyleProjectPage(getDriver());
     }
 
-    public FreestyleProjectPage typeDescription (String description) {
-        descriptionField.sendKeys(description);
-        submitButton.click();
-
-        return new FreestyleProjectPage(getDriver());
-    }
-
     public FreestyleConfigPage addBuildStep(String buildStep) {
         TestUtils.scrollToBottomWithJS(getDriver());
         addBuildStepButton.click();
@@ -65,12 +58,6 @@ public class FreestyleConfigPage extends BaseConfigPage<FreestyleConfigPage, Fre
         executeWindowsBatchCommandField.sendKeys(command);
 
         return this;
-    }
-
-    public FreestyleProjectPage clickSubmitButton() {
-        submitButton.click();
-
-        return  new FreestyleProjectPage(getDriver());
     }
 
     public FreestyleConfigPage clickAddBuildStep() {

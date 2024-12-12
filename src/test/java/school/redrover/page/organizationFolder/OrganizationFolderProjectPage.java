@@ -1,5 +1,6 @@
 package school.redrover.page.organizationFolder;
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -18,6 +19,12 @@ public class OrganizationFolderProjectPage extends BaseProjectPage<OrganizationF
 
     @FindBy(id="view-message")
     private WebElement descriptionText;
+
+    @FindBy(css = "h1 > svg")
+    private WebElement titleIcon;
+
+    @FindBy(id="main-panel")
+    private WebElement mainPanel;
 
     public OrganizationFolderProjectPage(WebDriver driver) {
         super(driver);
@@ -39,11 +46,16 @@ public class OrganizationFolderProjectPage extends BaseProjectPage<OrganizationF
         return new OrganizationFolderConfigPage(getDriver());
     }
 
-    public String getName() {
-        return name.getText();
-    }
-
     public String getDescription() {
         return getWait5().until(ExpectedConditions.visibilityOf(descriptionText)).getText();
+    }
+
+    public String getIconAttributeTitle() {
+        return titleIcon.getAttribute("title");
+    }
+
+    public String getMainPanelText() {
+        return mainPanel.getText();
+
     }
 }

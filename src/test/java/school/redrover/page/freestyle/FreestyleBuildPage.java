@@ -1,5 +1,6 @@
 package school.redrover.page.freestyle;
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -37,6 +38,9 @@ public class FreestyleBuildPage extends BasePage {
 
     @FindBy(name = "Submit")
     private WebElement deleteButton;
+
+    @FindBy(xpath = "//*[@id='breadcrumbs']/li[5]")
+    private WebElement breadCrumbs;
 
     public FreestyleBuildPage(WebDriver driver) {
         super(driver);
@@ -103,5 +107,9 @@ public class FreestyleBuildPage extends BasePage {
         getWait10().until(ExpectedConditions.visibilityOf(deleteButton)).click();
 
         return new FreestyleProjectPage(getDriver());
+    }
+
+    public String getBreadCrumb() {
+        return breadCrumbs.getText();
     }
 }
