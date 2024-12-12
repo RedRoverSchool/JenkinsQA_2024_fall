@@ -388,4 +388,15 @@ public class FolderTest extends BaseTest {
 
         Assert.assertEquals(actualErrorMessage, ERROR_MESSAGE_ON_RENAME_WITH_SAME_NAME);
     }
+
+    @Test(dependsOnMethods = "testErrorMessageOnRenameFolderWithSameName")
+    public void testDeleteViaBreadcrumbDropdown() {
+        List<String> projectList = new HomePage(getDriver())
+                .openFolder(FOLDER_NAME)
+                .openBreadcrumbDropdown()
+                .clickDeleteBreadcrumbDropdownAndConfirm()
+                .getItemList();
+
+        Assert.assertListNotContainsObject(projectList, FOLDER_NAME, "Folder is not deleted.");
+    }
 }

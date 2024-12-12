@@ -323,7 +323,7 @@ public class PipelineProjectTest extends BaseTest {
         Assert.assertTrue(isDisplayed);
     }
 
-    @Test()
+    @Test
     public void testDeleteByChevronBreadcrumb() {
         String welcomeTitle = new HomePage(getDriver())
                 .clickNewItem()
@@ -331,8 +331,8 @@ public class PipelineProjectTest extends BaseTest {
                 .selectPipelineAndClickOk()
                 .gotoHomePage()
                 .openPipelineProject(PROJECT_NAME)
-                .openDropDownMenuByChevronBreadcrumb(PROJECT_NAME)
-                .clickDeleteButtonSidebarAndConfirm()
+                .openBreadcrumbDropdown()
+                .clickDeleteBreadcrumbDropdownAndConfirm()
                 .getWelcomeTitle();
 
         Assert.assertEquals(welcomeTitle, "Welcome to Jenkins!");
