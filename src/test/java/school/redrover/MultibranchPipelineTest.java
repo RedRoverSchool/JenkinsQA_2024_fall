@@ -142,22 +142,22 @@ public class MultibranchPipelineTest extends BaseTest {
         }
     }
 
-    @Test(dependsOnMethods = "testVerifyErrorMessageWhenCreateWithSameName")
+    @Test(dependsOnMethods = "testRenameMultibranchViaSideBar")
     public void testCreateJobAndJobNameVisibleOnStatusPage() {
         String title = new HomePage(getDriver())
-                .openMultibranchPipelineProject(MULTIBRANCH_PIPELINE_NAME)
+                .openMultibranchPipelineProject(MULTIBRANCH_PIPELINE_NAME2)
                 .getItemName();
 
-        Assert.assertEquals(title, MULTIBRANCH_PIPELINE_NAME);
+        Assert.assertEquals(title, MULTIBRANCH_PIPELINE_NAME2);
     }
 
     @Test(dependsOnMethods = "testCreateJobAndJobNameVisibleOnStatusPage")
     public void testCreateJobAndJobNameVisibleOnBreadcrumb() {
         String breadcrumbName = new HomePage(getDriver())
-                .openMultibranchPipelineProject(MULTIBRANCH_PIPELINE_NAME)
+                .openMultibranchPipelineProject(MULTIBRANCH_PIPELINE_NAME2)
                 .getBreadcrumbName();
 
-        Assert.assertEquals(breadcrumbName, MULTIBRANCH_PIPELINE_NAME);
+        Assert.assertEquals(breadcrumbName, MULTIBRANCH_PIPELINE_NAME2);
     }
 
     @Test
