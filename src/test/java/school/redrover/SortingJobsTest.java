@@ -13,6 +13,7 @@ import java.util.Comparator;
 import java.util.List;
 
 public class SortingJobsTest extends BaseTest {
+
     private void createJobAndReturnToHomePage(String projectName) {
         getDriver().findElement(By.cssSelector("[href$='newJob']")).click();
         getDriver().findElement(By.id("name")).sendKeys(projectName);

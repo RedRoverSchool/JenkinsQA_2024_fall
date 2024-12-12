@@ -1,13 +1,10 @@
 package school.redrover.page.organizationFolder;
 
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import school.redrover.page.base.BaseProjectPage;
-
-import java.util.List;
 
 public class OrganizationFolderProjectPage extends BaseProjectPage<OrganizationFolderProjectPage, OrganizationFolderConfigPage, OrganizationFolderRenamePage> {
 
@@ -56,6 +53,5 @@ public class OrganizationFolderProjectPage extends BaseProjectPage<OrganizationF
 
     public String getMainPanelText() {
         return mainPanel.getText();
-
     }
 }

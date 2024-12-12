@@ -16,7 +16,7 @@ public class AnExistingFolderChangeTest extends BaseTest {
     private static final List<String> setOfIncorrectSymbols = new ArrayList<>(List.of("$", "%", "#", "&amp;", "[", "]", "@", "!", "^", "/", ":", "*", "?", "|"));
 
     @Test
-    public void testNoChangesWarning () {
+    public void testNoChangesWarning() {
         TestUtils.createFolder(getDriver(), FOLDER_NAME);
 
         String warningMessage = new HomePage(getDriver())
@@ -28,7 +28,7 @@ public class AnExistingFolderChangeTest extends BaseTest {
     }
 
     @Test(dependsOnMethods = "testNoChangesWarning")
-    public void testSavingWithEmptyName () {
+    public void testSavingWithEmptyName() {
         String warningMessage = new HomePage(getDriver())
                 .openFolder(FOLDER_NAME)
                 .renameItem("")
@@ -38,7 +38,7 @@ public class AnExistingFolderChangeTest extends BaseTest {
     }
 
     @Test(dependsOnMethods = "testSavingWithEmptyName")
-    public void testRenameFromFoldersPage () {
+    public void testRenameFromFoldersPage() {
         String newItemName = new HomePage(getDriver())
                 .openFolder(FOLDER_NAME)
                 .renameItem(EDITED_FOLDER_NAME)
@@ -48,7 +48,7 @@ public class AnExistingFolderChangeTest extends BaseTest {
     }
 
     @Test(dependsOnMethods = "testRenameFromFoldersPage")
-    public void testNotAllowedSymbols () {
+    public void testNotAllowedSymbols() {
         for (String symbols : setOfIncorrectSymbols) {
             String incorrectSymbolsMessage = new HomePage(getDriver())
                     .gotoHomePage()

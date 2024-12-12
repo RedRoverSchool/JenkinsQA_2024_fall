@@ -32,7 +32,6 @@ public class PipelineProjectTest extends BaseTest {
                 {"$"}, {"%"}, {"^"}, {"*"}, {"|"}, {"/"}, {"<"}, {">"},
                 {"["}, {";"}
         };
-
     }
 
     @Test
@@ -484,7 +483,7 @@ public class PipelineProjectTest extends BaseTest {
     }
 
     @Test
-    public void testCreatePipelineFromExistingOne () {
+    public void testCreatePipelineFromExistingOne() {
         final String secondProjectName = "Second" + PROJECT_NAME;
         TestUtils.createPipelineProject(getDriver(), PROJECT_NAME);
 

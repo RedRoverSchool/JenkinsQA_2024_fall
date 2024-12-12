@@ -17,7 +17,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-
 public class NewItemTest extends BaseTest {
 
     private final static By NEW_ITEM_BUTTON = By.xpath("//a[@href='/view/all/newJob']");

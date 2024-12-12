@@ -12,7 +12,7 @@ public class AddDescriptionToNewFreestyleProjectTest extends BaseTest {
     private static final String DESCRIPTION_EDITED = "It's a simple test project new version";
 
     @Test
-    public void testAddDescription () {
+    public void testAddDescription() {
         String getDescription = new HomePage(getDriver())
                 .clickNewItem()
                 .enterItemName(PROJECT_NAME)
@@ -28,7 +28,7 @@ public class AddDescriptionToNewFreestyleProjectTest extends BaseTest {
 
 
     @Test (dependsOnMethods = "testAddDescription")
-    public void testAddDescriptionToExisting () {
+    public void testAddDescriptionToExisting() {
         String getDescription = new HomePage(getDriver())
                 .openFreestyleProject(PROJECT_NAME)
                 .clearDescription()

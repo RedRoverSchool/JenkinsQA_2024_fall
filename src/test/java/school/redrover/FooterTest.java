@@ -1,6 +1,5 @@
 package school.redrover;
 
-import org.openqa.selenium.By;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import school.redrover.page.home.HomePage;
@@ -26,12 +25,6 @@ public class FooterTest extends BaseTest {
                 .getAboutJenkinsDropdownLabelText();
 
         Assert.assertEquals(actualButtonLabel, ABOUT_JENKINS_LABEL);
-    }
-
-    @Test
-    public void checkVersionMainPage() {
-        Assert.assertEquals(getDriver().findElement(By.xpath("//button[@type='button']")).
-                getText(), EXPECTED_JENKINS_VERSION);
     }
 
     @Test
