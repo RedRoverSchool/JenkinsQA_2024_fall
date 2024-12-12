@@ -500,4 +500,5 @@ public class HomePage extends BasePage {
 
         return new CredentialsPage(getDriver());
     }
+
 }
