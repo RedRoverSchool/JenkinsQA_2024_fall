@@ -93,6 +93,22 @@ public class TestUtils {
                 .gotoHomePage();
     }
 
+    public static void createPipelineProject(WebDriver driver, String name) {
+        new HomePage(driver)
+                .clickNewItem()
+                .enterItemName(name)
+                .selectPipelineAndClickOk()
+                .clickSaveButton()
+                .gotoHomePage();
+    }
+
+    public static void createPipelineProjectWithoutSaveButton(WebDriver driver, String name) {
+        new HomePage(driver)
+                .clickNewItem()
+                .enterItemName(name)
+                .selectPipelineAndClickOk()
+                .gotoHomePage();
+    }
 
     public static void newItemsData(BaseTest baseTest, String itemName, String itemXpath) {
         baseTest.getDriver().findElement(By.xpath("//*[@id='tasks']/div[1]/span/a")).click();
@@ -112,15 +128,6 @@ public class TestUtils {
                 .clickNewItem()
                 .enterItemName(name)
                 .selectFreestyleProjectAndClickOk()
-                .clickSaveButton()
-                .gotoHomePage();
-    }
-
-    public static void createPipelineProject(WebDriver driver, String name) {
-        new HomePage(driver)
-                .clickNewItem()
-                .enterItemName(name)
-                .selectPipelineAndClickOk()
                 .clickSaveButton()
                 .gotoHomePage();
     }
