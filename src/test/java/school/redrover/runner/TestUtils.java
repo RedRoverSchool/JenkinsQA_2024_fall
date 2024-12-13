@@ -84,15 +84,6 @@ public class TestUtils {
         js.executeScript("arguments[0].scrollIntoView(true);", element);
     }
 
-    public static void createPipeline(WebDriver driver, String name) {
-        new HomePage(driver)
-                .clickNewItem()
-                .enterItemName(name)
-                .selectPipelineAndClickOk()
-                .clickSaveButton()
-                .gotoHomePage();
-    }
-
     public static void createPipelineProject(WebDriver driver, String name) {
         new HomePage(driver)
                 .clickNewItem()

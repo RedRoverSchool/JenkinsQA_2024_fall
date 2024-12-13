@@ -145,7 +145,7 @@ public class PipelineProjectTest extends BaseTest {
 
     @Test
     public void testGetPermalinksInformationUponSuccessfulBuild() {
-        TestUtils.createPipeline(getDriver(), PROJECT_NAME);
+        TestUtils.createPipelineProject(getDriver(), PROJECT_NAME);
 
         List<String> permalinkList = new HomePage(getDriver())
                 .clickScheduleBuild(PROJECT_NAME)
