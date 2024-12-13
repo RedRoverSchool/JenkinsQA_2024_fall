@@ -128,13 +128,13 @@ public class HomePage extends BasePage {
     private WebElement descriptionButton;
 
     @FindBy(xpath = "//textarea[contains(@class, 'jenkins-input')]")
-    private WebElement descriptionTextarea;
+    private WebElement descriptionTextArea;
 
     @FindBy(xpath = "//button[@name='Submit']")
     private WebElement saveButton;
 
     @FindBy(xpath = "//textarea[@name='description']")
-    private WebElement clearDescriptionTextarea;
+    private WebElement clearDescriptionTextArea;
 
     @FindBy(css = "[class$='textarea-show-preview']")
     private WebElement previewButton;
@@ -147,6 +147,9 @@ public class HomePage extends BasePage {
 
     @FindBy(xpath = "//th[@initialsortdir='down']//a[@class='sortheader']")
     private WebElement sortByNameButton;
+
+    @FindBy(xpath="//div[@class='tippy-box']//a")
+    private List<WebElement> breadcrumbBarMenuList;
 
     public HomePage(WebDriver driver) {
         super(driver);
@@ -445,7 +448,7 @@ public class HomePage extends BasePage {
     }
 
     public HomePage addDescription(String description) {
-        descriptionTextarea.sendKeys(description);
+        descriptionTextArea.sendKeys(description);
 
         return this;
     }
@@ -457,7 +460,7 @@ public class HomePage extends BasePage {
     }
 
     public HomePage clearDescription() {
-        clearDescriptionTextarea.clear();
+        clearDescriptionTextArea.clear();
 
         return this;
     }
@@ -527,5 +530,18 @@ public class HomePage extends BasePage {
     public HomePage clickSortByName() {
         sortByNameButton.click();
         return this;
+    }
+
+    public HomePage selectBreadcrumbBarMenu() {
+
+        new Actions(getDriver()).moveToElement(getDriver().findElement(By.xpath("//div[@id='breadcrumbBar']//a"))).perform();
+
+        TestUtils.moveAndClickWithJS(getDriver(),getWait5().until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//div[@id='breadcrumbBar']//a/button"))));
+
+        return this;
+    }
+    public List<WebElement> getBreadcrumbBarMenuList() {
+        return breadcrumbBarMenuList;
     }
 }

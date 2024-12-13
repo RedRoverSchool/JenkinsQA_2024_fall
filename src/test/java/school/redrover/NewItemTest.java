@@ -22,6 +22,7 @@ public class NewItemTest extends BaseTest {
     private final static By NEW_ITEM_BUTTON = By.xpath("//a[@href='/view/all/newJob']");
     private final static String MESSAGE = "» This field cannot be empty, please enter a valid name";
     private final static String NEW_ITEM_NAME = "New Project";
+    private final static String NEW_ITEM = "New Item";
 
     private List<String> getTextList(List<WebElement> listOfElements) {
 
@@ -36,18 +37,11 @@ public class NewItemTest extends BaseTest {
 
     @Test
     public void testPossibilityOfCreatingNewItemFromBreadcrumbBar() {
-        WebElement breadcrumbBar = getDriver().findElement(By.xpath("//div[@id='breadcrumbBar']//a"));
+        String newItemButton = new HomePage(getDriver())
+                .selectBreadcrumbBarMenu()
+                .getBreadcrumbBarMenuList().get(0).getText();
 
-        new Actions(getDriver()).moveToElement(breadcrumbBar).perform();
-
-        WebElement breadCrumbChevron = getWait5().until(ExpectedConditions.visibilityOfElementLocated(
-                By.xpath("//div[@id='breadcrumbBar']//a/button")));
-
-        TestUtils.moveAndClickWithJS(getDriver(), breadCrumbChevron);
-
-        List<WebElement> breadCrumbItemsList = getDriver().findElements(By.xpath("//div[@class='tippy-box']//a"));
-
-        Assert.assertTrue(getTextList(breadCrumbItemsList).contains("New Item"));
+        Assert.assertEquals(newItemButton, NEW_ITEM);
     }
 
     @Test
