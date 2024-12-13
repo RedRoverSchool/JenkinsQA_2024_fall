@@ -127,7 +127,7 @@ public class HomePage extends BasePage {
     @FindBy(id = "description-link")
     private WebElement descriptionButton;
 
-    @FindBy(name = "description")
+    @FindBy(css = "[name='description']")
     private WebElement descriptionTextarea;
 
     @FindBy(xpath = "//button[@name='Submit']")
@@ -445,8 +445,7 @@ public class HomePage extends BasePage {
     }
 
     public HomePage addDescription(String description) {
-        descriptionTextarea.click();
-        new Actions(getDriver()).moveToElement(getWait5().until(ExpectedConditions.visibilityOf(descriptionTextarea))).sendKeys(description).perform();
+        descriptionTextarea.sendKeys(description);
 
 
         return this;
