@@ -100,7 +100,7 @@ public class FreestyleProjectPage extends BaseProjectPage<FreestyleProjectPage, 
     }
 
     public FreestyleProjectPage clickBuildNowSidebar() {
-        getWait5().until(ExpectedConditions.visibilityOf(buildNowSidebar)).click();
+        getWait5().until(ExpectedConditions.elementToBeClickable(buildNowSidebar)).click();
 
         return this;
     }
