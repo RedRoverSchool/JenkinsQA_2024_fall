@@ -35,7 +35,7 @@ public class DashboardTest extends BaseTest {
     private static final String Disabled = "APipelineProject";
     private static final String FailedBuilt = "ZPipelineProject";
     private static final String NotBuilt = "1PipelineProject";
-    final private static List<String> PROJECT_NAMES = List.of("ProjectC", "ProjectA", "ProjectB");
+    private static final List<String> PROJECT_NAMES = List.of("FPipelineProject", "APipelineProject", "ZPipelineProject");
 
     @Test
     public void testVerifyProjectOrderByNameASCByDefault() {
@@ -51,13 +51,13 @@ public class DashboardTest extends BaseTest {
 
     @Test(dependsOnMethods = "testVerifyDisplayIconDownArrowNextToNameByDefault")
     public void testVerifyProjectOrderByNameDesc() {
-        final List<String> expectedJobsNamesSortedDesc = PROJECT_NAMES.stream().sorted(Comparator.reverseOrder()).toList();
+        final List<String> expectedList = PROJECT_NAMES.stream().sorted(Comparator.reverseOrder()).toList();
 
-        List<String> actualJobsNames = new HomePage(getDriver())
-                .clickSortByName()
+        List<String> actualList = new HomePage(getDriver())
+                .clickNameTableHeaderChangeOrder()
                 .getItemList();
 
-        Assert.assertEquals(actualJobsNames, expectedJobsNamesSortedDesc);
+        Assert.assertEquals(actualList, expectedList);
     }
 
     @Test(dependsOnMethods = "testVerifyProjectOrderByNameASCByDefault")
