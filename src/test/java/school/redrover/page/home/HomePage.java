@@ -445,7 +445,7 @@ public class HomePage extends BasePage {
     }
 
     public HomePage addDescription(String description) {
-        getWait10().until(ExpectedConditions.visibilityOf(descriptionTextarea)).sendKeys(description);
+        TestUtils.pasteTextWithJavaScript(getDriver(), descriptionTextarea, description);
 
         return this;
     }
