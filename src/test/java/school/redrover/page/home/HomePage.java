@@ -145,6 +145,9 @@ public class HomePage extends BasePage {
     @FindBy(xpath = "//td[text()= 'No builds in the queue.' ]")
     private WebElement buildQueueText;
 
+    @FindBy(xpath = "//th[@initialsortdir='down']//a[@class='sortheader']")
+    private WebElement sortByNameButton;
+
     public HomePage(WebDriver driver) {
         super(driver);
     }
@@ -336,6 +339,13 @@ public class HomePage extends BasePage {
         return getDriver().findElement(By.cssSelector("#job_%s> td:nth-of-type(1) > div > svg".formatted(projectName))).getAttribute("tooltip");
     }
 
+    public List<String> getSortedStatusesListBuild() {
+        getDriver().findElement(By.xpath("//th[@tooltip='Status of the last build']//a[@class='sortheader']")).click();
+        List<WebElement> jobsStatuses = getDriver().findElements(By.cssSelector("div[class='jenkins-table__cell__button-wrapper'] svg[tooltip]"));
+
+        return jobsStatuses.stream().map(el -> el.getAttribute("title")).toList();
+    }
+
     public PipelineRenamePage goToPipelineRenamePageViaDropdown(String name) {
         selectMenuFromItemDropdown(name, "Rename");
 
@@ -519,5 +529,10 @@ public class HomePage extends BasePage {
 
     public String getBuildQueueText() {
         return buildQueueText.getText();
+    }
+
+    public HomePage clickSortByName() {
+        sortByNameButton.click();
+        return this;
     }
 }
