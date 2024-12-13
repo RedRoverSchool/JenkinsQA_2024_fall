@@ -446,7 +446,7 @@ public class HomePage extends BasePage {
 
     public HomePage addDescription(String description) {
         getWait10().until(ExpectedConditions.elementToBeClickable(descriptionTextarea)).sendKeys(description);
-        getDriver().findElement(By.xpath("(//form)[2]")).getAttribute("innerHTML");
+        System.out.println(getDriver().findElement(By.xpath("(//form)[2]")).getAttribute("innerHTML"));
 
         return this;
     }
