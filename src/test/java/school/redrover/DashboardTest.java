@@ -4,8 +4,9 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 import school.redrover.page.home.HomePage;
 import school.redrover.runner.BaseTest;
+import school.redrover.runner.TestUtils;
 
-import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class DashboardTest extends BaseTest {
@@ -34,18 +35,15 @@ public class DashboardTest extends BaseTest {
     private static final String Disabled = "APipelineProject";
     private static final String FailedBuilt = "ZPipelineProject";
     private static final String NotBuilt = "1PipelineProject";
+    private static final List<String> PROJECT_NAMES = List.of("FPipelineProject", "APipelineProject", "ZPipelineProject");
 
     @Test
     public void testVerifyProjectOrderByNameASCByDefault() {
-
-        testPreparationCreateNotBuiltProject("FPipelineProject");
-        testPreparationCreateNotBuiltProject("APipelineProject");
-        testPreparationCreateNotBuiltProject("ZPipelineProject");
+        PROJECT_NAMES.forEach(jobName -> TestUtils.createFreestyleProject(getDriver(), jobName));
+        final List<String> expectedList = PROJECT_NAMES.stream().sorted(Comparator.naturalOrder()).toList();
 
         List<String> projectNameList = new HomePage(getDriver())
                 .getItemList();
-
-        List<String> expectedList = projectNameList.stream().sorted().toList();
 
         Assert.assertEquals(projectNameList.size(), 3);
         Assert.assertEquals(projectNameList, expectedList);
@@ -53,15 +51,11 @@ public class DashboardTest extends BaseTest {
 
     @Test(dependsOnMethods = "testVerifyDisplayIconDownArrowNextToNameByDefault")
     public void testVerifyProjectOrderByNameDesc() {
+        final List<String> expectedList = PROJECT_NAMES.stream().sorted(Comparator.reverseOrder()).toList();
 
         List<String> actualList = new HomePage(getDriver())
                 .clickNameTableHeaderChangeOrder()
                 .getItemList();
-
-        List<String> expectedList = new HomePage(getDriver()).getItemList()
-                .stream()
-                .sorted(Collections.reverseOrder())
-                .toList();
 
         Assert.assertEquals(actualList, expectedList);
     }
