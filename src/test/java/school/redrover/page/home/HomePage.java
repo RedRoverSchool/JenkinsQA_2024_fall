@@ -445,8 +445,7 @@ public class HomePage extends BasePage {
     }
 
     public HomePage addDescription(String description) {
-        System.out.println(getDriver().getPageSource());
-        getWait10().until(ExpectedConditions.visibilityOf(descriptionTextarea)).sendKeys(description);
+        new Actions(getDriver()).moveToElement(getWait5().until(ExpectedConditions.visibilityOf(descriptionTextarea)).sendKeys(description);
 
 
         return this;
