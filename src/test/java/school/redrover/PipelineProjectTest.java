@@ -32,7 +32,6 @@ public class PipelineProjectTest extends BaseTest {
                 {"$"}, {"%"}, {"^"}, {"*"}, {"|"}, {"/"}, {"<"}, {">"},
                 {"["}, {";"}
         };
-
     }
 
     @Test
@@ -323,7 +322,7 @@ public class PipelineProjectTest extends BaseTest {
         Assert.assertTrue(isDisplayed);
     }
 
-    @Test()
+    @Test
     public void testDeleteByChevronBreadcrumb() {
         String welcomeTitle = new HomePage(getDriver())
                 .clickNewItem()
@@ -331,8 +330,8 @@ public class PipelineProjectTest extends BaseTest {
                 .selectPipelineAndClickOk()
                 .gotoHomePage()
                 .openPipelineProject(PROJECT_NAME)
-                .openDropDownMenuByChevronBreadcrumb(PROJECT_NAME)
-                .clickDeleteButtonSidebarAndConfirm()
+                .openBreadcrumbDropdown()
+                .clickDeleteBreadcrumbDropdownAndConfirm()
                 .getWelcomeTitle();
 
         Assert.assertEquals(welcomeTitle, "Welcome to Jenkins!");
@@ -483,4 +482,19 @@ public class PipelineProjectTest extends BaseTest {
         Assert.assertEquals(icons.get(1).getCssValue("color"), "rgba(230, 0, 31, 1)");
     }
 
+    @Test
+    public void testCreatePipelineFromExistingOne() {
+        final String secondProjectName = "Second" + PROJECT_NAME;
+        TestUtils.createPipelineProject(getDriver(), PROJECT_NAME);
+
+        List<String> itemNameList = new HomePage(getDriver())
+                .clickNewItem()
+                .enterItemName(secondProjectName)
+                .enterName(PROJECT_NAME)
+                .clickOkAndGoToPipelineConfigPage()
+                .gotoHomePage()
+                .getItemList();
+
+        Assert.assertTrue(itemNameList.contains(secondProjectName));
+    }
 }

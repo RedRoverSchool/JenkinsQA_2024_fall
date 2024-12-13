@@ -6,6 +6,7 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import school.redrover.page.home.CreateNewItemPage;
 import school.redrover.page.home.HomePage;
+import school.redrover.runner.TestUtils;
 
 import java.util.List;
 
@@ -61,6 +62,15 @@ public abstract class BaseProjectPage<Self extends BaseProjectPage<?, ?, ?>, Pro
 
     @FindBy(xpath = "//button[@data-id='ok']")
     private WebElement yesButton;
+
+    @FindBy(xpath = "//button[@class='jenkins-menu-dropdown-chevron'][contains(@data-href,'job')]")
+    private WebElement chevronButton;
+
+    @FindBy(xpath = "//button[contains(@href,'Delete')]")
+    private WebElement deleteButton;
+
+    @FindBy(xpath = "//button[@data-id='ok']")
+    private WebElement confirmDeletionButton;
 
     public BaseProjectPage(WebDriver driver) {
         super(driver);
@@ -156,5 +166,19 @@ public abstract class BaseProjectPage<Self extends BaseProjectPage<?, ?, ?>, Pro
         getWait2().until(ExpectedConditions.elementToBeClickable(renameSidebarButton)).click();
 
         return createProjectRenamePage();
+    }
+
+
+    public Self openBreadcrumbDropdown() {
+        TestUtils.moveAndClickWithJS(getDriver(), chevronButton);
+
+        return (Self) this;
+    }
+
+    public HomePage clickDeleteBreadcrumbDropdownAndConfirm() {
+        deleteButton.click();
+        confirmDeletionButton.click();
+
+        return new HomePage(getDriver());
     }
 }

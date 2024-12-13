@@ -23,6 +23,9 @@ public class MyViewsPage extends BasePage {
     @FindBy(xpath = "//td//button[@aria-expanded='false']")
     private WebElement chevronButton;
 
+    @FindBy(xpath = "//div[@class='jenkins-dropdown__item__icon']/parent::*[contains(., 'Delete')]")
+    private WebElement deleteInChevronDropdown;
+
     public MyViewsPage(WebDriver driver) {
         super(driver);
     }
@@ -53,8 +56,7 @@ public class MyViewsPage extends BasePage {
     }
 
     public MyViewsPage clickDeleteInProjectDropdown() {
-        getWait10().until(ExpectedConditions.visibilityOfElementLocated(
-                By.xpath("//div[@class='jenkins-dropdown__item__icon']/parent::*[contains(., 'Delete')]"))).click();
+        getWait10().until(ExpectedConditions.visibilityOf(deleteInChevronDropdown)).click();
 
         return this;
     }

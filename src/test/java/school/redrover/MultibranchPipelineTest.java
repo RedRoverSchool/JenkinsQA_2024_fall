@@ -142,26 +142,22 @@ public class MultibranchPipelineTest extends BaseTest {
         }
     }
 
-    @Test
+    @Test(dependsOnMethods = "testRenameMultibranchViaSideBar")
     public void testCreateJobAndJobNameVisibleOnStatusPage() {
-        createJob(MULTIBRANCH_PIPELINE_NAME);
+        String title = new HomePage(getDriver())
+                .openMultibranchPipelineProject(MULTIBRANCH_PIPELINE_NAME2)
+                .getItemName();
 
-        getDriver().findElement(By.xpath(("//a[contains(@href,'%s')]").formatted(MULTIBRANCH_PIPELINE_NAME))).click();
-
-        Assert.assertEquals(
-                getDriver().findElement(By.xpath("//h1")).getText(),
-                MULTIBRANCH_PIPELINE_NAME);
+        Assert.assertEquals(title, MULTIBRANCH_PIPELINE_NAME2);
     }
 
-    @Test
+    @Test(dependsOnMethods = "testCreateJobAndJobNameVisibleOnStatusPage")
     public void testCreateJobAndJobNameVisibleOnBreadcrumb() {
-        createJob(MULTIBRANCH_PIPELINE_NAME);
+        String breadcrumbName = new HomePage(getDriver())
+                .openMultibranchPipelineProject(MULTIBRANCH_PIPELINE_NAME2)
+                .getBreadcrumbName();
 
-        getDriver().findElement(By.xpath(("//a[contains(@href,'%s')]").formatted(MULTIBRANCH_PIPELINE_NAME))).click();
-
-        Assert.assertEquals(
-                getDriver().findElement(By.xpath("//a[contains(@href,'job')][@class='model-link']")).getText(),
-                MULTIBRANCH_PIPELINE_NAME);
+        Assert.assertEquals(breadcrumbName, MULTIBRANCH_PIPELINE_NAME2);
     }
 
     @Test
@@ -204,7 +200,8 @@ public class MultibranchPipelineTest extends BaseTest {
                 .clickSaveButton()
                 .gotoHomePage()
                 .openMultibranchPipelineProject(MULTIBRANCH_PIPELINE_NAME)
-                .deleteJobUsingDropdownBreadcrumbJobPage()
+                .openBreadcrumbDropdown()
+                .clickDeleteBreadcrumbDropdownAndConfirm()
                 .getItemList();
 
         Assert.assertListNotContainsObject(projectList, MULTIBRANCH_PIPELINE_NAME,

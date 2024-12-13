@@ -12,6 +12,7 @@ import school.redrover.page.folder.FolderConfigPage;
 import school.redrover.page.folder.FolderProjectPage;
 import school.redrover.page.freestyle.FreestyleProjectPage;
 import school.redrover.page.freestyle.FreestyleRenamePage;
+import school.redrover.page.manage.ManageJenkinsPage;
 import school.redrover.page.multiConfiguration.MultiConfigurationProjectPage;
 import school.redrover.page.multibranch.MultibranchPipelineProjectPage;
 import school.redrover.page.organizationFolder.OrganizationFolderProjectPage;
@@ -141,6 +142,9 @@ public class HomePage extends BasePage {
     @FindBy(xpath = "//div[@class='textarea-preview']")
     private WebElement previewText;
 
+    @FindBy(xpath = "//td[text()= 'No builds in the queue.' ]")
+    private WebElement buildQueueText;
+
     public HomePage(WebDriver driver) {
         super(driver);
     }
@@ -269,12 +273,24 @@ public class HomePage extends BasePage {
         return getWait5().until(ExpectedConditions.visibilityOf(description)).getText();
     }
 
-    public List<WebElement> getSideContent() {
-        return getWait2().until(ExpectedConditions.visibilityOfAllElements(sideBarOptionList));
+    public List<String> getSideContent() {
+        getWait2().until(ExpectedConditions.visibilityOfAllElements(sideBarOptionList));
+        return sideBarOptionList.stream()
+                .map(WebElement::getText)
+                .toList();
     }
 
-    public List<WebElement> getContentBlock() {
-        return contentBlock;
+    public List<String> getSideContentAttribute() {
+        getWait2().until(ExpectedConditions.visibilityOfAllElements(sideBarOptionList));
+        return sideBarOptionList.stream()
+                .map(el -> el.getAttribute("href"))
+                .toList();
+    }
+
+    public List<String> getContentBlock() {
+        return contentBlock.stream()
+                .map(WebElement::getText)
+                .toList();
     }
 
     public List<String> getItemList() {
@@ -500,9 +516,14 @@ public class HomePage extends BasePage {
 
         return new CredentialsPage(getDriver());
     }
+  
     public ViewPage selectViewType(String viewType) {
         getDriver().findElement(By.linkText(viewType)).click();
 
         return new ViewPage(getDriver());
+    }
+
+    public String getBuildQueueText() {
+        return buildQueueText.getText();
     }
 }

@@ -34,6 +34,15 @@ public class FreestyleConfigPage extends BaseConfigPage<FreestyleConfigPage, Fre
     @FindBy(xpath = "//button[contains(text(), 'Execute shell')]")
     private WebElement executeShellBuildStep;
 
+    @FindBy(xpath = "//label[normalize-space()='Throttle builds']")
+    private WebElement throttleBuildsCheckbox;
+
+    @FindBy(xpath = "//select[@name='_.durationName']")
+    private WebElement timePeriodSelect;
+
+    @FindBy(xpath = "//*[@id='toggle-switch-enable-disable-project']/label")
+    private WebElement enableDisableToggle;
+
     public FreestyleConfigPage(WebDriver driver) {
         super(driver);
     }
@@ -89,32 +98,25 @@ public class FreestyleConfigPage extends BaseConfigPage<FreestyleConfigPage, Fre
     }
 
     public FreestyleConfigPage selectDurationCheckbox (String durationPeriod) {
-        getDriver().findElement(By.xpath("//label[normalize-space()='Throttle builds']")).click();
-        new Select(getDriver().findElement(By.xpath("//select[@name='_.durationName']")))
-                .selectByValue(durationPeriod);
+        throttleBuildsCheckbox.click();
+        new Select(timePeriodSelect).selectByValue(durationPeriod);
 
         return this;
     }
 
     public String getTimePeriod() {
-        return getDriver().findElement(By.xpath("//*[@name='_.durationName']")).getAttribute("value");
+        return timePeriodSelect.getAttribute("value");
     }
 
     public boolean getEnablingCurrentState() {
-        return getWait10().until(ExpectedConditions.visibilityOfElementLocated(
-                By.xpath("//*[@id='toggle-switch-enable-disable-project']/label"))).isEnabled();
+        return getWait10().until(ExpectedConditions.visibilityOf(enableDisableToggle)).isEnabled();
     }
 
-    public FreestyleConfigPage changeEnablingState() {
-        getWait10().until(ExpectedConditions.visibilityOfElementLocated(
-                By.xpath("//*[@id='toggle-switch-enable-disable-project']/label"))).click();
-        getDriver().findElement(By.name("Submit")).click();
+    public FreestyleProjectPage changeEnablingState() {
+        getWait10().until(ExpectedConditions.visibilityOf(enableDisableToggle)).click();
+        submitButton.click();
 
-        return this;
-    }
-
-    public String getDisabledProjectIndicator() {
-        return getWait10().until(ExpectedConditions.visibilityOfElementLocated(By.id("enable-project"))).getText();
+        return new FreestyleProjectPage(getDriver());
     }
 }
 

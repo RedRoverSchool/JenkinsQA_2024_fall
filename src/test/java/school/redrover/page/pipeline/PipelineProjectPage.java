@@ -7,7 +7,6 @@ import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import school.redrover.page.base.BaseProjectPage;
-import school.redrover.runner.TestUtils;
 
 import java.util.List;
 
@@ -116,22 +115,6 @@ public class PipelineProjectPage extends BaseProjectPage<PipelineProjectPage, Pi
                 .map(WebElement::getText)
                 .map(string -> string.split("\\(#")[0].trim())
                 .toList();
-    }
-
-    public PipelineProjectPage openDropDownMenuByChevronBreadcrumb(String name) {
-
-        new Actions(getDriver())
-                .moveToElement(getDriver().findElement(By.xpath("//li/a[@href='/job/%s/']".formatted(name))))
-                .click()
-                .perform();
-
-        WebElement buttonChevron = getWait10().until(TestUtils.ExpectedConditions.elementIsNotMoving(
-                By.xpath("//a[@href ='/job/%s/']/button[@class='jenkins-menu-dropdown-chevron']"
-                        .formatted(name))));
-
-        TestUtils.moveAndClickWithJS(getDriver(), buttonChevron);
-
-        return new PipelineProjectPage(getDriver());
     }
 
     public PipelineSyntaxPage gotoPipelineSyntaxPageFromLeftPanel(String projectName) {

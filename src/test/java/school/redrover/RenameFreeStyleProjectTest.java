@@ -16,7 +16,7 @@ public class RenameFreeStyleProjectTest extends BaseTest {
     private static final List<String> setOfIncorrectSymbols = new ArrayList<>(List.of("$", "%", "#", "&amp;", "[", "]", "@", "!", "^", "/", ":", "*", "?", "|"));
 
     @Test
-    public void testCorrectName () {
+    public void testCorrectName() {
         TestUtils.createFreestyleProject(getDriver(), PROJECT_NAME);
 
         String renamingResult = new HomePage(getDriver())
@@ -28,7 +28,7 @@ public class RenameFreeStyleProjectTest extends BaseTest {
     }
 
     @Test(dependsOnMethods = "testCorrectName")
-    public void testTheSameName () {
+    public void testTheSameName() {
         String theSameNameWarning = new HomePage(getDriver())
                 .openFreestyleProject(PROJECT_NAME_EDITED)
                 .renameItem(PROJECT_NAME_EDITED)
@@ -38,7 +38,7 @@ public class RenameFreeStyleProjectTest extends BaseTest {
     }
 
     @Test(dependsOnMethods = "testTheSameName")
-    public void testEmptyName () {
+    public void testEmptyName() {
         String emptyNameWarning = new HomePage(getDriver())
                 .openFreestyleProject(PROJECT_NAME_EDITED)
                 .renameItem("")
@@ -48,7 +48,7 @@ public class RenameFreeStyleProjectTest extends BaseTest {
     }
 
     @Test(dependsOnMethods = "testEmptyName")
-    public void testIncorrectSymbols () {
+    public void testIncorrectSymbols() {
         for (String symbols : setOfIncorrectSymbols) {
             String incorrectSymbolsMessage = new HomePage(getDriver())
                     .gotoHomePage()

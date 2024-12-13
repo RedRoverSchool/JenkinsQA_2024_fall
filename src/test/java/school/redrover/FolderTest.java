@@ -8,7 +8,6 @@ import school.redrover.page.folder.FolderProjectPage;
 import school.redrover.runner.BaseTest;
 import school.redrover.runner.TestUtils;
 
-
 import java.util.List;
 
 public class FolderTest extends BaseTest {
@@ -387,5 +386,16 @@ public class FolderTest extends BaseTest {
         String actualErrorMessage = new ErrorPage(getDriver()).getErrorMessage();
 
         Assert.assertEquals(actualErrorMessage, ERROR_MESSAGE_ON_RENAME_WITH_SAME_NAME);
+    }
+
+    @Test(dependsOnMethods = "testErrorMessageOnRenameFolderWithSameName")
+    public void testDeleteViaBreadcrumbDropdown() {
+        List<String> projectList = new HomePage(getDriver())
+                .openFolder(FOLDER_NAME)
+                .openBreadcrumbDropdown()
+                .clickDeleteBreadcrumbDropdownAndConfirm()
+                .getItemList();
+
+        Assert.assertListNotContainsObject(projectList, FOLDER_NAME, "Folder is not deleted.");
     }
 }
