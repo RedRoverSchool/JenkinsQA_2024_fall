@@ -127,7 +127,7 @@ public class HomePage extends BasePage {
     @FindBy(id = "description-link")
     private WebElement descriptionButton;
 
-    @FindBy(css = "[name='description']")
+    @FindBy(xpath = "//form[@action='submitDescription']//textarea")
     private WebElement descriptionTextarea;
 
     @FindBy(xpath = "//button[@name='Submit']")
