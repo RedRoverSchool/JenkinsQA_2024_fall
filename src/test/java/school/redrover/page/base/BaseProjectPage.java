@@ -67,10 +67,10 @@ public abstract class BaseProjectPage<Self extends BaseProjectPage<?, ?, ?>, Pro
     private WebElement chevronButton;
 
     @FindBy(xpath = "//button[contains(@href,'Delete')]")
-    private WebElement deleteButton;
+    private WebElement deleteBreadcrumbButton;
 
-    @FindBy(xpath = "//button[@data-id='ok']")
-    private WebElement confirmDeletionButton;
+    @FindBy(xpath = "//div[@class='jenkins-dropdown']//a[contains(@href,'rename')]")
+    private WebElement renameBreadcrumbButton;
 
     public BaseProjectPage(WebDriver driver) {
         super(driver);
@@ -168,7 +168,6 @@ public abstract class BaseProjectPage<Self extends BaseProjectPage<?, ?, ?>, Pro
         return createProjectRenamePage();
     }
 
-
     public Self openBreadcrumbDropdown() {
         TestUtils.moveAndClickWithJS(getDriver(), chevronButton);
 
@@ -176,9 +175,15 @@ public abstract class BaseProjectPage<Self extends BaseProjectPage<?, ?, ?>, Pro
     }
 
     public HomePage clickDeleteBreadcrumbDropdownAndConfirm() {
-        deleteButton.click();
-        confirmDeletionButton.click();
+        deleteBreadcrumbButton.click();
+        yesButton.click();
 
         return new HomePage(getDriver());
+    }
+
+    public ProjectRenamePage clickRenameBreadcrumbDropdown(){
+        renameBreadcrumbButton.click();
+
+        return createProjectRenamePage();
     }
 }
