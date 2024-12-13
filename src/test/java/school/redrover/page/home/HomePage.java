@@ -145,6 +145,9 @@ public class HomePage extends BasePage {
     @FindBy(xpath = "//td[text()= 'No builds in the queue.' ]")
     private WebElement buildQueueText;
 
+    @FindBy(xpath = "//th[@initialsortdir='down']//a[@class='sortheader']")
+    private WebElement sortByNameButton;
+
     public HomePage(WebDriver driver) {
         super(driver);
     }
@@ -525,5 +528,10 @@ public class HomePage extends BasePage {
 
     public String getBuildQueueText() {
         return buildQueueText.getText();
+    }
+
+    public HomePage clickSortByName() {
+        sortByNameButton.click();
+        return this;
     }
 }
