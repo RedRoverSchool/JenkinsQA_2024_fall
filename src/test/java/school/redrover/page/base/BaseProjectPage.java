@@ -88,8 +88,7 @@ public abstract class BaseProjectPage<Self extends BaseProjectPage<?, ?, ?>, Pro
 
     public Self editDescription(String text) {
         descriptionButton.click();
-        descriptionField.clear();
-        TestUtils.pasteTextWithJavaScript(getDriver(), descriptionField, text);
+        getWait10().until(ExpectedConditions.visibilityOf(descriptionField)).sendKeys(text);
 
         return (Self) this;
     }

@@ -43,7 +43,7 @@ public abstract class BaseConfigPage<Self extends BaseConfigPage<?, ?>, ProjectP
 
     public Self enterDescription(String description) {
         descriptionField.clear();
-        TestUtils.pasteTextWithJavaScript(getDriver(), descriptionField, description);
+        descriptionField.sendKeys(description);
 
         return (Self) this;
     }
