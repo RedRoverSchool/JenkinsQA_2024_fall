@@ -18,9 +18,6 @@ public class BuildHistoryPage extends BasePage {
     @FindBy(xpath = "//div[@class='jenkins-table__cell__button-wrapper']/*[@id]")
     private WebElement buildStatusSign;
 
-    @FindBy(xpath = "//td[text()='broken since this build']")
-    private WebElement firstBrokenBuildStatusText;
-
     public BuildHistoryPage(WebDriver driver) {
         super(driver);
     }
@@ -36,10 +33,6 @@ public class BuildHistoryPage extends BasePage {
 
     public String getBuildStatusSignColor() {
         return buildStatusSign.getAttribute("id");
-    }
-
-    public String getColorOfTextStatusOfFirstFailedBuild() {
-        return firstBrokenBuildStatusText.getCssValue("color");
     }
 
 }
