@@ -273,9 +273,9 @@ public class ManageJenkinsTest extends BaseTest {
                 .clickNodesButton()
                 .clickButtonNewNode()
                 .inputName(NODE_NAME)
-                .clickCheckboxAgent()
+                .selectPermanentAgent()
                 .clickButtonCreate()
-                .clickButtonCreate()
+                .clickButtonSave()
                 .getNodeList();
 
         Assert.assertListContainsObject(nodeItemList, NODE_NAME, "List not contain new node");
@@ -288,9 +288,9 @@ public class ManageJenkinsTest extends BaseTest {
                 .clickNodesButton()
                 .clickButtonNewNode()
                 .inputName(MY_NODE_NAME)
-                .clickCheckboxAgent()
+                .selectPermanentAgent()
                 .clickButtonCreate()
-                .clickButtonCreate()
+                .clickButtonSave()
                 .getNodeList();
 
         Assert.assertListContainsObject(itemNoteList, MY_NODE_NAME, MY_NODE_NAME);
