@@ -127,7 +127,7 @@ public class HomePage extends BasePage {
     @FindBy(id = "description-link")
     private WebElement descriptionButton;
 
-    @FindBy(xpath = "//textarea[contains(@class, 'jenkins-input')]")
+    @FindBy(name = "description")
     private WebElement descriptionTextarea;
 
     @FindBy(xpath = "//button[@name='Submit']")
