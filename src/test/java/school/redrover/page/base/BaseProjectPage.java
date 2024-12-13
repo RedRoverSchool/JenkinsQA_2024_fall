@@ -89,7 +89,7 @@ public abstract class BaseProjectPage<Self extends BaseProjectPage<?, ?, ?>, Pro
     public Self editDescription(String text) {
         descriptionButton.click();
         descriptionField.clear();
-        descriptionField.sendKeys(text);
+        TestUtils.pasteTextWithJavaScript(getDriver(), descriptionField, text);
 
         return (Self) this;
     }
