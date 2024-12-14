@@ -118,11 +118,11 @@ public class HomePage extends BasePage {
     @FindBy(xpath = "//table[@id='projectstatus']/thead/tr/th/a[contains(text(), 'S')]")
     private WebElement statusTableHeaderChangeOrder;
 
-    @FindBy(xpath = "//table[@id='projectstatus']/thead/tr/th/a/span[contains(text(), '  ↓')]/..")
-    private WebElement titleTableHeaderWithDownArrow;
-
-    @FindBy(xpath = "//table[@id='projectstatus']/thead/tr/th/a/span[contains(text(), '  ↑')]/..")
-    private WebElement titleTableHeaderWithUpArrow;
+//    @FindBy(xpath = "//table[@id='projectstatus']/thead/tr/th/a/span[contains(text(), '  ↓')]/..")
+//    private WebElement titleTableHeaderWithDownArrow;
+//
+//    @FindBy(xpath = "//table[@id='projectstatus']/thead/tr/th/a/span[contains(text(), '  ↑')]/..")
+//    private WebElement titleTableHeaderWithUpArrow;
 
     @FindBy(id = "description-link")
     private WebElement descriptionButton;
