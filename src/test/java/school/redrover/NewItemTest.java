@@ -8,7 +8,6 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.Test;
-import school.redrover.page.base.BaseModel;
 import school.redrover.page.freestyle.FreestyleConfigPage;
 import school.redrover.page.home.CreateNewItemPage;
 import school.redrover.page.home.HomePage;
@@ -28,7 +27,6 @@ public class NewItemTest extends BaseTest {
     private final static String NEW_ITEM_NAME = "New Project";
     private final static String FIRST_ITEM_NAME = "My_First_Project";
     private final static String SECOND_ITEM_NAME = "My_Second_Project";
-
 
     private CreateNewItemPage goToNewItemPageAndEnterName(String projectName) {
         return new HomePage(getDriver())
