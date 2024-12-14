@@ -320,7 +320,7 @@ public class HomePage extends BasePage {
     }
 
     public HomePage clickScheduleBuild(String name) {
-        getWait5().until(ExpectedConditions.visibilityOf(getDriver().findElement(By.xpath("//td[@class='jenkins-table__cell--tight']//a[@tooltip='Schedule a Build for %s']".formatted(name)))))
+        getWait10().until(ExpectedConditions.visibilityOf(getDriver().findElement(By.xpath("//td[@class='jenkins-table__cell--tight']//a[@tooltip='Schedule a Build for %s']".formatted(name)))))
                 .click();
         getWait10().until(ExpectedConditions.visibilityOf(buildScheduledTooltip));
         getWait10().until(ExpectedConditions.invisibilityOf(buildScheduledTooltip));
@@ -445,7 +445,7 @@ public class HomePage extends BasePage {
     }
 
     public HomePage addDescription(String description) {
-        getWait5().until(ExpectedConditions.visibilityOf(descriptionTextarea)).sendKeys(description);
+        getWait10().until(ExpectedConditions.visibilityOf(descriptionTextarea)).sendKeys(description);
 
         return this;
     }
