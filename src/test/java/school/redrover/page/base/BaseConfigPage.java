@@ -4,6 +4,7 @@ import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 
 public abstract class BaseConfigPage<Self extends BaseConfigPage<?, ?>, ProjectPage extends BaseProjectPage> extends BasePage {
 
@@ -41,7 +42,7 @@ public abstract class BaseConfigPage<Self extends BaseConfigPage<?, ?>, ProjectP
     protected abstract ProjectPage createProjectPage();
 
     public Self enterDescription(String description) {
-        descriptionField.clear();
+        getWait5().until(ExpectedConditions.visibilityOf(descriptionField)).clear();
         descriptionField.sendKeys(description);
 
         return (Self) this;

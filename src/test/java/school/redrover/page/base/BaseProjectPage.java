@@ -88,7 +88,7 @@ public abstract class BaseProjectPage<Self extends BaseProjectPage<?, ?, ?>, Pro
 
     public Self editDescription(String text) {
         descriptionButton.click();
-        descriptionField.clear();
+        getWait5().until(ExpectedConditions.visibilityOf(descriptionField)).clear();
         descriptionField.sendKeys(text);
 
         return (Self) this;
