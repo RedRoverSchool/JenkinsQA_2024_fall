@@ -29,14 +29,13 @@ public class MultiConfigurationProjectTest extends BaseTest {
         Assert.assertEquals(itemList.get(0), PROJECT_NAME);
     }
 
-    @Test(dependsOnMethods = "testCreateProjectWithoutDescription", description = " MultiConfigurationProjectTest | Add descriptions to existing project")
+    @Test(dependsOnMethods = "testCreateProjectWithoutDescription")
     public void testAddDescriptions() {
         String addDescription = new HomePage(getDriver())
                 .openMultiConfigurationProject(PROJECT_NAME)
-                                .editDescription(DESCRIPTIONS)
+                .editDescription(DESCRIPTIONS)
                 .clickSubmitButton()
                 .getDescription();
-
 
         Assert.assertEquals(addDescription, DESCRIPTIONS);
     }
@@ -69,8 +68,10 @@ public class MultiConfigurationProjectTest extends BaseTest {
         }
     }
 
-    @Test(dependsOnMethods = "testCreateProjectWithoutDescription")
+    @Test
     public void testCreateWithExistingName() {
+        TestUtils.createMultiConfigurationProject(getDriver(), PROJECT_NAME);
+
         String errorMessage = new HomePage(getDriver())
                 .clickNewItem()
                 .enterItemName(PROJECT_NAME)

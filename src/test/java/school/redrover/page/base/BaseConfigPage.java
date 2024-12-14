@@ -1,5 +1,6 @@
 package school.redrover.page.base;
 
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -41,8 +42,9 @@ public abstract class BaseConfigPage<Self extends BaseConfigPage<?, ?>, ProjectP
     protected abstract ProjectPage createProjectPage();
 
     public Self enterDescription(String description) {
-        descriptionField.clear();
-        descriptionField.sendKeys(description);
+        JavascriptExecutor js = (JavascriptExecutor) getDriver();
+        js.executeScript("arguments[0].value = '';", descriptionField);
+        js.executeScript("arguments[0].value = arguments[1];", descriptionField, description);
 
         return (Self) this;
     }

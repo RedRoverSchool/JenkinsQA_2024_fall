@@ -8,7 +8,7 @@ import school.redrover.runner.BaseTest;
 public class DescriptionTest extends BaseTest {
 
     private static final String DESCRIPTION_TEXT = "It's my workspace";
-    private static final String NEW_TEXT = "Hello! ";
+    private static final String NEW_TEXT = "Hello!";
     private static final String TEXT_DESCRIPTION_BUTTON = "Add description";
 
     @Test
@@ -16,7 +16,7 @@ public class DescriptionTest extends BaseTest {
 
         String textDescription = new HomePage(getDriver())
                 .clickDescriptionButton()
-                .addDescription(DESCRIPTION_TEXT)
+                .typeDescription(DESCRIPTION_TEXT)
                 .clickSaveButton()
                 .getDescriptionText();
 
@@ -28,11 +28,12 @@ public class DescriptionTest extends BaseTest {
 
         String newText = new HomePage(getDriver())
                 .clickDescriptionButton()
-                .addDescription(NEW_TEXT)
+                .clearDescription()
+                .typeDescription(NEW_TEXT)
                 .clickSaveButton()
                 .getDescriptionText();
 
-        Assert.assertEquals(newText, NEW_TEXT + DESCRIPTION_TEXT);
+        Assert.assertEquals(newText, NEW_TEXT);
     }
 
     @Test(dependsOnMethods = "testEdit")
@@ -52,7 +53,7 @@ public class DescriptionTest extends BaseTest {
 
         String textPreview = new HomePage(getDriver())
                 .clickDescriptionButton()
-                .addDescription(DESCRIPTION_TEXT)
+                .typeDescription(DESCRIPTION_TEXT)
                 .clickPreviewButton()
                 .getTextPreview();
 

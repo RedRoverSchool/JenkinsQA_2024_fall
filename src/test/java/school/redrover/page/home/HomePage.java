@@ -445,10 +445,9 @@ public class HomePage extends BasePage {
         return this;
     }
 
-    public HomePage addDescription(String description) {
+    public HomePage typeDescription(String description) {
         JavascriptExecutor js = (JavascriptExecutor) getDriver();
         js.executeScript("arguments[0].value = arguments[1];", descriptionTextarea, description);
-        //descriptionTextarea.sendKeys(description);
 
         return this;
     }
@@ -460,7 +459,8 @@ public class HomePage extends BasePage {
     }
 
     public HomePage clearDescription() {
-        clearDescriptionTextarea.clear();
+        JavascriptExecutor js = (JavascriptExecutor) getDriver();
+        js.executeScript("arguments[0].value = '';", descriptionTextarea);
 
         return this;
     }
