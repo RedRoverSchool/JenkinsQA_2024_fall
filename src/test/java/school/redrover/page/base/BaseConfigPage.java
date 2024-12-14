@@ -42,7 +42,8 @@ public abstract class BaseConfigPage<Self extends BaseConfigPage<?, ?>, ProjectP
     protected abstract ProjectPage createProjectPage();
 
     public Self enterDescription(String description) {
-        getWait10().until(ExpectedConditions.visibilityOf(descriptionField)).clear();
+        getWait10().until(ExpectedConditions.visibilityOf(descriptionField)).click();
+        descriptionField.clear();
         descriptionField.sendKeys(description);
 
         return (Self) this;
