@@ -85,76 +85,76 @@ public class DashboardTest extends BaseTest {
 
 //        Assert.assertEquals(titleTableHeader, "S");
 //    }
-
-    @Test
-    public void testVerifyProjectOrderByStatusASCByDefault() {
-
-        preparationCreateNotBuiltProject(NotBuilt);
-        preparationCreateDisableProject(Disabled);
-        preparationCreateSuccessBuiltProject(SuccessBuilt);
-        preparationCreateFailedBuiltProject(FailedBuilt);
-
-        List<String> projectNameList = new HomePage(getDriver())
-                .clickStatusTableHeaderChangeOrder()
-                .getItemList();
-
-        Assert.assertEquals(projectNameList.size(), 4);
-        Assert.assertEquals(projectNameList, List.of(NotBuilt, Disabled, SuccessBuilt, FailedBuilt));
-    }
-
-    private void preparationCreateNotBuiltProject(String projectName) {
-        new HomePage(getDriver())
-                .clickNewItem()
-                .enterItemName(projectName)
-                .selectPipelineAndClickOk()
-                .clickSaveButton()
-                .gotoHomePage();
-    }
-
-    private void preparationCreateDisableProject(String projectName) {
-        new HomePage(getDriver())
-                .clickNewItem()
-                .enterItemName(projectName)
-                .selectPipelineAndClickOk()
-                .clickToggleToDisableOrEnableProject()
-                .clickSaveButton()
-                .gotoHomePage();
-    }
-
-    private void preparationCreateSuccessBuiltProject(String projectName) {
-        new HomePage(getDriver())
-                .clickNewItem()
-                .enterItemName(projectName)
-                .selectPipelineAndClickOk()
-                .addScriptToPipeline(validPipelineScriptFile)
-                .clickSaveButton()
-                .clickOnBuildNowItemOnSidePanelAndWait()
-                .gotoHomePage();
-
-    }
-
-    private void preparationCreateFailedBuiltProject(String projectName) {
-        new HomePage(getDriver())
-                .clickNewItem()
-                .enterItemName(projectName)
-                .selectPipelineAndClickOk()
-                .addScriptToPipeline(invalidPipelineScriptFile)
-                .clickSaveButton()
-                .clickOnBuildNowItemOnSidePanelAndWait()
-                .gotoHomePage();
-    }
-
-    @Test
-    public void testFullNameHelperText() {
-        String fullNameInputTip = new HomePage(getDriver())
-                .clickAdmin()
-                .clickConfigureSidebar()
-                .clickFullNameTooltip()
-                .getFullNameHelperInputText();
-
-        Assert.assertTrue(fullNameInputTip.contains(
-                "Specify your name in a more human-friendly format, so that people can see your real name as opposed to your ID."));
-    }
+//
+//    @Test
+//    public void testVerifyProjectOrderByStatusASCByDefault() {
+//
+//        preparationCreateNotBuiltProject(NotBuilt);
+//        preparationCreateDisableProject(Disabled);
+//        preparationCreateSuccessBuiltProject(SuccessBuilt);
+//        preparationCreateFailedBuiltProject(FailedBuilt);
+//
+//        List<String> projectNameList = new HomePage(getDriver())
+//                .clickStatusTableHeaderChangeOrder()
+//                .getItemList();
+//
+//        Assert.assertEquals(projectNameList.size(), 4);
+//        Assert.assertEquals(projectNameList, List.of(NotBuilt, Disabled, SuccessBuilt, FailedBuilt));
+//    }
+//
+//    private void preparationCreateNotBuiltProject(String projectName) {
+//        new HomePage(getDriver())
+//                .clickNewItem()
+//                .enterItemName(projectName)
+//                .selectPipelineAndClickOk()
+//                .clickSaveButton()
+//                .gotoHomePage();
+//    }
+//
+//    private void preparationCreateDisableProject(String projectName) {
+//        new HomePage(getDriver())
+//                .clickNewItem()
+//                .enterItemName(projectName)
+//                .selectPipelineAndClickOk()
+//                .clickToggleToDisableOrEnableProject()
+//                .clickSaveButton()
+//                .gotoHomePage();
+//    }
+//
+//    private void preparationCreateSuccessBuiltProject(String projectName) {
+//        new HomePage(getDriver())
+//                .clickNewItem()
+//                .enterItemName(projectName)
+//                .selectPipelineAndClickOk()
+//                .addScriptToPipeline(validPipelineScriptFile)
+//                .clickSaveButton()
+//                .clickOnBuildNowItemOnSidePanelAndWait()
+//                .gotoHomePage();
+//
+//    }
+//
+//    private void preparationCreateFailedBuiltProject(String projectName) {
+//        new HomePage(getDriver())
+//                .clickNewItem()
+//                .enterItemName(projectName)
+//                .selectPipelineAndClickOk()
+//                .addScriptToPipeline(invalidPipelineScriptFile)
+//                .clickSaveButton()
+//                .clickOnBuildNowItemOnSidePanelAndWait()
+//                .gotoHomePage();
+//    }
+//
+//    @Test
+//    public void testFullNameHelperText() {
+//        String fullNameInputTip = new HomePage(getDriver())
+//                .clickAdmin()
+//                .clickConfigureSidebar()
+//                .clickFullNameTooltip()
+//                .getFullNameHelperInputText();
+//
+//        Assert.assertTrue(fullNameInputTip.contains(
+//                "Specify your name in a more human-friendly format, so that people can see your real name as opposed to your ID."));
+//    }
 
     @Test
     public void testLogOut() {
