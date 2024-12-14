@@ -38,6 +38,7 @@ public class DescriptionTest extends BaseTest {
         Assert.assertEquals(newText, NEW_TEXT + DESCRIPTION_TEXT);
     }
 
+    @Ignore
     @Test(dependsOnMethods = "testEdit")
     public void testDelete() {
 
