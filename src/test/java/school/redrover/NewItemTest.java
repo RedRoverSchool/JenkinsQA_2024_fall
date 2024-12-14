@@ -29,10 +29,6 @@ public class NewItemTest extends BaseTest {
     private final static String FIRST_ITEM_NAME = "My_First_Project";
     private final static String SECOND_ITEM_NAME = "My_Second_Project";
 
-    private CreateNewItemPage goToNewItemPage() {
-        return new HomePage(getDriver())
-                .clickNewItem();
-    }
 
     private CreateNewItemPage goToNewItemPageAndEnterName(String projectName) {
         return new HomePage(getDriver())
@@ -162,8 +158,9 @@ public class NewItemTest extends BaseTest {
 
         @Test
     public void testCreateNewItemWithEmptyNameField() {
-        goToNewItemPage();
-        String errorMessage = new CreateNewItemPage(getDriver())
+
+        String errorMessage = new HomePage(getDriver())
+                .clickNewItem()
                 .selectFreestyleProject()
                 .selectPipeline()
                 .selectMultibranchPipelineProject()
