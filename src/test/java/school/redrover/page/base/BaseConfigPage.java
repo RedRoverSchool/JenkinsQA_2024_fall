@@ -31,6 +31,9 @@ public abstract class BaseConfigPage<Self extends BaseConfigPage<?, ?>, ProjectP
     @FindBy(name = "_.displayNameOrNull")
     private WebElement displayNameInput;
 
+    @FindBy(xpath = "//h1")
+    private WebElement pageTitle;
+
     public BaseConfigPage(WebDriver driver) {
         super(driver);
     }
@@ -82,5 +85,9 @@ public abstract class BaseConfigPage<Self extends BaseConfigPage<?, ?>, ProjectP
         setDisplayName(name);
 
         return (Self) this;
+    }
+
+    public String getTitleOfConfigPage() {
+        return pageTitle.getText();
     }
 }

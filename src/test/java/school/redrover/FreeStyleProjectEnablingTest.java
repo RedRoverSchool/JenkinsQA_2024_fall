@@ -11,7 +11,7 @@ public class FreeStyleProjectEnablingTest extends BaseTest {
     private static final String PROJECT_NAME = "FreeStyleProjectTest";
 
     @Test
-    public void testDefaultState () {
+    public void testDefaultState() {
         TestUtils.createFreestyleProject(getDriver(), PROJECT_NAME);
 
         boolean currentState = new HomePage(getDriver())
@@ -23,7 +23,7 @@ public class FreeStyleProjectEnablingTest extends BaseTest {
     }
 
     @Test(dependsOnMethods = "testDefaultState")
-    public void testDisableEnabled () {
+    public void testDisableEnabled() {
         String indicatorText = new HomePage(getDriver())
                 .openFreestyleProject(PROJECT_NAME)
                 .clickSidebarConfigButton()
@@ -35,7 +35,7 @@ public class FreeStyleProjectEnablingTest extends BaseTest {
     }
 
     @Test (dependsOnMethods = "testDisableEnabled")
-    public void testEnableWithIndicator () {
+    public void testEnableWithIndicator() {
         boolean currentState = new HomePage(getDriver())
                 .openFreestyleProject(PROJECT_NAME)
                 .changeEnablingStateViaIndicator()
@@ -48,7 +48,7 @@ public class FreeStyleProjectEnablingTest extends BaseTest {
     }
 
     @Test (dependsOnMethods = "testEnableWithIndicator")
-    public void testEnabledFromProjectPage () {
+    public void testEnabledFromProjectPage() {
         boolean currentState = new HomePage(getDriver())
                 .openFreestyleProject(PROJECT_NAME)
                 .clickSidebarConfigButton()
