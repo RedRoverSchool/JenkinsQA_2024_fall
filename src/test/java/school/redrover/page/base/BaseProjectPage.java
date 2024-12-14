@@ -19,7 +19,7 @@ public abstract class BaseProjectPage<Self extends BaseProjectPage<?, ?, ?>, Pro
     @FindBy(xpath = "//span[text()='New Item']/ancestor::a")
     private WebElement newItem;
 
-    @FindBy(name = "description")
+    @FindBy(xpath = "//textarea[@name='description']")
     private WebElement descriptionField;
 
     @FindBy(name = "Submit")
@@ -130,7 +130,7 @@ public abstract class BaseProjectPage<Self extends BaseProjectPage<?, ?, ?>, Pro
     }
 
     public String getDescription() {
-        return descriptionText.getText();
+        return getWait2().until(ExpectedConditions.visibilityOf(descriptionText)).getText();
     }
 
     public String getDescriptionButtonText() {

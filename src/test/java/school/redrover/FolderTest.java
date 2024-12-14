@@ -294,7 +294,7 @@ public class FolderTest extends BaseTest {
         Assert.assertEquals(nameProjectsListBreadcrumbs, List.of("Dashboard", FOLDER_MOVE_PARENT_NAME, FOLDER_MOVE_CHILD_NAME, "Move"));
     }
 
-    @Test(dependsOnMethods = "testMoveFromTheSameLevel")
+    @Test(dependsOnMethods = "testTryToMoveInTheSamePlace")
     public void testMoveOnTheHigherLevel() {
         List<String> nameProjectsList = new HomePage(getDriver())
                 .openFolder(FOLDER_MOVE_PARENT_NAME)

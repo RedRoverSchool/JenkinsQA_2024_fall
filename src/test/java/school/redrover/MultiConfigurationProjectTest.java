@@ -16,7 +16,7 @@ public class MultiConfigurationProjectTest extends BaseTest {
     private static final String PROJECT_NAME = "MultiConfigurationProject";
     private static final String DESCRIPTIONS = "Descriptions of project";
 
-    @Test(description = "Create project without descriptions")
+    @Test
     public void testCreateProjectWithoutDescription() {
         List<String> itemList = new HomePage(getDriver())
                 .clickNewItem()
