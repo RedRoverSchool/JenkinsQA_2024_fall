@@ -430,13 +430,13 @@ public class HomePage extends BasePage {
         return new HomePage(getDriver());
     }
 
-    public String getTitleTableHeaderWithDownArrow() {
-        return titleTableHeaderWithDownArrow.getText().split(" ")[0].trim();
-    }
-
-    public String getTitleTableHeaderWithUpArrow() {
-        return titleTableHeaderWithUpArrow.getText().split(" ")[0].trim();
-    }
+//    public String getTitleTableHeaderWithDownArrow() {
+//        return titleTableHeaderWithDownArrow.getText().split(" ")[0].trim();
+//    }
+//
+//    public String getTitleTableHeaderWithUpArrow() {
+//        return titleTableHeaderWithUpArrow.getText().split(" ")[0].trim();
+//    }
 
     public HomePage clickDescriptionButton() {
         descriptionButton.click();

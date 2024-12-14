@@ -53,14 +53,14 @@ public class DashboardTest extends BaseTest {
 
 
 
-    @Ignore
-    @Test(dependsOnMethods = "testVerifyProjectOrderByNameASCByDefault")
-    public void testVerifyDisplayIconDownArrowNextToNameByDefault() {
-        String titleTableHeader = new HomePage(getDriver())
-                .getTitleTableHeaderWithDownArrow();
-
-        Assert.assertEquals(titleTableHeader, "Name");
-    }
+//    @Ignore
+//    @Test(dependsOnMethods = "testVerifyProjectOrderByNameASCByDefault")
+//    public void testVerifyDisplayIconDownArrowNextToNameByDefault() {
+//        String titleTableHeader = new HomePage(getDriver())
+//                .getTitleTableHeaderWithDownArrow();
+//
+//        Assert.assertEquals(titleTableHeader, "Name");
+//    }
 
     @Ignore
     @Test(dependsOnMethods = "testVerifyDisplayIconDownArrowNextToNameByDefault")
@@ -75,16 +75,16 @@ public class DashboardTest extends BaseTest {
     }
 
 
-    @Ignore
-    @Test(dependsOnMethods = "testVerifyDisplayIconDownArrowNextToNameByDefault")
-    public void testDisplayDownArrowOnSelectedColumnName() {
+//    @Ignore
+//    @Test(dependsOnMethods = "testVerifyDisplayIconDownArrowNextToNameByDefault")
+//    public void testDisplayDownArrowOnSelectedColumnName() {
+//
+//        String titleTableHeader = new HomePage(getDriver())
+//                .clickStatusTableHeaderChangeOrder()
+//                .getTitleTableHeaderWithUpArrow();
 
-        String titleTableHeader = new HomePage(getDriver())
-                .clickStatusTableHeaderChangeOrder()
-                .getTitleTableHeaderWithUpArrow();
-
-        Assert.assertEquals(titleTableHeader, "S");
-    }
+//        Assert.assertEquals(titleTableHeader, "S");
+//    }
 
     @Test
     public void testVerifyProjectOrderByStatusASCByDefault() {
