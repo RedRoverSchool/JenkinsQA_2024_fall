@@ -8,6 +8,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.Test;
+import school.redrover.page.base.BaseModel;
 import school.redrover.page.freestyle.FreestyleConfigPage;
 import school.redrover.page.home.CreateNewItemPage;
 import school.redrover.page.home.HomePage;
@@ -27,6 +28,11 @@ public class NewItemTest extends BaseTest {
     private final static String NEW_ITEM_NAME = "New Project";
     private final static String FIRST_ITEM_NAME = "My_First_Project";
     private final static String SECOND_ITEM_NAME = "My_Second_Project";
+
+    private CreateNewItemPage goToNewItemPage() {
+        return new HomePage(getDriver())
+                .clickNewItem();
+    }
 
     private CreateNewItemPage goToNewItemPageAndEnterName(String projectName) {
         return new HomePage(getDriver())
@@ -156,27 +162,15 @@ public class NewItemTest extends BaseTest {
 
         @Test
     public void testCreateNewItemWithEmptyNameField() {
-        getDriver().findElement(By.xpath("//a[@href='newJob']")).click();
+        goToNewItemPage();
+        String errorMessage = new CreateNewItemPage(getDriver())
+                .selectFreestyleProject()
+                .selectPipeline()
+                .selectMultibranchPipelineProject()
+                .selectFolderType()
+                .selectMultibranchPipelineProject()
+                .getErrorMessage();
 
-        // Помогите переделать мой класс по POM. Нужга ваша помощь я потерялся !!!!!!
-
-        List<WebElement> items = getDriver().findElements(By.xpath("//div[@class='desc']"));
-
-        JavascriptExecutor js = (JavascriptExecutor) getDriver();
-        js.executeScript("window.scrollBy(0, 500);");
-
-        String expectedMessage = "This field cannot be empty, please enter a valid name";
-
-        for (WebElement item : items) {
-            item.click();
-
-            WebElement errorMessage = getDriver().findElement(By.xpath("//div[@id='itemname-required']"));
-            String actualErrorMessage = errorMessage.getText();
-
-            WebDriverWait webDriverWait = new WebDriverWait(getDriver(), Duration.ofSeconds(3));
-            webDriverWait.until(ExpectedConditions.elementToBeClickable(item));
-
-            Assert.assertTrue(actualErrorMessage.contains(expectedMessage), "This field cannot be empty, please enter a valid name");
+            Assert.assertEquals(errorMessage,MESSAGE);
         }
-    }
 }
