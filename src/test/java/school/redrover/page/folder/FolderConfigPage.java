@@ -1,5 +1,6 @@
 package school.redrover.page.folder;
 
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -20,7 +21,8 @@ public class FolderConfigPage extends BaseConfigPage<FolderConfigPage, FolderPro
     }
 
     public FolderConfigPage enterConfigurationName(String name) {
-        displayNameField.sendKeys(name);
+        JavascriptExecutor js = (JavascriptExecutor) getDriver();
+        js.executeScript("arguments[0].value = arguments[1];", displayNameField, name);
 
         return this;
     }

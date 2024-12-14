@@ -27,11 +27,10 @@ public class AddDescriptionToNewFreestyleProjectTest extends BaseTest {
     }
 
 
-    @Test (dependsOnMethods = "testAddDescription")
+    @Test(dependsOnMethods = "testAddDescription")
     public void testAddDescriptionToExisting() {
         String getDescription = new HomePage(getDriver())
                 .openFreestyleProject(PROJECT_NAME)
-                .clearDescription()
                 .editDescription(DESCRIPTION_EDITED)
                 .clickSubmitButton()
                 .getDescription();

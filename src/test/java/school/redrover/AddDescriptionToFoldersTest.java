@@ -51,7 +51,8 @@ public class AddDescriptionToFoldersTest extends BaseTest {
         String finalResult = new HomePage(getDriver())
                 .gotoHomePage()
                 .openFolder(FOLDER_NAME)
-                .clearDescription()
+                .editDescription("")
+                .clickSubmitButton()
                 .getDescriptionButtonText();
 
         Assert.assertEquals(finalResult, "Add description");

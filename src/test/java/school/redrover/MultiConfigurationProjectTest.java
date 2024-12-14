@@ -33,8 +33,7 @@ public class MultiConfigurationProjectTest extends BaseTest {
     public void testAddDescriptions() {
         String addDescription = new HomePage(getDriver())
                 .openMultiConfigurationProject(PROJECT_NAME)
-                .clearDescription()
-                .editDescription(DESCRIPTIONS)
+                                .editDescription(DESCRIPTIONS)
                 .clickSubmitButton()
                 .getDescription();
 

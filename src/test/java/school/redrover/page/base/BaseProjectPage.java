@@ -1,5 +1,6 @@
 package school.redrover.page.base;
 
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -88,21 +89,15 @@ public abstract class BaseProjectPage<Self extends BaseProjectPage<?, ?, ?>, Pro
 
     public Self editDescription(String text) {
         descriptionButton.click();
-        descriptionField.clear();
-        descriptionField.sendKeys(text);
+
+        JavascriptExecutor js = (JavascriptExecutor) getDriver();
+        js.executeScript("arguments[0].value = '';", descriptionField);
+        js.executeScript("arguments[0].value = arguments[1];", descriptionField, text);
 
         return (Self) this;
     }
 
     public Self clickSubmitButton() {
-        submitButton.click();
-
-        return (Self) this;
-    }
-
-    public Self clearDescription() {
-        descriptionButton.click();
-        descriptionField.clear();
         submitButton.click();
 
         return (Self) this;

@@ -1,6 +1,7 @@
 package school.redrover.page.home;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
@@ -445,7 +446,9 @@ public class HomePage extends BasePage {
     }
 
     public HomePage addDescription(String description) {
-        descriptionTextarea.sendKeys(description);
+        JavascriptExecutor js = (JavascriptExecutor) getDriver();
+        js.executeScript("arguments[0].value = arguments[1];", descriptionTextarea, description);
+        //descriptionTextarea.sendKeys(description);
 
         return this;
     }

@@ -132,7 +132,6 @@ public class FreestyleProjectTest extends BaseTest {
 
         String actualDescription = new HomePage(getDriver())
                 .openFreestyleProject(PROJECT_NAME)
-                .clearDescription()
                 .editDescription(newDescription)
                 .clickSubmitButton()
                 .getDescription();
@@ -144,10 +143,11 @@ public class FreestyleProjectTest extends BaseTest {
     public void testDeleteDescription() {
         String description = new HomePage(getDriver())
                 .openFreestyleProject(PROJECT_NAME)
-                .clearDescription()
-                .getDescription();
+                .editDescription("")
+                .clickSubmitButton()
+                .getDescriptionButtonText();
 
-        Assert.assertEquals(description, "");
+        Assert.assertEquals(description, "Add description");
     }
 
     @Test(dependsOnMethods = "testCreateProjectViaSidebarMenu")
@@ -290,7 +290,7 @@ public class FreestyleProjectTest extends BaseTest {
                 .clickBuildNowSidebar();
         String lastBuildNumber = freestyleProjectPage.getLastBuildNumber();
 
-                freestyleProjectPage
+        freestyleProjectPage
                 .clickOnSuccessBuildIconForLastBuild()
                 .clickDeleteBuildSidebar()
                 .confirmDeleteBuild();
@@ -428,8 +428,10 @@ public class FreestyleProjectTest extends BaseTest {
         Assert.assertEquals(emptyHistory.size(), 0);
     }
 
-    @Test(dependsOnMethods = "testBuildHistoryIsEmpty")
+    @Test
     public void testUpdateAfterExecutingBuild() {
+        TestUtils.createFreestyleProject(getDriver(), PROJECT_NAME);
+
         List<String> oneExecution = new HomePage(getDriver())
                 .clickScheduleBuild(PROJECT_NAME)
                 .gotoBuildHistoryPageFromLeftPanel()
@@ -493,7 +495,7 @@ public class FreestyleProjectTest extends BaseTest {
     }
 
     @Test
-    public void testCreateFreestyleProjectFromExistingOne () {
+    public void testCreateFreestyleProjectFromExistingOne() {
         String secondProjectName = "Second" + PROJECT_NAME;
         TestUtils.createFreestyleProject(getDriver(), PROJECT_NAME);
 
