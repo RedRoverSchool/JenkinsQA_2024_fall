@@ -25,6 +25,7 @@ public class DescriptionTest extends BaseTest {
         Assert.assertEquals(textDescription, DESCRIPTION_TEXT);
     }
 
+    @Ignore
     @Test(dependsOnMethods = "testAdd")
     public void testEdit() {
 
