@@ -156,7 +156,6 @@ public class NewItemTest extends BaseTest {
 
         @Test
     public void testCreateNewItemWithEmptyNameField() {
-
         String errorMessage = new HomePage(getDriver())
                 .clickNewItem()
                 .selectFreestyleProject()
