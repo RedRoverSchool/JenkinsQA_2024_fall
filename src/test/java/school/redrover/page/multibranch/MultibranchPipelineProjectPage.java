@@ -33,7 +33,7 @@ public class MultibranchPipelineProjectPage extends BaseProjectPage<MultibranchP
         return jobNameToMenu.getText();
     }
 
-    public String getDescription() {
+    public String getMpDescription() {
         return getWait5().until(ExpectedConditions.visibilityOf(description)).getText();
     }
 }

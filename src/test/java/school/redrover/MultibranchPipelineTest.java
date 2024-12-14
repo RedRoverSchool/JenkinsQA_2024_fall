@@ -51,7 +51,7 @@ public class MultibranchPipelineTest extends BaseTest {
                 .selectMultibranchPipelineAndClickOk()
                 .enterDescription(description)
                 .clickSaveButton()
-                .getDescription();
+                .getMpDescription();
 
         Assert.assertEquals(actualDescription, description);
     }
