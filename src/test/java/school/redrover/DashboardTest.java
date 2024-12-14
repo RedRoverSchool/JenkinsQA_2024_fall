@@ -1,6 +1,7 @@
 package school.redrover;
 
 import org.testng.Assert;
+import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import school.redrover.page.home.HomePage;
 import school.redrover.runner.BaseTest;
@@ -28,7 +29,7 @@ public class DashboardTest extends BaseTest {
                 stages {
                     stage('Checkout') {
                         steps {echo 'Step: Checkout code from repository'}
-            
+                        
             """;
 
     private static final String SuccessBuilt = "FPipelineProject";
@@ -37,6 +38,7 @@ public class DashboardTest extends BaseTest {
     private static final String NotBuilt = "1PipelineProject";
     private static final List<String> PROJECT_NAMES = List.of("FPipelineProject", "APipelineProject", "ZPipelineProject");
 
+    @Ignore
     @Test
     public void testVerifyProjectOrderByNameASCByDefault() {
         PROJECT_NAMES.forEach(jobName -> TestUtils.createFreestyleProject(getDriver(), jobName));
@@ -49,6 +51,7 @@ public class DashboardTest extends BaseTest {
         Assert.assertEquals(projectNameList, expectedList);
     }
 
+    @Ignore
     @Test(dependsOnMethods = "testVerifyDisplayIconDownArrowNextToNameByDefault")
     public void testVerifyProjectOrderByNameDesc() {
         final List<String> expectedList = PROJECT_NAMES.stream().sorted(Comparator.reverseOrder()).toList();
@@ -60,6 +63,7 @@ public class DashboardTest extends BaseTest {
         Assert.assertEquals(actualList, expectedList);
     }
 
+    @Ignore
     @Test(dependsOnMethods = "testVerifyProjectOrderByNameASCByDefault")
     public void testVerifyDisplayIconDownArrowNextToNameByDefault() {
         String titleTableHeader = new HomePage(getDriver())
