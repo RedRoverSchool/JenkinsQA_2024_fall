@@ -298,6 +298,19 @@ public class FreestyleProjectTest extends BaseTest {
         Assert.assertListNotContainsObject(freestyleProjectPage.getListOfBuilds(), lastBuildNumber, "The last build wasn't deleted");
     }
 
+    @Test(description = "Verify existing of, total build time, for projects build")
+    public void testTotalBuildTimeForProjectsBuild(){
+        TestUtils.createFreestyleProject(getDriver(),PROJECT_NAME);
+
+        int lastBuildTotalTime = new HomePage(getDriver())
+                .openFreestyleProject(PROJECT_NAME)
+                .clickBuildNowSidebar()
+                .clickLastBuildDateTime()
+                .getLastBuildTotalTime();
+
+        Assert.assertTrue(lastBuildTotalTime > 0 );
+    }
+
     @Test
     public void testDeleteProjectViaSidebarMenuOnProjectPage() {
         String welcomeText = new HomePage(getDriver())
