@@ -51,6 +51,17 @@ public class DashboardTest extends BaseTest {
         Assert.assertEquals(projectNameList, expectedList);
     }
 
+
+
+    @Ignore
+    @Test(dependsOnMethods = "testVerifyProjectOrderByNameASCByDefault")
+    public void testVerifyDisplayIconDownArrowNextToNameByDefault() {
+        String titleTableHeader = new HomePage(getDriver())
+                .getTitleTableHeaderWithDownArrow();
+
+        Assert.assertEquals(titleTableHeader, "Name");
+    }
+
     @Ignore
     @Test(dependsOnMethods = "testVerifyDisplayIconDownArrowNextToNameByDefault")
     public void testVerifyProjectOrderByNameDesc() {
@@ -63,15 +74,8 @@ public class DashboardTest extends BaseTest {
         Assert.assertEquals(actualList, expectedList);
     }
 
+
     @Ignore
-    @Test(dependsOnMethods = "testVerifyProjectOrderByNameASCByDefault")
-    public void testVerifyDisplayIconDownArrowNextToNameByDefault() {
-        String titleTableHeader = new HomePage(getDriver())
-                .getTitleTableHeaderWithDownArrow();
-
-        Assert.assertEquals(titleTableHeader, "Name");
-    }
-
     @Test(dependsOnMethods = "testVerifyDisplayIconDownArrowNextToNameByDefault")
     public void testDisplayDownArrowOnSelectedColumnName() {
 
@@ -85,10 +89,10 @@ public class DashboardTest extends BaseTest {
     @Test
     public void testVerifyProjectOrderByStatusASCByDefault() {
 
-        testPreparationCreateNotBuiltProject(NotBuilt);
-        testPreparationCreateDisableProject(Disabled);
-        testPreparationCreateSuccessBuiltProject(SuccessBuilt);
-        testPreparationCreateFailedBuiltProject(FailedBuilt);
+        preparationCreateNotBuiltProject(NotBuilt);
+        preparationCreateDisableProject(Disabled);
+        preparationCreateSuccessBuiltProject(SuccessBuilt);
+        preparationCreateFailedBuiltProject(FailedBuilt);
 
         List<String> projectNameList = new HomePage(getDriver())
                 .clickStatusTableHeaderChangeOrder()
@@ -98,7 +102,7 @@ public class DashboardTest extends BaseTest {
         Assert.assertEquals(projectNameList, List.of(NotBuilt, Disabled, SuccessBuilt, FailedBuilt));
     }
 
-    private void testPreparationCreateNotBuiltProject(String projectName) {
+    private void preparationCreateNotBuiltProject(String projectName) {
         new HomePage(getDriver())
                 .clickNewItem()
                 .enterItemName(projectName)
@@ -107,7 +111,7 @@ public class DashboardTest extends BaseTest {
                 .gotoHomePage();
     }
 
-    private void testPreparationCreateDisableProject(String projectName) {
+    private void preparationCreateDisableProject(String projectName) {
         new HomePage(getDriver())
                 .clickNewItem()
                 .enterItemName(projectName)
@@ -117,7 +121,7 @@ public class DashboardTest extends BaseTest {
                 .gotoHomePage();
     }
 
-    private void testPreparationCreateSuccessBuiltProject(String projectName) {
+    private void preparationCreateSuccessBuiltProject(String projectName) {
         new HomePage(getDriver())
                 .clickNewItem()
                 .enterItemName(projectName)
@@ -129,7 +133,7 @@ public class DashboardTest extends BaseTest {
 
     }
 
-    private void testPreparationCreateFailedBuiltProject(String projectName) {
+    private void preparationCreateFailedBuiltProject(String projectName) {
         new HomePage(getDriver())
                 .clickNewItem()
                 .enterItemName(projectName)
