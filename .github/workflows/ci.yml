@@ -23,6 +23,15 @@ jobs:
           java-version: '17'
           cache: 'maven'
 
+      - name: Install Google Chrome and ChromeDriver
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y google-chrome-stable
+          wget https://chromedriver.storage.googleapis.com/131.0.6778.108/chromedriver_linux64.zip
+          unzip chromedriver_linux64.zip
+          sudo mv chromedriver /usr/local/bin/
+          sudo chmod +x /usr/local/bin/chromedriver
+
       - name: Get list of changed files
         run: echo "LIST_OF_CHANGED_FILES=$(git diff --name-only origin/$GITHUB_HEAD_REF $(git merge-base origin/$GITHUB_HEAD_REF origin/main) | tr '\n' ';')" >> $GITHUB_ENV
 
