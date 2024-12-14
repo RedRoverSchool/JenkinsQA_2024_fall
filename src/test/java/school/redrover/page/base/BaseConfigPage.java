@@ -42,6 +42,7 @@ public abstract class BaseConfigPage<Self extends BaseConfigPage<?, ?>, ProjectP
     protected abstract ProjectPage createProjectPage();
 
     public Self enterDescription(String description) {
+
         JavascriptExecutor js = (JavascriptExecutor) getDriver();
         js.executeScript("arguments[0].value = '';", descriptionField);
         js.executeScript("arguments[0].value = arguments[1];", descriptionField, description);

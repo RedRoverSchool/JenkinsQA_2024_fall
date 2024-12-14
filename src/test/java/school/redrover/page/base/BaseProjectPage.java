@@ -91,8 +91,7 @@ public abstract class BaseProjectPage<Self extends BaseProjectPage<?, ?, ?>, Pro
         descriptionButton.click();
 
         JavascriptExecutor js = (JavascriptExecutor) getDriver();
-        js.executeScript("arguments[0].value = '';", descriptionField);
-        js.executeScript("arguments[0].value = arguments[1];", descriptionField, text);
+        js.executeScript("arguments[0].value = arguments[1]; arguments[0].dispatchEvent(new Event('input'));", descriptionField, text);
 
         return (Self) this;
     }
