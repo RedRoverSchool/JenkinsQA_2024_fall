@@ -62,7 +62,6 @@ public abstract class BaseConfigPage<Self extends BaseConfigPage<?, ?>, ProjectP
     }
 
     public Self changeDescriptionPreviewState() {
-
         if (textareaPreview.getAttribute("style").equals("display: none;")) {
             showPreviewLink.click();
         } else {
