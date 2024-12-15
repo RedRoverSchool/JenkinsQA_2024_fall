@@ -198,7 +198,7 @@ public class FolderTest extends BaseTest {
     }
 
     @Test
-    public void testDeleteViaMainPageChevron () {
+    public void testDeleteViaMainPageChevron() {
         TestUtils.createFolder(getDriver(), FIRST_FOLDER_NAME);
 
         List<String> setOfProjects = new HomePage(getDriver())
@@ -209,7 +209,7 @@ public class FolderTest extends BaseTest {
     }
 
     @Test
-    public void testDeleteViaSidebarFromProjectPage () {
+    public void testDeleteViaSidebarFromProjectPage() {
         TestUtils.createFolder(getDriver(), FIRST_FOLDER_NAME);
 
         List<String> setOfProjects = new HomePage(getDriver())
@@ -220,7 +220,7 @@ public class FolderTest extends BaseTest {
     }
 
     @Test
-    public void testCancelDeletingViaSidebarProjectPage () {
+    public void testCancelDeletingViaSidebarProjectPage() {
         TestUtils.createFolder(getDriver(), FIRST_FOLDER_NAME);
 
         List<String> setOfProjects = new HomePage(getDriver())
@@ -233,7 +233,7 @@ public class FolderTest extends BaseTest {
     }
 
     @Test
-    public void testDeleteViaMyViewChevron () {
+    public void testDeleteViaMyViewChevron() {
         TestUtils.createFolder(getDriver(), FIRST_FOLDER_NAME);
 
         List<String> setOfProjects = new HomePage(getDriver())
@@ -279,14 +279,14 @@ public class FolderTest extends BaseTest {
                 .openFolder(FOLDER_MOVE_PARENT_NAME)
                 .openFolder(FOLDER_MOVE_CHILD2_NAME)
                 .clickMoveOnSidebar()
-                .selectParentFolderAndClickMove(FOLDER_MOVE_PARENT_NAME +"/" + FOLDER_MOVE_CHILD_NAME)
+                .selectParentFolderAndClickMove(FOLDER_MOVE_PARENT_NAME + "/" + FOLDER_MOVE_CHILD_NAME)
                 .getBreadcrumsBarItemsList();
 
         Assert.assertEquals(nameProjectsList, List.of("Dashboard", FOLDER_MOVE_PARENT_NAME, FOLDER_MOVE_CHILD_NAME, FOLDER_MOVE_CHILD2_NAME));
     }
 
     @Test(dependsOnMethods = "testMoveFromTheSameLevel")
-    public void testTryToMoveInTheSamePlace () {
+    public void testTryToMoveInTheSamePlace() {
         List<String> nameProjectsListBreadcrumbs = new HomePage(getDriver())
                 .openFolder(FOLDER_MOVE_PARENT_NAME)
                 .openFolder(FOLDER_MOVE_CHILD_NAME)
@@ -311,18 +311,18 @@ public class FolderTest extends BaseTest {
     }
 
     @Test(dependsOnMethods = "testMoveOnTheHigherLevel")
-    public void testNoOptionsToMoveParentIntoChild () {
+    public void testNoOptionsToMoveParentIntoChild() {
         List<String> itemsSidebar = new HomePage(getDriver())
                 .openFolder(FOLDER_MOVE_PARENT_NAME)
                 .getListOfItemsSidebar();
 
-        Assert.assertListNotContains(itemsSidebar, item->item.contains("Move"), "list of sidebar items contains Move");
+        Assert.assertListNotContains(itemsSidebar, item -> item.contains("Move"), "list of sidebar items contains Move");
     }
 
     @Test
-    public void testMoveViaChevronMainPage () {
+    public void testMoveViaChevronMainPage() {
 
-        List<String> nameProjectsList =  new HomePage(getDriver())
+        List<String> nameProjectsList = new HomePage(getDriver())
                 .clickNewItem()
                 .enterItemName(FOLDER_MOVE_PARENT_NAME)
                 .selectFolderAndClickOk()
@@ -341,9 +341,9 @@ public class FolderTest extends BaseTest {
     }
 
     @Test
-    public void testMoveViaChevronMyView () {
+    public void testMoveViaChevronMyView() {
 
-        List<String> nameProjectsList =  new HomePage(getDriver())
+        List<String> nameProjectsList = new HomePage(getDriver())
                 .clickNewItem()
                 .enterItemName(FOLDER_MOVE_PARENT_NAME)
                 .selectFolderAndClickOk()
@@ -363,32 +363,45 @@ public class FolderTest extends BaseTest {
     }
 
     @Test
-    public void testRenameFolderFromDashboardViaFolderPage() {
+    public void testRenameViaSidebar() {
         TestUtils.createFolder(getDriver(), FOLDER_NAME);
 
-            List<String> projectList = new HomePage(getDriver())
-                    .openFolder(FOLDER_NAME)
-                    .clickRenameSidebarButton()
-                    .clearInputFieldAndTypeName(NEW_FOLDER_NAME)
-                    .clickRenameButton()
-                    .gotoHomePage()
-                    .getItemList();
+        List<String> projectList = new HomePage(getDriver())
+                .openFolder(FOLDER_NAME)
+                .clickRenameSidebarButton()
+                .clearInputFieldAndTypeName(NEW_FOLDER_NAME)
+                .clickRenameButton()
+                .gotoHomePage()
+                .getItemList();
 
-            Assert.assertListContainsObject(projectList,NEW_FOLDER_NAME,"Folder is not renamed");
-        }
+        Assert.assertListContainsObject(projectList, NEW_FOLDER_NAME, "Folder is not renamed");
+    }
 
     @Test
     public void testErrorMessageOnRenameFolderWithSameName() {
         TestUtils.createFolder(getDriver(), FOLDER_NAME);
 
-        new HomePage(getDriver())
+        String actualErrorMessage = new HomePage(getDriver())
                 .openFolder(FOLDER_NAME)
                 .clickRenameSidebarButton()
-                .clickRenameButton();
-
-        String actualErrorMessage = new ErrorPage(getDriver()).getErrorMessage();
+                .clickRenameButtonLeadingToError()
+                .getErrorMessage();
 
         Assert.assertEquals(actualErrorMessage, ERROR_MESSAGE_ON_RENAME_WITH_SAME_NAME);
+    }
+
+    @Test(dependsOnMethods = "testRenameViaSidebar")
+    public void testRenameViaBreadcrumbDropdown() {
+        List<String> projectList = new HomePage(getDriver())
+                .openFolder(NEW_FOLDER_NAME)
+                .openBreadcrumbDropdown()
+                .clickRenameBreadcrumbDropdown()
+                .clearInputFieldAndTypeName(FOLDER_NAME)
+                .clickRenameButton()
+                .gotoHomePage()
+                .getItemList();
+
+        Assert.assertListContainsObject(projectList, FOLDER_NAME, "Folder is not renamed");
     }
 
     @Test(dependsOnMethods = "testErrorMessageOnRenameFolderWithSameName")

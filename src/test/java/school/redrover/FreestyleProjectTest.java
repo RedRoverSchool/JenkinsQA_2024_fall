@@ -291,7 +291,7 @@ public class FreestyleProjectTest extends BaseTest {
                 .clickBuildNowSidebar();
         String lastBuildNumber = freestyleProjectPage.getLastBuildNumber();
 
-                freestyleProjectPage
+        freestyleProjectPage
                 .clickOnSuccessBuildIconForLastBuild()
                 .clickDeleteBuildSidebar()
                 .confirmDeleteBuild();
@@ -432,6 +432,7 @@ public class FreestyleProjectTest extends BaseTest {
     @Ignore
     @Test(dependsOnMethods = "testBuildHistoryIsEmpty")
     public void testUpdateAfterExecutingBuild() {
+        TestUtils.createFreestyleProject(getDriver(), PROJECT_NAME);
         List<String> oneExecution = new HomePage(getDriver())
                 .clickScheduleBuild(PROJECT_NAME)
                 .gotoBuildHistoryPageFromLeftPanel()
@@ -496,7 +497,7 @@ public class FreestyleProjectTest extends BaseTest {
     }
 
     @Test
-    public void testCreateFreestyleProjectFromExistingOne () {
+    public void testCreateFreestyleProjectFromExistingOne() {
         String secondProjectName = "Second" + PROJECT_NAME;
         TestUtils.createFreestyleProject(getDriver(), PROJECT_NAME);
 
