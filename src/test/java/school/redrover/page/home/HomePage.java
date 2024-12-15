@@ -128,13 +128,13 @@ public class HomePage extends BasePage {
     private WebElement descriptionButton;
 
     @FindBy(xpath = "//textarea[contains(@class, 'jenkins-input')]")
-    private WebElement descriptionTextArea;
+    private WebElement descriptionTextarea;
 
     @FindBy(xpath = "//button[@name='Submit']")
     private WebElement saveButton;
 
     @FindBy(xpath = "//textarea[@name='description']")
-    private WebElement clearDescriptionTextArea;
+    private WebElement clearDescriptionTextarea;
 
     @FindBy(css = "[class$='textarea-show-preview']")
     private WebElement previewButton;
@@ -448,7 +448,8 @@ public class HomePage extends BasePage {
     }
 
     public HomePage addDescription(String description) {
-        descriptionTextArea.sendKeys(description);
+        getWait5().until(ExpectedConditions.visibilityOf(descriptionTextarea));
+        descriptionTextarea.sendKeys(description);
 
         return this;
     }
@@ -460,7 +461,7 @@ public class HomePage extends BasePage {
     }
 
     public HomePage clearDescription() {
-        clearDescriptionTextArea.clear();
+        clearDescriptionTextarea.clear();
 
         return this;
     }
