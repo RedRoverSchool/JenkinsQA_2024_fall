@@ -428,8 +428,9 @@ public class FreestyleProjectTest extends BaseTest {
         Assert.assertEquals(emptyHistory.size(), 0);
     }
 
-    @Test(dependsOnMethods = "testBuildHistoryIsEmpty")
+    @Test
     public void testUpdateAfterExecutingBuild() {
+        TestUtils.createFreestyleProject(getDriver(), PROJECT_NAME);
         List<String> oneExecution = new HomePage(getDriver())
                 .clickScheduleBuild(PROJECT_NAME)
                 .gotoBuildHistoryPageFromLeftPanel()
