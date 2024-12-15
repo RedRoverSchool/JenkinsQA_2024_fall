@@ -43,7 +43,7 @@ public class CreateUserPage extends BasePage {
     }
 
     public UsersPage fillFormByValidDataToCreateUser(String fullName) {
-        usernameField.sendKeys("name");
+        usernameField.sendKeys("Ivan");
         password1Field.sendKeys("123");
         password2Field.sendKeys("123");
         fullnameField.sendKeys(fullName);
