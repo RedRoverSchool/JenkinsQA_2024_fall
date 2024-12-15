@@ -19,6 +19,7 @@ import java.util.List;
 public class ManageJenkinsTest extends BaseTest {
 
     private final String MY_NODE_NAME = "My name of node";
+    private final String NODE_NAME = "NewNodeName";
 
     @Test
     public void testCheckTitle() {
@@ -111,6 +112,10 @@ public class ManageJenkinsTest extends BaseTest {
 
     @Test
     public void testSearchSystemConfigurationItems() {
+
+        new HomePage(getDriver())
+                .openManageJenkinsPage()
+                .getSystemConfigurationItems();
 
         WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(10));
         WebElement manageJenkinsTab = wait.until(
@@ -239,18 +244,18 @@ public class ManageJenkinsTest extends BaseTest {
 
     @Test
     public void testCreateNewAgent() {
-        getDriver().findElement(By.xpath("//a[contains(.,'Manage Jenkins')]")).click();
 
-        getDriver().findElement(By.xpath("//dt[.='Nodes']")).click();
-        getDriver().findElement(By.cssSelector(".jenkins-button--primary")).click();
-        getDriver().findElement(By.xpath("//input[@id='name']")).sendKeys("NewAgent");
-        getDriver().findElement(By.tagName("label")).click();
-        getDriver().findElement(By.xpath("//button[@id='ok']")).click();
-        getDriver().findElement(By.name("Submit")).click();
+        List<String> nodeItemList = new HomePage(getDriver())
+                .openManageJenkinsPage()
+                .clickNodesButton()
+                .clickButtonNewNode()
+                .enterNodeName(NODE_NAME)
+                .selectPermanentAgent()
+                .clickButtonCreate()
+                .clickButtonSave()
+                .getNodeList();
 
-        WebElement newAgent = getDriver().findElement(By.xpath("//a[.='NewAgent']"));
-
-        Assert.assertTrue(newAgent.isDisplayed());
+        Assert.assertListContainsObject(nodeItemList, NODE_NAME, "List not contain new node");
     }
 
     @Test
@@ -259,10 +264,10 @@ public class ManageJenkinsTest extends BaseTest {
                 .openManageJenkinsPage()
                 .clickNodesButton()
                 .clickButtonNewNode()
-                .inputName(MY_NODE_NAME)
-                .clickCheckboxAgent()
+                .enterNodeName(MY_NODE_NAME)
+                .selectPermanentAgent()
                 .clickButtonCreate()
-                .clickButtonCreate()
+                .clickButtonSave()
                 .getNodeList();
 
         Assert.assertListContainsObject(itemNoteList, MY_NODE_NAME, MY_NODE_NAME);
