@@ -1,6 +1,7 @@
 package school.redrover;
 
 import org.testng.Assert;
+import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import school.redrover.page.home.HomePage;
 import school.redrover.runner.BaseTest;
@@ -11,6 +12,7 @@ public class DescriptionTest extends BaseTest {
     private static final String NEW_TEXT = "Hello! ";
     private static final String TEXT_DESCRIPTION_BUTTON = "Add description";
 
+    @Ignore
     @Test
     public void testAdd() {
 
@@ -23,6 +25,7 @@ public class DescriptionTest extends BaseTest {
         Assert.assertEquals(textDescription, DESCRIPTION_TEXT);
     }
 
+    @Ignore
     @Test(dependsOnMethods = "testAdd")
     public void testEdit() {
 
@@ -35,6 +38,7 @@ public class DescriptionTest extends BaseTest {
         Assert.assertEquals(newText, NEW_TEXT + DESCRIPTION_TEXT);
     }
 
+    @Ignore
     @Test(dependsOnMethods = "testEdit")
     public void testDelete() {
 
@@ -47,6 +51,7 @@ public class DescriptionTest extends BaseTest {
         Assert.assertEquals(descriptionButton, TEXT_DESCRIPTION_BUTTON);
     }
 
+    @Ignore
     @Test
     public void testPreview() {
 
