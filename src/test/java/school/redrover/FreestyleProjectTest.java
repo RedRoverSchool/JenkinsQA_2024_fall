@@ -2,6 +2,7 @@ package school.redrover;
 
 import org.testng.Assert;
 import org.testng.annotations.DataProvider;
+import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import school.redrover.page.freestyle.FreestyleConfigPage;
 import school.redrover.page.freestyle.FreestyleProjectPage;
@@ -290,7 +291,7 @@ public class FreestyleProjectTest extends BaseTest {
                 .clickBuildNowSidebar();
         String lastBuildNumber = freestyleProjectPage.getLastBuildNumber();
 
-                freestyleProjectPage
+        freestyleProjectPage
                 .clickOnSuccessBuildIconForLastBuild()
                 .clickDeleteBuildSidebar()
                 .confirmDeleteBuild();
@@ -441,8 +442,9 @@ public class FreestyleProjectTest extends BaseTest {
         Assert.assertEquals(emptyHistory.size(), 0);
     }
 
-    @Test(dependsOnMethods = "testBuildHistoryIsEmpty")
+    @Test
     public void testUpdateAfterExecutingBuild() {
+        TestUtils.createFreestyleProject(getDriver(), PROJECT_NAME);
         List<String> oneExecution = new HomePage(getDriver())
                 .clickScheduleBuild(PROJECT_NAME)
                 .gotoBuildHistoryPageFromLeftPanel()
@@ -506,7 +508,7 @@ public class FreestyleProjectTest extends BaseTest {
     }
 
     @Test
-    public void testCreateFreestyleProjectFromExistingOne () {
+    public void testCreateFreestyleProjectFromExistingOne() {
         String secondProjectName = "Second" + PROJECT_NAME;
         TestUtils.createFreestyleProject(getDriver(), PROJECT_NAME);
 
