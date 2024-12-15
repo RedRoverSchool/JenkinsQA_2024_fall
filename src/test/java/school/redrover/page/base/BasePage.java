@@ -96,7 +96,7 @@ public abstract class BasePage extends BaseModel {
     }
 
     public List<String> getListSuggestion() {
-        getWait2().until(ExpectedConditions.elementToBeClickable(firstSuggestion));
+        getWait5().until(ExpectedConditions.elementToBeClickable(firstSuggestion));
 
         return listSuggestion.stream().map(WebElement::getText).toList();
     }
