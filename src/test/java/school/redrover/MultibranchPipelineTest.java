@@ -128,7 +128,7 @@ public class MultibranchPipelineTest extends BaseTest {
                 .gotoHomePage()
                 .getItemList();
 
-        Assert.assertListContainsObject(jobNames, MULTIBRANCH_PIPELINE_NAME, MULTIBRANCH_PIPELINE_NAME2);
+        Assert.assertListContainsObject(jobNames, MULTIBRANCH_PIPELINE_NAME2, MULTIBRANCH_PIPELINE_NAME2);
     }
 
     @Test (dataProvider = "providerUnsafeCharacters")
