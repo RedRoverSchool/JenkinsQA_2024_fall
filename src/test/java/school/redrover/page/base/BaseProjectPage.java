@@ -181,4 +181,5 @@ public abstract class BaseProjectPage<Self extends BaseProjectPage<?, ?, ?>, Pro
 
         return new HomePage(getDriver());
     }
+
 }
