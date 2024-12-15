@@ -46,7 +46,6 @@ public class ManageJenkinsTest extends BaseTest {
 
     @Test
     public void testCreateNewUser() {
-
         List<String> userList = new HomePage(getDriver())
                 .openManageJenkinsPage()
                 .openUsersPage()
@@ -58,11 +57,12 @@ public class ManageJenkinsTest extends BaseTest {
         Assert.assertEquals(userList.get(1), FULL_USER_NAME);
     }
 
-    @Test(dependsOnMethods = "testCreateNewUser")
+    @Test
     public void testAddDescriptionForUser() {
         String userDescription = new HomePage(getDriver())
                 .openManageJenkinsPage()
                 .openUsersPage()
+                .createNewUser(FULL_USER_NAME)
                 .clickToConfigureUser(FULL_USER_NAME)
                 .addUserDescription()
                 .getUserDescription();
@@ -70,11 +70,12 @@ public class ManageJenkinsTest extends BaseTest {
         Assert.assertEquals(userDescription, "User Description");
     }
 
-    @Test(dependsOnMethods = "testCreateNewUser")
+    @Test
     public void testAddTimeZoneForUser() {
         String userTimeZone = new HomePage(getDriver())
                 .openManageJenkinsPage()
                 .openUsersPage()
+                .createNewUser(FULL_USER_NAME)
                 .clickToConfigureUser(FULL_USER_NAME)
                 .addUserTimeZone()
                 .clickConfigureUserSidebar()
@@ -83,11 +84,12 @@ public class ManageJenkinsTest extends BaseTest {
         Assert.assertEquals(userTimeZone, "Etc/GMT+2");
     }
 
-    @Test(dependsOnMethods = "testCreateNewUser")
+    @Test
     public void testDeleteUserViaDeleteButtonOnUsersPage() {
         List<String> userList = new HomePage(getDriver())
                 .openManageJenkinsPage()
                 .openUsersPage()
+                .createNewUser(FULL_USER_NAME)
                 .deleteUserFromUsersPage()
                 .getCreatedUserName();
 
@@ -95,11 +97,12 @@ public class ManageJenkinsTest extends BaseTest {
         Assert.assertEquals(userList.get(0), "admin");
     }
 
-    @Test(dependsOnMethods = "testCreateNewUser")
+    @Test
     public void testDeleteUserViaConfigureUserPage() {
         List<String> userList = new HomePage(getDriver())
                 .openManageJenkinsPage()
                 .openUsersPage()
+                .createNewUser(FULL_USER_NAME)
                 .clickToConfigureUser(FULL_USER_NAME)
                 .deleteUserFromConfigureUserPage()
                 .openManageJenkinsPage()
