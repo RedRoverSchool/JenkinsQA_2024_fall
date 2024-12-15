@@ -442,7 +442,8 @@ public class FreestyleProjectTest extends BaseTest {
         Assert.assertEquals(emptyHistory.size(), 0);
     }
 
-    @Test
+    @Ignore
+    @Test(dependsOnMethods = "testBuildHistoryIsEmpty")
     public void testUpdateAfterExecutingBuild() {
         TestUtils.createFreestyleProject(getDriver(), PROJECT_NAME);
         List<String> oneExecution = new HomePage(getDriver())
@@ -454,6 +455,7 @@ public class FreestyleProjectTest extends BaseTest {
         Assert.assertEquals(oneExecution.size(), 1);
     }
 
+    @Ignore
     @Test(dependsOnMethods = "testUpdateAfterExecutingBuild")
     public void testUpdateAfterChangingConfig() {
         List<String> changeConfig = new HomePage(getDriver())

@@ -15,6 +15,9 @@ public class BuildHistoryPage extends BasePage {
     @FindBy(xpath = "//*[@id='projectStatus']/tbody/tr/td[4]")
     private List<WebElement> statusList;
 
+    @FindBy(xpath = "//div[@class='jenkins-table__cell__button-wrapper']/*[@id]")
+    private WebElement buildStatusSign;
+
     public BuildHistoryPage(WebDriver driver) {
         super(driver);
     }
@@ -27,4 +30,9 @@ public class BuildHistoryPage extends BasePage {
 
         return statusList.stream().map(WebElement::getText).toList();
     }
+
+    public String getBuildStatusSignColor() {
+        return buildStatusSign.getAttribute("id");
+    }
+
 }
