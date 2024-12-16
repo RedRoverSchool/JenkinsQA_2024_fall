@@ -179,10 +179,10 @@ public class MultibranchPipelineTest extends BaseTest {
     @Test(dependsOnMethods = "testCreateJobAndJobNameVisibleOnBreadcrumb")
     public void testDeleteJobUsingItemDropdownOnDashboard() {
         List<String> projectList = new HomePage(getDriver())
-                .selectDeleteFromItemMenuAndClickYes(MULTIBRANCH_PIPELINE_NAME)
+                .selectDeleteFromItemMenuAndClickYes(MULTIBRANCH_PIPELINE_NAME2)
                 .getItemList();
 
-        Assert.assertListNotContainsObject(projectList, MULTIBRANCH_PIPELINE_NAME,
+        Assert.assertListNotContainsObject(projectList, MULTIBRANCH_PIPELINE_NAME2,
                 "Project is not deleted");
     }
 
