@@ -5,6 +5,7 @@ import org.testng.Assert;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 import school.redrover.page.home.HomePage;
+import school.redrover.page.pipeline.PipelineConfigurePage;
 import school.redrover.page.pipeline.PipelineProjectPage;
 import school.redrover.runner.BaseTest;
 import school.redrover.runner.TestUtils;
@@ -491,7 +492,7 @@ public class PipelineProjectTest extends BaseTest {
                 .clickNewItem()
                 .enterItemName(secondProjectName)
                 .enterName(PROJECT_NAME)
-                .clickOkAndGoToPipelineConfigPage()
+                .clickOkLeadingToCofigPageOfCopiedProject(new PipelineConfigurePage(getDriver()))
                 .gotoHomePage()
                 .getItemList();
 

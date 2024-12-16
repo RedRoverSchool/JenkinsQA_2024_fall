@@ -4,7 +4,6 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import school.redrover.MultibranchPipelineTest;
 import school.redrover.page.ErrorPage;
 import school.redrover.page.base.BasePage;
 import school.redrover.page.folder.FolderConfigPage;
@@ -151,12 +150,6 @@ public class CreateNewItemPage extends BasePage {
         return emptyNameMessage.getText();
     }
 
-    public ErrorPage saveInvalidData() {
-        okButton.click();
-
-        return new ErrorPage(getDriver());
-    }
-
     public CreateNewItemPage selectPipeline() {
         getWait10().until(ExpectedConditions.elementToBeClickable(pipeline)).click();
 
@@ -186,16 +179,16 @@ public class CreateNewItemPage extends BasePage {
         return this;
     }
 
-    public <T> T clickOkLeadingToCertainPage(T page) {
+    public <T> T clickOkLeadingToCofigPageOfCopiedProject(T page) {
         okButton.click();
 
         return page;
     }
 
-    public PipelineConfigurePage clickOkAndGoToPipelineConfigPage() {
+    public ErrorPage clickOkButtonLeadingToErrorPage() {
         okButton.click();
 
-        return new PipelineConfigurePage(getDriver());
+        return new ErrorPage(getDriver());
     }
 
     public CreateNewItemPage clickSomewhere() {

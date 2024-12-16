@@ -120,7 +120,7 @@ public class MultiConfigurationProjectTest extends BaseTest {
 
         String welcomeText = new HomePage(getDriver())
                 .openMultiConfigurationProject(PROJECT_NAME)
-                .clickDeleteOnSidebarAndConfirmDeletion()
+                .clickDeleteButtonSidebarAndConfirm()
                 .getWelcomeTitle();
 
         Assert.assertEquals(welcomeText, "Welcome to Jenkins!");

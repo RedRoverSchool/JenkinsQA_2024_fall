@@ -101,13 +101,6 @@ public class TestUtils {
                 .gotoHomePage();
     }
 
-    public static void newItemsData(BaseTest baseTest, String itemName, String itemXpath) {
-        baseTest.getDriver().findElement(By.xpath("//*[@id='tasks']/div[1]/span/a")).click();
-        baseTest.getDriver().findElement(By.id("name")).sendKeys(itemName);
-        baseTest.getDriver().findElement(By.xpath(itemXpath)).click();
-        baseTest.getDriver().findElement(By.id("ok-button")).click();
-    }
-
     public static void pasteTextWithJavaScript(WebDriver driver, WebElement element, String text) {
         ((JavascriptExecutor) driver)
                 .executeScript("arguments[0].value = arguments[1];", element, text);

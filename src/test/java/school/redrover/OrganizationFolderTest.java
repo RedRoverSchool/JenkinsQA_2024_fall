@@ -63,7 +63,7 @@ public class OrganizationFolderTest extends BaseTest {
                 .clickSidebarConfigButton()
                 .enterDescription(DESCRIPTION)
                 .clickSaveButton()
-                .getDescription();
+                .getDescriptionWhenAddedViaConfigure();
 
         Assert.assertEquals(description, DESCRIPTION);
     }
@@ -75,7 +75,7 @@ public class OrganizationFolderTest extends BaseTest {
                 .clickSidebarConfigButton()
                 .enterDescription(NEW_DESCRIPTION)
                 .clickSaveButton()
-                .getDescription();
+                .getDescriptionWhenAddedViaConfigure();
 
         Assert.assertEquals(description, NEW_DESCRIPTION);
     }
@@ -199,7 +199,7 @@ public class OrganizationFolderTest extends BaseTest {
                 .selectOrganizationFolderAndClickOk()
                 .enterDescription(DESCRIPTION)
                 .clickSaveButton()
-                .getDescription();
+                .getDescriptionWhenAddedViaConfigure();
 
         Assert.assertEquals(actualDescription, DESCRIPTION);
     }
@@ -238,5 +238,31 @@ public class OrganizationFolderTest extends BaseTest {
                 .getItemList();
 
         Assert.assertListNotContainsObject(projectsList, ORGANIZATION_FOLDER_NAME, "Project is not deleted");
+    }
+
+    @Test
+    public void testGetDisplayNameTooltipDisplayedWhenHoverOverQuestionMark() {
+        TestUtils.createOrganizationFolder(getDriver(), ORGANIZATION_FOLDER_NAME);
+
+        String questionMarkTooltipText = new HomePage(getDriver())
+                .openOrganisationFolderProject(ORGANIZATION_FOLDER_NAME)
+                .clickConfigure()
+                .hoverOverDisplayNameQuestionMark()
+                .getQuestionMarkTooltipText();
+
+        Assert.assertEquals(questionMarkTooltipText, "Help for feature: Display Name");
+    }
+
+    @Test
+    public void testVisibleDisplayNameTooltipWhenHoverOverQuestionMark() {
+        TestUtils.createOrganizationFolder(getDriver(), ORGANIZATION_FOLDER_NAME);
+
+        boolean questionMarkTooltip = new HomePage(getDriver())
+                .openOrganisationFolderProject(ORGANIZATION_FOLDER_NAME)
+                .clickConfigure()
+                .hoverOverDisplayNameQuestionMark()
+                .toolTipQuestionMarkVisible();
+
+        Assert.assertTrue(questionMarkTooltip);
     }
 }
