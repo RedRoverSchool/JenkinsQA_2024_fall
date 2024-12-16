@@ -84,15 +84,6 @@ public class TestUtils {
         js.executeScript("arguments[0].scrollIntoView(true);", element);
     }
 
-    public static void createPipeline(WebDriver driver, String name) {
-        new HomePage(driver)
-                .clickNewItem()
-                .enterItemName(name)
-                .selectPipelineAndClickOk()
-                .clickSaveButton()
-                .gotoHomePage();
-    }
-
     public static void createPipelineProject(WebDriver driver, String name) {
         new HomePage(driver)
                 .clickNewItem()
@@ -108,13 +99,6 @@ public class TestUtils {
                 .enterItemName(name)
                 .selectPipelineAndClickOk()
                 .gotoHomePage();
-    }
-
-    public static void newItemsData(BaseTest baseTest, String itemName, String itemXpath) {
-        baseTest.getDriver().findElement(By.xpath("//*[@id='tasks']/div[1]/span/a")).click();
-        baseTest.getDriver().findElement(By.id("name")).sendKeys(itemName);
-        baseTest.getDriver().findElement(By.xpath(itemXpath)).click();
-        baseTest.getDriver().findElement(By.id("ok-button")).click();
     }
 
     public static void pasteTextWithJavaScript(WebDriver driver, WebElement element, String text) {

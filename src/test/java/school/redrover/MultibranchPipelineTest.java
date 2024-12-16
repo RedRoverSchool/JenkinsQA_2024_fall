@@ -131,7 +131,7 @@ public class MultibranchPipelineTest extends BaseTest {
         Assert.assertListContainsObject(jobNames, MULTIBRANCH_PIPELINE_NAME2, MULTIBRANCH_PIPELINE_NAME2);
     }
 
-    @Test (dataProvider = "providerUnsafeCharacters")
+    @Test(dataProvider = "providerUnsafeCharacters")
     public void testEnterInvalidNameAndSeesAppropriateMessages(String unsafeCharacter) {
         String invalidNameMessage = new HomePage(getDriver())
                 .clickNewItem()
@@ -176,14 +176,9 @@ public class MultibranchPipelineTest extends BaseTest {
                 "Project is not deleted");
     }
 
-    @Test
+    @Test(dependsOnMethods = "testCreateJobAndJobNameVisibleOnBreadcrumb")
     public void testDeleteJobUsingItemDropdownOnDashboard() {
         List<String> projectList = new HomePage(getDriver())
-                .clickNewItem()
-                .enterItemName(MULTIBRANCH_PIPELINE_NAME)
-                .selectMultibranchPipelineAndClickOk()
-                .clickSaveButton()
-                .gotoHomePage()
                 .selectDeleteFromItemMenuAndClickYes(MULTIBRANCH_PIPELINE_NAME)
                 .getItemList();
 

@@ -18,8 +18,8 @@ import java.util.List;
 
 public class ManageJenkinsTest extends BaseTest {
 
-    private final String MY_NODE_NAME = "My name of node";
-    private final String NODE_NAME = "NewNodeName";
+    private static final String MY_NODE_NAME = "My name of node";
+    private static final String NODE_NAME = "NewNodeName";
 
     @Test
     public void testCheckTitle() {
