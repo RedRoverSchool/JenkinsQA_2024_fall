@@ -76,7 +76,7 @@ public class HomePage extends BasePage {
     @FindBy(css = "a[href^='/logout']")
     private WebElement logOut;
 
-    @FindBy(xpath = "//a[@href = '/view/all/builds']")
+    @FindBy(xpath = "//a[@href ='/view/all/builds']")
     private WebElement buildHistoryLink;
 
     @FindBy(xpath = "//a[contains(@class,'app-progress-bar')]")
