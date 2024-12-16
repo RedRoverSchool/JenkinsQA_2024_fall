@@ -38,6 +38,10 @@ public class BuildHistoryPage extends BasePage {
         return statusList.stream().map(WebElement::getText).toList();
     }
 
+    public String getCssValueOfStatusByIndex(int index, String cssProperty) {
+        return statusList.get(index).getCssValue(cssProperty);
+    }
+
     public String getBuildStatusSignColor() {
         return buildStatusSign.getAttribute("id");
     }

@@ -49,6 +49,7 @@ public class BuildHistoryTest extends BaseTest {
 
         Assert.assertEquals(buildHistoryPage.getBuildName(), PIPELINE_PROJECT_NAME);
         Assert.assertEquals(buildHistoryPage.getListOfStatuses().get(0), "broken since this build");
+        Assert.assertEquals(buildHistoryPage.getCssValueOfStatusByIndex(0, "color"), "rgba(230, 0, 31, 1)");
         Assert.assertEquals(buildHistoryPage.getBuildStatusSignColor(), "red");
     }
 
@@ -60,5 +61,17 @@ public class BuildHistoryTest extends BaseTest {
                 .getFinishResult();
 
         Assert.assertEquals(result, "FAILURE");
+    }
+
+    @Test(dependsOnMethods = "testFailedBuildConsoleOutputCheck")
+    public void testDisplayNextFailedBuild() {
+        BuildHistoryPage buildHistoryPage = new HomePage(getDriver())
+                .clickScheduleBuild(PIPELINE_PROJECT_NAME)
+                .gotoBuildHistoryPageFromLeftPanel();
+
+        Assert.assertEquals(buildHistoryPage.getBuildName(), PIPELINE_PROJECT_NAME);
+        Assert.assertEquals(buildHistoryPage.getListOfStatuses().get(0), "broken for a long time");
+        Assert.assertEquals(buildHistoryPage.getCssValueOfStatusByIndex(0, "color"), "rgba(20, 20, 31, 1)");
+        Assert.assertEquals(buildHistoryPage.getBuildStatusSignColor(), "red");
     }
 }
