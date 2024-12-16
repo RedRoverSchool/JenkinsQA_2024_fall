@@ -16,6 +16,9 @@ public class FreestyleProjectPage extends BaseProjectPage<FreestyleProjectPage, 
     @FindBy(xpath = "//tbody//tr[2]//td//a[contains(@class, 'display-name')]")
     private WebElement lastBuildNumber;
 
+    @FindBy(xpath = "//tbody/tr[2]/td/div[2]/a")
+    private WebElement lastBuildDateTime;
+
     @FindBy(tagName = "h1")
     private WebElement workspaceTitle;
 
@@ -83,6 +86,11 @@ public class FreestyleProjectPage extends BaseProjectPage<FreestyleProjectPage, 
         return lastBuildNumber.getText();
     }
 
+    public FreestyleBuildStatusPage clickLastBuildDateTime(){
+        getWait10().until(ExpectedConditions.elementToBeClickable(lastBuildDateTime)).click();
+        return new FreestyleBuildStatusPage(getDriver());
+    }
+
     public String getWorkspaceTitle() {
         return workspaceTitle.getText();
     }
@@ -100,7 +108,7 @@ public class FreestyleProjectPage extends BaseProjectPage<FreestyleProjectPage, 
     }
 
     public FreestyleProjectPage clickBuildNowSidebar() {
-        getWait5().until(ExpectedConditions.visibilityOf(buildNowSidebar)).click();
+        getWait5().until(ExpectedConditions.elementToBeClickable(buildNowSidebar)).click();
 
         return this;
     }

@@ -4,6 +4,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import school.redrover.MultibranchPipelineTest;
 import school.redrover.page.ErrorPage;
 import school.redrover.page.base.BasePage;
 import school.redrover.page.folder.FolderConfigPage;
@@ -119,6 +120,12 @@ public class CreateNewItemPage extends BasePage {
         okButton.click();
 
         return new MultibranchPipelineConfigPage(getDriver());
+    }
+
+    public CreateNewItemPage selectMultibranchPipeline() {
+        multibranchPipeline.click();
+
+        return this;
     }
 
     public PipelineConfigurePage selectPipelineAndClickOk() {
