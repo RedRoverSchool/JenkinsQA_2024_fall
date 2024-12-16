@@ -74,4 +74,19 @@ public class BuildHistoryTest extends BaseTest {
         Assert.assertEquals(buildHistoryPage.getCssValueOfStatusByIndex(0, "color"), "rgba(20, 20, 31, 1)");
         Assert.assertEquals(buildHistoryPage.getBuildStatusSignColor(), "red");
     }
+
+    @Test(dependsOnMethods = "testDisplayNextFailedBuild")
+    public void testDisplayFirstSuccessfulBuildAfterFailed() {
+        BuildHistoryPage buildHistoryPage = new HomePage(getDriver())
+                .openPipelineProject(PIPELINE_PROJECT_NAME)
+                .clickSidebarConfigButton()
+                .clickSaveButton()
+                .clickOnBuildNowItemOnSidePanelAndWait()
+                .gotoHomePage()
+                .gotoBuildHistoryPageFromLeftPanel();
+
+        Assert.assertEquals(buildHistoryPage.getBuildName(), PIPELINE_PROJECT_NAME);
+        Assert.assertEquals(buildHistoryPage.getListOfStatuses().get(0), "back to normal");
+        Assert.assertEquals(buildHistoryPage.getBuildStatusSignColor(), "blue");
+    }
 }
