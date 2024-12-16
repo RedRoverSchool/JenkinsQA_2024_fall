@@ -4,6 +4,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import school.redrover.page.ErrorPage;
 
 public abstract class BaseRenamePage<Self extends BaseRenamePage<?, ?>, ProjectPage extends BaseProjectPage> extends BasePage {
 
@@ -37,5 +38,11 @@ public abstract class BaseRenamePage<Self extends BaseRenamePage<?, ?>, ProjectP
         renameButton.click();
 
         return createProjectPage();
+    }
+
+    public ErrorPage clickRenameButtonLeadingToError() {
+        renameButton.click();
+
+        return new ErrorPage(getDriver());
     }
 }
