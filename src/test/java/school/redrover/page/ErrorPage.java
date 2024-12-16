@@ -16,8 +16,7 @@ public class ErrorPage extends BasePage {
     }
 
     public String getErrorMessage() {
-        getWait5().until(ExpectedConditions.visibilityOf(errorMessage));
 
-        return errorMessage.getText();
+        return getWait5().until(ExpectedConditions.visibilityOf(errorMessage)).getText();
     }
 }
