@@ -75,7 +75,7 @@ public class BuildHistoryTest extends BaseTest {
         Assert.assertEquals(buildHistoryPage.getBuildStatusSignColor(), "red");
     }
 
-    @Test(dependsOnMethods = "testFailedBuildConsoleOutputCheck")
+    @Test(dependsOnMethods = "testDisplayNextFailedBuild")
     public void testDisplayFirstSuccessfulBuildAfterFailed() {
         BuildHistoryPage buildHistoryPage = new HomePage(getDriver())
                 .openPipelineProject(PIPELINE_PROJECT_NAME)
