@@ -48,6 +48,7 @@ public class BuildHistoryTest extends BaseTest {
                 .gotoHomePage().gotoBuildHistoryPageFromLeftPanel();
 
         Assert.assertEquals(buildHistoryPage.getBuildName(), PIPELINE_PROJECT_NAME);
+        Assert.assertEquals(buildHistoryPage.getBuildDisplayName(), "#1");
         Assert.assertEquals(buildHistoryPage.getListOfStatuses().get(0), "broken since this build");
         Assert.assertEquals(buildHistoryPage.getCssValueOfStatusByIndex(0, "color"), "rgba(230, 0, 31, 1)");
         Assert.assertEquals(buildHistoryPage.getBuildStatusSignColor(), "red");
@@ -70,6 +71,7 @@ public class BuildHistoryTest extends BaseTest {
                 .gotoBuildHistoryPageFromLeftPanel();
 
         Assert.assertEquals(buildHistoryPage.getBuildName(), PIPELINE_PROJECT_NAME);
+        Assert.assertEquals(buildHistoryPage.getBuildDisplayName(), "#2");
         Assert.assertEquals(buildHistoryPage.getListOfStatuses().get(0), "broken for a long time");
         Assert.assertEquals(buildHistoryPage.getCssValueOfStatusByIndex(0, "color"), "rgba(20, 20, 31, 1)");
         Assert.assertEquals(buildHistoryPage.getBuildStatusSignColor(), "red");
@@ -86,6 +88,7 @@ public class BuildHistoryTest extends BaseTest {
                 .gotoBuildHistoryPageFromLeftPanel();
 
         Assert.assertEquals(buildHistoryPage.getBuildName(), PIPELINE_PROJECT_NAME);
+        Assert.assertEquals(buildHistoryPage.getBuildDisplayName(), "#3");
         Assert.assertEquals(buildHistoryPage.getListOfStatuses().get(0), "back to normal");
         Assert.assertEquals(buildHistoryPage.getBuildStatusSignColor(), "blue");
     }
