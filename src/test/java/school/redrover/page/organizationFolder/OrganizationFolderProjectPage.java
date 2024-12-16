@@ -43,7 +43,7 @@ public class OrganizationFolderProjectPage extends BaseProjectPage<OrganizationF
         return new OrganizationFolderConfigPage(getDriver());
     }
 
-    public String getDescription() {
+    public String getDescriptionWhenAddedViaConfigure() {
         return getWait5().until(ExpectedConditions.visibilityOf(descriptionText)).getText();
     }
 

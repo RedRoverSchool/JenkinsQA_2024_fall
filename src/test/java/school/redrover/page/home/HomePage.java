@@ -76,7 +76,7 @@ public class HomePage extends BasePage {
     @FindBy(css = "a[href^='/logout']")
     private WebElement logOut;
 
-    @FindBy(xpath = "//a[@href = '/view/all/builds']")
+    @FindBy(xpath = "//a[@href ='/view/all/builds']")
     private WebElement buildHistoryLink;
 
     @FindBy(xpath = "//a[contains(@class,'app-progress-bar')]")
@@ -145,10 +145,7 @@ public class HomePage extends BasePage {
     @FindBy(xpath = "//td[text()= 'No builds in the queue.' ]")
     private WebElement buildQueueText;
 
-    @FindBy(xpath = "//th[@initialsortdir='down']//a[@class='sortheader']")
-    private WebElement sortByNameButton;
-
-    @FindBy(xpath="//div[@class='tippy-box']//a")
+    @FindBy(xpath = "//div[@class='tippy-box']//a")
     private List<WebElement> breadcrumbBarMenuList;
 
     public HomePage(WebDriver driver) {
@@ -323,7 +320,8 @@ public class HomePage extends BasePage {
     }
 
     public HomePage clickScheduleBuild(String name) {
-        getWait10().until(ExpectedConditions.visibilityOf(getDriver().findElement(By.xpath("//td[@class='jenkins-table__cell--tight']//a[@tooltip='Schedule a Build for %s']".formatted(name)))))
+        getWait10().until(ExpectedConditions.visibilityOf(getDriver().findElement(
+                        By.xpath("//td[@class='jenkins-table__cell--tight']//a[@tooltip='Schedule a Build for %s']".formatted(name)))))
                 .click();
         getWait10().until(ExpectedConditions.visibilityOf(buildScheduledTooltip));
         getWait10().until(ExpectedConditions.invisibilityOf(buildScheduledTooltip));
@@ -448,7 +446,6 @@ public class HomePage extends BasePage {
     }
 
     public HomePage addDescription(String description) {
-        getWait5().until(ExpectedConditions.visibilityOf(descriptionTextarea));
         descriptionTextarea.sendKeys(description);
 
         return this;
@@ -528,20 +525,15 @@ public class HomePage extends BasePage {
         return buildQueueText.getText();
     }
 
-    public HomePage clickSortByName() {
-        sortByNameButton.click();
-        return this;
-    }
-
     public HomePage selectBreadcrumbBarMenu() {
-
         new Actions(getDriver()).moveToElement(getDriver().findElement(By.xpath("//div[@id='breadcrumbBar']//a"))).perform();
 
-        TestUtils.moveAndClickWithJS(getDriver(),getWait5().until(ExpectedConditions.visibilityOfElementLocated(
+        TestUtils.moveAndClickWithJS(getDriver(), getWait5().until(ExpectedConditions.visibilityOfElementLocated(
                 By.xpath("//div[@id='breadcrumbBar']//a/button"))));
 
         return this;
     }
+
     public List<WebElement> getBreadcrumbBarMenuList() {
         return breadcrumbBarMenuList;
     }

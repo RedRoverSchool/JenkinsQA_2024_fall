@@ -63,7 +63,7 @@ public class OrganizationFolderTest extends BaseTest {
                 .clickSidebarConfigButton()
                 .enterDescription(DESCRIPTION)
                 .clickSaveButton()
-                .getDescription();
+                .getDescriptionWhenAddedViaConfigure();
 
         Assert.assertEquals(description, DESCRIPTION);
     }
@@ -75,7 +75,7 @@ public class OrganizationFolderTest extends BaseTest {
                 .clickSidebarConfigButton()
                 .enterDescription(NEW_DESCRIPTION)
                 .clickSaveButton()
-                .getDescription();
+                .getDescriptionWhenAddedViaConfigure();
 
         Assert.assertEquals(description, NEW_DESCRIPTION);
     }
@@ -199,7 +199,7 @@ public class OrganizationFolderTest extends BaseTest {
                 .selectOrganizationFolderAndClickOk()
                 .enterDescription(DESCRIPTION)
                 .clickSaveButton()
-                .getDescription();
+                .getDescriptionWhenAddedViaConfigure();
 
         Assert.assertEquals(actualDescription, DESCRIPTION);
     }
