@@ -83,8 +83,8 @@ public class BuildHistoryTest extends BaseTest {
                 .openPipelineProject(PIPELINE_PROJECT_NAME)
                 .clickSidebarConfigButton()
                 .clickSaveButton()
-                .clickOnBuildNowItemOnSidePanelAndWait()
                 .gotoHomePage()
+                .clickScheduleBuild(PIPELINE_PROJECT_NAME)
                 .gotoBuildHistoryPageFromLeftPanel();
 
         Assert.assertEquals(buildHistoryPage.getBuildName(), PIPELINE_PROJECT_NAME);
