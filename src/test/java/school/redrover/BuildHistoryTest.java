@@ -22,8 +22,19 @@ public class BuildHistoryTest extends BaseTest {
                 .gotoBuildHistoryPageFromLeftPanel();
 
         Assert.assertEquals(buildHistoryPage.getBuildName(), FREESTYLE_PROJECT_NAME);
+        Assert.assertEquals(buildHistoryPage.getBuildDisplayName(), "#1");
         Assert.assertEquals(buildHistoryPage.getListOfStatuses().get(0), "stable");
         Assert.assertEquals(buildHistoryPage.getBuildStatusSignColor(), "blue");
+    }
+
+    @Test(dependsOnMethods = "testDisplaySuccessBuild")
+    public void testSuccessfulBuildConsoleOutputCheck() {
+        String result = new HomePage(getDriver())
+                .gotoBuildHistoryPageFromLeftPanel()
+                .clickConsoleOutput()
+                .getFinishResult();
+
+        Assert.assertEquals(result, "SUCCESS");
     }
 
     @Test
@@ -34,11 +45,20 @@ public class BuildHistoryTest extends BaseTest {
         BuildHistoryPage buildHistoryPage = new HomePage(getDriver())
                 .openPipelineProject(PIPELINE_PROJECT_NAME)
                 .clickOnBuildNowItemOnSidePanelAndWait()
-                .gotoHomePage()
-                .gotoBuildHistoryPageFromLeftPanel();
+                .gotoHomePage().gotoBuildHistoryPageFromLeftPanel();
 
         Assert.assertEquals(buildHistoryPage.getBuildName(), PIPELINE_PROJECT_NAME);
         Assert.assertEquals(buildHistoryPage.getListOfStatuses().get(0), "broken since this build");
         Assert.assertEquals(buildHistoryPage.getBuildStatusSignColor(), "red");
+    }
+
+    @Test(dependsOnMethods = "testDisplayFirstFailedBuild")
+    public void testFailedBuildConsoleOutputCheck() {
+        String result = new HomePage(getDriver())
+                .gotoBuildHistoryPageFromLeftPanel()
+                .clickConsoleOutput()
+                .getFinishResult();
+
+        Assert.assertEquals(result, "FAILURE");
     }
 }

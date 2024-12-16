@@ -44,11 +44,4 @@ public class MultiConfigurationProjectPage extends BaseProjectPage<MultiConfigur
     public WebElement getDeletionPopup() {
         return getWait5().until(ExpectedConditions.visibilityOf(deletionPopup));
     }
-
-    public HomePage clickDeleteOnSidebarAndConfirmDeletion() {
-        deleteSidebarButton.click();
-        confirmDeletionButton.click();
-
-        return new HomePage(getDriver());
-    }
-}
+ }

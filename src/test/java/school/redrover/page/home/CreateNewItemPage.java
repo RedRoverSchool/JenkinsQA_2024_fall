@@ -121,6 +121,12 @@ public class CreateNewItemPage extends BasePage {
         return new MultibranchPipelineConfigPage(getDriver());
     }
 
+    public CreateNewItemPage selectMultibranchPipeline() {
+        multibranchPipeline.click();
+
+        return this;
+    }
+
     public PipelineConfigurePage selectPipelineAndClickOk() {
         pipeline.click();
         okButton.click();
@@ -142,12 +148,6 @@ public class CreateNewItemPage extends BasePage {
 
     public String getEmptyNameMessage() {
         return emptyNameMessage.getText();
-    }
-
-    public ErrorPage saveInvalidData() {
-        okButton.click();
-
-        return new ErrorPage(getDriver());
     }
 
     public CreateNewItemPage selectPipeline() {
@@ -179,16 +179,16 @@ public class CreateNewItemPage extends BasePage {
         return this;
     }
 
-    public <T> T clickOkLeadingToCertainPage(T page) {
+    public <T> T clickOkLeadingToCofigPageOfCopiedProject(T page) {
         okButton.click();
 
         return page;
     }
 
-    public PipelineConfigurePage clickOkAndGoToPipelineConfigPage() {
+    public ErrorPage clickOkButtonLeadingToErrorPage() {
         okButton.click();
 
-        return new PipelineConfigurePage(getDriver());
+        return new ErrorPage(getDriver());
     }
 
     public CreateNewItemPage clickSomewhere() {
