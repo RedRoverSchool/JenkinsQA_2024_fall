@@ -25,7 +25,7 @@ public class DescriptionTest extends BaseTest {
         Assert.assertEquals(textDescription, DESCRIPTION_TEXT);
     }
 
-    @Ignore
+
     @Test(dependsOnMethods = "testAdd")
     public void testEdit() {
 
@@ -38,7 +38,7 @@ public class DescriptionTest extends BaseTest {
         Assert.assertEquals(newText, NEW_TEXT + DESCRIPTION_TEXT);
     }
 
-    @Ignore
+
     @Test(dependsOnMethods = "testEdit")
     public void testDelete() {
 
@@ -51,7 +51,7 @@ public class DescriptionTest extends BaseTest {
         Assert.assertEquals(descriptionButton, TEXT_DESCRIPTION_BUTTON);
     }
 
-    @Ignore
+
     @Test
     public void testPreview() {
 
