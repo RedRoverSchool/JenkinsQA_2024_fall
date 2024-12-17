@@ -12,7 +12,7 @@ public class DescriptionTest extends BaseTest {
     private static final String NEW_TEXT = "Hello! ";
     private static final String TEXT_DESCRIPTION_BUTTON = "Add description";
 
-    @Ignore
+
     @Test
     public void testAdd() {
 

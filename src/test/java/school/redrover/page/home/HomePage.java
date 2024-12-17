@@ -410,6 +410,7 @@ public class HomePage extends BasePage {
     }
 
     public WebElement getDeletionPopup() {
+
         return getWait5().until(ExpectedConditions.visibilityOf(deletionPopup));
     }
 
