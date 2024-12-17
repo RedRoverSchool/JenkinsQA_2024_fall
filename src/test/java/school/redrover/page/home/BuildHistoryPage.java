@@ -11,7 +11,7 @@ import java.util.List;
 public class BuildHistoryPage extends BasePage {
 
     @FindBy(xpath = "//a[@class='jenkins-table__link model-link']/span")
-    private WebElement lastBuildName;
+    private WebElement lastProjectName;
 
     @FindBy(xpath = "//*[@id='projectStatus']/tbody/tr/td[4]")
     private List<WebElement> statusList;
@@ -29,8 +29,8 @@ public class BuildHistoryPage extends BasePage {
         super(driver);
     }
 
-    public String getBuildName() {
-        return lastBuildName.getText();
+    public String getProjectName() {
+        return lastProjectName.getText();
     }
 
     public List<String> getListOfStatuses() {
