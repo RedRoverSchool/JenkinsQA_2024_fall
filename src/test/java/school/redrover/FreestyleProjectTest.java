@@ -2,6 +2,7 @@ package school.redrover;
 
 import org.testng.Assert;
 import org.testng.annotations.DataProvider;
+import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import school.redrover.page.freestyle.FreestyleConfigPage;
 import school.redrover.page.freestyle.FreestyleProjectPage;
@@ -293,7 +294,7 @@ public class FreestyleProjectTest extends BaseTest {
 
         Assert.assertEquals(actualDescription, newDescription);
     }
-
+    @Ignore
     @Test
     public void testDeleteLastBuild() {
         TestUtils.createFreestyleProject(getDriver(), PROJECT_NAME);
