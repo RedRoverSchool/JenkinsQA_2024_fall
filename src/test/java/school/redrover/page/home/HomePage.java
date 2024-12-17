@@ -141,6 +141,12 @@ public class HomePage extends BasePage {
     @FindBy(xpath = "//div[@class='textarea-preview']")
     private WebElement previewText;
 
+    @FindBy(xpath = "//section[2]/ul/li[1]/a")
+    private WebElement SetUpAgentButton;
+
+    @FindBy(xpath = "//*[@id='executors']/div[1]")
+    private WebElement clickBuildExecutorStatus;
+
     public HomePage(WebDriver driver) {
         super(driver);
     }
@@ -494,10 +500,20 @@ public class HomePage extends BasePage {
 
         return new SignInPage(getDriver());
     }
-
+    
     public CredentialsPage clickCredentialsAdminDropdownMenu() {
         getWait2().until(ExpectedConditions.elementToBeClickable(credentialsDropdown)).click();
 
         return new CredentialsPage(getDriver());
+    }
+
+    public AgentPage newNode() {
+        clickBuildExecutorStatus.click();
+        return new AgentPage(getDriver());
+    }
+
+    public AgentPage setUpAnAgent() {
+        SetUpAgentButton.click();
+        return new AgentPage(getDriver());
     }
 }
