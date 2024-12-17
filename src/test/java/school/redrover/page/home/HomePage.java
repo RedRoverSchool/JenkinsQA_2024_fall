@@ -128,13 +128,13 @@ public class HomePage extends BasePage {
     private WebElement descriptionButton;
 
     @FindBy(xpath = "//textarea[contains(@class, 'jenkins-input')]")
-    private WebElement descriptionTextarea;
+    private WebElement descriptionTextArea;
 
     @FindBy(xpath = "//button[@name='Submit']")
     private WebElement saveButton;
 
     @FindBy(xpath = "//textarea[@name='description']")
-    private WebElement clearDescriptionTextarea;
+    private WebElement clearDescriptionTextArea;
 
     @FindBy(css = "[class$='textarea-show-preview']")
     private WebElement previewButton;
@@ -410,6 +410,7 @@ public class HomePage extends BasePage {
     }
 
     public WebElement getDeletionPopup() {
+
         return getWait5().until(ExpectedConditions.visibilityOf(deletionPopup));
     }
 
@@ -446,7 +447,7 @@ public class HomePage extends BasePage {
     }
 
     public HomePage addDescription(String description) {
-        descriptionTextarea.sendKeys(description);
+        descriptionTextArea.sendKeys(description);
 
         return this;
     }
@@ -458,7 +459,7 @@ public class HomePage extends BasePage {
     }
 
     public HomePage clearDescription() {
-        clearDescriptionTextarea.clear();
+        clearDescriptionTextArea.clear();
 
         return this;
     }
