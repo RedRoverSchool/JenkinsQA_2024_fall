@@ -12,6 +12,7 @@ import school.redrover.page.folder.FolderConfigPage;
 import school.redrover.page.folder.FolderProjectPage;
 import school.redrover.page.freestyle.FreestyleProjectPage;
 import school.redrover.page.freestyle.FreestyleRenamePage;
+import school.redrover.page.manage.ManageJenkinsPage;
 import school.redrover.page.multiConfiguration.MultiConfigurationProjectPage;
 import school.redrover.page.multibranch.MultibranchPipelineProjectPage;
 import school.redrover.page.organizationFolder.OrganizationFolderProjectPage;
@@ -75,7 +76,7 @@ public class HomePage extends BasePage {
     @FindBy(css = "a[href^='/logout']")
     private WebElement logOut;
 
-    @FindBy(xpath = "//a[@href = '/view/all/builds']")
+    @FindBy(xpath = "//a[@href ='/view/all/builds']")
     private WebElement buildHistoryLink;
 
     @FindBy(xpath = "//a[contains(@class,'app-progress-bar')]")
@@ -140,6 +141,12 @@ public class HomePage extends BasePage {
 
     @FindBy(xpath = "//div[@class='textarea-preview']")
     private WebElement previewText;
+
+    @FindBy(xpath = "//td[text()= 'No builds in the queue.' ]")
+    private WebElement buildQueueText;
+
+    @FindBy(xpath = "//div[@class='tippy-box']//a")
+    private List<WebElement> breadcrumbBarMenuList;
 
     @FindBy(xpath = "//section[2]/ul/li[1]/a")
     private WebElement SetUpAgentButton;
@@ -275,12 +282,24 @@ public class HomePage extends BasePage {
         return getWait5().until(ExpectedConditions.visibilityOf(description)).getText();
     }
 
-    public List<WebElement> getSideContent() {
-        return getWait2().until(ExpectedConditions.visibilityOfAllElements(sideBarOptionList));
+    public List<String> getSideContent() {
+        getWait2().until(ExpectedConditions.visibilityOfAllElements(sideBarOptionList));
+        return sideBarOptionList.stream()
+                .map(WebElement::getText)
+                .toList();
     }
 
-    public List<WebElement> getContentBlock() {
-        return contentBlock;
+    public List<String> getSideContentAttribute() {
+        getWait2().until(ExpectedConditions.visibilityOfAllElements(sideBarOptionList));
+        return sideBarOptionList.stream()
+                .map(el -> el.getAttribute("href"))
+                .toList();
+    }
+
+    public List<String> getContentBlock() {
+        return contentBlock.stream()
+                .map(WebElement::getText)
+                .toList();
     }
 
     public List<String> getItemList() {
@@ -307,7 +326,8 @@ public class HomePage extends BasePage {
     }
 
     public HomePage clickScheduleBuild(String name) {
-        getDriver().findElement(By.xpath("//td[@class='jenkins-table__cell--tight']//a[@tooltip='Schedule a Build for %s']".formatted(name)))
+        getWait10().until(ExpectedConditions.visibilityOf(getDriver().findElement(
+                        By.xpath("//td[@class='jenkins-table__cell--tight']//a[@tooltip='Schedule a Build for %s']".formatted(name)))))
                 .click();
         getWait10().until(ExpectedConditions.visibilityOf(buildScheduledTooltip));
         getWait10().until(ExpectedConditions.invisibilityOf(buildScheduledTooltip));
@@ -507,13 +527,32 @@ public class HomePage extends BasePage {
         return new CredentialsPage(getDriver());
     }
 
-    public AgentPage newNode() {
+    public String getBuildQueueText() {
+        return buildQueueText.getText();
+    }
+
+    public HomePage selectBreadcrumbBarMenu() {
+        new Actions(getDriver()).moveToElement(getDriver().findElement(By.xpath("//div[@id='breadcrumbBar']//a"))).perform();
+
+        TestUtils.moveAndClickWithJS(getDriver(), getWait5().until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//div[@id='breadcrumbBar']//a/button"))));
+
+        return this;
+    }
+
+    public List<WebElement> getBreadcrumbBarMenuList() {
+        return breadcrumbBarMenuList;
+    }
+  
+  public AgentPage newNode() {
         clickBuildExecutorStatus.click();
+        
         return new AgentPage(getDriver());
     }
 
     public AgentPage setUpAnAgent() {
         SetUpAgentButton.click();
+        
         return new AgentPage(getDriver());
     }
 }

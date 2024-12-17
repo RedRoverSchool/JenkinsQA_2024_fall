@@ -5,6 +5,7 @@ import org.testng.Assert;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 import school.redrover.page.home.HomePage;
+import school.redrover.page.pipeline.PipelineConfigurePage;
 import school.redrover.page.pipeline.PipelineProjectPage;
 import school.redrover.runner.BaseTest;
 import school.redrover.runner.TestUtils;
@@ -32,7 +33,6 @@ public class PipelineProjectTest extends BaseTest {
                 {"$"}, {"%"}, {"^"}, {"*"}, {"|"}, {"/"}, {"<"}, {">"},
                 {"["}, {";"}
         };
-
     }
 
     @Test
@@ -146,7 +146,7 @@ public class PipelineProjectTest extends BaseTest {
 
     @Test
     public void testGetPermalinksInformationUponSuccessfulBuild() {
-        TestUtils.createPipeline(getDriver(), PROJECT_NAME);
+        TestUtils.createPipelineProject(getDriver(), PROJECT_NAME);
 
         List<String> permalinkList = new HomePage(getDriver())
                 .clickScheduleBuild(PROJECT_NAME)
@@ -323,7 +323,7 @@ public class PipelineProjectTest extends BaseTest {
         Assert.assertTrue(isDisplayed);
     }
 
-    @Test()
+    @Test
     public void testDeleteByChevronBreadcrumb() {
         String welcomeTitle = new HomePage(getDriver())
                 .clickNewItem()
@@ -331,8 +331,8 @@ public class PipelineProjectTest extends BaseTest {
                 .selectPipelineAndClickOk()
                 .gotoHomePage()
                 .openPipelineProject(PROJECT_NAME)
-                .openDropDownMenuByChevronBreadcrumb(PROJECT_NAME)
-                .clickDeleteButtonSidebarAndConfirm()
+                .openBreadcrumbDropdown()
+                .clickDeleteBreadcrumbDropdownAndConfirm()
                 .getWelcomeTitle();
 
         Assert.assertEquals(welcomeTitle, "Welcome to Jenkins!");
@@ -483,4 +483,19 @@ public class PipelineProjectTest extends BaseTest {
         Assert.assertEquals(icons.get(1).getCssValue("color"), "rgba(230, 0, 31, 1)");
     }
 
+    @Test
+    public void testCreatePipelineFromExistingOne() {
+        final String secondProjectName = "Second" + PROJECT_NAME;
+        TestUtils.createPipelineProject(getDriver(), PROJECT_NAME);
+
+        List<String> itemNameList = new HomePage(getDriver())
+                .clickNewItem()
+                .enterItemName(secondProjectName)
+                .enterName(PROJECT_NAME)
+                .clickOkLeadingToCofigPageOfCopiedProject(new PipelineConfigurePage(getDriver()))
+                .gotoHomePage()
+                .getItemList();
+
+        Assert.assertTrue(itemNameList.contains(secondProjectName));
+    }
 }

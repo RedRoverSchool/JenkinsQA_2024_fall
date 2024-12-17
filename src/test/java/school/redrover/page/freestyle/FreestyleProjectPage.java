@@ -1,6 +1,5 @@
 package school.redrover.page.freestyle;
 
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -16,6 +15,9 @@ public class FreestyleProjectPage extends BaseProjectPage<FreestyleProjectPage, 
 
     @FindBy(xpath = "//tbody//tr[2]//td//a[contains(@class, 'display-name')]")
     private WebElement lastBuildNumber;
+
+    @FindBy(xpath = "//tbody/tr[2]/td/div[2]/a")
+    private WebElement lastBuildDateTime;
 
     @FindBy(tagName = "h1")
     private WebElement workspaceTitle;
@@ -56,6 +58,12 @@ public class FreestyleProjectPage extends BaseProjectPage<FreestyleProjectPage, 
     @FindBy(xpath = "//*[@id='breadcrumbs']/li[5]")
     private WebElement breadCrumbs;
 
+    @FindBy(name = "Submit")
+    private WebElement enableButton;
+
+    @FindBy(id = "enable-project")
+    private WebElement projectStatusText;
+
     public FreestyleProjectPage(WebDriver driver) {
         super(driver);
     }
@@ -78,6 +86,11 @@ public class FreestyleProjectPage extends BaseProjectPage<FreestyleProjectPage, 
         return lastBuildNumber.getText();
     }
 
+    public FreestyleBuildStatusPage clickLastBuildDateTime(){
+        getWait10().until(ExpectedConditions.elementToBeClickable(lastBuildDateTime)).click();
+        return new FreestyleBuildStatusPage(getDriver());
+    }
+
     public String getWorkspaceTitle() {
         return workspaceTitle.getText();
     }
@@ -95,7 +108,7 @@ public class FreestyleProjectPage extends BaseProjectPage<FreestyleProjectPage, 
     }
 
     public FreestyleProjectPage clickBuildNowSidebar() {
-        getWait5().until(ExpectedConditions.visibilityOf(buildNowSidebar)).click();
+        getWait5().until(ExpectedConditions.elementToBeClickable(buildNowSidebar)).click();
 
         return this;
     }
@@ -132,13 +145,16 @@ public class FreestyleProjectPage extends BaseProjectPage<FreestyleProjectPage, 
     }
 
     public FreestyleConfigPage changeEnablingStateViaIndicator() {
-        getWait10().until(ExpectedConditions.visibilityOfElementLocated(
-                By.name("Submit"))).click();
+        getWait10().until(ExpectedConditions.visibilityOf(enableButton)).click();
 
         return new FreestyleConfigPage(getDriver());
     }
 
     public String getBreadCrumb() {
         return breadCrumbs.getText();
+    }
+
+    public String getDisabledProjectIndicator() {
+        return getWait10().until(ExpectedConditions.visibilityOf(projectStatusText)).getText();
     }
 }

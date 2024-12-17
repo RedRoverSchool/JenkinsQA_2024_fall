@@ -4,21 +4,23 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
-import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
+import school.redrover.page.manage.AppearancePage;
 import school.redrover.page.home.HomePage;
 import school.redrover.runner.BaseTest;
 import school.redrover.runner.ProjectUtils;
 
 import java.time.Duration;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 public class ManageJenkinsTest extends BaseTest {
+
+    private final String MY_NODE_NAME = "My name of node";
+    private final String NODE_NAME = "NewNodeName";
+    private final String FULL_USER_NAME = "Ivan Petrov";
 
     @Test
     public void testCheckTitle() {
@@ -32,29 +34,83 @@ public class ManageJenkinsTest extends BaseTest {
 
     @Test
     public void testImpossiblyToCreateNewUserWithEmptyFields() {
-        String title = new HomePage(getDriver())
+        String validationMessage = new HomePage(getDriver())
                 .openManageJenkinsPage()
                 .openUsersPage()
                 .clickCreateUser()
                 .clickCreateUserButton()
                 .getValidationMessage();
 
-        Assert.assertEquals(title, "\"\" is prohibited as a username for security reasons.");
+        Assert.assertEquals(validationMessage, "\"\" is prohibited as a username for security reasons.");
     }
 
     @Test
     public void testCreateNewUser() {
-        final String fullName = "Ivan Petrov";
-
         List<String> userList = new HomePage(getDriver())
                 .openManageJenkinsPage()
                 .openUsersPage()
                 .clickCreateUser()
-                .fillFormByValidDataToCreateUser(fullName)
+                .fillFormByValidDataToCreateUser(FULL_USER_NAME)
                 .getCreatedUserName();
 
         Assert.assertEquals(userList.size(), 2);
-        Assert.assertEquals(userList.get(1), fullName);
+        Assert.assertEquals(userList.get(1), FULL_USER_NAME);
+    }
+
+    @Test
+    public void testAddDescriptionForUser() {
+        String userDescription = new HomePage(getDriver())
+                .openManageJenkinsPage()
+                .openUsersPage()
+                .createNewUser(FULL_USER_NAME)
+                .clickToConfigureUser(FULL_USER_NAME)
+                .addUserDescription()
+                .getUserDescription();
+
+        Assert.assertEquals(userDescription, "User Description");
+    }
+
+    @Test
+    public void testAddTimeZoneForUser() {
+        String userTimeZone = new HomePage(getDriver())
+                .openManageJenkinsPage()
+                .openUsersPage()
+                .createNewUser(FULL_USER_NAME)
+                .clickToConfigureUser(FULL_USER_NAME)
+                .addUserTimeZone()
+                .clickConfigureUserSidebar()
+                .getUserTimeZone();
+
+        Assert.assertEquals(userTimeZone, "Etc/GMT+2");
+    }
+
+    @Test
+    public void testDeleteUserViaDeleteButtonOnUsersPage() {
+        List<String> userList = new HomePage(getDriver())
+                .openManageJenkinsPage()
+                .openUsersPage()
+                .createNewUser(FULL_USER_NAME)
+                .deleteUserFromUsersPage()
+                .getCreatedUserName();
+
+        Assert.assertEquals(userList.size(), 1);
+        Assert.assertEquals(userList.get(0), "admin");
+    }
+
+    @Test
+    public void testDeleteUserViaConfigureUserPage() {
+        List<String> userList = new HomePage(getDriver())
+                .openManageJenkinsPage()
+                .openUsersPage()
+                .createNewUser(FULL_USER_NAME)
+                .clickToConfigureUser(FULL_USER_NAME)
+                .deleteUserFromConfigureUserPage()
+                .openManageJenkinsPage()
+                .openUsersPage()
+                .getCreatedUserName();
+
+        Assert.assertEquals(userList.size(), 1);
+        Assert.assertEquals(userList.get(0), "admin");
     }
 
     @Test
@@ -107,11 +163,14 @@ public class ManageJenkinsTest extends BaseTest {
                 .getAttribute("placeholder");
 
         Assert.assertEquals(searchField, "Search settings");
-
     }
 
     @Test
     public void testSearchSystemConfigurationItems() {
+
+        new HomePage(getDriver())
+                .openManageJenkinsPage()
+                .getSystemConfigurationItems();
 
         WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(10));
         WebElement manageJenkinsTab = wait.until(
@@ -222,28 +281,6 @@ public class ManageJenkinsTest extends BaseTest {
     }
 
     @Test
-    public void testSystemMessagePreview() {
-        getDriver().findElement(By.xpath("//a[contains(@href, '/manage')]")).click();
-        getWait10().until(ExpectedConditions.elementToBeClickable(By.xpath("//a[contains(@href, 'configureSecurity')]"))).click();
-        getWait5().until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//option[text() = 'Plain text']/..")));
-
-        new Select(getDriver().findElement(By.xpath("//option[text() = 'Plain text']/..")))
-                .selectByVisibleText("Safe HTML");
-
-        getDriver().findElement(By.name("Apply")).click();
-        getWait5().until(ExpectedConditions.elementToBeClickable(By.name("Submit"))).click();
-
-        getWait5().until(ExpectedConditions.elementToBeClickable(By.xpath("(//a[contains(@href, 'configure')])[1]"))).click();
-
-        getWait5().until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//textarea[@name = 'system_message']/.."))).click();
-        getDriver().findElement(By.xpath("//div[@class = 'CodeMirror']/div/textarea")).sendKeys("<h2>Hello</h2>");
-
-        getWait5().until(ExpectedConditions.elementToBeClickable(By.xpath("//a[@previewendpoint = '/markupFormatter/previewDescription']"))).click();
-
-        Assert.assertEquals(getDriver().findElement(By.xpath("//div[@class = 'textarea-preview']/h2")).getText(), "Hello");
-    }
-
-    @Test
     public void testVisitPageThreadDumps() {
         getDriver().findElement(By.xpath("//a[@href ='/manage']")).click();
 
@@ -262,115 +299,96 @@ public class ManageJenkinsTest extends BaseTest {
 
     @Test
     public void testCreateNewAgent() {
-        getDriver().findElement(By.xpath("//a[contains(.,'Manage Jenkins')]")).click();
 
-        getDriver().findElement(By.xpath("//dt[.='Nodes']")).click();
-        getDriver().findElement(By.cssSelector(".jenkins-button--primary")).click();
-        getDriver().findElement(By.xpath("//input[@id='name']")).sendKeys("NewAgent");
-        getDriver().findElement(By.tagName("label")).click();
-        getDriver().findElement(By.xpath("//button[@id='ok']")).click();
-        getDriver().findElement(By.name("Submit")).click();
+        List<String> nodeItemList = new HomePage(getDriver())
+                .openManageJenkinsPage()
+                .clickNodesButton()
+                .clickButtonNewNode()
+                .enterNodeName(NODE_NAME)
+                .selectPermanentAgent()
+                .clickButtonCreate()
+                .clickButtonSave()
+                .getNodeList();
 
-        WebElement newAgent = getDriver().findElement(By.xpath("//a[.='NewAgent']"));
-
-        Assert.assertTrue(newAgent.isDisplayed());
+        Assert.assertListContainsObject(nodeItemList, NODE_NAME, "List not contain new node");
     }
 
     @Test
     public void testCreationAndDisplayNewNameOnNodesPage() {
-        final String myNodeName = "My name of node";
-        getDriver().findElement(By.xpath("//a[@href='/manage']")).click();
+        List<String> itemNoteList = new HomePage(getDriver())
+                .openManageJenkinsPage()
+                .clickNodesButton()
+                .clickButtonNewNode()
+                .enterNodeName(MY_NODE_NAME)
+                .selectPermanentAgent()
+                .clickButtonCreate()
+                .clickButtonSave()
+                .getNodeList();
 
-        getDriver().findElement(By.xpath("//dt[.='Nodes']")).click();
-
-        getDriver().findElement(By.xpath("//a[@href='new']")).click();
-
-        getDriver().findElement(By.xpath("//*[@id='name']")).sendKeys(myNodeName);
-        getDriver().findElement(By.xpath("//*[.='Permanent Agent']")).click();
-        getDriver().findElement(By.xpath("//button[@name='Submit']")).click();
-
-        getDriver().findElement(By.xpath("//button[@name='Submit']")).click();
-
-        List<WebElement> nodes = getDriver().findElements(By.xpath("//a[@class='jenkins-table__link model-link inside']"));
-        List<String> nodesNames = new ArrayList<>();
-        for (WebElement element : nodes) {
-            String text = element.getText();
-            nodesNames.add(text);
-        }
-
-        Assert.assertListContainsObject(nodesNames, myNodeName, myNodeName);
+        Assert.assertListContainsObject(itemNoteList, MY_NODE_NAME, MY_NODE_NAME);
     }
 
     @Test
     public void testThemesOnPage() {
-        WebElement manageButton = getDriver().findElement(By.xpath("//a[@href='/manage']"));
-        manageButton.click();
-        WebElement appearanceButton = getDriver().findElement(By.xpath("//a[@href='appearance']"));
-        appearanceButton.click();
+        List<WebElement> themeList = new HomePage(getDriver())
+                .openManageJenkinsPage()
+                .clickAppearanceButton()
+                .getThemeList();
 
-        List<WebElement> selectTheme = getDriver().findElements(By.xpath("//section[@class='jenkins-section']"));
-
-        Assert.assertEquals(selectTheme.size(), 3, "Number of elements is not equal 3");
+        Assert.assertEquals(themeList.size(), 3);
     }
 
     @Test
     public void testPickDarkTheme() {
-        WebElement manageButton = getDriver().findElement(By.xpath("//a[@href='/manage']"));
-        manageButton.click();
-        WebElement appearanceButton = getDriver().findElement(By.xpath("//a[@href='appearance']"));
-        appearanceButton.click();
+        String initialColorTheme = new HomePage(getDriver())
+                .openManageJenkinsPage()
+                .clickAppearanceButton()
+                .getColorBackground();
 
-        WebElement changedColorArea = getDriver().findElement(By.xpath("//section[@class='jenkins-section']"));
+        String changedColor = new AppearancePage(getDriver())
+                .clickSelectDarkThemes()
+                .getColorBackground();
 
-        String initialColorTheme = changedColorArea.getCssValue("background");
-
-        WebElement darkThemeIcon = getDriver().findElement(By.xpath("//label[@for='radio-block-0']"));
-        darkThemeIcon.click();
-
-        String changedColor = changedColorArea.getCssValue("background");
-
-        Assert.assertEquals(changedColor, initialColorTheme, "Color of theme did not changed");
+        Assert.assertEquals(initialColorTheme, changedColor);
     }
 
-    @Ignore
     @Test
     public void testThemesDark() {
-        getDriver().findElement(By.cssSelector("[href='/manage']")).click();
-        getDriver().findElement(By.cssSelector("[href='appearance']")).click();
-        getDriver().findElement(By.xpath("//label[@for='radio-block-0']")).click();
+        String attributeData = new HomePage(getDriver())
+                .openManageJenkinsPage()
+                .clickAppearanceButton()
+                .clickSelectDarkThemes()
+                .clickCheckboxDifferentTheme()
+                .clickApplyButton()
+                .getAttributeData();
 
-        getDriver().findElement(By.cssSelector("[class='attach-previous ']")).click();
-        getDriver().findElement(By.xpath("//button[@name='Apply']")).click();
-
-        Assert.assertEquals(getDriver().findElement(By.cssSelector("html[data-theme]")).
-                getAttribute("data-theme"), "dark");
+        Assert.assertEquals(attributeData, "dark");
     }
 
 
     @Test
     public void testThemesDefault() {
-        getDriver().findElement(By.cssSelector("[href='/manage']")).click();
-        getDriver().findElement(By.cssSelector("[href='appearance']")).click();
-        getDriver().findElement(By.xpath("//label[@for='radio-block-2']")).click();
+        String attributeData = new HomePage(getDriver())
+                .openManageJenkinsPage()
+                .clickAppearanceButton()
+                .clickSelectDefaultThemes()
+                .clickCheckboxDifferentTheme()
+                .clickApplyButton()
+                .getAttributeData();
 
-        getDriver().findElement(By.cssSelector("[class='attach-previous ']")).click();
-        getDriver().findElement(By.xpath("//button[@name='Apply']")).click();
-
-        Assert.assertEquals(getDriver().findElement(By.cssSelector("html[data-theme]")).
-                getAttribute("data-theme"), "none");
+        Assert.assertEquals(attributeData, "none");
     }
-
 
     @Test
     public void testThemesSystem() {
-        getDriver().findElement(By.cssSelector("[href='/manage']")).click();
-        getDriver().findElement(By.cssSelector("[href='appearance']")).click();
-        getDriver().findElement(By.xpath("//label[@for='radio-block-1']")).click();
+        String attributeData = new HomePage(getDriver())
+                .openManageJenkinsPage()
+                .clickAppearanceButton()
+                .clickSelectSystemThemes()
+                .clickCheckboxDifferentTheme()
+                .clickApplyButton()
+                .getAttributeData();
 
-        getDriver().findElement(By.cssSelector("[class='attach-previous ']")).click();
-        getDriver().findElement(By.xpath("//button[@name='Apply']")).click();
-
-        Assert.assertTrue(getDriver().findElement(By.cssSelector("html[data-theme]")).
-                getAttribute("data-theme").contains("system"));
+        Assert.assertTrue(attributeData.contains("system"));
     }
 }

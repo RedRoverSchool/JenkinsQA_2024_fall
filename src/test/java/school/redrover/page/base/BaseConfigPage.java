@@ -4,6 +4,7 @@ import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 
 public abstract class BaseConfigPage<Self extends BaseConfigPage<?, ?>, ProjectPage extends BaseProjectPage> extends BasePage {
 
@@ -31,6 +32,9 @@ public abstract class BaseConfigPage<Self extends BaseConfigPage<?, ?>, ProjectP
     @FindBy(name = "_.displayNameOrNull")
     private WebElement displayNameInput;
 
+    @FindBy(xpath = "//h1")
+    private WebElement pageTitle;
+
     public BaseConfigPage(WebDriver driver) {
         super(driver);
     }
@@ -38,7 +42,7 @@ public abstract class BaseConfigPage<Self extends BaseConfigPage<?, ?>, ProjectP
     protected abstract ProjectPage createProjectPage();
 
     public Self enterDescription(String description) {
-        descriptionField.clear();
+        getWait2().until(ExpectedConditions.visibilityOf(descriptionField)).clear();
         descriptionField.sendKeys(description);
 
         return (Self) this;
@@ -57,7 +61,6 @@ public abstract class BaseConfigPage<Self extends BaseConfigPage<?, ?>, ProjectP
     }
 
     public Self changeDescriptionPreviewState() {
-
         if (textareaPreview.getAttribute("style").equals("display: none;")) {
             showPreviewLink.click();
         } else {
@@ -82,5 +85,9 @@ public abstract class BaseConfigPage<Self extends BaseConfigPage<?, ?>, ProjectP
         setDisplayName(name);
 
         return (Self) this;
+    }
+
+    public String getTitleOfConfigPage() {
+        return pageTitle.getText();
     }
 }

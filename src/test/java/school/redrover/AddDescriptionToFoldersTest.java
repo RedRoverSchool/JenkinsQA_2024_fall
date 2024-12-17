@@ -12,7 +12,7 @@ public class AddDescriptionToFoldersTest extends BaseTest {
     private static final String DESCRIPTION = "Description text";
 
     @Test
-    public void testExistingFolderWithNoDescription () {
+    public void testExistingFolderWithNoDescription() {
         TestUtils.createFolder(getDriver(), FOLDER_NAME);
 
         String finalResult = new HomePage(getDriver())
@@ -25,7 +25,7 @@ public class AddDescriptionToFoldersTest extends BaseTest {
     }
 
     @Test(dependsOnMethods = "testExistingFolderWithNoDescription")
-    public void testEditExistingDescription () {
+    public void testEditExistingDescription() {
         String finalResult = new HomePage(getDriver())
                 .gotoHomePage()
                 .openFolder(FOLDER_NAME)
@@ -37,7 +37,7 @@ public class AddDescriptionToFoldersTest extends BaseTest {
     }
 
     @Test(dependsOnMethods = "testEditExistingDescription")
-    public void testDescriptionsPreviewButton () {
+    public void testDescriptionsPreviewButton() {
         String finalResult = new HomePage(getDriver())
                 .gotoHomePage()
                 .openFolder(FOLDER_NAME)
@@ -47,7 +47,7 @@ public class AddDescriptionToFoldersTest extends BaseTest {
     }
 
     @Test(dependsOnMethods = "testDescriptionsPreviewButton")
-    public void testClearDescription () {
+    public void testClearDescription() {
         String finalResult = new HomePage(getDriver())
                 .gotoHomePage()
                 .openFolder(FOLDER_NAME)

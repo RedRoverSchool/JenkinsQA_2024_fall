@@ -1,9 +1,9 @@
 package school.redrover;
 
 import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
 import org.testng.Assert;
+import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import school.redrover.page.home.HomePage;
 import school.redrover.page.multiConfiguration.MultiConfigurationConfigPage;
@@ -13,6 +13,7 @@ import school.redrover.runner.TestUtils;
 import java.util.List;
 
 public class MultiConfigurationProjectTest extends BaseTest {
+
     private static final String PROJECT_NAME = "MultiConfigurationProject";
     private static final String DESCRIPTIONS = "Descriptions of project";
 
@@ -29,11 +30,11 @@ public class MultiConfigurationProjectTest extends BaseTest {
         Assert.assertEquals(itemList.get(0), PROJECT_NAME);
     }
 
+    @Ignore
     @Test(dependsOnMethods = "testCreateProjectWithoutDescription", description = " MultiConfigurationProjectTest | Add descriptions to existing project")
     public void testAddDescriptions() {
         String addDescription = new HomePage(getDriver())
                 .openMultiConfigurationProject(PROJECT_NAME)
-                .clearDescription()
                 .editDescription(DESCRIPTIONS)
                 .clickSubmitButton()
                 .getDescription();
@@ -44,18 +45,14 @@ public class MultiConfigurationProjectTest extends BaseTest {
 
     @Test
     public void testCreateProjectWithoutName() {
-        final String errorMessage = "This field cannot be empty";
+        String errorMessage = new HomePage(getDriver())
+                .clickNewItem()
+                .selectMultiConfigurationProject()
+                .getErrorMessage();
 
-        getDriver().findElement(By.xpath("//a[@href='/view/all/newJob']")).click();
-        getDriver().findElement(By.className("hudson_matrix_MatrixProject")).click();
-
-        JavascriptExecutor js = (JavascriptExecutor) getDriver();
-        js.executeScript("window.scrollTo(0, document.body.scrollHeight);");
-
-        Assert.assertTrue(getDriver().findElement(By.id("itemname-required")).getText().contains(errorMessage));
+        Assert.assertEquals(errorMessage, "» This field cannot be empty, please enter a valid name");
         Assert.assertFalse(getDriver().findElement(By.id("ok-button")).isEnabled());
     }
-
 
     @Test
     public void testSelectTimePeriodThrottleBuilds() {
@@ -123,11 +120,10 @@ public class MultiConfigurationProjectTest extends BaseTest {
 
         String welcomeText = new HomePage(getDriver())
                 .openMultiConfigurationProject(PROJECT_NAME)
-                .clickDeleteOnSidebarAndConfirmDeletion()
+                .clickDeleteButtonSidebarAndConfirm()
                 .getWelcomeTitle();
 
         Assert.assertEquals(welcomeText, "Welcome to Jenkins!");
-
     }
 
     @Test

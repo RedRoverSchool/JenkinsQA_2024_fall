@@ -17,7 +17,7 @@ public class ViewTest extends BaseTest {
 
     @Test
     public void testCreateListViewForSpecificJob() {
-        TestUtils.createPipeline(getDriver(), PIPELINE_NAME);
+        TestUtils.createPipelineProject(getDriver(), PIPELINE_NAME);
 
         List<String> viewList = new HomePage(getDriver())
                 .clickCreateNewViewButton()

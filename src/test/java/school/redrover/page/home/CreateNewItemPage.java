@@ -49,10 +49,10 @@ public class CreateNewItemPage extends BasePage {
     @FindBy(id = "ok-button")
     private WebElement okButton;
 
-    @FindBy (id="add-item-panel")
+    @FindBy(id = "add-item-panel")
     private WebElement pageField;
 
-    @FindBy (id="itemname-required")
+    @FindBy(id = "itemname-required")
     private WebElement warningMessage;
 
     public CreateNewItemPage(WebDriver driver) {
@@ -92,6 +92,12 @@ public class CreateNewItemPage extends BasePage {
         return new MultiConfigurationConfigPage(getDriver());
     }
 
+    public CreateNewItemPage selectMultiConfigurationProject() {
+        multiConfigurationProject.click();
+
+        return new CreateNewItemPage(getDriver());
+    }
+
     public FreestyleConfigPage selectFreestyleProjectAndClickOk() {
         freestyleProject.click();
         okButton.click();
@@ -115,6 +121,12 @@ public class CreateNewItemPage extends BasePage {
         return new MultibranchPipelineConfigPage(getDriver());
     }
 
+    public CreateNewItemPage selectMultibranchPipeline() {
+        multibranchPipeline.click();
+
+        return this;
+    }
+
     public PipelineConfigurePage selectPipelineAndClickOk() {
         pipeline.click();
         okButton.click();
@@ -136,12 +148,6 @@ public class CreateNewItemPage extends BasePage {
 
     public String getEmptyNameMessage() {
         return emptyNameMessage.getText();
-    }
-
-    public ErrorPage saveInvalidData() {
-        okButton.click();
-
-        return new ErrorPage(getDriver());
     }
 
     public CreateNewItemPage selectPipeline() {
@@ -173,26 +179,28 @@ public class CreateNewItemPage extends BasePage {
         return this;
     }
 
-    public <T> T clickOkLeadingToCertainPage(T page) {
+    public <T> T clickOkLeadingToCofigPageOfCopiedProject(T page) {
         okButton.click();
 
         return page;
     }
 
-    public PipelineConfigurePage clickOkAndGoToPipelineConfigPage() {
+    public ErrorPage clickOkButtonLeadingToErrorPage() {
         okButton.click();
 
-        return new PipelineConfigurePage(getDriver());
+        return new ErrorPage(getDriver());
     }
-
 
     public CreateNewItemPage clickSomewhere() {
         pageField.click();
+
         return this;
     }
+
     public String getWarningMessageText() {
         return warningMessage.getText();
     }
+
     public boolean getOkButton() {
         return okButton.isEnabled();
     }
