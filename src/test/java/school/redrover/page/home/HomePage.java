@@ -148,6 +148,12 @@ public class HomePage extends BasePage {
     @FindBy(xpath = "//div[@class='tippy-box']//a")
     private List<WebElement> breadcrumbBarMenuList;
 
+    @FindBy(xpath = "//section[2]/ul/li[1]/a")
+    private WebElement SetUpAgentButton;
+
+    @FindBy(xpath = "//*[@id='executors']/div[1]")
+    private WebElement clickBuildExecutorStatus;
+
     public HomePage(WebDriver driver) {
         super(driver);
     }
@@ -537,5 +543,17 @@ public class HomePage extends BasePage {
 
     public List<WebElement> getBreadcrumbBarMenuList() {
         return breadcrumbBarMenuList;
+    }
+  
+  public AgentPage newNode() {
+        clickBuildExecutorStatus.click();
+        
+        return new AgentPage(getDriver());
+    }
+
+    public AgentPage setUpAnAgent() {
+        SetUpAgentButton.click();
+        
+        return new AgentPage(getDriver());
     }
 }
