@@ -73,7 +73,7 @@ public class AgentPage extends BasePage {
         return this;
     }
 
-    public AgentPage label(){
+    public AgentPage label() {
         labels.sendKeys();
 
         return this;

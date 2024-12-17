@@ -500,7 +500,7 @@ public class HomePage extends BasePage {
 
         return new SignInPage(getDriver());
     }
-    
+
     public CredentialsPage clickCredentialsAdminDropdownMenu() {
         getWait2().until(ExpectedConditions.elementToBeClickable(credentialsDropdown)).click();
 
