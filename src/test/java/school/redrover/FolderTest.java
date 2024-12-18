@@ -3,7 +3,6 @@ package school.redrover;
 import org.testng.Assert;
 import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
-import school.redrover.page.ErrorPage;
 import school.redrover.page.home.HomePage;
 import school.redrover.page.folder.FolderProjectPage;
 import school.redrover.runner.BaseTest;
@@ -125,7 +124,7 @@ public class FolderTest extends BaseTest {
                 .runJob(FREESTYLE_PROJECT_NAME)
                 .gotoHomePage()
                 .selectBuildHistoryFromItemMenu(FIRST_FOLDER_NAME)
-                .getBuildName();
+                .getProjectName();
 
         Assert.assertEquals(buildHistoryName, "%s » %s".formatted(FIRST_FOLDER_NAME, FREESTYLE_PROJECT_NAME));
     }
@@ -165,7 +164,7 @@ public class FolderTest extends BaseTest {
                 .enterItemName("Folder.")
                 .selectFolderType()
                 .selectFolderType()
-                .saveInvalidData()
+                .clickOkButtonLeadingToErrorPage()
                 .getErrorMessage();
 
         Assert.assertEquals(errorMessage, "A name cannot end with ‘.’");

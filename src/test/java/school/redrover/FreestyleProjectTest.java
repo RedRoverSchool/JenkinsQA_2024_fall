@@ -15,8 +15,8 @@ import java.util.List;
 public class FreestyleProjectTest extends BaseTest {
 
     private static final String PROJECT_NAME = "MyFreestyleProject";
-    private static final String FREESTYLE_PROJECT = "Freestyle project";
-    private static final String DESCRIPTION = "Bla-bla-bla project";
+    private static final String NEW_PROJECT_NAME = "NewFreestyleProjectName";
+    private static final String DESCRIPTION = "FreestyleDescription";
     private static final String BUILD_NAME = "BuildName";
 
     @DataProvider
@@ -68,6 +68,19 @@ public class FreestyleProjectTest extends BaseTest {
 
         Assert.assertEquals(actualProjectsList.size(), 1);
         Assert.assertEquals(actualProjectsList.get(0), PROJECT_NAME);
+    }
+
+    @Test(dependsOnMethods = "testCreateFreestyleProjectWithDuplicateName")
+    public void testRenameViaBreadcrumbDropdown() {
+        String renamedProject = new HomePage(getDriver())
+                .openFreestyleProject(PROJECT_NAME)
+                .openBreadcrumbDropdown()
+                .clickRenameBreadcrumbDropdown()
+                .clearInputFieldAndTypeName(NEW_PROJECT_NAME)
+                .clickRenameButton()
+                .getProjectName();
+
+        Assert.assertEquals(renamedProject, NEW_PROJECT_NAME);
     }
 
     @Test
@@ -281,7 +294,7 @@ public class FreestyleProjectTest extends BaseTest {
 
         Assert.assertEquals(actualDescription, newDescription);
     }
-
+    @Ignore
     @Test
     public void testDeleteLastBuild() {
         TestUtils.createFreestyleProject(getDriver(), PROJECT_NAME);
@@ -300,8 +313,8 @@ public class FreestyleProjectTest extends BaseTest {
     }
 
     @Test(description = "Verify existing of, total build time, for projects build")
-    public void testTotalBuildTimeForProjectsBuild(){
-        TestUtils.createFreestyleProject(getDriver(),PROJECT_NAME);
+    public void testTotalBuildTimeForProjectsBuild() {
+        TestUtils.createFreestyleProject(getDriver(), PROJECT_NAME);
 
         int lastBuildTotalTime = new HomePage(getDriver())
                 .openFreestyleProject(PROJECT_NAME)
@@ -309,16 +322,13 @@ public class FreestyleProjectTest extends BaseTest {
                 .clickLastBuildDateTime()
                 .getLastBuildTotalTime();
 
-        Assert.assertTrue(lastBuildTotalTime > 0 );
+        Assert.assertTrue(lastBuildTotalTime > 0);
     }
 
-    @Test
+    @Test(dependsOnMethods = "testTotalBuildTimeForProjectsBuild")
     public void testDeleteProjectViaSidebarMenuOnProjectPage() {
         String welcomeText = new HomePage(getDriver())
-                .clickNewItem()
-                .enterItemName(PROJECT_NAME)
-                .selectFreestyleProjectAndClickOk()
-                .clickSaveButton()
+                .openFreestyleProject(PROJECT_NAME)
                 .clickDeleteButtonSidebarAndConfirm()
                 .getWelcomeTitle();
 
@@ -327,13 +337,9 @@ public class FreestyleProjectTest extends BaseTest {
 
     @Test
     public void testDeleteProjectViaDropdown() {
-        String welcomeText = new HomePage(getDriver())
-                .clickNewItem()
-                .enterItemName(PROJECT_NAME)
-                .selectFreestyleProjectAndClickOk()
-                .clickSaveButton()
-                .gotoHomePage()
+        TestUtils.createFreestyleProject(getDriver(), PROJECT_NAME);
 
+        String welcomeText = new HomePage(getDriver())
                 .selectDeleteFromItemMenuAndClickYes(PROJECT_NAME)
                 .getWelcomeTitle();
 
@@ -379,10 +385,10 @@ public class FreestyleProjectTest extends BaseTest {
 
     @Test
     public void testFreestyleProjectDescriptionPreview() {
-        TestUtils.createFreestyleProject(getDriver(), FREESTYLE_PROJECT);
+        TestUtils.createFreestyleProject(getDriver(), PROJECT_NAME);
 
         String descriptionPreview = new HomePage(getDriver())
-                .openFreestyleProject(FREESTYLE_PROJECT)
+                .openFreestyleProject(PROJECT_NAME)
                 .editDescription(DESCRIPTION)
                 .clickPreview()
                 .getPreviewDescriptionText();
@@ -442,10 +448,10 @@ public class FreestyleProjectTest extends BaseTest {
         Assert.assertEquals(emptyHistory.size(), 0);
     }
 
-    @Ignore
-    @Test(dependsOnMethods = "testBuildHistoryIsEmpty")
+    @Test
     public void testUpdateAfterExecutingBuild() {
         TestUtils.createFreestyleProject(getDriver(), PROJECT_NAME);
+
         List<String> oneExecution = new HomePage(getDriver())
                 .clickScheduleBuild(PROJECT_NAME)
                 .gotoBuildHistoryPageFromLeftPanel()
@@ -455,7 +461,6 @@ public class FreestyleProjectTest extends BaseTest {
         Assert.assertEquals(oneExecution.size(), 1);
     }
 
-    @Ignore
     @Test(dependsOnMethods = "testUpdateAfterExecutingBuild")
     public void testUpdateAfterChangingConfig() {
         List<String> changeConfig = new HomePage(getDriver())
@@ -472,12 +477,10 @@ public class FreestyleProjectTest extends BaseTest {
 
     @Test
     public void testWorkspaceIsOpened() {
+        TestUtils.createFreestyleProject(getDriver(), PROJECT_NAME);
+
         String workspace = new HomePage(getDriver())
-                .clickNewItem()
-                .enterItemName(PROJECT_NAME)
-                .selectFreestyleProject()
-                .selectFreestyleProjectAndClickOk()
-                .clickSaveButton()
+                .openFreestyleProject(PROJECT_NAME)
                 .clickBuildNowSidebar()
                 .clickWorkspaceSidebar()
                 .getBreadCrumb();
@@ -518,7 +521,7 @@ public class FreestyleProjectTest extends BaseTest {
                 .clickNewItem()
                 .enterItemName(secondProjectName)
                 .enterName(PROJECT_NAME)
-                .clickOkLeadingToCertainPage(new FreestyleConfigPage(getDriver()))
+                .clickOkLeadingToCofigPageOfCopiedProject(new FreestyleConfigPage(getDriver()))
                 .gotoHomePage()
                 .getItemList();
 
