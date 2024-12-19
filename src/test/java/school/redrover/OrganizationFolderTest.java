@@ -16,6 +16,7 @@ public class OrganizationFolderTest extends BaseTest {
     private static final String DESCRIPTION = "Description";
     private static final String NEW_DISPLAY_NAME = "NewNameOrganizationFolder";
     private static final String NEW_DESCRIPTION = "NewDescription";
+    private static final String MIN_LENGTH_NAME = "a";
 
     @Test
     public void testCreate() {
@@ -264,5 +265,17 @@ public class OrganizationFolderTest extends BaseTest {
                 .toolTipQuestionMarkVisible();
 
         Assert.assertTrue(questionMarkTooltip);
+    }
+
+    @Test
+    public void createWithMinLength() {
+        HomePage homePage = new HomePage(getDriver())
+                .clickNewItem()
+                .enterItemName(MIN_LENGTH_NAME)
+                .selectOrganizationFolderAndClickOk()
+                .gotoHomePage();
+
+        Assert.assertEquals(homePage.getItemNameByOrder(1), MIN_LENGTH_NAME);
+        Assert.assertEquals(homePage.getItemList().size(), 1);
     }
 }
