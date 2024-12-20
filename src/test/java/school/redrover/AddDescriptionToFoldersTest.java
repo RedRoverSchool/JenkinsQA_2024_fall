@@ -10,6 +10,7 @@ public class AddDescriptionToFoldersTest extends BaseTest {
 
     private static final String FOLDER_NAME = "FolderTest";
     private static final String DESCRIPTION = "Description text";
+    private static final String DESCRIPTION_EDITED = "Edited";
 
     @Test
     public void testExistingFolderWithNoDescription() {
@@ -29,11 +30,11 @@ public class AddDescriptionToFoldersTest extends BaseTest {
         String finalResult = new HomePage(getDriver())
                 .gotoHomePage()
                 .openFolder(FOLDER_NAME)
-                .editDescription("Edited ")
+                .editDescription(DESCRIPTION_EDITED)
                 .clickSubmitButton()
                 .getDescription();
 
-        Assert.assertEquals(finalResult, "Edited");
+        Assert.assertEquals(finalResult, DESCRIPTION_EDITED);
     }
 
     @Test(dependsOnMethods = "testEditExistingDescription")
@@ -43,7 +44,7 @@ public class AddDescriptionToFoldersTest extends BaseTest {
                 .openFolder(FOLDER_NAME)
                 .getDescriptionViaPreview();
 
-        Assert.assertEquals(finalResult, "Edited");
+        Assert.assertEquals(finalResult, DESCRIPTION_EDITED);
     }
 
     @Test(dependsOnMethods = "testDescriptionsPreviewButton")
