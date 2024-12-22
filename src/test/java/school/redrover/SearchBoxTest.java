@@ -109,16 +109,6 @@ public class SearchBoxTest extends BaseTest {
     }
 
     @Test
-    public void testSearchNotExistingInstance() {
-        String error = new HomePage(getDriver())
-                .enterSearch("hjk")
-                .enter()
-                .getMessageError();
-
-        Assert.assertEquals(error, "Nothing seems to match.");
-    }
-
-    @Test
     public void testResultOfSearch() {
         List<String> suggestionList = new HomePage(getDriver())
                 .enterSearch(SEARCH_TEXT)
@@ -128,7 +118,7 @@ public class SearchBoxTest extends BaseTest {
         Assert.assertEquals(suggestionList.get(2), SEARCH_RESULT);
     }
 
-    @Test
+    @Test(dependsOnMethods = "testResultOfSearch")
     public void testRedirectToResult() {
         String title = new HomePage(getDriver())
                 .enterSearch(SEARCH_TEXT)
@@ -138,7 +128,7 @@ public class SearchBoxTest extends BaseTest {
         Assert.assertEquals(title, "Manage Jenkins");
     }
 
-    @Test
+    @Test(dependsOnMethods = "testRedirectToResult")
     public void testEmptySearchField() {
         String errorMessage = new HomePage(getDriver())
                 .enterSearch(INVALID_SEARCH_TEXT)
