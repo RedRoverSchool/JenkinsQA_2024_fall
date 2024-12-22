@@ -68,4 +68,6 @@ public class MyViewsPage extends BasePage {
     public String getTextEmptyFolder() {
         return getWait5().until(ExpectedConditions.visibilityOf(folderText)).getText();
     }
+
+
 }
