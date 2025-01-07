@@ -104,7 +104,7 @@ jobs:
         run: |
           TIMESTAMP=$(date +"%Y-%m-%d %H:%M:%S")
           PREV_RUN_NUMBER=$(( ${{ github.run_number }} - 1 ))
-          REPORT_LINK="https://evgnick.github.io/api-ui-python-framework/${PREV_RUN_NUMBER}/"
+          REPORT_LINK="https://redroverschool.github.io/JenkinsQA_2024_fall/${PREV_RUN_NUMBER}/"
           
           ESCAPED_TIMESTAMP=$(echo "$TIMESTAMP" | sed 's|-|\\-|g; s|:|\\:|g; s|\.|\\.|g; s|_|\\_|g; s|/|\\/|g')
           ESCAPED_REPORT_LINK=$(echo "$REPORT_LINK" | sed 's|-|\\-|g; s|\.|\\.|g; s|_|\\_|g; s|:|\\:|g; s|/|\\/|g')
