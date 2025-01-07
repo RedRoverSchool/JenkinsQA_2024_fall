@@ -93,7 +93,9 @@ jobs:
           PUBLISH_DIR: allure-history
 
   notify:
-    if: ${{ github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success' }}
+    if: >
+      github.event.workflow_run.conclusion == 'success' &&
+      github.event.workflow_run.workflow_id == 'pages-build-deployment'
     runs-on: ubuntu-latest
 
     steps:
