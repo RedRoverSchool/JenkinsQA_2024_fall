@@ -4,6 +4,10 @@ on:
   pull_request:
     branches:
       - main
+  workflow_run:
+    workflows: [ "pages-build-deployment" ]
+    types:
+      - completed
 
 jobs:
   run-test:
@@ -87,3 +91,24 @@ jobs:
           PERSONAL_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           PUBLISH_BRANCH: gh-pages
           PUBLISH_DIR: allure-history
+
+  notify:
+    if: ${{ github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Send Telegram Notification
+        run: |
+          TIMESTAMP=$(date +"%Y-%m-%d %H:%M:%S")
+          PREV_RUN_NUMBER=$(( ${{ github.run_number }} - 1 ))
+          REPORT_LINK="https://evgnick.github.io/api-ui-python-framework/${PREV_RUN_NUMBER}/"
+          
+          ESCAPED_TIMESTAMP=$(echo "$TIMESTAMP" | sed 's|-|\\-|g; s|:|\\:|g; s|\.|\\.|g; s|_|\\_|g; s|/|\\/|g')
+          ESCAPED_REPORT_LINK=$(echo "$REPORT_LINK" | sed 's|-|\\-|g; s|\.|\\.|g; s|_|\\_|g; s|:|\\:|g; s|/|\\/|g')
+          
+          MESSAGE="📝 Новый отчет Allure: [открыть отчет](${ESCAPED_REPORT_LINK})%0A📅 Дата и время: ${ESCAPED_TIMESTAMP}%0A⚙️ Сборка: ${PREV_RUN_NUMBER}"
+          
+          curl -s -X POST "https://api.telegram.org/bot${{ secrets.TELEGRAM_TOKEN }}/sendMessage" \
+            -d chat_id="${{ secrets.TELEGRAM_CHAT_ID }}" \
+            -d text="${MESSAGE}" \
+            -d parse_mode="MarkdownV2"
