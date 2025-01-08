@@ -4,14 +4,9 @@ on:
   pull_request:
     branches:
       - main
-  workflow_run:
-    workflows: [ "pages-build-deployment" ]
-    types:
-      - completed
 
 jobs:
   run-test:
-    if: ${{ github.event_name == 'pull_request'}}
     name: 'Run tests'
     runs-on: ubuntu-latest
 
@@ -60,6 +55,15 @@ jobs:
           APP_OPTIONS: host=localhost;port=8080;admin.username=${{ secrets.ADMIN_USERNAME }};admin.password=${{ secrets.ADMIN_PASSWORD }}
           CI_RUN: true
 
+      - name: Save run number to artifact
+        run: echo "${{ github.run_number }}" > run_number.txt
+
+      - name: Upload run_number artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: my_artifact
+          path: run_number.txt
+
       - name: Attach screenshots
         if: failure()
         uses: actions/upload-artifact@v4
@@ -92,24 +96,3 @@ jobs:
           PERSONAL_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           PUBLISH_BRANCH: gh-pages
           PUBLISH_DIR: allure-history
-
-  notify:
-    if: ${{ github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success' }}
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Send Telegram Notification
-        run: |
-          TIMESTAMP=$(date +"%Y-%m-%d %H:%M:%S")
-          PREV_RUN_NUMBER=$(( ${{ github.run_number }} - 1 ))
-          REPORT_LINK="https://redroverschool.github.io/JenkinsQA_2024_fall/${PREV_RUN_NUMBER}/"
-          
-          ESCAPED_TIMESTAMP=$(echo "$TIMESTAMP" | sed 's|-|\\-|g; s|:|\\:|g; s|\.|\\.|g; s|_|\\_|g; s|/|\\/|g')
-          ESCAPED_REPORT_LINK=$(echo "$REPORT_LINK" | sed 's|-|\\-|g; s|\.|\\.|g; s|_|\\_|g; s|:|\\:|g; s|/|\\/|g')
-          
-          MESSAGE="📝 Новый отчет Allure: [открыть отчет](${ESCAPED_REPORT_LINK})%0A📅 Дата и время: ${ESCAPED_TIMESTAMP}%0A⚙️ Сборка: ${PREV_RUN_NUMBER}"
-          
-          curl -s -X POST "https://api.telegram.org/bot${{ secrets.TELEGRAM_TOKEN }}/sendMessage" \
-            -d chat_id="${{ secrets.TELEGRAM_CHAT_ID }}" \
-            -d text="${MESSAGE}" \
-            -d parse_mode="MarkdownV2"

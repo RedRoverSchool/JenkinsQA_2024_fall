@@ -1,0 +1,64 @@
+name: Notify
+
+on:
+  workflow_run:
+    workflows: [ "pages-build-deployment" ]
+    types:
+      - completed
+jobs:
+  notify:
+    if: ${{ github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Find the latest successful CI run
+        uses: actions/github-script@v6
+        id: find_ci_run
+        with:
+          script: |
+            const runs = await github.rest.actions.listWorkflowRunsForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              status: "success",
+              per_page: 5,
+            });
+            
+            const ciRun = runs.data.workflow_runs.find(run => run.name === "CI");
+            
+            if (!ciRun) {
+              core.setFailed("No successful CI workflow runs found with name 'CI'.");
+            } else {
+              core.info(`Found CI workflow run with ID: ${ciRun.id}`);
+              core.setOutput("run_id", ciRun.id);
+            }
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+
+      - name: Download run_number artifact from CI workflow
+        uses: actions/download-artifact@v4
+        with:
+          name: my_artifact
+          run-id: ${{ steps.find_ci_run.outputs.run_id }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Read run_number from artifact
+        run: |
+          RUN_NUMBER=$(cat run_number.txt)
+          echo "RUN_NUMBER=${RUN_NUMBER}" >> $GITHUB_ENV
+          echo "Run Number: $RUN_NUMBER"
+
+      - name: Send Telegram Notification
+        run: |
+          TIMESTAMP=$(date +"%Y-%m-%d %H:%M:%S")
+          REPORT_LINK="https://redroverschool.github.io/JenkinsQA_2024_fall/$RUN_NUMBER/"
+          
+          ESCAPED_TIMESTAMP=$(echo "$TIMESTAMP" | sed 's|-|\\-|g; s|:|\\:|g; s|\.|\\.|g; s|_|\\_|g; s|/|\\/|g')
+          ESCAPED_REPORT_LINK=$(echo "$REPORT_LINK" | sed 's|-|\\-|g; s|\.|\\.|g; s|_|\\_|g; s|:|\\:|g; s|/|\\/|g')
+          
+          MESSAGE="📝 Новый отчет Allure: [открыть отчет](${ESCAPED_REPORT_LINK})%0A📅 Дата и время: ${ESCAPED_TIMESTAMP}%0A⚙️ Сборка: $RUN_NUMBER"
+          
+          curl -s -X POST "https://api.telegram.org/bot${{ secrets.TELEGRAM_TOKEN }}/sendMessage" \
+            -d chat_id="${{ secrets.TELEGRAM_CHAT_ID }}" \
+            -d text="${MESSAGE}" \
+            -d parse_mode="MarkdownV2"
