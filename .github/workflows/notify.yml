@@ -17,23 +17,12 @@ jobs:
         with:
           script: |
             const runs = await github.rest.actions.listWorkflowRunsForRepo({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              status: "success",
-              per_page: 5,
+              owner: context.repo.owner, repo: context.repo.repo, status: "success", per_page: 2,
             });
-            
             const ciRun = runs.data.workflow_runs.find(run => run.name === "CI");
-            
-            if (!ciRun) {
-              core.setFailed("No successful CI workflow runs found with name 'CI'.");
-            } else {
-              core.info(`Found CI workflow run with ID: ${ciRun.id}`);
-              core.setOutput("run_id", ciRun.id);
-            }
+            core.setOutput("run_id", ciRun.id);
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
 
       - name: Download run_number artifact from CI workflow
         uses: actions/download-artifact@v4
