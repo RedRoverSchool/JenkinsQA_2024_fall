@@ -1,5 +1,6 @@
 package school.redrover.page.base;
 
+import io.qameta.allure.Step;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -39,6 +40,7 @@ public abstract class BasePage extends BaseModel {
         super(driver);
     }
 
+    @Step("Go to Home Page")
     public HomePage gotoHomePage() {
         logo.click();
 

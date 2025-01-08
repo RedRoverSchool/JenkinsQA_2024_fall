@@ -1,5 +1,6 @@
 package school.redrover.page.base;
 
+import io.qameta.allure.Step;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -48,6 +49,7 @@ public abstract class BaseConfigPage<Self extends BaseConfigPage<?, ?>, ProjectP
         return (Self) this;
     }
 
+    @Step("Click Save button")
     public ProjectPage clickSaveButton() {
         saveButton.click();
 

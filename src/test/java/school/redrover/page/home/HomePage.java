@@ -1,5 +1,6 @@
 package school.redrover.page.home;
 
+import io.qameta.allure.Step;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -201,6 +202,7 @@ public class HomePage extends BasePage {
         return new ManageJenkinsPage(getDriver());
     }
 
+    @Step("Click New Item")
     public CreateNewItemPage clickNewItem() {
         newJob.click();
 
@@ -296,6 +298,7 @@ public class HomePage extends BasePage {
                 .toList();
     }
 
+    @Step("Get Item list from Dashboard")
     public List<String> getItemList() {
         return projectList
                 .stream()

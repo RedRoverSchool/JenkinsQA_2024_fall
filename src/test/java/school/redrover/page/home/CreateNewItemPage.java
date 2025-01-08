@@ -1,5 +1,6 @@
 package school.redrover.page.home;
 
+import io.qameta.allure.Step;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -59,6 +60,7 @@ public class CreateNewItemPage extends BasePage {
         super(driver);
     }
 
+    @Step("Type '{name}' to name input field")
     public CreateNewItemPage enterItemName(String name) {
         nameField.sendKeys(name);
 
@@ -127,6 +129,7 @@ public class CreateNewItemPage extends BasePage {
         return this;
     }
 
+    @Step("Select 'Pipeline' and click 'Ok' button")
     public PipelineConfigurePage selectPipelineAndClickOk() {
         pipeline.click();
         okButton.click();

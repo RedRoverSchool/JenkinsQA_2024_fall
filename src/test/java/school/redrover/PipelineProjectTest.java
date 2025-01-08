@@ -1,5 +1,8 @@
 package school.redrover;
 
+import io.qameta.allure.Description;
+import io.qameta.allure.Epic;
+import io.qameta.allure.Story;
 import org.openqa.selenium.WebElement;
 import org.testng.Assert;
 import org.testng.annotations.DataProvider;
@@ -13,6 +16,7 @@ import school.redrover.runner.TestUtils;
 import java.util.List;
 import java.util.Map;
 
+@Epic("Pipeline")
 public class PipelineProjectTest extends BaseTest {
 
     private static final String PROJECT_NAME = "PipelineName";
@@ -36,6 +40,8 @@ public class PipelineProjectTest extends BaseTest {
     }
 
     @Test
+    @Story("US_00.002 Create Pipeline Project")
+    @Description("Create Pipeline Project with valid name via sidepanel")
     public void testCreateProjectWithValidNameViaSidebar() {
         List<String> itemList = new HomePage(getDriver())
                 .clickNewItem()
