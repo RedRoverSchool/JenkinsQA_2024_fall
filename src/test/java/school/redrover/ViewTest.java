@@ -32,7 +32,7 @@ public class ViewTest extends BaseTest {
         Assert.assertListContainsObject(
                 viewList,
                 VIEW_NAME,
-                "New List View is displayed1");
+                "New List View is displayed");
     }
 
     @Test(dependsOnMethods = "testCreateListViewForSpecificJob")

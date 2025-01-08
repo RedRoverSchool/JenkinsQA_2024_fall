@@ -21,7 +21,7 @@ public class SearchBoxTest extends BaseTest {
                 .gotoSearchBox()
                 .getTitle();
 
-        Assert.assertEquals(title, "Search Box");
+        Assert.assertEquals(title, "Search Box1");
     }
 
     @Test
