@@ -19,6 +19,9 @@ public class ListViewConfigPage extends BasePage {
     @FindBy(xpath = "//button[@suffix='columns']")
     private WebElement columnButton;
 
+    @FindBy(name = "_.description")
+    private WebElement descriptionTextArea;
+
     public ListViewConfigPage(WebDriver driver) {
         super(driver);
     }
@@ -64,6 +67,11 @@ public class ListViewConfigPage extends BasePage {
     public ListViewConfigPage selectColumnByName(String name) {
         getWait5().until(ExpectedConditions.elementToBeClickable(
                 By.xpath("//button[contains(text(),'%s')]".formatted(name)))).click();
+
+        return this;
+    }
+    public ListViewConfigPage addDescription(String description) {
+        descriptionTextArea.sendKeys(description);
 
         return this;
     }

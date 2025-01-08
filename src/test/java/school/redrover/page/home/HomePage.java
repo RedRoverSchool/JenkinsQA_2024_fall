@@ -524,6 +524,12 @@ public class HomePage extends BasePage {
 
         return new CredentialsPage(getDriver());
     }
+  
+    public ViewPage selectViewType(String viewType) {
+        getDriver().findElement(By.linkText(viewType)).click();
+
+        return new ViewPage(getDriver());
+    }
 
     public String getBuildQueueText() {
         return buildQueueText.getText();
