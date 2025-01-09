@@ -15,6 +15,8 @@ import school.redrover.page.organizationFolder.OrganizationFolderConfigPage;
 import school.redrover.page.pipeline.PipelineConfigurePage;
 import school.redrover.runner.TestUtils;
 
+import java.util.List;
+
 public class CreateNewItemPage extends BasePage {
 
     @FindBy(xpath = "//span[text()= 'Multibranch Pipeline']")
@@ -55,6 +57,9 @@ public class CreateNewItemPage extends BasePage {
 
     @FindBy(id = "itemname-required")
     private WebElement warningMessage;
+
+    @FindBy(xpath = "//div[@id='items']//li//label/span")
+    private List<WebElement> itemsTypesList;
 
     public CreateNewItemPage(WebDriver driver) {
         super(driver);
@@ -206,5 +211,10 @@ public class CreateNewItemPage extends BasePage {
 
     public boolean getOkButton() {
         return okButton.isEnabled();
+    }
+
+    public List<WebElement> getTextList() {
+
+        return itemsTypesList;
     }
 }

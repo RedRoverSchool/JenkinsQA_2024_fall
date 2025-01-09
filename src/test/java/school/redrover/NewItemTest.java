@@ -19,7 +19,7 @@ import java.util.List;
 
 public class NewItemTest extends BaseTest {
 
-    private final static By NEW_ITEM_BUTTON = By.xpath("//a[@href='/view/all/newJob']");
+
     private final static String MESSAGE = "» This field cannot be empty, please enter a valid name";
     private final static String NEW_ITEM_NAME = "New Project";
     private final static String NEW_ITEM = "New Item";
@@ -46,16 +46,17 @@ public class NewItemTest extends BaseTest {
 
     @Test
     public void testCountItemTypes() {
-        getDriver().findElement(NEW_ITEM_BUTTON).click();
 
-        List<WebElement> itemsTypesList = getDriver().findElements(By.xpath(   "//div[@id='items']//li//label/span"));
+        Integer sizeItemsTypesList = new HomePage(getDriver())
+                .clickNewItem()
+                .getTextList().size();
 
-        Assert.assertEquals(getTextList(itemsTypesList).size(), 6);
+        Assert.assertEquals(sizeItemsTypesList, 6);
     }
 
     @Test
     public void testItemTypesNames() {
-        getDriver().findElement(NEW_ITEM_BUTTON).click();
+        getDriver().findElement(By.xpath("//a[@href='/view/all/newJob']")).click();
 
         List<String> expectedItemTypes = Arrays.asList("Freestyle project", "Pipeline", "Multi-configuration project",
                 "Folder", "Multibranch Pipeline", "Organization Folder");
