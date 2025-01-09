@@ -13,6 +13,7 @@ import school.redrover.page.systemConfiguration.PluginsPage;
 import school.redrover.page.systemConfiguration.SystemPage;
 import school.redrover.page.base.BasePage;
 import school.redrover.page.user.UsersPage;
+import school.redrover.runner.TestUtils;
 
 import java.util.List;
 
@@ -65,6 +66,9 @@ public class ManageJenkinsPage extends BasePage {
 
     @FindBy(xpath = "//dt[.='Nodes']")
     private WebElement nodesButton;
+
+    @FindBy(xpath = "//a[@href ='systemInfo']")
+    private WebElement systemInformationButton;
 
     public ManageJenkinsPage(WebDriver driver) {
         super(driver);
@@ -168,5 +172,12 @@ public class ManageJenkinsPage extends BasePage {
 
     public String getAttribute(String attributeName) {
         return searchInputField.getAttribute(attributeName);
+    }
+
+    public SystemInformationPage openSystemInformationPage() {
+        TestUtils.scrollToElementWithJS(getDriver(), systemInformationButton);
+        systemInformationButton.click();
+
+        return new SystemInformationPage(getDriver());
     }
 }
