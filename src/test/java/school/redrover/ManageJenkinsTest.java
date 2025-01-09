@@ -1,7 +1,6 @@
 package school.redrover;
 
 import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -285,19 +284,14 @@ public class ManageJenkinsTest extends BaseTest {
 
     @Test
     public void testVisitPageThreadDumps() {
-        getDriver().findElement(By.xpath("//a[@href ='/manage']")).click();
+        String pageTitle = new HomePage(getDriver())
+                .openManageJenkinsPage()
+                .openSystemInformationPage()
+                .openThreadDumpsTab()
+                .clickThisPageLink()
+                .getTitle();
 
-        JavascriptExecutor scrollPage = (JavascriptExecutor) getDriver();
-        scrollPage.executeScript("window.scrollBy(0,5000)");
-
-        getDriver().findElement(By.xpath("//a[@href ='systemInfo']")).click();
-
-        getDriver().findElement(By.xpath("//*[contains(text(),'Thread Dumps')]")).click();
-
-        getDriver().findElement(By.xpath("//a[@href ='threadDump']")).click();
-
-        Assert.assertEquals(getDriver().findElement
-                (By.xpath("//div/h1")).getText(), "Thread Dump");
+        Assert.assertEquals(pageTitle, "Thread Dump");
     }
 
     @Test
@@ -367,7 +361,6 @@ public class ManageJenkinsTest extends BaseTest {
 
         Assert.assertEquals(attributeData, "dark");
     }
-
 
     @Test
     public void testThemesDefault() {
