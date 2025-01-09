@@ -115,10 +115,13 @@ public class ManageJenkinsTest extends BaseTest {
 
     @Test
     public void testRedirectionToManage() {
-        String urlBeforeRedirection = getDriver().getCurrentUrl();
+        HomePage homePage = new HomePage(getDriver());
+        String urlBeforeRedirection = homePage
+                .getCurrentUrl();
 
-        getDriver().findElement(By.xpath("//div[@id='tasks']//a[@href='/manage']")).click();
-        String currentURL = getDriver().getCurrentUrl();
+        String currentURL = homePage
+                .openManageJenkinsPage()
+                .getCurrentUrl();
 
         Assert.assertEquals(currentURL, urlBeforeRedirection + "manage/");
     }
