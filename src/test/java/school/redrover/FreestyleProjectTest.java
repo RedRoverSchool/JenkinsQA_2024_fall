@@ -294,7 +294,7 @@ public class FreestyleProjectTest extends BaseTest {
 
         Assert.assertEquals(actualDescription, newDescription);
     }
-    @Ignore
+
     @Test
     public void testDeleteLastBuild() {
         TestUtils.createFreestyleProject(getDriver(), PROJECT_NAME);

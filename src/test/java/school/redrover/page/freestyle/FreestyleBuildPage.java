@@ -97,7 +97,7 @@ public class FreestyleBuildPage extends BasePage {
     }
 
     public FreestyleBuildPage clickDeleteBuildSidebar() {
-        deleteBuildSidebar.click();
+        getWait5().until(ExpectedConditions.elementToBeClickable(deleteBuildSidebar)).click();
 
         return this;
     }
