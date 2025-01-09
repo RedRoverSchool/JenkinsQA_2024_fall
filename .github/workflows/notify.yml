@@ -17,10 +17,15 @@ jobs:
         with:
           script: |
             const runs = await github.rest.actions.listWorkflowRunsForRepo({
-              owner: context.repo.owner, repo: context.repo.repo, per_page: 30,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              per_page: 50,
             });
-            const ciRun = runs.data.workflow_runs.find(run => run.name === "CI");
-            core.setOutput("run_id", ciRun.id);
+            const ciRuns = runs.data.workflow_runs
+              .filter(run => run.name === "CI")
+              .sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+            const latestCiRun = ciRuns[0];
+            core.setOutput("run_id", latestCiRun.id);
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -48,6 +53,6 @@ jobs:
           MESSAGE="📝 Новый отчет Allure: [открыть отчет](${ESCAPED_REPORT_LINK})%0A📅 Дата и время: ${ESCAPED_TIMESTAMP}%0A⚙️ Сборка: $RUN_NUMBER"
           
           curl -s -X POST "https://api.telegram.org/bot${{ secrets.TELEGRAM_TOKEN }}/sendMessage" \
-            -d chat_id="${{ secrets.TELEGRAM_CHAT_ID }}" \
+            -d chat_id="-1002222760706" \
             -d text="${MESSAGE}" \
             -d parse_mode="MarkdownV2"
