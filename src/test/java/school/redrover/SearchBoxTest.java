@@ -31,7 +31,7 @@ public class SearchBoxTest extends BaseTest {
                 .enter()
                 .getResult();
 
-        Assert.assertEquals(result, "Built-In Node");
+        Assert.assertEquals(result, "Built-In Node1");
     }
 
     @Test
