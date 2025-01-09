@@ -8,6 +8,7 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 import school.redrover.page.manage.AppearancePage;
 import school.redrover.page.home.HomePage;
+import school.redrover.page.systemConfiguration.SystemPage;
 import school.redrover.runner.BaseTest;
 import school.redrover.runner.ProjectUtils;
 
@@ -158,7 +159,6 @@ public class ManageJenkinsTest extends BaseTest {
 
     @Test
     public void testManageJenkinsTabSearch() {
-
         String searchField = new HomePage(getDriver())
                 .openManageJenkinsPage()
                 .clickOnSearchField()
@@ -270,16 +270,17 @@ public class ManageJenkinsTest extends BaseTest {
     }
 
     @Test
-    public void testSystemButton() {
-        getDriver().findElement(By.xpath("//a[@href='/manage']")).click();
-        getDriver().findElement(By.xpath("//a[@href='configure']")).click();
+    public void testSystemPageNavigation() {
+        String currentUrl = new HomePage(getDriver())
+                .openManageJenkinsPage()
+                .clickSystemSection()
+                .getCurrentUrl();
 
-        String currentUrl = getDriver().getCurrentUrl();
-        String getSystemText = getDriver().findElement(By.xpath("//div[@id='main-panel']")).getText().toLowerCase();
+        String pageTitle = new SystemPage(getDriver())
+                .getTitle();
 
-        Assert.assertEquals(currentUrl, ProjectUtils.getUrl() + "manage/configure",
-                "Current URL does not meet requirement. ");
-        Assert.assertTrue(getSystemText.contains("system"), "Current page does not contain the word 'System'");
+        Assert.assertTrue(currentUrl.contains("manage/configure"), "Current URL does not meet the requirement.");
+        Assert.assertEquals(pageTitle, "System");
     }
 
     @Test
