@@ -53,6 +53,6 @@ jobs:
           MESSAGE="📝 Новый отчет Allure: [открыть отчет](${ESCAPED_REPORT_LINK})%0A📅 Дата и время: ${ESCAPED_TIMESTAMP}%0A⚙️ Сборка: $RUN_NUMBER"
           
           curl -s -X POST "https://api.telegram.org/bot${{ secrets.TELEGRAM_TOKEN }}/sendMessage" \
-            -d chat_id="-1002222760706" \
+            -d chat_id="@team_jenkins_2024_fall" \
             -d text="${MESSAGE}" \
             -d parse_mode="MarkdownV2"
