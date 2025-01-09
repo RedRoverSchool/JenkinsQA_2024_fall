@@ -19,9 +19,6 @@ public class FreestyleConfigPage extends BaseConfigPage<FreestyleConfigPage, Fre
     @FindBy(xpath = "//button[@name = 'Submit']")
     private WebElement submitButton;
 
-    @FindBy(xpath = "//textarea[@name='description']")
-    private WebElement descriptionField;
-
     @FindBy(xpath = "//button[contains(text(),'Add build step')]")
     private WebElement addBuildStepButton;
 
