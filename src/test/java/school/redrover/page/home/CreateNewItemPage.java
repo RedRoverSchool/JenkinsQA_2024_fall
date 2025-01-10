@@ -217,4 +217,7 @@ public class CreateNewItemPage extends BasePage {
 
         return itemsTypesList;
     }
+    public List<String> getItemList(){
+       return itemsTypesList.stream().map(WebElement::getText).toList();
+    }
 }
