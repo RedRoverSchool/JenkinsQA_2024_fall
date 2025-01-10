@@ -1,14 +1,10 @@
 package school.redrover;
 
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebElement;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import school.redrover.page.home.HomePage;
 import school.redrover.runner.BaseTest;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class NewItemTest extends BaseTest {
@@ -16,17 +12,6 @@ public class NewItemTest extends BaseTest {
     private final static String MESSAGE = "» This field cannot be empty, please enter a valid name";
     private final static String NEW_ITEM_NAME = "New Project";
     private final static String NEW_ITEM = "New Item";
-
-    private List<String> getTextList(List<WebElement> listOfElements) {
-
-        List<String> textList = new ArrayList<>(listOfElements.size());
-
-        for (WebElement element : listOfElements) {
-            textList.add(element.getText());
-        }
-
-        return textList;
-    }
 
     @Test
     public void testPossibilityOfCreatingNewItemFromBreadcrumbBar() {
@@ -54,8 +39,8 @@ public class NewItemTest extends BaseTest {
                 .clickNewItem()
                 .getItemList();
 
-                Assert.assertEquals(itemTypes, List.of("Freestyle project", "Pipeline", "Multi-configuration project",
-                        "Folder", "Multibranch Pipeline", "Organization Folder"));
+        Assert.assertEquals(itemTypes, List.of("Freestyle project", "Pipeline", "Multi-configuration project",
+                "Folder", "Multibranch Pipeline", "Organization Folder"));
     }
 
     @Test

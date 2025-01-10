@@ -67,5 +67,4 @@ public class ListViewConfigPage extends BasePage {
 
         return this;
     }
-
 }

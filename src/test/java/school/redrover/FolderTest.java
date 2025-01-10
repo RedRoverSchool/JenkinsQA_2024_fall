@@ -1,7 +1,6 @@
 package school.redrover;
 
 import org.testng.Assert;
-import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import school.redrover.page.home.HomePage;
 import school.redrover.page.folder.FolderProjectPage;
@@ -61,7 +60,6 @@ public class FolderTest extends BaseTest {
         Assert.assertEquals(folderProjectPage.getFolderName(), "F");
     }
 
-    @Ignore
     @Test
     public void testConfigureDescriptionByChevron() {
 
@@ -78,7 +76,6 @@ public class FolderTest extends BaseTest {
                 "This is new description");
     }
 
-    @Ignore
     @Test(dependsOnMethods = "testConfigureDescriptionByChevron")
     public void testCreateNewItemByChevron() {
 

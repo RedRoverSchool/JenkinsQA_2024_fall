@@ -31,20 +31,11 @@ public class FreestyleProjectPage extends BaseProjectPage<FreestyleProjectPage, 
     @FindBy(css = "dialog *")
     private List<WebElement> wipeOutCurrentWorkspaceDialogOptions;
 
-    @FindBy(xpath = "//span[text()='Rename']/..")
-    private WebElement renameSidebar;
-
-    @FindBy(xpath = "//a[contains(@href, 'configure')]")
-    private WebElement configureSidebar;
-
     @FindBy(xpath = "//a[@data-build-success='Build scheduled']")
     private WebElement buildNowSidebar;
 
     @FindBy(xpath = "//tbody//tr[2]//a")
     private WebElement lastBuildSuccessBuildIcon;
-
-    @FindBy(xpath = "//a[@data-title='Delete Project']")
-    private WebElement deleteProjectSidebar;
 
     @FindBy(xpath = "//button[@data-id='ok']")
     private WebElement yesButton;

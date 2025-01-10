@@ -26,12 +26,6 @@ public class OrganizationFolderConfigPage extends BaseConfigPage<OrganizationFol
     @FindBy(xpath = "//div/div[@class='textarea-preview']")
     private WebElement textareaPreview;
 
-    @FindBy(xpath = "//div/a[@class='textarea-show-preview']")
-    private WebElement showPreviewLink;
-
-    @FindBy(xpath = "//div/a[@class='textarea-hide-preview']")
-    private WebElement hidePreviewLink;
-
     @FindBy(xpath = "//div[@id='tasks']/div")
     private List<WebElement> sidebarItemsNameList;
 

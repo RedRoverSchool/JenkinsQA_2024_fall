@@ -48,9 +48,6 @@ public abstract class BaseProjectPage<Self extends BaseProjectPage<?, ?, ?>, Pro
     @FindBy(className = "textarea-preview")
     private WebElement previewDescriptionText;
 
-    @FindBy(xpath = "//a[@id='description-link']/text()")
-    private WebElement descriptionButtonText;
-
     @FindBy(css = "[class*='task-link-wrapper'] [href$='/configure']")
     private WebElement sidebarConfigureButton;
 

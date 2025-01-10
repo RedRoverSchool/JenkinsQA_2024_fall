@@ -92,5 +92,4 @@ public class NewViewPage extends BasePage {
 
         return typeToDescriptionMap;
     }
-
 }

@@ -55,5 +55,4 @@ public class BuildHistoryPage extends BasePage {
 
         return new ConsoleOutputPage(getDriver());
     }
-
 }
