@@ -16,7 +16,7 @@ import school.redrover.runner.TestUtils;
 import java.util.List;
 import java.util.Map;
 
-@Epic("Pipeline")
+@Epic("02 Pipeline")
 public class PipelineProjectTest extends BaseTest {
 
     private static final String PROJECT_NAME = "PipelineName";
@@ -40,8 +40,9 @@ public class PipelineProjectTest extends BaseTest {
     }
 
     @Test
+    @Epic("00 New Item")
     @Story("US_00.002 Create Pipeline Project")
-    @Description("Create Pipeline Project with valid name via sidepanel")
+    @Description("TC_00.002.01 Create Pipeline Project with valid name via sidepanel")
     public void testCreateProjectWithValidNameViaSidebar() {
         List<String> itemList = new HomePage(getDriver())
                 .clickNewItem()

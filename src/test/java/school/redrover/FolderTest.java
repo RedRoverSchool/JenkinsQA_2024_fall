@@ -1,6 +1,10 @@
 package school.redrover;
 
+import io.qameta.allure.Description;
+import io.qameta.allure.Epic;
+import io.qameta.allure.Story;
 import org.testng.Assert;
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 import school.redrover.page.home.HomePage;
 import school.redrover.page.folder.FolderProjectPage;
@@ -9,6 +13,7 @@ import school.redrover.runner.TestUtils;
 
 import java.util.List;
 
+@Epic("04 Folder")
 public class FolderTest extends BaseTest {
 
     private static final String FIRST_FOLDER_NAME = "FreestyleProjects";
@@ -20,6 +25,24 @@ public class FolderTest extends BaseTest {
     private static final String FOLDER_NAME = "FolderName";
     private static final String NEW_FOLDER_NAME = "NewFolderName";
     private static final String ERROR_MESSAGE_ON_RENAME_WITH_SAME_NAME = "The new name is the same as the current name.";
+    private static final String ERROR_MESSAGE_ON_RENAME_WITH_EMPTY_NAME = "No name is specified";
+
+    private String escapeHtml(String input) {
+        if (input == null) return null;
+        return input.replace("&", "&amp;")
+                .replace("<", "&lt;")
+                .replace(">", "&gt;");
+    }
+
+    @DataProvider
+    public Object[][] providerUnsafeCharacters() {
+
+        return new Object[][]{
+                {"\\"}, {"]"}, {":"}, {"#"}, {"&"}, {"?"}, {"!"}, {"@"},
+                {"$"}, {"%"}, {"^"}, {"*"}, {"|"}, {"/"}, {"<"}, {">"},
+                {"["}, {";"}
+        };
+    }
 
     @Test
     public void testCreateWithMaxNameLength() {
@@ -409,5 +432,72 @@ public class FolderTest extends BaseTest {
                 .getItemList();
 
         Assert.assertListNotContainsObject(projectList, FOLDER_NAME, "Folder is not deleted.");
+    }
+
+    @Test
+    @Story("US_04.001 Rename Folder")
+    @Description("TC_04.001.04 Rename Folder from the My Views directly via folder's page")
+    public void testRenameFolderFromMyViewsViaFolderPage() {
+        TestUtils.createFolder(getDriver(), FOLDER_NAME);
+
+        List<String> projectList = new HomePage(getDriver())
+                .clickMyViewsButton()
+                .openFolder(FOLDER_NAME)
+                .clickRenameSidebarButton()
+                .clearInputFieldAndTypeName(NEW_FOLDER_NAME)
+                .clickRenameButton()
+                .gotoHomePage()
+                .getItemList();
+
+        Assert.assertListContainsObject(projectList, NEW_FOLDER_NAME, "Folder is not renamed");
+    }
+
+    @Test(dependsOnMethods = "testRenameFolderFromMyViewsViaFolderPage")
+    @Story("US_04.001 Rename Folder")
+    @Description("TC_04.001.03 Rename Folder from the My Views via 'Drop-down menu'")
+    public void testRenameFolderFromMyViewsViaDropdownMenu() {
+        List<String> projectList = new HomePage(getDriver())
+                .clickMyViewsButton()
+                .openFolder(NEW_FOLDER_NAME)
+                .openBreadcrumbDropdown()
+                .clickRenameBreadcrumbDropdown()
+                .clearInputFieldAndTypeName(FOLDER_NAME)
+                .clickRenameButton()
+                .gotoHomePage()
+                .getItemList();
+
+        Assert.assertListContainsObject(projectList, FOLDER_NAME, "Folder is not renamed");
+    }
+
+    @Test
+    @Story("US_04.001 Rename Folder")
+    @Description("TC_04.001.07 Validate Error message, if New Folder Name is empty")
+    public void testRenameFolderToEmptyName() {
+        TestUtils.createFolder(getDriver(), FOLDER_NAME);
+
+        String actualErrorMessage = new HomePage(getDriver())
+                .openFolder(FOLDER_NAME)
+                .clickRenameSidebarButton()
+                .clearInputFieldAndTypeName("")
+                .clickRenameButtonLeadingToError()
+                .getErrorMessage();
+
+        Assert.assertEquals(actualErrorMessage, ERROR_MESSAGE_ON_RENAME_WITH_EMPTY_NAME);
+    }
+
+    @Test(dataProvider = "providerUnsafeCharacters")
+    @Story("US_04.001 Rename Folder")
+    @Description("TC_04.001.06 Validate Error message, if New Folder Name contains special characters")
+    public void testCreateWithUnsafeCharactersInName(String unsafeCharacter) {
+        TestUtils.createFolder(getDriver(), FOLDER_NAME);
+
+        String invalidNameMessage = new HomePage(getDriver())
+                .openFolder(FOLDER_NAME)
+                .clickRenameSidebarButton()
+                .clearInputFieldAndTypeName(unsafeCharacter)
+                .clickRenameButtonLeadingToError()
+                .getErrorMessage();
+
+        Assert.assertEquals(invalidNameMessage, "‘%s’ is an unsafe character".formatted(escapeHtml(unsafeCharacter)));
     }
 }
