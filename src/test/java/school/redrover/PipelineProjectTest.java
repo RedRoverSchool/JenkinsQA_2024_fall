@@ -16,7 +16,7 @@ import school.redrover.runner.TestUtils;
 import java.util.List;
 import java.util.Map;
 
-@Epic("Pipeline")
+@Epic("02 Pipeline")
 public class PipelineProjectTest extends BaseTest {
 
     private static final String PROJECT_NAME = "PipelineName";

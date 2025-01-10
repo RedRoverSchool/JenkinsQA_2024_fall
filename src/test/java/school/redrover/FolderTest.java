@@ -1,6 +1,7 @@
 package school.redrover;
 
 import io.qameta.allure.Description;
+import io.qameta.allure.Epic;
 import io.qameta.allure.Story;
 import org.testng.Assert;
 import org.testng.annotations.DataProvider;
@@ -12,6 +13,7 @@ import school.redrover.runner.TestUtils;
 
 import java.util.List;
 
+@Epic("04 Folder")
 public class FolderTest extends BaseTest {
 
     private static final String FIRST_FOLDER_NAME = "FreestyleProjects";
@@ -496,8 +498,6 @@ public class FolderTest extends BaseTest {
                 .clickRenameButtonLeadingToError()
                 .getErrorMessage();
 
-        String expectedMessage = "‘%s’ is an unsafe character".formatted(escapeHtml(unsafeCharacter));
-
-        Assert.assertEquals(invalidNameMessage, expectedMessage);
+        Assert.assertEquals(invalidNameMessage, "‘%s’ is an unsafe character".formatted(escapeHtml(unsafeCharacter)));
     }
 }
