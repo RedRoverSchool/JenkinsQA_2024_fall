@@ -51,7 +51,6 @@ public class RenameFreeStyleProjectTest extends BaseTest {
     public void testIncorrectSymbols() {
         for (String symbols : setOfIncorrectSymbols) {
             String incorrectSymbolsMessage = new HomePage(getDriver())
-                    .gotoHomePage()
                     .openFreestyleProject(PROJECT_NAME_EDITED)
                     .renameItem(symbols)
                     .getRenameWarningMessage();

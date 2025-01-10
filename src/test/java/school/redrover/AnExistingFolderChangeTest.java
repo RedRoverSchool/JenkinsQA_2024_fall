@@ -51,7 +51,6 @@ public class AnExistingFolderChangeTest extends BaseTest {
     public void testNotAllowedSymbols() {
         for (String symbols : setOfIncorrectSymbols) {
             String incorrectSymbolsMessage = new HomePage(getDriver())
-                    .gotoHomePage()
                     .openFolder(EDITED_FOLDER_NAME)
                     .renameItem(symbols)
                     .getRenameWarningMessage();

@@ -102,8 +102,7 @@ public class FolderTest extends BaseTest {
     @Test(dependsOnMethods = "testConfigureDescriptionByChevron")
     public void testCreateNewItemByChevron() {
 
-        String projectName = new FolderProjectPage(getDriver())
-                .gotoHomePage()
+        String projectName = new HomePage(getDriver())
                 .selectNewItemFromFolderMenu(FIRST_FOLDER_NAME)
                 .nameAndSelectFreestyleProject(FREESTYLE_PROJECT_NAME)
                 .addExecuteWindowsBatchCommand("echo 'Hello world!'")
