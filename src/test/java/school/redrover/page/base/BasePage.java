@@ -114,5 +114,4 @@ public abstract class BasePage extends BaseModel {
     public String getCurrentUrl() {
         return getDriver().getCurrentUrl();
     }
-
 }

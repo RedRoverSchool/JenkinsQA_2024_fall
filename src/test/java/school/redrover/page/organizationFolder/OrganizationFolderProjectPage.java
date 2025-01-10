@@ -11,9 +11,6 @@ public class OrganizationFolderProjectPage extends BaseProjectPage<OrganizationF
     @FindBy(xpath = "//a[@href='./configure']")
     private WebElement configureButton;
 
-    @FindBy(tagName = "h1")
-    private WebElement name;
-
     @FindBy(id="view-message")
     private WebElement descriptionText;
 

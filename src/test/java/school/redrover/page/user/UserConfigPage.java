@@ -77,5 +77,4 @@ public class UserConfigPage extends BasePage {
         return new HomePage(getDriver());
 
     }
-
 }

@@ -24,5 +24,4 @@ public class ConsoleOutputPage extends BasePage {
                 .findFirst()
                 .orElse("");
     }
-
 }

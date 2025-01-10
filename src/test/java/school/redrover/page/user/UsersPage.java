@@ -67,5 +67,4 @@ public class UsersPage extends BasePage {
                 .fillFormByValidDataToCreateUser(userName);
         return new UsersPage(getDriver());
     }
-
 }

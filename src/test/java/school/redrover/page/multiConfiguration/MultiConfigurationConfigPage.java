@@ -50,5 +50,4 @@ public class MultiConfigurationConfigPage extends BaseConfigPage<MultiConfigurat
                 .map(option -> option.getAttribute("value"))
                 .toList();
     }
-
 }

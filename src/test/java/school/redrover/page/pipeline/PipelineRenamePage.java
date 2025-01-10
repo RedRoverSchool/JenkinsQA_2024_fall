@@ -13,5 +13,4 @@ public class PipelineRenamePage extends BaseRenamePage<PipelineRenamePage, Pipel
     protected PipelineProjectPage createProjectPage() {
         return new PipelineProjectPage(getDriver());
     }
-
 }

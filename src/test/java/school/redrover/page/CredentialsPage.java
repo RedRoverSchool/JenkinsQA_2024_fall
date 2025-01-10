@@ -37,5 +37,4 @@ public class CredentialsPage extends BasePage {
     public boolean getDisplayedItemMenu () {
         return dropdownMenu.isDisplayed();
     }
-
 }
