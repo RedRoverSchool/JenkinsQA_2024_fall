@@ -1,10 +1,8 @@
 package school.redrover;
 
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 import school.redrover.page.manage.AppearancePage;
 import school.redrover.page.home.HomePage;
@@ -12,15 +10,20 @@ import school.redrover.page.systemConfiguration.SystemPage;
 import school.redrover.runner.BaseTest;
 import school.redrover.runner.ProjectUtils;
 
-import java.time.Duration;
-import java.util.Arrays;
 import java.util.List;
 
 public class ManageJenkinsTest extends BaseTest {
 
-    private final String MY_NODE_NAME = "My name of node";
-    private final String NODE_NAME = "NewNodeName";
-    private final String FULL_USER_NAME = "Ivan Petrov";
+    private static final String MY_NODE_NAME = "My name of node";
+    private static final String NODE_NAME = "NewNodeName";
+    private static final String FULL_USER_NAME = "Ivan Petrov";
+
+    @DataProvider
+    public Object[][] provideSystemConfigurationItems() {
+        return new Object[][]{
+                {"System"}, {"Tools"}, {"Plugins"}, {"Nodes"}, {"Clouds"}, {"Appearance"}
+        };
+    }
 
     @Test
     public void testCheckTitle() {
@@ -167,33 +170,17 @@ public class ManageJenkinsTest extends BaseTest {
         Assert.assertEquals(searchField, "Search settings");
     }
 
-    @Test
-    public void testSearchSystemConfigurationItems() {
+    @Test(dataProvider = "provideSystemConfigurationItems")
+    public void testSearchSystemConfigurationAllItemsAreFound(String systemConfigurationItem) {
 
-        new HomePage(getDriver())
+        List<String> searchDropdown = new HomePage(getDriver())
                 .openManageJenkinsPage()
-                .getSystemConfigurationItems();
+                .clickOnSearchField()
+                .typeSearchInputField(systemConfigurationItem)
+                .getSearchResults();
 
-        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(10));
-        WebElement manageJenkinsTab = wait.until(
-                ExpectedConditions.elementToBeClickable(By.xpath("//a[span[text()='Manage Jenkins']]")));
-        manageJenkinsTab.click();
-
-        WebElement searchField = getDriver().findElement(
-                By.xpath("//input[@id='settings-search-bar']"));
-
-        List<String> itemsSystemConfiguration = Arrays.asList(
-                "System", "Tools", "Plugins", "Nodes", "Clouds", "Appearance");
-        for (String itemsSystemConfigurations : itemsSystemConfiguration) {
-            wait.until(ExpectedConditions.elementToBeClickable(searchField)).clear();
-            wait.until(ExpectedConditions.visibilityOf(searchField)).sendKeys(itemsSystemConfigurations);
-
-            WebElement searchDropdown = wait.until(
-                    ExpectedConditions.presenceOfElementLocated(By.xpath("//div[@class='jenkins-search__results']")));
-
-            Assert.assertNotNull(searchDropdown, "Item '" + itemsSystemConfigurations + "' not found in dropdown.");
-
-        }
+        Assert.assertEquals(searchDropdown.get(0), systemConfigurationItem,
+                "Item '" + systemConfigurationItem + "' not found in dropdown or not in the expected position.");
     }
 
     @Test
