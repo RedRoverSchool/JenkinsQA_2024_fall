@@ -6,14 +6,10 @@ import school.redrover.page.home.HomePage;
 import school.redrover.runner.BaseTest;
 import school.redrover.runner.TestUtils;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class AnExistingFolderChangeTest extends BaseTest {
 
     private static final String FOLDER_NAME = "Folder";
     private static final String EDITED_FOLDER_NAME = "FolderEdited";
-    private static final List<String> setOfIncorrectSymbols = new ArrayList<>(List.of("$", "%", "#", "&amp;", "[", "]", "@", "!", "^", "/", ":", "*", "?", "|"));
 
     @Test
     public void testNoChangesWarning() {
@@ -45,17 +41,5 @@ public class AnExistingFolderChangeTest extends BaseTest {
                 .getItemName();
 
         Assert.assertEquals(newItemName, EDITED_FOLDER_NAME);
-    }
-
-    @Test(dependsOnMethods = "testRenameFromFoldersPage")
-    public void testNotAllowedSymbols() {
-        for (String symbols : setOfIncorrectSymbols) {
-            String incorrectSymbolsMessage = new HomePage(getDriver())
-                    .openFolder(EDITED_FOLDER_NAME)
-                    .renameItem(symbols)
-                    .getRenameWarningMessage();
-
-            Assert.assertEquals(incorrectSymbolsMessage,"‘%s’ is an unsafe character".formatted(symbols));
-        }
     }
 }

@@ -484,11 +484,10 @@ public class FolderTest extends BaseTest {
         Assert.assertEquals(actualErrorMessage, ERROR_MESSAGE_ON_RENAME_WITH_EMPTY_NAME);
     }
 
-    @Test(dataProvider = "providerUnsafeCharacters")
+    @Test(dataProvider = "providerUnsafeCharacters", dependsOnMethods = "testRenameFolderToEmptyName")
     @Story("US_04.001 Rename Folder")
     @Description("TC_04.001.06 Validate Error message, if New Folder Name contains special characters")
-    public void testCreateWithUnsafeCharactersInName(String unsafeCharacter) {
-        TestUtils.createFolder(getDriver(), FOLDER_NAME);
+    public void testRenameFolderWithUnsafeCharactersInName(String unsafeCharacter) {
 
         String invalidNameMessage = new HomePage(getDriver())
                 .openFolder(FOLDER_NAME)
