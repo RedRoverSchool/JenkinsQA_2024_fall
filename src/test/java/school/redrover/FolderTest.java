@@ -25,6 +25,13 @@ public class FolderTest extends BaseTest {
     private static final String ERROR_MESSAGE_ON_RENAME_WITH_SAME_NAME = "The new name is the same as the current name.";
     private static final String ERROR_MESSAGE_ON_RENAME_WITH_EMPTY_NAME = "No name is specified";
 
+    private String escapeHtml(String input) {
+        if (input == null) return null;
+        return input.replace("&", "&amp;")
+                .replace("<", "&lt;")
+                .replace(">", "&gt;");
+    }
+
     @DataProvider
     public Object[][] providerUnsafeCharacters() {
 
@@ -489,6 +496,8 @@ public class FolderTest extends BaseTest {
                 .clickRenameButtonLeadingToError()
                 .getErrorMessage();
 
-        Assert.assertEquals(invalidNameMessage, "‘%s’ is an unsafe character".formatted(unsafeCharacter));
+        String expectedMessage = "‘%s’ is an unsafe character".formatted(escapeHtml(unsafeCharacter));
+
+        Assert.assertEquals(invalidNameMessage, expectedMessage);
     }
 }
