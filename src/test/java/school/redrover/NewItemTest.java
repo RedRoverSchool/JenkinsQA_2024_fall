@@ -49,18 +49,13 @@ public class NewItemTest extends BaseTest {
 
     @Test
     public void testItemTypesNames() {
-        getDriver().findElement(By.xpath("//a[@href='/view/all/newJob']")).click();
 
-        List<String> expectedItemTypes = Arrays.asList("Freestyle project", "Pipeline", "Multi-configuration project",
-                "Folder", "Multibranch Pipeline", "Organization Folder");
+        List<String> itemTypes = new HomePage(getDriver())
+                .clickNewItem()
+                .getItemList();
 
-        List<WebElement> itemsTypesList = getDriver().findElements(By.xpath(   "//div[@id='items']//li//label/span"));
-
-        List<String> actualItemTypes = getTextList(itemsTypesList);
-
-        for (int i = 0; i < getTextList(itemsTypesList).size(); i++) {
-            Assert.assertEquals(actualItemTypes.get(i), (expectedItemTypes.get(i)));
-        }
+                Assert.assertEquals(itemTypes, List.of("Freestyle project", "Pipeline", "Multi-configuration project",
+                        "Folder", "Multibranch Pipeline", "Organization Folder"));
     }
 
     @Test
