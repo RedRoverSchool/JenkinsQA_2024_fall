@@ -1,24 +1,17 @@
 package school.redrover;
 
 import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.interactions.Actions;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import school.redrover.page.home.HomePage;
 import school.redrover.runner.BaseTest;
-import school.redrover.runner.TestUtils;
 
-import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 public class NewItemTest extends BaseTest {
-
 
     private final static String MESSAGE = "» This field cannot be empty, please enter a valid name";
     private final static String NEW_ITEM_NAME = "New Project";
@@ -99,8 +92,7 @@ public class NewItemTest extends BaseTest {
         Assert.assertFalse(okButton);
     }
 
-
-        @Test
+    @Test
     public void testCreateNewItemWithEmptyNameField() {
         String errorMessage = new HomePage(getDriver())
                 .clickNewItem()
@@ -111,6 +103,6 @@ public class NewItemTest extends BaseTest {
                 .selectMultibranchPipelineProject()
                 .getErrorMessage();
 
-            Assert.assertEquals(errorMessage,MESSAGE);
-        }
+        Assert.assertEquals(errorMessage,MESSAGE);
+    }
 }
