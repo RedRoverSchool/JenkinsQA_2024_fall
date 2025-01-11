@@ -102,8 +102,7 @@ public class FolderTest extends BaseTest {
     @Test(dependsOnMethods = "testConfigureDescriptionByChevron")
     public void testCreateNewItemByChevron() {
 
-        String projectName = new FolderProjectPage(getDriver())
-                .gotoHomePage()
+        String projectName = new HomePage(getDriver())
                 .selectNewItemFromFolderMenu(FIRST_FOLDER_NAME)
                 .nameAndSelectFreestyleProject(FREESTYLE_PROJECT_NAME)
                 .addExecuteWindowsBatchCommand("echo 'Hello world!'")
@@ -488,7 +487,7 @@ public class FolderTest extends BaseTest {
     @Test(dataProvider = "providerUnsafeCharacters")
     @Story("US_04.001 Rename Folder")
     @Description("TC_04.001.06 Validate Error message, if New Folder Name contains special characters")
-    public void testCreateWithUnsafeCharactersInName(String unsafeCharacter) {
+    public void testRenameFolderWithUnsafeCharactersInName(String unsafeCharacter) {
         TestUtils.createFolder(getDriver(), FOLDER_NAME);
 
         String invalidNameMessage = new HomePage(getDriver())

@@ -28,7 +28,6 @@ public class AddDescriptionToFoldersTest extends BaseTest {
     @Test(dependsOnMethods = "testExistingFolderWithNoDescription")
     public void testEditExistingDescription() {
         String finalResult = new HomePage(getDriver())
-                .gotoHomePage()
                 .openFolder(FOLDER_NAME)
                 .editDescription(DESCRIPTION_EDITED)
                 .clickSubmitButton()
@@ -40,7 +39,6 @@ public class AddDescriptionToFoldersTest extends BaseTest {
     @Test(dependsOnMethods = "testEditExistingDescription")
     public void testDescriptionsPreviewButton() {
         String finalResult = new HomePage(getDriver())
-                .gotoHomePage()
                 .openFolder(FOLDER_NAME)
                 .getDescriptionViaPreview();
 
@@ -50,7 +48,6 @@ public class AddDescriptionToFoldersTest extends BaseTest {
     @Test(dependsOnMethods = "testDescriptionsPreviewButton")
     public void testClearDescription() {
         String finalResult = new HomePage(getDriver())
-                .gotoHomePage()
                 .openFolder(FOLDER_NAME)
                 .clearDescription()
                 .getDescriptionButtonText();
