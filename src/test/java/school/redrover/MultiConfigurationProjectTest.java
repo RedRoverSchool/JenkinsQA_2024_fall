@@ -1,5 +1,7 @@
 package school.redrover;
 
+import io.qameta.allure.Epic;
+import io.qameta.allure.Story;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.testng.Assert;
@@ -122,6 +124,21 @@ public class MultiConfigurationProjectTest extends BaseTest {
                 .getWelcomeTitle();
 
         Assert.assertEquals(welcomeText, "Welcome to Jenkins!");
+    }
+    @Epic("03 Multiconfiguration project")
+    @Story("US_03.003 Delete project")
+    @Test
+    public void testCancelDeleteProjectFromProjectPage() {
+        TestUtils.createMultiConfigurationProject(getDriver(), PROJECT_NAME);
+
+        List<String> itemList= new HomePage(getDriver())
+                .openMultiConfigurationProject(PROJECT_NAME)
+                .clickDeleteButtonSidebarAndCancel()
+                .gotoHomePage()
+                .getItemList();
+
+        Assert.assertEquals(itemList.size(), 1);
+        Assert.assertEquals(itemList.get(0),PROJECT_NAME);
     }
 
     @Test
