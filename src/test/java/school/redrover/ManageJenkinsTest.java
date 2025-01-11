@@ -11,7 +11,6 @@ import school.redrover.runner.BaseTest;
 import school.redrover.runner.ProjectUtils;
 import school.redrover.runner.TestUtils;
 
-import java.sql.SQLOutput;
 import java.util.List;
 
 public class ManageJenkinsTest extends BaseTest {
