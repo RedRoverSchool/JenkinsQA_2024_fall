@@ -345,6 +345,19 @@ public class FreestyleProjectTest extends BaseTest {
         Assert.assertEquals(welcomeText, "Welcome to Jenkins!");
     }
 
+    @Test
+    public void testDeleteFirstProjectViaChevron() {
+        TestUtils.createFreestyleProject(getDriver(), PROJECT_NAME);
+        TestUtils.createFreestyleProject(getDriver(), PROJECT_NAME + " 2");
+
+        List<String> projectsList = new HomePage(getDriver())
+                .selectDeleteFromItemMenuAndClickYes(PROJECT_NAME)
+                .getItemList();
+
+        Assert.assertEquals(projectsList.size(),1);
+        Assert.assertEquals(projectsList.get(0), PROJECT_NAME + " 2");
+    }
+
     @Test(dependsOnMethods = "testBuildProjectViaSidebarMenuOnProjectPage")
     public void testDeleteWorkspace() {
         String workspaceText = new HomePage(getDriver())
