@@ -48,6 +48,9 @@ public abstract class BaseProjectPage<Self extends BaseProjectPage<?, ?, ?>, Pro
     @FindBy(xpath = "//span[contains(text(),'Delete')]")
     private WebElement deleteButtonSidebar;
 
+    @FindBy(xpath = "//button[@data-id='cancel']")
+    private WebElement cancelButton;
+
     @FindBy(xpath = "//button[@data-id='ok']")
     private WebElement yesButton;
 
@@ -136,6 +139,13 @@ public abstract class BaseProjectPage<Self extends BaseProjectPage<?, ?, ?>, Pro
         getWait2().until(ExpectedConditions.elementToBeClickable(yesButton)).click();
 
         return new HomePage(getDriver());
+    }
+
+    public Self clickDeleteButtonSidebarAndCancel() {
+        getWait2().until(ExpectedConditions.elementToBeClickable(deleteButtonSidebar)).click();
+        getWait2().until(ExpectedConditions.elementToBeClickable(cancelButton)).click();
+
+        return (Self) this;
     }
 
     public ProjectRenamePage clickRenameSidebarButton() {
