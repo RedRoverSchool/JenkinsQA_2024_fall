@@ -14,6 +14,7 @@ import school.redrover.page.folder.FolderProjectPage;
 import school.redrover.page.freestyle.FreestyleProjectPage;
 import school.redrover.page.freestyle.FreestyleRenamePage;
 import school.redrover.page.manage.ManageJenkinsPage;
+import school.redrover.page.manage.node.NodesProjectPage;
 import school.redrover.page.multiConfiguration.MultiConfigurationProjectPage;
 import school.redrover.page.multibranch.MultibranchPipelineProjectPage;
 import school.redrover.page.organizationFolder.OrganizationFolderProjectPage;
@@ -154,7 +155,7 @@ public class HomePage extends BasePage {
     private WebElement buttonExpandCollaps;
 
     @FindBy(xpath = "div[@id='executors']/div[@class='pane-content']/div/div/a")
-    private List<WebElement> buildList;
+    private List<WebElement> nodeList;
 
     public HomePage(WebDriver driver) {
         super(driver);
@@ -549,25 +550,9 @@ public class HomePage extends BasePage {
         return breadcrumbBarMenuList;
     }
 
-    private void selectMenuFromBuildDropdown(String itemName, String menuName) {
+    public List<String> getNodeNameList() {
         clickButtonExpand();
-
-        TestUtils.moveAndClickWithJS(getDriver(), getDriver().findElement(
-                By.xpath("//div/a/span[text() = '%s']/../button".formatted(itemName))));
-
-        getWait10().until(ExpectedConditions.visibilityOfElementLocated(
-                By.xpath("//div[@class='jenkins-dropdown__item__icon']/parent::*[contains(., '%s')]"
-                        .formatted(menuName)))).click();
-    }
-
-    public HomePage selectDeleteAgentFromBuildDropdownAndClickYes(String buildName) {
-        selectMenuFromBuildDropdown(buildName,"Delete Agent");
-        getWait5().until(ExpectedConditions.visibilityOf(yesButton)).click();
-        return this;
-    }
-    public List<String> getBuildNameList() {
-        clickButtonExpand();
-        return buildList
+        return nodeList
                 .stream()
                 .map(WebElement::getText)
                 .toList();
@@ -581,5 +566,12 @@ public class HomePage extends BasePage {
         if(isExpanded()) {
             buttonExpandCollaps.click();
         }
+    }
+
+    public NodesProjectPage openNodeFromBuildExecutorStatusBlock(String nodeName) {
+        clickButtonExpand();
+        getDriver().findElement(
+                By.xpath("//div/a/span[text() = '%s']/..".formatted(nodeName))).click();
+        return new NodesProjectPage(getDriver());
     }
 }
