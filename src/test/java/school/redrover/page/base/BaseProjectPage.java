@@ -27,9 +27,6 @@ public abstract class BaseProjectPage<Self extends BaseProjectPage<?, ?, ?>, Pro
     @FindBy(xpath = "//div[@id='description']/div[1]")
     private WebElement descriptionText;
 
-    @FindBy(xpath = "//a[contains(@href,'rename')]")
-    private WebElement renameButtonViaSidebar;
-
     @FindBy(name = "newName")
     private WebElement newNameField;
 
@@ -111,20 +108,8 @@ public abstract class BaseProjectPage<Self extends BaseProjectPage<?, ?, ?>, Pro
         return (Self) this;
     }
 
-    public Self renameItem(String newName) {
-        renameButtonViaSidebar.click();
-        newNameField.clear();
-        newNameField.sendKeys(newName);
-        submitButton.click();
-        return (Self) this;
-    }
-
     public String getPreviewDescriptionText() {
         return previewDescriptionText.getText();
-    }
-
-    public String getRenameWarningMessage() {
-        return getWait10().until(ExpectedConditions.visibilityOf(errorMessage)).getText();
     }
 
     public String getItemName() {
