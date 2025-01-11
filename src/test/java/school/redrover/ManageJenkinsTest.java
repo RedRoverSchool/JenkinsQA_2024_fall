@@ -9,6 +9,7 @@ import school.redrover.page.home.HomePage;
 import school.redrover.page.systemConfiguration.SystemPage;
 import school.redrover.runner.BaseTest;
 import school.redrover.runner.ProjectUtils;
+import school.redrover.runner.TestUtils;
 
 import java.util.List;
 
@@ -311,6 +312,19 @@ public class ManageJenkinsTest extends BaseTest {
                 .getNodeList();
 
         Assert.assertListContainsObject(itemNoteList, MY_NODE_NAME, MY_NODE_NAME);
+    }
+
+    @Test()
+    public void testDeleteAgent() {
+        TestUtils.createNode(getDriver(),NODE_NAME);
+
+        List<String> nodeNameAfterList = new HomePage(getDriver())
+                .openNodeFromBuildExecutorStatusBlock(NODE_NAME)
+                .clickDeleteButtonSidebarAndConfirm()
+                .gotoHomePage()
+                .getNodeNameList();
+
+        Assert.assertEquals(nodeNameAfterList.size(), 0);
     }
 
     @Test
