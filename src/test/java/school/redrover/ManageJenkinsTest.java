@@ -319,9 +319,10 @@ public class ManageJenkinsTest extends BaseTest {
         TestUtils.createNode(getDriver(),NODE_NAME);
 
         List<String> nodeNameAfterList = new HomePage(getDriver())
-                .selectDeleteAgentFromBuildDropdownAndClickYes(NODE_NAME)
+                .openNodeFromBuildExecutorStatusBlock(NODE_NAME)
+                .clickDeleteButtonSidebarAndConfirm()
                 .gotoHomePage()
-                .getBuildNameList();
+                .getNodeNameList();
 
         Assert.assertEquals(nodeNameAfterList.size(), 0);
     }
