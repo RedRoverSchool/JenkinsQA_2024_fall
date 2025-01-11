@@ -544,6 +544,10 @@ public class HomePage extends BasePage {
     }
 
     private void selectMenuFromBuildDropdown(String itemName, String menuName) {
+        if(isExpanded()) {
+            getDriver().findElement(By.xpath("//div[@id='executors']/div[@class='pane-header']/a")).click();
+        }
+
         TestUtils.moveAndClickWithJS(getDriver(), getDriver().findElement(
                 By.xpath("//div/a/span[text() = '%s']/../button".formatted(itemName))));
 
@@ -558,6 +562,9 @@ public class HomePage extends BasePage {
         return this;
     }
     public List<String> getBuildNameList() {
+        if(isExpanded()) {
+            getDriver().findElement(By.xpath("//div[@id='executors']/div[@class='pane-header']/a")).click();
+        }
         return getDriver().findElements(By.xpath("//div[@id='executors']/div[@class='pane-content']/div/div/a"))
                 .stream()
                 .map(WebElement::getText)
@@ -566,8 +573,8 @@ public class HomePage extends BasePage {
 
     private boolean isExpanded() {
         return (Objects.equals(getDriver().findElement(
-                By.xpath("//div[@id='executors']/div[@class='pane-header']/a")).getAttribute("class"),
-                "collapse"));
+                By.xpath("//div[@id='executors']/div[@class='pane-header']/a")).getAttribute("title"),
+                "Expand"));
     }
 }
 
