@@ -11,7 +11,15 @@ import java.util.List;
 
 public class DashboardTest extends BaseTest {
 
-    private static final String invalidPipelineScriptFile = """
+    private static final String VALID_PIPELINE_SCRIPT = """
+            pipeline {
+                agent any
+                stages {
+                    stage('Checkout') {
+                        steps {echo 'Step: Checkout code from repository'}
+            
+            """;
+    private static final String INVALID_PIPELINE_SCRIPT = """
             error_pipeline {{{
                 agent any
                 stages {
@@ -21,22 +29,54 @@ public class DashboardTest extends BaseTest {
                  }
             }
             """;
-
-    private static final String validPipelineScriptFile = """
-            pipeline {
-                agent any
-                stages {
-                    stage('Checkout') {
-                        steps {echo 'Step: Checkout code from repository'}
-            
-            """;
-
     private static final String SuccessBuilt = "FPipelineProject";
     private static final String Disabled = "APipelineProject";
     private static final String FailedBuilt = "ZPipelineProject";
     private static final String NotBuilt = "1PipelineProject";
     private static final List<String> PROJECT_NAMES = List.of("FPipelineProject", "APipelineProject", "ZPipelineProject");
 
+    private void preparationCreateNotBuiltProject(String projectName) {
+        new HomePage(getDriver())
+                .clickNewItem()
+                .enterItemName(projectName)
+                .selectPipelineAndClickOk()
+                .clickSaveButton()
+                .gotoHomePage();
+    }
+
+    private void preparationCreateDisableProject(String projectName) {
+        new HomePage(getDriver())
+                .clickNewItem()
+                .enterItemName(projectName)
+                .selectPipelineAndClickOk()
+                .clickToggleToDisableOrEnableProject()
+                .clickSaveButton()
+                .gotoHomePage();
+    }
+
+    private void preparationCreateSuccessBuiltProject(String projectName) {
+        new HomePage(getDriver())
+                .clickNewItem()
+                .enterItemName(projectName)
+                .selectPipelineAndClickOk()
+                .addScriptToPipeline(VALID_PIPELINE_SCRIPT)
+                .clickSaveButton()
+                .clickOnBuildNowItemOnSidePanelAndWait()
+                .gotoHomePage();
+
+    }
+
+    private void preparationCreateFailedBuiltProject(String projectName) {
+        new HomePage(getDriver())
+                .clickNewItem()
+                .enterItemName(projectName)
+                .selectPipelineAndClickOk()
+                .addScriptToPipeline(INVALID_PIPELINE_SCRIPT)
+                .clickSaveButton()
+                .clickOnBuildNowItemOnSidePanelAndWait()
+                .gotoHomePage();
+    }
+    
     @Test
     public void testVerifyProjectOrderByNameASCByDefault() {
         PROJECT_NAMES.forEach(jobName -> TestUtils.createFreestyleProject(getDriver(), jobName));
@@ -81,10 +121,10 @@ public class DashboardTest extends BaseTest {
     @Test
     public void testVerifyProjectOrderByStatusASCByDefault() {
 
-        testPreparationCreateNotBuiltProject(NotBuilt);
-        testPreparationCreateDisableProject(Disabled);
-        testPreparationCreateSuccessBuiltProject(SuccessBuilt);
-        testPreparationCreateFailedBuiltProject(FailedBuilt);
+        preparationCreateNotBuiltProject(NotBuilt);
+        preparationCreateDisableProject(Disabled);
+        preparationCreateSuccessBuiltProject(SuccessBuilt);
+        preparationCreateFailedBuiltProject(FailedBuilt);
 
         List<String> projectNameList = new HomePage(getDriver())
                 .clickStatusTableHeaderChangeOrder()
@@ -94,47 +134,7 @@ public class DashboardTest extends BaseTest {
         Assert.assertEquals(projectNameList, List.of(NotBuilt, Disabled, SuccessBuilt, FailedBuilt));
     }
 
-    private void testPreparationCreateNotBuiltProject(String projectName) {
-        new HomePage(getDriver())
-                .clickNewItem()
-                .enterItemName(projectName)
-                .selectPipelineAndClickOk()
-                .clickSaveButton()
-                .gotoHomePage();
-    }
 
-    private void testPreparationCreateDisableProject(String projectName) {
-        new HomePage(getDriver())
-                .clickNewItem()
-                .enterItemName(projectName)
-                .selectPipelineAndClickOk()
-                .clickToggleToDisableOrEnableProject()
-                .clickSaveButton()
-                .gotoHomePage();
-    }
-
-    private void testPreparationCreateSuccessBuiltProject(String projectName) {
-        new HomePage(getDriver())
-                .clickNewItem()
-                .enterItemName(projectName)
-                .selectPipelineAndClickOk()
-                .addScriptToPipeline(validPipelineScriptFile)
-                .clickSaveButton()
-                .clickOnBuildNowItemOnSidePanelAndWait()
-                .gotoHomePage();
-
-    }
-
-    private void testPreparationCreateFailedBuiltProject(String projectName) {
-        new HomePage(getDriver())
-                .clickNewItem()
-                .enterItemName(projectName)
-                .selectPipelineAndClickOk()
-                .addScriptToPipeline(invalidPipelineScriptFile)
-                .clickSaveButton()
-                .clickOnBuildNowItemOnSidePanelAndWait()
-                .gotoHomePage();
-    }
 
     @Test
     public void testFullNameHelperText() {
