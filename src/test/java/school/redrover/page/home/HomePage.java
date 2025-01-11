@@ -570,8 +570,9 @@ public class HomePage extends BasePage {
 
     public NodesProjectPage openNodeFromBuildExecutorStatusBlock(String nodeName) {
         clickButtonExpand();
-        getDriver().findElement(
-                By.xpath("//div/a/span[text() = '%s']/..".formatted(nodeName))).click();
+        getWait5().until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//div/a/span[text() = '%s']/..".formatted(nodeName)))).click();
+
         return new NodesProjectPage(getDriver());
     }
 }
