@@ -26,6 +26,8 @@ public class FolderTest extends BaseTest {
     private static final String NEW_FOLDER_NAME = "NewFolderName";
     private static final String ERROR_MESSAGE_ON_RENAME_WITH_SAME_NAME = "The new name is the same as the current name.";
     private static final String ERROR_MESSAGE_ON_RENAME_WITH_EMPTY_NAME = "No name is specified";
+    private static final String DESCRIPTION = "Description text";
+    private static final String DESCRIPTION_EDITED = "Edited";
 
     private String escapeHtml(String input) {
         if (input == null) return null;
@@ -55,6 +57,49 @@ public class FolderTest extends BaseTest {
                 .getItemNameByOrder(1);
 
         Assert.assertEquals(folderName, FOLDER_NAME_MAX_LENGTH);
+    }
+
+    @Test
+    public void testExistingFolderWithNoDescription() {
+        TestUtils.createFolder(getDriver(), FOLDER_NAME);
+
+        String finalResult = new HomePage(getDriver())
+                .openFolder(FOLDER_NAME)
+                .editDescription(DESCRIPTION)
+                .clickSubmitButton()
+                .getDescription();
+
+        Assert.assertEquals(finalResult, DESCRIPTION);
+    }
+
+    @Test(dependsOnMethods = "testExistingFolderWithNoDescription")
+    public void testEditExistingDescription() {
+        String finalResult = new HomePage(getDriver())
+                .openFolder(FOLDER_NAME)
+                .editDescription(DESCRIPTION_EDITED)
+                .clickSubmitButton()
+                .getDescription();
+
+        Assert.assertEquals(finalResult, DESCRIPTION_EDITED);
+    }
+
+    @Test(dependsOnMethods = "testEditExistingDescription")
+    public void testDescriptionsPreviewButton() {
+        String finalResult = new HomePage(getDriver())
+                .openFolder(FOLDER_NAME)
+                .getDescriptionViaPreview();
+
+        Assert.assertEquals(finalResult, DESCRIPTION_EDITED);
+    }
+
+    @Test(dependsOnMethods = "testDescriptionsPreviewButton")
+    public void testClearDescription() {
+        String finalResult = new HomePage(getDriver())
+                .openFolder(FOLDER_NAME)
+                .clearDescription()
+                .getDescriptionButtonText();
+
+        Assert.assertEquals(finalResult, "Add description");
     }
 
     @Test
@@ -231,7 +276,8 @@ public class FolderTest extends BaseTest {
         TestUtils.createFolder(getDriver(), FIRST_FOLDER_NAME);
 
         List<String> setOfProjects = new HomePage(getDriver())
-                .selectDeleteFromItemMenuAndClickYes(FIRST_FOLDER_NAME)
+                .openFolder(FIRST_FOLDER_NAME)
+                .clickDeleteButtonSidebarAndConfirm()
                 .getItemList();
 
         Assert.assertTrue(setOfProjects.isEmpty());
@@ -250,10 +296,8 @@ public class FolderTest extends BaseTest {
         Assert.assertTrue(setOfProjects.contains(FIRST_FOLDER_NAME));
     }
 
-    @Test
+    @Test(dependsOnMethods = "testConfigureNameByChevron")
     public void testDeleteViaMyViewChevron() {
-        TestUtils.createFolder(getDriver(), FIRST_FOLDER_NAME);
-
         List<String> setOfProjects = new HomePage(getDriver())
                 .clickMyViewsButton()
                 .selectDeleteFromItemMenuAndClickYes(FIRST_FOLDER_NAME)
@@ -422,23 +466,10 @@ public class FolderTest extends BaseTest {
         Assert.assertListContainsObject(projectList, FOLDER_NAME, "Folder is not renamed");
     }
 
-    @Test(dependsOnMethods = "testErrorMessageOnRenameFolderWithSameName")
-    public void testDeleteViaBreadcrumbDropdown() {
-        List<String> projectList = new HomePage(getDriver())
-                .openFolder(FOLDER_NAME)
-                .openBreadcrumbDropdown()
-                .clickDeleteBreadcrumbDropdownAndConfirm()
-                .getItemList();
-
-        Assert.assertListNotContainsObject(projectList, FOLDER_NAME, "Folder is not deleted.");
-    }
-
-    @Test
+    @Test(dependsOnMethods = "testRenameViaBreadcrumbDropdown")
     @Story("US_04.001 Rename Folder")
     @Description("TC_04.001.04 Rename Folder from the My Views directly via folder's page")
     public void testRenameFolderFromMyViewsViaFolderPage() {
-        TestUtils.createFolder(getDriver(), FOLDER_NAME);
-
         List<String> projectList = new HomePage(getDriver())
                 .clickMyViewsButton()
                 .openFolder(FOLDER_NAME)
@@ -468,12 +499,10 @@ public class FolderTest extends BaseTest {
         Assert.assertListContainsObject(projectList, FOLDER_NAME, "Folder is not renamed");
     }
 
-    @Test
+    @Test(dependsOnMethods = "testRenameFolderFromMyViewsViaDropdownMenu")
     @Story("US_04.001 Rename Folder")
     @Description("TC_04.001.07 Validate Error message, if New Folder Name is empty")
     public void testRenameFolderToEmptyName() {
-        TestUtils.createFolder(getDriver(), FOLDER_NAME);
-
         String actualErrorMessage = new HomePage(getDriver())
                 .openFolder(FOLDER_NAME)
                 .clickRenameSidebarButton()
@@ -482,6 +511,17 @@ public class FolderTest extends BaseTest {
                 .getErrorMessage();
 
         Assert.assertEquals(actualErrorMessage, ERROR_MESSAGE_ON_RENAME_WITH_EMPTY_NAME);
+    }
+
+    @Test(dependsOnMethods = "testRenameFolderToEmptyName")
+    public void testDeleteViaBreadcrumbDropdown() {
+        List<String> projectList = new HomePage(getDriver())
+                .openFolder(FOLDER_NAME)
+                .openBreadcrumbDropdown()
+                .clickDeleteBreadcrumbDropdownAndConfirm()
+                .getItemList();
+
+        Assert.assertListNotContainsObject(projectList, FOLDER_NAME, "Folder is not deleted.");
     }
 
     @Test(dataProvider = "providerUnsafeCharacters")
@@ -499,4 +539,5 @@ public class FolderTest extends BaseTest {
 
         Assert.assertEquals(invalidNameMessage, "‘%s’ is an unsafe character".formatted(escapeHtml(unsafeCharacter)));
     }
+
 }
