@@ -150,6 +150,12 @@ public class HomePage extends BasePage {
     @FindBy(xpath = "//div[@class='tippy-box']//a")
     private List<WebElement> breadcrumbBarMenuList;
 
+    @FindBy(xpath = "//div[@id='executors']/div[@class='pane-header']/a")
+    private WebElement buttonExpandCollaps;
+
+    @FindBy(xpath = "div[@id='executors']/div[@class='pane-content']/div/div/a")
+    private List<WebElement> buildList;
+
     public HomePage(WebDriver driver) {
         super(driver);
     }
@@ -544,9 +550,7 @@ public class HomePage extends BasePage {
     }
 
     private void selectMenuFromBuildDropdown(String itemName, String menuName) {
-        if(isExpanded()) {
-            getDriver().findElement(By.xpath("//div[@id='executors']/div[@class='pane-header']/a")).click();
-        }
+        clickButtonExpand();
 
         TestUtils.moveAndClickWithJS(getDriver(), getDriver().findElement(
                 By.xpath("//div/a/span[text() = '%s']/../button".formatted(itemName))));
@@ -562,20 +566,20 @@ public class HomePage extends BasePage {
         return this;
     }
     public List<String> getBuildNameList() {
-        if(isExpanded()) {
-            getDriver().findElement(By.xpath("//div[@id='executors']/div[@class='pane-header']/a")).click();
-        }
-        return getDriver().findElements(By.xpath("//div[@id='executors']/div[@class='pane-content']/div/div/a"))
+        clickButtonExpand();
+        return buildList
                 .stream()
                 .map(WebElement::getText)
                 .toList();
     }
 
     private boolean isExpanded() {
-        return (Objects.equals(getDriver().findElement(
-                By.xpath("//div[@id='executors']/div[@class='pane-header']/a")).getAttribute("title"),
-                "Expand"));
+        return (Objects.equals(buttonExpandCollaps.getAttribute("title"), "Expand"));
+    }
+
+    public void clickButtonExpand() {
+        if(isExpanded()) {
+            buttonExpandCollaps.click();
+        }
     }
 }
-
-
