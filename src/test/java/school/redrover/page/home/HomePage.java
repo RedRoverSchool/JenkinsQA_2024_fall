@@ -26,6 +26,7 @@ import school.redrover.runner.TestUtils;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 public class HomePage extends BasePage {
 
@@ -541,4 +542,33 @@ public class HomePage extends BasePage {
     public List<WebElement> getBreadcrumbBarMenuList() {
         return breadcrumbBarMenuList;
     }
+
+    private void selectMenuFromBuildDropdown(String itemName, String menuName) {
+        TestUtils.moveAndClickWithJS(getDriver(), getDriver().findElement(
+                By.xpath("//div/a/span[text() = '%s']/../button".formatted(itemName))));
+
+        getWait10().until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//div[@class='jenkins-dropdown__item__icon']/parent::*[contains(., '%s')]"
+                        .formatted(menuName)))).click();
+    }
+
+    public HomePage selectDeleteAgentFromBuildDropdownAndClickYes(String buildName) {
+        selectMenuFromBuildDropdown(buildName,"Delete Agent");
+        getWait5().until(ExpectedConditions.visibilityOf(yesButton)).click();
+        return this;
+    }
+    public List<String> getBuildNameList() {
+        return getDriver().findElements(By.xpath("//div[@id='executors']/div[@class='pane-content']/div/div/a"))
+                .stream()
+                .map(WebElement::getText)
+                .toList();
+    }
+
+    private boolean isExpanded() {
+        return (Objects.equals(getDriver().findElement(
+                By.xpath("//div[@id='executors']/div[@class='pane-header']/a")).getAttribute("class"),
+                "collapse"));
+    }
 }
+
+
