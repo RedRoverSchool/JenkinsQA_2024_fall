@@ -9,6 +9,7 @@ import school.redrover.page.home.HomePage;
 import school.redrover.page.systemConfiguration.SystemPage;
 import school.redrover.runner.BaseTest;
 import school.redrover.runner.ProjectUtils;
+import school.redrover.runner.TestUtils;
 
 import java.sql.SQLOutput;
 import java.util.List;
@@ -296,8 +297,6 @@ public class ManageJenkinsTest extends BaseTest {
                 .clickButtonSave()
                 .getNodeList();
 
-        System.out.println(nodeItemList.size());
-
         Assert.assertListContainsObject(nodeItemList, NODE_NAME, "List not contain new node");
     }
 
@@ -316,18 +315,16 @@ public class ManageJenkinsTest extends BaseTest {
         Assert.assertListContainsObject(itemNoteList, MY_NODE_NAME, MY_NODE_NAME);
     }
 
-    @Test(dependsOnMethods = "testCreateNewAgent")
+    @Test()
     public void testDeleteAgent() {
-        int numOfBuildBefore = new HomePage(getDriver())
-                .getBuildNameList().size();
-        System.out.println(numOfBuildBefore);
+        TestUtils.createNode(getDriver(),NODE_NAME);
 
-        List<String> nodeItemList = new HomePage(getDriver())
+        List<String> nodeNameAfterList = new HomePage(getDriver())
                 .selectDeleteAgentFromBuildDropdownAndClickYes(NODE_NAME)
                 .gotoHomePage()
                 .getBuildNameList();
 
-        Assert.assertEquals(nodeItemList.size(), numOfBuildBefore - 2);
+        Assert.assertEquals(nodeNameAfterList.size(), 0);
     }
 
     @Test
