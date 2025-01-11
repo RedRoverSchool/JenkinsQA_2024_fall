@@ -12,10 +12,19 @@ public class BuildHistoryTest extends BaseTest {
     private static final String FREESTYLE_PROJECT_NAME = "FreestyleProject";
     private static final String PIPELINE_PROJECT_NAME = "PipelineProject";
 
-    @Test
-    public void testDisplaySuccessBuild() {
 
-        TestUtils.createFreestyleProject(getDriver(), FREESTYLE_PROJECT_NAME);
+    @Test
+    private void createFreestyleProject() {
+        new HomePage(getDriver())
+                .clickNewItem()
+                .enterItemName(FREESTYLE_PROJECT_NAME)
+                .selectFreestyleProjectAndClickOk()
+                .clickSaveButton()
+                .gotoHomePage();
+    }
+
+    @Test(dependsOnMethods = "createFreestyleProject" )
+    public void testDisplaySuccessBuild() {
 
         BuildHistoryPage buildHistoryPage = new HomePage(getDriver())
                 .clickScheduleBuild(FREESTYLE_PROJECT_NAME)
@@ -38,9 +47,16 @@ public class BuildHistoryTest extends BaseTest {
     }
 
     @Test
-    public void testDisplayFirstFailedBuild() {
+    private void createPipelineProjectWithoutSaveButton() {
+        new HomePage(getDriver())
+                .clickNewItem()
+                .enterItemName(PIPELINE_PROJECT_NAME)
+                .selectPipelineAndClickOk()
+                .gotoHomePage();
+    }
 
-        TestUtils.createPipelineProjectWithoutSaveButton(getDriver(), PIPELINE_PROJECT_NAME);
+    @Test(dependsOnMethods = "createPipelineProjectWithoutSaveButton")
+    public void testDisplayFirstFailedBuild() {
 
         BuildHistoryPage buildHistoryPage = new HomePage(getDriver())
                 .openPipelineProject(PIPELINE_PROJECT_NAME)
