@@ -27,12 +27,6 @@ public abstract class BaseProjectPage<Self extends BaseProjectPage<?, ?, ?>, Pro
     @FindBy(xpath = "//div[@id='description']/div[1]")
     private WebElement descriptionText;
 
-    @FindBy(name = "newName")
-    private WebElement newNameField;
-
-    @FindBy(xpath = "//div[@id='main-panel']/p")
-    private WebElement errorMessage;
-
     @FindBy(xpath = "//div[@class='task ']//span[2]")
     private List<WebElement> sidebarElementList;
 
