@@ -174,6 +174,19 @@ public class FreestyleProjectTest extends BaseTest {
         Assert.assertEquals(actualDescription, newDescription);
     }
 
+    @Test
+    public void testAddDescriptionOnConfigPageViaItemDropdown() {
+        TestUtils.createFreestyleProject(getDriver(),PROJECT_NAME);
+
+        String actualDescription = new HomePage(getDriver())
+                .selectConfigureFromItemMenuForFreestyle(PROJECT_NAME)
+                .enterDescription(DESCRIPTION)
+                .clickSaveButton()
+                .getDescription();
+
+        Assert.assertEquals(actualDescription, DESCRIPTION);
+    }
+
     @Test(dependsOnMethods = "testEditDescriptionOnProjectPage")
     public void testDeleteDescription() {
         String description = new HomePage(getDriver())
