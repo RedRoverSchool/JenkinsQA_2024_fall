@@ -6,6 +6,7 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 import school.redrover.page.home.HomePage;
 import school.redrover.runner.BaseTest;
+import school.redrover.runner.TestUtils;
 
 import java.util.List;
 
@@ -96,6 +97,37 @@ public class MultibranchPipelineTest extends BaseTest {
 
         Assert.assertListContainsObject(projectList, MULTIBRANCH_PIPELINE_NAME2,
                 "Project is not renamed");
+    }
+
+    @Test
+    public void testRenameProjectViaDashboardChevron() {
+        TestUtils.createMultiBranchPipeline(getDriver(), MULTIBRANCH_PIPELINE_NAME);
+
+        List<String> projectList = new HomePage(getDriver())
+                .selectRenameFromItemDropdown(MULTIBRANCH_PIPELINE_NAME)
+                .clearInputFieldAndTypeName(MULTIBRANCH_PIPELINE_NAME2)
+                .clickRenameButton()
+                .gotoHomePage()
+                .getItemList();
+        Assert.assertListContainsObject(projectList, MULTIBRANCH_PIPELINE_NAME2, "Project didn't rename");
+        Assert.assertListNotContainsObject(projectList, MULTIBRANCH_PIPELINE_NAME, "Project didn't rename");
+    }
+
+    @Test
+    public void testRenameProjectViaBreadcrumbChevron() {
+        TestUtils.createMultiBranchPipeline(getDriver(), MULTIBRANCH_PIPELINE_NAME);
+
+        List<String> projectList = new HomePage(getDriver())
+                .openMultibranchPipelineProject(MULTIBRANCH_PIPELINE_NAME)
+                .openBreadcrumbDropdown()
+                .clickRenameBreadcrumbDropdown()
+                .clearInputFieldAndTypeName(MULTIBRANCH_PIPELINE_NAME2)
+                .clickRenameButton()
+                .gotoHomePage()
+                .getItemList();
+
+        Assert.assertListContainsObject(projectList, MULTIBRANCH_PIPELINE_NAME2, "List doesn't contain rename project");
+        Assert.assertListNotContainsObject(projectList, MULTIBRANCH_PIPELINE_NAME, "List contains not renamed project");
     }
 
     @Test
