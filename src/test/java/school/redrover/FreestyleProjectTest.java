@@ -103,8 +103,6 @@ public class FreestyleProjectTest extends BaseTest {
         Assert.assertEquals(invalidNameMessage, "‘%s’ is an unsafe character".formatted(escapeHtml(unsafeCharacter)));
     }
 
-
-
     @Test
     public void testCreateProjectViaSidebarMenu() {
         List<String> actualProjectsList = new HomePage(getDriver())
