@@ -154,4 +154,13 @@ public class TestUtils {
                 .clickButtonSave()
                 .gotoHomePage();
     }
+
+    public static void createMultiBranchPipeline(WebDriver driver, String name) {
+        new HomePage(driver)
+                .clickNewItem()
+                .enterItemName(name)
+                .selectMultibranchPipelineAndClickOk()
+                .clickSaveButton()
+                .gotoHomePage();
+    }
 }
