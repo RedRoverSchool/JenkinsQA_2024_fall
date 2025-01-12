@@ -575,4 +575,22 @@ public class HomePage extends BasePage {
 
         return new NodesProjectPage(getDriver());
     }
+
+    public HomePage selectDeleteAgentFromBuildDropdownAndClickYes(String nodeName) {
+        selectMenuFromBuildDropdown(nodeName,"Delete Agent");
+        getWait5().until(ExpectedConditions.visibilityOf(yesButton)).click();
+        return this;
+    }
+
+    private void selectMenuFromBuildDropdown(String nodeName, String menuName) {
+        clickButtonExpand();
+
+        TestUtils.moveAndClickWithJS(getDriver(), getDriver().findElement(
+                By.xpath("//div[@id='executors']//a[contains(@href, '%s')]/button".formatted(nodeName))));
+
+        getWait10().until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//div[@class='jenkins-dropdown__item__icon']/parent::*[contains(., '%s')]"
+                        .formatted(menuName)))).click();
+    }
+
 }
