@@ -11,6 +11,7 @@ import school.redrover.page.*;
 import school.redrover.page.base.BasePage;
 import school.redrover.page.folder.FolderConfigPage;
 import school.redrover.page.folder.FolderProjectPage;
+import school.redrover.page.freestyle.FreestyleConfigPage;
 import school.redrover.page.freestyle.FreestyleProjectPage;
 import school.redrover.page.freestyle.FreestyleRenamePage;
 import school.redrover.page.manage.ManageJenkinsPage;
@@ -228,6 +229,12 @@ public class HomePage extends BasePage {
         selectMenuFromItemDropdown(itemName, "Configure");
 
         return new FolderConfigPage(getDriver());
+    }
+
+    public FreestyleConfigPage selectConfigureFromItemMenuForFreestyle(String itemName) {
+        selectMenuFromItemDropdown(itemName, "Configure");
+
+        return new FreestyleConfigPage(getDriver());
     }
 
     public HomePage selectDeleteFromItemMenu(String itemName) {
