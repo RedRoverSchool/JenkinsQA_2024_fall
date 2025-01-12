@@ -328,6 +328,19 @@ public class ManageJenkinsTest extends BaseTest {
     }
 
     @Test
+    public void testDeleteAgentByChevronFromBuildExecutorsStatus() {
+        TestUtils.createNode(getDriver(), NODE_NAME);
+
+        List<String> nodeNameAfterList = new HomePage(getDriver())
+                .selectDeleteAgentFromBuildDropdownAndClickYes(NODE_NAME)
+                .gotoHomePage()
+                .getNodeNameList();
+
+        Assert.assertEquals(nodeNameAfterList.size(), 0);
+        Assert.assertListNotContainsObject(nodeNameAfterList, NODE_NAME,"List contains node");
+    }
+
+    @Test
     public void testThemesOnPage() {
         List<WebElement> themeList = new HomePage(getDriver())
                 .openManageJenkinsPage()
