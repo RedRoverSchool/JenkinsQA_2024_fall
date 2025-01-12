@@ -134,8 +134,6 @@ public class DashboardTest extends BaseTest {
         Assert.assertEquals(projectNameList, List.of(NotBuilt, Disabled, SuccessBuilt, FailedBuilt));
     }
 
-
-
     @Test
     public void testFullNameHelperText() {
         String fullNameInputTip = new HomePage(getDriver())
@@ -178,7 +176,6 @@ public class DashboardTest extends BaseTest {
         Assert.assertEquals(pageTitleText, "Credentials");
     }
 
-
     @Test
     public void testAddDomainArrow() {
         String user = new HomePage(getDriver())
@@ -199,5 +196,4 @@ public class DashboardTest extends BaseTest {
 
         Assert.assertTrue(itemMenuDisplayed);
     }
-
 }

@@ -18,6 +18,13 @@ public class FreestyleProjectTest extends BaseTest {
     private static final String DESCRIPTION = "FreestyleDescription";
     private static final String BUILD_NAME = "BuildName";
 
+    private String escapeHtml(String input) {
+        if (input == null) return null;
+        return input.replace("&", "&amp;")
+                .replace("<", "&lt;")
+                .replace(">", "&gt;");
+    }
+
     @DataProvider
     public Object[][] providerUnsafeCharacters() {
 
@@ -80,6 +87,20 @@ public class FreestyleProjectTest extends BaseTest {
                 .getProjectName();
 
         Assert.assertEquals(renamedProject, NEW_PROJECT_NAME);
+    }
+
+    @Test(dataProvider = "providerUnsafeCharacters")
+    public void testRenameWithIncorrectSymbols(String unsafeCharacter) {
+        TestUtils.createFreestyleProject(getDriver(), PROJECT_NAME);
+
+        String invalidNameMessage = new HomePage(getDriver())
+                .openFreestyleProject(PROJECT_NAME)
+                .clickRenameSidebarButton()
+                .clearInputFieldAndTypeName(unsafeCharacter)
+                .clickRenameButtonLeadingToError()
+                .getErrorMessage();
+
+        Assert.assertEquals(invalidNameMessage, "‘%s’ is an unsafe character".formatted(escapeHtml(unsafeCharacter)));
     }
 
     @Test
@@ -175,6 +196,30 @@ public class FreestyleProjectTest extends BaseTest {
                 .getProjectName();
 
         Assert.assertEquals(actualProjectName, newName);
+    }
+
+    @Test(dependsOnMethods = "testRenameProjectViaSidebarMenu")
+    public void testRenameEmptyName() {
+        String emptyNameWarning = new HomePage(getDriver())
+                .openFreestyleProject("New " + PROJECT_NAME)
+                .clickRenameSidebarButton()
+                .clearInputFieldAndTypeName("")
+                .clickRenameButtonLeadingToError()
+                .getErrorMessage();
+
+        Assert.assertEquals(emptyNameWarning, "No name is specified");
+    }
+
+    @Test(dependsOnMethods = "testRenameEmptyName")
+    public void testTheSameName() {
+        String theSameNameWarning = new HomePage(getDriver())
+                .openFreestyleProject("New " + PROJECT_NAME)
+                .clickRenameSidebarButton()
+                .clearInputFieldAndTypeName("New " + PROJECT_NAME)
+                .clickRenameButtonLeadingToError()
+                .getErrorMessage();
+
+        Assert.assertEquals(theSameNameWarning, "The new name is the same as the current name.");
     }
 
     @Test
@@ -343,6 +388,19 @@ public class FreestyleProjectTest extends BaseTest {
                 .getWelcomeTitle();
 
         Assert.assertEquals(welcomeText, "Welcome to Jenkins!");
+    }
+
+    @Test
+    public void testDeleteFirstProjectViaChevron() {
+        TestUtils.createFreestyleProject(getDriver(), PROJECT_NAME);
+        TestUtils.createFreestyleProject(getDriver(), PROJECT_NAME + " 2");
+
+        List<String> projectsList = new HomePage(getDriver())
+                .selectDeleteFromItemMenuAndClickYes(PROJECT_NAME)
+                .getItemList();
+
+        Assert.assertEquals(projectsList.size(),1);
+        Assert.assertEquals(projectsList.get(0), PROJECT_NAME + " 2");
     }
 
     @Test(dependsOnMethods = "testBuildProjectViaSidebarMenuOnProjectPage")
@@ -525,5 +583,60 @@ public class FreestyleProjectTest extends BaseTest {
                 .getItemList();
 
         Assert.assertTrue(itemNameList.contains(secondProjectName));
+    }
+
+    @Test
+    public void testDefaultState() {
+        TestUtils.createFreestyleProject(getDriver(), PROJECT_NAME);
+
+        boolean currentState = new HomePage(getDriver())
+                .openFreestyleProject(PROJECT_NAME)
+                .clickSidebarConfigButton()
+                .getEnablingCurrentState();
+
+        Assert.assertTrue(currentState);
+    }
+
+    @Test(dependsOnMethods = "testDefaultState")
+    public void testDisableEnabled() {
+        String indicatorText = new HomePage(getDriver())
+                .openFreestyleProject(PROJECT_NAME)
+                .clickSidebarConfigButton()
+                .changeEnablingState()
+                .getDisabledProjectIndicator();
+
+        Assert.assertEquals(indicatorText, "This project is currently disabled\n" +
+                "Enable");
+    }
+
+    @Test (dependsOnMethods = "testDisableEnabled")
+    public void testEnableWithIndicator() {
+        boolean currentState = new HomePage(getDriver())
+                .openFreestyleProject(PROJECT_NAME)
+                .changeEnablingStateViaIndicator()
+                .gotoHomePage()
+                .openFreestyleProject(PROJECT_NAME)
+                .clickSidebarConfigButton()
+                .getEnablingCurrentState();
+
+        Assert.assertTrue(currentState);
+    }
+
+    @Test (dependsOnMethods = "testEnableWithIndicator")
+    public void testEnabledFromProjectPage() {
+        boolean currentState = new HomePage(getDriver())
+                .openFreestyleProject(PROJECT_NAME)
+                .clickSidebarConfigButton()
+                .changeEnablingState()
+                .gotoHomePage()
+                .openFreestyleProject(PROJECT_NAME)
+                .clickSidebarConfigButton()
+                .changeEnablingState()
+                .gotoHomePage()
+                .openFreestyleProject(PROJECT_NAME)
+                .clickSidebarConfigButton()
+                .getEnablingCurrentState();
+
+        Assert.assertTrue(currentState);
     }
 }
