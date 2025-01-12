@@ -114,6 +114,23 @@ public class MultibranchPipelineTest extends BaseTest {
     }
 
     @Test
+    public void testRenameProjectViaBreadcrumbChevron() {
+        TestUtils.createMultiBranchPipeline(getDriver(), MULTIBRANCH_PIPELINE_NAME);
+
+        List<String> projectList = new HomePage(getDriver())
+                .openMultibranchPipelineProject(MULTIBRANCH_PIPELINE_NAME)
+                .openBreadcrumbDropdown()
+                .clickRenameBreadcrumbDropdown()
+                .clearInputFieldAndTypeName(MULTIBRANCH_PIPELINE_NAME2)
+                .clickRenameButton()
+                .gotoHomePage()
+                .getItemList();
+
+        Assert.assertListContainsObject(projectList, MULTIBRANCH_PIPELINE_NAME2, "List doesn't contain rename project");
+        Assert.assertListNotContainsObject(projectList, MULTIBRANCH_PIPELINE_NAME, "List contains not renamed project");
+    }
+
+    @Test
     public void testSelectingTriggersScanPeriodFromConfigPage() {
         WebElement selectedValue = new HomePage(getDriver())
                 .clickNewItem()
