@@ -5,7 +5,7 @@ import org.testng.annotations.Test;
 import school.redrover.page.home.BuildHistoryPage;
 import school.redrover.page.home.HomePage;
 import school.redrover.runner.BaseTest;
-import school.redrover.runner.TestUtils;
+
 
 public class BuildHistoryTest extends BaseTest {
 
@@ -14,16 +14,19 @@ public class BuildHistoryTest extends BaseTest {
 
 
     @Test
-    private void createFreestyleProject() {
-        new HomePage(getDriver())
+    public void testCreateFreestyleProject() {
+        String newProject = new HomePage(getDriver())
                 .clickNewItem()
                 .enterItemName(FREESTYLE_PROJECT_NAME)
                 .selectFreestyleProjectAndClickOk()
                 .clickSaveButton()
-                .gotoHomePage();
+                .gotoHomePage()
+                .getItemNameByOrder(1);
+
+        Assert.assertEquals(newProject, FREESTYLE_PROJECT_NAME);
     }
 
-    @Test(dependsOnMethods = "createFreestyleProject" )
+    @Test(dependsOnMethods = "testCreateFreestyleProject")
     public void testDisplaySuccessBuild() {
 
         BuildHistoryPage buildHistoryPage = new HomePage(getDriver())
@@ -47,15 +50,17 @@ public class BuildHistoryTest extends BaseTest {
     }
 
     @Test
-    private void createPipelineProjectWithoutSaveButton() {
-        new HomePage(getDriver())
+    public void testCreatePipelineProjectWithoutSaveButton() {
+        String pipelineProject = new HomePage(getDriver())
                 .clickNewItem()
                 .enterItemName(PIPELINE_PROJECT_NAME)
                 .selectPipelineAndClickOk()
-                .gotoHomePage();
+                .gotoHomePage()
+                .getItemNameByOrder(1);
+        Assert.assertEquals(pipelineProject,PIPELINE_PROJECT_NAME);
     }
 
-    @Test(dependsOnMethods = "createPipelineProjectWithoutSaveButton")
+    @Test(dependsOnMethods = "testCreatePipelineProjectWithoutSaveButton")
     public void testDisplayFirstFailedBuild() {
 
         BuildHistoryPage buildHistoryPage = new HomePage(getDriver())
