@@ -76,7 +76,7 @@ public class DashboardTest extends BaseTest {
                 .clickOnBuildNowItemOnSidePanelAndWait()
                 .gotoHomePage();
     }
-    
+
     @Test
     public void testVerifyProjectOrderByNameASCByDefault() {
         PROJECT_NAMES.forEach(jobName -> TestUtils.createFreestyleProject(getDriver(), jobName));
