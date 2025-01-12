@@ -142,4 +142,16 @@ public class TestUtils {
                 .clickSaveButton()
                 .gotoHomePage();
     }
+
+    public static void createNode(WebDriver driver, String name) {
+        new HomePage(driver)
+                .openManageJenkinsPage()
+                .clickNodesButton()
+                .clickButtonNewNode()
+                .enterNodeName(name)
+                .selectPermanentAgent()
+                .clickButtonCreate()
+                .clickButtonSave()
+                .gotoHomePage();
+    }
 }

@@ -66,7 +66,8 @@ public class BuildHistoryTest extends BaseTest {
         BuildHistoryPage buildHistoryPage = new HomePage(getDriver())
                 .openPipelineProject(PIPELINE_PROJECT_NAME)
                 .clickOnBuildNowItemOnSidePanelAndWait()
-                .gotoHomePage().gotoBuildHistoryPageFromLeftPanel();
+                .gotoHomePage()
+                .gotoBuildHistoryPageFromLeftPanel();
 
         Assert.assertEquals(buildHistoryPage.getProjectName(), PIPELINE_PROJECT_NAME);
         Assert.assertEquals(buildHistoryPage.getBuildDisplayName(), "#1");

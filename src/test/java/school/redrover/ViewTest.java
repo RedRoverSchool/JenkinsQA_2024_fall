@@ -94,7 +94,6 @@ public class ViewTest extends BaseTest {
         TestUtils.createFolder(getDriver(), "NewFolder");
 
         NewViewPage newViewPage = new HomePage(getDriver())
-                .gotoHomePage()
                 .clickCreateNewViewButton();
 
         Assert.assertTrue(newViewPage.getInputFromNameField().isEmpty(), "Input field should be empty.");

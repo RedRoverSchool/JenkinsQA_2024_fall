@@ -14,6 +14,7 @@ import school.redrover.page.folder.FolderProjectPage;
 import school.redrover.page.freestyle.FreestyleProjectPage;
 import school.redrover.page.freestyle.FreestyleRenamePage;
 import school.redrover.page.manage.ManageJenkinsPage;
+import school.redrover.page.manage.node.NodesProjectPage;
 import school.redrover.page.multiConfiguration.MultiConfigurationProjectPage;
 import school.redrover.page.multibranch.MultibranchPipelineProjectPage;
 import school.redrover.page.organizationFolder.OrganizationFolderProjectPage;
@@ -26,6 +27,7 @@ import school.redrover.runner.TestUtils;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 public class HomePage extends BasePage {
 
@@ -148,6 +150,12 @@ public class HomePage extends BasePage {
 
     @FindBy(xpath = "//div[@class='tippy-box']//a")
     private List<WebElement> breadcrumbBarMenuList;
+
+    @FindBy(xpath = "//div[@id='executors']/div[@class='pane-header']/a")
+    private WebElement buttonExpandCollaps;
+
+    @FindBy(xpath = "div[@id='executors']/div[@class='pane-content']/div/div/a")
+    private List<WebElement> nodeList;
 
     public HomePage(WebDriver driver) {
         super(driver);
@@ -540,5 +548,31 @@ public class HomePage extends BasePage {
 
     public List<WebElement> getBreadcrumbBarMenuList() {
         return breadcrumbBarMenuList;
+    }
+
+    public List<String> getNodeNameList() {
+        clickButtonExpand();
+        return nodeList
+                .stream()
+                .map(WebElement::getText)
+                .toList();
+    }
+
+    private boolean isExpanded() {
+        return (Objects.equals(buttonExpandCollaps.getAttribute("title"), "Expand"));
+    }
+
+    public void clickButtonExpand() {
+        if(isExpanded()) {
+            buttonExpandCollaps.click();
+        }
+    }
+
+    public NodesProjectPage openNodeFromBuildExecutorStatusBlock(String nodeName) {
+        clickButtonExpand();
+        getWait5().until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//div[@id='executors']//a[contains(@href, '%s')]".formatted(nodeName)))).click();
+
+        return new NodesProjectPage(getDriver());
     }
 }
