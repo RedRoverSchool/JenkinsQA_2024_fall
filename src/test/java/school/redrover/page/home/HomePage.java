@@ -17,6 +17,7 @@ import school.redrover.page.manage.ManageJenkinsPage;
 import school.redrover.page.manage.node.NodesProjectPage;
 import school.redrover.page.multiConfiguration.MultiConfigurationProjectPage;
 import school.redrover.page.multibranch.MultibranchPipelineProjectPage;
+import school.redrover.page.multibranch.MultibranchPipelineRenamePage;
 import school.redrover.page.organizationFolder.OrganizationFolderProjectPage;
 import school.redrover.page.pipeline.PipelineProjectPage;
 import school.redrover.page.pipeline.PipelineRenamePage;
@@ -591,6 +592,12 @@ public class HomePage extends BasePage {
         getWait10().until(ExpectedConditions.visibilityOfElementLocated(
                 By.xpath("//div[@class='jenkins-dropdown__item__icon']/parent::*[contains(., '%s')]"
                         .formatted(menuName)))).click();
+    }
+
+    public MultibranchPipelineRenamePage selectRenameFromItemDropdown(String itemName) {
+        selectMenuFromItemDropdown(itemName, "Rename");
+
+        return new MultibranchPipelineRenamePage(getDriver());
     }
 
 }
