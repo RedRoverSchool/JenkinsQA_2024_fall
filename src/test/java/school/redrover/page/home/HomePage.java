@@ -582,11 +582,11 @@ public class HomePage extends BasePage {
         return this;
     }
 
-    private void selectMenuFromBuildDropdown(String itemName, String menuName) {
+    private void selectMenuFromBuildDropdown(String nodeName, String menuName) {
         clickButtonExpand();
 
         TestUtils.moveAndClickWithJS(getDriver(), getDriver().findElement(
-                By.xpath("//div/a/span[text() = '%s']/../button".formatted(itemName))));
+                By.xpath("//div[@id='executors']//a[contains(@href, '%s')]/button".formatted(nodeName))));
 
         getWait10().until(ExpectedConditions.visibilityOfElementLocated(
                 By.xpath("//div[@class='jenkins-dropdown__item__icon']/parent::*[contains(., '%s')]"
