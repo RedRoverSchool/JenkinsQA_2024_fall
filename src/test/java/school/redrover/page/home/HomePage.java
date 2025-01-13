@@ -206,6 +206,7 @@ public class HomePage extends BasePage {
         return new FolderProjectPage(getDriver());
     }
 
+    @Step("Open Manage Jenkins Page from Sidebar on Home page")
     public ManageJenkinsPage openManageJenkinsPage() {
         manageJenkinsSidebar.click();
 
