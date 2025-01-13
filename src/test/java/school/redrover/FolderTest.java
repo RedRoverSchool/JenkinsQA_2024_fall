@@ -264,23 +264,23 @@ public class FolderTest extends BaseTest {
     public void testDeleteViaMainPageChevron() {
         TestUtils.createFolder(getDriver(), FIRST_FOLDER_NAME);
 
-        List<String> setOfProjects = new HomePage(getDriver())
+        String welcomeTitle = new HomePage(getDriver())
                 .selectDeleteFromItemMenuAndClickYes(FIRST_FOLDER_NAME)
-                .getItemList();
+                .getWelcomeTitle();
 
-        Assert.assertTrue(setOfProjects.isEmpty());
+        Assert.assertEquals(welcomeTitle, "Welcome to Jenkins!");
     }
 
     @Test
     public void testDeleteViaSidebarFromProjectPage() {
         TestUtils.createFolder(getDriver(), FIRST_FOLDER_NAME);
 
-        List<String> setOfProjects = new HomePage(getDriver())
+        String welcomeTitle = new HomePage(getDriver())
                 .openFolder(FIRST_FOLDER_NAME)
                 .clickDeleteButtonSidebarAndConfirm()
-                .getItemList();
+                .getWelcomeTitle();
 
-        Assert.assertTrue(setOfProjects.isEmpty());
+        Assert.assertEquals(welcomeTitle, "Welcome to Jenkins!");
     }
 
     @Test
@@ -296,15 +296,17 @@ public class FolderTest extends BaseTest {
         Assert.assertTrue(setOfProjects.contains(FIRST_FOLDER_NAME));
     }
 
-    @Test(dependsOnMethods = "testConfigureNameByChevron")
+    @Test
     public void testDeleteViaMyViewChevron() {
-        List<String> setOfProjects = new HomePage(getDriver())
+        TestUtils.createFolder(getDriver(), FIRST_FOLDER_NAME);
+
+        String welcomeTitle = new HomePage(getDriver())
                 .clickMyViewsButton()
                 .selectDeleteFromItemMenuAndClickYes(FIRST_FOLDER_NAME)
                 .gotoHomePage()
-                .getItemList();
+                .getWelcomeTitle();
 
-        Assert.assertTrue(setOfProjects.isEmpty());
+        Assert.assertEquals(welcomeTitle, "Welcome to Jenkins!");
     }
 
     @Test
