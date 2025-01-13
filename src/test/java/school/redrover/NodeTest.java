@@ -47,7 +47,7 @@ public class NodeTest extends BaseTest {
                 .clickDeleteButtonSidebarAndConfirm()
                 .getNodeNameList();
 
-        Allure.step("The deleted node is not displayed on Home page in 'Build Executor Status' block");
+        Allure.step("Expected Result: The deleted node is not displayed on Home page in 'Build Executor Status' block");
         Assert.assertEquals(nodeNameAfterList.size(), 0);
     }
 
@@ -61,7 +61,7 @@ public class NodeTest extends BaseTest {
                 .selectDeleteAgentFromBuildDropdownAndClickYes(NODE_NAME)
                 .getNodeNameList();
 
-        Allure.step("The deleted node is not displayed on Main page in 'Build Executor Status' block");
+        Allure.step("Expected Result: The deleted node is not displayed on Main page in 'Build Executor Status' block");
         Assert.assertEquals(nodeNameAfterList.size(), 0);
     }
 }
