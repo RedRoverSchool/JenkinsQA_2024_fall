@@ -1,0 +1,1 @@
+{"total":26,"items":[{"uid":"aaa0b30f7dc4ec15ec55a399c75fc6ab","name":"02 Pipeline","statistic":{"failed":0,"broken":0,"skipped":0,"passed":48,"unknown":0,"total":48}},{"uid":"573f35621d739ba3d3e0772b9fe5ef47","name":"00 New Item","statistic":{"failed":0,"broken":0,"skipped":0,"passed":1,"unknown":0,"total":1}}]}
