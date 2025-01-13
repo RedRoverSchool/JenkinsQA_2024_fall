@@ -559,6 +559,7 @@ public class HomePage extends BasePage {
         return breadcrumbBarMenuList;
     }
 
+    @Step("Get the list of Node names from the 'Build Executors Status' block on the Home page")
     public List<String> getNodeNameList() {
         clickButtonExpand();
         return nodeList
