@@ -32,7 +32,7 @@ public class NodeTest extends BaseTest {
                 .clickButtonSave()
                 .getNodeList();
 
-        Allure.step("Expected Result: The new node '{NODE_NAME}' appears in the list on the Nodes Page");
+        Allure.step("Expected Result: The new node appears in the list on the Nodes Page");
         Assert.assertListContainsObject(nodeItemList, NODE_NAME, "List not contain new node");
     }
 
@@ -48,7 +48,7 @@ public class NodeTest extends BaseTest {
                 .gotoHomePage()
                 .getNodeNameList();
 
-        Allure.step("The 'NewAgent' node {NODE_NAME} is not displayed on Home page in 'Build Executor Status' block");
+        Allure.step("The deleted node is not displayed on Home page in 'Build Executor Status' block");
         Assert.assertEquals(nodeNameAfterList.size(), 0);
     }
 
@@ -63,7 +63,7 @@ public class NodeTest extends BaseTest {
                 .gotoHomePage()
                 .getNodeNameList();
 
-        Allure.step("The deleted node {NODE_NAME} is not displayed on Main page in 'Build Executor Status' block");
+        Allure.step("The deleted node is not displayed on Main page in 'Build Executor Status' block");
         Assert.assertEquals(nodeNameAfterList.size(), 0);
     }
 }
