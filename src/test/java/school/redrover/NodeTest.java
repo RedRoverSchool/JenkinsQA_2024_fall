@@ -45,7 +45,6 @@ public class NodeTest extends BaseTest {
         List<String> nodeNameAfterList = new HomePage(getDriver())
                 .openNodeFromBuildExecutorStatusBlock(NODE_NAME)
                 .clickDeleteButtonSidebarAndConfirm()
-                .gotoHomePage()
                 .getNodeNameList();
 
         Allure.step("The deleted node is not displayed on Home page in 'Build Executor Status' block");
@@ -60,7 +59,6 @@ public class NodeTest extends BaseTest {
 
         List<String> nodeNameAfterList = new HomePage(getDriver())
                 .selectDeleteAgentFromBuildDropdownAndClickYes(NODE_NAME)
-                .gotoHomePage()
                 .getNodeNameList();
 
         Allure.step("The deleted node is not displayed on Main page in 'Build Executor Status' block");
