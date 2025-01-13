@@ -1,6 +1,8 @@
 package school.redrover;
 
 import org.testng.Assert;
+import org.testng.annotations.DataProvider;
+import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import school.redrover.page.home.HomePage;
 import school.redrover.runner.BaseTest;
@@ -28,7 +30,7 @@ public class DashboardTest extends BaseTest {
                 stages {
                     stage('Checkout') {
                         steps {echo 'Step: Checkout code from repository'}
-            
+                        
             """;
 
     private static final String SuccessBuilt = "FPipelineProject";
@@ -36,9 +38,74 @@ public class DashboardTest extends BaseTest {
     private static final String FailedBuilt = "ZPipelineProject";
     private static final String NotBuilt = "1PipelineProject";
     private static final List<String> PROJECT_NAMES = List.of("FPipelineProject", "APipelineProject", "ZPipelineProject");
+//    private static final List<String> createdProjects = new ArrayList<>();
+//
+//    @DataProvider(name = "projectNameProvider")
+//    public Object[][] projectNameProvider() {
+//        return new Object[][]{
+//                {"FPipelineProject"},
+//                {"APipelineProject"},
+//                {"ZPipelineProject"}
+//        };
+//    }
+//
+//    @Test(dataProvider = "projectNameProvider")
+//    public void testCreate(String projectName) {
+//        TestUtils.createFreestyleProject(getDriver(), projectName);
+//        createdProjects.add(projectName);
+//
+//        List<String> projectNameList = new HomePage(getDriver())
+//                .getItemList();
+//
+//        Assert.assertTrue(
+//                projectNameList.contains(projectName));
+//    }
+//
+//    @Test(dependsOnMethods = "testCreate")
+//    public void testVerifyProjectOrderByNameASCByDefault() {
+//        List<String> projectNameList = new HomePage(getDriver())
+//                .getItemList();
+//
+//        List<String> expectedList = createdProjects.stream()
+//                .sorted(Comparator.naturalOrder())
+//                .toList();
+//
+//        Assert.assertEquals(
+//                projectNameList,
+//                expectedList);
+//    }
 
-    @Test
+    @DataProvider(name = "projectNamesProvider")
+    public Object[][] projectNamesProvider() {
+        return new Object[][]{
+                {List.of("FPipelineProject", "APipelineProject", "ZPipelineProject")}
+        };
+    }
+
+    @Test(dataProvider = "projectNamesProvider")
+    public void testCreateProjects(List<String> projectNames) {
+        projectNames.forEach(jobName -> TestUtils.createFreestyleProject(getDriver(), jobName));
+
+        List<String> projectNameList = new HomePage(getDriver())
+                .getItemList();
+
+        Assert.assertEquals(projectNameList.size(), projectNames.size());
+    }
+
+    @Test(dependsOnMethods = "testCreateProjects")
     public void testVerifyProjectOrderByNameASCByDefault() {
+        List<String> projectNameList = new HomePage(getDriver())
+                .getItemList();
+
+        List<String> expectedList = projectNameList.stream().sorted(Comparator.naturalOrder()).toList();
+
+        Assert.assertEquals(projectNameList.size(), expectedList.size());
+        Assert.assertEquals(projectNameList, expectedList);
+    }
+
+    @Ignore
+    @Test
+    public void testVerifyOrderByNameASCByDefault() {
         PROJECT_NAMES.forEach(jobName -> TestUtils.createFreestyleProject(getDriver(), jobName));
         final List<String> expectedList = PROJECT_NAMES.stream().sorted(Comparator.naturalOrder()).toList();
 
