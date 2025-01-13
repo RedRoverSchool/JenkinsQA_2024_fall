@@ -7,15 +7,30 @@ import school.redrover.runner.BaseTest;
 
 import java.util.List;
 
-public class CreateNewItem1Test extends BaseTest {
+public class CreateNewItemTest extends BaseTest {
 
     private static final String ITEM_NAME = "CreateNewItem";
     private static final String PIPELINE = "Pipeline";
+    private static final String PROJECT_NAME = "MyFreestyleProject";
 
+
+    @Test
+    public void testCreateFromMyViews() {
+        List<String> projectName = new HomePage(getDriver())
+                .clickMyViewsButton()
+                .clickNewItem()
+                .enterItemName(PROJECT_NAME)
+                .selectFreestyleProjectAndClickOk()
+                .gotoHomePage()
+                .getItemList();
+
+        Assert.assertEquals(projectName.size(), 1);
+        Assert.assertEquals(projectName.get(0), PROJECT_NAME);
+    }
     @Test
     public void testWithButton() {
         List<String> items = new HomePage(getDriver())
-                .clickNewItem()
+                .clickNewItemContentBlock()
                 .enterItemName(ITEM_NAME)
                 .selectFreestyleProjectAndClickOk()
                 .gotoHomePage()
