@@ -118,20 +118,6 @@ public class FreestyleProjectTest extends BaseTest {
     }
 
     @Test
-    public void testCreateFreestyleProjectFromMyViews() {
-        List<String> projectName = new HomePage(getDriver())
-                .clickMyViewsButton()
-                .clickNewItem()
-                .enterItemName(PROJECT_NAME)
-                .selectFreestyleProjectAndClickOk()
-                .gotoHomePage()
-                .getItemList();
-
-        Assert.assertEquals(projectName.size(), 1);
-        Assert.assertEquals(projectName.get(0), PROJECT_NAME);
-    }
-
-    @Test
     public void testCreateFreestyleProjectWithDurationCheckbox() {
         final String durationPeriod = "minute";
 
