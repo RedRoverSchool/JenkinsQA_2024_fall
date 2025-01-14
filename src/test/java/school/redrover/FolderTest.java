@@ -65,6 +65,8 @@ public class FolderTest extends BaseTest {
     }
 
     @Test
+    @Story("US_04.004 Add and edit description of the folder ")
+    @Description("TC_04.004.01 Add description to the folder")
     public void testAddDescription() {
         TestUtils.createFolder(getDriver(), FOLDER_NAME);
 
@@ -74,10 +76,13 @@ public class FolderTest extends BaseTest {
                 .clickSubmitButton()
                 .getDescription();
 
+        Allure.step("Expected Result: The description is successfully added to the folder and displayed correctly.");
         Assert.assertEquals(finalResult, DESCRIPTION);
     }
 
     @Test(dependsOnMethods = "testAddDescription")
+    @Story("US_04.004 Add and edit description of the folder ")
+    @Description("TC_04.004.02 Edit an existing folder's description")
     public void testEditExistingDescription() {
         String finalResult = new HomePage(getDriver())
                 .openFolder(FOLDER_NAME)
@@ -85,6 +90,7 @@ public class FolderTest extends BaseTest {
                 .clickSubmitButton()
                 .getDescription();
 
+        Allure.step("Expected Result: The folder's description is successfully edited and displayed correctly.");
         Assert.assertEquals(finalResult, DESCRIPTION_EDITED);
     }
 
