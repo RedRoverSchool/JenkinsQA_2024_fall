@@ -275,6 +275,7 @@ public class HomePage extends BasePage {
         return new FolderProjectPage(getDriver());
     }
 
+    @Step("Get project name from the list by order '{order}'")
     public String getItemNameByOrder(int order) {
 
         return getDriver().findElements(By.xpath("//td/a/span")).stream()

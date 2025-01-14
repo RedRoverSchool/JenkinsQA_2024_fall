@@ -1,5 +1,6 @@
 package school.redrover;
 
+import io.qameta.allure.Allure;
 import io.qameta.allure.Description;
 import io.qameta.allure.Epic;
 import io.qameta.allure.Story;
@@ -47,6 +48,9 @@ public class FolderTest extends BaseTest {
     }
 
     @Test
+    @Epic("00 New Item")
+    @Story("US_00.006 Create Folder")
+    @Description("TC_00.006.02 Create Folder with max name length")
     public void testCreateWithMaxNameLength() {
 
         String folderName = new HomePage(getDriver())
@@ -56,6 +60,7 @@ public class FolderTest extends BaseTest {
                 .gotoHomePage()
                 .getItemNameByOrder(1);
 
+        Allure.step("Expected Result: The folder is created with the maximum allowed name length");
         Assert.assertEquals(folderName, FOLDER_NAME_MAX_LENGTH);
     }
 
