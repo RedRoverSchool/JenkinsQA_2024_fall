@@ -39,7 +39,6 @@ public class MultiConfigurationProjectTest extends BaseTest {
                 .clickSubmitButton()
                 .getDescription();
 
-
         Assert.assertEquals(addDescription, DESCRIPTIONS);
     }
 
