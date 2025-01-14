@@ -94,6 +94,7 @@ public abstract class BaseProjectPage<Self extends BaseProjectPage<?, ?, ?>, Pro
         return (Self) this;
     }
 
+    @Step("Clear description and click 'Save'")
     public Self clearDescription() {
         descriptionButton.click();
         descriptionField.clear();
@@ -121,6 +122,7 @@ public abstract class BaseProjectPage<Self extends BaseProjectPage<?, ?, ?>, Pro
         return descriptionText.getText();
     }
 
+    @Step("Get current text from 'Add/edit description button'")
     public String getDescriptionButtonText() {
         return descriptionButton.getText();
     }

@@ -107,12 +107,15 @@ public class FolderTest extends BaseTest {
     }
 
     @Test(dependsOnMethods = "testDescriptionsPreviewButton")
+    @Story("US_04.004 Add and edit description of the folder ")
+    @Description("TC_04.004.03 Clear folder's description")
     public void testClearDescription() {
         String finalResult = new HomePage(getDriver())
                 .openFolder(FOLDER_NAME)
                 .clearDescription()
                 .getDescriptionButtonText();
 
+        Allure.step("Expected Result: The description button shows 'Add description'");
         Assert.assertEquals(finalResult, "Add description");
     }
 
