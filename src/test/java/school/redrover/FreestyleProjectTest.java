@@ -89,6 +89,20 @@ public class FreestyleProjectTest extends BaseTest {
         Assert.assertEquals(renamedProject, NEW_PROJECT_NAME);
     }
 
+    @Test
+    public void testCreateFromMyViews() {
+        List<String> projectName = new HomePage(getDriver())
+                .clickMyViewsButton()
+                .clickNewItem()
+                .enterItemName(PROJECT_NAME)
+                .selectFreestyleProjectAndClickOk()
+                .gotoHomePage()
+                .getItemList();
+
+        Assert.assertEquals(projectName.size(), 1);
+        Assert.assertEquals(projectName.get(0), PROJECT_NAME);
+    }
+
     @Test(dataProvider = "providerUnsafeCharacters")
     public void testRenameWithIncorrectSymbols(String unsafeCharacter) {
         TestUtils.createFreestyleProject(getDriver(), PROJECT_NAME);
@@ -115,20 +129,6 @@ public class FreestyleProjectTest extends BaseTest {
 
         Assert.assertEquals(actualProjectsList.size(), 1);
         Assert.assertEquals(actualProjectsList.get(0), PROJECT_NAME);
-    }
-
-    @Test
-    public void testCreateFreestyleProjectFromMyViews() {
-        List<String> projectName = new HomePage(getDriver())
-                .clickMyViewsButton()
-                .clickNewItem()
-                .enterItemName(PROJECT_NAME)
-                .selectFreestyleProjectAndClickOk()
-                .gotoHomePage()
-                .getItemList();
-
-        Assert.assertEquals(projectName.size(), 1);
-        Assert.assertEquals(projectName.get(0), PROJECT_NAME);
     }
 
     @Test
