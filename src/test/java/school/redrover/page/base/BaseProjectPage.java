@@ -1,5 +1,6 @@
 package school.redrover.page.base;
 
+import io.qameta.allure.Step;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -77,6 +78,7 @@ public abstract class BaseProjectPage<Self extends BaseProjectPage<?, ?, ?>, Pro
         return new CreateNewItemPage(getDriver());
     }
 
+    @Step("Edit description to '{text}'")
     public Self editDescription(String text) {
         descriptionButton.click();
         descriptionField.clear();
@@ -85,12 +87,14 @@ public abstract class BaseProjectPage<Self extends BaseProjectPage<?, ?, ?>, Pro
         return (Self) this;
     }
 
+    @Step("Click Save button")
     public Self clickSubmitButton() {
         submitButton.click();
 
         return (Self) this;
     }
 
+    @Step("Clear description and click 'Save'")
     public Self clearDescription() {
         descriptionButton.click();
         descriptionField.clear();
@@ -113,10 +117,12 @@ public abstract class BaseProjectPage<Self extends BaseProjectPage<?, ?, ?>, Pro
         return getWait10().until(ExpectedConditions.visibilityOf(itemName)).getText();
     }
 
+    @Step("Get description from project page")
     public String getDescription() {
         return descriptionText.getText();
     }
 
+    @Step("Get current text from 'Add/edit description button'")
     public String getDescriptionButtonText() {
         return descriptionButton.getText();
     }

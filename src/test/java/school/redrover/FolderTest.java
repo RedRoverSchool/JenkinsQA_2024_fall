@@ -1,5 +1,6 @@
 package school.redrover;
 
+import io.qameta.allure.Allure;
 import io.qameta.allure.Description;
 import io.qameta.allure.Epic;
 import io.qameta.allure.Story;
@@ -47,6 +48,9 @@ public class FolderTest extends BaseTest {
     }
 
     @Test
+    @Epic("00 New Item")
+    @Story("US_00.006 Create Folder")
+    @Description("TC_00.006.02 Create Folder with max name length")
     public void testCreateWithMaxNameLength() {
 
         String folderName = new HomePage(getDriver())
@@ -56,11 +60,14 @@ public class FolderTest extends BaseTest {
                 .gotoHomePage()
                 .getItemNameByOrder(1);
 
+        Allure.step("Expected Result: The folder '{FOLDER_NAME_MAX_LENGTH}' is created with the maximum allowed name length");
         Assert.assertEquals(folderName, FOLDER_NAME_MAX_LENGTH);
     }
 
     @Test
-    public void testExistingFolderWithNoDescription() {
+    @Story("US_04.004 Add and edit description of the folder ")
+    @Description("TC_04.004.01 Add description to the folder")
+    public void testAddDescription() {
         TestUtils.createFolder(getDriver(), FOLDER_NAME);
 
         String finalResult = new HomePage(getDriver())
@@ -69,10 +76,13 @@ public class FolderTest extends BaseTest {
                 .clickSubmitButton()
                 .getDescription();
 
+        Allure.step("Expected Result: The description '{DESCRIPTION}' is successfully added to the folder and displayed correctly.");
         Assert.assertEquals(finalResult, DESCRIPTION);
     }
 
-    @Test(dependsOnMethods = "testExistingFolderWithNoDescription")
+    @Test(dependsOnMethods = "testAddDescription")
+    @Story("US_04.004 Add and edit description of the folder ")
+    @Description("TC_04.004.02 Edit an existing folder's description")
     public void testEditExistingDescription() {
         String finalResult = new HomePage(getDriver())
                 .openFolder(FOLDER_NAME)
@@ -80,25 +90,32 @@ public class FolderTest extends BaseTest {
                 .clickSubmitButton()
                 .getDescription();
 
+        Allure.step("Expected Result: The description '{DESCRIPTION_EDITED}' is successfully edited and displayed correctly.");
         Assert.assertEquals(finalResult, DESCRIPTION_EDITED);
     }
 
     @Test(dependsOnMethods = "testEditExistingDescription")
+    @Story("US_04.004 Add and edit description of the folder ")
+    @Description("TC_04.004.04 Activate 'Preview' option while adding a description")
     public void testDescriptionsPreviewButton() {
         String finalResult = new HomePage(getDriver())
                 .openFolder(FOLDER_NAME)
                 .getDescriptionViaPreview();
 
+        Allure.step("Expected Result: The description '{DESCRIPTION_EDITED}' is correctly displayed in the preview mode.");
         Assert.assertEquals(finalResult, DESCRIPTION_EDITED);
     }
 
     @Test(dependsOnMethods = "testDescriptionsPreviewButton")
+    @Story("US_04.004 Add and edit description of the folder ")
+    @Description("TC_04.004.03 Clear folder's description")
     public void testClearDescription() {
         String finalResult = new HomePage(getDriver())
                 .openFolder(FOLDER_NAME)
                 .clearDescription()
                 .getDescriptionButtonText();
 
+        Allure.step("Expected Result: The description button shows 'Add description'");
         Assert.assertEquals(finalResult, "Add description");
     }
 
