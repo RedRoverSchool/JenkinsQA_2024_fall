@@ -78,7 +78,7 @@ public abstract class BaseProjectPage<Self extends BaseProjectPage<?, ?, ?>, Pro
         return new CreateNewItemPage(getDriver());
     }
 
-    @Step("Edit the description to '{text}'")
+    @Step("Edit description to '{text}'")
     public Self editDescription(String text) {
         descriptionButton.click();
         descriptionField.clear();

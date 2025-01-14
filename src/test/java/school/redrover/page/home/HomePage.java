@@ -201,7 +201,7 @@ public class HomePage extends BasePage {
         return new MultibranchPipelineProjectPage(getDriver());
     }
 
-    @Step("Open folder ")
+    @Step("Open folder")
     public FolderProjectPage openFolder(String name) {
         openItem(name);
         return new FolderProjectPage(getDriver());

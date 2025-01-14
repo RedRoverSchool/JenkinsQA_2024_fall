@@ -90,16 +90,19 @@ public class FolderTest extends BaseTest {
                 .clickSubmitButton()
                 .getDescription();
 
-        Allure.step("Expected Result: The folder's description is successfully edited and displayed correctly.");
+        Allure.step("Expected Result: The description is successfully edited and displayed correctly.");
         Assert.assertEquals(finalResult, DESCRIPTION_EDITED);
     }
 
     @Test(dependsOnMethods = "testEditExistingDescription")
+    @Story("US_04.004 Add and edit description of the folder ")
+    @Description("TC_04.004.04 Activate 'Preview' option while adding a description")
     public void testDescriptionsPreviewButton() {
         String finalResult = new HomePage(getDriver())
                 .openFolder(FOLDER_NAME)
                 .getDescriptionViaPreview();
 
+        Allure.step("Expected Result: The description is correctly displayed in the preview mode.");
         Assert.assertEquals(finalResult, DESCRIPTION_EDITED);
     }
 
