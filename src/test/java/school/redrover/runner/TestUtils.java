@@ -4,6 +4,10 @@ import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import school.redrover.page.home.HomePage;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
+
 public class TestUtils {
 
     public static ExpectedCondition<Boolean> isElementInViewPort(WebElement element) {
@@ -107,6 +111,7 @@ public class TestUtils {
         ((JavascriptExecutor) driver)
                 .executeScript("arguments[0].dispatchEvent(new Event('input', { bubbles: true }));", element);
     }
+
     public static void createFreestyleProject(WebDriver driver, String name) {
         new HomePage(driver)
                 .clickNewItem()
@@ -163,4 +168,16 @@ public class TestUtils {
                 .clickSaveButton()
                 .gotoHomePage();
     }
+
+    public static String readFileFromResources(String name) {
+        try(InputStream inputStream = TestUtils.class.getClassLoader().getResourceAsStream("jenkins/%s".formatted(name))) {
+            if (inputStream == null) {
+                throw new IOException("File not found in resources");
+            }
+            return new String(inputStream.readAllBytes(), StandardCharsets.UTF_8);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 }
