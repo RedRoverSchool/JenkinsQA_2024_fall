@@ -65,7 +65,7 @@ public class FolderTest extends BaseTest {
     }
 
     @Test
-    public void testExistingFolderWithNoDescription() {
+    public void testAddDescription() {
         TestUtils.createFolder(getDriver(), FOLDER_NAME);
 
         String finalResult = new HomePage(getDriver())
@@ -77,7 +77,7 @@ public class FolderTest extends BaseTest {
         Assert.assertEquals(finalResult, DESCRIPTION);
     }
 
-    @Test(dependsOnMethods = "testExistingFolderWithNoDescription")
+    @Test(dependsOnMethods = "testAddDescription")
     public void testEditExistingDescription() {
         String finalResult = new HomePage(getDriver())
                 .openFolder(FOLDER_NAME)
