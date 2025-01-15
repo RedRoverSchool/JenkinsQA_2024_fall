@@ -55,17 +55,6 @@ jobs:
           APP_OPTIONS: host=localhost;port=8080;admin.username=${{ secrets.ADMIN_USERNAME }};admin.password=${{ secrets.ADMIN_PASSWORD }}
           CI_RUN: true
 
-      - name: Save run number to artifact
-        if: always()
-        run: echo "${{ github.run_number }}" > run_number.txt
-
-      - name: Upload run_number artifact
-        uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: my_artifact
-          path: run_number.txt
-
       - name: Attach screenshots
         if: failure()
         uses: actions/upload-artifact@v4
