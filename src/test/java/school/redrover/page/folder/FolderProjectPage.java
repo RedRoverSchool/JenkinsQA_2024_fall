@@ -8,6 +8,7 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import school.redrover.page.base.BaseProjectPage;
+import school.redrover.page.home.CreateNewItemPage;
 
 import java.util.Arrays;
 import java.util.List;
@@ -55,6 +56,9 @@ public class FolderProjectPage extends BaseProjectPage<FolderProjectPage, Folder
 
     @FindBy(xpath = "//td/a/span")
     private List<WebElement> itemNames;
+
+    @FindBy(xpath = "//span[text()='New Item']/ancestor::a")
+    private WebElement newItem;
 
     public FolderProjectPage(WebDriver driver) {
         super(driver);
@@ -154,5 +158,12 @@ public class FolderProjectPage extends BaseProjectPage<FolderProjectPage, Folder
                 .stream()
                 .map(WebElement::getText)
                 .toList();
+    }
+
+    @Step("Click 'New Item' from the folder")
+    public CreateNewItemPage clickNewItem() {
+        newItem.click();
+
+        return new CreateNewItemPage(getDriver());
     }
 }

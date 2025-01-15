@@ -183,29 +183,29 @@ public class FolderTest extends BaseTest {
                 .openFolder(FIRST_FOLDER_NAME)
                 .getItemNameByOrder(1);
 
-        Allure.step(String.format("Expected Result: The new item '%s' is successfully created from the folder '%s'.",
+        Allure.step(String.format("Expected Result: The new item '%s' is successfully created from the folder '%s' by chevron.",
                 FREESTYLE_PROJECT_NAME, FIRST_FOLDER_NAME));
         Assert.assertEquals(projectName, FREESTYLE_PROJECT_NAME);
     }
 
     @Test
+    @Epic("00 New Item")
+    @Story("US_00.004 Create new item from other existing")
+    @Description("TC_00.004.02 Create new item from folder page")
     public void testCreateNewItemFromFolderPage() {
+        TestUtils.createFolder(getDriver(), FOLDER_NAME);
 
         String projectName = new HomePage(getDriver())
-                .clickNewItem()
-                .nameAndSelectFolderType(FIRST_FOLDER_NAME)
-                .gotoHomePage()
-
-                .openFolder(FIRST_FOLDER_NAME)
+                .openFolder(FOLDER_NAME)
                 .clickNewItem()
                 .nameAndSelectFreestyleProject(FREESTYLE_PROJECT_NAME)
-                .addExecuteWindowsBatchCommand("echo 'Hello world!'")
-                .clickSaveButton()
                 .gotoHomePage()
 
-                .openFolder(FIRST_FOLDER_NAME)
+                .openFolder(FOLDER_NAME)
                 .getItemNameByOrder(1);
 
+        Allure.step(String.format("Expected Result: The new item '%s' is successfully created from the folder '%s'.",
+                FREESTYLE_PROJECT_NAME, FOLDER_NAME));
         Assert.assertEquals(projectName, FREESTYLE_PROJECT_NAME);
     }
 
@@ -213,13 +213,13 @@ public class FolderTest extends BaseTest {
     public void testOpenBuildHistoryByChevron() {
 
         String buildHistoryName = new HomePage(getDriver())
-                .openFolder(FIRST_FOLDER_NAME)
+                .openFolder(FOLDER_NAME)
                 .runJob(FREESTYLE_PROJECT_NAME)
                 .gotoHomePage()
-                .selectBuildHistoryFromItemMenu(FIRST_FOLDER_NAME)
+                .selectBuildHistoryFromItemMenu(FOLDER_NAME)
                 .getProjectName();
 
-        Assert.assertEquals(buildHistoryName, "%s » %s".formatted(FIRST_FOLDER_NAME, FREESTYLE_PROJECT_NAME));
+        Assert.assertEquals(buildHistoryName, "%s » %s".formatted(FOLDER_NAME, FREESTYLE_PROJECT_NAME));
     }
 
     @Test(dependsOnMethods = "testOpenBuildHistoryByChevron")
@@ -227,7 +227,7 @@ public class FolderTest extends BaseTest {
         final String displayName = "DisplayName";
 
         List<String> projectList = new HomePage(getDriver())
-                .openFolder(FIRST_FOLDER_NAME)
+                .openFolder(FOLDER_NAME)
                 .clickSidebarConfigButton()
                 .enterConfigurationName(displayName)
                 .clickSaveButton()
