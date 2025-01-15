@@ -27,6 +27,7 @@ public class PipelineProjectTest extends BaseTest {
     private final static String NEW_PROJECT_NAME = "NewPipelineName";
     private final static List<String> PIPELINE_STAGES = List.of("Start", "Build", "Test", "End");
     private final static String EMPTY_NAME_ERROR_MESSAGE = "» This field cannot be empty, please enter a valid name";
+    private final static String DUPLICATE_NAME_ERROR_MESSAGE = "» A job already exists with the name ";
     private final static String PIPELINE_SCRIPT = """
             pipeline {agent any\n stages {
             stage('Build') {steps {echo 'Building the application'}}
@@ -73,7 +74,7 @@ public class PipelineProjectTest extends BaseTest {
                 .selectPipeline()
                 .getEmptyNameMessage();
 
-        Allure.step("Expected result: Error message" + EMPTY_NAME_ERROR_MESSAGE + "is displayed", () -> {
+        Allure.step("Expected result: Error message " + EMPTY_NAME_ERROR_MESSAGE + " is displayed", () -> {
             Assert.assertEquals(emptyNameMessage, EMPTY_NAME_ERROR_MESSAGE); });
     }
 
@@ -89,7 +90,7 @@ public class PipelineProjectTest extends BaseTest {
                 .selectPipeline()
                 .getErrorMessage();
 
-        Allure.step("Expected result: Error message is displayed");
+        Allure.step(String.format("Expected result: Error message " + DUPLICATE_NAME_ERROR_MESSAGE + "'%s' is displayed", PROJECT_NAME));
         Assert.assertEquals(errorMessage, "» A job already exists with the name ‘%s’".formatted(PROJECT_NAME));
     }
 
@@ -102,11 +103,14 @@ public class PipelineProjectTest extends BaseTest {
                 .enterItemName(unsafeCharacter)
                 .selectPipeline()
                 .getInvalidNameMessage();
-        Allure.step("Expected result: Error message is displayed");
+
+        Allure.step(String.format("Expected result: Error message '» %s is an unsafe character' is displayed", unsafeCharacter));
         Assert.assertEquals(invalidNameMessage, "» ‘%s’ is an unsafe character".formatted(unsafeCharacter));
     }
 
     @Test
+    @Story("US_00.004 Create new item from other existing")
+    @Description("TC_00.004.04 Create Pipeline Project from existing one")
     public void testCreatePipelineFromExistingOne() {
         final String secondProjectName = "Second" + PROJECT_NAME;
         TestUtils.createPipelineProject(getDriver(), PROJECT_NAME);
@@ -119,7 +123,8 @@ public class PipelineProjectTest extends BaseTest {
                 .gotoHomePage()
                 .getItemList();
 
-        Assert.assertTrue(itemNameList.contains(secondProjectName));
+        Allure.step(String.format("Expected result: Project '%s' is displayed on Home page", PROJECT_NAME));
+        Assert.assertListContainsObject(itemNameList, secondProjectName,"Project with name '%s' didn't create".formatted(secondProjectName));
     }
 
     @Test(dependsOnMethods = "testCreateProjectWithValidNameViaSidebar")
