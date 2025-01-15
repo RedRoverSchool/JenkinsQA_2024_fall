@@ -56,7 +56,7 @@ public class PipelineProjectTest extends BaseTest {
                 .gotoHomePage()
                 .getItemList();
 
-        Allure.step("Expected result: The created Pipeline Project with the valid name is displayed on the Home page");
+        Allure.step("Expected result: Project with valid name is displayed on the Home page");
         Assert.assertListContainsObject(
                 itemList,
                 PROJECT_NAME,
@@ -74,7 +74,7 @@ public class PipelineProjectTest extends BaseTest {
                 .selectPipeline()
                 .getEmptyNameMessage();
 
-        Allure.step("Expected result: An error message '» This field cannot be empty, please enter a valid name' is displayed below the 'Enter Item Name' field.");
+        Allure.step("Expected result: Error message is displayed");
         Assert.assertEquals(emptyNameMessage, "» This field cannot be empty, please enter a valid name");
     }
 
@@ -91,7 +91,7 @@ public class PipelineProjectTest extends BaseTest {
                 .selectPipeline()
                 .getErrorMessage();
 
-        Allure.step("Expected result: An error message appears below the 'Enter an item name' field: 'A project with this name already exists.'.");
+        Allure.step("Expected result: Error message is displayed");
         Assert.assertEquals(errorMessage, "» A job already exists with the name ‘%s’".formatted(PROJECT_NAME));
     }
 
@@ -105,7 +105,7 @@ public class PipelineProjectTest extends BaseTest {
                 .enterItemName(unsafeCharacter)
                 .selectPipeline()
                 .getInvalidNameMessage();
-
+        Allure.step("Expected result: Error message is displayed");
         Assert.assertEquals(invalidNameMessage, "» ‘%s’ is an unsafe character".formatted(unsafeCharacter));
     }
 
