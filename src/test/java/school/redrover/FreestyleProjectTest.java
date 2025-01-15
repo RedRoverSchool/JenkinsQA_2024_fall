@@ -1,5 +1,9 @@
 package school.redrover;
 
+import io.qameta.allure.Allure;
+import io.qameta.allure.Description;
+import io.qameta.allure.Epic;
+import io.qameta.allure.Story;
 import org.testng.Assert;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
@@ -11,6 +15,7 @@ import school.redrover.runner.TestUtils;
 
 import java.util.List;
 
+@Epic("01 FreestyleProject")
 public class FreestyleProjectTest extends BaseTest {
 
     private static final String PROJECT_NAME = "MyFreestyleProject";
@@ -36,6 +41,9 @@ public class FreestyleProjectTest extends BaseTest {
     }
 
     @Test
+    @Epic("00 New Item")
+    @Story("US_00.001 Create Freestyle Project")
+    @Description("TC_00.001.05 Verify error when create the project without name.")
     public void testCreateFreestyleProjectWithEmptyName() {
         String emptyNameMessage = new HomePage(getDriver())
                 .clickNewItem()
@@ -43,10 +51,14 @@ public class FreestyleProjectTest extends BaseTest {
                 .selectFreestyleProject()
                 .getEmptyNameMessage();
 
+        Allure.step("Expected result: Error message is displayed");
         Assert.assertEquals(emptyNameMessage, "» This field cannot be empty, please enter a valid name");
     }
 
     @Test
+    @Epic("00 New Item")
+    @Story("US_00.001 Create Freestyle Project")
+    @Description("TC_00.002.05 Create Freestyle Project with duplicate name via sidebar")
     public void testCreateFreestyleProjectWithDuplicateName() {
         String errorMessage = new HomePage(getDriver())
                 .clickNewItem()
@@ -59,10 +71,14 @@ public class FreestyleProjectTest extends BaseTest {
                 .selectFreestyleProject()
                 .getErrorMessage();
 
+        Allure.step("Expected result: Error message is displayed");
         Assert.assertEquals(errorMessage, "» A job already exists with the name ‘%s’".formatted(PROJECT_NAME));
     }
 
     @Test
+    @Epic("00 New Item")
+    @Story("US_00.001 Create Freestyle Project")
+    @Description("TC_00.001.08 Create project via content block button")
     public void testCreateProjectViaContentBlockButton() {
         List<String> actualProjectsList = new HomePage(getDriver())
                 .clickNewItemContentBlock()
@@ -72,11 +88,14 @@ public class FreestyleProjectTest extends BaseTest {
                 .gotoHomePage()
                 .getItemList();
 
+        Allure.step("Expected result: Project name is displayed on Home page");
         Assert.assertEquals(actualProjectsList.size(), 1);
         Assert.assertEquals(actualProjectsList.get(0), PROJECT_NAME);
     }
 
     @Test(dependsOnMethods = "testCreateFreestyleProjectWithDuplicateName")
+    @Story("US_01.002 Rename Project")
+    @Description("01.002.05 Rename via Breadcrumb dropdown")
     public void testRenameViaBreadcrumbDropdown() {
         String renamedProject = new HomePage(getDriver())
                 .openFreestyleProject(PROJECT_NAME)
@@ -86,6 +105,7 @@ public class FreestyleProjectTest extends BaseTest {
                 .clickRenameButton()
                 .getProjectName();
 
+        Allure.step("Renamed project is displayed");
         Assert.assertEquals(renamedProject, NEW_PROJECT_NAME);
     }
 
@@ -176,7 +196,7 @@ public class FreestyleProjectTest extends BaseTest {
 
     @Test
     public void testAddDescriptionOnConfigPageViaItemDropdown() {
-        TestUtils.createFreestyleProject(getDriver(),PROJECT_NAME);
+        TestUtils.createFreestyleProject(getDriver(), PROJECT_NAME);
 
         String actualDescription = new HomePage(getDriver())
                 .selectConfigureFromItemMenuForFreestyle(PROJECT_NAME)
@@ -238,7 +258,6 @@ public class FreestyleProjectTest extends BaseTest {
     @Test
     public void testRenameProjectViaDropdown() {
         TestUtils.createFreestyleProject(getDriver(), PROJECT_NAME);
-
         final String newName = "New " + PROJECT_NAME;
 
         String actualProjectName = new HomePage(getDriver())
@@ -412,7 +431,7 @@ public class FreestyleProjectTest extends BaseTest {
                 .selectDeleteFromItemMenuAndClickYes(PROJECT_NAME)
                 .getItemList();
 
-        Assert.assertEquals(projectsList.size(),1);
+        Assert.assertEquals(projectsList.size(), 1);
         Assert.assertEquals(projectsList.get(0), PROJECT_NAME + " 2");
     }
 
@@ -500,7 +519,6 @@ public class FreestyleProjectTest extends BaseTest {
 
     @Test(dependsOnMethods = "testCounterOfRunsIncrease")
     public void testStatusOnHomePageIsSuccess() {
-
         String statusBuild = new HomePage(getDriver())
                 .getStatusBuild(PROJECT_NAME);
 
@@ -560,7 +578,6 @@ public class FreestyleProjectTest extends BaseTest {
 
     @Test(dependsOnMethods = "testWorkspaceIsOpened")
     public void testLastBuildIsOpened() {
-
         String secondBuild = new HomePage(getDriver())
                 .openFreestyleProject(PROJECT_NAME)
                 .clickBuildNowSidebar()
@@ -622,7 +639,7 @@ public class FreestyleProjectTest extends BaseTest {
                 "Enable");
     }
 
-    @Test (dependsOnMethods = "testDisableEnabled")
+    @Test(dependsOnMethods = "testDisableEnabled")
     public void testEnableWithIndicator() {
         boolean currentState = new HomePage(getDriver())
                 .openFreestyleProject(PROJECT_NAME)
@@ -635,7 +652,7 @@ public class FreestyleProjectTest extends BaseTest {
         Assert.assertTrue(currentState);
     }
 
-    @Test (dependsOnMethods = "testEnableWithIndicator")
+    @Test(dependsOnMethods = "testEnableWithIndicator")
     public void testEnabledFromProjectPage() {
         boolean currentState = new HomePage(getDriver())
                 .openFreestyleProject(PROJECT_NAME)

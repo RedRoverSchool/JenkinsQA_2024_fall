@@ -176,6 +176,7 @@ public class HomePage extends BasePage {
                         .formatted(menuName)))).click();
     }
 
+    @Step("Open '{name}' freestyle project")
     public FreestyleProjectPage openFreestyleProject(String name) {
         openItem(name);
         return new FreestyleProjectPage(getDriver());
@@ -221,6 +222,7 @@ public class HomePage extends BasePage {
         return new CreateNewItemPage(getDriver());
     }
 
+    @Step("Click 'Create a job'")
     public CreateNewItemPage clickNewItemContentBlock() {
         newJobContentBlock.click();
 
@@ -233,6 +235,7 @@ public class HomePage extends BasePage {
         return new FolderConfigPage(getDriver());
     }
 
+    @Step("Select 'Configure' for '{itemName}' from item dropdown menu")
     public FreestyleConfigPage selectConfigureFromItemMenuForFreestyle(String itemName) {
         selectMenuFromItemDropdown(itemName, "Configure");
 
@@ -245,6 +248,7 @@ public class HomePage extends BasePage {
         return this;
     }
 
+    @Step("Select 'Delete' from item menu for project '{itemName}'")
     public HomePage selectDeleteFromItemMenuAndClickYes(String itemName) {
         selectDeleteFromItemMenu(itemName);
         getWait5().until(ExpectedConditions.visibilityOf(yesButton)).click();
@@ -264,6 +268,7 @@ public class HomePage extends BasePage {
         return new BuildHistoryPage(getDriver());
     }
 
+    @Step("Select 'Build Now' from item menu for '{itemName}'")
     public HomePage selectBuildNowFromItemMenu(String itemName) {
         selectMenuFromItemDropdown(itemName, "Build Now");
 
@@ -341,6 +346,7 @@ public class HomePage extends BasePage {
                         .formatted(name))).isEmpty();
     }
 
+    @Step("Click green triangle to schedule a build for '{name}' project")
     public HomePage clickScheduleBuild(String name) {
         getWait10().until(ExpectedConditions.visibilityOf(getDriver().findElement(
                         By.xpath("//td[@class='jenkins-table__cell--tight']//a[@tooltip='Schedule a Build for %s']".formatted(name)))))
@@ -351,6 +357,7 @@ public class HomePage extends BasePage {
         return this;
     }
 
+    @Step("Click 'Build History'")
     public BuildHistoryPage gotoBuildHistoryPageFromLeftPanel() {
         buildHistoryLink.click();
 
@@ -411,6 +418,7 @@ public class HomePage extends BasePage {
         return getWait2().until(ExpectedConditions.visibilityOf(aboutJenkinsDropdownLabel)).getText();
     }
 
+    @Step("Click 'My Views' sidebar")
     public HomePage clickMyViewsButton() {
         myViewsButton.click();
 
@@ -500,6 +508,7 @@ public class HomePage extends BasePage {
         return previewText.getText();
     }
 
+    @Step("Click 'Rename' in project dropdown for '{projectName}'")
     public FreestyleRenamePage clickRenameInProjectDropdown(String projectName) {
         selectMenuFromItemDropdown(projectName, "Rename");
 
