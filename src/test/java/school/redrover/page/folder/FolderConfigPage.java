@@ -1,5 +1,6 @@
 package school.redrover.page.folder;
 
+import io.qameta.allure.Step;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -19,6 +20,7 @@ public class FolderConfigPage extends BaseConfigPage<FolderConfigPage, FolderPro
         return new FolderProjectPage(getDriver());
     }
 
+    @Step("Type '{name}' to Display Name field on Configuration page")
     public FolderConfigPage enterConfigurationName(String name) {
         displayNameField.sendKeys(name);
 

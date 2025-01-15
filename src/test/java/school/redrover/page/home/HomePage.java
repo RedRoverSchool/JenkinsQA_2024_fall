@@ -229,6 +229,7 @@ public class HomePage extends BasePage {
         return new CreateNewItemPage(getDriver());
     }
 
+    @Step("Select 'Configure' for '{itemName}' from item dropdown menu")
     public FolderConfigPage selectConfigureFromItemMenu(String itemName) {
         selectMenuFromItemDropdown(itemName, "Configure");
 

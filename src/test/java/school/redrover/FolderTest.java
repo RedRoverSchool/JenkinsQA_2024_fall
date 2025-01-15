@@ -65,7 +65,7 @@ public class FolderTest extends BaseTest {
     }
 
     @Test
-    @Story("US_04.004 Add and edit description of the folder ")
+    @Story("US_04.004 Add and edit description of the folder")
     @Description("TC_04.004.01 Add description to the folder")
     public void testAddDescription() {
         TestUtils.createFolder(getDriver(), FOLDER_NAME);
@@ -81,7 +81,7 @@ public class FolderTest extends BaseTest {
     }
 
     @Test(dependsOnMethods = "testAddDescription")
-    @Story("US_04.004 Add and edit description of the folder ")
+    @Story("US_04.004 Add and edit description of the folder")
     @Description("TC_04.004.02 Edit an existing folder's description")
     public void testEditExistingDescription() {
         String finalResult = new HomePage(getDriver())
@@ -95,7 +95,7 @@ public class FolderTest extends BaseTest {
     }
 
     @Test(dependsOnMethods = "testEditExistingDescription")
-    @Story("US_04.004 Add and edit description of the folder ")
+    @Story("US_04.004 Add and edit description of the folder")
     @Description("TC_04.004.04 Activate 'Preview' option while adding a description")
     public void testDescriptionsPreviewButton() {
         String finalResult = new HomePage(getDriver())
@@ -107,7 +107,7 @@ public class FolderTest extends BaseTest {
     }
 
     @Test(dependsOnMethods = "testDescriptionsPreviewButton")
-    @Story("US_04.004 Add and edit description of the folder ")
+    @Story("US_04.004 Add and edit description of the folder")
     @Description("TC_04.004.03 Clear folder's description")
     public void testClearDescription() {
         String finalResult = new HomePage(getDriver())
@@ -138,15 +138,18 @@ public class FolderTest extends BaseTest {
     }
 
     @Test(dependsOnMethods = "testCreateWithMinNameLength")
+    @Story("US_04.005 Configure folder")
+    @Description("TC_04.005.01 Configure name by chevron")
     public void testConfigureNameByChevron() {
-
         FolderProjectPage folderProjectPage = new HomePage(getDriver())
-                .selectConfigureFromItemMenu("F")
+                .selectConfigureFromItemMenu(FOLDER_NAME_MIN_LENGTH)
                 .enterConfigurationName(FIRST_FOLDER_NAME)
                 .clickSaveButton();
 
+        Allure.step(String.format("Expected Result: The folder '%s' is successfully configured with the name '%s'.",
+                FOLDER_NAME_MIN_LENGTH, FIRST_FOLDER_NAME));
         Assert.assertEquals(folderProjectPage.getConfigurationName(), FIRST_FOLDER_NAME);
-        Assert.assertEquals(folderProjectPage.getFolderName(), "F");
+        Assert.assertEquals(folderProjectPage.getFolderName(), FOLDER_NAME_MIN_LENGTH);
     }
 
     @Test
