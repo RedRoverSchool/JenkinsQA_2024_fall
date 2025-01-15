@@ -50,7 +50,7 @@ public abstract class BaseConfigPage<Self extends BaseConfigPage<?, ?>, ProjectP
         return (Self) this;
     }
 
-    @Step("Click Save button")
+    @Step("Click 'Save' button")
     public ProjectPage clickSaveButton() {
         saveButton.click();
 

@@ -20,6 +20,7 @@ public class FolderTest extends BaseTest {
     private static final String FIRST_FOLDER_NAME = "FreestyleProjects";
     private static final String FREESTYLE_PROJECT_NAME = "FirstFreestyleProjectJob";
     private static final String FOLDER_NAME_MAX_LENGTH = "012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234";
+    private static final String FOLDER_NAME_MIN_LENGTH = "F";
     private static final String FOLDER_MOVE_PARENT_NAME = "FolderParent";
     private static final String FOLDER_MOVE_CHILD_NAME = "FolderChild";
     private static final String FOLDER_MOVE_CHILD2_NAME = "FolderChild2";
@@ -52,7 +53,6 @@ public class FolderTest extends BaseTest {
     @Story("US_00.006 Create Folder")
     @Description("TC_00.006.02 Create Folder with max name length")
     public void testCreateWithMaxNameLength() {
-
         String folderName = new HomePage(getDriver())
                 .clickNewItem()
                 .enterItemName(FOLDER_NAME_MAX_LENGTH)
@@ -60,12 +60,12 @@ public class FolderTest extends BaseTest {
                 .gotoHomePage()
                 .getItemNameByOrder(1);
 
-        Allure.step("Expected Result: The folder '{FOLDER_NAME_MAX_LENGTH}' is created with the maximum allowed name length");
+        Allure.step(String.format("Expected Result: The folder with the maximum allowed name length '%s' is created.", FOLDER_NAME_MAX_LENGTH));
         Assert.assertEquals(folderName, FOLDER_NAME_MAX_LENGTH);
     }
 
     @Test
-    @Story("US_04.004 Add and edit description of the folder ")
+    @Story("US_04.004 Add and edit description of the folder")
     @Description("TC_04.004.01 Add description to the folder")
     public void testAddDescription() {
         TestUtils.createFolder(getDriver(), FOLDER_NAME);
@@ -76,12 +76,12 @@ public class FolderTest extends BaseTest {
                 .clickSubmitButton()
                 .getDescription();
 
-        Allure.step("Expected Result: The description '{DESCRIPTION}' is successfully added to the folder and displayed correctly.");
+        Allure.step(String.format("Expected Result: The description '%s' is successfully added to the folder and displayed correctly.", DESCRIPTION));
         Assert.assertEquals(finalResult, DESCRIPTION);
     }
 
     @Test(dependsOnMethods = "testAddDescription")
-    @Story("US_04.004 Add and edit description of the folder ")
+    @Story("US_04.004 Add and edit description of the folder")
     @Description("TC_04.004.02 Edit an existing folder's description")
     public void testEditExistingDescription() {
         String finalResult = new HomePage(getDriver())
@@ -90,24 +90,24 @@ public class FolderTest extends BaseTest {
                 .clickSubmitButton()
                 .getDescription();
 
-        Allure.step("Expected Result: The description '{DESCRIPTION_EDITED}' is successfully edited and displayed correctly.");
+        Allure.step(String.format("Expected Result: The description '%s' is successfully edited and displayed correctly.", DESCRIPTION_EDITED));
         Assert.assertEquals(finalResult, DESCRIPTION_EDITED);
     }
 
     @Test(dependsOnMethods = "testEditExistingDescription")
-    @Story("US_04.004 Add and edit description of the folder ")
+    @Story("US_04.004 Add and edit description of the folder")
     @Description("TC_04.004.04 Activate 'Preview' option while adding a description")
     public void testDescriptionsPreviewButton() {
         String finalResult = new HomePage(getDriver())
                 .openFolder(FOLDER_NAME)
                 .getDescriptionViaPreview();
 
-        Allure.step("Expected Result: The description '{DESCRIPTION_EDITED}' is correctly displayed in the preview mode.");
+        Allure.step(String.format("Expected Result: The description '%s' is correctly displayed in the preview mode.", DESCRIPTION_EDITED));
         Assert.assertEquals(finalResult, DESCRIPTION_EDITED);
     }
 
     @Test(dependsOnMethods = "testDescriptionsPreviewButton")
-    @Story("US_04.004 Add and edit description of the folder ")
+    @Story("US_04.004 Add and edit description of the folder")
     @Description("TC_04.004.03 Clear folder's description")
     public void testClearDescription() {
         String finalResult = new HomePage(getDriver())
@@ -120,29 +120,36 @@ public class FolderTest extends BaseTest {
     }
 
     @Test
+    @Epic("00 New Item")
+    @Story("US_00.006 Create Folder")
+    @Description("TC_00.006.01 Create Folder with min name length")
     public void testCreateWithMinNameLength() {
-
         List<String> itemList = new HomePage(getDriver())
                 .clickNewItem()
-                .enterItemName("F")
+                .enterItemName(FOLDER_NAME_MIN_LENGTH)
                 .selectFolderAndClickOk()
                 .gotoHomePage()
                 .getItemList();
 
+        Allure.step(String.format("Expected Result: The list of items contains '%d' folder(s). \n " +
+                "The folder with the minimum allowed name length '%s' is created.", itemList.size(), FOLDER_NAME_MIN_LENGTH));
         Assert.assertEquals(itemList.size(), 1);
-        Assert.assertEquals(itemList.get(0), "F");
+        Assert.assertEquals(itemList.get(0), FOLDER_NAME_MIN_LENGTH);
     }
 
     @Test(dependsOnMethods = "testCreateWithMinNameLength")
+    @Story("US_04.005 Configure folder")
+    @Description("TC_04.005.01 Configure name by chevron")
     public void testConfigureNameByChevron() {
-
         FolderProjectPage folderProjectPage = new HomePage(getDriver())
-                .selectConfigureFromItemMenu("F")
+                .selectConfigureFromItemMenu(FOLDER_NAME_MIN_LENGTH)
                 .enterConfigurationName(FIRST_FOLDER_NAME)
                 .clickSaveButton();
 
+        Allure.step(String.format("Expected Result: The folder '%s' is successfully configured with the name '%s'.",
+                FOLDER_NAME_MIN_LENGTH, FIRST_FOLDER_NAME));
         Assert.assertEquals(folderProjectPage.getConfigurationName(), FIRST_FOLDER_NAME);
-        Assert.assertEquals(folderProjectPage.getFolderName(), "F");
+        Assert.assertEquals(folderProjectPage.getFolderName(), FOLDER_NAME_MIN_LENGTH);
     }
 
     @Test
