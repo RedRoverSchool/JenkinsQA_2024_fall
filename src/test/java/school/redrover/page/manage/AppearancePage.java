@@ -1,5 +1,6 @@
 package school.redrover.page.manage;
 
+import io.qameta.allure.Step;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -35,44 +36,52 @@ public class AppearancePage extends BasePage {
         super(driver);
     }
 
+    @Step("Select dark themes")
     public AppearancePage clickSelectDarkThemes() {
         selectDarkThemes.click();
 
         return this;
     }
 
+    @Step("Select system themes")
     public AppearancePage clickSelectSystemThemes() {
         selectSystemThemes.click();
 
         return this;
     }
 
+    @Step("Select default themes")
     public AppearancePage clickSelectDefaultThemes() {
         selectDefaultThemes.click();
 
         return this;
     }
 
+    @Step("Click apply button")
     public AppearancePage clickApplyButton() {
         selectApplyButton.click();
 
         return this;
     }
 
+    @Step("Click checkbox different theme")
     public AppearancePage clickCheckboxDifferentTheme() {
         checkboxDifferentTheme.click();
 
         return this;
     }
 
+    @Step("Get attribute data")
     public String getAttributeData() {
         return dataTheme.getAttribute("data-theme");
     }
 
+    @Step("Get color background")
     public String getColorBackground() {
         return colorBackground.getCssValue("background");
     }
 
+    @Step("Get theme list")
     public List<WebElement> getThemeList() {
         return getDriver().findElements(By.xpath("//section[@class='jenkins-section']"));
     }

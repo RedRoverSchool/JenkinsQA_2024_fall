@@ -1,5 +1,6 @@
 package school.redrover.page.manage;
 
+import io.qameta.allure.Step;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -78,6 +79,7 @@ public class ManageJenkinsPage extends BasePage {
         return title.getText();
     }
 
+    @Step("Click Appearance button")
     public AppearancePage clickAppearanceButton() {
         appearanceButton.click();
 
@@ -96,36 +98,43 @@ public class ManageJenkinsPage extends BasePage {
         return new PluginsPage(getDriver());
     }
 
+    @Step("Click Users button")
     public UsersPage openUsersPage() {
         usersButton.click();
 
         return new UsersPage(getDriver());
     }
 
+    @Step("Get all sections")
     public List<String> getAllSections() {
         return sections.stream().map(WebElement::getText).toList();
     }
 
+    @Step("Get all system configuration items")
     public List<String> getSystemConfigurationItems() {
         return systemConfigItems.stream().map(WebElement::getText).toList();
     }
 
+    @Step("Click System section")
     public SystemPage clickSystemSection() {
         systemSectionButton.click();
 
         return new SystemPage(getDriver());
     }
 
+    @Step("Type text in search input field '{text}'")
     public ManageJenkinsPage typeSearchInputField(String text) {
         getWait10().until(ExpectedConditions.visibilityOf(searchInputField)).sendKeys(text);
 
         return this;
     }
 
+    @Step("Get no result label text")
     public String getNoResultLabelText() {
         return getWait10().until(ExpectedConditions.visibilityOf(noResultLabel)).getText();
     }
 
+    @Step("Press enter after input '{text}'")
     public CloudsPage pressEnterAfterInput(String text) {
         searchFieldForPressEnter.sendKeys(text);
         getWait5().until(ExpectedConditions.visibilityOf(selectedSearchResultItem));
@@ -134,18 +143,21 @@ public class ManageJenkinsPage extends BasePage {
         return new CloudsPage(getDriver());
     }
 
+    @Step("Is hidden shortcut tooltip displayed")
     public boolean isHiddenShortcutTooltipDisplayed() {
         new Actions(getDriver()).moveToElement(tooltip).perform();
 
         return hiddenTooltipValue.isDisplayed();
     }
 
+    @Step("Switch focus to search field and type text '{text}'")
     public ManageJenkinsPage switchFocusToSearchFieldAndTypeText(String text) {
          new Actions(getDriver()).sendKeys(Keys.chord("/", text)).perform();
 
         return this;
     }
 
+    @Step("Click on search field")
     public ManageJenkinsPage clickOnSearchField() {
         searchInputField.click();
 
@@ -156,24 +168,29 @@ public class ManageJenkinsPage extends BasePage {
         return searchInputField.getAttribute("value");
     }
 
+    @Step("Is search setting field displayed")
     public boolean isSearchSettingFieldDisplayed() {
         return searchInputField.isDisplayed();
     }
 
+    @Step("Get search results")
     public List<String> getSearchResults() {
         return getWait5().until(ExpectedConditions.visibilityOfAllElements(searchResultElements)).stream().map(WebElement::getText).toList();
     }
 
+    @Step("Click Configure Credentials item")
     public CredentialsConfigurePage clickConfigureCredentialsItem() {
         configureCredentialsItem.click();
 
         return new CredentialsConfigurePage(getDriver());
     }
 
+    @Step("Get attribute {attributeName}")
     public String getAttribute(String attributeName) {
         return searchInputField.getAttribute(attributeName);
     }
 
+    @Step("Open System Information page")
     public SystemInformationPage openSystemInformationPage() {
         TestUtils.scrollToElementWithJS(getDriver(), systemInformationButton);
         systemInformationButton.click();

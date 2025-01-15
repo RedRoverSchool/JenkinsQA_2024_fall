@@ -1,5 +1,6 @@
 package school.redrover.page.systemConfiguration;
 
+import io.qameta.allure.Step;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -18,6 +19,7 @@ public class SystemPage extends BasePage {
         super(driver);
     }
 
+    @Step("Get breadcrumbs")
     public String getBreadCrumbs() {
 
         return breadcrumbs.getText();

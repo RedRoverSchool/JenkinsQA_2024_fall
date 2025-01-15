@@ -1,5 +1,6 @@
 package school.redrover.page.user;
 
+import io.qameta.allure.Step;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -32,16 +33,19 @@ public class CreateUserPage extends BasePage {
         super(driver);
     }
 
+    @Step("Click create user button")
     public CreateUserPage clickCreateUserButton() {
         createUserButton.click();
 
         return new CreateUserPage(getDriver());
     }
 
+    @Step("Get validation message")
     public String getValidationMessage() {
         return validationMessage.getText();
     }
 
+    @Step("Fill form by valid data to create user {fullName}")
     public UsersPage fillFormByValidDataToCreateUser(String fullName) {
         usernameField.sendKeys("Ivan");
         password1Field.sendKeys("123");

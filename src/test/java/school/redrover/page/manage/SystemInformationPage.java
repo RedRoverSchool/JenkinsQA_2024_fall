@@ -1,5 +1,6 @@
 package school.redrover.page.manage;
 
+import io.qameta.allure.Step;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -18,12 +19,14 @@ public class SystemInformationPage extends BasePage {
         super(driver);
     }
 
+    @Step("Open Thread Dumps tab")
     public SystemInformationPage openThreadDumpsTab() {
         getWait5().until(ExpectedConditions.visibilityOf(threadDumpsTab)).click();
 
         return this;
     }
 
+    @Step("Click on this page link")
     public ThreadDumpPage clickThisPageLink() {
         getWait5().until(ExpectedConditions.visibilityOf(thisPageLink)).click();
 
