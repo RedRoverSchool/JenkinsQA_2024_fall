@@ -257,6 +257,7 @@ public class HomePage extends BasePage {
         return this;
     }
 
+    @Step("Select 'New Item' from folder dropdown menu")
     public CreateNewItemPage selectNewItemFromFolderMenu(String itemName) {
         selectMenuFromItemDropdown(itemName, "New Item");
 

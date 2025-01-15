@@ -89,8 +89,8 @@ public class FolderProjectPage extends BaseProjectPage<FolderProjectPage, Folder
                 .orElse("");
     }
 
+    @Step("Get project name from the list by order '{order}'")
     public String getItemNameByOrder(int order) {
-
         return itemNames
                 .stream()
                 .skip(order - 1)

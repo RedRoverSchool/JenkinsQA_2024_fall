@@ -115,6 +115,7 @@ public class CreateNewItemPage extends BasePage {
         return new FreestyleConfigPage(getDriver());
     }
 
+    @Step("Type name '{itemName}', select 'FreestyleProject' and click 'Ok'")
     public FreestyleConfigPage nameAndSelectFreestyleProject(String itemName) {
         enterItemName(itemName);
         selectFreestyleProjectAndClickOk();

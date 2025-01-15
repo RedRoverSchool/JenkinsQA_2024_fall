@@ -170,8 +170,10 @@ public class FolderTest extends BaseTest {
     }
 
     @Test(dependsOnMethods = "testConfigureDescriptionByChevron")
+    @Epic("00 New Item")
+    @Story("US_00.004 Create new item from other existing")
+    @Description("TC_00.004.01 Create new item from folder by chevron")
     public void testCreateNewItemByChevron() {
-
         String projectName = new HomePage(getDriver())
                 .selectNewItemFromFolderMenu(FIRST_FOLDER_NAME)
                 .nameAndSelectFreestyleProject(FREESTYLE_PROJECT_NAME)
@@ -181,6 +183,8 @@ public class FolderTest extends BaseTest {
                 .openFolder(FIRST_FOLDER_NAME)
                 .getItemNameByOrder(1);
 
+        Allure.step(String.format("Expected Result: The new item '%s' is successfully created from the folder '%s'.",
+                FREESTYLE_PROJECT_NAME, FIRST_FOLDER_NAME));
         Assert.assertEquals(projectName, FREESTYLE_PROJECT_NAME);
     }
 
