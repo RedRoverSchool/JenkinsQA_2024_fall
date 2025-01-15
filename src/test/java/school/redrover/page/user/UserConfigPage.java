@@ -1,5 +1,6 @@
 package school.redrover.page.user;
 
+import io.qameta.allure.Step;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -54,12 +55,14 @@ public class UserConfigPage extends BasePage {
         return new UserPage(getDriver());
     }
 
+    @Step("Add user description")
     public UserPage addUserDescription () {
         descriptionField.sendKeys("User Description");
         submitButton.click();
         return new UserPage(getDriver());
     }
 
+    @Step("Add user time zone")
     public UserPage addUserTimeZone() {
         Select timeZone = new Select(selectTimeZone);
         timeZone.selectByValue("Etc/GMT+2");
@@ -67,10 +70,12 @@ public class UserConfigPage extends BasePage {
         return new UserPage(getDriver());
     }
 
+    @Step("Get user time zone")
     public String getUserTimeZone() {
         return selectTimeZone.getAttribute("value");
     }
 
+    @Step("Delete user from configure user page")
     public HomePage deleteUserFromConfigureUserPage() {
         deleteUserSidebarButton.click();
         okToDeleteButton.click();
