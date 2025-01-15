@@ -1,12 +1,13 @@
 package school.redrover;
 
+import io.qameta.allure.Epic;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import school.redrover.page.home.BuildHistoryPage;
 import school.redrover.page.home.HomePage;
 import school.redrover.runner.BaseTest;
 
-
+@Epic("08 Build History")
 public class BuildHistoryTest extends BaseTest {
 
     private static final String FREESTYLE_PROJECT_NAME = "FreestyleProject";
