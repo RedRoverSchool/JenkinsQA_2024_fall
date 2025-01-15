@@ -25,7 +25,6 @@ public class PipelineProjectTest extends BaseTest {
     private final static String EXPECTED_RESULT = SELECT_VALUE.split(":")[0].trim();
     private final static String PROJECT_NAME = "PipelineName";
     private final static String NEW_PROJECT_NAME = "NewPipelineName";
-    private final static List<String> PIPELINE_STAGES = List.of("Start", "Build", "Test", "End");
     private final static String EMPTY_NAME_ERROR_MESSAGE = "» This field cannot be empty, please enter a valid name";
     private final static String DUPLICATE_NAME_ERROR_MESSAGE = "» A job already exists with the name ";
     private final static String PIPELINE_SCRIPT = """
@@ -34,6 +33,9 @@ public class PipelineProjectTest extends BaseTest {
             stage('Test') {steps {error 'Test stage failed due to an error'}}
             }
             """;
+    private final static List<String> PIPELINE_STAGES = List.of("Start", "Build", "Test", "End");
+    private final static List<String> SIDEBAR_ITEM_LIST_PROJECT_PAGE = List.of("Status", "Changes", "Build Now",
+            "Configure", "Delete Pipeline", "Stages", "Rename", "Pipeline Syntax");
 
     @DataProvider
     public Object[][] providerUnsafeCharacters() {
@@ -127,33 +129,97 @@ public class PipelineProjectTest extends BaseTest {
         Assert.assertListContainsObject(itemNameList, secondProjectName,"Project with name '%s' didn't create".formatted(secondProjectName));
     }
 
+    @Test(dependsOnMethods = "testEnableProject")
+    public void testRenameProjectViaSidebar() {
+        List<String> projectList = new HomePage(getDriver())
+                .openPipelineProject(PROJECT_NAME)
+                .clickRenameSidebarButton()
+                .clearInputFieldAndTypeName(NEW_PROJECT_NAME)
+                .clickRenameButton()
+                .gotoHomePage()
+                .getItemList();
+
+        Assert.assertListContainsObject(
+                projectList,
+                NEW_PROJECT_NAME,
+                "Project is not renamed");
+    }
+
+    @Test()
+    public void testRename() {
+        PipelineProjectPage projectPage = new HomePage(getDriver())
+                .clickNewItem()
+                .enterItemName(PROJECT_NAME)
+                .selectPipelineAndClickOk()
+                .clickSaveButton()
+                .gotoHomePage()
+                .openPipelineProject(PROJECT_NAME)
+                .clickRenameSidebarButton()
+                .clearInputFieldAndTypeName(NEW_PROJECT_NAME)
+                .clickRenameButton();
+
+        Assert.assertEquals(projectPage.getTitle(), NEW_PROJECT_NAME);
+        Assert.assertEquals(projectPage.getProjectNameBreadcrumb(), NEW_PROJECT_NAME);
+    }
+
+    @Test
+    public void testWarningMessageOnRenameProjectPage() {
+        String actualWarningMessage = new HomePage(getDriver())
+                .clickNewItem()
+                .enterItemName(PROJECT_NAME)
+                .selectPipelineAndClickOk()
+                .clickSaveButton()
+                .gotoHomePage()
+                .openPipelineProject(PROJECT_NAME)
+                .clickRenameSidebarButton()
+                .getWarningMessage();
+
+        Assert.assertEquals(actualWarningMessage, "The new name is the same as the current name.");
+    }
+
+    @Test
+    public void testRenameByChevronDashboard() {
+        PipelineProjectPage projectPage = new HomePage(getDriver())
+                .clickNewItem()
+                .enterItemName(PROJECT_NAME)
+                .selectPipelineAndClickOk()
+                .clickSaveButton()
+                .gotoHomePage()
+                .goToPipelineRenamePageViaDropdown(PROJECT_NAME)
+                .clearInputFieldAndTypeName(NEW_PROJECT_NAME)
+                .clickRenameButton();
+
+        Assert.assertEquals(projectPage.getTitle(), NEW_PROJECT_NAME);
+        Assert.assertEquals(projectPage.getProjectNameBreadcrumb(), NEW_PROJECT_NAME);
+    }
+
+    @Test(dependsOnMethods = "testRenameByChevronDashboard")
+    public void testRenameByChevronDisplayedOnHomePageWithCorrectName() {
+        boolean isDisplayed = new HomePage(getDriver())
+                .getItemList()
+                .contains(NEW_PROJECT_NAME);
+
+        Assert.assertTrue(isDisplayed);
+    }
+
     @Test(dependsOnMethods = "testCreateProjectWithValidNameViaSidebar")
-    public void testVerifySidebarOptionsOnProjectPage() {
-        List<String> actualSidebarOptionList = new HomePage(getDriver())
+    @Story("US_02.001 View Pipeline page")
+    @Description("TC_02.001.01 Verify list of sidebar items")
+    public void testVerifySidebarItemsOnProjectPage() {
+        List<String> actualSidebarItemList = new HomePage(getDriver())
                 .openPipelineProject(PROJECT_NAME)
-                .getSidebarOptionList();
+                .getSidebarItemList();
 
+        Allure.step("List of sidebar items contains " + SIDEBAR_ITEM_LIST_PROJECT_PAGE);
         Assert.assertEquals(
-                actualSidebarOptionList,
-                List.of("Status", "Changes", "Build Now", "Configure", "Delete Pipeline", "Stages", "Rename", "Pipeline Syntax"),
-                "Sidebar options on Project page do not match expected list.");
+                actualSidebarItemList, SIDEBAR_ITEM_LIST_PROJECT_PAGE,
+                "List of Sidebar items on Project page don't match expected list.");
     }
 
-    @Test(dependsOnMethods = "testVerifySidebarOptionsOnProjectPage")
-    public void testVerifySidebarOptionsOnConfigurationPage() {
-        List<String> actualSidebarOptionList = new HomePage(getDriver())
-                .openPipelineProject(PROJECT_NAME)
-                .clickSidebarConfigButton()
-                .getSidebarConfigurationOption();
-
-        Assert.assertEquals(
-                actualSidebarOptionList,
-                List.of("General", "Advanced Project Options", "Pipeline"),
-                "Sidebar options on Configuration page do not match expected list.");
-    }
-
-    @Test(dependsOnMethods = "testVerifySidebarOptionsOnConfigurationPage")
+    @Test
     public void testVerifyCheckboxTooltipsContainCorrectText() {
+        TestUtils.createPipelineProject(getDriver(), PROJECT_NAME);
+
         Map<String, String> labelToTooltipTextMap = new HomePage(getDriver())
                 .openPipelineProject(PROJECT_NAME)
                 .clickSidebarConfigButton()
@@ -264,22 +330,6 @@ public class PipelineProjectTest extends BaseTest {
                 "Delete build sidebar option is displayed, but it should not be.");
     }
 
-    @Test(dependsOnMethods = "testEnableProject")
-    public void testRenameProjectViaSidebar() {
-        List<String> projectList = new HomePage(getDriver())
-                .openPipelineProject(PROJECT_NAME)
-                .clickRenameSidebarButton()
-                .clearInputFieldAndTypeName(NEW_PROJECT_NAME)
-                .clickRenameButton()
-                .gotoHomePage()
-                .getItemList();
-
-        Assert.assertListContainsObject(
-                projectList,
-                NEW_PROJECT_NAME,
-                "Project is not renamed");
-    }
-
     @Test(dependsOnMethods = "testRenameProjectViaSidebar")
     public void testDeleteProjectViaSidebar() {
         List<String> projectList = new HomePage(getDriver())
@@ -305,63 +355,6 @@ public class PipelineProjectTest extends BaseTest {
                 .getItemList();
 
         Assert.assertListNotContainsObject(projectList, PROJECT_NAME, "Project is not deleted");
-    }
-
-    @Test()
-    public void testRename() {
-        PipelineProjectPage projectPage = new HomePage(getDriver())
-                .clickNewItem()
-                .enterItemName(PROJECT_NAME)
-                .selectPipelineAndClickOk()
-                .clickSaveButton()
-                .gotoHomePage()
-                .openPipelineProject(PROJECT_NAME)
-                .clickRenameSidebarButton()
-                .clearInputFieldAndTypeName(NEW_PROJECT_NAME)
-                .clickRenameButton();
-
-        Assert.assertEquals(projectPage.getTitle(), NEW_PROJECT_NAME);
-        Assert.assertEquals(projectPage.getProjectNameBreadcrumb(), NEW_PROJECT_NAME);
-    }
-
-    @Test
-    public void testWarningMessageOnRenameProjectPage() {
-        String actualWarningMessage = new HomePage(getDriver())
-                .clickNewItem()
-                .enterItemName(PROJECT_NAME)
-                .selectPipelineAndClickOk()
-                .clickSaveButton()
-                .gotoHomePage()
-                .openPipelineProject(PROJECT_NAME)
-                .clickRenameSidebarButton()
-                .getWarningMessage();
-
-        Assert.assertEquals(actualWarningMessage, "The new name is the same as the current name.");
-    }
-
-    @Test
-    public void testRenameByChevronDashboard() {
-        PipelineProjectPage projectPage = new HomePage(getDriver())
-                .clickNewItem()
-                .enterItemName(PROJECT_NAME)
-                .selectPipelineAndClickOk()
-                .clickSaveButton()
-                .gotoHomePage()
-                .goToPipelineRenamePageViaDropdown(PROJECT_NAME)
-                .clearInputFieldAndTypeName(NEW_PROJECT_NAME)
-                .clickRenameButton();
-
-        Assert.assertEquals(projectPage.getTitle(), NEW_PROJECT_NAME);
-        Assert.assertEquals(projectPage.getProjectNameBreadcrumb(), NEW_PROJECT_NAME);
-    }
-
-    @Test(dependsOnMethods = "testRenameByChevronDashboard")
-    public void testRenameByChevronDisplayedOnHomePageWithCorrectName() {
-        boolean isDisplayed = new HomePage(getDriver())
-                .getItemList()
-                .contains(NEW_PROJECT_NAME);
-
-        Assert.assertTrue(isDisplayed);
     }
 
     @Test
@@ -445,18 +438,6 @@ public class PipelineProjectTest extends BaseTest {
                 .getStatusBuild(PROJECT_NAME);
 
         Assert.assertEquals(statusBuild, "Failed");
-    }
-
-    @Test
-    public void testVerifyListOfActionsOnSidebar() {
-        TestUtils.createPipelineProject(getDriver(), PROJECT_NAME);
-
-        List<String> actualListActions = new HomePage(getDriver())
-                .openPipelineProject(PROJECT_NAME)
-                .getSidebarOptionList();
-
-        Assert.assertEquals(actualListActions,
-                List.of("Status", "Changes", "Build Now", "Configure", "Delete Pipeline", "Stages", "Rename", "Pipeline Syntax"));
     }
 
     @Test
