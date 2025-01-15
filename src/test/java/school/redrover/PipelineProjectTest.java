@@ -74,7 +74,7 @@ public class PipelineProjectTest extends BaseTest {
                 .selectPipeline()
                 .getEmptyNameMessage();
 
-        Allure.step("Expected result: Error message " + EMPTY_NAME_ERROR_MESSAGE + " is displayed", () -> {
+        Allure.step("Expected result: Error message " + "'" + EMPTY_NAME_ERROR_MESSAGE + "'" + " is displayed", () -> {
             Assert.assertEquals(emptyNameMessage, EMPTY_NAME_ERROR_MESSAGE); });
     }
 
@@ -90,7 +90,7 @@ public class PipelineProjectTest extends BaseTest {
                 .selectPipeline()
                 .getErrorMessage();
 
-        Allure.step(String.format("Expected result: Error message " + DUPLICATE_NAME_ERROR_MESSAGE + "'%s' is displayed", PROJECT_NAME));
+        Allure.step(String.format("Expected result: Error message " + "'" + DUPLICATE_NAME_ERROR_MESSAGE + "'" + "'%s' is displayed", PROJECT_NAME));
         Assert.assertEquals(errorMessage, "» A job already exists with the name ‘%s’".formatted(PROJECT_NAME));
     }
 
@@ -104,7 +104,7 @@ public class PipelineProjectTest extends BaseTest {
                 .selectPipeline()
                 .getInvalidNameMessage();
 
-        Allure.step(String.format("Expected result: Error message '» %s is an unsafe character' is displayed", unsafeCharacter));
+        Allure.step(String.format("Expected result: Error message '» '%s' is an unsafe character' is displayed", unsafeCharacter));
         Assert.assertEquals(invalidNameMessage, "» ‘%s’ is an unsafe character".formatted(unsafeCharacter));
     }
 
