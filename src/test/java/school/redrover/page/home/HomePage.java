@@ -398,22 +398,26 @@ public class HomePage extends BasePage {
         return new NewViewPage(getDriver());
     }
 
+    @Step("Get Jenkins version number")
     public String getJenkinsVersion() {
         return jenkinsVersion.getText();
     }
 
+    @Step("Click Jenkins version number button")
     public HomePage clickJenkinsVersionButton() {
         jenkinsVersion.click();
 
         return this;
     }
 
+    @Step("Click 'About Jenkins' option in dropdown menu of Jenkins version number")
     public AboutPage gotoAboutPage() {
         aboutJenkinsButton.click();
 
         return new AboutPage(getDriver());
     }
 
+    @Step("Get 'About Jenkins' option in dropdown menu of Jenkins version number")
     public String getAboutJenkinsDropdownLabelText() {
         return getWait2().until(ExpectedConditions.visibilityOf(aboutJenkinsDropdownLabel)).getText();
     }
