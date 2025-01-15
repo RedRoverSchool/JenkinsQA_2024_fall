@@ -70,6 +70,7 @@ public class FolderProjectPage extends BaseProjectPage<FolderProjectPage, Folder
         return new FolderRenamePage(getDriver());
     }
 
+    @Step("Get Folder description from project page")
     public String getFolderDescription() {
         return folderDescription.getText();
     }

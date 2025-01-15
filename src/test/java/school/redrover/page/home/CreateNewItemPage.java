@@ -86,6 +86,7 @@ public class CreateNewItemPage extends BasePage {
         return new FolderConfigPage(getDriver());
     }
 
+    @Step("Type name '{itemName}', select 'Folder' and click 'Ok'")
     public FolderConfigPage nameAndSelectFolderType(String itemName) {
         enterItemName(itemName);
         selectFolderAndClickOk();

@@ -153,19 +153,20 @@ public class FolderTest extends BaseTest {
     }
 
     @Test
+    @Story("US_04.005 Configure folder")
+    @Description("TC_04.005.02 Configure description by chevron")
     public void testConfigureDescriptionByChevron() {
-
         String desc = new HomePage(getDriver())
                 .clickNewItem()
                 .nameAndSelectFolderType(FIRST_FOLDER_NAME)
                 .gotoHomePage()
                 .selectConfigureFromItemMenu(FIRST_FOLDER_NAME)
-                .enterDescription("This is new description")
+                .enterDescription(DESCRIPTION)
                 .clickSaveButton()
                 .getFolderDescription();
 
-        Assert.assertEquals(desc,
-                "This is new description");
+        Allure.step(String.format("Expected Result: The description '%s' is successfully added and displayed correctly.", DESCRIPTION));
+        Assert.assertEquals(desc,DESCRIPTION);
     }
 
     @Test(dependsOnMethods = "testConfigureDescriptionByChevron")
