@@ -60,7 +60,7 @@ public class FolderTest extends BaseTest {
                 .gotoHomePage()
                 .getItemNameByOrder(1);
 
-        Allure.step("Expected Result: The folder '{FOLDER_NAME_MAX_LENGTH}' is created with the maximum allowed name length");
+        Allure.step(String.format("Expected Result: The folder with the maximum allowed name length '%s' is created.", FOLDER_NAME_MAX_LENGTH));
         Assert.assertEquals(folderName, FOLDER_NAME_MAX_LENGTH);
     }
 
@@ -76,7 +76,7 @@ public class FolderTest extends BaseTest {
                 .clickSubmitButton()
                 .getDescription();
 
-        Allure.step("Expected Result: The description '{DESCRIPTION}' is successfully added to the folder and displayed correctly.");
+        Allure.step(String.format("Expected Result: The description '%s' is successfully added to the folder and displayed correctly.", DESCRIPTION));
         Assert.assertEquals(finalResult, DESCRIPTION);
     }
 
@@ -90,7 +90,7 @@ public class FolderTest extends BaseTest {
                 .clickSubmitButton()
                 .getDescription();
 
-        Allure.step("Expected Result: The description '{DESCRIPTION_EDITED}' is successfully edited and displayed correctly.");
+        Allure.step(String.format("Expected Result: The description '%s' is successfully edited and displayed correctly.", DESCRIPTION_EDITED));
         Assert.assertEquals(finalResult, DESCRIPTION_EDITED);
     }
 
@@ -102,7 +102,7 @@ public class FolderTest extends BaseTest {
                 .openFolder(FOLDER_NAME)
                 .getDescriptionViaPreview();
 
-        Allure.step("Expected Result: The description '{DESCRIPTION_EDITED}' is correctly displayed in the preview mode.");
+        Allure.step(String.format("Expected Result: The description '%s' is correctly displayed in the preview mode.", DESCRIPTION_EDITED));
         Assert.assertEquals(finalResult, DESCRIPTION_EDITED);
     }
 
