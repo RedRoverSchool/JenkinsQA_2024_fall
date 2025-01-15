@@ -182,6 +182,7 @@ public class HomePage extends BasePage {
         return new FreestyleProjectPage(getDriver());
     }
 
+    @Step("Open '{name}' Pipeline Project")
     public PipelineProjectPage openPipelineProject(String name) {
         openItem(name);
         return new PipelineProjectPage(getDriver());
