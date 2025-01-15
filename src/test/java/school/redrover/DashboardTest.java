@@ -2,12 +2,12 @@ package school.redrover;
 
 import org.testng.Assert;
 import org.testng.annotations.DataProvider;
-import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import school.redrover.page.home.HomePage;
 import school.redrover.runner.BaseTest;
 import school.redrover.runner.TestUtils;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
@@ -19,7 +19,7 @@ public class DashboardTest extends BaseTest {
                 stages {
                     stage('Checkout') {
                         steps {echo 'Step: Checkout code from repository'}
-            
+                        
             """;
     private static final String INVALID_PIPELINE_SCRIPT = """
             error_pipeline {{{
@@ -35,59 +35,7 @@ public class DashboardTest extends BaseTest {
     private static final String Disabled = "APipelineProject";
     private static final String FailedBuilt = "ZPipelineProject";
     private static final String NotBuilt = "1PipelineProject";
-    private static final List<String> PROJECT_NAMES = List.of("FPipelineProject", "APipelineProject", "ZPipelineProject");
-//    private static final List<String> createdProjects = new ArrayList<>();
-//
-//    @DataProvider(name = "projectNameProvider")
-//    public Object[][] projectNameProvider() {
-//        return new Object[][]{
-//                {"FPipelineProject"},
-//                {"APipelineProject"},
-//                {"ZPipelineProject"}
-//        };
-//    }
-//
-//    @Test(dataProvider = "projectNameProvider")
-//    public void testCreate(String projectName) {
-//        TestUtils.createFreestyleProject(getDriver(), projectName);
-//        createdProjects.add(projectName);
-//
-//        List<String> projectNameList = new HomePage(getDriver())
-//                .getItemList();
-//
-//        Assert.assertTrue(
-//                projectNameList.contains(projectName));
-//    }
-//
-//    @Test(dependsOnMethods = "testCreate")
-//    public void testVerifyProjectOrderByNameASCByDefault() {
-//        List<String> projectNameList = new HomePage(getDriver())
-//                .getItemList();
-//
-//        List<String> expectedList = createdProjects.stream()
-//                .sorted(Comparator.naturalOrder())
-//                .toList();
-//
-//        Assert.assertEquals(
-//                projectNameList,
-//                expectedList);
-//    }
-
-    @DataProvider(name = "projectNamesProvider")
-    public Object[][] projectNamesProvider() {
-        return new Object[][]{
-                {List.of("FPipelineProject", "APipelineProject", "ZPipelineProject")}
-        };
-    }
-
-    @Test(dataProvider = "projectNamesProvider")
-    public void testCreateProjects(List<String> projectNames) {
-        projectNames.forEach(jobName -> TestUtils.createFreestyleProject(getDriver(), jobName));
-
-        List<String> projectNameList = new HomePage(getDriver())
-                .getItemList();
-        Assert.assertEquals(projectNameList.size(), projectNames.size());
-    }
+    private final List<String> createdProjectList = new ArrayList<>();
 
     private void preparationCreateNotBuiltProject(String projectName) {
         new HomePage(getDriver())
@@ -117,7 +65,6 @@ public class DashboardTest extends BaseTest {
                 .clickSaveButton()
                 .clickOnBuildNowItemOnSidePanelAndWait()
                 .gotoHomePage();
-
     }
 
     private void preparationCreateFailedBuiltProject(String projectName) {
@@ -131,39 +78,57 @@ public class DashboardTest extends BaseTest {
                 .gotoHomePage();
     }
 
-    @Test(dependsOnMethods = "testCreateProjects")
+
+    @DataProvider(name = "projectNameProvider")
+    public Object[][] projectNameProvider() {
+        return new Object[][]{
+                {"FPipelineProject"},
+                {"APipelineProject"},
+                {"ZPipelineProject"}
+        };
+    }
+
+    @Test(dataProvider = "projectNameProvider")
+    public void testCreate(String projectName) {
+        TestUtils.createFreestyleProject(getDriver(), projectName);
+        createdProjectList.add(projectName);
+
+        List<String> projectNameList = new HomePage(getDriver())
+                .getItemList();
+
+        Assert.assertListContainsObject(
+                projectNameList,
+                projectName,
+                "Project is not created or displayed on Home page");
+    }
+
+    @Test(dependsOnMethods = "testCreate")
     public void testVerifyProjectOrderByNameASCByDefault() {
         List<String> projectNameList = new HomePage(getDriver())
                 .getItemList();
 
-        List<String> expectedList = projectNameList.stream().sorted(Comparator.naturalOrder()).toList();
+        List<String> expectedList = createdProjectList.stream()
+                .sorted(Comparator.naturalOrder())
+                .toList();
 
-        Assert.assertEquals(projectNameList.size(), expectedList.size());
-        Assert.assertEquals(projectNameList, expectedList);
-    }
-
-    @Ignore
-    @Test
-    public void testVerifyOrderByNameASCByDefault() {
-        PROJECT_NAMES.forEach(jobName -> TestUtils.createFreestyleProject(getDriver(), jobName));
-        final List<String> expectedList = PROJECT_NAMES.stream().sorted(Comparator.naturalOrder()).toList();
-
-        List<String> projectNameList = new HomePage(getDriver())
-                .getItemList();
-
-        Assert.assertEquals(projectNameList.size(), 3);
-        Assert.assertEquals(projectNameList, expectedList);
+        Assert.assertEquals(
+                projectNameList,
+                expectedList,
+                "Projects are not sorted in ascending order by default.");
     }
 
     @Test(dependsOnMethods = "testVerifyDisplayIconDownArrowNextToNameByDefault")
     public void testVerifyProjectOrderByNameDesc() {
-        final List<String> expectedList = PROJECT_NAMES.stream().sorted(Comparator.reverseOrder()).toList();
+        final List<String> expectedList = createdProjectList.stream().sorted(Comparator.reverseOrder()).toList();
 
         List<String> actualList = new HomePage(getDriver())
                 .clickNameTableHeaderChangeOrder()
                 .getItemList();
 
-        Assert.assertEquals(actualList, expectedList);
+        Assert.assertEquals(
+                actualList,
+                expectedList,
+                "The project list is not sorted in descending order.");
     }
 
     @Test(dependsOnMethods = "testVerifyProjectOrderByNameASCByDefault")
@@ -186,7 +151,6 @@ public class DashboardTest extends BaseTest {
 
     @Test
     public void testVerifyProjectOrderByStatusASCByDefault() {
-
         preparationCreateNotBuiltProject(NotBuilt);
         preparationCreateDisableProject(Disabled);
         preparationCreateSuccessBuiltProject(SuccessBuilt);
