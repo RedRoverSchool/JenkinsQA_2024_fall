@@ -34,13 +34,13 @@ jobs:
       - name: Send Telegram Notification
         run: |
           TIMESTAMP=$(date +"%Y-%m-%d %H:%M:%S")
-          REPORT_LINK="https://redroverschool.github.io/JenkinsQA_2024_fall/$RUN_NUMBER/"
+          REPORT_LINK="https://redroverschool.github.io/JenkinsQA_2024_fall/${{ steps.find_ci_run.outputs.run_number }}/"
           CI_RUN_LINK="https://github.com/${{ github.repository }}/actions/runs/${{ steps.find_ci_run.outputs.run_id }}"
           ESCAPED_TIMESTAMP=$(echo "$TIMESTAMP" | sed 's|-|\\-|g; s|:|\\:|g; s|\.|\\.|g; s|_|\\_|g; s|/|\\/|g')
           ESCAPED_REPORT_LINK=$(echo "$REPORT_LINK" | sed 's|-|\\-|g; s|\.|\\.|g; s|_|\\_|g; s|:|\\:|g; s|/|\\/|g')
           ESCAPED_CI_RUN_LINK=$(echo "$CI_RUN_LINK" | sed 's|-|\\-|g; s|\.|\\.|g; s|_|\\_|g; s|:|\\:|g; s|/|\\/|g')
           
-          MESSAGE="📝 Новый отчет Allure: [открыть](${ESCAPED_REPORT_LINK})%0A📅 Дата и время: ${ESCAPED_TIMESTAMP}%0A⚙️ Сборка: $RUN_NUMBER%0A🔗 Запуск: [посмотреть](${ESCAPED_CI_RUN_LINK})"
+          MESSAGE="📝 Новый отчет Allure: [открыть отчет](${ESCAPED_REPORT_LINK})%0A📅 Дата и время: ${ESCAPED_TIMESTAMP}%0A⚙️ Сборка: ${{ steps.find_ci_run.outputs.run_number }}%0A🔗 Запуск: [посмотреть запуск](${ESCAPED_CI_RUN_LINK})"
           
           curl -s -X POST "https://api.telegram.org/bot${{ secrets.TELEGRAM_TOKEN }}/sendMessage" \
             -d chat_id="@team_jenkins_2024_fall" \
