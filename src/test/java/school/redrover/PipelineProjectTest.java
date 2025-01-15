@@ -27,7 +27,7 @@ public class PipelineProjectTest extends BaseTest {
     private final static String NEW_PROJECT_NAME = "NewPipelineName";
     private final static String EMPTY_NAME_ERROR_MESSAGE = "» This field cannot be empty, please enter a valid name";
     private final static String DUPLICATE_NAME_ERROR_MESSAGE = "» A job already exists with the name ";
-    private final static String SAME_NAME_WARNING_MESSAGE_RENAME_PAGE = "The new name is the same as the current name.";
+    private final static String SAME_NAME_WARNING_MESSAGE = "The new name is the same as the current name.";
     private final static String PIPELINE_SCRIPT = """
             pipeline {agent any\n stages {
             stage('Build') {steps {echo 'Building the application'}}
@@ -180,9 +180,26 @@ public class PipelineProjectTest extends BaseTest {
                 .clickRenameSidebarButton()
                 .getWarningMessage();
 
-        Allure.step("Expected Result: Warning message " + "'" + SAME_NAME_WARNING_MESSAGE_RENAME_PAGE + "'" + " is displayed");
-        Assert.assertEquals(actualWarningMessage, SAME_NAME_WARNING_MESSAGE_RENAME_PAGE);
+        Allure.step("Expected Result: Warning message " + "'" + SAME_NAME_WARNING_MESSAGE + "'" + " is displayed");
+        Assert.assertEquals(actualWarningMessage, SAME_NAME_WARNING_MESSAGE);
     }
+
+    @Test
+    @Story("US_02.007 Rename")
+    @Description("TC_02.007.04 Error message when new project name matches an existing one")
+    public void testErrorMessageRenameDuplicateName() {
+        TestUtils.createPipelineProject(getDriver(), PROJECT_NAME);
+
+        String actualErrorMessage = new HomePage(getDriver())
+                .goToPipelineRenamePageViaDropdown(PROJECT_NAME)
+                .clearInputFieldAndTypeName(PROJECT_NAME)
+                .clickRenameButtonLeadingToError()
+                .getErrorMessage();
+
+        Allure.step("Expected Result: Error message " + "'" + SAME_NAME_WARNING_MESSAGE + "'" + " is displayed");
+        Assert.assertEquals(actualErrorMessage, SAME_NAME_WARNING_MESSAGE);
+    }
+    
 
     @Test
     @Story("US_02.007 Rename")
