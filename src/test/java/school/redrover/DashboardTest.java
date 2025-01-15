@@ -32,6 +32,10 @@ public class DashboardTest extends BaseTest {
             }
             """;
     private final List<String> createdProjectList = new ArrayList<>();
+    private static final String DESCRIPTION_TEXT = "It's my workspace";
+    private static final String NEW_TEXT = "Hello! ";
+    private static final String TEXT_DESCRIPTION_BUTTON = "Add description";
+
 
     private void preparationCreateNotBuiltProject(String projectName) {
         new HomePage(getDriver())
@@ -226,5 +230,53 @@ public class DashboardTest extends BaseTest {
                 .getDisplayedItemMenu();
 
         Assert.assertTrue(itemMenuDisplayed);
+    }
+
+    @Test
+    public void testAddDescription() {
+
+        String textDescription = new HomePage(getDriver())
+                .clickDescriptionButton()
+                .addDescription(DESCRIPTION_TEXT)
+                .clickSaveButton()
+                .getDescriptionText();
+
+        Assert.assertEquals(textDescription, DESCRIPTION_TEXT);
+    }
+
+    @Test(dependsOnMethods = "testAddDescription")
+    public void testEditDescription() {
+
+        String newText = new HomePage(getDriver())
+                .clickDescriptionButton()
+                .addDescription(NEW_TEXT)
+                .clickSaveButton()
+                .getDescriptionText();
+
+        Assert.assertEquals(newText, NEW_TEXT + DESCRIPTION_TEXT);
+    }
+
+    @Test(dependsOnMethods = "testEditDescription")
+    public void testDeleteDescription() {
+
+        String descriptionButton = new HomePage(getDriver())
+                .clickDescriptionButton()
+                .clearDescription()
+                .clickSaveButton()
+                .getDescriptionButtonTitle();
+
+        Assert.assertEquals(descriptionButton, TEXT_DESCRIPTION_BUTTON);
+    }
+
+    @Test
+    public void testDescriptionPreviewButton() {
+
+        String textPreview = new HomePage(getDriver())
+                .clickDescriptionButton()
+                .addDescription(DESCRIPTION_TEXT)
+                .clickPreviewButton()
+                .getTextPreview();
+
+        Assert.assertEquals(textPreview, DESCRIPTION_TEXT);
     }
 }
