@@ -1,5 +1,6 @@
 package school.redrover.page;
 
+import io.qameta.allure.Step;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -15,6 +16,7 @@ public class ErrorPage extends BasePage {
         super(driver);
     }
 
+    @Step("Get error message on Error page")
     public String getErrorMessage() {
 
         return getWait5().until(ExpectedConditions.visibilityOf(errorMessage)).getText();

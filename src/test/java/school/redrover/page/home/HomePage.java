@@ -272,13 +272,14 @@ public class HomePage extends BasePage {
         return new BuildHistoryPage(getDriver());
     }
 
-    @Step("Select 'Build Now' from item menu for '{itemName}'")
+    @Step("Select 'Build Now' in dropdown for '{itemName}'")
     public HomePage selectBuildNowFromItemMenu(String itemName) {
         selectMenuFromItemDropdown(itemName, "Build Now");
 
         return this;
     }
 
+    @Step("Select 'Move' in dropdown for for '{itemName}'")
     public FolderProjectPage selectMoveFromItemMenuByChevron(String itemName) {
         selectMenuFromItemDropdown(itemName, "Move");
 
@@ -298,6 +299,7 @@ public class HomePage extends BasePage {
         return headerDescription.getText();
     }
 
+    @Step("Get welcome title")
     public String getWelcomeTitle() {
         return welcomeTitle.getText();
     }

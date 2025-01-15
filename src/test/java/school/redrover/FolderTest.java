@@ -143,12 +143,12 @@ public class FolderTest extends BaseTest {
     public void testConfigureNameByChevron() {
         FolderProjectPage folderProjectPage = new HomePage(getDriver())
                 .selectConfigureFromItemMenu(FOLDER_NAME_MIN_LENGTH)
-                .enterConfigurationName(FIRST_FOLDER_NAME)
+                .enterConfigurationName(FOLDER_NAME)
                 .clickSaveButton();
 
         Allure.step(String.format("Expected Result: The folder '%s' is successfully configured with the name '%s'.",
-                FOLDER_NAME_MIN_LENGTH, FIRST_FOLDER_NAME));
-        Assert.assertEquals(folderProjectPage.getConfigurationName(), FIRST_FOLDER_NAME);
+                FOLDER_NAME_MIN_LENGTH, FOLDER_NAME));
+        Assert.assertEquals(folderProjectPage.getConfigurationName(), FOLDER_NAME);
         Assert.assertEquals(folderProjectPage.getFolderName(), FOLDER_NAME_MIN_LENGTH);
     }
 
@@ -158,9 +158,9 @@ public class FolderTest extends BaseTest {
     public void testConfigureDescriptionByChevron() {
         String desc = new HomePage(getDriver())
                 .clickNewItem()
-                .nameAndSelectFolderType(FIRST_FOLDER_NAME)
+                .nameAndSelectFolderType(FOLDER_NAME)
                 .gotoHomePage()
-                .selectConfigureFromItemMenu(FIRST_FOLDER_NAME)
+                .selectConfigureFromItemMenu(FOLDER_NAME)
                 .enterDescription(DESCRIPTION)
                 .clickSaveButton()
                 .getFolderDescription();
@@ -175,16 +175,16 @@ public class FolderTest extends BaseTest {
     @Description("TC_00.004.01 Create new item from folder by chevron")
     public void testCreateNewItemByChevron() {
         String projectName = new HomePage(getDriver())
-                .selectNewItemFromFolderMenu(FIRST_FOLDER_NAME)
+                .selectNewItemFromFolderMenu(FOLDER_NAME)
                 .nameAndSelectFreestyleProject(FREESTYLE_PROJECT_NAME)
                 .addExecuteWindowsBatchCommand("echo 'Hello world!'")
                 .clickSaveButton()
                 .gotoHomePage()
-                .openFolder(FIRST_FOLDER_NAME)
+                .openFolder(FOLDER_NAME)
                 .getItemNameByOrder(1);
 
         Allure.step(String.format("Expected Result: The new item '%s' is successfully created from the folder '%s' by chevron.",
-                FREESTYLE_PROJECT_NAME, FIRST_FOLDER_NAME));
+                FREESTYLE_PROJECT_NAME, FOLDER_NAME));
         Assert.assertEquals(projectName, FREESTYLE_PROJECT_NAME);
     }
 
@@ -226,6 +226,8 @@ public class FolderTest extends BaseTest {
     }
 
     @Test(dependsOnMethods = "testOpenBuildHistoryByChevron")
+    @Story("US_04.005 Configure folder")
+    @Description("TC_04.005.03 Configure name by Sidebar menu")
     public void testAddDisplayName() {
         final String displayName = "DisplayName";
 
@@ -237,113 +239,140 @@ public class FolderTest extends BaseTest {
                 .gotoHomePage()
                 .getItemList();
 
+        Allure.step(String.format("Expected Result: The display name '%s' is successfully added and shown in the project list.", displayName));
         Assert.assertListContainsObject(projectList, displayName, "Display name is not added");
     }
 
     @Test
+    @Epic("00 New Item")
+    @Story("US_00.006 Create Folder")
+    @Description("TC_00.006.03 Error message when trying to create a folder with dot in the end of name")
     public void testErrorDuringCreationWithDotInEnd() {
-
         String errorMessage = new HomePage(getDriver())
                 .clickNewItem()
-                .enterItemName("Folder.")
+                .enterItemName(FOLDER_NAME + ".")
                 .selectFolderType()
                 .getInvalidNameMessage();
 
+        Allure.step("Expected Result: An error message indicating that a name cannot end with a dot is displayed.");
         Assert.assertEquals(errorMessage, "» A name cannot end with ‘.’");
     }
 
     @Test
+    @Epic("00 New Item")
+    @Story("US_00.006 Create Folder")
+    @Description("TC_00.006.07 Error message after trying to create a folder with dot in the end of name")
     public void testErrorAfterCreationWithDotInEnd() {
 
         String errorMessage = new HomePage(getDriver())
                 .clickNewItem()
-                .enterItemName("Folder.")
+                .enterItemName(FOLDER_NAME + ".")
                 .selectFolderType()
                 .selectFolderType()
                 .clickOkButtonLeadingToErrorPage()
                 .getErrorMessage();
 
+        Allure.step("Expected Result: An error message indicating that a name cannot end with a dot is displayed on new page.");
         Assert.assertEquals(errorMessage, "A name cannot end with ‘.’");
     }
 
     @Test
+    @Epic("00 New Item")
+    @Story("US_00.006 Create Folder")
+    @Description("TC_00.006.04 Forbidden to create a folder with empty name")
     public void testErrorEmptyNameCreation() {
-
         String errorMessage = new HomePage(getDriver())
                 .clickNewItem()
                 .selectFolderType()
                 .getEmptyNameMessage();
 
+        Allure.step("Expected Result: An error message indicating that the name field cannot be empty is displayed.");
         Assert.assertEquals(errorMessage, "» This field cannot be empty, please enter a valid name");
     }
 
     @Test()
+    @Epic("00 New Item")
+    @Story("US_00.006 Create Folder")
+    @Description("TC_00.006.05 Forbidden to create a folder with duplicate name")
     public void testErrorDuplicateNameCreation() {
-
         String errorMessage = new HomePage(getDriver())
                 .clickNewItem()
-                .nameAndSelectFolderType(FIRST_FOLDER_NAME)
+                .nameAndSelectFolderType(FOLDER_NAME)
                 .gotoHomePage()
 
                 .clickNewItem()
-                .enterItemName(FIRST_FOLDER_NAME).selectFolderType()
+                .enterItemName(FOLDER_NAME).selectFolderType()
                 .getInvalidNameMessage();
 
-        Assert.assertEquals(errorMessage, "» A job already exists with the name ‘%s’".formatted(FIRST_FOLDER_NAME));
+        Allure.step(String.format("Expected Result: An error message indicating that a job already exists with the name '%s' is displayed.", FOLDER_NAME));
+        Assert.assertEquals(errorMessage, "» A job already exists with the name ‘%s’".formatted(FOLDER_NAME));
     }
 
     @Test
+    @Story("US_04.003 Delete Folder")
+    @Description("TC_04.003.01 Delete from the main page via Dropdown menu")
     public void testDeleteViaMainPageChevron() {
-        TestUtils.createFolder(getDriver(), FIRST_FOLDER_NAME);
+        TestUtils.createFolder(getDriver(), FOLDER_NAME);
 
         String welcomeTitle = new HomePage(getDriver())
-                .selectDeleteFromItemMenuAndClickYes(FIRST_FOLDER_NAME)
+                .selectDeleteFromItemMenuAndClickYes(FOLDER_NAME)
                 .getWelcomeTitle();
 
+        Allure.step("Expected Result: 'Welcome to Jenkins' message is displayed on the page");
         Assert.assertEquals(welcomeTitle, "Welcome to Jenkins!");
     }
 
     @Test
+    @Story("US_04.003 Delete Folder")
+    @Description("TC_04.003.02 Delete directly from folder's page")
     public void testDeleteViaSidebarFromProjectPage() {
-        TestUtils.createFolder(getDriver(), FIRST_FOLDER_NAME);
+        TestUtils.createFolder(getDriver(), FOLDER_NAME);
 
         String welcomeTitle = new HomePage(getDriver())
-                .openFolder(FIRST_FOLDER_NAME)
+                .openFolder(FOLDER_NAME)
                 .clickDeleteButtonSidebarAndConfirm()
                 .getWelcomeTitle();
 
+        Allure.step("Expected Result: 'Welcome to Jenkins' message is displayed on the page");
         Assert.assertEquals(welcomeTitle, "Welcome to Jenkins!");
     }
 
     @Test
+    @Story("US_04.003 Delete Folder")
+    @Description("TC_04.003.04 Cancel deleting in 'Delete folder' window")
     public void testCancelDeletingViaSidebarProjectPage() {
-        TestUtils.createFolder(getDriver(), FIRST_FOLDER_NAME);
+        TestUtils.createFolder(getDriver(), FOLDER_NAME);
 
         List<String> setOfProjects = new HomePage(getDriver())
-                .openFolder(FIRST_FOLDER_NAME)
+                .openFolder(FOLDER_NAME)
                 .cancelDeletingViaModalWindow()
                 .gotoHomePage()
                 .getItemList();
 
-        Assert.assertTrue(setOfProjects.contains(FIRST_FOLDER_NAME));
+        Allure.step(String.format("Expected Result: The folder '%s' is not deleted and still present in the project list.", FOLDER_NAME));
+        Assert.assertTrue(setOfProjects.contains(FOLDER_NAME));
     }
 
     @Test
+    @Story("US_04.003 Delete Folder")
+    @Description("TC_04.003.03 Delete from 'My views' page via 'Dropdown menu'")
     public void testDeleteViaMyViewChevron() {
-        TestUtils.createFolder(getDriver(), FIRST_FOLDER_NAME);
+        TestUtils.createFolder(getDriver(), FOLDER_NAME);
 
         String welcomeTitle = new HomePage(getDriver())
                 .clickMyViewsButton()
-                .selectDeleteFromItemMenuAndClickYes(FIRST_FOLDER_NAME)
+                .selectDeleteFromItemMenuAndClickYes(FOLDER_NAME)
                 .gotoHomePage()
                 .getWelcomeTitle();
 
+        Allure.step("Expected Result: 'Welcome to Jenkins' message is displayed on the page");
         Assert.assertEquals(welcomeTitle, "Welcome to Jenkins!");
     }
 
     @Test
+    @Story("US_04.002 Move Folder to Folder")
+    @Description("TC_04.002.01 Move directly from folder's page")
     public void testMoveFromFoldersPage() {
-
         List<String> nameProjectList = new HomePage(getDriver())
                 .clickNewItem()
                 .enterItemName(FOLDER_MOVE_PARENT_NAME)
@@ -360,10 +389,14 @@ public class FolderTest extends BaseTest {
                 .selectParentFolderAndClickMove(FOLDER_MOVE_PARENT_NAME)
                 .getBreadcrumsBarItemsList();
 
+        Allure.step(String.format("Expected Result: The folder '%s' is successfully moved to the parent folder '%s' and the breadcrumbs are updated accordingly.",
+                FOLDER_MOVE_CHILD_NAME, FOLDER_MOVE_PARENT_NAME));
         Assert.assertEquals(nameProjectList, List.of("Dashboard", FOLDER_MOVE_PARENT_NAME, FOLDER_MOVE_CHILD_NAME));
     }
 
     @Test(dependsOnMethods = "testMoveFromFoldersPage")
+    @Story("US_04.002 Move Folder to Folder")
+    @Description("TC_04.002.04 Move folders which are on the same level")
     public void testMoveFromTheSameLevel() {
         List<String> nameProjectsList = new HomePage(getDriver())
                 .openFolder(FOLDER_MOVE_PARENT_NAME)
@@ -378,10 +411,14 @@ public class FolderTest extends BaseTest {
                 .selectParentFolderAndClickMove(FOLDER_MOVE_PARENT_NAME + "/" + FOLDER_MOVE_CHILD_NAME)
                 .getBreadcrumsBarItemsList();
 
+        Allure.step(String.format("Expected Result: The folder '%s' is successfully moved to the folder '%s' which is at the same level, and the breadcrumbs are updated accordingly.",
+                FOLDER_MOVE_CHILD2_NAME, FOLDER_MOVE_CHILD_NAME));
         Assert.assertEquals(nameProjectsList, List.of("Dashboard", FOLDER_MOVE_PARENT_NAME, FOLDER_MOVE_CHILD_NAME, FOLDER_MOVE_CHILD2_NAME));
     }
 
     @Test(dependsOnMethods = "testMoveFromTheSameLevel")
+    @Story("US_04.002 Move Folder to Folder")
+    @Description("TC_04.002.07 No possibility to move to the same place")
     public void testTryToMoveInTheSamePlace() {
         List<String> nameProjectsListBreadcrumbs = new HomePage(getDriver())
                 .openFolder(FOLDER_MOVE_PARENT_NAME)
@@ -390,10 +427,13 @@ public class FolderTest extends BaseTest {
                 .selectParentFolderAndClickMove(FOLDER_MOVE_PARENT_NAME)
                 .getBreadcrumsBarItemsList();
 
+        Allure.step("Expected Result: The move action is not allowed to proceed, and the breadcrumb remains unchanged.");
         Assert.assertEquals(nameProjectsListBreadcrumbs, List.of("Dashboard", FOLDER_MOVE_PARENT_NAME, FOLDER_MOVE_CHILD_NAME, "Move"));
     }
 
     @Test(dependsOnMethods = "testMoveFromTheSameLevel")
+    @Story("US_04.002 Move Folder to Folder")
+    @Description("TC_04.002.05 Move from lower level to upper level")
     public void testMoveOnTheHigherLevel() {
         List<String> nameProjectsList = new HomePage(getDriver())
                 .openFolder(FOLDER_MOVE_PARENT_NAME)
@@ -403,21 +443,28 @@ public class FolderTest extends BaseTest {
                 .selectParentFolderAndClickMove(FOLDER_MOVE_PARENT_NAME)
                 .getBreadcrumsBarItemsList();
 
+        Allure.step(String.format("Expected Result: The folder '%s' is successfully moved from '%s/%s' to the higher level '%s', and the breadcrumbs are updated accordingly.",
+                FOLDER_MOVE_CHILD2_NAME, FOLDER_MOVE_PARENT_NAME, FOLDER_MOVE_CHILD_NAME, FOLDER_MOVE_PARENT_NAME));
         Assert.assertEquals(nameProjectsList, List.of("Dashboard", FOLDER_MOVE_PARENT_NAME, FOLDER_MOVE_CHILD2_NAME));
     }
 
     @Test(dependsOnMethods = "testMoveOnTheHigherLevel")
+    @Story("US_04.002 Move Folder to Folder")
+    @Description("TC_04.002.06 No possibility to move parent folder to child folder")
     public void testNoOptionsToMoveParentIntoChild() {
         List<String> itemsSidebar = new HomePage(getDriver())
                 .openFolder(FOLDER_MOVE_PARENT_NAME)
                 .getListOfItemsSidebar();
 
+        Allure.step(String.format("Expected Result: The option to move the parent folder '%s' into the child folder is not available in the sidebar menu.",
+                FOLDER_MOVE_PARENT_NAME));
         Assert.assertListNotContains(itemsSidebar, item -> item.contains("Move"), "list of sidebar items contains Move");
     }
 
     @Test
+    @Story("US_04.002 Move Folder to Folder")
+    @Description("TC_04.002.02 Move from the main page via 'Dropdown menu'")
     public void testMoveViaChevronMainPage() {
-
         List<String> nameProjectsList = new HomePage(getDriver())
                 .clickNewItem()
                 .enterItemName(FOLDER_MOVE_PARENT_NAME)
@@ -433,12 +480,15 @@ public class FolderTest extends BaseTest {
                 .selectParentFolderAndClickMove(FOLDER_MOVE_PARENT_NAME)
                 .getBreadcrumsBarItemsList();
 
+        Allure.step(String.format("Expected Result: The folder '%s' is successfully moved from the main page to the parent folder '%s' using the dropdown menu, " +
+                        "and the breadcrumbs are updated accordingly.", FOLDER_MOVE_CHILD_NAME, FOLDER_MOVE_PARENT_NAME));
         Assert.assertEquals(nameProjectsList, List.of("Dashboard", FOLDER_MOVE_PARENT_NAME, FOLDER_MOVE_CHILD_NAME));
     }
 
     @Test
+    @Story("US_04.002 Move Folder to Folder")
+    @Description("TC_04.002.03 Move from 'My views' page via 'Dropdown menu'")
     public void testMoveViaChevronMyView() {
-
         List<String> nameProjectsList = new HomePage(getDriver())
                 .clickNewItem()
                 .enterItemName(FOLDER_MOVE_PARENT_NAME)
@@ -455,10 +505,14 @@ public class FolderTest extends BaseTest {
                 .selectParentFolderAndClickMove(FOLDER_MOVE_PARENT_NAME)
                 .getBreadcrumsBarItemsList();
 
+        Allure.step(String.format("Expected Result: The folder '%s' is successfully moved from 'My views' page to the parent folder '%s' using the dropdown menu, " +
+                "and the breadcrumbs are updated accordingly.", FOLDER_MOVE_CHILD_NAME, FOLDER_MOVE_PARENT_NAME));
         Assert.assertEquals(nameProjectsList, List.of("Dashboard", FOLDER_MOVE_PARENT_NAME, FOLDER_MOVE_CHILD_NAME));
     }
 
     @Test
+    @Story("US_04.001 Rename Folder")
+    @Description("TC_04.001.08 Rename Folder using sidebar menu")
     public void testRenameViaSidebar() {
         TestUtils.createFolder(getDriver(), FOLDER_NAME);
 
@@ -470,10 +524,14 @@ public class FolderTest extends BaseTest {
                 .gotoHomePage()
                 .getItemList();
 
+        Allure.step(String.format("Expected Result: The folder '%s' is successfully renamed to '%s' using the sidebar menu."
+                , FOLDER_NAME, NEW_FOLDER_NAME));
         Assert.assertListContainsObject(projectList, NEW_FOLDER_NAME, "Folder is not renamed");
     }
 
     @Test
+    @Story("US_04.001 Rename Folder")
+    @Description("TC_04.001.05 Validate Error message, if New Folder Name is the same as Old Name")
     public void testErrorMessageOnRenameFolderWithSameName() {
         TestUtils.createFolder(getDriver(), FOLDER_NAME);
 
@@ -483,10 +541,14 @@ public class FolderTest extends BaseTest {
                 .clickRenameButtonLeadingToError()
                 .getErrorMessage();
 
+        Allure.step(String.format("Expected Result: An error message '%s' is displayed indicating that the new folder " +
+                "name '%s' cannot be the same as the old name.", ERROR_MESSAGE_ON_RENAME_WITH_SAME_NAME, FOLDER_NAME));
         Assert.assertEquals(actualErrorMessage, ERROR_MESSAGE_ON_RENAME_WITH_SAME_NAME);
     }
 
     @Test(dependsOnMethods = "testRenameViaSidebar")
+    @Story("US_04.001 Rename Folder")
+    @Description("TC_04.001.09 Rename Folder using breadcrumbs dropdown")
     public void testRenameViaBreadcrumbDropdown() {
         List<String> projectList = new HomePage(getDriver())
                 .openFolder(NEW_FOLDER_NAME)
@@ -497,6 +559,8 @@ public class FolderTest extends BaseTest {
                 .gotoHomePage()
                 .getItemList();
 
+        Allure.step(String.format("Expected Result: The folder '%s' is successfully renamed to '%s' using the breadcrumbs dropdown menu",
+                NEW_FOLDER_NAME, FOLDER_NAME));
         Assert.assertListContainsObject(projectList, FOLDER_NAME, "Folder is not renamed");
     }
 
@@ -513,6 +577,8 @@ public class FolderTest extends BaseTest {
                 .gotoHomePage()
                 .getItemList();
 
+        Allure.step(String.format("Expected Result: The folder '%s' is successfully renamed to '%s' from the 'My Views' " +
+                "page via the folder's sidebar menu.", FOLDER_NAME, NEW_FOLDER_NAME));
         Assert.assertListContainsObject(projectList, NEW_FOLDER_NAME, "Folder is not renamed");
     }
 
@@ -530,6 +596,8 @@ public class FolderTest extends BaseTest {
                 .gotoHomePage()
                 .getItemList();
 
+        Allure.step(String.format("Expected Result: The folder '%s' is successfully renamed to '%s' from the 'My Views' " +
+                "page using the dropdown menu.", NEW_FOLDER_NAME, FOLDER_NAME));
         Assert.assertListContainsObject(projectList, FOLDER_NAME, "Folder is not renamed");
     }
 
@@ -544,10 +612,14 @@ public class FolderTest extends BaseTest {
                 .clickRenameButtonLeadingToError()
                 .getErrorMessage();
 
+        Allure.step(String.format("Expected Result: An error message '%s' is displayed indicating that the new folder name cannot be empty."
+                , ERROR_MESSAGE_ON_RENAME_WITH_EMPTY_NAME));
         Assert.assertEquals(actualErrorMessage, ERROR_MESSAGE_ON_RENAME_WITH_EMPTY_NAME);
     }
 
     @Test(dependsOnMethods = "testRenameFolderToEmptyName")
+    @Story("US_04.003 Delete Folder")
+    @Description("TC_04.003.05 Delete folder Via breadcrumbs dropdown")
     public void testDeleteViaBreadcrumbDropdown() {
         List<String> projectList = new HomePage(getDriver())
                 .openFolder(FOLDER_NAME)
@@ -555,6 +627,8 @@ public class FolderTest extends BaseTest {
                 .clickDeleteBreadcrumbDropdownAndConfirm()
                 .getItemList();
 
+        Allure.step(String.format("Expected Result: The folder '%s' is successfully deleted via the breadcrumbs dropdown menu."
+                , FOLDER_NAME));
         Assert.assertListNotContainsObject(projectList, FOLDER_NAME, "Folder is not deleted.");
     }
 
@@ -571,7 +645,7 @@ public class FolderTest extends BaseTest {
                 .clickRenameButtonLeadingToError()
                 .getErrorMessage();
 
+        Allure.step(String.format("Expected Result: An error message is displayed indicating that '%s' is an unsafe character.", escapeHtml(unsafeCharacter)));
         Assert.assertEquals(invalidNameMessage, "‘%s’ is an unsafe character".formatted(escapeHtml(unsafeCharacter)));
     }
-
 }

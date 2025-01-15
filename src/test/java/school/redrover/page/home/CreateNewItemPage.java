@@ -72,6 +72,7 @@ public class CreateNewItemPage extends BasePage {
         return this;
     }
 
+    @Step("Select 'Folder' type")
     public CreateNewItemPage selectFolderType() {
         folder.click();
 
@@ -154,10 +155,12 @@ public class CreateNewItemPage extends BasePage {
         return new OrganizationFolderConfigPage(getDriver());
     }
 
+    @Step("Get invalid message for item name field")
     public String getInvalidNameMessage() {
         return invalidOrSameNameMessage.getText();
     }
 
+    @Step("Get invalid message for empty name field")
     public String getEmptyNameMessage() {
         return emptyNameMessage.getText();
     }
@@ -200,6 +203,7 @@ public class CreateNewItemPage extends BasePage {
         return page;
     }
 
+    @Step("Click 'Ok' button")
     public ErrorPage clickOkButtonLeadingToErrorPage() {
         okButton.click();
 
