@@ -201,6 +201,7 @@ public class HomePage extends BasePage {
         return new MultibranchPipelineProjectPage(getDriver());
     }
 
+    @Step("Open folder")
     public FolderProjectPage openFolder(String name) {
         openItem(name);
         return new FolderProjectPage(getDriver());
@@ -275,6 +276,7 @@ public class HomePage extends BasePage {
         return new FolderProjectPage(getDriver());
     }
 
+    @Step("Get project name from the list by order '{order}'")
     public String getItemNameByOrder(int order) {
 
         return getDriver().findElements(By.xpath("//td/a/span")).stream()

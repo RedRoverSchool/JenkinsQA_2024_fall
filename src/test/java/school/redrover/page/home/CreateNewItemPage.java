@@ -78,6 +78,7 @@ public class CreateNewItemPage extends BasePage {
         return this;
     }
 
+    @Step("Select 'Folder' and click 'Ok' button")
     public FolderConfigPage selectFolderAndClickOk() {
         selectFolderType();
         okButton.click();
