@@ -102,6 +102,7 @@ public class FolderProjectPage extends BaseProjectPage<FolderProjectPage, Folder
                 .getText();
     }
 
+    @Step("Click on green triangle to schedule a build")
     public FolderProjectPage runJob(String projectName) {
         getDriver().findElement(By.xpath("//td//a[@title='Schedule a Build for %s']".formatted(projectName))).click();
 

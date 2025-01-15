@@ -167,6 +167,7 @@ public class HomePage extends BasePage {
         getDriver().findElement(By.xpath("//td/a/span[text() = '%s']/..".formatted(name))).click();
     }
 
+    @Step("Click on chevron and select '{menuName}' in dropdown menu for '{itemName}' project")
     private void selectMenuFromItemDropdown(String itemName, String menuName) {
         TestUtils.moveAndClickWithJS(getDriver(), getDriver().findElement(
                 By.xpath("//td/a/span[text() = '%s']/../button".formatted(itemName))));
@@ -264,6 +265,7 @@ public class HomePage extends BasePage {
         return new CreateNewItemPage(getDriver());
     }
 
+    @Step("Select 'Build History' in dropdown for '{itemName}'")
     public BuildHistoryPage selectBuildHistoryFromItemMenu(String itemName) {
         selectMenuFromItemDropdown(itemName, "Build History");
 

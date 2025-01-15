@@ -210,8 +210,9 @@ public class FolderTest extends BaseTest {
     }
 
     @Test(dependsOnMethods = "testCreateNewItemFromFolderPage")
+    @Story("US_04.006 Folder Buil History")
+    @Description("TC_04.006.01 Open Build history by chevron")
     public void testOpenBuildHistoryByChevron() {
-
         String buildHistoryName = new HomePage(getDriver())
                 .openFolder(FOLDER_NAME)
                 .runJob(FREESTYLE_PROJECT_NAME)
@@ -219,6 +220,8 @@ public class FolderTest extends BaseTest {
                 .selectBuildHistoryFromItemMenu(FOLDER_NAME)
                 .getProjectName();
 
+        Allure.step(String.format("Expected Result: The build history for the folder '%s' correctly shows the project '%s'",
+                FOLDER_NAME, FREESTYLE_PROJECT_NAME));
         Assert.assertEquals(buildHistoryName, "%s » %s".formatted(FOLDER_NAME, FREESTYLE_PROJECT_NAME));
     }
 
