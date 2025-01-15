@@ -31,10 +31,6 @@ public class DashboardTest extends BaseTest {
                  }
             }
             """;
-    private static final String SuccessBuilt = "FPipelineProject";
-    private static final String Disabled = "APipelineProject";
-    private static final String FailedBuilt = "ZPipelineProject";
-    private static final String NotBuilt = "1PipelineProject";
     private final List<String> createdProjectList = new ArrayList<>();
 
     private void preparationCreateNotBuiltProject(String projectName) {
@@ -151,17 +147,22 @@ public class DashboardTest extends BaseTest {
 
     @Test
     public void testVerifyProjectOrderByStatusASCByDefault() {
-        preparationCreateNotBuiltProject(NotBuilt);
-        preparationCreateDisableProject(Disabled);
-        preparationCreateSuccessBuiltProject(SuccessBuilt);
-        preparationCreateFailedBuiltProject(FailedBuilt);
+        final String successBuilt = "FPipelineProject";
+        final String disabled = "APipelineProject";
+        final String failedBuilt = "ZPipelineProject";
+        final String notBuilt = "1PipelineProject";
+
+        preparationCreateNotBuiltProject(notBuilt);
+        preparationCreateDisableProject(disabled);
+        preparationCreateSuccessBuiltProject(successBuilt);
+        preparationCreateFailedBuiltProject(failedBuilt);
 
         List<String> projectNameList = new HomePage(getDriver())
                 .clickStatusTableHeaderChangeOrder()
                 .getItemList();
 
         Assert.assertEquals(projectNameList.size(), 4);
-        Assert.assertEquals(projectNameList, List.of(NotBuilt, Disabled, SuccessBuilt, FailedBuilt));
+        Assert.assertEquals(projectNameList, List.of(notBuilt, disabled, successBuilt, failedBuilt));
     }
 
     @Test
