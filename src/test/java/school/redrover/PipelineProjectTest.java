@@ -127,7 +127,7 @@ public class PipelineProjectTest extends BaseTest {
                 .gotoHomePage()
                 .getItemList();
 
-        Allure.step(String.format("Expected result: Project '%s' is displayed on Home page", PROJECT_NAME));
+        Allure.step(String.format("Expected result: Project '%s' is displayed on Home page", secondProjectName));
         Assert.assertListContainsObject(itemNameList, secondProjectName,"Project with name '%s' didn't create".formatted(secondProjectName));
     }
 
