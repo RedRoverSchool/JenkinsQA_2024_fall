@@ -81,7 +81,7 @@ jobs:
           allure_history: allure-history
 
       - name: Deploy report to Github Pages
-        if: always()
+        if: ${{ github.run_status != 'cancelled' }}
         uses: peaceiris/actions-gh-pages@v2
         env:
           PERSONAL_TOKEN: ${{ secrets.GITHUB_TOKEN }}

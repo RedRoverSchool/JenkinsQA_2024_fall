@@ -78,7 +78,7 @@ public abstract class BaseProjectPage<Self extends BaseProjectPage<?, ?, ?>, Pro
         return new CreateNewItemPage(getDriver());
     }
 
-    @Step("Edit description to '{text}'")
+    @Step("Edit description: clear input and type '{text}'")
     public Self editDescription(String text) {
         descriptionButton.click();
         descriptionField.clear();
@@ -87,7 +87,7 @@ public abstract class BaseProjectPage<Self extends BaseProjectPage<?, ?, ?>, Pro
         return (Self) this;
     }
 
-    @Step("Click Save button")
+    @Step("Click 'Save' button")
     public Self clickSubmitButton() {
         submitButton.click();
 
