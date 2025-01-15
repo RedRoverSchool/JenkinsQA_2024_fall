@@ -23,10 +23,11 @@ public class PipelineProjectTest extends BaseTest {
     private final static String PIPELINE_NAME = "TestName";
     private final static String SELECT_VALUE = "cleanWs: Delete workspace when build is done";
     private final static String EXPECTED_RESULT = SELECT_VALUE.split(":")[0].trim();
-    private static final String PROJECT_NAME = "PipelineName";
-    private static final String NEW_PROJECT_NAME = "NewPipelineName";
-    private static final List<String> PIPELINE_STAGES = List.of("Start", "Build", "Test", "End");
-    private static final String PIPELINE_SCRIPT = """
+    private final static String PROJECT_NAME = "PipelineName";
+    private final static String NEW_PROJECT_NAME = "NewPipelineName";
+    private final static List<String> PIPELINE_STAGES = List.of("Start", "Build", "Test", "End");
+    private final static String EMPTY_NAME_ERROR_MESSAGE = "» This field cannot be empty, please enter a valid name";
+    private final static String PIPELINE_SCRIPT = """
             pipeline {agent any\n stages {
             stage('Build') {steps {echo 'Building the application'}}
             stage('Test') {steps {error 'Test stage failed due to an error'}}
@@ -44,7 +45,6 @@ public class PipelineProjectTest extends BaseTest {
     }
 
     @Test
-    @Epic("00 New Item")
     @Story("US_00.002 Create Pipeline Project")
     @Description("TC_00.002.01 Create Pipeline Project with valid name via sidepanel")
     public void testCreateProjectWithValidNameViaSidebar() {
@@ -56,7 +56,7 @@ public class PipelineProjectTest extends BaseTest {
                 .gotoHomePage()
                 .getItemList();
 
-        Allure.step("Expected result: Project with valid name is displayed on the Home page");
+        Allure.step(String.format("Expected result: Project with valid name '%s' is displayed on the Home page", PROJECT_NAME));
         Assert.assertListContainsObject(
                 itemList,
                 PROJECT_NAME,
@@ -64,7 +64,6 @@ public class PipelineProjectTest extends BaseTest {
     }
 
     @Test
-    @Epic("00 New Item")
     @Story("US_00.002 Create Pipeline Project")
     @Description("TC_00.002.02 Create Pipeline Project with empty name via sidepanel")
     public void testCreateWithEmptyName() {
@@ -74,12 +73,11 @@ public class PipelineProjectTest extends BaseTest {
                 .selectPipeline()
                 .getEmptyNameMessage();
 
-        Allure.step("Expected result: Error message is displayed");
-        Assert.assertEquals(emptyNameMessage, "» This field cannot be empty, please enter a valid name");
+        Allure.step("Expected result: Error message" + EMPTY_NAME_ERROR_MESSAGE + "is displayed", () -> {
+            Assert.assertEquals(emptyNameMessage, EMPTY_NAME_ERROR_MESSAGE); });
     }
 
     @Test
-    @Epic("00 New Item")
     @Story("US_00.002 Create Pipeline Project")
     @Description("TC_00.002.04 Create Pipeline Project with duplicate name via sidepanel")
     public void testCreateWithDuplicateName() {
@@ -96,7 +94,6 @@ public class PipelineProjectTest extends BaseTest {
     }
 
     @Test(dataProvider = "providerUnsafeCharacters")
-    @Epic("00 New Item")
     @Story("US_00.002 Create Pipeline Project")
     @Description("TC_00.002.03 Create Pipeline Project with unsafe characters in name via sidepanel")
     public void testCreateWithUnsafeCharactersInName(String unsafeCharacter) {
