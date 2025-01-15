@@ -27,6 +27,7 @@ public class PipelineProjectTest extends BaseTest {
     private final static String NEW_PROJECT_NAME = "NewPipelineName";
     private final static String EMPTY_NAME_ERROR_MESSAGE = "» This field cannot be empty, please enter a valid name";
     private final static String DUPLICATE_NAME_ERROR_MESSAGE = "» A job already exists with the name ";
+    private final static String SAME_NAME_WARNING_MESSAGE_RENAME_PAGE = "The new name is the same as the current name.";
     private final static String PIPELINE_SCRIPT = """
             pipeline {agent any\n stages {
             stage('Build') {steps {echo 'Building the application'}}
@@ -76,7 +77,8 @@ public class PipelineProjectTest extends BaseTest {
                 .selectPipeline()
                 .getEmptyNameMessage();
 
-        Allure.step("Expected result: Error message " + "'" + EMPTY_NAME_ERROR_MESSAGE + "'" + " is displayed", () -> {
+        Allure.step("Expected result: Error message " + "'" + EMPTY_NAME_ERROR_MESSAGE + "'" +
+                " is displayed", () -> {
             Assert.assertEquals(emptyNameMessage, EMPTY_NAME_ERROR_MESSAGE); });
     }
 
@@ -129,8 +131,12 @@ public class PipelineProjectTest extends BaseTest {
         Assert.assertListContainsObject(itemNameList, secondProjectName,"Project with name '%s' didn't create".formatted(secondProjectName));
     }
 
-    @Test(dependsOnMethods = "testEnableProject")
+    @Test
+    @Story("US_02.007 Rename")
+    @Description("TC_02.007.03 Rename Pipeline via sidebar on the Project page")
     public void testRenameProjectViaSidebar() {
+        TestUtils.createPipelineProject(getDriver(), PROJECT_NAME);
+
         List<String> projectList = new HomePage(getDriver())
                 .openPipelineProject(PROJECT_NAME)
                 .clickRenameSidebarButton()
@@ -139,66 +145,72 @@ public class PipelineProjectTest extends BaseTest {
                 .gotoHomePage()
                 .getItemList();
 
+        Allure.step(String.format("Expected result: Project '%s' renamed to '%s'", PROJECT_NAME, NEW_PROJECT_NAME));
         Assert.assertListContainsObject(
-                projectList,
-                NEW_PROJECT_NAME,
-                "Project is not renamed");
+                projectList, NEW_PROJECT_NAME, "Project is not renamed");
     }
 
     @Test()
-    public void testRename() {
+    @Story("US_02.007 Rename")
+    @Description("TC_02.007.03 Rename Pipeline via sidebar on the Project page")
+    public void testRenameProjectViaSidebar2() {
+        TestUtils.createPipelineProject(getDriver(), PROJECT_NAME);
+
         PipelineProjectPage projectPage = new HomePage(getDriver())
-                .clickNewItem()
-                .enterItemName(PROJECT_NAME)
-                .selectPipelineAndClickOk()
-                .clickSaveButton()
-                .gotoHomePage()
                 .openPipelineProject(PROJECT_NAME)
                 .clickRenameSidebarButton()
                 .clearInputFieldAndTypeName(NEW_PROJECT_NAME)
                 .clickRenameButton();
 
+        Allure.step(String.format("Expected Result: Project page title is '%s'", NEW_PROJECT_NAME));
         Assert.assertEquals(projectPage.getTitle(), NEW_PROJECT_NAME);
+
+        Allure.step(String.format("Expected Result: Breadcrumb displays the name of the renamed project '%s'", NEW_PROJECT_NAME));
         Assert.assertEquals(projectPage.getProjectNameBreadcrumb(), NEW_PROJECT_NAME);
     }
 
     @Test
+    @Story("US_02.007 Rename")
+    @Description("TC_02.007.01 Warning message is displayed under 'New Name' field on the project renaming page")
     public void testWarningMessageOnRenameProjectPage() {
+        TestUtils.createPipelineProject(getDriver(), PROJECT_NAME);
+
         String actualWarningMessage = new HomePage(getDriver())
-                .clickNewItem()
-                .enterItemName(PROJECT_NAME)
-                .selectPipelineAndClickOk()
-                .clickSaveButton()
-                .gotoHomePage()
                 .openPipelineProject(PROJECT_NAME)
                 .clickRenameSidebarButton()
                 .getWarningMessage();
 
-        Assert.assertEquals(actualWarningMessage, "The new name is the same as the current name.");
+        Allure.step("Expected Result: Warning message " + "'" + SAME_NAME_WARNING_MESSAGE_RENAME_PAGE + "'" + " is displayed");
+        Assert.assertEquals(actualWarningMessage, SAME_NAME_WARNING_MESSAGE_RENAME_PAGE);
     }
 
     @Test
+    @Story("US_02.007 Rename")
+    @Description("TC_02.007.02 Rename Pipeline via the chevron drop-down menu on the Dashboard")
     public void testRenameByChevronDashboard() {
+        TestUtils.createPipelineProject(getDriver(), PROJECT_NAME);
+
         PipelineProjectPage projectPage = new HomePage(getDriver())
-                .clickNewItem()
-                .enterItemName(PROJECT_NAME)
-                .selectPipelineAndClickOk()
-                .clickSaveButton()
-                .gotoHomePage()
                 .goToPipelineRenamePageViaDropdown(PROJECT_NAME)
                 .clearInputFieldAndTypeName(NEW_PROJECT_NAME)
                 .clickRenameButton();
 
+        Allure.step(String.format("Expected Result: Project page title is '%s'", NEW_PROJECT_NAME));
         Assert.assertEquals(projectPage.getTitle(), NEW_PROJECT_NAME);
+
+        Allure.step(String.format("Expected Result: Breadcrumb displays the name of the renamed project '%s'", NEW_PROJECT_NAME));
         Assert.assertEquals(projectPage.getProjectNameBreadcrumb(), NEW_PROJECT_NAME);
     }
 
     @Test(dependsOnMethods = "testRenameByChevronDashboard")
+    @Story("US_02.007 Rename")
+    @Description("TC_02.007.02 Rename Pipeline via the chevron drop-down menu on the Dashboard")
     public void testRenameByChevronDisplayedOnHomePageWithCorrectName() {
         boolean isDisplayed = new HomePage(getDriver())
                 .getItemList()
                 .contains(NEW_PROJECT_NAME);
 
+        Allure.step("Expected result: Renamed project displayed in the list of projects on the Dashboard");
         Assert.assertTrue(isDisplayed);
     }
 
