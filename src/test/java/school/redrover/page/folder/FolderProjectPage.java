@@ -1,5 +1,6 @@
 package school.redrover.page.folder;
 
+import io.qameta.allure.Step;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -108,6 +109,7 @@ public class FolderProjectPage extends BaseProjectPage<FolderProjectPage, Folder
         return this;
     }
 
+    @Step("Get description from 'Preview' field")
     public String getDescriptionViaPreview() {
         getWait5().until(ExpectedConditions.elementToBeClickable(addDescriptionButton)).click();
         getWait5().until(ExpectedConditions.elementToBeClickable(descriptionPreviewLink)).click();

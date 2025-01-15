@@ -1,5 +1,6 @@
 package school.redrover.page.freestyle;
 
+import io.qameta.allure.Step;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
@@ -49,6 +50,7 @@ public class FreestyleConfigPage extends BaseConfigPage<FreestyleConfigPage, Fre
         return new FreestyleProjectPage(getDriver());
     }
 
+    @Step("Click 'Add build step' and select '{buildStep}'")
     public FreestyleConfigPage addBuildStep(String buildStep) {
         TestUtils.scrollToBottomWithJS(getDriver());
         addBuildStepButton.click();
@@ -66,6 +68,7 @@ public class FreestyleConfigPage extends BaseConfigPage<FreestyleConfigPage, Fre
         return this;
     }
 
+    @Step("Click 'Add build step'")
     public FreestyleConfigPage clickAddBuildStep() {
         TestUtils.scrollToBottomWithJS(getDriver());
         getWait10().until(ExpectedConditions.elementToBeClickable(addBuildStepButton)).click();
@@ -73,12 +76,14 @@ public class FreestyleConfigPage extends BaseConfigPage<FreestyleConfigPage, Fre
         return this;
     }
 
+    @Step("Select Execute shell")
     public FreestyleConfigPage selectExecuteShellBuildStep() {
         getWait10().until(ExpectedConditions.elementToBeClickable(executeShellBuildStep)).click();
 
         return this;
     }
 
+    @Step("Type command '{command}' to input field")
     public FreestyleConfigPage addExecuteShellCommand(String command) {
         getWait10().until(ExpectedConditions.visibilityOf(executeShellCommandField));
         ((JavascriptExecutor) getDriver()).executeScript("arguments[0].focus();", executeShellCommandField);
@@ -94,6 +99,7 @@ public class FreestyleConfigPage extends BaseConfigPage<FreestyleConfigPage, Fre
                 "return arguments[0].CodeMirror.getValue();", executeShellCommandField);
     }
 
+    @Step("Select 'Duration' checkbox")
     public FreestyleConfigPage selectDurationCheckbox (String durationPeriod) {
         throttleBuildsCheckbox.click();
         new Select(timePeriodSelect).selectByValue(durationPeriod);
@@ -109,6 +115,7 @@ public class FreestyleConfigPage extends BaseConfigPage<FreestyleConfigPage, Fre
         return getWait10().until(ExpectedConditions.visibilityOf(enableDisableToggle)).isEnabled();
     }
 
+    @Step("Click toggle")
     public FreestyleProjectPage changeEnablingState() {
         getWait10().until(ExpectedConditions.visibilityOf(enableDisableToggle)).click();
         submitButton.click();
