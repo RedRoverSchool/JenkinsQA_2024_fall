@@ -35,8 +35,8 @@ public class FooterTest extends BaseTest {
                 .clickJenkinsVersionButton()
                 .getAboutJenkinsDropdownLabelText();
 
-        Allure.step("Expected Result: 'About Jenkins' option is displayed in dropdown menu of Jenkins version number: " 
-                + ABOUT_JENKINS_LABEL);
+        Allure.step("Expected Result: " + ABOUT_JENKINS_LABEL +
+                " option is displayed in dropdown menu of Jenkins version number");
         Assert.assertEquals(actualButtonLabel, ABOUT_JENKINS_LABEL);
     }
 
