@@ -1,5 +1,6 @@
 package school.redrover.page.multibranch;
 
+import io.qameta.allure.Step;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -31,12 +32,14 @@ public class MultibranchPipelineConfigPage extends BaseConfigPage<MultibranchPip
         return new MultibranchPipelineProjectPage(getDriver());
     }
 
+    @Step("Click 'Scan Multibranch Pipeline' button")
     public MultibranchPipelineConfigPage clickScanMultibranchPipelineButton() {
         scanMultibranchPipelineButton.click();
 
         return this;
     }
 
+    @Step("Click 'Periodical Scanning' checkbox")
     public MultibranchPipelineConfigPage clickPeriodicalScanningCheckbox() {
         getWait2().until(TestUtils.isElementInViewPort(periodicalScanningCheckbox));
         ((JavascriptExecutor) getDriver()).
@@ -46,6 +49,7 @@ public class MultibranchPipelineConfigPage extends BaseConfigPage<MultibranchPip
         return this;
     }
 
+    @Step("Select interval value")
     public MultibranchPipelineConfigPage selectingIntervalValue() {
         Select select = new Select(intervalSelect);
         select.selectByValue("12h");
@@ -53,6 +57,7 @@ public class MultibranchPipelineConfigPage extends BaseConfigPage<MultibranchPip
         return this;
     }
 
+    @Step("Get selected value")
     public WebElement getSelectedValue() {
         return selectedValue;
     }
