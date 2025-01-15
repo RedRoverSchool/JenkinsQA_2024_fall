@@ -79,7 +79,7 @@ public class DashboardTest extends BaseTest {
     }
 
 
-    @DataProvider(name = "projectNameProvider")
+    @DataProvider
     public Object[][] projectNameProvider() {
         return new Object[][]{
                 {"FPipelineProject"},
