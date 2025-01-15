@@ -20,6 +20,7 @@ public class FolderTest extends BaseTest {
     private static final String FIRST_FOLDER_NAME = "FreestyleProjects";
     private static final String FREESTYLE_PROJECT_NAME = "FirstFreestyleProjectJob";
     private static final String FOLDER_NAME_MAX_LENGTH = "012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234";
+    private static final String FOLDER_NAME_MIN_LENGTH = "F";
     private static final String FOLDER_MOVE_PARENT_NAME = "FolderParent";
     private static final String FOLDER_MOVE_CHILD_NAME = "FolderChild";
     private static final String FOLDER_MOVE_CHILD2_NAME = "FolderChild2";
@@ -52,7 +53,6 @@ public class FolderTest extends BaseTest {
     @Story("US_00.006 Create Folder")
     @Description("TC_00.006.02 Create Folder with max name length")
     public void testCreateWithMaxNameLength() {
-
         String folderName = new HomePage(getDriver())
                 .clickNewItem()
                 .enterItemName(FOLDER_NAME_MAX_LENGTH)
@@ -120,17 +120,21 @@ public class FolderTest extends BaseTest {
     }
 
     @Test
+    @Epic("00 New Item")
+    @Story("US_00.006 Create Folder")
+    @Description("TC_00.006.01 Create Folder with min name length")
     public void testCreateWithMinNameLength() {
-
         List<String> itemList = new HomePage(getDriver())
                 .clickNewItem()
-                .enterItemName("F")
+                .enterItemName(FOLDER_NAME_MIN_LENGTH)
                 .selectFolderAndClickOk()
                 .gotoHomePage()
                 .getItemList();
 
+        Allure.step(String.format("Expected Result: The list of items contains '%d' folder(s). \n " +
+                "The folder with the minimum allowed name length '%s' is created.", itemList.size(), FOLDER_NAME_MIN_LENGTH));
         Assert.assertEquals(itemList.size(), 1);
-        Assert.assertEquals(itemList.get(0), "F");
+        Assert.assertEquals(itemList.get(0), FOLDER_NAME_MIN_LENGTH);
     }
 
     @Test(dependsOnMethods = "testCreateWithMinNameLength")
