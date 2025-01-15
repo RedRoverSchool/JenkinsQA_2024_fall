@@ -42,7 +42,7 @@ public class FooterTest extends BaseTest {
     @Test
     @Epic("12 Footer")
     @Story("US_12.001 Jenkins version")
-    @Description("TC_12.001.03 Verify 'About Jenkins' option clickabity in dropdown menu of Jenkins version number")
+    @Description("TC_12.001.02 Verify version button clickability and display of 'About Jenkins' in dropdown menu")
     public void testVerifyTitleDescription() {
         String descriptionTitle = new HomePage(getDriver())
                 .clickJenkinsVersionButton()
@@ -58,7 +58,7 @@ public class FooterTest extends BaseTest {
     @Test
     @Epic("12 Footer")
     @Story("US_12.001 Jenkins version")
-    @Description("TC_12.001.04 Verify 'About Jenkins' option clickabity in dropdown menu of Jenkins version number")
+    @Description("TC_12.001.02 Verify version button clickability and display of 'About Jenkins' in dropdown menu")
     public void testCheckNumberOfMavenDependencies() {
         Integer numberOfDependencies = new HomePage(getDriver())
                 .clickJenkinsVersionButton()
