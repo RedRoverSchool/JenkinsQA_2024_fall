@@ -14,8 +14,6 @@ import java.util.List;
 
 public class ManageJenkinsTest extends BaseTest {
 
-    private static final String MY_NODE_NAME = "My name of node";
-    private static final String NODE_NAME = "NewNodeName";
     private static final String FULL_USER_NAME = "Ivan Petrov";
 
     @DataProvider
@@ -280,37 +278,6 @@ public class ManageJenkinsTest extends BaseTest {
                 .getTitle();
 
         Assert.assertEquals(pageTitle, "Thread Dump");
-    }
-
-    @Test
-    public void testCreateNewAgent() {
-
-        List<String> nodeItemList = new HomePage(getDriver())
-                .openManageJenkinsPage()
-                .clickNodesButton()
-                .clickButtonNewNode()
-                .enterNodeName(NODE_NAME)
-                .selectPermanentAgent()
-                .clickButtonCreate()
-                .clickButtonSave()
-                .getNodeList();
-
-        Assert.assertListContainsObject(nodeItemList, NODE_NAME, "List not contain new node");
-    }
-
-    @Test
-    public void testCreationAndDisplayNewNameOnNodesPage() {
-        List<String> itemNoteList = new HomePage(getDriver())
-                .openManageJenkinsPage()
-                .clickNodesButton()
-                .clickButtonNewNode()
-                .enterNodeName(MY_NODE_NAME)
-                .selectPermanentAgent()
-                .clickButtonCreate()
-                .clickButtonSave()
-                .getNodeList();
-
-        Assert.assertListContainsObject(itemNoteList, MY_NODE_NAME, MY_NODE_NAME);
     }
 
     @Test

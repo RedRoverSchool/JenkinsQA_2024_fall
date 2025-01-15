@@ -1,5 +1,6 @@
 package school.redrover;
 
+import io.qameta.allure.Allure;
 import io.qameta.allure.Description;
 import io.qameta.allure.Epic;
 import io.qameta.allure.Story;
@@ -26,6 +27,8 @@ public class FolderTest extends BaseTest {
     private static final String NEW_FOLDER_NAME = "NewFolderName";
     private static final String ERROR_MESSAGE_ON_RENAME_WITH_SAME_NAME = "The new name is the same as the current name.";
     private static final String ERROR_MESSAGE_ON_RENAME_WITH_EMPTY_NAME = "No name is specified";
+    private static final String DESCRIPTION = "Description text";
+    private static final String DESCRIPTION_EDITED = "Edited";
 
     private String escapeHtml(String input) {
         if (input == null) return null;
@@ -45,6 +48,9 @@ public class FolderTest extends BaseTest {
     }
 
     @Test
+    @Epic("00 New Item")
+    @Story("US_00.006 Create Folder")
+    @Description("TC_00.006.02 Create Folder with max name length")
     public void testCreateWithMaxNameLength() {
 
         String folderName = new HomePage(getDriver())
@@ -54,7 +60,63 @@ public class FolderTest extends BaseTest {
                 .gotoHomePage()
                 .getItemNameByOrder(1);
 
+        Allure.step("Expected Result: The folder '{FOLDER_NAME_MAX_LENGTH}' is created with the maximum allowed name length");
         Assert.assertEquals(folderName, FOLDER_NAME_MAX_LENGTH);
+    }
+
+    @Test
+    @Story("US_04.004 Add and edit description of the folder ")
+    @Description("TC_04.004.01 Add description to the folder")
+    public void testAddDescription() {
+        TestUtils.createFolder(getDriver(), FOLDER_NAME);
+
+        String finalResult = new HomePage(getDriver())
+                .openFolder(FOLDER_NAME)
+                .editDescription(DESCRIPTION)
+                .clickSubmitButton()
+                .getDescription();
+
+        Allure.step("Expected Result: The description '{DESCRIPTION}' is successfully added to the folder and displayed correctly.");
+        Assert.assertEquals(finalResult, DESCRIPTION);
+    }
+
+    @Test(dependsOnMethods = "testAddDescription")
+    @Story("US_04.004 Add and edit description of the folder ")
+    @Description("TC_04.004.02 Edit an existing folder's description")
+    public void testEditExistingDescription() {
+        String finalResult = new HomePage(getDriver())
+                .openFolder(FOLDER_NAME)
+                .editDescription(DESCRIPTION_EDITED)
+                .clickSubmitButton()
+                .getDescription();
+
+        Allure.step("Expected Result: The description '{DESCRIPTION_EDITED}' is successfully edited and displayed correctly.");
+        Assert.assertEquals(finalResult, DESCRIPTION_EDITED);
+    }
+
+    @Test(dependsOnMethods = "testEditExistingDescription")
+    @Story("US_04.004 Add and edit description of the folder ")
+    @Description("TC_04.004.04 Activate 'Preview' option while adding a description")
+    public void testDescriptionsPreviewButton() {
+        String finalResult = new HomePage(getDriver())
+                .openFolder(FOLDER_NAME)
+                .getDescriptionViaPreview();
+
+        Allure.step("Expected Result: The description '{DESCRIPTION_EDITED}' is correctly displayed in the preview mode.");
+        Assert.assertEquals(finalResult, DESCRIPTION_EDITED);
+    }
+
+    @Test(dependsOnMethods = "testDescriptionsPreviewButton")
+    @Story("US_04.004 Add and edit description of the folder ")
+    @Description("TC_04.004.03 Clear folder's description")
+    public void testClearDescription() {
+        String finalResult = new HomePage(getDriver())
+                .openFolder(FOLDER_NAME)
+                .clearDescription()
+                .getDescriptionButtonText();
+
+        Allure.step("Expected Result: The description button shows 'Add description'");
+        Assert.assertEquals(finalResult, "Add description");
     }
 
     @Test
@@ -102,8 +164,7 @@ public class FolderTest extends BaseTest {
     @Test(dependsOnMethods = "testConfigureDescriptionByChevron")
     public void testCreateNewItemByChevron() {
 
-        String projectName = new FolderProjectPage(getDriver())
-                .gotoHomePage()
+        String projectName = new HomePage(getDriver())
                 .selectNewItemFromFolderMenu(FIRST_FOLDER_NAME)
                 .nameAndSelectFreestyleProject(FREESTYLE_PROJECT_NAME)
                 .addExecuteWindowsBatchCommand("echo 'Hello world!'")
@@ -220,22 +281,23 @@ public class FolderTest extends BaseTest {
     public void testDeleteViaMainPageChevron() {
         TestUtils.createFolder(getDriver(), FIRST_FOLDER_NAME);
 
-        List<String> setOfProjects = new HomePage(getDriver())
+        String welcomeTitle = new HomePage(getDriver())
                 .selectDeleteFromItemMenuAndClickYes(FIRST_FOLDER_NAME)
-                .getItemList();
+                .getWelcomeTitle();
 
-        Assert.assertTrue(setOfProjects.isEmpty());
+        Assert.assertEquals(welcomeTitle, "Welcome to Jenkins!");
     }
 
     @Test
     public void testDeleteViaSidebarFromProjectPage() {
         TestUtils.createFolder(getDriver(), FIRST_FOLDER_NAME);
 
-        List<String> setOfProjects = new HomePage(getDriver())
-                .selectDeleteFromItemMenuAndClickYes(FIRST_FOLDER_NAME)
-                .getItemList();
+        String welcomeTitle = new HomePage(getDriver())
+                .openFolder(FIRST_FOLDER_NAME)
+                .clickDeleteButtonSidebarAndConfirm()
+                .getWelcomeTitle();
 
-        Assert.assertTrue(setOfProjects.isEmpty());
+        Assert.assertEquals(welcomeTitle, "Welcome to Jenkins!");
     }
 
     @Test
@@ -255,13 +317,13 @@ public class FolderTest extends BaseTest {
     public void testDeleteViaMyViewChevron() {
         TestUtils.createFolder(getDriver(), FIRST_FOLDER_NAME);
 
-        List<String> setOfProjects = new HomePage(getDriver())
+        String welcomeTitle = new HomePage(getDriver())
                 .clickMyViewsButton()
                 .selectDeleteFromItemMenuAndClickYes(FIRST_FOLDER_NAME)
                 .gotoHomePage()
-                .getItemList();
+                .getWelcomeTitle();
 
-        Assert.assertTrue(setOfProjects.isEmpty());
+        Assert.assertEquals(welcomeTitle, "Welcome to Jenkins!");
     }
 
     @Test
@@ -423,23 +485,10 @@ public class FolderTest extends BaseTest {
         Assert.assertListContainsObject(projectList, FOLDER_NAME, "Folder is not renamed");
     }
 
-    @Test(dependsOnMethods = "testErrorMessageOnRenameFolderWithSameName")
-    public void testDeleteViaBreadcrumbDropdown() {
-        List<String> projectList = new HomePage(getDriver())
-                .openFolder(FOLDER_NAME)
-                .openBreadcrumbDropdown()
-                .clickDeleteBreadcrumbDropdownAndConfirm()
-                .getItemList();
-
-        Assert.assertListNotContainsObject(projectList, FOLDER_NAME, "Folder is not deleted.");
-    }
-
-    @Test
+    @Test(dependsOnMethods = "testRenameViaBreadcrumbDropdown")
     @Story("US_04.001 Rename Folder")
     @Description("TC_04.001.04 Rename Folder from the My Views directly via folder's page")
     public void testRenameFolderFromMyViewsViaFolderPage() {
-        TestUtils.createFolder(getDriver(), FOLDER_NAME);
-
         List<String> projectList = new HomePage(getDriver())
                 .clickMyViewsButton()
                 .openFolder(FOLDER_NAME)
@@ -469,12 +518,10 @@ public class FolderTest extends BaseTest {
         Assert.assertListContainsObject(projectList, FOLDER_NAME, "Folder is not renamed");
     }
 
-    @Test
+    @Test(dependsOnMethods = "testRenameFolderFromMyViewsViaDropdownMenu")
     @Story("US_04.001 Rename Folder")
     @Description("TC_04.001.07 Validate Error message, if New Folder Name is empty")
     public void testRenameFolderToEmptyName() {
-        TestUtils.createFolder(getDriver(), FOLDER_NAME);
-
         String actualErrorMessage = new HomePage(getDriver())
                 .openFolder(FOLDER_NAME)
                 .clickRenameSidebarButton()
@@ -485,10 +532,21 @@ public class FolderTest extends BaseTest {
         Assert.assertEquals(actualErrorMessage, ERROR_MESSAGE_ON_RENAME_WITH_EMPTY_NAME);
     }
 
+    @Test(dependsOnMethods = "testRenameFolderToEmptyName")
+    public void testDeleteViaBreadcrumbDropdown() {
+        List<String> projectList = new HomePage(getDriver())
+                .openFolder(FOLDER_NAME)
+                .openBreadcrumbDropdown()
+                .clickDeleteBreadcrumbDropdownAndConfirm()
+                .getItemList();
+
+        Assert.assertListNotContainsObject(projectList, FOLDER_NAME, "Folder is not deleted.");
+    }
+
     @Test(dataProvider = "providerUnsafeCharacters")
     @Story("US_04.001 Rename Folder")
     @Description("TC_04.001.06 Validate Error message, if New Folder Name contains special characters")
-    public void testCreateWithUnsafeCharactersInName(String unsafeCharacter) {
+    public void testRenameFolderWithUnsafeCharactersInName(String unsafeCharacter) {
         TestUtils.createFolder(getDriver(), FOLDER_NAME);
 
         String invalidNameMessage = new HomePage(getDriver())
@@ -500,4 +558,5 @@ public class FolderTest extends BaseTest {
 
         Assert.assertEquals(invalidNameMessage, "‘%s’ is an unsafe character".formatted(escapeHtml(unsafeCharacter)));
     }
+
 }

@@ -1,5 +1,6 @@
 package school.redrover.page.base;
 
+import io.qameta.allure.Step;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -27,15 +28,6 @@ public abstract class BaseProjectPage<Self extends BaseProjectPage<?, ?, ?>, Pro
     @FindBy(xpath = "//div[@id='description']/div[1]")
     private WebElement descriptionText;
 
-    @FindBy(xpath = "//a[contains(@href,'rename')]")
-    private WebElement renameButtonViaSidebar;
-
-    @FindBy(name = "newName")
-    private WebElement newNameField;
-
-    @FindBy(xpath = "//div[@id='main-panel']/p")
-    private WebElement errorMessage;
-
     @FindBy(xpath = "//div[@class='task ']//span[2]")
     private List<WebElement> sidebarElementList;
 
@@ -56,6 +48,9 @@ public abstract class BaseProjectPage<Self extends BaseProjectPage<?, ?, ?>, Pro
 
     @FindBy(xpath = "//span[contains(text(),'Delete')]")
     private WebElement deleteButtonSidebar;
+
+    @FindBy(xpath = "//button[@data-id='cancel']")
+    private WebElement cancelButton;
 
     @FindBy(xpath = "//button[@data-id='ok']")
     private WebElement yesButton;
@@ -83,6 +78,7 @@ public abstract class BaseProjectPage<Self extends BaseProjectPage<?, ?, ?>, Pro
         return new CreateNewItemPage(getDriver());
     }
 
+    @Step("Edit description to '{text}'")
     public Self editDescription(String text) {
         descriptionButton.click();
         descriptionField.clear();
@@ -91,12 +87,14 @@ public abstract class BaseProjectPage<Self extends BaseProjectPage<?, ?, ?>, Pro
         return (Self) this;
     }
 
+    @Step("Click Save button")
     public Self clickSubmitButton() {
         submitButton.click();
 
         return (Self) this;
     }
 
+    @Step("Clear description and click 'Save'")
     public Self clearDescription() {
         descriptionButton.click();
         descriptionField.clear();
@@ -111,30 +109,20 @@ public abstract class BaseProjectPage<Self extends BaseProjectPage<?, ?, ?>, Pro
         return (Self) this;
     }
 
-    public Self renameItem(String newName) {
-        renameButtonViaSidebar.click();
-        newNameField.clear();
-        newNameField.sendKeys(newName);
-        submitButton.click();
-        return (Self) this;
-    }
-
     public String getPreviewDescriptionText() {
         return previewDescriptionText.getText();
-    }
-
-    public String getRenameWarningMessage() {
-        return getWait10().until(ExpectedConditions.visibilityOf(errorMessage)).getText();
     }
 
     public String getItemName() {
         return getWait10().until(ExpectedConditions.visibilityOf(itemName)).getText();
     }
 
+    @Step("Get description from project page")
     public String getDescription() {
         return descriptionText.getText();
     }
 
+    @Step("Get current text from 'Add/edit description button'")
     public String getDescriptionButtonText() {
         return descriptionButton.getText();
     }
@@ -157,6 +145,13 @@ public abstract class BaseProjectPage<Self extends BaseProjectPage<?, ?, ?>, Pro
         getWait2().until(ExpectedConditions.elementToBeClickable(yesButton)).click();
 
         return new HomePage(getDriver());
+    }
+
+    public Self clickDeleteButtonSidebarAndCancel() {
+        getWait2().until(ExpectedConditions.elementToBeClickable(deleteButtonSidebar)).click();
+        getWait2().until(ExpectedConditions.elementToBeClickable(cancelButton)).click();
+
+        return (Self) this;
     }
 
     public ProjectRenamePage clickRenameSidebarButton() {

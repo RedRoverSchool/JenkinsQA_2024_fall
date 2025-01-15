@@ -11,11 +11,14 @@ import school.redrover.page.*;
 import school.redrover.page.base.BasePage;
 import school.redrover.page.folder.FolderConfigPage;
 import school.redrover.page.folder.FolderProjectPage;
+import school.redrover.page.freestyle.FreestyleConfigPage;
 import school.redrover.page.freestyle.FreestyleProjectPage;
 import school.redrover.page.freestyle.FreestyleRenamePage;
 import school.redrover.page.manage.ManageJenkinsPage;
+import school.redrover.page.manage.node.NodesProjectPage;
 import school.redrover.page.multiConfiguration.MultiConfigurationProjectPage;
 import school.redrover.page.multibranch.MultibranchPipelineProjectPage;
+import school.redrover.page.multibranch.MultibranchPipelineRenamePage;
 import school.redrover.page.organizationFolder.OrganizationFolderProjectPage;
 import school.redrover.page.pipeline.PipelineProjectPage;
 import school.redrover.page.pipeline.PipelineRenamePage;
@@ -26,6 +29,7 @@ import school.redrover.runner.TestUtils;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 public class HomePage extends BasePage {
 
@@ -149,6 +153,12 @@ public class HomePage extends BasePage {
     @FindBy(xpath = "//div[@class='tippy-box']//a")
     private List<WebElement> breadcrumbBarMenuList;
 
+    @FindBy(xpath = "//div[@id='executors']/div[@class='pane-header']/a")
+    private WebElement buttonExpandCollaps;
+
+    @FindBy(xpath = "div[@id='executors']/div[@class='pane-content']/div/div/a")
+    private List<WebElement> nodeList;
+
     public HomePage(WebDriver driver) {
         super(driver);
     }
@@ -191,11 +201,13 @@ public class HomePage extends BasePage {
         return new MultibranchPipelineProjectPage(getDriver());
     }
 
+    @Step("Open folder")
     public FolderProjectPage openFolder(String name) {
         openItem(name);
         return new FolderProjectPage(getDriver());
     }
 
+    @Step("Open Manage Jenkins Page from Sidebar on Home page")
     public ManageJenkinsPage openManageJenkinsPage() {
         manageJenkinsSidebar.click();
 
@@ -219,6 +231,12 @@ public class HomePage extends BasePage {
         selectMenuFromItemDropdown(itemName, "Configure");
 
         return new FolderConfigPage(getDriver());
+    }
+
+    public FreestyleConfigPage selectConfigureFromItemMenuForFreestyle(String itemName) {
+        selectMenuFromItemDropdown(itemName, "Configure");
+
+        return new FreestyleConfigPage(getDriver());
     }
 
     public HomePage selectDeleteFromItemMenu(String itemName) {
@@ -258,6 +276,7 @@ public class HomePage extends BasePage {
         return new FolderProjectPage(getDriver());
     }
 
+    @Step("Get project name from the list by order '{order}'")
     public String getItemNameByOrder(int order) {
 
         return getDriver().findElements(By.xpath("//td/a/span")).stream()
@@ -541,4 +560,55 @@ public class HomePage extends BasePage {
     public List<WebElement> getBreadcrumbBarMenuList() {
         return breadcrumbBarMenuList;
     }
+
+    @Step("Get the list of Node names from the 'Build Executors Status' block on the Home page")
+    public List<String> getNodeNameList() {
+        clickButtonExpand();
+        return nodeList
+                .stream()
+                .map(WebElement::getText)
+                .toList();
+    }
+
+    private boolean isExpanded() {
+        return (Objects.equals(buttonExpandCollaps.getAttribute("title"), "Expand"));
+    }
+
+    public void clickButtonExpand() {
+        if(isExpanded()) {
+            buttonExpandCollaps.click();
+        }
+    }
+
+    public NodesProjectPage openNodeFromBuildExecutorStatusBlock(String nodeName) {
+        clickButtonExpand();
+        getWait5().until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//div[@id='executors']//a[contains(@href, '%s')]".formatted(nodeName)))).click();
+
+        return new NodesProjectPage(getDriver());
+    }
+
+    public HomePage selectDeleteAgentFromBuildDropdownAndClickYes(String nodeName) {
+        selectMenuFromBuildDropdown(nodeName,"Delete Agent");
+        getWait5().until(ExpectedConditions.visibilityOf(yesButton)).click();
+        return this;
+    }
+
+    private void selectMenuFromBuildDropdown(String nodeName, String menuName) {
+        clickButtonExpand();
+
+        TestUtils.moveAndClickWithJS(getDriver(), getDriver().findElement(
+                By.xpath("//div[@id='executors']//a[contains(@href, '%s')]/button".formatted(nodeName))));
+
+        getWait10().until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//div[@class='jenkins-dropdown__item__icon']/parent::*[contains(., '%s')]"
+                        .formatted(menuName)))).click();
+    }
+
+    public MultibranchPipelineRenamePage selectRenameFromItemDropdown(String itemName) {
+        selectMenuFromItemDropdown(itemName, "Rename");
+
+        return new MultibranchPipelineRenamePage(getDriver());
+    }
+
 }
