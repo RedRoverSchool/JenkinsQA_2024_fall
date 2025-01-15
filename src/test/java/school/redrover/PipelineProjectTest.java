@@ -1,5 +1,6 @@
 package school.redrover;
 
+import io.qameta.allure.Allure;
 import io.qameta.allure.Description;
 import io.qameta.allure.Epic;
 import io.qameta.allure.Story;
@@ -55,10 +56,73 @@ public class PipelineProjectTest extends BaseTest {
                 .gotoHomePage()
                 .getItemList();
 
+        Allure.step("Expected result: Project with valid name is displayed on the Home page");
         Assert.assertListContainsObject(
                 itemList,
                 PROJECT_NAME,
                 "Project is not created");
+    }
+
+    @Test
+    @Epic("00 New Item")
+    @Story("US_00.002 Create Pipeline Project")
+    @Description("TC_00.002.02 Create Pipeline Project with empty name via sidepanel")
+    public void testCreateWithEmptyName() {
+        String emptyNameMessage = new HomePage(getDriver())
+                .clickNewItem()
+                .enterItemName("")
+                .selectPipeline()
+                .getEmptyNameMessage();
+
+        Allure.step("Expected result: Error message is displayed");
+        Assert.assertEquals(emptyNameMessage, "» This field cannot be empty, please enter a valid name");
+    }
+
+    @Test
+    @Epic("00 New Item")
+    @Story("US_00.002 Create Pipeline Project")
+    @Description("TC_00.002.04 Create Pipeline Project with duplicate name via sidepanel")
+    public void testCreateWithDuplicateName() {
+        TestUtils.createPipelineProject(getDriver(), PROJECT_NAME);
+
+        String errorMessage = new HomePage(getDriver())
+                .clickNewItem()
+                .enterItemName(PROJECT_NAME)
+                .selectPipeline()
+                .getErrorMessage();
+
+        Allure.step("Expected result: Error message is displayed");
+        Assert.assertEquals(errorMessage, "» A job already exists with the name ‘%s’".formatted(PROJECT_NAME));
+    }
+
+    @Test(dataProvider = "providerUnsafeCharacters")
+    @Epic("00 New Item")
+    @Story("US_00.002 Create Pipeline Project")
+    @Description("TC_00.002.03 Create Pipeline Project with unsafe characters in name via sidepanel")
+    public void testCreateWithUnsafeCharactersInName(String unsafeCharacter) {
+        String invalidNameMessage = new HomePage(getDriver())
+                .clickNewItem()
+                .enterItemName(unsafeCharacter)
+                .selectPipeline()
+                .getInvalidNameMessage();
+        Allure.step("Expected result: Error message is displayed");
+        Assert.assertEquals(invalidNameMessage, "» ‘%s’ is an unsafe character".formatted(unsafeCharacter));
+    }
+
+    @Test
+    public void testCreatePipelineFromExistingOne() {
+        final String secondProjectName = "Second" + PROJECT_NAME;
+        TestUtils.createPipelineProject(getDriver(), PROJECT_NAME);
+
+        List<String> itemNameList = new HomePage(getDriver())
+                .clickNewItem()
+                .enterItemName(secondProjectName)
+                .enterName(PROJECT_NAME)
+                .clickOkLeadingToCofigPageOfCopiedProject(new PipelineConfigurePage(getDriver()))
+                .gotoHomePage()
+                .getItemList();
+
+        Assert.assertTrue(itemNameList.contains(secondProjectName));
     }
 
     @Test(dependsOnMethods = "testCreateProjectWithValidNameViaSidebar")
@@ -239,41 +303,6 @@ public class PipelineProjectTest extends BaseTest {
                 .getItemList();
 
         Assert.assertListNotContainsObject(projectList, PROJECT_NAME, "Project is not deleted");
-    }
-
-    @Test
-    public void testCreateWithEmptyName() {
-        String emptyNameMessage = new HomePage(getDriver())
-                .clickNewItem()
-                .enterItemName("")
-                .selectPipeline()
-                .getEmptyNameMessage();
-
-        Assert.assertEquals(emptyNameMessage, "» This field cannot be empty, please enter a valid name");
-    }
-
-    @Test
-    public void testCreateWithDuplicateName() {
-        TestUtils.createPipelineProject(getDriver(), PROJECT_NAME);
-
-        String errorMessage = new HomePage(getDriver())
-                .clickNewItem()
-                .enterItemName(PROJECT_NAME)
-                .selectPipeline()
-                .getErrorMessage();
-
-        Assert.assertEquals(errorMessage, "» A job already exists with the name ‘%s’".formatted(PROJECT_NAME));
-    }
-
-    @Test(dataProvider = "providerUnsafeCharacters")
-    public void testCreateWithUnsafeCharactersInName(String unsafeCharacter) {
-        String invalidNameMessage = new HomePage(getDriver())
-                .clickNewItem()
-                .enterItemName(unsafeCharacter)
-                .selectPipeline()
-                .getInvalidNameMessage();
-
-        Assert.assertEquals(invalidNameMessage, "» ‘%s’ is an unsafe character".formatted(unsafeCharacter));
     }
 
     @Test()
@@ -491,22 +520,6 @@ public class PipelineProjectTest extends BaseTest {
 
         Assert.assertEquals(icons.get(0).getCssValue("color"), "rgba(30, 166, 75, 1)");
         Assert.assertEquals(icons.get(1).getCssValue("color"), "rgba(230, 0, 31, 1)");
-    }
-
-    @Test
-    public void testCreatePipelineFromExistingOne() {
-        final String secondProjectName = "Second" + PROJECT_NAME;
-        TestUtils.createPipelineProject(getDriver(), PROJECT_NAME);
-
-        List<String> itemNameList = new HomePage(getDriver())
-                .clickNewItem()
-                .enterItemName(secondProjectName)
-                .enterName(PROJECT_NAME)
-                .clickOkLeadingToCofigPageOfCopiedProject(new PipelineConfigurePage(getDriver()))
-                .gotoHomePage()
-                .getItemList();
-
-        Assert.assertTrue(itemNameList.contains(secondProjectName));
     }
 
     @Test

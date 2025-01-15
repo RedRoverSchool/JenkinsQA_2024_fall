@@ -1,5 +1,6 @@
 package school.redrover.page.base;
 
+import io.qameta.allure.Step;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -77,6 +78,7 @@ public abstract class BaseProjectPage<Self extends BaseProjectPage<?, ?, ?>, Pro
         return new CreateNewItemPage(getDriver());
     }
 
+    @Step("Edit description to '{text}'")
     public Self editDescription(String text) {
         descriptionButton.click();
         descriptionField.clear();
@@ -85,12 +87,14 @@ public abstract class BaseProjectPage<Self extends BaseProjectPage<?, ?, ?>, Pro
         return (Self) this;
     }
 
+    @Step("Click Save button")
     public Self clickSubmitButton() {
         submitButton.click();
 
         return (Self) this;
     }
 
+    @Step("Clear description and click 'Save'")
     public Self clearDescription() {
         descriptionButton.click();
         descriptionField.clear();
@@ -99,6 +103,7 @@ public abstract class BaseProjectPage<Self extends BaseProjectPage<?, ?, ?>, Pro
         return (Self) this;
     }
 
+    @Step("Click 'Preview'")
     public Self clickPreview() {
         previewOption.click();
 
@@ -113,10 +118,12 @@ public abstract class BaseProjectPage<Self extends BaseProjectPage<?, ?, ?>, Pro
         return getWait10().until(ExpectedConditions.visibilityOf(itemName)).getText();
     }
 
+    @Step("Get description from project page")
     public String getDescription() {
         return descriptionText.getText();
     }
 
+    @Step("Get current text from 'Add/edit description button'")
     public String getDescriptionButtonText() {
         return descriptionButton.getText();
     }
@@ -128,12 +135,14 @@ public abstract class BaseProjectPage<Self extends BaseProjectPage<?, ?, ?>, Pro
                 .toList();
     }
 
+    @Step("Click 'Configure' sidebar")
     public ProjectConfigPage clickSidebarConfigButton() {
         getWait2().until(ExpectedConditions.elementToBeClickable(sidebarConfigureButton)).click();
 
         return createProjectConfigPage();
     }
 
+    @Step("Click 'Delete' sidebar and confirm")
     public HomePage clickDeleteButtonSidebarAndConfirm() {
         getWait2().until(ExpectedConditions.elementToBeClickable(deleteButtonSidebar)).click();
         getWait2().until(ExpectedConditions.elementToBeClickable(yesButton)).click();
@@ -148,18 +157,21 @@ public abstract class BaseProjectPage<Self extends BaseProjectPage<?, ?, ?>, Pro
         return (Self) this;
     }
 
+    @Step("Click 'Rename' sidebar")
     public ProjectRenamePage clickRenameSidebarButton() {
         getWait2().until(ExpectedConditions.elementToBeClickable(renameSidebarButton)).click();
 
         return createProjectRenamePage();
     }
 
+    @Step("Open breadcrumb dropdown menu")
     public Self openBreadcrumbDropdown() {
         TestUtils.moveAndClickWithJS(getDriver(), chevronButton);
 
         return (Self) this;
     }
 
+    @Step("Click 'Delete' breadcrumb item dropdown and confirm deletion")
     public HomePage clickDeleteBreadcrumbDropdownAndConfirm() {
         deleteBreadcrumbButton.click();
         yesButton.click();
@@ -167,6 +179,7 @@ public abstract class BaseProjectPage<Self extends BaseProjectPage<?, ?, ?>, Pro
         return new HomePage(getDriver());
     }
 
+    @Step("Click 'Rename' in breadcrumb dropdown menu")
     public ProjectRenamePage clickRenameBreadcrumbDropdown(){
         renameBreadcrumbButton.click();
 

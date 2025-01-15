@@ -1,5 +1,6 @@
 package school.redrover.page.freestyle;
 
+import io.qameta.allure.Step;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -77,6 +78,7 @@ public class FreestyleProjectPage extends BaseProjectPage<FreestyleProjectPage, 
         return lastBuildNumber.getText();
     }
 
+    @Step("Click last build date")
     public FreestyleBuildStatusPage clickLastBuildDateTime(){
         getWait10().until(ExpectedConditions.elementToBeClickable(lastBuildDateTime)).click();
         return new FreestyleBuildStatusPage(getDriver());
@@ -86,18 +88,21 @@ public class FreestyleProjectPage extends BaseProjectPage<FreestyleProjectPage, 
         return workspaceTitle.getText();
     }
 
+    @Step("Click 'Workspace' sidebar")
     public FreestyleProjectPage clickWorkspaceSidebar() {
         getWait10().until(ExpectedConditions.visibilityOf(workspaceSidebar)).click();
 
         return this;
     }
 
+    @Step("Click Wipe Out Current Workspace sidebar")
     public FreestyleProjectPage clickWipeOutCurrentWorkspaceSidebar() {
         getWait10().until(ExpectedConditions.visibilityOf(wipeOutCurrentWorkspaceSidebar)).click();
 
         return this;
     }
 
+    @Step("Click 'Build Now' sidebar")
     public FreestyleProjectPage clickBuildNowSidebar() {
         getWait5().until(ExpectedConditions.elementToBeClickable(buildNowSidebar)).click();
 
@@ -124,17 +129,20 @@ public class FreestyleProjectPage extends BaseProjectPage<FreestyleProjectPage, 
         return true;
     }
 
+    @Step("Click on success build icon for last build")
     public FreestyleBuildPage clickOnSuccessBuildIconForLastBuild() {
         getWait10().until(ExpectedConditions.visibilityOf(lastBuildSuccessBuildIcon)).click();
 
         return new FreestyleBuildPage(getDriver());
     }
 
+    @Step("Click 'Yes' button")
     public FreestyleProjectPage clickYesToWipeOutCurrentWorkspace() {
         getWait10().until(ExpectedConditions.elementToBeClickable(yesButton)).click();
         return this;
     }
 
+    @Step("Change enabling state via indicator")
     public FreestyleConfigPage changeEnablingStateViaIndicator() {
         getWait10().until(ExpectedConditions.visibilityOf(enableButton)).click();
 

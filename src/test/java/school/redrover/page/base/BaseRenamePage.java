@@ -1,5 +1,6 @@
 package school.redrover.page.base;
 
+import io.qameta.allure.Step;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -23,6 +24,7 @@ public abstract class BaseRenamePage<Self extends BaseRenamePage<?, ?>, ProjectP
 
     protected abstract ProjectPage createProjectPage();
 
+    @Step("Clear input and type '{newName}' to name input field")
     public Self clearInputFieldAndTypeName(String newName) {
         inputField.clear();
         inputField.sendKeys(newName);
@@ -34,12 +36,14 @@ public abstract class BaseRenamePage<Self extends BaseRenamePage<?, ?>, ProjectP
         return getWait5().until(ExpectedConditions.visibilityOf(warningMessage)).getText();
     }
 
+    @Step("Click 'Rename' button")
     public ProjectPage clickRenameButton() {
         renameButton.click();
 
         return createProjectPage();
     }
 
+    @Step("Click 'Rename' button")
     public ErrorPage clickRenameButtonLeadingToError() {
         renameButton.click();
 
