@@ -1,5 +1,6 @@
 package school.redrover.runner;
 
+import io.qameta.allure.Step;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import school.redrover.page.home.HomePage;
@@ -97,14 +98,7 @@ public class TestUtils {
                 .gotoHomePage();
     }
 
-    public static void createPipelineProjectWithoutSaveButton(WebDriver driver, String name) {
-        new HomePage(driver)
-                .clickNewItem()
-                .enterItemName(name)
-                .selectPipelineAndClickOk()
-                .gotoHomePage();
-    }
-
+    @Step("Paste '{text}' with JavaScript")
     public static void pasteTextWithJavaScript(WebDriver driver, WebElement element, String text) {
         ((JavascriptExecutor) driver)
                 .executeScript("arguments[0].value = arguments[1];", element, text);
@@ -112,6 +106,7 @@ public class TestUtils {
                 .executeScript("arguments[0].dispatchEvent(new Event('input', { bubbles: true }));", element);
     }
 
+    @Step("Create freestyle project '{name}'")
     public static void createFreestyleProject(WebDriver driver, String name) {
         new HomePage(driver)
                 .clickNewItem()
@@ -121,6 +116,7 @@ public class TestUtils {
                 .gotoHomePage();
     }
 
+    @Step("Create folder '{name}'")
     public static void createFolder(WebDriver driver, String name) {
         new HomePage(driver)
                 .clickNewItem()
@@ -130,6 +126,7 @@ public class TestUtils {
                 .gotoHomePage();
     }
 
+    @Step("Create multi-configuration project '{name}'")
     public static void createMultiConfigurationProject(WebDriver driver, String name) {
         new HomePage(driver)
                 .clickNewItem()
@@ -139,6 +136,7 @@ public class TestUtils {
                 .gotoHomePage();
     }
 
+    @Step("Create organization folder '{name}'")
     public static void createOrganizationFolder(WebDriver driver, String name) {
         new HomePage(driver)
                 .clickNewItem()
@@ -148,6 +146,7 @@ public class TestUtils {
                 .gotoHomePage();
     }
 
+    @Step("Create node '{name}'")
     public static void createNode(WebDriver driver, String name) {
         new HomePage(driver)
                 .openManageJenkinsPage()
@@ -160,6 +159,7 @@ public class TestUtils {
                 .gotoHomePage();
     }
 
+    @Step("Create multi-branch pipeline '{name}'")
     public static void createMultiBranchPipeline(WebDriver driver, String name) {
         new HomePage(driver)
                 .clickNewItem()
@@ -169,6 +169,7 @@ public class TestUtils {
                 .gotoHomePage();
     }
 
+    @Step("Read file '{name}' from resources")
     public static String readFileFromResources(String name) {
         try(InputStream inputStream = TestUtils.class.getClassLoader().getResourceAsStream("jenkins/%s".formatted(name))) {
             if (inputStream == null) {
