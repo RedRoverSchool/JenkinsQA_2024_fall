@@ -1,5 +1,6 @@
 package school.redrover.page;
 
+import io.qameta.allure.Step;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -19,11 +20,13 @@ public class AboutPage extends BasePage {
         super(driver);
     }
 
+    @Step("Get description from About page")
     public String getAboutDescription() {
 
         return aboutDescription.getText();
     }
 
+    @Step("Count number of Maven dependencies")
     public int getNumberOfMavenDependencies() {
 
         return mavenDependencies.size();
