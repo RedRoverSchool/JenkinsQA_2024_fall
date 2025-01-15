@@ -106,6 +106,7 @@ public class CreateNewItemPage extends BasePage {
         return new CreateNewItemPage(getDriver());
     }
 
+    @Step("Select 'Freestyle project' and click 'Ok' button")
     public FreestyleConfigPage selectFreestyleProjectAndClickOk() {
         freestyleProject.click();
         okButton.click();
@@ -165,6 +166,7 @@ public class CreateNewItemPage extends BasePage {
         return new CreateNewItemPage(getDriver());
     }
 
+    @Step("Select 'Freestyle project'")
     public CreateNewItemPage selectFreestyleProject() {
         freestyleProject.click();
 
@@ -181,6 +183,7 @@ public class CreateNewItemPage extends BasePage {
         return getWait5().until(ExpectedConditions.visibilityOf(invalidOrSameNameMessage)).getText();
     }
 
+    @Step("Type '{name}' to 'Copy from' input field")
     public CreateNewItemPage enterName(String name) {
         TestUtils.scrollToElementWithJS(getDriver(), copyFromField);
         copyFromField.sendKeys(name);
@@ -188,6 +191,7 @@ public class CreateNewItemPage extends BasePage {
         return this;
     }
 
+    @Step("Click 'Ok' button")
     public <T> T clickOkLeadingToCofigPageOfCopiedProject(T page) {
         okButton.click();
 
@@ -218,7 +222,8 @@ public class CreateNewItemPage extends BasePage {
 
         return itemsTypesList;
     }
-    public List<String> getItemList(){
-       return itemsTypesList.stream().map(WebElement::getText).toList();
+
+    public List<String> getItemList() {
+        return itemsTypesList.stream().map(WebElement::getText).toList();
     }
 }

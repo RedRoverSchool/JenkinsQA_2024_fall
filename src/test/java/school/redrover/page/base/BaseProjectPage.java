@@ -103,6 +103,7 @@ public abstract class BaseProjectPage<Self extends BaseProjectPage<?, ?, ?>, Pro
         return (Self) this;
     }
 
+    @Step("Click 'Preview'")
     public Self clickPreview() {
         previewOption.click();
 
@@ -134,12 +135,14 @@ public abstract class BaseProjectPage<Self extends BaseProjectPage<?, ?, ?>, Pro
                 .toList();
     }
 
+    @Step("Click 'Configure' sidebar")
     public ProjectConfigPage clickSidebarConfigButton() {
         getWait2().until(ExpectedConditions.elementToBeClickable(sidebarConfigureButton)).click();
 
         return createProjectConfigPage();
     }
 
+    @Step("Click 'Delete' sidebar and confirm")
     public HomePage clickDeleteButtonSidebarAndConfirm() {
         getWait2().until(ExpectedConditions.elementToBeClickable(deleteButtonSidebar)).click();
         getWait2().until(ExpectedConditions.elementToBeClickable(yesButton)).click();
@@ -154,18 +157,21 @@ public abstract class BaseProjectPage<Self extends BaseProjectPage<?, ?, ?>, Pro
         return (Self) this;
     }
 
+    @Step("Click 'Rename' sidebar")
     public ProjectRenamePage clickRenameSidebarButton() {
         getWait2().until(ExpectedConditions.elementToBeClickable(renameSidebarButton)).click();
 
         return createProjectRenamePage();
     }
 
+    @Step("Open breadcrumb dropdown menu")
     public Self openBreadcrumbDropdown() {
         TestUtils.moveAndClickWithJS(getDriver(), chevronButton);
 
         return (Self) this;
     }
 
+    @Step("Click 'Delete' breadcrumb item dropdown and confirm deletion")
     public HomePage clickDeleteBreadcrumbDropdownAndConfirm() {
         deleteBreadcrumbButton.click();
         yesButton.click();
@@ -173,6 +179,7 @@ public abstract class BaseProjectPage<Self extends BaseProjectPage<?, ?, ?>, Pro
         return new HomePage(getDriver());
     }
 
+    @Step("Click 'Rename' in breadcrumb dropdown menu")
     public ProjectRenamePage clickRenameBreadcrumbDropdown(){
         renameBreadcrumbButton.click();
 

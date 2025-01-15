@@ -42,6 +42,7 @@ public abstract class BaseConfigPage<Self extends BaseConfigPage<?, ?>, ProjectP
 
     protected abstract ProjectPage createProjectPage();
 
+    @Step("Type '{description}' to description field")
     public Self enterDescription(String description) {
         getWait2().until(ExpectedConditions.visibilityOf(descriptionField)).clear();
         descriptionField.sendKeys(description);
