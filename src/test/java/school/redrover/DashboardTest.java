@@ -13,6 +13,9 @@ import java.util.List;
 
 public class DashboardTest extends BaseTest {
 
+    private static final String DESCRIPTION_TEXT = "It's my workspace";
+    private static final String NEW_TEXT = "Hello! ";
+    private static final String TEXT_DESCRIPTION_BUTTON = "Add description";
     private static final String VALID_PIPELINE_SCRIPT = """
             pipeline {
                 agent any
@@ -32,10 +35,6 @@ public class DashboardTest extends BaseTest {
             }
             """;
     private final List<String> createdProjectList = new ArrayList<>();
-    private static final String DESCRIPTION_TEXT = "It's my workspace";
-    private static final String NEW_TEXT = "Hello! ";
-    private static final String TEXT_DESCRIPTION_BUTTON = "Add description";
-
 
     private void preparationCreateNotBuiltProject(String projectName) {
         new HomePage(getDriver())
@@ -77,7 +76,6 @@ public class DashboardTest extends BaseTest {
                 .clickOnBuildNowItemOnSidePanelAndWait()
                 .gotoHomePage();
     }
-
 
     @DataProvider
     public Object[][] projectNameProvider() {
