@@ -1,5 +1,6 @@
 package school.redrover.page.freestyle;
 
+import io.qameta.allure.Step;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -58,18 +59,21 @@ public class FreestyleBuildPage extends BasePage {
         return getWait5().until(ExpectedConditions.visibilityOf(consoleOutputMessage)).getText();
     }
 
+    @Step("Click 'Edit Build Information' sidebar")
     public FreestyleBuildPage clickEditBuildInformationSidebar() {
         getWait5().until(ExpectedConditions.visibilityOf(editBuildInformationSidebar)).click();
 
         return this;
     }
 
+    @Step("Type '{name}' 'Display name' field")
     public FreestyleBuildPage addDisplayName(String name) {
         getWait5().until(ExpectedConditions.visibilityOf(displayNameField)).sendKeys(name);
 
         return this;
     }
 
+    @Step("Clear and type '{newName}' to 'Display name' field")
     public FreestyleBuildPage editDisplayName(String newName) {
         getWait5().until(ExpectedConditions.visibilityOf(displayNameField)).clear();
         displayNameField.sendKeys(newName);
@@ -77,12 +81,14 @@ public class FreestyleBuildPage extends BasePage {
         return this;
     }
 
+    @Step("Type '{description}' to Description input field")
     public FreestyleBuildPage addBuildDescription(String description) {
         getWait5().until(ExpectedConditions.visibilityOf(descriptionField)).sendKeys(description);
 
         return this;
     }
 
+    @Step("Clear and type '{newDescription}' to Description input field")
     public FreestyleBuildPage editBuildDescription(String newDescription) {
         getWait5().until(ExpectedConditions.visibilityOf(descriptionField)).clear();
         descriptionField.sendKeys(newDescription);
@@ -90,18 +96,21 @@ public class FreestyleBuildPage extends BasePage {
         return this;
     }
 
+    @Step("Click 'Save' button")
     public FreestyleBuildPage clickSaveButton() {
         saveButton.click();
 
         return this;
     }
 
+    @Step("Click 'Delete Build' sidebar")
     public FreestyleBuildPage clickDeleteBuildSidebar() {
         getWait5().until(ExpectedConditions.elementToBeClickable(deleteBuildSidebar)).click();
 
         return this;
     }
 
+    @Step("Click 'Delete' button")
     public FreestyleProjectPage confirmDeleteBuild() {
         getWait10().until(ExpectedConditions.visibilityOf(deleteButton)).click();
 
