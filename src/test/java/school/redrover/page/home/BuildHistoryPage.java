@@ -52,6 +52,7 @@ public class BuildHistoryPage extends BasePage {
         return buildDisplayName.getText();
     }
 
+    @Step("Click 'Console output'")
     public ConsoleOutputPage clickConsoleOutput() {
         consoleOutputButton.click();
 

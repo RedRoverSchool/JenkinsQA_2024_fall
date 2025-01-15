@@ -1,5 +1,6 @@
 package school.redrover.page.pipeline;
 
+import io.qameta.allure.Step;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -63,7 +64,7 @@ public class PipelineProjectPage extends BaseProjectPage<PipelineProjectPage, Pi
     public String getStatusButtonText() {
         return getWait2().until(ExpectedConditions.visibilityOf(enableDisableStatusButton)).getText();
     }
-
+    @Step("Click on 'Build Now' item on side panel")
     public PipelineProjectPage clickOnBuildNowItemOnSidePanelAndWait() {
         buildNowSidebarButton.click();
         getWait5().until(ExpectedConditions.visibilityOf(buildIcon));
