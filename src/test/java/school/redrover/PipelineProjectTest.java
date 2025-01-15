@@ -231,6 +231,48 @@ public class PipelineProjectTest extends BaseTest {
         Assert.assertTrue(isDisplayed);
     }
 
+    @Test(dependsOnMethods = "testRenameProjectViaSidebar")
+    public void testDeleteProjectViaSidebar() {
+        List<String> projectList = new HomePage(getDriver())
+                .openPipelineProject(NEW_PROJECT_NAME)
+                .clickDeleteButtonSidebarAndConfirm()
+                .getItemList();
+
+        Assert.assertListNotContainsObject(
+                projectList,
+                NEW_PROJECT_NAME,
+                "Project is not deleted");
+    }
+
+    @Test
+    public void testDeleteViaChevron() {
+        List<String> projectList = new HomePage(getDriver())
+                .clickNewItem()
+                .enterItemName(PROJECT_NAME)
+                .selectPipelineAndClickOk()
+                .clickSaveButton()
+                .gotoHomePage()
+                .selectDeleteFromItemMenuAndClickYes(PROJECT_NAME)
+                .getItemList();
+
+        Assert.assertListNotContainsObject(projectList, PROJECT_NAME, "Project is not deleted");
+    }
+
+    @Test
+    public void testDeleteByChevronBreadcrumb() {
+        String welcomeTitle = new HomePage(getDriver())
+                .clickNewItem()
+                .enterItemName(PROJECT_NAME)
+                .selectPipelineAndClickOk()
+                .gotoHomePage()
+                .openPipelineProject(PROJECT_NAME)
+                .openBreadcrumbDropdown()
+                .clickDeleteBreadcrumbDropdownAndConfirm()
+                .getWelcomeTitle();
+
+        Assert.assertEquals(welcomeTitle, "Welcome to Jenkins!");
+    }
+
     @Test(dependsOnMethods = "testCreateProjectWithValidNameViaSidebar")
     @Story("US_02.001 View Pipeline page")
     @Description("TC_02.001.01 Verify list of sidebar items")
@@ -357,48 +399,6 @@ public class PipelineProjectTest extends BaseTest {
         Assert.assertFalse(
                 isDeleteOptionPresent,
                 "Delete build sidebar option is displayed, but it should not be.");
-    }
-
-    @Test(dependsOnMethods = "testRenameProjectViaSidebar")
-    public void testDeleteProjectViaSidebar() {
-        List<String> projectList = new HomePage(getDriver())
-                .openPipelineProject(NEW_PROJECT_NAME)
-                .clickDeleteButtonSidebarAndConfirm()
-                .getItemList();
-
-        Assert.assertListNotContainsObject(
-                projectList,
-                NEW_PROJECT_NAME,
-                "Project is not deleted");
-    }
-
-    @Test
-    public void testDeleteViaChevron() {
-        List<String> projectList = new HomePage(getDriver())
-                .clickNewItem()
-                .enterItemName(PROJECT_NAME)
-                .selectPipelineAndClickOk()
-                .clickSaveButton()
-                .gotoHomePage()
-                .selectDeleteFromItemMenuAndClickYes(PROJECT_NAME)
-                .getItemList();
-
-        Assert.assertListNotContainsObject(projectList, PROJECT_NAME, "Project is not deleted");
-    }
-
-    @Test
-    public void testDeleteByChevronBreadcrumb() {
-        String welcomeTitle = new HomePage(getDriver())
-                .clickNewItem()
-                .enterItemName(PROJECT_NAME)
-                .selectPipelineAndClickOk()
-                .gotoHomePage()
-                .openPipelineProject(PROJECT_NAME)
-                .openBreadcrumbDropdown()
-                .clickDeleteBreadcrumbDropdownAndConfirm()
-                .getWelcomeTitle();
-
-        Assert.assertEquals(welcomeTitle, "Welcome to Jenkins!");
     }
 
     @Test
