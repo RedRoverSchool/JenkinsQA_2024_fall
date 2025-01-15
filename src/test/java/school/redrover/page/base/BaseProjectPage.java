@@ -128,7 +128,8 @@ public abstract class BaseProjectPage<Self extends BaseProjectPage<?, ?, ?>, Pro
         return descriptionButton.getText();
     }
 
-    public List<String> getSidebarOptionList() {
+    @Step("Get Sidebar item list")
+    public List<String> getSidebarItemList() {
         return getWait5().until(ExpectedConditions.visibilityOfAllElements(sidebarElementList))
                 .stream()
                 .map(WebElement::getText)
