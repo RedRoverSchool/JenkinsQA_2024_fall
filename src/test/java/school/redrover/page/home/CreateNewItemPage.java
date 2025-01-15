@@ -114,6 +114,7 @@ public class CreateNewItemPage extends BasePage {
         return new FreestyleConfigPage(getDriver());
     }
 
+    @Step("Select 'Freestyle project' and click 'Ok' button")
     public FreestyleConfigPage nameAndSelectFreestyleProject(String itemName) {
         enterItemName(itemName);
         selectFreestyleProjectAndClickOk();
@@ -121,6 +122,7 @@ public class CreateNewItemPage extends BasePage {
         return new FreestyleConfigPage(getDriver());
     }
 
+    @Step("Select 'Multibranch Pipeline' and click 'Ok' button")
     public MultibranchPipelineConfigPage selectMultibranchPipelineAndClickOk() {
         TestUtils.scrollToBottomWithJS(getDriver());
 
@@ -130,6 +132,7 @@ public class CreateNewItemPage extends BasePage {
         return new MultibranchPipelineConfigPage(getDriver());
     }
 
+    @Step("Select 'Multibranch Pipeline'")
     public CreateNewItemPage selectMultibranchPipeline() {
         multibranchPipeline.click();
 
@@ -152,6 +155,7 @@ public class CreateNewItemPage extends BasePage {
         return new OrganizationFolderConfigPage(getDriver());
     }
 
+    @Step("Get error message")
     public String getInvalidNameMessage() {
         return invalidOrSameNameMessage.getText();
     }
@@ -173,12 +177,14 @@ public class CreateNewItemPage extends BasePage {
         return this;
     }
 
+    @Step("Select 'Multibranch Pipeline'")
     public CreateNewItemPage selectMultibranchPipelineProject() {
         multibranchPipeline.click();
 
         return this;
     }
 
+    @Step("Get error message")
     public String getErrorMessage() {
         return getWait5().until(ExpectedConditions.visibilityOf(invalidOrSameNameMessage)).getText();
     }
