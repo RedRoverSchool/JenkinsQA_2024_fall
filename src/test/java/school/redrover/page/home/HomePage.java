@@ -202,7 +202,7 @@ public class HomePage extends BasePage {
         return new MultibranchPipelineProjectPage(getDriver());
     }
 
-    @Step("Open folder")
+    @Step("Open folder '{name}'")
     public FolderProjectPage openFolder(String name) {
         openItem(name);
         return new FolderProjectPage(getDriver());
@@ -229,6 +229,7 @@ public class HomePage extends BasePage {
         return new CreateNewItemPage(getDriver());
     }
 
+    @Step("Select 'Configure' for '{itemName}' from item dropdown menu")
     public FolderConfigPage selectConfigureFromItemMenu(String itemName) {
         selectMenuFromItemDropdown(itemName, "Configure");
 
