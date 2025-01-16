@@ -405,6 +405,8 @@ public class PipelineProjectTest extends BaseTest {
     }
 
     @Test
+    @Story("US_02.004 Pipeline Configuration")
+    @Description("TC_02.004.01 Disabled Pipeline tooltip is displayed on HomePage")
     public void testPipelineDisabledTooltipOnHomePage() {
         String tooltipValue = new HomePage(getDriver())
                 .clickNewItem()
@@ -415,6 +417,7 @@ public class PipelineProjectTest extends BaseTest {
                 .gotoHomePage()
                 .getStatusBuild(PROJECT_NAME);
 
+        Allure.step("The disabled tooltip is displayed on Home page in the table of project status");
         Assert.assertEquals(tooltipValue, "Disabled");
     }
 
