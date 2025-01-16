@@ -241,7 +241,7 @@ public class PipelineProjectTest extends BaseTest {
                 .openPipelineProject(NEW_PROJECT_NAME)
                 .clickDeleteButtonSidebarAndConfirm()
                 .getItemList();
-        Allure.step(String.format("The Project '%s' is not displayed in the Dashboard", NEW_PROJECT_NAME));
+        Allure.step(String.format("Expected result: The Project '%s' is not displayed in the Dashboard", NEW_PROJECT_NAME));
         Assert.assertListNotContainsObject(
                 projectList, NEW_PROJECT_NAME, "Project is not deleted");
     }
@@ -256,7 +256,7 @@ public class PipelineProjectTest extends BaseTest {
                 .selectDeleteFromItemMenuAndClickYes(PROJECT_NAME)
                 .getItemList();
 
-        Allure.step(String.format("The Project '%s' is not displayed in the Dashboard", PROJECT_NAME));
+        Allure.step(String.format("Expected result: The Project '%s' is not displayed in the Dashboard", PROJECT_NAME));
         Assert.assertListNotContainsObject(projectList, PROJECT_NAME, "Project is not deleted");
     }
 
@@ -272,7 +272,7 @@ public class PipelineProjectTest extends BaseTest {
                 .clickDeleteBreadcrumbDropdownAndConfirm()
                 .getWelcomeTitle();
 
-        Allure.step(String.format("The Project '%s' is not displayed in the Dashboard", PROJECT_NAME));
+        Allure.step(String.format("Expected result: The Project '%s' is not displayed in the Dashboard", PROJECT_NAME));
         Assert.assertEquals(welcomeTitle, "Welcome to Jenkins!");
     }
 
@@ -284,7 +284,7 @@ public class PipelineProjectTest extends BaseTest {
                 .openPipelineProject(PROJECT_NAME)
                 .getSidebarItemList();
 
-        Allure.step("List of sidebar items contains " + SIDEBAR_ITEM_LIST_PROJECT_PAGE);
+        Allure.step("Expected result: List of sidebar items contains " + SIDEBAR_ITEM_LIST_PROJECT_PAGE);
         Assert.assertEquals(
                 actualSidebarItemList, SIDEBAR_ITEM_LIST_PROJECT_PAGE,
                 "List of Sidebar items on Project page don't match expected list.");
@@ -317,7 +317,7 @@ public class PipelineProjectTest extends BaseTest {
                 .editDescription(expectedProjectDescription)
                 .clickSubmitButton()
                 .getDescription();
-        Allure.step(String.format("Description '%s' is displayed on the Project page", expectedProjectDescription));
+        Allure.step(String.format("Expected result: Description '%s' is displayed on the Project page", expectedProjectDescription));
         Assert.assertEquals(actualDescription, expectedProjectDescription,
                 "Expected description for the project is not found");
     }
@@ -418,7 +418,7 @@ public class PipelineProjectTest extends BaseTest {
                 .gotoHomePage()
                 .getStatusBuild(PROJECT_NAME);
 
-        Allure.step("The disabled tooltip is displayed on Home page in the table of project status");
+        Allure.step("Expected result: The disabled tooltip is displayed on Home page in the table of project status");
         Assert.assertEquals(tooltipValue, "Disabled");
     }
 
@@ -490,7 +490,7 @@ public class PipelineProjectTest extends BaseTest {
                 .clickOnStagesItemOnSidePanel()
                 .getAllPipelineBuilds();
 
-        Allure.step("The List of recent builds is displayed");
+        Allure.step("Expected result: The List of recent builds is displayed");
         Assert.assertFalse(pipelineBuilds.isEmpty());
     }
 
@@ -509,7 +509,7 @@ public class PipelineProjectTest extends BaseTest {
                 .clickOnStagesItemOnSidePanel()
                 .getAllStagesNames();
 
-        Allure.step("The stages are displayed in the Pipeline graph");
+        Allure.step("Expected result: The stages are displayed in the Pipeline graph");
         Assert.assertEquals(stagesNames, PIPELINE_STAGES);
     }
 
@@ -528,7 +528,7 @@ public class PipelineProjectTest extends BaseTest {
                 .clickOnStagesItemOnSidePanel()
                 .getGreenAndRedIcons();
 
-        Allure.step("The status icons are displayed in the Pipeline graph");
+        Allure.step("Expected result: The status icons are displayed in the Pipeline graph");
         Assert.assertTrue(icons.get(0).isDisplayed(), "Green Icon must be displayed");
         Assert.assertTrue(icons.get(1).isDisplayed(), "Red Icon must be displayed");
     }
@@ -548,10 +548,10 @@ public class PipelineProjectTest extends BaseTest {
                 .clickOnStagesItemOnSidePanel()
                 .getGreenAndRedIcons();
 
-        Allure.step("The successful stage is colored green");
+        Allure.step("Expected result: The successful stage is colored green");
         Assert.assertEquals(icons.get(0).getCssValue("color"), "rgba(30, 166, 75, 1)");
 
-        Allure.step("The unsuccessful stage is colored red");
+        Allure.step("Expected result: The unsuccessful stage is colored red");
         Assert.assertEquals(icons.get(1).getCssValue("color"), "rgba(230, 0, 31, 1)");
     }
 
