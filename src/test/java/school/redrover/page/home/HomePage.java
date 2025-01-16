@@ -296,6 +296,7 @@ public class HomePage extends BasePage {
         return headerDescription.getText();
     }
 
+    @Step("Get Welcome title")
     public String getWelcomeTitle() {
         return welcomeTitle.getText();
     }
