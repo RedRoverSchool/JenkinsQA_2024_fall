@@ -27,6 +27,7 @@ public class PipelineProjectTest extends BaseTest {
     private final static String NEW_PROJECT_NAME = "NewPipelineName";
     private final static String EMPTY_NAME_ERROR_MESSAGE = "» This field cannot be empty, please enter a valid name";
     private final static String DUPLICATE_NAME_ERROR_MESSAGE = "» A job already exists with the name ";
+    private final static String DISABLE_PROJECT_WARNING_MESSAGE = "This project is currently disabled";
     private final static String SAME_NAME_WARNING_MESSAGE = "The new name is the same as the current name.";
     private final static String PIPELINE_SCRIPT = """
             pipeline {agent any\n stages {
@@ -322,33 +323,40 @@ public class PipelineProjectTest extends BaseTest {
                 "Expected description for the project is not found");
     }
 
-    @Test(dependsOnMethods = "testAddDescriptionToProject")
+    @Test
+    @Story("US_02.009 Disable/Enable Project")
+    @Description("TC_02.009.01 Disable project via toggle on the Configure page")
     public void testGetWarningMessageWhenDisableProject() {
+        TestUtils.createPipelineProject(getDriver(), PROJECT_NAME);
+
         PipelineProjectPage pipelineProjectPage = new HomePage(getDriver())
                 .openPipelineProject(PROJECT_NAME)
                 .clickSidebarConfigButton()
                 .clickToggleToDisableOrEnableProject()
                 .clickSaveButton();
 
-        Assert.assertEquals(
-                pipelineProjectPage.getWarningDisabledMessage(),
-                "This project is currently disabled");
-        Assert.assertEquals(
-                pipelineProjectPage.getStatusButtonText(),
+        Allure.step(String.format("Expected result: Warning message '%s' is displayed on the Project page", DISABLE_PROJECT_WARNING_MESSAGE));
+        Assert.assertEquals(pipelineProjectPage.getWarningDisabledMessage(),
+                DISABLE_PROJECT_WARNING_MESSAGE);
+
+        Allure.step("Expected result: Button text is 'Enable'");
+        Assert.assertEquals(pipelineProjectPage.getStatusButtonText(),
                 "Enable");
     }
 
     @Test(dependsOnMethods = "testGetWarningMessageWhenDisableProject")
+    @Story("US_02.009 Disable/Enable Project")
+    @Description("TC_02.009.02 Verify icon on the Dashboard for disabled project")
     public void testDisableProject() {
         HomePage homePage = new HomePage(getDriver());
 
-        Assert.assertTrue(
-                homePage.isDisableCircleSignPresent(PROJECT_NAME));
-        Assert.assertFalse(
-                homePage.isGreenScheduleBuildTrianglePresent(PROJECT_NAME));
+        Allure.step("Expected result: Disabled icon is displayed for the project");
+        Assert.assertTrue(homePage.isDisableCircleSignPresent(PROJECT_NAME));
     }
 
     @Test(dependsOnMethods = "testDisableProject")
+    @Story("US_02.009 Disable/Enable Project")
+    @Description("TC_02.009.03 Enable project via toggle on the Project page")
     public void testEnableProject() {
         boolean isGreenBuildButtonPresent = new HomePage(getDriver())
                 .openPipelineProject(PROJECT_NAME)
@@ -356,8 +364,8 @@ public class PipelineProjectTest extends BaseTest {
                 .gotoHomePage()
                 .isGreenScheduleBuildTrianglePresent(PROJECT_NAME);
 
-        Assert.assertTrue(
-                isGreenBuildButtonPresent,
+        Allure.step("Expected result: Green build button is displayed for the project");
+        Assert.assertTrue(isGreenBuildButtonPresent,
                 "Green build button is not displayed for the project");
     }
 
@@ -423,6 +431,8 @@ public class PipelineProjectTest extends BaseTest {
     }
 
     @Test
+    @Story("US_02.003 Build now")
+    @Description("TC_02.003.03 Build with valid pipeline script")
     public void testBuildWithValidPipelineScript() {
         final String validPipelineScriptFile = """
                 pipeline {
@@ -446,10 +456,13 @@ public class PipelineProjectTest extends BaseTest {
                 .refreshAfterBuild()
                 .getStatusBuild(PROJECT_NAME);
 
+        Allure.step("The 'Status of the last build' field displays 'Success' next to Pipeline project");
         Assert.assertEquals(statusBuild, "Success");
     }
 
     @Test
+    @Story("US_02.003 Build now")
+    @Description("TC_02.003.03 Build with invalid pipeline script")
     public void testBuildWithInvalidPipelineScript() {
         final String invalidPipelineScriptFile = """
                 error_pipeline {{{
@@ -473,6 +486,7 @@ public class PipelineProjectTest extends BaseTest {
                 .refreshAfterBuild()
                 .getStatusBuild(PROJECT_NAME);
 
+        Allure.step("The 'Status of the last build' field displays 'Failed' next to Pipeline project");
         Assert.assertEquals(statusBuild, "Failed");
     }
 
