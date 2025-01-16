@@ -87,14 +87,14 @@ public class PipelineProjectPage extends BaseProjectPage<PipelineProjectPage, Pi
         return projectNameBreadcrumbs.getText();
     }
 
-    @Step("Click Enable project toggle")
+    @Step("Click 'Enable' toggle")
     public PipelineProjectPage clickEnableButton() {
         getWait2().until(ExpectedConditions.elementToBeClickable(enableDisableStatusButton)).click();
 
         return this;
     }
 
-    @Step("Hover over Build Status mark")
+    @Step("Hover over 'Build Status' mark")
     public PipelineProjectPage hoverOverBuildStatusMark() {
         new Actions(getDriver())
                 .moveToElement(getWait10().until(ExpectedConditions.visibilityOf(buildStatusMark)))
@@ -108,7 +108,7 @@ public class PipelineProjectPage extends BaseProjectPage<PipelineProjectPage, Pi
         return getWait10().until(ExpectedConditions.visibilityOf(statusMarkTooltip)).getText();
     }
 
-    @Step("Click Build Status mark")
+    @Step("Click 'Build Status' mark")
     public PipelineBuildPage clickBuildStatusMark() {
         getWait10().until(ExpectedConditions.elementToBeClickable(buildStatusMark)).click();
 

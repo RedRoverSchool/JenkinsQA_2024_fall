@@ -24,7 +24,7 @@ public class PipelineBuildPage extends BasePage {
         super(driver);
     }
 
-    @Step("Click Keep this Build Forever button")
+    @Step("Click 'Keep this Build Forever' button")
     public PipelineBuildPage clickKeepThisBuildForever() {
         getWait10().until(ExpectedConditions.elementToBeClickable(submitButton)).click();
         getWait2().until(ExpectedConditions.visibilityOf(keepThisBuildForeverButton));
@@ -32,7 +32,7 @@ public class PipelineBuildPage extends BasePage {
         return this;
     }
 
-    @Step("Check Delete Build # sidebar item is displayed")
+    @Step("Check 'Delete Build #' sidebar item is displayed")
     public boolean isDeleteBuildOptionSidebarPresent(String name) {
 
         return sidebarTaskList.stream()

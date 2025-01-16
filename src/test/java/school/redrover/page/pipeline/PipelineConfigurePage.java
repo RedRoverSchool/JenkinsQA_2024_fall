@@ -62,7 +62,7 @@ public class PipelineConfigurePage extends BaseConfigPage<PipelineConfigurePage,
         return labelToTooltipTextMap;
     }
 
-    @Step("Click on Enable/Disable project toggle")
+    @Step("Click on 'Enable/Disable' toggle")
     public PipelineConfigurePage clickToggleToDisableOrEnableProject() {
         getWait5().until(ExpectedConditions.elementToBeClickable(enableDisableToggle)).click();
 

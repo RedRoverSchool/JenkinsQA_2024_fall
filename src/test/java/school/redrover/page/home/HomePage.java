@@ -348,7 +348,7 @@ public class HomePage extends BasePage {
         }
     }
 
-    @Step("Check green scheduleBuild triangle is display")
+    @Step("Check green schedule Build triangle is displayed")
     public boolean isGreenScheduleBuildTrianglePresent(String name) {
         return !getDriver().findElements(
                 By.xpath("//td[@class='jenkins-table__cell--tight']//a[@tooltip='Schedule a Build for %s']"
