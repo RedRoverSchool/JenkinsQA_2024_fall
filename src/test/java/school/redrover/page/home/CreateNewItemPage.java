@@ -167,6 +167,7 @@ public class CreateNewItemPage extends BasePage {
         return emptyNameMessage.getText();
     }
 
+    @Step("Select 'Pipeline'")
     public CreateNewItemPage selectPipeline() {
         getWait10().until(ExpectedConditions.elementToBeClickable(pipeline)).click();
 
@@ -186,8 +187,8 @@ public class CreateNewItemPage extends BasePage {
 
         return this;
     }
-
-    @Step("Get error message")
+  
+    @Step("Get Error Message")
     public String getErrorMessage() {
         return getWait5().until(ExpectedConditions.visibilityOf(invalidOrSameNameMessage)).getText();
     }

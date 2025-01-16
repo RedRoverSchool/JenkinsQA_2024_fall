@@ -182,7 +182,8 @@ public class HomePage extends BasePage {
         openItem(name);
         return new FreestyleProjectPage(getDriver());
     }
-    @Step("Open '{name}' pipeline project")
+
+    @Step("Open '{name}' Pipeline Project")
     public PipelineProjectPage openPipelineProject(String name) {
         openItem(name);
         return new PipelineProjectPage(getDriver());
@@ -347,6 +348,7 @@ public class HomePage extends BasePage {
         }
     }
 
+    @Step("Check green schedule Build triangle is displayed")
     public boolean isGreenScheduleBuildTrianglePresent(String name) {
         return !getDriver().findElements(
                 By.xpath("//td[@class='jenkins-table__cell--tight']//a[@tooltip='Schedule a Build for %s']"
@@ -371,17 +373,20 @@ public class HomePage extends BasePage {
         return new BuildHistoryPage(getDriver());
     }
 
+    @Step("Get Status Build tooltip text by project '{projectName}'")
     public String getStatusBuild(String projectName) {
 
         return getDriver().findElement(By.cssSelector("#job_%s> td:nth-of-type(1) > div > svg".formatted(projectName))).getAttribute("tooltip");
     }
 
+    @Step("Go to Pipeline Rename page from item dropdown")
     public PipelineRenamePage goToPipelineRenamePageViaDropdown(String name) {
         selectMenuFromItemDropdown(name, "Rename");
 
         return new PipelineRenamePage(getDriver());
     }
 
+    @Step("Refresh after Build")
     public HomePage refreshAfterBuild() {
         getWait10().until(ExpectedConditions.invisibilityOf(progressBar));
 

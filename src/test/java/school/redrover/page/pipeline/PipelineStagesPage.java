@@ -1,5 +1,6 @@
 package school.redrover.page.pipeline;
 
+import io.qameta.allure.Step;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -26,14 +27,17 @@ public class PipelineStagesPage extends BasePage {
         super(driver);
     }
 
+    @Step("Get all Pipeline Builds list")
     public List<WebElement> getAllPipelineBuilds() {
         return buildIdList;
     }
 
+    @Step("Get all Stages name list")
     public List<String> getAllStagesNames() {
         return pipelineStages.stream().map(el-> el.getAttribute("title")).toList();
     }
 
+    @Step("Get green and red icons")
     public List<WebElement> getGreenAndRedIcons() {
         List<WebElement> icons = new ArrayList<>();
         icons.add(greenIcon);

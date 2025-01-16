@@ -64,7 +64,7 @@ public class PipelineProjectPage extends BaseProjectPage<PipelineProjectPage, Pi
     public String getStatusButtonText() {
         return getWait2().until(ExpectedConditions.visibilityOf(enableDisableStatusButton)).getText();
     }
-    @Step("Click on 'Build Now' item on side panel")
+    @Step("Click on 'Build Now' item on side panel and waite")
     public PipelineProjectPage clickOnBuildNowItemOnSidePanelAndWait() {
         buildNowSidebarButton.click();
         getWait5().until(ExpectedConditions.visibilityOf(buildIcon));
@@ -72,6 +72,7 @@ public class PipelineProjectPage extends BaseProjectPage<PipelineProjectPage, Pi
         return this;
     }
 
+    @Step("Click on 'Stages' on sidebar")
     public PipelineStagesPage clickOnStagesItemOnSidePanel() {
         stagesSidebarButton.click();
 
@@ -86,12 +87,14 @@ public class PipelineProjectPage extends BaseProjectPage<PipelineProjectPage, Pi
         return projectNameBreadcrumbs.getText();
     }
 
+    @Step("Click 'Enable' toggle")
     public PipelineProjectPage clickEnableButton() {
         getWait2().until(ExpectedConditions.elementToBeClickable(enableDisableStatusButton)).click();
 
         return this;
     }
 
+    @Step("Hover over 'Build Status' mark")
     public PipelineProjectPage hoverOverBuildStatusMark() {
         new Actions(getDriver())
                 .moveToElement(getWait10().until(ExpectedConditions.visibilityOf(buildStatusMark)))
@@ -100,16 +103,19 @@ public class PipelineProjectPage extends BaseProjectPage<PipelineProjectPage, Pi
         return this;
     }
 
+    @Step("Get Status mark tooltip text")
     public String getStatusMarkTooltipText() {
         return getWait10().until(ExpectedConditions.visibilityOf(statusMarkTooltip)).getText();
     }
 
+    @Step("Click 'Build Status' mark")
     public PipelineBuildPage clickBuildStatusMark() {
         getWait10().until(ExpectedConditions.elementToBeClickable(buildStatusMark)).click();
 
         return new PipelineBuildPage(getDriver());
     }
 
+    @Step("Get Permalinks list")
     public List<String> getPermalinkList() {
         return getWait10().until(ExpectedConditions.visibilityOfAllElements(permalinks))
                 .stream()
@@ -118,6 +124,7 @@ public class PipelineProjectPage extends BaseProjectPage<PipelineProjectPage, Pi
                 .toList();
     }
 
+    @Step("Go to Pipeline Syntax page from sidebar")
     public PipelineSyntaxPage gotoPipelineSyntaxPageFromLeftPanel(String projectName) {
         getDriver().findElement(By.xpath("//a[@href='/job/%s/pipeline-syntax']".formatted(projectName))).click();
 

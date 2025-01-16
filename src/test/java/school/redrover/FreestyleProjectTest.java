@@ -278,7 +278,7 @@ public class FreestyleProjectTest extends BaseTest {
 
         List<String> actualSidebarMenu = new HomePage(getDriver())
                 .openFreestyleProject(PROJECT_NAME)
-                .getSidebarOptionList();
+                .getSidebarItemList();
 
         Assert.assertEquals(actualSidebarMenu, templateSidebarMenu);
     }
