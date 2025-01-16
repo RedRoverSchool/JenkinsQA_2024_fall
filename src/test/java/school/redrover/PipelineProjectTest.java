@@ -35,9 +35,10 @@ public class PipelineProjectTest extends BaseTest {
             stage('Test') {steps {error 'Test stage failed due to an error'}}
             }
             """;
-    private final static List<String> PIPELINE_STAGES = List.of("Start", "Build", "Test", "End");
+    private final static List<String> PIPELINE_STAGES_LIST = List.of("Start", "Build", "Test", "End");
     private final static List<String> SIDEBAR_ITEM_LIST_PROJECT_PAGE = List.of("Status", "Changes", "Build Now",
             "Configure", "Delete Pipeline", "Stages", "Rename", "Pipeline Syntax");
+    private final static List<String> BUILD_PERMALINK_LIST = List.of("Last build", "Last stable build", "Last successful build", "Last completed build");
 
     @DataProvider
     public Object[][] providerUnsafeCharacters() {
@@ -370,6 +371,8 @@ public class PipelineProjectTest extends BaseTest {
     }
 
     @Test
+    @Story("US_02.003 Build now")
+    @Description("TC_02.003.05 Display the list of permalinks on the Project page after running at least one build")
     public void testGetPermalinksInformationUponSuccessfulBuild() {
         TestUtils.createPipelineProject(getDriver(), PROJECT_NAME);
 
@@ -378,29 +381,27 @@ public class PipelineProjectTest extends BaseTest {
                 .openPipelineProject(PROJECT_NAME)
                 .getPermalinkList();
 
-        Assert.assertTrue(
-                permalinkList.containsAll(
-                        List.of(
-                                "Last build",
-                                "Last stable build",
-                                "Last successful build",
-                                "Last completed build")),
+        Allure.step("Expected result: All expected permalinks are displayed");
+        Assert.assertEquals(permalinkList, BUILD_PERMALINK_LIST,
                 "Not all expected permalinks are present in the actual permalinks list.");
     }
 
     @Test(dependsOnMethods = "testGetPermalinksInformationUponSuccessfulBuild")
+    @Story("US_02.003 Build now")
+    @Description("TC_02.003.06 Display tooltip Success by hovering over the icon next to the Project name")
     public void testGetSuccessTooltipDisplayedWhenHoverOverGreenMark() {
         String greenMarkTooltip = new HomePage(getDriver())
                 .openPipelineProject(PROJECT_NAME)
                 .hoverOverBuildStatusMark()
                 .getStatusMarkTooltipText();
 
-        Assert.assertEquals(
-                greenMarkTooltip,
-                "Success");
+        Allure.step("Expected result: Displayed tooltip 'Success'");
+        Assert.assertEquals(greenMarkTooltip, "Success");
     }
 
     @Test(dependsOnMethods = "testGetSuccessTooltipDisplayedWhenHoverOverGreenMark")
+    @Story("US_02.003 Build now")
+    @Description("TC_02.003.07 Not display sidebar button 'Delete Build # '  if keep toggle 'Don't keep this build forever'")
     public void testKeepBuildForever() {
         boolean isDeleteOptionPresent = new HomePage(getDriver())
                 .openPipelineProject(PROJECT_NAME)
@@ -408,8 +409,8 @@ public class PipelineProjectTest extends BaseTest {
                 .clickKeepThisBuildForever()
                 .isDeleteBuildOptionSidebarPresent(PROJECT_NAME);
 
-        Assert.assertFalse(
-                isDeleteOptionPresent,
+        Allure.step("Expected result: Sidebar button 'Delete Build # ' is not displayed");
+        Assert.assertFalse(isDeleteOptionPresent,
                 "Delete build sidebar option is displayed, but it should not be.");
     }
 
@@ -524,7 +525,7 @@ public class PipelineProjectTest extends BaseTest {
                 .getAllStagesNames();
 
         Allure.step("Expected result: The stages are displayed in the Pipeline graph");
-        Assert.assertEquals(stagesNames, PIPELINE_STAGES);
+        Assert.assertEquals(stagesNames, PIPELINE_STAGES_LIST);
     }
 
     @Test
