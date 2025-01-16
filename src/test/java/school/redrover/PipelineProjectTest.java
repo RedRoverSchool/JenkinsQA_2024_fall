@@ -231,45 +231,48 @@ public class PipelineProjectTest extends BaseTest {
         Assert.assertTrue(isDisplayed);
     }
 
-    @Test(dependsOnMethods = "testRenameProjectViaSidebar")
+    @Test
+    @Story("US_02.005 Delete Pipeline")
+    @Description("TC_02.005.01 Delete Pipeline by sidebar on the Project page")
     public void testDeleteProjectViaSidebar() {
+        TestUtils.createPipelineProject(getDriver(), NEW_PROJECT_NAME);
+
         List<String> projectList = new HomePage(getDriver())
                 .openPipelineProject(NEW_PROJECT_NAME)
                 .clickDeleteButtonSidebarAndConfirm()
                 .getItemList();
-
+        Allure.step(String.format("The Project '%s' is not displayed in the Dashboard", NEW_PROJECT_NAME));
         Assert.assertListNotContainsObject(
-                projectList,
-                NEW_PROJECT_NAME,
-                "Project is not deleted");
+                projectList, NEW_PROJECT_NAME, "Project is not deleted");
     }
 
     @Test
+    @Story("US_02.005 Delete Pipeline")
+    @Description("TC_02.005.02 Delete Pipeline via chevron dropdown menu on the Dashboard")
     public void testDeleteViaChevron() {
+        TestUtils.createPipelineProject(getDriver(), PROJECT_NAME);
+
         List<String> projectList = new HomePage(getDriver())
-                .clickNewItem()
-                .enterItemName(PROJECT_NAME)
-                .selectPipelineAndClickOk()
-                .clickSaveButton()
-                .gotoHomePage()
                 .selectDeleteFromItemMenuAndClickYes(PROJECT_NAME)
                 .getItemList();
 
+        Allure.step(String.format("The Project '%s' is not displayed in the Dashboard", PROJECT_NAME));
         Assert.assertListNotContainsObject(projectList, PROJECT_NAME, "Project is not deleted");
     }
 
     @Test
+    @Story("US_02.005 Delete Pipeline")
+    @Description("TC_02.005.03 Delete Pipeline via the chevron dropdown menu  in Breadcrumb")
     public void testDeleteByChevronBreadcrumb() {
+        TestUtils.createPipelineProject(getDriver(), PROJECT_NAME);
+
         String welcomeTitle = new HomePage(getDriver())
-                .clickNewItem()
-                .enterItemName(PROJECT_NAME)
-                .selectPipelineAndClickOk()
-                .gotoHomePage()
                 .openPipelineProject(PROJECT_NAME)
                 .openBreadcrumbDropdown()
                 .clickDeleteBreadcrumbDropdownAndConfirm()
                 .getWelcomeTitle();
 
+        Allure.step(String.format("The Project '%s' is not displayed in the Dashboard", PROJECT_NAME));
         Assert.assertEquals(welcomeTitle, "Welcome to Jenkins!");
     }
 
