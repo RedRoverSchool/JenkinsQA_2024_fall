@@ -16,9 +16,6 @@ public abstract class BaseProjectPage<Self extends BaseProjectPage<?, ?, ?>, Pro
     @FindBy(id = "description-link")
     private WebElement descriptionButton;
 
-    @FindBy(xpath = "//span[text()='New Item']/ancestor::a")
-    private WebElement newItem;
-
     @FindBy(name = "description")
     private WebElement descriptionField;
 
@@ -71,12 +68,6 @@ public abstract class BaseProjectPage<Self extends BaseProjectPage<?, ?, ?>, Pro
     protected abstract ProjectConfigPage createProjectConfigPage();
 
     protected abstract ProjectRenamePage createProjectRenamePage();
-
-    public CreateNewItemPage clickNewItem() {
-        newItem.click();
-
-        return new CreateNewItemPage(getDriver());
-    }
 
     @Step("Edit description: clear input and type '{text}'")
     public Self editDescription(String text) {

@@ -1,5 +1,6 @@
 package school.redrover.page.manage;
 
+import io.qameta.allure.Step;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -15,6 +16,7 @@ public class ThreadDumpPage extends BasePage {
         super(driver);
     }
 
+    @Step("Get title")
     public String getTitle() {
         return getWait5().until(ExpectedConditions.visibilityOf(title)).getText();
     }

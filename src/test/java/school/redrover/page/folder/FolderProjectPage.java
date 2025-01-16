@@ -8,6 +8,7 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import school.redrover.page.base.BaseProjectPage;
+import school.redrover.page.home.CreateNewItemPage;
 
 import java.util.Arrays;
 import java.util.List;
@@ -56,6 +57,9 @@ public class FolderProjectPage extends BaseProjectPage<FolderProjectPage, Folder
     @FindBy(xpath = "//td/a/span")
     private List<WebElement> itemNames;
 
+    @FindBy(xpath = "//span[text()='New Item']/ancestor::a")
+    private WebElement newItem;
+
     public FolderProjectPage(WebDriver driver) {
         super(driver);
     }
@@ -70,6 +74,7 @@ public class FolderProjectPage extends BaseProjectPage<FolderProjectPage, Folder
         return new FolderRenamePage(getDriver());
     }
 
+    @Step("Get Folder description from project page")
     public String getFolderDescription() {
         return folderDescription.getText();
     }
@@ -88,8 +93,8 @@ public class FolderProjectPage extends BaseProjectPage<FolderProjectPage, Folder
                 .orElse("");
     }
 
+    @Step("Get project name from the list by order '{order}'")
     public String getItemNameByOrder(int order) {
-
         return itemNames
                 .stream()
                 .skip(order - 1)
@@ -97,12 +102,14 @@ public class FolderProjectPage extends BaseProjectPage<FolderProjectPage, Folder
                 .getText();
     }
 
+    @Step("Click on green triangle to schedule a build")
     public FolderProjectPage runJob(String projectName) {
         getDriver().findElement(By.xpath("//td//a[@title='Schedule a Build for %s']".formatted(projectName))).click();
 
         return this;
     }
 
+    @Step("Cancel deleting in modal window")
     public FolderProjectPage cancelDeletingViaModalWindow() {
         getWait10().until(ExpectedConditions.elementToBeClickable(deleteFolderButton)).click();
         getWait10().until(ExpectedConditions.elementToBeClickable(cancelDeleteButton)).click();
@@ -116,12 +123,14 @@ public class FolderProjectPage extends BaseProjectPage<FolderProjectPage, Folder
         return getWait10().until(ExpectedConditions.visibilityOf(descriptionTextareaPreview)).getText();
     }
 
+    @Step("Click 'Move' on sidebar menu")
     public FolderProjectPage clickMoveOnSidebar() {
         moveSidebarButton.click();
 
         return this;
     }
 
+    @Step("Select parent folder '{folderName}' in dropdown and click 'Move'")
     public FolderProjectPage selectParentFolderAndClickMove(String folderName) {
         WebElement selectElement = getWait5().until(ExpectedConditions.visibilityOf(selectFolderDestinationSelect));
         Select select = new Select(selectElement);
@@ -132,6 +141,7 @@ public class FolderProjectPage extends BaseProjectPage<FolderProjectPage, Folder
         return this;
     }
 
+    @Step("Get the list of breadcrumbs items as text")
     public List<String> getBreadcrumsBarItemsList() {
         return breadcrumbsItemList
                 .stream()
@@ -143,15 +153,24 @@ public class FolderProjectPage extends BaseProjectPage<FolderProjectPage, Folder
         getDriver().findElement(By.xpath("//td/a/span[text() = '%s']/..".formatted(name))).click();
     }
 
+    @Step("Open folder '{name}'")
     public FolderProjectPage openFolder(String name) {
         openItem(name);
         return new FolderProjectPage(getDriver());
     }
 
+    @Step("Get list of sidebar menu options")
     public List<String> getListOfItemsSidebar() {
         return sidebarItemsNameList
                 .stream()
                 .map(WebElement::getText)
                 .toList();
+    }
+
+    @Step("Click 'New Item' from the folder")
+    public CreateNewItemPage clickNewItem() {
+        newItem.click();
+
+        return new CreateNewItemPage(getDriver());
     }
 }

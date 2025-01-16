@@ -111,6 +111,7 @@ public abstract class BasePage extends BaseModel {
         return new ManageJenkinsPage(getDriver());
     }
 
+    @Step("Get current page url")
     public String getCurrentUrl() {
         return getDriver().getCurrentUrl();
     }
