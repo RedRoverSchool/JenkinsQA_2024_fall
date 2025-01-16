@@ -1,5 +1,6 @@
 package school.redrover.page.pipeline;
 
+import io.qameta.allure.Step;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -49,6 +50,7 @@ public class PipelineConfigurePage extends BaseConfigPage<PipelineConfigurePage,
         return getWait2().until(ExpectedConditions.visibilityOfAllElements(sidebarOptions)).stream().map(WebElement::getText).toList();
     }
 
+    @Step("Get Map checkboxes tooltip text")
     public Map<String, String> getCheckboxWithTooltipTextMap() {
         Map<String, String> labelToTooltipTextMap = new HashMap<>();
         for (int i = 0; i < checkboxWithQuestionMarkList.size(); i++) {
@@ -60,12 +62,14 @@ public class PipelineConfigurePage extends BaseConfigPage<PipelineConfigurePage,
         return labelToTooltipTextMap;
     }
 
+    @Step("Click on Enable/Disable project toggle")
     public PipelineConfigurePage clickToggleToDisableOrEnableProject() {
         getWait5().until(ExpectedConditions.elementToBeClickable(enableDisableToggle)).click();
 
         return this;
     }
 
+    @Step("Add script to project on the Configure page")
     public PipelineConfigurePage addScriptToPipeline(String script) {
 
         TestUtils.scrollToBottomWithJS(getDriver());
@@ -74,12 +78,14 @@ public class PipelineConfigurePage extends BaseConfigPage<PipelineConfigurePage,
         return this;
     }
 
+    @Step("Enter Script from file '{script}'")
     public PipelineConfigurePage enterScriptFromFile(String script) {
         TestUtils.pasteTextWithJavaScript(getDriver(), scriptField, script);
 
         return this;
     }
 
+    @Step("Paste script to 'Script' textarea on the Configure page")
     public PipelineConfigurePage pasteScript() {
         TestUtils.scrollToBottomWithJS(getDriver());
 
@@ -90,6 +96,7 @@ public class PipelineConfigurePage extends BaseConfigPage<PipelineConfigurePage,
         return this;
     }
 
+    @Step("Get Script text onto 'Script' textarea on the Configure page")
     public String getScriptText() {
         return getWait2().until(ExpectedConditions.visibilityOf(scriptText))
                 .getText();

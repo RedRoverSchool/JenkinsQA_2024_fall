@@ -63,10 +63,7 @@ public class PipelineProjectTest extends BaseTest {
                 .getItemList();
 
         Allure.step(String.format("Expected result: Project with valid name '%s' is displayed on the Home page", PROJECT_NAME));
-        Assert.assertListContainsObject(
-                itemList,
-                PROJECT_NAME,
-                "Project is not created");
+        Assert.assertListContainsObject(itemList, PROJECT_NAME, "Project is not created");
     }
 
     @Test
@@ -243,6 +240,7 @@ public class PipelineProjectTest extends BaseTest {
                 .openPipelineProject(NEW_PROJECT_NAME)
                 .clickDeleteButtonSidebarAndConfirm()
                 .getItemList();
+
         Allure.step(String.format("Expected result: The Project '%s' is not displayed in the Dashboard", NEW_PROJECT_NAME));
         Assert.assertListNotContainsObject(
                 projectList, NEW_PROJECT_NAME, "Project is not deleted");
@@ -303,7 +301,7 @@ public class PipelineProjectTest extends BaseTest {
                 .clickSidebarConfigButton()
                 .getCheckboxWithTooltipTextMap();
 
-        Allure.step("Tooltip text in the options list is correct");
+        Allure.step("Expected result: Tooltip text in the options list is correct");
         labelToTooltipTextMap.forEach((checkbox, tooltip) ->
                 Assert.assertTrue(tooltip.contains("Help for feature: " + checkbox),
                         "Tooltip for feature '" + checkbox + "' does not contain the correct text"));
@@ -321,6 +319,7 @@ public class PipelineProjectTest extends BaseTest {
                 .editDescription(expectedProjectDescription)
                 .clickSubmitButton()
                 .getDescription();
+
         Allure.step(String.format("Expected result: Description '%s' is displayed on the Project page", expectedProjectDescription));
         Assert.assertEquals(actualDescription, expectedProjectDescription,
                 "Expected description for the project is not found");
@@ -459,7 +458,7 @@ public class PipelineProjectTest extends BaseTest {
                 .refreshAfterBuild()
                 .getStatusBuild(PROJECT_NAME);
 
-        Allure.step("The 'Status of the last build' field displays 'Success' next to Pipeline project");
+        Allure.step("Expected result: The 'Status of the last build' field displays 'Success' next to Pipeline project");
         Assert.assertEquals(statusBuild, "Success");
     }
 
@@ -489,7 +488,7 @@ public class PipelineProjectTest extends BaseTest {
                 .refreshAfterBuild()
                 .getStatusBuild(PROJECT_NAME);
 
-        Allure.step("The 'Status of the last build' field displays 'Failed' next to Pipeline project");
+        Allure.step("Expected result: The 'Status of the last build' field displays 'Failed' next to Pipeline project");
         Assert.assertEquals(statusBuild, "Failed");
     }
 

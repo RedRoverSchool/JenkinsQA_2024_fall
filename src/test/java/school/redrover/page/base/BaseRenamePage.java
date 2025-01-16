@@ -32,6 +32,7 @@ public abstract class BaseRenamePage<Self extends BaseRenamePage<?, ?>, ProjectP
         return (Self) this;
     }
 
+    @Step("Get warning message")
     public String getWarningMessage() {
         return getWait5().until(ExpectedConditions.visibilityOf(warningMessage)).getText();
     }
