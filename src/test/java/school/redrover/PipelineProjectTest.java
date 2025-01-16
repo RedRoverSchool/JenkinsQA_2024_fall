@@ -293,6 +293,8 @@ public class PipelineProjectTest extends BaseTest {
     }
 
     @Test
+    @Story("US_02.004 Pipeline Configuration")
+    @Description("TC_02.004.02 Verify tooltip text in the options list on the Configure page")
     public void testVerifyCheckboxTooltipsContainCorrectText() {
         TestUtils.createPipelineProject(getDriver(), PROJECT_NAME);
 
@@ -301,9 +303,9 @@ public class PipelineProjectTest extends BaseTest {
                 .clickSidebarConfigButton()
                 .getCheckboxWithTooltipTextMap();
 
+        Allure.step("Tooltip text in the options list is correct");
         labelToTooltipTextMap.forEach((checkbox, tooltip) ->
-                Assert.assertTrue(
-                        tooltip.contains("Help for feature: " + checkbox),
+                Assert.assertTrue(tooltip.contains("Help for feature: " + checkbox),
                         "Tooltip for feature '" + checkbox + "' does not contain the correct text"));
     }
 
@@ -571,20 +573,23 @@ public class PipelineProjectTest extends BaseTest {
     }
 
     @Test
+    @Story("US_02.008 Pipeline Syntax")
+    @Description("TC_02.008.02 Verify Breadcrumb text on the Pipeline Syntax page")
     public void testPipelineSyntaxPageIsPresent() {
+        TestUtils.createPipelineProject(getDriver(), PIPELINE_NAME);
+
         String bredCrumbs = new HomePage(getDriver())
-                .clickNewItem()
-                .enterItemName(PIPELINE_NAME)
-                .selectPipelineAndClickOk()
-                .gotoHomePage()
                 .openPipelineProject(PIPELINE_NAME)
                 .gotoPipelineSyntaxPageFromLeftPanel(PIPELINE_NAME)
                 .getBreadCrumb(PIPELINE_NAME);
 
+        Allure.step("Expected result: Pipeline Syntax is displayed in the Breadcrumb on the Pipeline Syntax page");
         Assert.assertEquals(bredCrumbs, "Pipeline Syntax");
     }
 
     @Test(dependsOnMethods = "testPipelineSyntaxPageIsPresent")
+    @Story("US_02.008 Pipeline Syntax")
+    @Description("TC_02.008.01 Selecting and applying a new script via Sample Step")
     public void testSelectScript() {
         String selectItem = new HomePage(getDriver())
                 .openPipelineProject(PIPELINE_NAME)
@@ -592,10 +597,13 @@ public class PipelineProjectTest extends BaseTest {
                 .selectNewStep(SELECT_VALUE)
                 .getTitleOfSelectedScript(SELECT_VALUE);
 
+        Allure.step(String.format("Expected result: The '%s' step is displayed as selected in the dropdown 'Sample Step'", SELECT_VALUE));
         Assert.assertEquals(selectItem, EXPECTED_RESULT);
     }
 
     @Test(dependsOnMethods = "testSelectScript")
+    @Story("US_02.008 Pipeline Syntax")
+    @Description("TC_02.008.03 Generate script and insert into script block on Сonfigure page")
     public void testCopyAndPasteScript() {
         String pastedText = new HomePage(getDriver())
                 .openPipelineProject(PIPELINE_NAME)
@@ -609,6 +617,7 @@ public class PipelineProjectTest extends BaseTest {
                 .pasteScript()
                 .getScriptText();
 
+        Allure.step(String.format("Expected result: Copied script '%s' is displayed in the Script block", SELECT_VALUE));
         Assert.assertEquals(pastedText, EXPECTED_RESULT);
     }
 }
