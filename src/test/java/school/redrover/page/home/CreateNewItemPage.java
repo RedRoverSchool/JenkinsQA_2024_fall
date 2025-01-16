@@ -72,6 +72,7 @@ public class CreateNewItemPage extends BasePage {
         return this;
     }
 
+    @Step("Select 'Folder' type")
     public CreateNewItemPage selectFolderType() {
         folder.click();
 
@@ -86,6 +87,7 @@ public class CreateNewItemPage extends BasePage {
         return new FolderConfigPage(getDriver());
     }
 
+    @Step("Type name '{itemName}', select 'Folder' and click 'Ok'")
     public FolderConfigPage nameAndSelectFolderType(String itemName) {
         enterItemName(itemName);
         selectFolderAndClickOk();
@@ -114,7 +116,7 @@ public class CreateNewItemPage extends BasePage {
         return new FreestyleConfigPage(getDriver());
     }
 
-    @Step("Select 'Freestyle project' and click 'Ok' button")
+    @Step("Type name '{itemName}', select 'FreestyleProject' and click 'Ok'")
     public FreestyleConfigPage nameAndSelectFreestyleProject(String itemName) {
         enterItemName(itemName);
         selectFreestyleProjectAndClickOk();
@@ -160,6 +162,7 @@ public class CreateNewItemPage extends BasePage {
         return invalidOrSameNameMessage.getText();
     }
 
+    @Step("Get invalid message for empty name field")
     public String getEmptyNameMessage() {
         return emptyNameMessage.getText();
     }
@@ -204,6 +207,7 @@ public class CreateNewItemPage extends BasePage {
         return page;
     }
 
+    @Step("Click 'Ok' button")
     public ErrorPage clickOkButtonLeadingToErrorPage() {
         okButton.click();
 

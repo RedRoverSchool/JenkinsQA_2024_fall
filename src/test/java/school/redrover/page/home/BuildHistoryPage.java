@@ -30,6 +30,7 @@ public class BuildHistoryPage extends BasePage {
         super(driver);
     }
 
+    @Step("Get project name from Build History page")
     public String getProjectName() {
         return lastProjectName.getText();
     }
