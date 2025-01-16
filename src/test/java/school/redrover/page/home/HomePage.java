@@ -198,6 +198,7 @@ public class HomePage extends BasePage {
         return new OrganizationFolderProjectPage(getDriver());
     }
 
+    @Step("Open '{name}' multibranch pipeline project")
     public MultibranchPipelineProjectPage openMultibranchPipelineProject(String name) {
         openItem(name);
         return new MultibranchPipelineProjectPage(getDriver());
@@ -621,6 +622,7 @@ public class HomePage extends BasePage {
                         .formatted(menuName)))).click();
     }
 
+    @Step("Select 'Rename' in project dropdown for '{itemName}'")
     public MultibranchPipelineRenamePage selectRenameFromItemDropdown(String itemName) {
         selectMenuFromItemDropdown(itemName, "Rename");
 
