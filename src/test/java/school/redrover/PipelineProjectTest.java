@@ -305,8 +305,11 @@ public class PipelineProjectTest extends BaseTest {
                         "Tooltip for feature '" + checkbox + "' does not contain the correct text"));
     }
 
-    @Test(dependsOnMethods = "testVerifyCheckboxTooltipsContainCorrectText")
+    @Test
+    @Story("US_02.001 View Pipeline page")
+    @Description("TC_02.001.02 Add Project description on the Project page")
     public void testAddDescriptionToProject() {
+        TestUtils.createPipelineProject(getDriver(), PROJECT_NAME);
         final String expectedProjectDescription = "Certain_project_description";
 
         String actualDescription = new HomePage(getDriver())
@@ -314,10 +317,8 @@ public class PipelineProjectTest extends BaseTest {
                 .editDescription(expectedProjectDescription)
                 .clickSubmitButton()
                 .getDescription();
-
-        Assert.assertEquals(
-                actualDescription,
-                expectedProjectDescription,
+        Allure.step(String.format("Description '%s' is displayed on the Project page", expectedProjectDescription));
+        Assert.assertEquals(actualDescription, expectedProjectDescription,
                 "Expected description for the project is not found");
     }
 
@@ -476,6 +477,8 @@ public class PipelineProjectTest extends BaseTest {
     }
 
     @Test
+    @Story("US_02.006 Stages")
+    @Description("TC_02.006.01 List of recent builds is displayed on Stages page")
     public void testListOfRecentBuildsISDisplayedOnStages() {
 
         List<WebElement> pipelineBuilds = new HomePage(getDriver())
@@ -487,10 +490,13 @@ public class PipelineProjectTest extends BaseTest {
                 .clickOnStagesItemOnSidePanel()
                 .getAllPipelineBuilds();
 
+        Allure.step("The List of recent builds is displayed");
         Assert.assertFalse(pipelineBuilds.isEmpty());
     }
 
     @Test
+    @Story("US_02.006 Stages")
+    @Description("TC_02.006.02 Pipeline stages are displayed in pipeline graph")
     public void testStagesAreDisplayedInPipelineGraph() {
 
         List<String> stagesNames = new HomePage(getDriver())
@@ -503,10 +509,13 @@ public class PipelineProjectTest extends BaseTest {
                 .clickOnStagesItemOnSidePanel()
                 .getAllStagesNames();
 
+        Allure.step("The stages are displayed in the Pipeline graph");
         Assert.assertEquals(stagesNames, PIPELINE_STAGES);
     }
 
     @Test
+    @Story("US_02.006 Stages")
+    @Description("TC_02.006.03 Pipeline status icons are displayed in pipeline graph")
     public void testStatusIconsAreDisplayedInPipelineGraph() {
 
         List<WebElement> icons = new HomePage(getDriver())
@@ -519,11 +528,14 @@ public class PipelineProjectTest extends BaseTest {
                 .clickOnStagesItemOnSidePanel()
                 .getGreenAndRedIcons();
 
+        Allure.step("The status icons are displayed in the Pipeline graph");
         Assert.assertTrue(icons.get(0).isDisplayed(), "Green Icon must be displayed");
         Assert.assertTrue(icons.get(1).isDisplayed(), "Red Icon must be displayed");
     }
 
     @Test
+    @Story("US_02.006 Stages")
+    @Description("TC_02.006.04 Status icons color")
     public void testStatusIconsColor() {
 
         List<WebElement> icons = new HomePage(getDriver())
@@ -536,7 +548,10 @@ public class PipelineProjectTest extends BaseTest {
                 .clickOnStagesItemOnSidePanel()
                 .getGreenAndRedIcons();
 
+        Allure.step("The successful stage is colored green");
         Assert.assertEquals(icons.get(0).getCssValue("color"), "rgba(30, 166, 75, 1)");
+
+        Allure.step("The unsuccessful stage is colored red");
         Assert.assertEquals(icons.get(1).getCssValue("color"), "rgba(230, 0, 31, 1)");
     }
 
