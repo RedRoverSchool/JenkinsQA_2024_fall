@@ -1,5 +1,6 @@
 package school.redrover.page.user;
 
+import io.qameta.allure.Step;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -30,6 +31,7 @@ public class UserPage extends BasePage {
         return new UserConfigPage(getDriver());
     }
 
+    @Step("Click configure user sidebar")
     public UserConfigPage clickConfigureUserSidebar() {
         getWait2().until(ExpectedConditions.elementToBeClickable(configureUserSidebar)).click();
 
@@ -40,6 +42,7 @@ public class UserPage extends BasePage {
         return getWait2().until(ExpectedConditions.visibilityOf(adminDescription)).getText();
     }
 
+    @Step("Get user description")
     public String getUserDescription() {
         return userDescription.getText();
     }

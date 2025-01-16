@@ -59,6 +59,7 @@ public class FreestyleConfigPage extends BaseConfigPage<FreestyleConfigPage, Fre
         return this;
     }
 
+    @Step("Click 'Build steps' in sidebar and type '{command}' for 'Execute Windows batch command' add build step option")
     public FreestyleConfigPage addExecuteWindowsBatchCommand(String command) {
         getWait10().until(ExpectedConditions.visibilityOf(buildStepsSidebar)).click();
         TestUtils.scrollToBottomWithJS(getDriver());

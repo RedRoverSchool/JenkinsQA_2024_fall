@@ -167,6 +167,7 @@ public class HomePage extends BasePage {
         getDriver().findElement(By.xpath("//td/a/span[text() = '%s']/..".formatted(name))).click();
     }
 
+    @Step("Click on chevron and select '{menuName}' in dropdown menu for '{itemName}' project")
     private void selectMenuFromItemDropdown(String itemName, String menuName) {
         TestUtils.moveAndClickWithJS(getDriver(), getDriver().findElement(
                 By.xpath("//td/a/span[text() = '%s']/../button".formatted(itemName))));
@@ -259,25 +260,28 @@ public class HomePage extends BasePage {
         return this;
     }
 
+    @Step("Select 'New Item' from folder dropdown menu")
     public CreateNewItemPage selectNewItemFromFolderMenu(String itemName) {
         selectMenuFromItemDropdown(itemName, "New Item");
 
         return new CreateNewItemPage(getDriver());
     }
 
+    @Step("Select 'Build History' in dropdown for '{itemName}'")
     public BuildHistoryPage selectBuildHistoryFromItemMenu(String itemName) {
         selectMenuFromItemDropdown(itemName, "Build History");
 
         return new BuildHistoryPage(getDriver());
     }
 
-    @Step("Select 'Build Now' from item menu for '{itemName}'")
+    @Step("Select 'Build Now' in dropdown for '{itemName}'")
     public HomePage selectBuildNowFromItemMenu(String itemName) {
         selectMenuFromItemDropdown(itemName, "Build Now");
 
         return this;
     }
 
+    @Step("Select 'Move' in dropdown for for '{itemName}'")
     public FolderProjectPage selectMoveFromItemMenuByChevron(String itemName) {
         selectMenuFromItemDropdown(itemName, "Move");
 
@@ -297,7 +301,7 @@ public class HomePage extends BasePage {
         return headerDescription.getText();
     }
 
-    @Step("Get Welcome title")
+    @Step("Get welcome title")
     public String getWelcomeTitle() {
         return welcomeTitle.getText();
     }
