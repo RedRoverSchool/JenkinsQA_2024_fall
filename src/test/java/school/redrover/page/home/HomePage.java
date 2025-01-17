@@ -573,6 +573,7 @@ public class HomePage extends BasePage {
         return buildQueueText.getText();
     }
 
+    @Step("Open Dashboard dropdown")
     public HomePage selectBreadcrumbBarMenu() {
         new Actions(getDriver()).moveToElement(getDriver().findElement(By.xpath("//div[@id='breadcrumbBar']//a"))).perform();
 
