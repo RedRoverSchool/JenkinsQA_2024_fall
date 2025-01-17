@@ -75,7 +75,7 @@ public class HomePage extends BasePage {
     @FindBy(xpath = "//*[@href='/user/admin']")
     private WebElement admin;
 
-    @FindBy(xpath = "/html/body/div[3]/div/div/div/a[4]")
+    @FindBy(xpath = "//html/body/div[3]/div/div/div/a[4]")
     private WebElement credentialsDropdown;
 
     @FindBy(css = "a[href^='/logout']")
