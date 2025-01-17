@@ -17,7 +17,7 @@ public class UserConfigPage extends BasePage {
     @FindBy(xpath = "//div[@class='help']/div")
     private WebElement fullNameInputHelper;
 
-    @FindBy(xpath = "//span[contains(@class,'task-link-wrapper')]/a[@href='/user/admin/']")
+    @FindBy(xpath = "//div[1]/span/a")
     private WebElement statusSidebarButton;
 
     @FindBy (xpath = "//textarea[@name='_.description']")
@@ -39,16 +39,12 @@ public class UserConfigPage extends BasePage {
         super(driver);
     }
 
-    public UserConfigPage clickFullNameTooltip() {
-        getWait2().until(ExpectedConditions.elementToBeClickable(fullNameTooltip)).click();
-
-        return this;
-    }
 
     public String getFullNameHelperInputText() {
         return getWait2().until(ExpectedConditions.visibilityOf(fullNameInputHelper)).getText();
     }
 
+    @Step("Click 'Status' at sidebar")
     public UserPage clickStatusSidebar() {
         getWait2().until(ExpectedConditions.elementToBeClickable(statusSidebarButton)).click();
 

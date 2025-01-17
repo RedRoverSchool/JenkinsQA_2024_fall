@@ -25,12 +25,6 @@ public class UserPage extends BasePage {
         super(driver);
     }
 
-    public UserConfigPage clickConfigureSidebar() {
-        getWait2().until(ExpectedConditions.elementToBeClickable(configureAdminSidebar)).click();
-
-        return new UserConfigPage(getDriver());
-    }
-
     @Step("Click configure user sidebar")
     public UserConfigPage clickConfigureUserSidebar() {
         getWait2().until(ExpectedConditions.elementToBeClickable(configureUserSidebar)).click();
@@ -38,6 +32,7 @@ public class UserPage extends BasePage {
         return new UserConfigPage(getDriver());
     }
 
+    @Step("Get user ID text")
     public String getUserIDText() {
         return getWait2().until(ExpectedConditions.visibilityOf(adminDescription)).getText();
     }
