@@ -1,0 +1,6 @@
+"DESCRIPTION","DURATION IN MS","NAME","PARENT SUITE","START TIME","STATUS","STOP TIME","SUB SUITE","SUITE","TEST CLASS","TEST METHOD"
+"TC_09.006.01 Check number of update plugin","2607","testNumberOfUpdatePlugin","Surefire suite","Sat Jan 18 11:22:45 GMT 2025","passed","Sat Jan 18 11:22:48 GMT 2025","school.redrover.PluginTest","Surefire test","school.redrover.PluginTest","testNumberOfUpdatePlugin"
+"TC_09.006.02 Check number of all update plugin","1518","testNumberOfAllUpdatePlugin","Surefire suite","Sat Jan 18 11:22:48 GMT 2025","passed","Sat Jan 18 11:22:50 GMT 2025","school.redrover.PluginTest","Surefire test","school.redrover.PluginTest","testNumberOfAllUpdatePlugin"
+"TC_09.006.03 Search plugin via tag","1958","testSearchPluginViaTag","Surefire suite","Sat Jan 18 11:22:50 GMT 2025","passed","Sat Jan 18 11:22:52 GMT 2025","school.redrover.PluginTest","Surefire test","school.redrover.PluginTest","testSearchPluginViaTag"
+"","0","restAssuredTest","Surefire suite","Sat Jan 18 11:22:40 GMT 2025","unknown","Sat Jan 18 11:22:40 GMT 2025","school.redrover.APITest","Surefire test","school.redrover.APITest","restAssuredTest"
+"","1","httpTest","Surefire suite","Sat Jan 18 11:22:40 GMT 2025","unknown","Sat Jan 18 11:22:40 GMT 2025","school.redrover.APITest","Surefire test","school.redrover.APITest","httpTest"
