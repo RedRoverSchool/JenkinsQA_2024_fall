@@ -1,8 +1,9 @@
 package school.redrover;
 
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.ui.ExpectedConditions;
+import io.qameta.allure.Allure;
+import io.qameta.allure.Description;
+import io.qameta.allure.Epic;
+import io.qameta.allure.Story;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import school.redrover.page.home.HomePage;
@@ -12,6 +13,7 @@ import school.redrover.runner.TestUtils;
 
 import java.util.List;
 
+@Epic("16 Dashboard")
 public class NewViewDashboardTest extends BaseTest {
 
     private static final String PROJECT_NAME = "New Freestyle Project";
@@ -19,57 +21,65 @@ public class NewViewDashboardTest extends BaseTest {
     private static final String MY_VIEW = "MyView";
 
     @Test
+    @Story("US_16.002 Create View")
+    @Description("TC_16.002.01 Create My View")
     public void testAddNewMyView() {
         TestUtils.createFreestyleProject(getDriver(), PROJECT_NAME);
 
-        new HomePage(getDriver())
+        List<String> listOfViews = new HomePage(getDriver())
                 .clickCreateNewViewButton()
                 .typeNameIntoInputField(MY_VIEW)
                 .selectMyViewType()
-                .clickCreateButton();
+                .clickCreateButton()
+                .getViewsList();
 
-        List<WebElement> listOfViews = getDriver().findElements(By.xpath("//div[@class = 'tabBar']//a"));
-        Assert.assertTrue(listOfViews.stream().anyMatch(item -> MY_VIEW.equals(item.getText())));
+        Allure.step(String.format("Expected result: The '%s' view is created and is displayed in the list of views", MY_VIEW));
+        Assert.assertTrue(listOfViews.contains(MY_VIEW));
     }
 
     @Test
+    @Story("US_16.002 Create View")
+    @Description("TC_16.002.02 Create basic List View")
     public void testAddNewListView() {
         TestUtils.createFreestyleProject(getDriver(), PROJECT_NAME);
 
-        new HomePage(getDriver())
+        List<String> listOfViews = new HomePage(getDriver())
                 .clickCreateNewViewButton()
                 .typeNameIntoInputField(LIST_VIEW)
                 .selectListViewType()
                 .clickCreateButton()
-                .clickOkButton();
+                .clickOkButton()
+                .getViewsList();
 
-        List<WebElement> listOfViews = getDriver().findElements(By.xpath("//div[@class = 'tabBar']//a"));
-        Assert.assertTrue(listOfViews.stream().anyMatch(item -> LIST_VIEW.equals(item.getText())));
+        Allure.step(String.format("Expected result: The '%s' view is created and is displayed in the list of views", LIST_VIEW));
+        Assert.assertTrue(listOfViews.contains(LIST_VIEW));
     }
 
     @Test (dependsOnMethods = "testAddNewMyView")
+    @Story("US_16.004 Delete view")
+    @Description("TC_16.004.01 Delete 'My View'")
     public void testDeleteMyView() {
-        new ViewPage(getDriver())
+        List<String> listOfViews = new ViewPage(getDriver())
                 .selectViewTypeToDelete(MY_VIEW)
                 .deleteView()
-                .clickYesInPopUp();
+                .clickYesInPopUp()
+                .getViewsList();
 
-        getWait5().until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@class = 'tabBar']")));
-        List<WebElement> listOfViews = getDriver().findElements(By.xpath("//div[@class = 'tabBar']//a"));
-
-        Assert.assertTrue(listOfViews.stream().anyMatch(item -> !MY_VIEW.equals(item.getText())));
+        Allure.step(String.format("Expected result: The '%s' view was deleted and is not displayed in the list of views", MY_VIEW));
+        Assert.assertFalse(listOfViews.contains(MY_VIEW));
     }
+
     @Test (dependsOnMethods = "testAddNewListView")
+    @Story("US_16.004 Delete view")
+    @Description("TC_16.004.02 Delete 'List View'")
     public void testDeleteListView() {
-        new ViewPage(getDriver())
+        List<String> listOfViews = new ViewPage(getDriver())
                 .selectViewTypeToDelete(LIST_VIEW)
                 .deleteView()
-                .clickYesInPopUp();
+                .clickYesInPopUp()
+                .getViewsList();
 
-        getWait5().until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@class = 'tabBar']")));
-        List<WebElement> listOfViews = getDriver().findElements(By.xpath("//div[@class = 'tabBar']//a"));
-
-        Assert.assertTrue(listOfViews.stream().anyMatch(item -> !LIST_VIEW.equals(item.getText())));
+        Allure.step(String.format("Expected result: The '%s' view was deleted and is not displayed in the list of views", LIST_VIEW));
+        Assert.assertFalse(listOfViews.contains(LIST_VIEW));
     }
-
 }

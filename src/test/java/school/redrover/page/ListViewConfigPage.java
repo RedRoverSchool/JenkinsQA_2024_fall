@@ -1,5 +1,6 @@
 package school.redrover.page;
 
+import io.qameta.allure.Step;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -19,6 +20,9 @@ public class ListViewConfigPage extends BasePage {
     @FindBy(xpath = "//button[@suffix='columns']")
     private WebElement columnButton;
 
+    @FindBy(xpath = "//div[@class = 'tabBar']//a")
+    private List<WebElement> viewsList;
+
     public ListViewConfigPage(WebDriver driver) {
         super(driver);
     }
@@ -29,6 +33,7 @@ public class ListViewConfigPage extends BasePage {
         return this;
     }
 
+    @Step("Click 'Ok' button")
     public ViewPage clickOkButton() {
         getDriver().findElement(By.xpath("//button[@name='Submit']")).click();
 
@@ -66,5 +71,12 @@ public class ListViewConfigPage extends BasePage {
                 By.xpath("//button[contains(text(),'%s')]".formatted(name)))).click();
 
         return this;
+    }
+
+    @Step("Get list of existing views")
+    public List<String> getViewsList() {
+        getWait5().until(ExpectedConditions.visibilityOfAllElements(viewsList));
+
+        return viewsList.stream().map(WebElement::getText).toList();
     }
 }

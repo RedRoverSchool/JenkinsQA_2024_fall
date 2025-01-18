@@ -1,5 +1,6 @@
 package school.redrover.page;
 
+import io.qameta.allure.Step;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -55,24 +56,28 @@ public class NewViewPage extends BasePage {
         return createButton.isEnabled();
     }
 
+    @Step("Type '{name}' into 'Name' input field")
     public NewViewPage typeNameIntoInputField(String name) {
         getWait2().until(ExpectedConditions.visibilityOf(nameInputField)).sendKeys(name);
 
         return this;
     }
 
+    @Step("Select 'List View' type")
     public NewViewPage selectListViewType() {
         getWait2().until(ExpectedConditions.elementToBeClickable(radioButtonListView)).click();
 
         return this;
     }
 
+    @Step("Select 'My View' type")
     public NewViewPage selectMyViewType() {
         getWait2().until(ExpectedConditions.elementToBeClickable(radioButtonMyView)).click();
 
         return this;
     }
 
+    @Step("Click 'Create' button")
     public ListViewConfigPage clickCreateButton() {
         submitButton.click();
 
