@@ -1,5 +1,6 @@
 package school.redrover.page;
 
+import io.qameta.allure.Step;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -23,6 +24,9 @@ public class ViewPage extends HomePage {
     @FindBy(xpath = "//button[@data-id = 'ok']")
     private WebElement yesButton;
 
+    @FindBy(xpath = "//div[@class = 'tabBar']//a")
+    private List<WebElement> viewsList;
+
     public ViewPage(WebDriver driver) {
         super(driver);
     }
@@ -41,21 +45,31 @@ public class ViewPage extends HomePage {
                 .toList();
     }
 
+    @Step("Select '{viewType}' view")
     public ViewPage selectViewTypeToDelete(String viewType) {
         getDriver().findElement(By.linkText(viewType)).click();
         return this;
     }
 
+    @Step("Click 'Delete View' in sidebar menu")
     public ViewPage deleteView() {
         deleteOption.click();
 
         return this;
     }
 
+    @Step("Click 'Yes' in 'Delete view' window")
     public ViewPage clickYesInPopUp() {
         getWait5().until(ExpectedConditions.visibilityOf(confirmationDialog));
         yesButton.click();
 
         return this;
+    }
+
+    @Step("Get list of existing views")
+    public List<String> getViewsList() {
+        getWait5().until(ExpectedConditions.visibilityOfAllElements(viewsList));
+
+        return viewsList.stream().map(WebElement::getText).toList();
     }
 }

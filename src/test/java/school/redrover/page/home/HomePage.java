@@ -404,6 +404,7 @@ public class HomePage extends BasePage {
         return numberOfRuns.getText();
     }
 
+    @Step("Click '+ New View' button")
     public NewViewPage clickCreateNewViewButton() {
         createNewViewButton.click();
 
