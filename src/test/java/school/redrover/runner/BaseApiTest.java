@@ -10,36 +10,32 @@ import static io.restassured.RestAssured.*;
 public abstract class BaseApiTest {
 
     protected static CrumbIssuerResponse crumbIssuerResponse;
-    protected static String firstCookieName;
-    protected static String firstCookieValue;
+    protected static String cookieName;
+    protected static String cookieValue;
 
     @BeforeMethod
-    protected void setUp() {
+    protected void setup() {
 
         JenkinsUtils.clearData();
 
         Map<String, String> cookies = given()
                 .spec(Specifications.baseRequestSpec())
                 .when()
-                .get(ProjectUtils.getUrl()) // Запрос к корневому URL Jenkins
+                .get(ProjectUtils.getUrl())
                 .then()
                 .extract().cookies();
-        try {
-            firstCookieName = cookies.keySet().iterator().next();
-            firstCookieValue = cookies.get(firstCookieName);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+
+        cookieName = cookies.keySet().iterator().next();
+        cookieValue = cookies.get(cookieName);
 
         crumbIssuerResponse = given()
                 .spec(Specifications.baseRequestSpec())
-                .header("Cookie", firstCookieName + "=" + firstCookieValue)
+                .header("Cookie", cookieName + "=" + cookieValue)
                 .when()
-                .get("/crumbIssuer/api/json")
+                .get("crumbIssuer/api/json")
                 .then()
-                .spec(Specifications.baseResponseSpec())
+                .spec(Specifications.baseResponseSpec(200))
                 .extract().response().as(CrumbIssuerResponse.class);
-        System.out.println(crumbIssuerResponse.getCrumb());
     }
 
 }
