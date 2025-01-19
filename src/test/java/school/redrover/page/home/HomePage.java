@@ -323,7 +323,7 @@ public class HomePage extends BasePage {
         return sideBarOptionList.stream()
                 .map(el -> {
                     String href = el.getAttribute("href");
-                    URI uri = URI.create(href); // Создаем объект URI
+                    URI uri = URI.create(href);
                     return uri.getPath();
                 })
                 .toList();
