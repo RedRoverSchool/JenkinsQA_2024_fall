@@ -35,10 +35,7 @@ public class StartPageTest extends BaseTest {
                 .getSideContentAttribute();
 
         Assert.assertEquals(startPageSideContent.size(), 4);
-        Assert.assertEquals(
-                startPageSideContent,
-                List.of("/view/all/newJob", "/view/all/builds",
-                        "/manage", "/me/my-views"));
+        Assert.assertEquals(startPageSideContent, List.of("/view/all/newJob", "/view/all/builds", "/manage", "/me/my-views"));
     }
 
     @Test
