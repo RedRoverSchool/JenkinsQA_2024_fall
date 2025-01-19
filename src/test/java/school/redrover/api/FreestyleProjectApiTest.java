@@ -2,6 +2,7 @@ package school.redrover.api;
 
 import io.qameta.allure.*;
 import io.restassured.http.ContentType;
+import io.restassured.response.Response;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import school.redrover.runner.BaseApiTest;
@@ -34,14 +35,18 @@ public class FreestyleProjectApiTest extends BaseApiTest {
                 .post("createItem")
                 .then();
 
-        String projectName = given().basePath("job/" + PROJECT_NAME)
+        Response response = given().basePath("job/" + PROJECT_NAME)
                 .body(xml)
                 .baseUri(ProjectUtils.getUrl())
                 .when()
                 .get("api/json")
                 .then()
-                .extract().body().jsonPath().getString("fullName");
+                .extract().response();
+
+        String projectName = response.body().jsonPath().getString("fullName");
+        String contentType = response.header("Content-Type");
 
         Assert.assertEquals(projectName, PROJECT_NAME);
+        Assert.assertEquals(contentType, "application/json;charset=utf-8");
     }
 }
