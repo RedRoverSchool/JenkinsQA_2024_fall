@@ -35,6 +35,7 @@ public class UserConfigPage extends BasePage {
     @FindBy(xpath = "//button[@data-id='ok']")
     private WebElement okToDeleteButton;
 
+
     public UserConfigPage(WebDriver driver) {
         super(driver);
     }
@@ -55,9 +56,13 @@ public class UserConfigPage extends BasePage {
         return new UserPage(getDriver());
     }
 
+    public UserConfigPage enterDescription (String description) {
+        descriptionField.sendKeys(description);
+        return (UserConfigPage) this;
+    }
+
     @Step("Add user description")
-    public UserPage addUserDescription () {
-        descriptionField.sendKeys("User Description");
+    public UserPage submitButton() {
         submitButton.click();
         return new UserPage(getDriver());
     }
@@ -76,10 +81,12 @@ public class UserConfigPage extends BasePage {
     }
 
     @Step("Delete user from configure user page")
-    public HomePage deleteUserFromConfigureUserPage() {
+    public HomePage deleteUserFromSidePanelAndClickOk() {
         deleteUserSidebarButton.click();
         okToDeleteButton.click();
         return new HomePage(getDriver());
 
     }
+
+
 }

@@ -6,13 +6,15 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import school.redrover.page.base.BasePage;
 
+import java.util.List;
+
 public class CreateUserPage extends BasePage {
 
     @FindBy(css = ".jenkins-submit-button")
     private WebElement createUserButton;
 
-    @FindBy(xpath = "//div[@class='error jenkins-!-margin-bottom-2'][1]")
-    private WebElement validationMessage;
+    @FindBy(xpath = "//div[@class='error jenkins-!-margin-bottom-2']")
+    private List<WebElement> validationMessage;
 
     @FindBy(css = "#username")
     private WebElement usernameField;
@@ -34,26 +36,48 @@ public class CreateUserPage extends BasePage {
     }
 
     @Step("Click create user button")
-    public CreateUserPage clickCreateUserButton() {
+    public <T extends BasePage> T clickCreateUserFormSubmit(Class<T> pageClass) {
         createUserButton.click();
 
-        return new CreateUserPage(getDriver());
+        if (!validationMessage.isEmpty() && pageClass.isAssignableFrom(CreateUserPage.class)) {
+            return pageClass.cast(new CreateUserPage(getDriver()));
+        } else {
+            return pageClass.cast(new UsersPage(getDriver()));
+        }
     }
 
     @Step("Get validation message")
-    public String getValidationMessage() {
-        return validationMessage.getText();
+    public List<String> getValidationMessages() {
+        return validationMessage.stream().map(WebElement::getText).toList();
     }
 
-    @Step("Fill form by valid data to create user {fullName}")
-    public UsersPage fillFormByValidDataToCreateUser(String fullName) {
-        usernameField.sendKeys("Ivan");
-        password1Field.sendKeys("123");
-        password2Field.sendKeys("123");
-        fullnameField.sendKeys(fullName);
-        emailField.sendKeys("Petrov@gmail.com");
-        clickCreateUserButton();
+    @Step("Enter username {username}")
+    public CreateUserPage enterUsername(String username) {
+        usernameField.sendKeys(username);
+        return new CreateUserPage(getDriver());
+    }
 
-        return new UsersPage(getDriver());
+    @Step("Enter password {password}")
+    public CreateUserPage enterPassword(String password) {
+        password1Field.sendKeys(password);
+        return new CreateUserPage(getDriver());
+    }
+
+    @Step("Enter confirm password {password}")
+    public CreateUserPage enterConfirmPassword(String password) {
+        password2Field.sendKeys(password);
+        return new CreateUserPage(getDriver());
+    }
+
+    @Step("Enter full name {fullName}")
+    public CreateUserPage enterFullName(String fullName) {
+        fullnameField.sendKeys(fullName);
+        return new CreateUserPage(getDriver());
+    }
+
+    @Step("Enter email {email}")
+    public CreateUserPage enterEmail(String email) {
+        emailField.sendKeys(email);
+        return new CreateUserPage(getDriver());
     }
 }

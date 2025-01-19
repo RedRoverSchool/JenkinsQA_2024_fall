@@ -20,14 +20,11 @@ public class UsersPage extends BasePage {
     @FindBy(xpath = "//div[@class='jenkins-app-bar__content']/h1")
     private WebElement usersTitle;
 
-    @FindBy(xpath = "//a[@data-title='Users']")
-    private WebElement deleteUser;
-
     @FindBy(xpath = "//button[@data-id='ok']")
     private WebElement okToDeleteButton;
 
-    @FindBy(xpath = "//table[@id='people']/tbody//td[3]")
-    private List<WebElement> usersTable;
+    @FindBy(xpath = "//a[@data-title='Users']")
+    private WebElement deleteUser;
 
     public UsersPage(WebDriver driver) {
         super(driver);
@@ -39,20 +36,19 @@ public class UsersPage extends BasePage {
     }
 
     @Step("Click 'Create user' button")
-    public CreateUserPage clickCreateUser() {
+    public CreateUserPage clickCreateUserButton() {
         createUserButton.click();
         return new CreateUserPage(getDriver());
     }
 
-    @Step("Get created user name")
-    public List<String> getCreatedUserName() {
+    @Step("Get created user list")
+    public List<String> getUserList() {
         return userNameList.stream().map(WebElement::getText).toList();
     }
 
     @Step("Click to configure user {userName}")
     public UserConfigPage clickToConfigureUser(String userName) {
-        List<WebElement> elements = usersTable;
-        for (WebElement elem : elements) {
+        for (WebElement elem : userNameList) {
             if (elem.getText().equals(userName)) {
                 elem.findElement(By.xpath("following-sibling::*")).click();
             }
@@ -67,11 +63,4 @@ public class UsersPage extends BasePage {
         return new UsersPage(getDriver());
     }
 
-    @Step("Create new user {userName}")
-    public UsersPage createNewUser(String userName) {
-        new UsersPage(getDriver())
-                .clickCreateUser()
-                .fillFormByValidDataToCreateUser(userName);
-        return new UsersPage(getDriver());
-    }
 }
