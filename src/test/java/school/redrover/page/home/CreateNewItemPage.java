@@ -215,25 +215,30 @@ public class CreateNewItemPage extends BasePage {
         return new ErrorPage(getDriver());
     }
 
+    @Step("Click on random area on CreateNewItemPage")
     public CreateNewItemPage clickSomewhere() {
         pageField.click();
 
         return this;
     }
 
+    @Step("Get warning message")
     public String getWarningMessageText() {
         return warningMessage.getText();
     }
 
+    @Step("Check if 'Ok' button is enabled")
     public boolean getOkButton() {
         return okButton.isEnabled();
     }
 
+    @Step("Get list of available item types")
     public List<WebElement> getTextList() {
 
         return itemsTypesList;
     }
 
+    @Step("Get list of names for available item types")
     public List<String> getItemList() {
         return itemsTypesList.stream().map(WebElement::getText).toList();
     }

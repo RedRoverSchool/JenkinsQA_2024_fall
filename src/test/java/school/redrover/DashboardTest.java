@@ -1,5 +1,9 @@
 package school.redrover;
 
+import io.qameta.allure.Allure;
+import io.qameta.allure.Description;
+import io.qameta.allure.Epic;
+import io.qameta.allure.Story;
 import org.testng.Assert;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
@@ -16,6 +20,7 @@ public class DashboardTest extends BaseTest {
     private static final String DESCRIPTION_TEXT = "It's my workspace";
     private static final String NEW_TEXT = "Hello! ";
     private static final String TEXT_DESCRIPTION_BUTTON = "Add description";
+    private final static String NEW_ITEM = "New Item";
     private static final String VALID_PIPELINE_SCRIPT = """
             pipeline {
                 agent any
@@ -276,5 +281,18 @@ public class DashboardTest extends BaseTest {
                 .getTextPreview();
 
         Assert.assertEquals(textPreview, DESCRIPTION_TEXT);
+    }
+
+    @Test
+    @Epic("16 Dashboard")
+    @Story("US_16.003 Item context Menu > Check content")
+    @Description("TC_16.003.01 'New Item' button is present in the 'Dashboard' dropdown options")
+    public void testPossibilityOfCreatingNewItemFromBreadcrumbBar() {
+        String newItemButton = new HomePage(getDriver())
+                .selectBreadcrumbBarMenu()
+                .getBreadcrumbBarMenuList().get(0).getText();
+
+        Allure.step(String.format("Expected Result: The button '%s' is present in dropdown options.", NEW_ITEM));
+        Assert.assertEquals(newItemButton, NEW_ITEM);
     }
 }
