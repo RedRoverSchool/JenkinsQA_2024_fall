@@ -1,5 +1,7 @@
 package school.redrover.api;
 
+import io.qameta.allure.*;
+import io.restassured.http.ContentType;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import school.redrover.runner.BaseApiTest;
@@ -9,35 +11,39 @@ import school.redrover.runner.TestUtils;
 
 import static io.restassured.RestAssured.given;
 
+@Epic("API")
 public class FreestyleProjectApiTest extends BaseApiTest {
 
-    private static final String PROJECT_NAME = "FreestyleProject";
+    private static final String PROJECT_NAME = "FreestyleProject1";
 
     @Test
+    @Feature("Freestyle project")
+    @Description("Create freestyle project")
     public void createFreestyleProjectTest() {
+        Specifications.installSpecification(Specifications.authRequestSpec(), Specifications.baseResponseSpec(200));
         String xml = TestUtils.readFileFromResources("create-empty-freestyle-project.xml");
+
+        Allure.step("Creating project with name: " + PROJECT_NAME);
+
 
         given()
                 .queryParams("name", PROJECT_NAME)
-                .spec(Specifications.authRequestSpec())
-                .header("Content-Type", "application/xml")
+                .contentType(ContentType.XML)
                 .body(xml)
                 .baseUri(ProjectUtils.getUrl())
                 .when()
-                .post("/createItem")
-                .then()
-                .spec(Specifications.baseResponseSpec());
+                .post("createItem")
+                .then();
 
-        String jobName = given().basePath("job/" + PROJECT_NAME)
-                .spec(Specifications.authRequestSpec())
+        String projectName = given().basePath("job/" + PROJECT_NAME)
                 .body(xml)
                 .baseUri(ProjectUtils.getUrl())
                 .when()
-                .post("/api/json")
+                .get("api/json")
                 .then()
-                .extract().body().jsonPath().getString("jobs[0].name");
+                .extract().body().jsonPath().getString("fullName");
 
-        Assert.assertEquals(jobName, PROJECT_NAME);
+        Assert.assertEquals(projectName, PROJECT_NAME);
 
     }
 }
