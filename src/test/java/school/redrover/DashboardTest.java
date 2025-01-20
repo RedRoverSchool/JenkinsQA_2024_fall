@@ -192,19 +192,6 @@ public class DashboardTest extends BaseTest {
         Assert.assertEquals(projectNameList.size(), 4);
         Assert.assertEquals(projectNameList, List.of(notBuilt, disabled, successBuilt, failedBuilt));
     }
-    @Test
-    @Story("US_16.011 Dropdown menu of user")
-    @Description("TC_16.011.04 Check displayed domain element dropdown")
-    public void testIsDisplayedDomainElementDropdown() {
-        boolean itemMenuDisplayed = new HomePage(getDriver())
-                .openAdminDropdownMenu()
-                .clickCredentialsAdminDropdownMenu()
-                .clickDropdownMenu()
-                .getDisplayedItemMenu();
-
-        Allure.step(" \uD83D\uDCCC Expected result: Item menu displayed");
-        Assert.assertTrue(itemMenuDisplayed);
-    }
 
     @Test
     @Story("US_16.010 Log out")

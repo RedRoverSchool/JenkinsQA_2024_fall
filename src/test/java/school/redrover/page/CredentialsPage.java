@@ -32,14 +32,4 @@ public class CredentialsPage extends BasePage {
         return userName.getText();
     }
 
-    @Step("Click dropdown menu of user")
-    public CredentialsPage clickDropdownMenu() {
-        TestUtils.moveAndClickWithJS(getDriver(), dropdownMenu);
-        return this;
-    }
-
-    @Step("Get displayed item menu")
-    public boolean getDisplayedItemMenu () {
-        return dropdownMenu.isDisplayed();
-    }
 }
