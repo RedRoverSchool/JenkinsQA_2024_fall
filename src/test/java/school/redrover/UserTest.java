@@ -7,71 +7,91 @@ import io.qameta.allure.Story;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import school.redrover.page.home.HomePage;
+import school.redrover.page.user.CreateUserPage;
+import school.redrover.page.user.UsersPage;
 import school.redrover.runner.BaseTest;
 
+import java.util.Arrays;
 import java.util.List;
 
 @Epic("13 User")
 public class UserTest extends BaseTest {
 
-    private static final String FULL_USER_NAME = "Ivan Petrov";
+    private static final String USERNAME = "Ivan";
+    private static final String PASSWORD = "123";
+    private static final String FULL_NAME = "Ivan Petrov";
+    private static final String EMAIL = "Petrov@gmail.com";
+    private static final List<String> ERROR_MESSAGES = Arrays.asList(
+            "\"\" is prohibited as a username for security reasons.",
+            "Password is required",
+            "Password is required",
+            "\"\" is prohibited as a full name for security reasons.",
+            "Invalid e-mail address"
+    );
 
     @Test
     @Story("US_13.001 Create user")
     @Description("TC_13.001.02 Can't Create User with empty fields")
     public void testImpossiblyToCreateNewUserWithEmptyFields() {
-        String validationMessage = new HomePage(getDriver())
+        List<String> validationMessages = new HomePage(getDriver())
                 .openManageJenkinsPage()
                 .openUsersPage()
-                .clickCreateUser()
                 .clickCreateUserButton()
-                .getValidationMessage();
+                .clickCreateUserFormSubmit(CreateUserPage.class)
+                .getValidationMessages();
 
         Allure.step(" \uD83D\uDCCC Expected result: The system prohibits the creation of a new user with empty fields.");
-        Assert.assertEquals(validationMessage, "\"\" is prohibited as a username for security reasons.");
+        Assert.assertEquals(validationMessages.size(), ERROR_MESSAGES.size());
+        for (int i = 0; i < validationMessages.size(); i++) {
+            Assert.assertEquals(validationMessages.get(i), ERROR_MESSAGES.get(i));
+        }
     }
 
     @Test
     @Story("US_13.001 Create user")
     @Description("TC_13.001.01 Can Create User with valid data")
-    public void testCreateNewUser() {
+    public void testCreateNewUserWithValidData() {
         List<String> userList = new HomePage(getDriver())
                 .openManageJenkinsPage()
                 .openUsersPage()
-                .clickCreateUser()
-                .fillFormByValidDataToCreateUser(FULL_USER_NAME)
-                .getCreatedUserName();
+                .clickCreateUserButton()
+                .enterUsername(USERNAME)
+                .enterFullName(FULL_NAME)
+                .enterPassword(PASSWORD)
+                .enterConfirmPassword(PASSWORD)
+                .enterEmail(EMAIL)
+                .clickCreateUserFormSubmit(UsersPage.class)
+                .getUserList();
 
-        Allure.step(" \uD83D\uDCCC Expected result: A new user %s is created.".formatted(FULL_USER_NAME));
+        Allure.step(" \uD83D\uDCCC Expected result: A new user %s is created.".formatted(FULL_NAME));
         Assert.assertEquals(userList.size(), 2);
-        Assert.assertEquals(userList.get(1), FULL_USER_NAME);
+        Assert.assertEquals(userList.get(1), FULL_NAME);
     }
 
-    @Test
+    @Test(dependsOnMethods = "testCreateNewUserWithValidData")
     @Story("US_13.003 Modify User")
     @Description("TC_13.003.01 Can Add Description For User")
     public void testAddDescriptionForUser() {
         String userDescription = new HomePage(getDriver())
                 .openManageJenkinsPage()
                 .openUsersPage()
-                .createNewUser(FULL_USER_NAME)
-                .clickToConfigureUser(FULL_USER_NAME)
-                .addUserDescription()
+                .clickToConfigureUser(FULL_NAME)
+                .enterDescription("User Description")
+                .submitButton()
                 .getUserDescription();
 
         Allure.step(" \uD83D\uDCCC Expected result: User Description is added.");
         Assert.assertEquals(userDescription, "User Description");
     }
 
-    @Test
+    @Test(dependsOnMethods = "testAddDescriptionForUser")
     @Story("US_13.003 Modify User")
     @Description("TC_13.003.02 Add Time Zone For User")
     public void testAddTimeZoneForUser() {
         String userTimeZone = new HomePage(getDriver())
                 .openManageJenkinsPage()
                 .openUsersPage()
-                .createNewUser(FULL_USER_NAME)
-                .clickToConfigureUser(FULL_USER_NAME)
+                .clickToConfigureUser(FULL_NAME)
                 .addUserTimeZone()
                 .clickConfigureUserSidebar()
                 .getUserTimeZone();
@@ -87,35 +107,38 @@ public class UserTest extends BaseTest {
         List<String> userList = new HomePage(getDriver())
                 .openManageJenkinsPage()
                 .openUsersPage()
-                .createNewUser(FULL_USER_NAME)
+                .clickCreateUserButton()
+                .enterUsername(USERNAME)
+                .enterFullName(FULL_NAME)
+                .enterPassword(PASSWORD)
+                .enterConfirmPassword(PASSWORD)
+                .enterEmail(EMAIL)
+                .clickCreateUserFormSubmit(UsersPage.class)
                 .deleteUserFromUsersPage()
-                .getCreatedUserName();
+                .getUserList();
 
-        Allure.step(" \uD83D\uDCCC Expected result: A new user %s is deleted.".formatted(FULL_USER_NAME), () -> {
+        Allure.step(" \uD83D\uDCCC Expected result: A new user %s is deleted.".formatted(FULL_NAME), () -> {
             Assert.assertEquals(userList.size(), 1);
-            Assert.assertEquals(userList.get(0), "admin");
+            Assert.assertNotEquals(userList.get(0), FULL_NAME);
         });
-
     }
 
-    @Test
+    @Test(dependsOnMethods = "testAddTimeZoneForUser")
     @Story("US_13.002 Delete User")
     @Description("TC_13.002.03 Can Delete User Via Configure User Page")
     public void testDeleteUserViaConfigureUserPage() {
         List<String> userList = new HomePage(getDriver())
                 .openManageJenkinsPage()
                 .openUsersPage()
-                .createNewUser(FULL_USER_NAME)
-                .clickToConfigureUser(FULL_USER_NAME)
-                .deleteUserFromConfigureUserPage()
+                .clickToConfigureUser(FULL_NAME)
+                .deleteUserFromSidePanelAndClickOk()
                 .openManageJenkinsPage()
                 .openUsersPage()
-                .getCreatedUserName();
+                .getUserList();
 
-        Allure.step(" \uD83D\uDCCC Expected result: A new user %s is deleted.".formatted(FULL_USER_NAME), () -> {
+        Allure.step(" \uD83D\uDCCC Expected result: A new user %s is deleted.".formatted(FULL_NAME), () -> {
             Assert.assertEquals(userList.size(), 1);
-            Assert.assertEquals(userList.get(0), "admin");
+            Assert.assertNotEquals(userList.get(0), FULL_NAME);
         });
-
     }
 }
