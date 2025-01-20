@@ -49,6 +49,7 @@ public class UserConfigPage extends BasePage {
         return getWait2().until(ExpectedConditions.visibilityOf(fullNameInputHelper)).getText();
     }
 
+    @Step("Click 'Status' at sidebar")
     public UserPage clickStatusSidebar() {
         getWait2().until(ExpectedConditions.elementToBeClickable(statusSidebarButton)).click();
 

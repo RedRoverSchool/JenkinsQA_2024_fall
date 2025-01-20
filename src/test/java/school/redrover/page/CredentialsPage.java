@@ -1,5 +1,6 @@
 package school.redrover.page;
 
+import io.qameta.allure.Step;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -21,19 +22,23 @@ public class CredentialsPage extends BasePage {
         super(driver);
     }
 
+    @Step("Get page title text")
     public String getPageTitleText() {
         return pageTitle.getText();
     }
 
+    @Step("Get user name")
     public String getUserName() {
         return userName.getText();
     }
 
+    @Step("Click dropdown menu")
     public CredentialsPage clickDropdownMenu() {
         TestUtils.moveAndClickWithJS(getDriver(), dropdownMenu);
         return this;
     }
 
+    @Step("Get displayed item menu")
     public boolean getDisplayedItemMenu () {
         return dropdownMenu.isDisplayed();
     }

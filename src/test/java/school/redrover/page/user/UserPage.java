@@ -38,6 +38,7 @@ public class UserPage extends BasePage {
         return new UserConfigPage(getDriver());
     }
 
+    @Step("Get user ID text")
     public String getUserIDText() {
         return getWait2().until(ExpectedConditions.visibilityOf(adminDescription)).getText();
     }
