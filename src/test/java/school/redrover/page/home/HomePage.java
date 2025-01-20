@@ -69,13 +69,13 @@ public class HomePage extends BasePage {
     @FindBy(xpath = "(//button[@class='jenkins-menu-dropdown-chevron'])[1]")
     private WebElement adminDropdown;
 
-    @FindBy(xpath = "//*[@id='tippy-2']/div/div/div/a[2]")
+    @FindBy(xpath = "//a[@href='/user/natashashim/configure']")
     private WebElement configureAdminDropdown;
 
     @FindBy(xpath = "//*[@href='/user/admin']")
     private WebElement admin;
 
-    @FindBy(xpath = "//*[@id='tippy-2']/div/div/div/a[4]")
+    @FindBy(xpath = "////a[@href='/user/natashashim/credentials']")
     private WebElement credentialsDropdown;
 
     @FindBy(css = "a[href^='/logout']")
