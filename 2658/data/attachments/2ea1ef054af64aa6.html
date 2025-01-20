@@ -1,0 +1,49 @@
+<div>POST to http://localhost:8080/createItem?name=FreestyleProject1</div>
+
+<h4>Body</h4>
+<div>
+    <pre class="preformated-text">
+&lt;project&gt;
+  &lt;keepDependencies&gt;false&lt;/keepDependencies&gt;
+  &lt;properties/&gt;
+  &lt;scm class=&quot;hudson.scm.NullSCM&quot;/&gt;
+  &lt;canRoam&gt;false&lt;/canRoam&gt;
+  &lt;disabled&gt;false&lt;/disabled&gt;
+  &lt;blockBuildWhenDownstreamBuilding&gt;false&lt;/blockBuildWhenDownstreamBuilding&gt;
+  &lt;blockBuildWhenUpstreamBuilding&gt;false&lt;/blockBuildWhenUpstreamBuilding&gt;
+  &lt;triggers/&gt;
+  &lt;concurrentBuild&gt;false&lt;/concurrentBuild&gt;
+  &lt;builders/&gt;
+  &lt;publishers/&gt;
+  &lt;buildWrappers/&gt;
+&lt;/project&gt;    </pre>
+</div>
+
+<h4>Headers</h4>
+<div>
+        <div>Authorization: Basic YWRtaW46NGY3MDBlMDIyNDY3NGE3NGFjNTFlYmJiMTJkMDNmMTc=</div>
+        <div>Cookie: JSESSIONID.192e717d=node01as79gj1d435e3j0wgc28na6w302.node0</div>
+        <div>Jenkins-Crumb: edddbac1ae29a75186dc5e4a0c9469f1f71c6e1ec0d5312ad031838f58aba847</div>
+        <div>Accept: */*</div>
+        <div>Content-Type: application/xml; charset=ISO-8859-1</div>
+</div>
+
+
+
+<h4>Curl</h4>
+<div>
+curl -v -X POST &#39;http://localhost:8080/createItem?name=FreestyleProject1&#39; -H &#39;Authorization: Basic YWRtaW46NGY3MDBlMDIyNDY3NGE3NGFjNTFlYmJiMTJkMDNmMTc=&#39; -H &#39;Cookie: JSESSIONID.192e717d=node01as79gj1d435e3j0wgc28na6w302.node0&#39; -H &#39;Jenkins-Crumb: edddbac1ae29a75186dc5e4a0c9469f1f71c6e1ec0d5312ad031838f58aba847&#39; -H &#39;Accept: */*&#39; -H &#39;Content-Type: application/xml; charset=ISO-8859-1&#39; -d &#39;&lt;project&gt;
+  &lt;keepDependencies&gt;false&lt;/keepDependencies&gt;
+  &lt;properties/&gt;
+  &lt;scm class=&quot;hudson.scm.NullSCM&quot;/&gt;
+  &lt;canRoam&gt;false&lt;/canRoam&gt;
+  &lt;disabled&gt;false&lt;/disabled&gt;
+  &lt;blockBuildWhenDownstreamBuilding&gt;false&lt;/blockBuildWhenDownstreamBuilding&gt;
+  &lt;blockBuildWhenUpstreamBuilding&gt;false&lt;/blockBuildWhenUpstreamBuilding&gt;
+  &lt;triggers/&gt;
+  &lt;concurrentBuild&gt;false&lt;/concurrentBuild&gt;
+  &lt;builders/&gt;
+  &lt;publishers/&gt;
+  &lt;buildWrappers/&gt;
+&lt;/project&gt;&#39;
+</div>
