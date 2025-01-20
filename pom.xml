@@ -15,6 +15,8 @@
         <cucumber.version>7.12.1</cucumber.version>
         <allure.version>2.24.0</allure.version>
         <aspectj.version>1.9.20.1</aspectj.version>
+        <slf4j.version>2.0.16</slf4j.version>
+        <json.version>20240303</json.version>
     </properties>
 
     <dependencies>
@@ -39,9 +41,8 @@
         <dependency>
             <groupId>org.json</groupId>
             <artifactId>json</artifactId>
-            <version>20240303</version>
+            <version>${json.version}</version>
         </dependency>
-
 
         <dependency>
             <groupId>io.rest-assured</groupId>
@@ -75,6 +76,18 @@
             <groupId>io.qameta.allure</groupId>
             <artifactId>allure-rest-assured</artifactId>
             <version>${allure.version}</version>
+        </dependency>
+
+
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>${slf4j.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+            <version>${slf4j.version}</version>
         </dependency>
 
     </dependencies>
