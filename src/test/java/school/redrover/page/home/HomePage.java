@@ -26,6 +26,7 @@ import school.redrover.page.user.UserConfigPage;
 import school.redrover.page.user.UserPage;
 import school.redrover.runner.TestUtils;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -320,7 +321,11 @@ public class HomePage extends BasePage {
     public List<String> getSideContentAttribute() {
         getWait2().until(ExpectedConditions.visibilityOfAllElements(sideBarOptionList));
         return sideBarOptionList.stream()
-                .map(el -> el.getAttribute("href"))
+                .map(el -> {
+                    String href = el.getAttribute("href");
+                    URI uri = URI.create(href);
+                    return uri.getPath();
+                })
                 .toList();
     }
 

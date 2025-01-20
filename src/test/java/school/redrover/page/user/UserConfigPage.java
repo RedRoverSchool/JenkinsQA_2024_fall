@@ -55,9 +55,13 @@ public class UserConfigPage extends BasePage {
         return new UserPage(getDriver());
     }
 
-    @Step("Add user description")
-    public UserPage addUserDescription () {
-        descriptionField.sendKeys("User Description");
+    public UserConfigPage enterDescription (String description) {
+        descriptionField.sendKeys(description);
+        return this;
+    }
+
+    @Step("Click save button")
+    public UserPage submitButton() {
         submitButton.click();
         return new UserPage(getDriver());
     }
@@ -76,10 +80,10 @@ public class UserConfigPage extends BasePage {
     }
 
     @Step("Delete user from configure user page")
-    public HomePage deleteUserFromConfigureUserPage() {
+    public HomePage deleteUserFromSidePanelAndClickOk() {
         deleteUserSidebarButton.click();
         okToDeleteButton.click();
         return new HomePage(getDriver());
-
     }
+
 }
