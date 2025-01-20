@@ -1,5 +1,6 @@
 package school.redrover.page.systemConfiguration;
 
+import io.qameta.allure.Step;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -37,6 +38,7 @@ public class PluginsPage extends BasePage {
         super(driver);
     }
 
+    @Step("Get update count from indicator")
     public int getUpdateCountFromIndicator() {
         return Integer.parseInt(numberOfUpdatesAvailable.getText());
     }
@@ -45,12 +47,14 @@ public class PluginsPage extends BasePage {
         return updatesList.size();
     }
 
+    @Step("Get count available plugins")
     public int getCountAvailablePlugins() {
         getWait10().until(ExpectedConditions.visibilityOf(availablePluginsSidebar)).click();
 
         return availablePluginsList.size();
     }
 
+    @Step("Search installed plugin")
     public PluginsPage searchInstalledPlugin(String name) {
         getWait10().until(ExpectedConditions.visibilityOf(installedPluginsSidebar)).click();
         getWait5().until(ExpectedConditions.visibilityOf(searchField)).sendKeys(name);
@@ -60,6 +64,7 @@ public class PluginsPage extends BasePage {
         return this;
     }
 
+    @Step("Get count of plugins found")
     public int getCountOfPluginsFound() {
         return installedPluginsList.size();
     }

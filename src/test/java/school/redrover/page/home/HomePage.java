@@ -405,6 +405,7 @@ public class HomePage extends BasePage {
         return numberOfRuns.getText();
     }
 
+    @Step("Click '+ New View' button")
     public NewViewPage clickCreateNewViewButton() {
         createNewViewButton.click();
 
@@ -588,6 +589,7 @@ public class HomePage extends BasePage {
         return buildQueueText.getText();
     }
 
+    @Step("Open Dashboard dropdown")
     public HomePage selectBreadcrumbBarMenu() {
         new Actions(getDriver()).moveToElement(getDriver().findElement(By.xpath("//div[@id='breadcrumbBar']//a"))).perform();
 

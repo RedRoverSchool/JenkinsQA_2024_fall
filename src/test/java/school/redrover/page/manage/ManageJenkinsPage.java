@@ -92,6 +92,7 @@ public class ManageJenkinsPage extends BasePage {
         return new NodesPage(getDriver());
     }
 
+    @Step("Open plugins page")
     public PluginsPage openPluginsPage() {
         pluginsButton.click();
 
