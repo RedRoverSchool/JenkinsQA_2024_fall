@@ -311,6 +311,7 @@ public class HomePage extends BasePage {
         return getWait5().until(ExpectedConditions.visibilityOf(description)).getText();
     }
 
+    @Step("Displaying task contents in the start page sidebar")
     public List<String> getSideContent() {
         getWait2().until(ExpectedConditions.visibilityOfAllElements(sideBarOptionList));
         return sideBarOptionList.stream()
@@ -318,6 +319,7 @@ public class HomePage extends BasePage {
                 .toList();
     }
 
+    @Step("Check links side panel")
     public List<String> getSideContentAttribute() {
         getWait2().until(ExpectedConditions.visibilityOfAllElements(sideBarOptionList));
         return sideBarOptionList.stream()
@@ -328,7 +330,7 @@ public class HomePage extends BasePage {
                 })
                 .toList();
     }
-
+    @Step("Displaying the contents of the main panel of the start page")
     public List<String> getContentBlock() {
         return contentBlock.stream()
                 .map(WebElement::getText)
@@ -575,6 +577,7 @@ public class HomePage extends BasePage {
         return new CredentialsPage(getDriver());
     }
 
+    @Step("Check build queue message")
     public String getBuildQueueText() {
         return buildQueueText.getText();
     }
