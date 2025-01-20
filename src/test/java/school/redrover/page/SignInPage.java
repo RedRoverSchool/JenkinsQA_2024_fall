@@ -1,5 +1,6 @@
 package school.redrover.page;
 
+import io.qameta.allure.Step;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -15,6 +16,7 @@ public class SignInPage extends BasePage {
     @FindBy(xpath = "//h1")
     private WebElement signInTitle;
 
+    @Step("Get sing in title")
     public String getSignInTitle() {
         return getWait2().until(ExpectedConditions.visibilityOf(signInTitle)).getText();
     }

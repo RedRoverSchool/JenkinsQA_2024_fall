@@ -307,6 +307,7 @@ public class HomePage extends BasePage {
         return welcomeTitle.getText();
     }
 
+    @Step("Get description text")
     public String getDescriptionText() {
         return getWait5().until(ExpectedConditions.visibilityOf(description)).getText();
     }
@@ -474,60 +475,61 @@ public class HomePage extends BasePage {
         return new MyViewsPage(getDriver());
     }
 
+    @Step("Click 'Name' table header change order")
     public HomePage clickNameTableHeaderChangeOrder() {
         tableNameHeaderChangeOrder.click();
 
         return new HomePage(getDriver());
     }
 
+    @Step("Click 'Status of the last build' table header change order")
     public HomePage clickStatusTableHeaderChangeOrder() {
         statusTableHeaderChangeOrder.click();
 
         return new HomePage(getDriver());
     }
 
+    @Step("Get title table header with down arrow")
     public String getTitleTableHeaderWithDownArrow() {
         return titleTableHeaderWithDownArrow.getText().split(" ")[0].trim();
     }
 
+    @Step("Get title table header with up arrow")
     public String getTitleTableHeaderWithUpArrow() {
         return titleTableHeaderWithUpArrow.getText().split(" ")[0].trim();
     }
 
+    @Step("Click description button at home page")
     public HomePage clickDescriptionButton() {
         descriptionButton.click();
-
         return this;
     }
 
+    @Step("Add description text in the text area")
     public HomePage addDescription(String description) {
         descriptionTextArea.sendKeys(description);
-
         return this;
     }
-
+    @Step("Click 'Save' button")
     public HomePage clickSaveButton() {
         saveButton.click();
-
         return this;
     }
-
+    @Step("Clear description text area")
     public HomePage clearDescription() {
         clearDescriptionTextArea.clear();
-
         return this;
     }
-
+    @Step("Get description button title")
     public String getDescriptionButtonTitle() {
         return descriptionButton.getText();
     }
-
+    @Step("Click 'Preview' button")
     public HomePage clickPreviewButton() {
         previewButton.click();
-
         return this;
     }
-
+    @Step("Get text preview")
     public String getTextPreview() {
         return previewText.getText();
     }
@@ -553,24 +555,28 @@ public class HomePage extends BasePage {
         return new UserPage(getDriver());
     }
 
+    @Step("Open user dropdown menu")
     public HomePage openAdminDropdownMenu() {
         new Actions(getDriver()).moveToElement(adminDropdown).click().perform();
 
         return this;
     }
 
+    @Step("Click 'Configure' at user dropdown menu")
     public UserConfigPage clickConfigureAdminDropdownMenu() {
         getWait2().until(ExpectedConditions.elementToBeClickable(configureAdminDropdown)).click();
 
         return new UserConfigPage(getDriver());
     }
 
+    @Step("Click Log out button")
     public SignInPage clickLogOut() {
         logOut.click();
 
         return new SignInPage(getDriver());
     }
 
+    @Step("Click 'Credentials' at user dropdown menu")
     public CredentialsPage clickCredentialsAdminDropdownMenu() {
         getWait2().until(ExpectedConditions.elementToBeClickable(credentialsDropdown)).click();
 
