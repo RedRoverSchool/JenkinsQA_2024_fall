@@ -46,7 +46,7 @@ public class CreateUserPage extends BasePage {
         }
     }
 
-    @Step("Get validation message")
+    @Step("Get validation messages")
     public List<String> getValidationMessages() {
         return validationMessage.stream().map(WebElement::getText).toList();
     }

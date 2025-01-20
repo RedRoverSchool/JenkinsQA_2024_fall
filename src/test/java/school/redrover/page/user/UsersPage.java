@@ -41,7 +41,7 @@ public class UsersPage extends BasePage {
         return new CreateUserPage(getDriver());
     }
 
-    @Step("Get created user list")
+    @Step("Get user list")
     public List<String> getUserList() {
         return userNameList.stream().map(WebElement::getText).toList();
     }
