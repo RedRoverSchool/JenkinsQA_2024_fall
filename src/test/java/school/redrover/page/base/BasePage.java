@@ -65,7 +65,7 @@ public abstract class BasePage extends BaseModel {
         return new SearchPage(getDriver());
     }
 
-    public LogPage enterGotoLogPage(String text) {
+    public LogPage typeTextIntoSearchFieldAndPressEnter(String text) {
         searchBox.sendKeys(text, Keys.ENTER);
 
         return new LogPage(getDriver());

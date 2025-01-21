@@ -14,7 +14,7 @@ public class LogPage extends BasePage {
         super(driver);
     }
 
-    public String getResultSearch() {
+    public String getSearchResult() {
         return resultSearch.getText();
     }
 }

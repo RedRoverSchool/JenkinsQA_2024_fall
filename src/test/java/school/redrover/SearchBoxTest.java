@@ -122,8 +122,8 @@ public class SearchBoxTest extends BaseTest {
     @Description("(NO TC) 14.002.07 Search for logs")
     public void testInputField() {
         String text = new HomePage(getDriver())
-                .enterGotoLogPage("log")
-                .getResultSearch();
+                .typeTextIntoSearchFieldAndPressEnter("log")
+                .getSearchResult();
 
         Allure.step("Expected result: Log page is displayed");
         Assert.assertTrue(text.toLowerCase().contains("log"));
