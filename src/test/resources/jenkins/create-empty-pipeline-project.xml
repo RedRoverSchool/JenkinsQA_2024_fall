@@ -1,14 +1,11 @@
-<project>
+<flow-definition>
+    <description/>
     <keepDependencies>false</keepDependencies>
     <properties/>
-    <scm class="hudson.scm.NullSCM"/>
-    <canRoam>false</canRoam>
-    <disabled>false</disabled>
-    <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
-    <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
+    <definition class="org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition">
+        <script/>
+        <sandbox>true</sandbox>
+    </definition>
     <triggers/>
-    <concurrentBuild>false</concurrentBuild>
-    <builders/>
-    <publishers/>
-    <buildWrappers/>
-</project>
+    <disabled>false</disabled>
+</flow-definition>
