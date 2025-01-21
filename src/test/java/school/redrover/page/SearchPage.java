@@ -2,13 +2,17 @@ package school.redrover.page;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindAll;
 import org.openqa.selenium.support.FindBy;
 import school.redrover.page.base.BasePage;
 
 public class SearchPage extends BasePage {
 
-    @FindBy(xpath = "//li[@id = 'item_Built-In Node']/a")
-    private WebElement resultSearch;
+    @FindAll({
+        @FindBy(xpath = "//li[@id = 'item_Built-In Node']/a"),
+        @FindBy(xpath = "//a[@class='jenkins-table__link']")
+    })
+    private WebElement searchResult;
 
     @FindBy(xpath = "//h1")
     private WebElement title;
@@ -20,8 +24,8 @@ public class SearchPage extends BasePage {
         super(driver);
     }
 
-    public String getResult() {
-        return resultSearch.getText();
+    public String getSearchResult() {
+        return searchResult.getText();
     }
 
     public String getTitle() {
