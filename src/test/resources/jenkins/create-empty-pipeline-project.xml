@@ -1,8 +1,8 @@
-<flow-definition plugin="workflow-job@1436.vfa_244484591f">
+<flow-definition>
     <description/>
     <keepDependencies>false</keepDependencies>
     <properties/>
-    <definition class="org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition" plugin="workflow-cps@3990.vd281dd77a_388">
+    <definition class="org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition">
         <script/>
         <sandbox>true</sandbox>
     </definition>
