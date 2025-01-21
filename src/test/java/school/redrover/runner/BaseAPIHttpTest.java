@@ -12,7 +12,6 @@ import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 
 import java.io.IOException;
-import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import org.slf4j.Logger;
@@ -39,7 +38,7 @@ public abstract class BaseAPIHttpTest {
     @BeforeMethod
     protected void getToken() {
         try {
-            String encodedXpath = URLEncoder.encode("concat(//crumbRequestFields,\":\",//crumb)", StandardCharsets.UTF_8);
+            String encodedXpath = TestUtils.encodeParam("concat(//crumbRequestFields,\":\",//crumb)");
             String url = ProjectUtils.getUrl() + "crumbIssuer/api/json?xpath=" + encodedXpath;
 
             try (CloseableHttpClient httpClient = HttpClients.createDefault()) {

@@ -8,6 +8,7 @@ import school.redrover.page.home.HomePage;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
+import java.net.URLEncoder;
 
 public class TestUtils {
 
@@ -181,4 +182,7 @@ public class TestUtils {
         }
     }
 
+    public static String encodeParam(String param) {
+        return URLEncoder.encode(param, StandardCharsets.UTF_8);
+    }
 }
