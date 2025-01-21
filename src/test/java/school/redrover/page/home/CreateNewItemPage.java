@@ -95,6 +95,7 @@ public class CreateNewItemPage extends BasePage {
         return new FolderConfigPage(getDriver());
     }
 
+    @Step("Select 'MultiConfiguration' and click 'Ok'")
     public MultiConfigurationConfigPage selectMultiConfigurationAndClickOk() {
         multiConfigurationProject.click();
         okButton.click();
@@ -102,6 +103,7 @@ public class CreateNewItemPage extends BasePage {
         return new MultiConfigurationConfigPage(getDriver());
     }
 
+    @Step("Select 'MultiConfiguration'")
     public CreateNewItemPage selectMultiConfigurationProject() {
         multiConfigurationProject.click();
 

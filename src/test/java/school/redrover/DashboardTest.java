@@ -14,7 +14,7 @@ import school.redrover.runner.TestUtils;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-
+@Epic("16 Dashboard")
 public class DashboardTest extends BaseTest {
 
     private static final String DESCRIPTION_TEXT = "It's my workspace";
@@ -313,7 +313,6 @@ public class DashboardTest extends BaseTest {
     }
 
     @Test
-    @Epic("16 Dashboard")
     @Story("US_16.003 Item context Menu > Check content")
     @Description("TC_16.003.01 'New Item' button is present in the 'Dashboard' dropdown options")
     public void testPossibilityOfCreatingNewItemFromBreadcrumbBar() {

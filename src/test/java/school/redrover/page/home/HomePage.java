@@ -190,6 +190,7 @@ public class HomePage extends BasePage {
         return new PipelineProjectPage(getDriver());
     }
 
+    @Step("Open MultiConfiguration project")
     public MultiConfigurationProjectPage openMultiConfigurationProject(String name) {
         openItem(name);
         return new MultiConfigurationProjectPage(getDriver());
@@ -247,6 +248,7 @@ public class HomePage extends BasePage {
         return new FreestyleConfigPage(getDriver());
     }
 
+    @Step("Select 'Delete' from item menu")
     public HomePage selectDeleteFromItemMenu(String itemName) {
         selectMenuFromItemDropdown(itemName, "Delete");
 
@@ -464,11 +466,13 @@ public class HomePage extends BasePage {
         return new ViewPage(getDriver());
     }
 
+    @Step("Get a deletion pop-up")
     public WebElement getDeletionPopup() {
 
         return getWait5().until(ExpectedConditions.visibilityOf(deletionPopup));
     }
 
+    @Step("Go to 'My views'")
     public MyViewsPage goToMyViews() {
         myViewsLink.click();
 
