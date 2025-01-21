@@ -11,7 +11,7 @@ import school.redrover.runner.BaseTest;
 
 import java.util.List;
 
-@Epic("00 New item")
+@Epic("00 New Item")
 public class NewItemTest extends BaseTest {
 
     private final static String MESSAGE = "» This field cannot be empty, please enter a valid name";

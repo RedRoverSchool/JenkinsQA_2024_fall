@@ -1,5 +1,6 @@
 package school.redrover.page.multiConfiguration;
 
+import io.qameta.allure.Step;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -28,12 +29,14 @@ public class MultiConfigurationProjectPage extends BaseProjectPage<MultiConfigur
         return new MultiConfigurationRenamePage(getDriver());
     }
 
+    @Step("Click 'Delete project'")
     public MultiConfigurationProjectPage clickDeleteProject() {
         deleteProjectButton.click();
 
         return this;
     }
 
+    @Step("Get a deletion pop-up")
     public WebElement getDeletionPopup() {
         return getWait5().until(ExpectedConditions.visibilityOf(deletionPopup));
     }

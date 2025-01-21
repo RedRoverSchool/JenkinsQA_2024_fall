@@ -142,6 +142,7 @@ public abstract class BaseProjectPage<Self extends BaseProjectPage<?, ?, ?>, Pro
         return new HomePage(getDriver());
     }
 
+    @Step("Click 'Delete button' at sidebar and cancel")
     public Self clickDeleteButtonSidebarAndCancel() {
         getWait2().until(ExpectedConditions.elementToBeClickable(deleteButtonSidebar)).click();
         getWait2().until(ExpectedConditions.elementToBeClickable(cancelButton)).click();
