@@ -1,0 +1,1 @@
+name=Pipeline&mode=org.jenkinsci.plugins.workflow.job.WorkflowJob
