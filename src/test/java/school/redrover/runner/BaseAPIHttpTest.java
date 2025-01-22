@@ -14,6 +14,7 @@ import org.testng.annotations.BeforeMethod;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,7 +24,7 @@ public abstract class BaseAPIHttpTest {
     protected String crumbRequestField;
     protected String token;
 
-   protected static final Logger logger = LoggerFactory.getLogger(BaseAPIHttpTest.class);
+    protected static final Logger logger = LoggerFactory.getLogger(BaseAPIHttpTest.class);
 
     protected String getBasicAuthWithPassword() {
         String auth = ProjectUtils.getUserName() + ":" + ProjectUtils.getPassword();
@@ -37,41 +38,36 @@ public abstract class BaseAPIHttpTest {
 
     @BeforeMethod
     protected void getToken() {
-        try {
-            String encodedXpath = TestUtils.encodeParam("concat(//crumbRequestFields,\":\",//crumb)");
-            String url = ProjectUtils.getUrl() + "crumbIssuer/api/json?xpath=" + encodedXpath;
+        try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
 
-            try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
-                HttpGet httpGet = new HttpGet(url);
-                httpGet.addHeader("Authorization", getBasicAuthWithPassword());
+            HttpGet httpGet = new HttpGet(ProjectUtils.getUrl() + "crumbIssuer/api/json");
+            httpGet.addHeader("Authorization", getBasicAuthWithPassword());
 
-                try (CloseableHttpResponse response = httpClient.execute(httpGet)) {
-                    String jsonString = EntityUtils.toString(response.getEntity());
-                    Assert.assertEquals(response.getStatusLine().getStatusCode(), 200);
-                    Assert.assertNotNull(jsonString);
+            try (CloseableHttpResponse response = httpClient.execute(httpGet)) {
+                String jsonString = EntityUtils.toString(response.getEntity());
+                Assert.assertEquals(response.getStatusLine().getStatusCode(), 200);
+                Assert.assertNotNull(jsonString);
 
-                    JSONObject jsonResponse = new JSONObject(jsonString);
-                    crumb = jsonResponse.getString("crumb");
-                    crumbRequestField = jsonResponse.getString("crumbRequestField");
+                JSONObject jsonResponse = new JSONObject(jsonString);
+                crumb = jsonResponse.getString("crumb");
+                crumbRequestField = jsonResponse.getString("crumbRequestField");
 
-                    Assert.assertNotNull(crumb);
-                    Assert.assertNotNull(crumbRequestField);
+                Assert.assertNotNull(crumb);
+                Assert.assertNotNull(crumbRequestField);
 
-                    HttpPost httpPost = new HttpPost(ProjectUtils.getUrl()
-                            + "me/descriptorByName/jenkins.security.ApiTokenProperty/generateNewToken");
-                    httpPost.addHeader("Jenkins-Crumb", crumb);
-                    httpPost.addHeader("Authorization", getBasicAuthWithPassword());
+                HttpPost httpPost = new HttpPost(ProjectUtils.getUrl() + "me/descriptorByName/jenkins.security.ApiTokenProperty/generateNewToken");
+                httpPost.addHeader("Jenkins-Crumb", crumb);
+                httpPost.addHeader("Authorization", getBasicAuthWithPassword());
 
-                    try (CloseableHttpResponse postResponse = httpClient.execute(httpPost)) {
-                        Assert.assertEquals(postResponse.getStatusLine().getStatusCode(), 200);
+                try (CloseableHttpResponse postResponse = httpClient.execute(httpPost)) {
+                    Assert.assertEquals(postResponse.getStatusLine().getStatusCode(), 200);
 
-                        String postResponseBody = EntityUtils.toString(postResponse.getEntity(), StandardCharsets.UTF_8);
-                        JSONObject postJsonResponse = new JSONObject(postResponseBody);
-                        token = postJsonResponse.getJSONObject("data").getString("tokenValue");
+                    String postResponseBody = EntityUtils.toString(postResponse.getEntity(), StandardCharsets.UTF_8);
+                    JSONObject postJsonResponse = new JSONObject(postResponseBody);
+                    token = postJsonResponse.getJSONObject("data").getString("tokenValue");
 
-                        logger.info("Crumb: " + "*".repeat(crumb.length() - 5) + crumb.substring(crumb.length() - 5));
-                        logger.info("Token: " + "*".repeat(token.length() - 5) + token.substring(token.length() - 5));
-                    }
+                    logger.info("Crumb: " + "*".repeat(crumb.length() - 5) + crumb.substring(crumb.length() - 5));
+                    logger.info("Token: " + "*".repeat(token.length() - 5) + token.substring(token.length() - 5));
                 }
             }
         } catch (IOException e) {

@@ -81,7 +81,6 @@ public class APIHttpTest extends BaseAPIHttpTest {
                     getAllProjectNamesFromJsonResponseList(),
                     PIPELINE_NAME,
                     "The project is not created");
-
         }
     }
 
@@ -105,6 +104,37 @@ public class APIHttpTest extends BaseAPIHttpTest {
                     getAllProjectNamesFromJsonResponseList(),
                     PIPELINE_NAME_BY_XML_CREATED,
                     "The project is not created");
+        }
+    }
+
+    @Test(dependsOnMethods = "testCreatePipelineXML")
+    public void testAddDescription() throws IOException {
+        final String description = "This is a description";
+
+        HttpPost httpPost = new HttpPost(ProjectUtils.getUrl() + "job/" + PIPELINE_NAME_BY_XML_CREATED + "/submitDescription");
+
+        httpPost.setEntity(new StringEntity("description=" + TestUtils.encodeParam(description)));
+
+        httpPost.addHeader(HttpHeaders.CONTENT_TYPE, "application/x-www-form-urlencoded");
+        httpPost.addHeader(HttpHeaders.AUTHORIZATION, getBasicAuthWithToken());
+
+        try (CloseableHttpClient httpClient = HttpClients.createDefault();
+             CloseableHttpResponse response = httpClient.execute(httpPost)) {
+
+            HttpLogger.logRequestAndResponse(httpPost, response);
+
+            Assert.assertEquals(response.getStatusLine().getStatusCode(), 302);
+        }
+        HttpGet httpGet = new HttpGet(ProjectUtils.getUrl() + "job/" + PIPELINE_NAME_BY_XML_CREATED + "/api/json?pretty=true");
+        httpGet.addHeader(HttpHeaders.AUTHORIZATION, getBasicAuthWithToken());
+
+        try (CloseableHttpClient httpClient = HttpClients.createDefault();
+             CloseableHttpResponse response = httpClient.execute(httpGet)) {
+            String jsonResponse = EntityUtils.toString(response.getEntity());
+
+            Assert.assertEquals(response.getStatusLine().getStatusCode(), 200);
+            Assert.assertTrue(jsonResponse.contains("\"description\" : \"" + description + "\""),
+                    "Description not found in job details");
         }
     }
 }
