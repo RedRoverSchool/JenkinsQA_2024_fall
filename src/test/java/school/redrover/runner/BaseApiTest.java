@@ -21,7 +21,7 @@ public abstract class BaseApiTest {
         Map<String, String> cookies = given()
                 .spec(Specifications.baseRequestSpec())
                 .when()
-                .get(ProjectUtils.getUrl())
+                .get()
                 .then()
                 .extract().cookies();
 
