@@ -59,10 +59,10 @@ public class HeaderComponent<T extends BasePage<T>> extends BaseComponent<T> {
         return new SearchBoxPage(getDriver());
     }
 
-    public HomePage enterSearch(String text) {
+    public T enterSearch(String text) {
         searchBox.sendKeys(text);
 
-        return new HomePage(getDriver());
+        return getReturnPage();
     }
 
     public SearchPage pressEnter() {
@@ -77,17 +77,17 @@ public class HeaderComponent<T extends BasePage<T>> extends BaseComponent<T> {
         return new SearchPage(getDriver());
     }
 
-    public HomePage getSuggestion() {
+    public T getSuggestion() {
         getWait2().until(ExpectedConditions.elementToBeClickable(firstSuggestion));
         new Actions(getDriver()).moveToElement(firstSuggestion).click().perform();
 
-        return new HomePage(getDriver());
+        return getReturnPage();
     }
 
-    public HomePage clickBell() {
+    public T clickBell() {
         iconBell.click();
 
-        return new HomePage(getDriver());
+        return getReturnPage();
     }
 
     public ManageJenkinsPage clickLinkWithPopup() {
