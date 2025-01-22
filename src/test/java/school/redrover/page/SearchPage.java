@@ -32,7 +32,4 @@ public class SearchPage extends BasePage<SearchPage> {
         return title.getText();
     }
 
-    public String getMessageError() {
-        return messageError.getText();
-    }
 }

@@ -36,8 +36,8 @@ public class HeaderComponent<T extends BasePage<T>> extends BaseComponent<T> {
     @FindBy(css = "a[id='visible-am-button'] svg")
     private WebElement iconBell;
 
-    @FindBy(xpath = "//div[@class='am-list']/p/a")
-    private WebElement linkWithPopup;
+    @FindBy(xpath = "//a[@href='/manage']")
+    private WebElement manageJenkinsLink;
 
     @FindBy(xpath = "//div[@class='yui-ac-bd']/ul/li[not(contains(@style, 'display: none'))]")
     private List<WebElement> listSuggestion;
@@ -59,49 +59,50 @@ public class HeaderComponent<T extends BasePage<T>> extends BaseComponent<T> {
         return new SearchBoxPage(getDriver());
     }
 
-    public T enterSearch(String text) {
+    @Step("Enter text into search field")
+    public HeaderComponent<T> enterSearchText(String text) {
         searchBox.sendKeys(text);
 
-        return getReturnPage();
+        return this;
     }
 
+    @Step("Press Enter")
     public SearchPage pressEnter() {
         searchBox.sendKeys(Keys.ENTER);
 
         return new SearchPage(getDriver());
     }
 
-    public SearchPage typeTextIntoSearchFieldAndPressEnter(String text) {
-        searchBox.sendKeys(text, Keys.ENTER);
-
-        return new SearchPage(getDriver());
-    }
-
-    public T getSuggestion() {
+    @Step("Select first suggestion")
+    public HeaderComponent<T> selectFirstSuggestion() {
         getWait2().until(ExpectedConditions.elementToBeClickable(firstSuggestion));
         new Actions(getDriver()).moveToElement(firstSuggestion).click().perform();
 
-        return getReturnPage();
+        return this;
     }
 
-    public T clickBell() {
+    @Step("Click 'Bell' icon")
+    public HeaderComponent<T> clickBell() {
         iconBell.click();
 
-        return getReturnPage();
+        return this;
     }
 
-    public ManageJenkinsPage clickLinkWithPopup() {
-        linkWithPopup.click();
+    @Step("Click 'Manage Jenkins' link")
+    public ManageJenkinsPage clickManageJenkins() {
+        manageJenkinsLink.click();
 
         return new ManageJenkinsPage(getDriver());
     }
 
+    @Step("Get list of suggestions")
     public List<String> getListSuggestion() {
         getWait5().until(ExpectedConditions.elementToBeClickable(firstSuggestion));
 
         return listSuggestion.stream().map(WebElement::getText).toList();
     }
 
+    @Step("Click on 'Manage Jenkins' suggestion")
     public ManageJenkinsPage clickOnSuggestedManage() {
         getWait2().until(ExpectedConditions.elementToBeClickable(suggestedManage)).click();
 

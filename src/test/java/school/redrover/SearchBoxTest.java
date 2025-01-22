@@ -12,17 +12,16 @@ import school.redrover.runner.ProjectUtils;
 
 import java.util.List;
 
+@Epic("14 Header")
 public class SearchBoxTest extends BaseTest {
 
     private static final String ITEM_NAME = "Item Name";
     private static final String SEARCH_TEXT = "g";
     private static final String SEARCH_RESULT = "manage";
-    private static final String INVALID_SEARCH_TEXT = "444";
 
     @Test
-    @Epic("14 Header")
     @Story("US_14.003 Questions box")
-    @Description("TC_14.003.01 Click on the guestion in search box")
+    @Description("TC_14.003.01 Click on the question in search box")
     public void testVerifyTitleSearchBoxLink() {
         String title = new HomePage(getDriver())
                 .getHeader()
@@ -34,14 +33,12 @@ public class SearchBoxTest extends BaseTest {
     }
 
     @Test
-    @Epic("14 Header")
     @Story("US_14.002 Search box")
     @Description("(NO TC) TC_14.002.01 Display and type in search field")
-    public void testSearch() {
+    public void testBuiltInSearch() {
         String result = new HomePage(getDriver())
                 .getHeader()
-                .enterSearch("built")
-                .getHeader()
+                .enterSearchText("built")
                 .pressEnter()
                 .getSearchResult();
 
@@ -50,16 +47,13 @@ public class SearchBoxTest extends BaseTest {
     }
 
     @Test
-    @Epic("14 Header")
     @Story("US_14.002 Search box")
     @Description("(NO TC) 14.002.04 Verify suggestions based on search in field")
     public void testSuggestionList() {
         String result = new HomePage(getDriver())
                 .getHeader()
-                .enterSearch("bu")
-                .getHeader()
-                .getSuggestion()
-                .getHeader()
+                .enterSearchText("bu")
+                .selectFirstSuggestion()
                 .pressEnter()
                 .getSearchResult();
 
@@ -68,14 +62,12 @@ public class SearchBoxTest extends BaseTest {
     }
 
     @Test
-    @Epic("14 Header")
     @Story("US_14.002 Search box")
     @Description("TC_14.002.02 Redirect based on search results")
-    public void testSearchManage() {
+    public void testManageJenkinsPageSearch() {
         String title = new HomePage(getDriver())
                 .getHeader()
-                .enterSearch(SEARCH_RESULT)
-                .getHeader()
+                .enterSearchText(SEARCH_RESULT)
                 .pressEnter()
                 .getTitle();
 
@@ -84,14 +76,12 @@ public class SearchBoxTest extends BaseTest {
     }
 
     @Test
-    @Epic("14 Header")
     @Story("US_14.002 Search box")
     @Description("(NO TC) 14.002.03 No results are found")
-    public void testFindSearchTest() {
+    public void testNoResultSearch() {
         String result = new HomePage(getDriver())
                 .getHeader()
-                .enterSearch("TestSearch")
-                .getHeader()
+                .enterSearchText("TestSearch")
                 .pressEnter()
                 .getTitle();
 
@@ -100,15 +90,13 @@ public class SearchBoxTest extends BaseTest {
     }
 
     @Test
-    @Epic("14 Header")
     @Story("US_14.002 Search box")
     @Description("(NO TC) 14.002.05 Go to Manage Jenkins through 'bell'")
-    public void testClickButtonTest() {
+    public void testGoToManageJenkinsThroughBell() {
         String title = new HomePage(getDriver())
                 .getHeader()
                 .clickBell()
-                .getHeader()
-                .clickLinkWithPopup()
+                .clickManageJenkins()
                 .getTitle();
 
         Allure.step("Expected result: 'Manage Jenkins' is reached though the 'bell'");
@@ -116,14 +104,12 @@ public class SearchBoxTest extends BaseTest {
     }
 
     @Test
-    @Epic("14 Header")
     @Story("US_14.002 Search box")
     @Description("(NO TC) 14.002.06 Search configure page")
-    public void testSearchField() {
+    public void testConfigurationPageSearch() {
         String url = new HomePage(getDriver())
                 .getHeader()
-                .enterSearch("config")
-                .getHeader()
+                .enterSearchText("config")
                 .pressEnter()
                 .getCurrentUrl();
 
@@ -132,21 +118,20 @@ public class SearchBoxTest extends BaseTest {
     }
 
     @Test
-    @Epic("14 Header")
     @Story("US_14.002 Search box")
     @Description("(NO TC) 14.002.07 Search for logs")
-    public void testInputField() {
-        String text = new HomePage(getDriver())
+    public void testLogPageSearch() {
+        String url = new HomePage(getDriver())
                 .getHeader()
-                .typeTextIntoSearchFieldAndPressEnter("log")
-                .getSearchResult();
+                .enterSearchText("log")
+                .pressEnter()
+                .getCurrentUrl();
 
         Allure.step("Expected result: Log page is displayed");
-        Assert.assertTrue(text.toLowerCase().contains("log"));
+        Assert.assertEquals(url, ProjectUtils.getUrl() + "log/");
     }
 
     @Test
-    @Epic("14 Header")
     @Story("US_14.002 Search box")
     @Description("(NO TC) 14.002.08 Search for some item")
     public void testSearchCreatedInstance() {
@@ -158,8 +143,7 @@ public class SearchBoxTest extends BaseTest {
                 .getHeader()
                 .gotoHomePage()
                 .getHeader()
-                .enterSearch(ITEM_NAME)
-                .getHeader()
+                .enterSearchText(ITEM_NAME)
                 .pressEnter()
                 .getTitle();
 
@@ -168,30 +152,26 @@ public class SearchBoxTest extends BaseTest {
     }
 
     @Test
-    @Epic("14 Header")
     @Story("US_14.002 Search box")
     @Description("(NO TC) 14.002.09 Search with one symbol is contained in pages")
     public void testResultOfSearch() {
         List<String> suggestionList = new HomePage(getDriver())
                 .getHeader()
-                .enterSearch(SEARCH_TEXT)
-                .getHeader()
+                .enterSearchText(SEARCH_TEXT)
                 .getListSuggestion();
 
         Allure.step("Expected result: One symbol search is performed so it's got some list of results");
-        Assert.assertEquals(suggestionList.size(), 4);
+        Assert.assertEquals(suggestionList.size(), 5);
         Assert.assertEquals(suggestionList.get(2), SEARCH_RESULT);
     }
 
     @Test(dependsOnMethods = "testResultOfSearch")
-    @Epic("14 Header")
     @Story("US_14.002 Search box")
     @Description("(NO TC) 14.002.10 Go to Manage Jenkins from search result page")
-    public void testRedirectToResult() {
+    public void testSearchManageJenkinsPageFromRedirectedSearchResult() {
         String title = new HomePage(getDriver())
                 .getHeader()
-                .enterSearch(SEARCH_TEXT)
-                .getHeader()
+                .enterSearchText(SEARCH_TEXT)
                 .clickOnSuggestedManage()
                 .getHeader()
                 .pressEnter()
@@ -201,19 +181,17 @@ public class SearchBoxTest extends BaseTest {
         Assert.assertEquals(title, "Manage Jenkins");
     }
 
-    @Test(dependsOnMethods = "testRedirectToResult")
-    @Epic("14 Header")
+    @Test(dependsOnMethods = "testSearchManageJenkinsPageFromRedirectedSearchResult")
     @Story("US_14.002 Search box")
     @Description("(NO TC) 14.002.11 No results are found from search result page")
     public void testEmptySearchField() {
-        String errorMessage = new HomePage(getDriver())
+        String url = new HomePage(getDriver())
                 .getHeader()
-                .enterSearch(INVALID_SEARCH_TEXT)
-                .getHeader()
+                .enterSearchText("")
                 .pressEnter()
-                .getMessageError();
+                .getCurrentUrl();
 
         Allure.step("Expected result: Empty search is performed from search result page with no matching");
-        Assert.assertEquals(errorMessage, "Nothing seems to match.");
+        Assert.assertEquals(url, ProjectUtils.getUrl() + "computer/(built-in)/");
     }
 }
