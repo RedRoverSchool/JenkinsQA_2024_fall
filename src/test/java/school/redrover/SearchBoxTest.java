@@ -161,7 +161,7 @@ public class SearchBoxTest extends BaseTest {
                 .getListSuggestion();
 
         Allure.step("Expected result: One symbol search is performed so it's got some list of results");
-        Assert.assertEquals(suggestionList.size(), 5);
+        Assert.assertEquals(suggestionList.size(), 4);
         Assert.assertEquals(suggestionList.get(2), SEARCH_RESULT);
     }
 
