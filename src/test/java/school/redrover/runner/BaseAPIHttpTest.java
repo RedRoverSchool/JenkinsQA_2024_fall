@@ -38,8 +38,7 @@ public abstract class BaseAPIHttpTest {
     @BeforeMethod
     protected void getToken() {
         try {
-            String encodedXpath = TestUtils.encodeParam("concat(//crumbRequestFields,\":\",//crumb)");
-            String url = ProjectUtils.getUrl() + "crumbIssuer/api/json?xpath=" + encodedXpath;
+            String url = ProjectUtils.getUrl() + "crumbIssuer/api/json";
 
             try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
                 HttpGet httpGet = new HttpGet(url);
