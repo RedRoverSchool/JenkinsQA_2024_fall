@@ -27,6 +27,9 @@ public abstract class BasePage extends BaseModel {
     @FindBy(xpath = "//div[@class='yui-ac-bd']/ul/li[1]")
     private WebElement firstSuggestion;
 
+    @FindBy(xpath = "//div[@class='yui-ac-bd']/ul/li[3]")
+    private WebElement suggestedManage;
+
     @FindBy(css = "a[id='visible-am-button'] svg")
     private WebElement iconBell;
 
@@ -71,13 +74,6 @@ public abstract class BasePage extends BaseModel {
         return new SearchPage(getDriver());
     }
 
-    public ManageJenkinsPage resultManage(String manage) {
-        enterSearch(manage);
-        pressEnter();
-
-        return new ManageJenkinsPage(getDriver());
-    }
-
     public HomePage getSuggestion() {
         getWait2().until(ExpectedConditions.elementToBeClickable(firstSuggestion));
         new Actions(getDriver()).moveToElement(firstSuggestion).click().perform();
@@ -103,10 +99,8 @@ public abstract class BasePage extends BaseModel {
         return listSuggestion.stream().map(WebElement::getText).toList();
     }
 
-    public ManageJenkinsPage getResultManage() {
-        getWait2().until(ExpectedConditions.elementToBeClickable(firstSuggestion));
-        enterSearch(Keys.BACK_SPACE + listSuggestion.stream().map(WebElement::getText).toList().get(2));
-        pressEnter();
+    public ManageJenkinsPage clickOnSuggestedManage() {
+        getWait2().until(ExpectedConditions.elementToBeClickable(suggestedManage)).click();
 
         return new ManageJenkinsPage(getDriver());
     }
