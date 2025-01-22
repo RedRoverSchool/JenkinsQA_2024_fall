@@ -59,6 +59,7 @@ public class PipelineProjectTest extends BaseTest {
                 .enterItemName(PROJECT_NAME)
                 .selectPipelineAndClickOk()
                 .clickSaveButton()
+                .getHeader()
                 .gotoHomePage()
                 .getItemList();
 
@@ -123,6 +124,7 @@ public class PipelineProjectTest extends BaseTest {
                 .enterItemName(secondProjectName)
                 .enterName(PROJECT_NAME)
                 .clickOkLeadingToCofigPageOfCopiedProject(new PipelineConfigurePage(getDriver()))
+                .getHeader()
                 .gotoHomePage()
                 .getItemList();
 
@@ -141,6 +143,7 @@ public class PipelineProjectTest extends BaseTest {
                 .clickRenameSidebarButton()
                 .clearInputFieldAndTypeName(NEW_PROJECT_NAME)
                 .clickRenameButton()
+                .getHeader()
                 .gotoHomePage()
                 .getItemList();
 
@@ -363,6 +366,7 @@ public class PipelineProjectTest extends BaseTest {
         boolean isGreenBuildButtonPresent = new HomePage(getDriver())
                 .openPipelineProject(PROJECT_NAME)
                 .clickEnableButton()
+                .getHeader()
                 .gotoHomePage()
                 .isGreenScheduleBuildTrianglePresent(PROJECT_NAME);
 
@@ -425,6 +429,7 @@ public class PipelineProjectTest extends BaseTest {
                 .selectPipelineAndClickOk()
                 .clickToggleToDisableOrEnableProject()
                 .clickSaveButton()
+                .getHeader()
                 .gotoHomePage()
                 .getStatusBuild(PROJECT_NAME);
 
@@ -453,6 +458,7 @@ public class PipelineProjectTest extends BaseTest {
                 .selectPipelineAndClickOk()
                 .enterScriptFromFile(validPipelineScriptFile)
                 .clickSaveButton()
+                .getHeader()
                 .gotoHomePage()
                 .selectBuildNowFromItemMenu(PROJECT_NAME)
                 .refreshAfterBuild()
@@ -483,6 +489,7 @@ public class PipelineProjectTest extends BaseTest {
                 .selectPipelineAndClickOk()
                 .enterScriptFromFile(invalidPipelineScriptFile)
                 .clickSaveButton()
+                .getHeader()
                 .gotoHomePage()
                 .selectBuildNowFromItemMenu(PROJECT_NAME)
                 .refreshAfterBuild()
@@ -610,6 +617,7 @@ public class PipelineProjectTest extends BaseTest {
                 .selectNewStep(SELECT_VALUE)
                 .clickGeneratePipelineScript()
                 .clickCopy()
+                .getHeader()
                 .gotoHomePage()
                 .openPipelineProject(PIPELINE_NAME)
                 .clickSidebarConfigButton()

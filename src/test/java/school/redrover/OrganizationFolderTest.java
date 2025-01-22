@@ -31,6 +31,7 @@ public class OrganizationFolderTest extends BaseTest {
                 .clickNewItem()
                 .enterItemName(ORGANIZATION_FOLDER_NAME)
                 .selectOrganizationFolderAndClickOk()
+                .getHeader()
                 .gotoHomePage()
                 .getItemList();
 
@@ -357,6 +358,7 @@ public class OrganizationFolderTest extends BaseTest {
                 .clickNewItem()
                 .enterItemName(MIN_LENGTH_NAME)
                 .selectOrganizationFolderAndClickOk()
+                .getHeader()
                 .gotoHomePage();
 
         Allure.step("Verify possibility to create Organization folder with minimal name length one symbol");

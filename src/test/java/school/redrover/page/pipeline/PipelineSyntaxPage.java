@@ -10,7 +10,7 @@ import org.openqa.selenium.support.ui.Select;
 import school.redrover.page.base.BasePage;
 import school.redrover.runner.TestUtils;
 
-public class PipelineSyntaxPage extends BasePage {
+public class PipelineSyntaxPage extends BasePage<PipelineSyntaxPage> {
 
     @FindBy(xpath = "//select[@class='jenkins-select__input dropdownList']")
     private WebElement sampleStepSelect;

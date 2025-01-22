@@ -7,7 +7,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
-public abstract class BaseConfigPage<Self extends BaseConfigPage<?, ?>, ProjectPage extends BaseProjectPage> extends BasePage {
+public abstract class BaseConfigPage<Self extends BaseConfigPage<?, ?>, ProjectPage extends BaseProjectPage<?, ?, ?>> extends BasePage<BaseConfigPage<?, ?>> {
 
     @FindBy(css = "[name$='description']")
     private WebElement descriptionField;

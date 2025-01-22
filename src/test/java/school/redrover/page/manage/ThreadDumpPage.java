@@ -7,7 +7,7 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import school.redrover.page.base.BasePage;
 
-public class ThreadDumpPage extends BasePage {
+public class ThreadDumpPage extends BasePage<ThreadDumpPage> {
 
     @FindBy(xpath = "//h1")
     private WebElement title;

@@ -9,7 +9,7 @@ import school.redrover.page.base.BasePage;
 
 import java.util.List;
 
-public class AppearancePage extends BasePage {
+public class AppearancePage extends BasePage<AppearancePage> {
 
     @FindBy(xpath = "//label[@for='radio-block-0']")
     private WebElement selectDarkThemes;

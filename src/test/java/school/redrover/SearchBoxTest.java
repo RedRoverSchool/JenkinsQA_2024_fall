@@ -25,6 +25,7 @@ public class SearchBoxTest extends BaseTest {
     @Description("TC_14.003.01 Click on the guestion in search box")
     public void testVerifyTitleSearchBoxLink() {
         String title = new HomePage(getDriver())
+                .getHeader()
                 .gotoSearchBox()
                 .getTitle();
 
@@ -38,7 +39,9 @@ public class SearchBoxTest extends BaseTest {
     @Description("(NO TC) TC_14.002.01 Display and type in search field")
     public void testSearch() {
         String result = new HomePage(getDriver())
+                .getHeader()
                 .enterSearch("built")
+                .getHeader()
                 .pressEnter()
                 .getSearchResult();
 
@@ -52,8 +55,11 @@ public class SearchBoxTest extends BaseTest {
     @Description("(NO TC) 14.002.04 Verify suggestions based on search in field")
     public void testSuggestionList() {
         String result = new HomePage(getDriver())
+                .getHeader()
                 .enterSearch("bu")
+                .getHeader()
                 .getSuggestion()
+                .getHeader()
                 .pressEnter()
                 .getSearchResult();
 
@@ -67,7 +73,9 @@ public class SearchBoxTest extends BaseTest {
     @Description("TC_14.002.02 Redirect based on search results")
     public void testSearchManage() {
         String title = new HomePage(getDriver())
+                .getHeader()
                 .enterSearch(SEARCH_RESULT)
+                .getHeader()
                 .pressEnter()
                 .getTitle();
 
@@ -81,7 +89,9 @@ public class SearchBoxTest extends BaseTest {
     @Description("(NO TC) 14.002.03 No results are found")
     public void testFindSearchTest() {
         String result = new HomePage(getDriver())
+                .getHeader()
                 .enterSearch("TestSearch")
+                .getHeader()
                 .pressEnter()
                 .getTitle();
 
@@ -95,7 +105,9 @@ public class SearchBoxTest extends BaseTest {
     @Description("(NO TC) 14.002.05 Go to Manage Jenkins through 'bell'")
     public void testClickButtonTest() {
         String title = new HomePage(getDriver())
+                .getHeader()
                 .clickBell()
+                .getHeader()
                 .clickLinkWithPopup()
                 .getTitle();
 
@@ -109,7 +121,9 @@ public class SearchBoxTest extends BaseTest {
     @Description("(NO TC) 14.002.06 Search configure page")
     public void testSearchField() {
         String url = new HomePage(getDriver())
+                .getHeader()
                 .enterSearch("config")
+                .getHeader()
                 .pressEnter()
                 .getCurrentUrl();
 
@@ -123,6 +137,7 @@ public class SearchBoxTest extends BaseTest {
     @Description("(NO TC) 14.002.07 Search for logs")
     public void testInputField() {
         String text = new HomePage(getDriver())
+                .getHeader()
                 .typeTextIntoSearchFieldAndPressEnter("log")
                 .getSearchResult();
 
@@ -140,8 +155,11 @@ public class SearchBoxTest extends BaseTest {
                 .enterItemName(ITEM_NAME)
                 .selectOrganizationFolderAndClickOk()
                 .clickSaveButton()
+                .getHeader()
                 .gotoHomePage()
+                .getHeader()
                 .enterSearch(ITEM_NAME)
+                .getHeader()
                 .pressEnter()
                 .getTitle();
 
@@ -155,7 +173,9 @@ public class SearchBoxTest extends BaseTest {
     @Description("(NO TC) 14.002.09 Search with one symbol is contained in pages")
     public void testResultOfSearch() {
         List<String> suggestionList = new HomePage(getDriver())
+                .getHeader()
                 .enterSearch(SEARCH_TEXT)
+                .getHeader()
                 .getListSuggestion();
 
         Allure.step("Expected result: One symbol search is performed so it's got some list of results");
@@ -169,8 +189,11 @@ public class SearchBoxTest extends BaseTest {
     @Description("(NO TC) 14.002.10 Go to Manage Jenkins from search result page")
     public void testRedirectToResult() {
         String title = new HomePage(getDriver())
+                .getHeader()
                 .enterSearch(SEARCH_TEXT)
+                .getHeader()
                 .clickOnSuggestedManage()
+                .getHeader()
                 .pressEnter()
                 .getTitle();
 
@@ -184,7 +207,9 @@ public class SearchBoxTest extends BaseTest {
     @Description("(NO TC) 14.002.11 No results are found from search result page")
     public void testEmptySearchField() {
         String errorMessage = new HomePage(getDriver())
+                .getHeader()
                 .enterSearch(INVALID_SEARCH_TEXT)
+                .getHeader()
                 .pressEnter()
                 .getMessageError();
 

@@ -40,6 +40,7 @@ public class MultibranchPipelineTest extends BaseTest {
                 .enterItemName(MULTIBRANCH_PIPELINE_NAME)
                 .selectMultibranchPipelineAndClickOk()
                 .clickSaveButton()
+                .getHeader()
                 .gotoHomePage()
                 .getItemList();
 
@@ -116,6 +117,7 @@ public class MultibranchPipelineTest extends BaseTest {
                 .clickRenameSidebarButton()
                 .clearInputFieldAndTypeName(MULTIBRANCH_PIPELINE_NAME2)
                 .clickRenameButton()
+                .getHeader()
                 .gotoHomePage()
                 .getItemList();
 
@@ -134,6 +136,7 @@ public class MultibranchPipelineTest extends BaseTest {
                 .selectRenameFromItemDropdown(MULTIBRANCH_PIPELINE_NAME)
                 .clearInputFieldAndTypeName(MULTIBRANCH_PIPELINE_NAME2)
                 .clickRenameButton()
+                .getHeader()
                 .gotoHomePage()
                 .getItemList();
 
@@ -155,6 +158,7 @@ public class MultibranchPipelineTest extends BaseTest {
                 .clickRenameBreadcrumbDropdown()
                 .clearInputFieldAndTypeName(MULTIBRANCH_PIPELINE_NAME2)
                 .clickRenameButton()
+                .getHeader()
                 .gotoHomePage()
                 .getItemList();
 
@@ -190,11 +194,13 @@ public class MultibranchPipelineTest extends BaseTest {
                 .enterItemName(MULTIBRANCH_PIPELINE_NAME)
                 .selectMultibranchPipelineAndClickOk()
                 .clickSaveButton()
+                .getHeader()
                 .gotoHomePage()
                 .clickNewItem()
                 .enterItemName(MULTIBRANCH_PIPELINE_NAME2)
                 .selectMultibranchPipelineAndClickOk()
                 .clickSaveButton()
+                .getHeader()
                 .gotoHomePage()
                 .getItemList();
 
@@ -226,6 +232,7 @@ public class MultibranchPipelineTest extends BaseTest {
                 .enterItemName(MULTIBRANCH_PIPELINE_NAME)
                 .selectMultibranchPipelineAndClickOk()
                 .clickSaveButton()
+                .getHeader()
                 .gotoHomePage()
                 .openMultibranchPipelineProject(MULTIBRANCH_PIPELINE_NAME)
                 .clickDeleteButtonSidebarAndConfirm()
@@ -258,6 +265,7 @@ public class MultibranchPipelineTest extends BaseTest {
                 .enterItemName(MULTIBRANCH_PIPELINE_NAME)
                 .selectMultibranchPipelineAndClickOk()
                 .clickSaveButton()
+                .getHeader()
                 .gotoHomePage()
                 .openMultibranchPipelineProject(MULTIBRANCH_PIPELINE_NAME)
                 .openBreadcrumbDropdown()

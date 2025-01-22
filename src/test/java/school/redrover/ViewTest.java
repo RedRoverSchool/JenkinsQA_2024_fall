@@ -33,6 +33,7 @@ public class ViewTest extends BaseTest {
                 .clickCreateButton()
                 .selectJobCheckBoxByName(PIPELINE_NAME)
                 .clickOkButton()
+                .getHeader()
                 .gotoHomePage()
                 .getViewList();
 

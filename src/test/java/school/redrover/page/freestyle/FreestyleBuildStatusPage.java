@@ -5,7 +5,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import school.redrover.page.base.BasePage;
 
-public class FreestyleBuildStatusPage extends BasePage {
+public class FreestyleBuildStatusPage extends BasePage<FreestyleBuildStatusPage> {
 
     @FindBy(xpath = "//div[@id='main-panel']/table//ul//li[3]")
     private WebElement totalBuildTime;

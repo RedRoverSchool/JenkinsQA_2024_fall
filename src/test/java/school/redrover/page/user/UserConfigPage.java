@@ -9,7 +9,7 @@ import org.openqa.selenium.support.ui.Select;
 import school.redrover.page.base.BasePage;
 import school.redrover.page.home.HomePage;
 
-public class UserConfigPage extends BasePage {
+public class UserConfigPage extends BasePage<UserConfigPage> {
 
     @FindBy(xpath = "//a[@title='Help for feature: Full Name']")
     private WebElement fullNameTooltip;

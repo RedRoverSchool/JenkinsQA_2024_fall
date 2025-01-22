@@ -7,7 +7,7 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import school.redrover.page.base.BasePage;
 
-public class SystemInformationPage extends BasePage {
+public class SystemInformationPage extends BasePage<SystemInformationPage> {
 
     @FindBy(xpath = "//*[contains(text(),'Thread Dumps')]")
     private WebElement threadDumpsTab;

@@ -4,8 +4,9 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import school.redrover.page.base.BaseModel;
+import school.redrover.page.base.BasePage;
 
-public class SearchBoxPage extends BaseModel {
+public class SearchBoxPage extends BasePage<SearchBoxPage> {
 
     @FindBy(xpath = "//h1")
     private WebElement title;

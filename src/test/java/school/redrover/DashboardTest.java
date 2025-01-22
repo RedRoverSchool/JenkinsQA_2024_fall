@@ -47,6 +47,7 @@ public class DashboardTest extends BaseTest {
                 .enterItemName(projectName)
                 .selectPipelineAndClickOk()
                 .clickSaveButton()
+                .getHeader()
                 .gotoHomePage();
     }
 
@@ -57,6 +58,7 @@ public class DashboardTest extends BaseTest {
                 .selectPipelineAndClickOk()
                 .clickToggleToDisableOrEnableProject()
                 .clickSaveButton()
+                .getHeader()
                 .gotoHomePage();
     }
 
@@ -68,6 +70,7 @@ public class DashboardTest extends BaseTest {
                 .addScriptToPipeline(VALID_PIPELINE_SCRIPT)
                 .clickSaveButton()
                 .clickOnBuildNowItemOnSidePanelAndWait()
+                .getHeader()
                 .gotoHomePage();
     }
 
@@ -79,6 +82,7 @@ public class DashboardTest extends BaseTest {
                 .addScriptToPipeline(INVALID_PIPELINE_SCRIPT)
                 .clickSaveButton()
                 .clickOnBuildNowItemOnSidePanelAndWait()
+                .getHeader()
                 .gotoHomePage();
     }
 

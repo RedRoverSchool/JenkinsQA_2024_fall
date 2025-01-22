@@ -8,7 +8,7 @@ import school.redrover.page.base.BasePage;
 
 import java.util.List;
 
-public class CreateUserPage extends BasePage {
+public class CreateUserPage extends BasePage<CreateUserPage> {
 
     @FindBy(css = ".jenkins-submit-button")
     private WebElement createUserButton;

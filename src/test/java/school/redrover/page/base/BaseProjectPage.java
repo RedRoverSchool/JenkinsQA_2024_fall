@@ -11,7 +11,7 @@ import school.redrover.runner.TestUtils;
 
 import java.util.List;
 
-public abstract class BaseProjectPage<Self extends BaseProjectPage<?, ?, ?>, ProjectConfigPage, ProjectRenamePage> extends BasePage {
+public abstract class BaseProjectPage<Self extends BaseProjectPage<?, ?, ?>, ProjectConfigPage, ProjectRenamePage> extends BasePage<BaseProjectPage<?, ?, ?>> {
 
     @FindBy(id = "description-link")
     private WebElement descriptionButton;

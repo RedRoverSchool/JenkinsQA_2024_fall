@@ -15,7 +15,7 @@ import school.redrover.page.freestyle.FreestyleConfigPage;
 import school.redrover.page.freestyle.FreestyleProjectPage;
 import school.redrover.page.freestyle.FreestyleRenamePage;
 import school.redrover.page.manage.ManageJenkinsPage;
-import school.redrover.page.manage.node.NodesProjectPage;
+import school.redrover.page.node.NodesProjectPage;
 import school.redrover.page.multiConfiguration.MultiConfigurationProjectPage;
 import school.redrover.page.multibranch.MultibranchPipelineProjectPage;
 import school.redrover.page.multibranch.MultibranchPipelineRenamePage;
@@ -32,7 +32,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
-public class HomePage extends BasePage {
+public class HomePage extends BasePage<HomePage> {
 
     @FindBy(css = "[href$='/newJob']")
     private WebElement newJob;
