@@ -27,6 +27,7 @@ public class BuildHistoryTest extends BaseTest {
                 .enterItemName(FREESTYLE_PROJECT_NAME)
                 .selectFreestyleProjectAndClickOk()
                 .clickSaveButton()
+                .getHeader()
                 .gotoHomePage()
                 .getItemNameByOrder(1);
 
@@ -73,6 +74,7 @@ public class BuildHistoryTest extends BaseTest {
                 .clickNewItem()
                 .enterItemName(PIPELINE_PROJECT_NAME)
                 .selectPipelineAndClickOk()
+                .getHeader()
                 .gotoHomePage()
                 .getItemNameByOrder(1);
 
@@ -88,6 +90,7 @@ public class BuildHistoryTest extends BaseTest {
         BuildHistoryPage buildHistoryPage = new HomePage(getDriver())
                 .openPipelineProject(PIPELINE_PROJECT_NAME)
                 .clickOnBuildNowItemOnSidePanelAndWait()
+                .getHeader()
                 .gotoHomePage()
                 .gotoBuildHistoryPageFromLeftPanel();
 
@@ -138,6 +141,7 @@ public class BuildHistoryTest extends BaseTest {
                 .openPipelineProject(PIPELINE_PROJECT_NAME)
                 .clickSidebarConfigButton()
                 .clickSaveButton()
+                .getHeader()
                 .gotoHomePage()
                 .clickScheduleBuild(PIPELINE_PROJECT_NAME)
                 .gotoBuildHistoryPageFromLeftPanel();

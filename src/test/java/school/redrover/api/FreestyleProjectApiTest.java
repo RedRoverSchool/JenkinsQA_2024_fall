@@ -19,7 +19,7 @@ public class FreestyleProjectApiTest extends BaseApiTest {
 
     @Test
     @Feature("Freestyle project")
-    @Description("Create freestyle project with valid name")
+    @Description("001 Create freestyle project with valid name")
     public void createFreestyleProjectTest() {
         Specifications.installSpecification(Specifications.authRequestSpec(), Specifications.baseResponseSpec(200));
         String xml = TestUtils.readFileFromResources("create-empty-freestyle-project.xml");

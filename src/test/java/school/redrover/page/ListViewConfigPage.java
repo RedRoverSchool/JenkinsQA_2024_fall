@@ -12,7 +12,7 @@ import school.redrover.runner.TestUtils;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-public class ListViewConfigPage extends BasePage {
+public class ListViewConfigPage extends BasePage<ListViewConfigPage> {
 
     @FindBy(xpath = "//div[@class='repeated-chunk__header']")
     private List<WebElement> columnList;

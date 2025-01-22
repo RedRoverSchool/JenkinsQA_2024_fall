@@ -6,7 +6,7 @@ import org.openqa.selenium.support.FindAll;
 import org.openqa.selenium.support.FindBy;
 import school.redrover.page.base.BasePage;
 
-public class SearchPage extends BasePage {
+public class SearchPage extends BasePage<SearchPage> {
 
     @FindAll({
         @FindBy(xpath = "//li[@id = 'item_Built-In Node']/a"),
@@ -32,7 +32,4 @@ public class SearchPage extends BasePage {
         return title.getText();
     }
 
-    public String getMessageError() {
-        return messageError.getText();
-    }
 }

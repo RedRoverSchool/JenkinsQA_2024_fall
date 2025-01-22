@@ -11,7 +11,7 @@ import school.redrover.page.base.BasePage;
 
 import java.util.List;
 
-public class PluginsPage extends BasePage {
+public class PluginsPage extends BasePage<PluginsPage> {
 
     @FindBy(xpath = "//span[contains(@tooltip, 'updates available')]")
     private WebElement numberOfUpdatesAvailable;

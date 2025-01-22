@@ -7,7 +7,7 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import school.redrover.page.base.BasePage;
 
-public class FreestyleBuildPage extends BasePage {
+public class FreestyleBuildPage extends BasePage<FreestyleBuildPage> {
 
     @FindBy(xpath = "//input[@name='displayName']")
     private WebElement displayNameField;
@@ -111,10 +111,9 @@ public class FreestyleBuildPage extends BasePage {
     }
 
     @Step("Click 'Delete' button")
-    public FreestyleProjectPage confirmDeleteBuild() {
+    public void confirmDeleteBuild() {
         getWait10().until(ExpectedConditions.visibilityOf(deleteButton)).click();
 
-        return new FreestyleProjectPage(getDriver());
     }
 
     public String getBreadCrumb() {

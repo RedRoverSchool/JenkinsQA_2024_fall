@@ -29,7 +29,6 @@ public class Specifications {
                 .addRequestSpecification(baseRequestSpec())
                 .addHeader(BaseApiTest.crumbIssuerResponse.getCrumbRequestField(), BaseApiTest.crumbIssuerResponse.getCrumb())
                 .addHeader("Cookie", BaseApiTest.cookieName + "=" + BaseApiTest.cookieValue)
-                .log(LogDetail.ALL)
                 .build();
     }
 

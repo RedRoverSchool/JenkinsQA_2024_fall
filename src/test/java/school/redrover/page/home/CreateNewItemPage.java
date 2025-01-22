@@ -17,7 +17,7 @@ import school.redrover.runner.TestUtils;
 
 import java.util.List;
 
-public class CreateNewItemPage extends BasePage {
+public class CreateNewItemPage extends BasePage<CreateNewItemPage> {
 
     @FindBy(xpath = "//span[text()= 'Multibranch Pipeline']")
     private WebElement multibranchPipeline;

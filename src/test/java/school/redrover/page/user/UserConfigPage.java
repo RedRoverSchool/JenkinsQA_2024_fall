@@ -9,7 +9,7 @@ import org.openqa.selenium.support.ui.Select;
 import school.redrover.page.base.BasePage;
 import school.redrover.page.home.HomePage;
 
-public class UserConfigPage extends BasePage {
+public class UserConfigPage extends BasePage<UserConfigPage> {
 
     @FindBy(xpath = "//a[@title='Help for feature: Full Name']")
     private WebElement fullNameTooltip;
@@ -37,16 +37,6 @@ public class UserConfigPage extends BasePage {
 
     public UserConfigPage(WebDriver driver) {
         super(driver);
-    }
-
-    public UserConfigPage clickFullNameTooltip() {
-        getWait2().until(ExpectedConditions.elementToBeClickable(fullNameTooltip)).click();
-
-        return this;
-    }
-
-    public String getFullNameHelperInputText() {
-        return getWait2().until(ExpectedConditions.visibilityOf(fullNameInputHelper)).getText();
     }
 
     @Step("Click 'Status' at sidebar")

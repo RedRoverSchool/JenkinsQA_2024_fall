@@ -1,4 +1,4 @@
-package school.redrover.page.manage.node;
+package school.redrover.page.node;
 
 import org.openqa.selenium.WebDriver;
 import school.redrover.page.base.BaseRenamePage;

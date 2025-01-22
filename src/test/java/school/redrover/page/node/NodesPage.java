@@ -1,4 +1,4 @@
-package school.redrover.page.manage.node;
+package school.redrover.page.node;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -24,6 +24,6 @@ public class NodesPage extends BasePage {
     }
 
     public List<String> getNodeList() {
-        return getDriver().findElements(By.xpath("//a[@class='jenkins-table__link model-link inside']")).stream().map(x -> x.getText()).toList();
+        return getDriver().findElements(By.xpath("//a[@class='jenkins-table__link model-link inside']")).stream().map(WebElement::getText).toList();
     }
 }

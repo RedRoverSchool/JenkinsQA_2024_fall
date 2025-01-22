@@ -8,7 +8,7 @@ import school.redrover.page.base.BasePage;
 
 import java.util.List;
 
-public class CreateUserPage extends BasePage {
+public class CreateUserPage extends BasePage<CreateUserPage> {
 
     @FindBy(css = ".jenkins-submit-button")
     private WebElement createUserButton;
@@ -36,7 +36,7 @@ public class CreateUserPage extends BasePage {
     }
 
     @Step("Click create user button")
-    public <T extends BasePage> T clickCreateUserFormSubmit(Class<T> pageClass) {
+    public <T extends BasePage<T>> T clickCreateUserFormSubmit(Class<T> pageClass) {
         createUserButton.click();
 
         if (!validationMessage.isEmpty() && pageClass.isAssignableFrom(CreateUserPage.class)) {

@@ -29,6 +29,7 @@ public class MultiConfigurationProjectTest extends BaseTest {
                 .clickNewItem()
                 .enterItemName(PROJECT_NAME)
                 .selectMultiConfigurationAndClickOk()
+                .getHeader()
                 .gotoHomePage()
                 .getItemList();
 
@@ -157,6 +158,7 @@ public class MultiConfigurationProjectTest extends BaseTest {
         List<String> itemList= new HomePage(getDriver())
                 .openMultiConfigurationProject(PROJECT_NAME)
                 .clickDeleteButtonSidebarAndCancel()
+                .getHeader()
                 .gotoHomePage()
                 .getItemList();
 

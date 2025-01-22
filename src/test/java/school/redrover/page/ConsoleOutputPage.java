@@ -8,7 +8,7 @@ import school.redrover.page.base.BasePage;
 
 import java.util.Arrays;
 
-public class ConsoleOutputPage extends BasePage {
+public class ConsoleOutputPage extends BasePage<ConsoleOutputPage> {
     public ConsoleOutputPage(WebDriver driver) {
         super(driver);
     }

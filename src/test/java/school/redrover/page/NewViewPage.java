@@ -12,7 +12,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class NewViewPage extends BasePage {
+public class NewViewPage extends BasePage<NewViewPage> {
 
     @FindBy(id = "name")
     private WebElement nameInputField;
