@@ -78,8 +78,7 @@ public class PipelineProjectTest extends BaseTest {
                 .getEmptyNameMessage();
 
         Allure.step("Expected result: Error message " + "'" + EMPTY_NAME_ERROR_MESSAGE + "'" +
-                " is displayed", () -> {
-            Assert.assertEquals(emptyNameMessage, EMPTY_NAME_ERROR_MESSAGE); });
+                " is displayed", () -> Assert.assertEquals(emptyNameMessage, EMPTY_NAME_ERROR_MESSAGE));
     }
 
     @Test

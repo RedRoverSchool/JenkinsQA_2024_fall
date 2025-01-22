@@ -27,7 +27,6 @@ public class DashboardTest extends BaseTest {
                 stages {
                     stage('Checkout') {
                         steps {echo 'Step: Checkout code from repository'}
-                        
             """;
     private static final String INVALID_PIPELINE_SCRIPT = """
             error_pipeline {{{
