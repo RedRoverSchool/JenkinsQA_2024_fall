@@ -300,10 +300,6 @@ public class HomePage extends BasePage<HomePage> {
                 .getText();
     }
 
-    public String getWelcomeDescriptionText() {
-        return headerDescription.getText();
-    }
-
     @Step("Get welcome title")
     public String getWelcomeTitle() {
         return welcomeTitle.getText();
@@ -551,12 +547,6 @@ public class HomePage extends BasePage<HomePage> {
         Collections.sort(expectedOrder);
 
         return actualOrder.equals(expectedOrder);
-    }
-
-    public UserPage clickAdmin() {
-        admin.click();
-
-        return new UserPage(getDriver());
     }
 
     @Step("Open user dropdown menu")

@@ -18,7 +18,7 @@ import school.redrover.runner.TestUtils;
 
 import java.util.List;
 
-public class ManageJenkinsPage extends BasePage {
+public class ManageJenkinsPage extends BasePage<ManageJenkinsPage> {
 
     @FindBy(xpath = "//h1")
     private WebElement title;

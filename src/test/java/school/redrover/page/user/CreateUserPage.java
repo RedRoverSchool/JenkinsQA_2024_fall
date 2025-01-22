@@ -36,7 +36,7 @@ public class CreateUserPage extends BasePage<CreateUserPage> {
     }
 
     @Step("Click create user button")
-    public <T extends BasePage> T clickCreateUserFormSubmit(Class<T> pageClass) {
+    public <T extends BasePage<T>> T clickCreateUserFormSubmit(Class<T> pageClass) {
         createUserButton.click();
 
         if (!validationMessage.isEmpty() && pageClass.isAssignableFrom(CreateUserPage.class)) {

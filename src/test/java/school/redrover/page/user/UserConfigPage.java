@@ -39,16 +39,6 @@ public class UserConfigPage extends BasePage<UserConfigPage> {
         super(driver);
     }
 
-    public UserConfigPage clickFullNameTooltip() {
-        getWait2().until(ExpectedConditions.elementToBeClickable(fullNameTooltip)).click();
-
-        return this;
-    }
-
-    public String getFullNameHelperInputText() {
-        return getWait2().until(ExpectedConditions.visibilityOf(fullNameInputHelper)).getText();
-    }
-
     @Step("Click 'Status' at sidebar")
     public UserPage clickStatusSidebar() {
         getWait2().until(ExpectedConditions.elementToBeClickable(statusSidebarButton)).click();

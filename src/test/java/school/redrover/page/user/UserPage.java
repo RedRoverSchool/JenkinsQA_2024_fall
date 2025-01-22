@@ -25,12 +25,6 @@ public class UserPage extends BasePage<UserPage> {
         super(driver);
     }
 
-    public UserConfigPage clickConfigureSidebar() {
-        getWait2().until(ExpectedConditions.elementToBeClickable(configureAdminSidebar)).click();
-
-        return new UserConfigPage(getDriver());
-    }
-
     @Step("Click configure user sidebar")
     public UserConfigPage clickConfigureUserSidebar() {
         getWait2().until(ExpectedConditions.elementToBeClickable(configureUserSidebar)).click();

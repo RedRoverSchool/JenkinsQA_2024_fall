@@ -24,6 +24,6 @@ public class NodesPage extends BasePage {
     }
 
     public List<String> getNodeList() {
-        return getDriver().findElements(By.xpath("//a[@class='jenkins-table__link model-link inside']")).stream().map(x -> x.getText()).toList();
+        return getDriver().findElements(By.xpath("//a[@class='jenkins-table__link model-link inside']")).stream().map(WebElement::getText).toList();
     }
 }

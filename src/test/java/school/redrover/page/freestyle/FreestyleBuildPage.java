@@ -111,10 +111,9 @@ public class FreestyleBuildPage extends BasePage<FreestyleBuildPage> {
     }
 
     @Step("Click 'Delete' button")
-    public FreestyleProjectPage confirmDeleteBuild() {
+    public void confirmDeleteBuild() {
         getWait10().until(ExpectedConditions.visibilityOf(deleteButton)).click();
 
-        return new FreestyleProjectPage(getDriver());
     }
 
     public String getBreadCrumb() {
