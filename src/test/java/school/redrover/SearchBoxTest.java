@@ -39,8 +39,8 @@ public class SearchBoxTest extends BaseTest {
     public void testSearch() {
         String result = new HomePage(getDriver())
                 .enterSearch("built")
-                .enter()
-                .getResult();
+                .pressEnter()
+                .getSearchResult();
 
         Allure.step("Expected result: Search action with 'built' is performed with 'Built-In Node' result");
         Assert.assertEquals(result, "Built-In Node");
@@ -54,8 +54,8 @@ public class SearchBoxTest extends BaseTest {
         String result = new HomePage(getDriver())
                 .enterSearch("bu")
                 .getSuggestion()
-                .enter()
-                .getResult();
+                .pressEnter()
+                .getSearchResult();
 
         Allure.step("Expected result: Search result is displayed according to typed staff in the search field");
         Assert.assertEquals(result, "Built-In Node");
@@ -81,7 +81,7 @@ public class SearchBoxTest extends BaseTest {
     public void testFindSearchTest() {
         String result = new HomePage(getDriver())
                 .enterSearch("TestSearch")
-                .enter()
+                .pressEnter()
                 .getTitle();
 
         Allure.step("Expected result: No specified result exists for this search so verifying an empty result");
@@ -109,7 +109,7 @@ public class SearchBoxTest extends BaseTest {
     public void testSearchField() {
         String url = new HomePage(getDriver())
                 .enterSearch("config")
-                .enter()
+                .pressEnter()
                 .getCurrentUrl();
 
         Allure.step("Expected result: The result of searching configure page is displayed");
@@ -122,8 +122,8 @@ public class SearchBoxTest extends BaseTest {
     @Description("(NO TC) 14.002.07 Search for logs")
     public void testInputField() {
         String text = new HomePage(getDriver())
-                .enterGotoLogPage("log")
-                .getResultSearch();
+                .typeTextIntoSearchFieldAndPressEnter("log")
+                .getSearchResult();
 
         Allure.step("Expected result: Log page is displayed");
         Assert.assertTrue(text.toLowerCase().contains("log"));
@@ -141,7 +141,7 @@ public class SearchBoxTest extends BaseTest {
                 .clickSaveButton()
                 .gotoHomePage()
                 .enterSearch(ITEM_NAME)
-                .enter()
+                .pressEnter()
                 .getTitle();
 
         Allure.step("Expected result: Some item has been created so it's checked of possibility to search for it");
@@ -183,7 +183,7 @@ public class SearchBoxTest extends BaseTest {
     public void testEmptySearchField() {
         String errorMessage = new HomePage(getDriver())
                 .enterSearch(INVALID_SEARCH_TEXT)
-                .enter()
+                .pressEnter()
                 .getMessageError();
 
         Allure.step("Expected result: Empty search is performed from search result page with no matching");

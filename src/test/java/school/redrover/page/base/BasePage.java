@@ -59,21 +59,21 @@ public abstract class BasePage extends BaseModel {
         return (HomePage) this;
     }
 
-    public SearchPage enter() {
+    public SearchPage pressEnter() {
         searchBox.sendKeys(Keys.ENTER);
 
         return new SearchPage(getDriver());
     }
 
-    public LogPage enterGotoLogPage(String text) {
+    public SearchPage typeTextIntoSearchFieldAndPressEnter(String text) {
         searchBox.sendKeys(text, Keys.ENTER);
 
-        return new LogPage(getDriver());
+        return new SearchPage(getDriver());
     }
 
     public ManageJenkinsPage resultManage(String manage) {
         enterSearch(manage);
-        enter();
+        pressEnter();
 
         return new ManageJenkinsPage(getDriver());
     }
@@ -106,7 +106,7 @@ public abstract class BasePage extends BaseModel {
     public ManageJenkinsPage getResultManage() {
         getWait2().until(ExpectedConditions.elementToBeClickable(firstSuggestion));
         enterSearch(Keys.BACK_SPACE + listSuggestion.stream().map(WebElement::getText).toList().get(2));
-        enter();
+        pressEnter();
 
         return new ManageJenkinsPage(getDriver());
     }
