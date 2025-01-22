@@ -67,7 +67,8 @@ public class SearchBoxTest extends BaseTest {
     @Description("TC_14.002.02 Redirect based on search results")
     public void testSearchManage() {
         String title = new HomePage(getDriver())
-                .resultManage(SEARCH_RESULT)
+                .enterSearch(SEARCH_RESULT)
+                .pressEnter()
                 .getTitle();
 
         Allure.step("Expected result: 'Manage Jenkins' is displayed due to this search");
@@ -169,7 +170,8 @@ public class SearchBoxTest extends BaseTest {
     public void testRedirectToResult() {
         String title = new HomePage(getDriver())
                 .enterSearch(SEARCH_TEXT)
-                .getResultManage()
+                .clickOnSuggestedManage()
+                .pressEnter()
                 .getTitle();
 
         Allure.step("Expected result: 'Manage jenkins' page is searching from redirected search result");
