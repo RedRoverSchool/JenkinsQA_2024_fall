@@ -1,11 +1,16 @@
 package school.redrover.runner;
 
+import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.edge.EdgeDriver;
+import org.openqa.selenium.edge.EdgeOptions;
+import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import java.io.*;
@@ -61,15 +66,21 @@ public final class ProjectUtils {
     }
 
     static final ChromeOptions chromeOptions;
+    static final FirefoxOptions firefoxOptions;
+    static final EdgeOptions edgeOptions;
 
     static {
         initProperties();
 
         chromeOptions = new ChromeOptions();
+        firefoxOptions = new FirefoxOptions();
+        edgeOptions = new EdgeOptions();
         String options = properties.getProperty(PROP_CHROME_OPTIONS);
         if (options != null) {
             for (String argument : options.split(";")) {
                 chromeOptions.addArguments(argument);
+                firefoxOptions.addArguments(argument);
+                edgeOptions.addArguments(argument);
             }
         }
     }
@@ -103,8 +114,30 @@ public final class ProjectUtils {
         }
     }
 
-    static WebDriver createDriver() {
-        WebDriver driver = new ChromeDriver(ProjectUtils.chromeOptions);
+    static WebDriver createDriver(String browser) {
+        WebDriver driver;
+
+        switch (browser.toLowerCase()) {
+            case "chrome":
+                WebDriverManager.chromedriver().setup();
+                driver = new ChromeDriver(chromeOptions);
+                break;
+
+            case "firefox":
+                WebDriverManager.firefoxdriver().setup();
+                driver = new FirefoxDriver(firefoxOptions);
+                break;
+
+            case "edge":
+                WebDriverManager.edgedriver().setup();
+                driver = new EdgeDriver(edgeOptions);
+                break;
+
+            default:
+                throw new IllegalArgumentException("Unsupported browser: " + browser);
+        }
+
+//        = new ChromeDriver(ProjectUtils.chromeOptions);
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
 
         return driver;

@@ -40,7 +40,7 @@ public class FreestyleProjectTest extends BaseTest {
         };
     }
 
-    @Test
+    @Test(groups = {"smoke"})
     @Epic("00 New Item")
     @Story("US_00.001 Create Freestyle Project")
     @Description("TC_00.001.05 Verify error when create the project without name.")

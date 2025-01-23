@@ -1,0 +1,13 @@
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="One Method">
+    <test name="Create with unsafe characters in name">
+        <parameter name="browser" value="chrome"/>
+        <classes>
+            <class name="school.redrover.PipelineProjectTest">
+                <methods>
+                    <include name="testCreateWithUnsafeCharactersInName"/>
+                </methods>
+            </class>
+        </classes>
+    </test>
+</suite>

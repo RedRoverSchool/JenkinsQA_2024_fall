@@ -25,7 +25,7 @@ public final class CucumberDriver {
             uri = scenario.getUri();
         }
 
-        driver = ProjectUtils.createDriver();
+        driver = ProjectUtils.createDriver("chrome");
 
         ProjectUtils.get(driver);
         JenkinsUtils.login(driver);

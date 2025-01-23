@@ -20,6 +20,7 @@ import java.util.stream.Collectors;
 public abstract class BaseTest {
 
     private WebDriver driver;
+    private String browser;
 
     private WebDriverWait wait2;
     private WebDriverWait wait5;
@@ -29,9 +30,9 @@ public abstract class BaseTest {
 
 
     private void startDriver() {
-        ProjectUtils.log("Browser open");
+        ProjectUtils.log("Browser '%s' open".formatted(browser));
 
-        driver = ProjectUtils.createDriver();
+        driver = ProjectUtils.createDriver(browser);
     }
 
     private void clearData() {
@@ -56,7 +57,8 @@ public abstract class BaseTest {
     private void stopDriver() {
         try {
             JenkinsUtils.logout(driver);
-        } catch (Exception ignore) {}
+        } catch (Exception ignore) {
+        }
 
         closeDriver();
     }
@@ -75,7 +77,9 @@ public abstract class BaseTest {
     }
 
     @BeforeClass
-    protected void beforeClass() {
+    @Parameters("browser")
+    protected void beforeClass(@Optional("chrome") String browserParam) {
+        this.browser = browserParam;
         methodsOrder = OrderUtils.createMethodsOrder(
                 Arrays.stream(this.getClass().getMethods())
                         .filter(m -> m.getAnnotation(Test.class) != null && m.getAnnotation(Ignore.class) == null)
