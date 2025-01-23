@@ -58,7 +58,7 @@ jobs:
       - name: Firefox test
         run: mvn test -Dsurefire.suiteXmlFiles=suite/firefox.xml
         env:
-          CHROME_OPTIONS: --no-sandbox;--disable-dev-shm-usage;--headless=new;--window-size=1920,1080
+          CHROME_OPTIONS: --no-sandbox;--disable-dev-shm-usage;--headless;--window-size=1920,1080
           APP_OPTIONS: host=localhost;port=8080;admin.username=${{ secrets.ADMIN_USERNAME }};admin.password=${{ secrets.ADMIN_PASSWORD }}
           CI_RUN: true
 
