@@ -7,7 +7,6 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import io.qameta.allure.*;
 import org.apache.http.NameValuePair;
-import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpDelete;
@@ -21,7 +20,6 @@ import org.apache.http.util.EntityUtils;
 import org.json.JSONObject;
 import org.testng.Assert;
 import org.testng.annotations.Test;
-import school.redrover.model.CrumbIssuerResponse;
 import school.redrover.runner.BaseAPIHttpTest;
 import school.redrover.runner.HttpLogger;
 import school.redrover.runner.ProjectUtils;
@@ -149,23 +147,23 @@ public class APIHttpTest extends BaseAPIHttpTest {
     public void testCreateFolderWithValidNameXML() throws IOException {
         String queryString = "name=" + TestUtils.encodeParam(FOLDER_NAME_BY_XML_CREATED);
 
-        Allure.step(String.format("Compose uri '%s' for Post request", ProjectUtils.getUrl() + "/view/all/createItem?" + queryString));
+        Allure.step(String.format("Compose uri '%s' for POST request", ProjectUtils.getUrl() + "/view/all/createItem?" + queryString));
         HttpPost httpPost = new HttpPost(ProjectUtils.getUrl() + "/view/all/createItem?" + queryString);
 
         Allure.step("Create request body from file create-empty-folder.xml");
         httpPost.setEntity(new StringEntity(TestUtils.readFileFromResources("create-empty-folder.xml")));
 
-        Allure.step(String.format("Set header '%s' : application/xml", HttpHeaders.CONTENT_TYPE));
+        Allure.step(String.format("Set header %s : application/xml", HttpHeaders.CONTENT_TYPE));
         httpPost.addHeader(HttpHeaders.CONTENT_TYPE, "application/xml");
 
-        Allure.step(String.format("Set header '%s' : '%s'", HttpHeaders.AUTHORIZATION, getBasicAuthWithToken()));
+        Allure.step(String.format("Set header '%s : %s'", HttpHeaders.AUTHORIZATION, getBasicAuthWithToken()));
         httpPost.addHeader(HttpHeaders.AUTHORIZATION, getBasicAuthWithToken());
 
 
         try(CloseableHttpClient httpClient = HttpClients.createDefault();
             CloseableHttpResponse response = httpClient.execute(httpPost)) {
 
-            //HttpLogger.logRequestAndResponse(httpPost, response);
+            HttpLogger.logRequestAndResponse(httpPost, response);
 
             Allure.step("Expected result: Status code is 200");
             Assert.assertEquals(response.getStatusLine().getStatusCode(), 200);
@@ -175,19 +173,26 @@ public class APIHttpTest extends BaseAPIHttpTest {
                     "The folder is not created");
         }
 
-        Allure.step(String.format("Compose uri '%s' for GET request", ProjectUtils.getUrl() + "api/json?pretty=true"));
-        HttpGet httpGet = new HttpGet(ProjectUtils.getUrl() + "api/json?pretty=true");
+        Allure.step(String.format("Compose uri for GET request" + ProjectUtils.getUrl() + "job/%s/api/json",FOLDER_NAME_BY_XML_CREATED));
+        HttpGet httpGet = new HttpGet(String.format(ProjectUtils.getUrl() + "job/%s/api/json",FOLDER_NAME_BY_XML_CREATED));
 
-        Allure.step(String.format("Set header 'Authorization' : '%s'", getBasicAuthWithToken()));
+        Allure.step(String.format("Set header 'Authorization : %s'", getBasicAuthWithToken()));
         httpGet.addHeader("Authorization", getBasicAuthWithToken());
 
         try(CloseableHttpClient httpClient = HttpClients.createDefault();
             CloseableHttpResponse response = httpClient.execute(httpGet)) {
 
+            String responseBody = EntityUtils.toString(response.getEntity());
+            JSONObject jsonResponse = new JSONObject(responseBody);
+            String actualFullName = jsonResponse.getString("fullName");
+
             Allure.step("Expected result: Status code is 200");
             Assert.assertEquals(response.getStatusLine().getStatusCode(), 200);
 
-            Allure.step("Expected result: Header 'Content-Type' has value 'application/json;charset=utf-8' ");
+            Allure.step("Expected result: fullName in json is " + FOLDER_NAME_BY_XML_CREATED);
+            Assert.assertEquals(FOLDER_NAME_BY_XML_CREATED, actualFullName, "Folder didn't find");
+
+            Allure.step("Expected result: Header 'Content-Type : application/json;charset=utf-8' ");
             Assert.assertEquals(response.getFirstHeader("Content-Type").getValue(), "application/json;charset=utf-8");
         }
     }
@@ -200,7 +205,7 @@ public class APIHttpTest extends BaseAPIHttpTest {
         Allure.step(String.format("Compose uri '%s' for DELETE request", String.format(ProjectUtils.getUrl() + "job/'%s'/", FOLDER_NAME_BY_XML_CREATED)));
         HttpDelete httpDelete = new HttpDelete(String.format(ProjectUtils.getUrl() + "job/%s/", FOLDER_NAME_BY_XML_CREATED));
 
-        Allure.step(String.format("Set header '%s' : '%s'", HttpHeaders.AUTHORIZATION, getBasicAuthWithToken()));
+        Allure.step(String.format("Set header '%s : %s'", HttpHeaders.AUTHORIZATION, getBasicAuthWithToken()));
         httpDelete.addHeader(HttpHeaders.AUTHORIZATION, getBasicAuthWithToken());
 
         try(CloseableHttpClient httpClient = HttpClients.createDefault();
@@ -209,10 +214,21 @@ public class APIHttpTest extends BaseAPIHttpTest {
             Allure.step("Expected result: Status code is 204");
             Assert.assertEquals(response.getStatusLine().getStatusCode(), 204);
 
-            Allure.step(String.format("Expected result: '%s' is displayed on Dashboard",FOLDER_NAME_BY_XML_CREATED));
+            Allure.step(String.format("Expected result: '%s' is not displayed on Dashboard",FOLDER_NAME_BY_XML_CREATED));
             Assert.assertListNotContainsObject(getAllProjectNamesFromJsonResponseList(), FOLDER_NAME_BY_XML_CREATED,
                     "The folder is not deleted");
         }
 
+        Allure.step(String.format("Compose uri '%s' for GET request", String.format(ProjectUtils.getUrl() + "job/'%s'/api/json", FOLDER_NAME_BY_XML_CREATED)));
+        HttpGet httpGet = new HttpGet(String.format(ProjectUtils.getUrl() + "job/%s/api/json", FOLDER_NAME_BY_XML_CREATED));
+
+        Allure.step(String.format("Set header '%s : %s'", HttpHeaders.AUTHORIZATION, getBasicAuthWithToken()));
+        httpGet.addHeader(HttpHeaders.AUTHORIZATION, getBasicAuthWithToken());
+
+        try (CloseableHttpClient httpClient = HttpClients.createDefault();
+             CloseableHttpResponse response = httpClient.execute(httpGet)) {
+
+            Assert.assertEquals(response.getStatusLine().getStatusCode(), 404);
+        }
     }
 }
