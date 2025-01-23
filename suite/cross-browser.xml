@@ -3,7 +3,7 @@
     <test name="Chrome Tests">
         <parameter name="browser" value="chrome"/>
         <classes>
-            <class name="school.redrover.FreestyleProjectTest"/>
+            <class name="school.redrover.ManageJenkinsTest"/>
         </classes>
     </test>
 
