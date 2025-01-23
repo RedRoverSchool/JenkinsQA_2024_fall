@@ -5,10 +5,12 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import io.qameta.allure.Epic;
+import io.qameta.allure.*;
 import org.apache.http.NameValuePair;
+import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
@@ -16,8 +18,10 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
+import org.json.JSONObject;
 import org.testng.Assert;
 import org.testng.annotations.Test;
+import school.redrover.model.CrumbIssuerResponse;
 import school.redrover.runner.BaseAPIHttpTest;
 import school.redrover.runner.HttpLogger;
 import school.redrover.runner.ProjectUtils;
@@ -33,6 +37,7 @@ public class APIHttpTest extends BaseAPIHttpTest {
 
     private static final String PIPELINE_NAME = "Pipeline";
     private static final String PIPELINE_NAME_BY_XML_CREATED = "PipelineXML";
+    private static final String FOLDER_NAME_BY_XML_CREATED = "FolderXML";
 
     private List<String> getAllProjectNamesFromJsonResponseList() throws IOException {
         HttpGet httpGet = new HttpGet(ProjectUtils.getUrl() + "api/json?pretty=true");
@@ -136,5 +141,78 @@ public class APIHttpTest extends BaseAPIHttpTest {
             Assert.assertTrue(jsonResponse.contains("\"description\" : \"" + description + "\""),
                     "Description not found in job details");
         }
+    }
+
+    @Test
+    @Story("Folder")
+    @Description("003 Create Folder with valid name")
+    public void testCreateFolderWithValidNameXML() throws IOException {
+        String queryString = "name=" + TestUtils.encodeParam(FOLDER_NAME_BY_XML_CREATED);
+
+        Allure.step(String.format("Compose uri '%s' for Post request", ProjectUtils.getUrl() + "/view/all/createItem?" + queryString));
+        HttpPost httpPost = new HttpPost(ProjectUtils.getUrl() + "/view/all/createItem?" + queryString);
+
+        Allure.step("Create request body from file create-empty-folder.xml");
+        httpPost.setEntity(new StringEntity(TestUtils.readFileFromResources("create-empty-folder.xml")));
+
+        Allure.step(String.format("Set header '%s' : application/xml", HttpHeaders.CONTENT_TYPE));
+        httpPost.addHeader(HttpHeaders.CONTENT_TYPE, "application/xml");
+
+        Allure.step(String.format("Set header '%s' : '%s'", HttpHeaders.AUTHORIZATION, getBasicAuthWithToken()));
+        httpPost.addHeader(HttpHeaders.AUTHORIZATION, getBasicAuthWithToken());
+
+
+        try(CloseableHttpClient httpClient = HttpClients.createDefault();
+            CloseableHttpResponse response = httpClient.execute(httpPost)) {
+
+            //HttpLogger.logRequestAndResponse(httpPost, response);
+
+            Allure.step("Expected result: Status code is 200");
+            Assert.assertEquals(response.getStatusLine().getStatusCode(), 200);
+
+            Allure.step(String.format("Expected result: '%s' is displayed on Dashboard",FOLDER_NAME_BY_XML_CREATED));
+            Assert.assertListContainsObject(getAllProjectNamesFromJsonResponseList(), FOLDER_NAME_BY_XML_CREATED,
+                    "The folder is not created");
+        }
+
+        Allure.step(String.format("Compose uri '%s' for GET request", ProjectUtils.getUrl() + "api/json?pretty=true"));
+        HttpGet httpGet = new HttpGet(ProjectUtils.getUrl() + "api/json?pretty=true");
+
+        Allure.step(String.format("Set header 'Authorization' : '%s'", getBasicAuthWithToken()));
+        httpGet.addHeader("Authorization", getBasicAuthWithToken());
+
+        try(CloseableHttpClient httpClient = HttpClients.createDefault();
+            CloseableHttpResponse response = httpClient.execute(httpGet)) {
+
+            Allure.step("Expected result: Status code is 200");
+            Assert.assertEquals(response.getStatusLine().getStatusCode(), 200);
+
+            Allure.step("Expected result: Header 'Content-Type' has value 'application/json;charset=utf-8' ");
+            Assert.assertEquals(response.getFirstHeader("Content-Type").getValue(), "application/json;charset=utf-8");
+        }
+    }
+
+    @Test(dependsOnMethods = "testCreateFolderWithValidNameXML")
+    @Story("Folder")
+    @Description("004 Delete Folder")
+    public void testDeleteFolder() throws IOException {
+
+        Allure.step(String.format("Compose uri '%s' for DELETE request", String.format(ProjectUtils.getUrl() + "job/'%s'/", FOLDER_NAME_BY_XML_CREATED)));
+        HttpDelete httpDelete = new HttpDelete(String.format(ProjectUtils.getUrl() + "job/%s/", FOLDER_NAME_BY_XML_CREATED));
+
+        Allure.step(String.format("Set header '%s' : '%s'", HttpHeaders.AUTHORIZATION, getBasicAuthWithToken()));
+        httpDelete.addHeader(HttpHeaders.AUTHORIZATION, getBasicAuthWithToken());
+
+        try(CloseableHttpClient httpClient = HttpClients.createDefault();
+            CloseableHttpResponse response = httpClient.execute(httpDelete)) {
+
+            Allure.step("Expected result: Status code is 204");
+            Assert.assertEquals(response.getStatusLine().getStatusCode(), 204);
+
+            Allure.step(String.format("Expected result: '%s' is displayed on Dashboard",FOLDER_NAME_BY_XML_CREATED));
+            Assert.assertListNotContainsObject(getAllProjectNamesFromJsonResponseList(), FOLDER_NAME_BY_XML_CREATED,
+                    "The folder is not deleted");
+        }
+
     }
 }
