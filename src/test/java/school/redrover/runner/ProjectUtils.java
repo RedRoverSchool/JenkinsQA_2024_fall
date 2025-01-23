@@ -137,7 +137,6 @@ public final class ProjectUtils {
                 throw new IllegalArgumentException("Unsupported browser: " + browser);
         }
 
-//        = new ChromeDriver(ProjectUtils.chromeOptions);
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
 
         return driver;
