@@ -3,7 +3,7 @@
     <test name="Edge Tests">
         <parameter name="browser" value="edge"/>
         <classes>
-            <class name="school.redrover.FooterTest"/>
+            <class name="school.redrover.FolderTest"/>
         </classes>
     </test>
 </suite>

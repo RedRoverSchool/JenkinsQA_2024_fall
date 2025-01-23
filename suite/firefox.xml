@@ -3,7 +3,7 @@
     <test name="Firefox Tests">
         <parameter name="browser" value="firefox"/>
         <classes>
-            <class name="school.redrover.FooterTest"/>
+            <class name="school.redrover.UserTest"/>
         </classes>
     </test>
 </suite>
