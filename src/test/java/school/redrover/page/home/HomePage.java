@@ -15,15 +15,14 @@ import school.redrover.page.freestyle.FreestyleConfigPage;
 import school.redrover.page.freestyle.FreestyleProjectPage;
 import school.redrover.page.freestyle.FreestyleRenamePage;
 import school.redrover.page.manage.ManageJenkinsPage;
-import school.redrover.page.node.NodesProjectPage;
 import school.redrover.page.multiConfiguration.MultiConfigurationProjectPage;
 import school.redrover.page.multibranch.MultibranchPipelineProjectPage;
 import school.redrover.page.multibranch.MultibranchPipelineRenamePage;
+import school.redrover.page.node.NodesProjectPage;
 import school.redrover.page.organizationFolder.OrganizationFolderProjectPage;
 import school.redrover.page.pipeline.PipelineProjectPage;
 import school.redrover.page.pipeline.PipelineRenamePage;
 import school.redrover.page.user.UserConfigPage;
-import school.redrover.page.user.UserPage;
 import school.redrover.runner.TestUtils;
 
 import java.net.URI;
