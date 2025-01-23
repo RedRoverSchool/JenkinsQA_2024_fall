@@ -6,6 +6,8 @@ public class CrumbIssuerResponse {
 
     private String crumb;
 
+    public CrumbIssuerResponse() {}
+
     public CrumbIssuerResponse(String crumbRequestField, String crumb) {
         this.crumbRequestField = crumbRequestField;
         this.crumb = crumb;
@@ -15,16 +17,8 @@ public class CrumbIssuerResponse {
         return crumbRequestField;
     }
 
-    public void setCrumbRequestField(String crumbRequestField) {
-        this.crumbRequestField = crumbRequestField;
-    }
-
     public String getCrumb() {
         return crumb;
-    }
-
-    public void setCrumb(String crumb) {
-        this.crumb = crumb;
     }
 
 }
