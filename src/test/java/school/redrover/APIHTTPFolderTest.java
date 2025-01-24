@@ -82,6 +82,7 @@ public class APIHTTPFolderTest extends BaseAPIHttpTest {
                 .POST(HttpRequest.BodyPublishers.ofString(getCreateFolderBody()))
                 .build();
 
+        Allure.step("Send POST request -> Create Folder");
         HttpResponse<String> httpResponse = httpClient.send(postRequest, HttpResponse.BodyHandlers.ofString());
         Allure.step("Expected result: Successful item creation");
         Assert.assertEquals(httpResponse.statusCode(), 302);
@@ -92,6 +93,7 @@ public class APIHTTPFolderTest extends BaseAPIHttpTest {
                 .GET()
                 .build();
 
+        Allure.step("Send GET request -> Get item by name");
         HttpResponse<String> getResponse = httpClient.send(getRequest, HttpResponse.BodyHandlers.ofString());
         String body = getResponse.body();
         Allure.step("Expected result: Created element is found by name");
@@ -110,8 +112,9 @@ public class APIHTTPFolderTest extends BaseAPIHttpTest {
                 .DELETE()
                 .build();
 
+        Allure.step("Send DELETE request -> Delete Folder");
         HttpResponse<String> deleteResponse = httpClient.send(deleteRequest, HttpResponse.BodyHandlers.ofString());
-        Allure.step("Expected result: Expected result: Delete item status code is 204");
+        Allure.step("Expected result: Delete item status code is 204");
         Assert.assertEquals(deleteResponse.statusCode(), 204);
     }
 }
