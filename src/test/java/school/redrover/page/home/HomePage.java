@@ -174,7 +174,6 @@ public class HomePage extends BasePage<HomePage> {
         return (Objects.equals(buttonExpandCollaps.getAttribute("title"), "Expand"));
     }
 
-
     @Step("Open '{name}' freestyle project")
     public FreestyleProjectPage openFreestyleProject(String name) {
         openItem(name);
