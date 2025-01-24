@@ -258,6 +258,7 @@ public class APIHttpTest extends BaseAPIHttpTest {
     @Test(dependsOnMethods = "testCreateFreestyleProject")
     public void testRenameFreestyleProject() throws IOException {
 
+
         String newProjectName = FREESTYLE_PROJECT + "Rename";
         String renameUrl = ProjectUtils.getUrl() + "job/" + FREESTYLE_PROJECT + "/doRename";
 
@@ -285,9 +286,8 @@ public class APIHttpTest extends BaseAPIHttpTest {
     @Test
     public void testDeleteFreestyleProject() throws IOException {
         testCreateFreestyleProject();
-        testRenameFreestyleProject();
 
-        String projectName = "NewProjectRename";
+        String projectName = "NewProject";
         String deleteUrl = ProjectUtils.getUrl() + "job/" + projectName + "/";
 
         HttpDelete httpDelete = new HttpDelete(deleteUrl);
