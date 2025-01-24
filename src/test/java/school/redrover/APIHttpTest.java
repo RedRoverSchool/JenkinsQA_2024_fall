@@ -144,20 +144,14 @@ public class APIHttpTest extends BaseAPIHttpTest {
 
     @Test
     @Story("Folder")
-    @Description("003 Create Folder with valid name")
+    @Description("003 Create Folder with valid name (XML)")
     public void testCreateFolderWithValidNameXML() throws IOException {
         String queryString = "name=" + TestUtils.encodeParam(FOLDER_NAME_BY_XML_CREATED);
 
-        Allure.step(String.format("Compose uri '%s' for POST request", ProjectUtils.getUrl() + "/view/all/createItem?" + queryString));
         HttpPost httpPost = new HttpPost(ProjectUtils.getUrl() + "/view/all/createItem?" + queryString);
-
-        Allure.step("Create request body from file create-empty-folder.xml");
         httpPost.setEntity(new StringEntity(TestUtils.readFileFromResources("create-empty-folder.xml")));
 
-        Allure.step(String.format("Set header %s : application/xml", HttpHeaders.CONTENT_TYPE));
         httpPost.addHeader(HttpHeaders.CONTENT_TYPE, "application/xml");
-
-        Allure.step(String.format("Set header '%s : %s'", HttpHeaders.AUTHORIZATION, getBasicAuthWithToken()));
         httpPost.addHeader(HttpHeaders.AUTHORIZATION, getBasicAuthWithToken());
 
 
@@ -166,7 +160,7 @@ public class APIHttpTest extends BaseAPIHttpTest {
 
             HttpLogger.logRequestAndResponse(httpPost, response);
 
-            Allure.step("Expected result: Status code is 200");
+            Allure.step("Expected result: Create item status code is 200");
             Assert.assertEquals(response.getStatusLine().getStatusCode(), 200);
 
             Allure.step(String.format("Expected result: '%s' is displayed on Dashboard",FOLDER_NAME_BY_XML_CREATED));
@@ -174,10 +168,8 @@ public class APIHttpTest extends BaseAPIHttpTest {
                     "The folder is not created");
         }
 
-        Allure.step(String.format("Compose uri for GET request" + ProjectUtils.getUrl() + "job/%s/api/json",FOLDER_NAME_BY_XML_CREATED));
         HttpGet httpGet = new HttpGet(String.format(ProjectUtils.getUrl() + "job/%s/api/json",FOLDER_NAME_BY_XML_CREATED));
 
-        Allure.step(String.format("Set header 'Authorization : %s'", getBasicAuthWithToken()));
         httpGet.addHeader("Authorization", getBasicAuthWithToken());
 
         try(CloseableHttpClient httpClient = HttpClients.createDefault();
@@ -203,16 +195,13 @@ public class APIHttpTest extends BaseAPIHttpTest {
     @Description("004 Delete Folder")
     public void testDeleteFolder() throws IOException {
 
-        Allure.step(String.format("Compose uri '%s' for DELETE request", String.format(ProjectUtils.getUrl() + "job/'%s'/", FOLDER_NAME_BY_XML_CREATED)));
         HttpDelete httpDelete = new HttpDelete(String.format(ProjectUtils.getUrl() + "job/%s/", FOLDER_NAME_BY_XML_CREATED));
-
-        Allure.step(String.format("Set header '%s : %s'", HttpHeaders.AUTHORIZATION, getBasicAuthWithToken()));
         httpDelete.addHeader(HttpHeaders.AUTHORIZATION, getBasicAuthWithToken());
 
         try(CloseableHttpClient httpClient = HttpClients.createDefault();
             CloseableHttpResponse response = httpClient.execute(httpDelete)) {
 
-            Allure.step("Expected result: Status code is 204");
+            Allure.step("Expected result: Delete item status code is 204");
             Assert.assertEquals(response.getStatusLine().getStatusCode(), 204);
 
             Allure.step(String.format("Expected result: '%s' is not displayed on Dashboard",FOLDER_NAME_BY_XML_CREATED));
@@ -220,15 +209,13 @@ public class APIHttpTest extends BaseAPIHttpTest {
                     "The folder is not deleted");
         }
 
-        Allure.step(String.format("Compose uri '%s' for GET request", String.format(ProjectUtils.getUrl() + "job/'%s'/api/json", FOLDER_NAME_BY_XML_CREATED)));
         HttpGet httpGet = new HttpGet(String.format(ProjectUtils.getUrl() + "job/%s/api/json", FOLDER_NAME_BY_XML_CREATED));
-
-        Allure.step(String.format("Set header '%s : %s'", HttpHeaders.AUTHORIZATION, getBasicAuthWithToken()));
         httpGet.addHeader(HttpHeaders.AUTHORIZATION, getBasicAuthWithToken());
 
         try (CloseableHttpClient httpClient = HttpClients.createDefault();
              CloseableHttpResponse response = httpClient.execute(httpGet)) {
 
+            Allure.step("Expected result: Item not found. Status code is 404");
             Assert.assertEquals(response.getStatusLine().getStatusCode(), 404);
         }
     }
