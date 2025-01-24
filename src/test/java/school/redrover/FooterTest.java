@@ -20,6 +20,7 @@ public class FooterTest extends BaseTest {
     @Description("TC_12.001.01 Verify the current Jenkins version number in the footer of the Jenkins dashboard")
     public void testJenkinsVersionOnDashboard() {
         String currentJenkinsVersion = new HomePage(getDriver())
+                .getFooter()
                 .getJenkinsVersion();
 
         Allure.step("Expected Result: the current Jenkins version number is correct");
@@ -32,6 +33,7 @@ public class FooterTest extends BaseTest {
     @Description("TC_12.001.02 Verify version button clickability and display of 'About Jenkins' in dropdown menu")
     public void testJenkinsLabelInDropdown() {
         String actualButtonLabel = new HomePage(getDriver())
+                .getFooter()
                 .clickJenkinsVersionButton()
                 .getAboutJenkinsDropdownLabelText();
 
@@ -46,6 +48,7 @@ public class FooterTest extends BaseTest {
     @Description("TC_12.001.02 Verify version button clickability and display of 'About Jenkins' in dropdown menu")
     public void testVerifyTitleDescription() {
         String descriptionTitle = new HomePage(getDriver())
+                .getFooter()
                 .clickJenkinsVersionButton()
                 .gotoAboutPage()
                 .getAboutDescription();
@@ -62,6 +65,7 @@ public class FooterTest extends BaseTest {
     @Description("TC_12.001.02 Verify version button clickability and display of 'About Jenkins' in dropdown menu")
     public void testCheckNumberOfMavenDependencies() {
         Integer numberOfDependencies = new HomePage(getDriver())
+                .getFooter()
                 .clickJenkinsVersionButton()
                 .gotoAboutPage()
                 .getNumberOfMavenDependencies();
