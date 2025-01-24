@@ -53,6 +53,7 @@ public class HeaderComponent<T extends BasePage<T>> extends BaseComponent<T> {
         return new HomePage(getDriver());
     }
 
+    @Step("Click icon question in search field")
     public SearchBoxPage gotoSearchBox() {
         iconQuestion.click();
 

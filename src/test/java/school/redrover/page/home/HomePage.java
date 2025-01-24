@@ -96,15 +96,6 @@ public class HomePage extends BasePage<HomePage> {
     @FindBy(xpath = "//a[@href='/newView']")
     private WebElement createNewViewButton;
 
-    @FindBy(css = "[class$='jenkins_ver']")
-    private WebElement jenkinsVersion;
-
-    @FindBy(xpath = "//a[normalize-space()='About Jenkins']")
-    private WebElement aboutJenkinsButton;
-
-    @FindBy(css = "[href='/manage/about']")
-    private WebElement aboutJenkinsDropdownLabel;
-
     @FindBy(linkText = "My Views")
     private WebElement myViewsButton;
 
@@ -163,6 +154,7 @@ public class HomePage extends BasePage<HomePage> {
         super(driver);
     }
 
+    @Step("Open '{name}' project")
     private void openItem(String name) {
         getDriver().findElement(By.xpath("//td/a/span[text() = '%s']/..".formatted(name))).click();
     }
@@ -175,6 +167,11 @@ public class HomePage extends BasePage<HomePage> {
         getWait10().until(ExpectedConditions.visibilityOfElementLocated(
                 By.xpath("//div[@class='jenkins-dropdown__item__icon']/parent::*[contains(., '%s')]"
                         .formatted(menuName)))).click();
+    }
+
+    @Step("Check if node list is expanded")
+    private boolean isExpanded() {
+        return (Objects.equals(buttonExpandCollaps.getAttribute("title"), "Expand"));
     }
 
     @Step("Open '{name}' freestyle project")
@@ -195,6 +192,7 @@ public class HomePage extends BasePage<HomePage> {
         return new MultiConfigurationProjectPage(getDriver());
     }
 
+    @Step("Open '{name}' organization folder project")
     public OrganizationFolderProjectPage openOrganisationFolderProject(String name) {
         openItem(name);
         return new OrganizationFolderProjectPage(getDriver());
@@ -328,6 +326,7 @@ public class HomePage extends BasePage<HomePage> {
                 })
                 .toList();
     }
+
     @Step("Displaying the contents of the main panel of the start page")
     public List<String> getContentBlock() {
         return contentBlock.stream()
@@ -343,6 +342,7 @@ public class HomePage extends BasePage<HomePage> {
                 .toList();
     }
 
+    @Step("Check disable circle sign is displayed")
     public boolean isDisableCircleSignPresent(String name) {
         try {
             return getWait5().until(ExpectedConditions.visibilityOfElementLocated(
@@ -400,11 +400,13 @@ public class HomePage extends BasePage<HomePage> {
         return this;
     }
 
+    @Step("Get notification bar status")
     public String getNotificationBarStatus() {
 
         return getWait2().until(ExpectedConditions.visibilityOf(notificationBar)).getText();
     }
 
+    @Step("Get number of runs")
     public String getNumberOfRuns() {
         return numberOfRuns.getText();
     }
@@ -416,30 +418,6 @@ public class HomePage extends BasePage<HomePage> {
         return new NewViewPage(getDriver());
     }
 
-    @Step("Get Jenkins version number")
-    public String getJenkinsVersion() {
-        return jenkinsVersion.getText();
-    }
-
-    @Step("Click Jenkins version number button")
-    public HomePage clickJenkinsVersionButton() {
-        jenkinsVersion.click();
-
-        return this;
-    }
-
-    @Step("Click 'About Jenkins' option in dropdown menu of Jenkins version number")
-    public AboutPage gotoAboutPage() {
-        aboutJenkinsButton.click();
-
-        return new AboutPage(getDriver());
-    }
-
-    @Step("Get 'About Jenkins' option in dropdown menu of Jenkins version number")
-    public String getAboutJenkinsDropdownLabelText() {
-        return getWait2().until(ExpectedConditions.visibilityOf(aboutJenkinsDropdownLabel)).getText();
-    }
-
     @Step("Click 'My Views' sidebar")
     public HomePage clickMyViewsButton() {
         myViewsButton.click();
@@ -447,6 +425,7 @@ public class HomePage extends BasePage<HomePage> {
         return this;
     }
 
+    @Step("Get list of views")
     public List<String> getViewList() {
         return getWait2().until(ExpectedConditions.visibilityOfAllElements(viewList))
                 .stream()
@@ -454,6 +433,7 @@ public class HomePage extends BasePage<HomePage> {
                 .toList();
     }
 
+    @Step("Click view by name '{name}'")
     public ViewPage clickViewByName(String name) {
         getWait2().until(ExpectedConditions.elementToBeClickable(
                 By.xpath("//a[@href='/view/%s/']".formatted(name)))).click();
@@ -509,25 +489,30 @@ public class HomePage extends BasePage<HomePage> {
         descriptionTextArea.sendKeys(description);
         return this;
     }
+
     @Step("Click 'Save' button")
     public HomePage clickSaveButton() {
         saveButton.click();
         return this;
     }
+
     @Step("Clear description text area")
     public HomePage clearDescription() {
         clearDescriptionTextArea.clear();
         return this;
     }
+
     @Step("Get description button title")
     public String getDescriptionButtonTitle() {
         return descriptionButton.getText();
     }
+
     @Step("Click 'Preview' button")
     public HomePage clickPreviewButton() {
         previewButton.click();
         return this;
     }
+
     @Step("Get text preview")
     public String getTextPreview() {
         return previewText.getText();
@@ -540,6 +525,7 @@ public class HomePage extends BasePage<HomePage> {
         return new FreestyleRenamePage(getDriver());
     }
 
+    @Step("Check items are in alphabetical order")
     public Boolean isInAlphabeticalOrder() {
         List<String> actualOrder = getItemList();
         List<String> expectedOrder = new ArrayList<>(actualOrder);
@@ -591,6 +577,7 @@ public class HomePage extends BasePage<HomePage> {
         return this;
     }
 
+    @Step("Get BreadcrumbBar menu list")
     public List<WebElement> getBreadcrumbBarMenuList() {
         return breadcrumbBarMenuList;
     }
@@ -604,16 +591,14 @@ public class HomePage extends BasePage<HomePage> {
                 .toList();
     }
 
-    private boolean isExpanded() {
-        return (Objects.equals(buttonExpandCollaps.getAttribute("title"), "Expand"));
-    }
-
+    @Step("Click 'Expand' button")
     public void clickButtonExpand() {
-        if(isExpanded()) {
+        if (isExpanded()) {
             buttonExpandCollaps.click();
         }
     }
 
+    @Step("Open node from Build Executors Status block")
     public NodesProjectPage openNodeFromBuildExecutorStatusBlock(String nodeName) {
         clickButtonExpand();
         getWait5().until(ExpectedConditions.visibilityOfElementLocated(
@@ -622,12 +607,14 @@ public class HomePage extends BasePage<HomePage> {
         return new NodesProjectPage(getDriver());
     }
 
+    @Step("Select 'Delete Agent' from Build dropdown for '{nodeName}'")
     public HomePage selectDeleteAgentFromBuildDropdownAndClickYes(String nodeName) {
-        selectMenuFromBuildDropdown(nodeName,"Delete Agent");
+        selectMenuFromBuildDropdown(nodeName, "Delete Agent");
         getWait5().until(ExpectedConditions.visibilityOf(yesButton)).click();
         return this;
     }
 
+    @Step("Select '{menuName}' from Build dropdown for '{nodeName}'")
     private void selectMenuFromBuildDropdown(String nodeName, String menuName) {
         clickButtonExpand();
 

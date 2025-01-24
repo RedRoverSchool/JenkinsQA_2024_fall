@@ -36,6 +36,7 @@ public class APIHttpTest extends BaseAPIHttpTest {
     private static final String PIPELINE_NAME = "Pipeline";
     private static final String PIPELINE_NAME_BY_XML_CREATED = "PipelineXML";
     private static final String FOLDER_NAME_BY_XML_CREATED = "FolderXML";
+    private static final String FREESTYLE_PROJECT = "NewProject";
 
     private List<String> getAllProjectNamesFromJsonResponseList() throws IOException {
         HttpGet httpGet = new HttpGet(ProjectUtils.getUrl() + "api/json?pretty=true");
@@ -215,6 +216,84 @@ public class APIHttpTest extends BaseAPIHttpTest {
              CloseableHttpResponse response = httpClient.execute(httpGet)) {
 
             Allure.step("Expected result: Item not found. Status code is 404");
+            Assert.assertEquals(response.getStatusLine().getStatusCode(), 404);
+        }
+    }
+    @Test
+    public void testCreateFreestyleProject() throws IOException {
+        String query = "name=" + TestUtils.encodeParam(FREESTYLE_PROJECT);
+
+        HttpPost httpPost = new HttpPost(ProjectUtils.getUrl() + "view/all/createItem?" + query);
+        httpPost.setEntity(new StringEntity(TestUtils.readFileFromResources("create-empty-freestyle-project.xml")));
+
+        httpPost.addHeader(HttpHeaders.CONTENT_TYPE, "application/xml");
+        httpPost.addHeader(HttpHeaders.AUTHORIZATION, getBasicAuthWithToken());
+
+        try (CloseableHttpClient httpClient = HttpClients.createDefault();
+             CloseableHttpResponse response = httpClient.execute(httpPost)) {
+
+            HttpLogger.logRequestAndResponse(httpPost, response);
+
+            Assert.assertEquals(response.getStatusLine().getStatusCode(), 200);
+            Assert.assertListContainsObject(
+                    getAllProjectNamesFromJsonResponseList(),
+                    FREESTYLE_PROJECT,
+                    "The project is not created");
+        }
+    }
+
+    @Test(dependsOnMethods = "testCreateFreestyleProject")
+    public void testRenameFreestyleProject() throws IOException {
+
+
+        String newProjectName = FREESTYLE_PROJECT + "Rename";
+        String renameUrl = ProjectUtils.getUrl() + "job/" + FREESTYLE_PROJECT + "/doRename";
+
+        HttpPost httpPost = new HttpPost(renameUrl);
+        List<NameValuePair> params = new ArrayList<>();
+        params.add(new BasicNameValuePair("newName", newProjectName));
+        httpPost.setEntity(new UrlEncodedFormEntity(params, StandardCharsets.UTF_8));
+
+        httpPost.addHeader(HttpHeaders.CONTENT_TYPE, "application/x-www-form-urlencoded");
+        httpPost.addHeader(HttpHeaders.AUTHORIZATION, getBasicAuthWithToken());
+
+        try (CloseableHttpClient httpClient = HttpClients.createDefault();
+             CloseableHttpResponse response = httpClient.execute(httpPost)) {
+
+            HttpLogger.logRequestAndResponse(httpPost, response);
+            Assert.assertEquals(response.getStatusLine().getStatusCode(), 302);
+
+            Assert.assertListContainsObject(
+                    getAllProjectNamesFromJsonResponseList(),
+                    newProjectName,
+                    "The project was not renamed");
+        }
+    }
+
+    @Test
+    public void testDeleteFreestyleProject() throws IOException {
+        testCreateFreestyleProject();
+
+        String projectName = "NewProject";
+        String deleteUrl = ProjectUtils.getUrl() + "job/" + projectName + "/";
+
+        HttpDelete httpDelete = new HttpDelete(deleteUrl);
+
+        httpDelete.addHeader(HttpHeaders.CONTENT_TYPE, "application/x-www-form-urlencoded");
+        httpDelete.addHeader(HttpHeaders.AUTHORIZATION, getBasicAuthWithToken());
+
+        try (CloseableHttpClient httpClient = HttpClients.createDefault();
+             CloseableHttpResponse response = httpClient.execute(httpDelete)) {
+
+            Assert.assertEquals(response.getStatusLine().getStatusCode(), 204);
+        }
+
+        HttpGet httpGet = new HttpGet(ProjectUtils.getUrl() + "job/" + projectName + "/api/json");
+        httpGet.addHeader(HttpHeaders.AUTHORIZATION, getBasicAuthWithToken());
+
+        try (CloseableHttpClient httpClient = HttpClients.createDefault();
+             CloseableHttpResponse response = httpClient.execute(httpGet)) {
+
             Assert.assertEquals(response.getStatusLine().getStatusCode(), 404);
         }
     }
