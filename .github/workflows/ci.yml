@@ -48,6 +48,13 @@ jobs:
       - name: Create screenshots directory
         run: mkdir -p ${{ github.workspace }}/screenshots
 
+      - name: Maven test
+        run: mvn test
+        env:
+          CHROME_OPTIONS: --remote-allow-origins=*;--disable-gpu;--no-sandbox;--disable-dev-shm-usage;--headless=new;--window-size=1920,1080
+          APP_OPTIONS: host=localhost;port=8080;admin.username=${{ secrets.ADMIN_USERNAME }};admin.password=${{ secrets.ADMIN_PASSWORD }}
+          CI_RUN: true
+
       - name: Chrome test
         if: always()
         run: mvn test -Dsurefire.suiteXmlFiles=suite/chrome.xml
@@ -75,13 +82,6 @@ jobs:
       - name: Cross-browser test
         if: always()
         run: mvn test -Dsurefire.suiteXmlFiles=suite/cross-browser.xml
-        env:
-          CHROME_OPTIONS: --remote-allow-origins=*;--disable-gpu;--no-sandbox;--disable-dev-shm-usage;--headless=new;--window-size=1920,1080
-          APP_OPTIONS: host=localhost;port=8080;admin.username=${{ secrets.ADMIN_USERNAME }};admin.password=${{ secrets.ADMIN_PASSWORD }}
-          CI_RUN: true
-
-      - name: Maven test
-        run: mvn test
         env:
           CHROME_OPTIONS: --remote-allow-origins=*;--disable-gpu;--no-sandbox;--disable-dev-shm-usage;--headless=new;--window-size=1920,1080
           APP_OPTIONS: host=localhost;port=8080;admin.username=${{ secrets.ADMIN_USERNAME }};admin.password=${{ secrets.ADMIN_PASSWORD }}

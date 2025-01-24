@@ -141,8 +141,6 @@ public class SearchBoxTest extends BaseTest {
                 .selectOrganizationFolderAndClickOk()
                 .clickSaveButton()
                 .getHeader()
-                .gotoHomePage()
-                .getHeader()
                 .enterSearchText(ITEM_NAME)
                 .pressEnter()
                 .getTitle();
