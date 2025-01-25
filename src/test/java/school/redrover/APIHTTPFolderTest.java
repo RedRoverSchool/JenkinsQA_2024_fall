@@ -28,6 +28,7 @@ public class APIHTTPFolderTest extends BaseAPIHttpTest {
     private static final String FOLDER_NAME = "FolderUn";
     private static final String FOLDER_CREATE_MODE = "com.cloudbees.hudson.plugins.folder.Folder";
     private static final String FOLDER_NEW_NAME = "FolderNewName";
+    private static final String DESCRIPTION = "Add description to rename folder!";
 
 
     private static final class Folder {
@@ -90,27 +91,35 @@ public class APIHTTPFolderTest extends BaseAPIHttpTest {
         return ProjectUtils.getUrl() + "createItem";
     }
 
-    private String getItemByNameURL() {
+    private String getItemByNameURL(String name) {
         return ProjectUtils.getUrl() + "job/" +
-                URLEncoder.encode(APIHTTPFolderTest.FOLDER_NAME, StandardCharsets.UTF_8) + "/api/json";
+                URLEncoder.encode(name, StandardCharsets.UTF_8) + "/api/json";
     }
 
     private String getItemListURL() {
         return ProjectUtils.getUrl() + "api/json";
     }
 
-    private String getDeleteItemURL() {
-        return String.format(ProjectUtils.getUrl() + "job/%s/", APIHTTPFolderTest.FOLDER_NAME);
+    private String getDeleteItemURL(String name) {
+        return String.format(ProjectUtils.getUrl() + "job/%s/", name);
     }
 
-    private String getRenameItemURL() {
-        return ProjectUtils.getUrl() + String.format("job/%s/confirmRename",FOLDER_NAME);
+    private String getRenameItemURL(String name) {
+        return ProjectUtils.getUrl() + String.format("job/%s/confirmRename",name);
     }
-    private String getCreateFolderBody() {
-        return "name="+ APIHTTPFolderTest.FOLDER_NAME +"&mode=" + APIHTTPFolderTest.FOLDER_CREATE_MODE;
+
+    private String getAddDescriptionURL(String name) {
+        return ProjectUtils.getUrl() + String.format("job/%s/submitDescription", name);
+    }
+    private String getCreateFolderBody(String name, String mode) {
+        return "name="+ name +"&mode=" + mode;
     }
     private String getRenameFolderBody(String name) {
         return "newName=" + name;
+    }
+
+    private String getAddDescriptionBody(String description) {
+        return "description=" + description;
     }
 
     @Test
@@ -123,7 +132,7 @@ public class APIHTTPFolderTest extends BaseAPIHttpTest {
                 .uri(new URI(getCreateFolderURL()))
                 .header(HttpHeaders.AUTHORIZATION, getBasicAuthWithToken())
                 .header(HttpHeaders.CONTENT_TYPE, "application/x-www-form-urlencoded")
-                .POST(HttpRequest.BodyPublishers.ofString(getCreateFolderBody()))
+                .POST(HttpRequest.BodyPublishers.ofString(getCreateFolderBody(FOLDER_NAME,FOLDER_CREATE_MODE)))
                 .build();
 
         Allure.step("Send POST request -> Create Folder");
@@ -132,7 +141,7 @@ public class APIHTTPFolderTest extends BaseAPIHttpTest {
         Assert.assertEquals(httpResponse.statusCode(), 302);
 
         HttpRequest getRequest = HttpRequest.newBuilder()
-                .uri(new URI(getItemByNameURL()))
+                .uri(new URI(getItemByNameURL(FOLDER_NAME)))
                 .header(HttpHeaders.AUTHORIZATION, getBasicAuthWithToken())
                 .GET()
                 .build();
@@ -149,17 +158,6 @@ public class APIHTTPFolderTest extends BaseAPIHttpTest {
 
         Allure.step("Expected result: description is null");
         Assert.assertNull(folder.description);
-
-//        HttpRequest deleteRequest = HttpRequest.newBuilder()
-//                .uri(new URI(getDeleteItemURL()))
-//                .header(HttpHeaders.AUTHORIZATION, getBasicAuthWithToken())
-//                .DELETE()
-//                .build();
-//
-//        Allure.step("Send DELETE request -> Delete Folder");
-//        HttpResponse<String> deleteResponse = httpClient.send(deleteRequest, HttpResponse.BodyHandlers.ofString());
-//        Allure.step("Expected result: Delete item status code is 204");
-//        Assert.assertEquals(deleteResponse.statusCode(), 204);
     }
 
     @Test(dependsOnMethods = "testCreateFolderWithValidName")
@@ -169,7 +167,7 @@ public class APIHTTPFolderTest extends BaseAPIHttpTest {
         HttpClient httpClient = HttpClient.newHttpClient();
 
         HttpRequest postRequest = HttpRequest.newBuilder()
-                .uri(new URI(getRenameItemURL()))
+                .uri(new URI(getRenameItemURL(FOLDER_NAME)))
                 .header(HttpHeaders.AUTHORIZATION, getBasicAuthWithToken())
                 .header(HttpHeaders.CONTENT_TYPE, "application/x-www-form-urlencoded")
                 .POST(HttpRequest.BodyPublishers.ofString(getRenameFolderBody(FOLDER_NEW_NAME)))
@@ -198,6 +196,45 @@ public class APIHTTPFolderTest extends BaseAPIHttpTest {
 
         Assert.assertTrue(findNewProjectNameInList, "project name was not found in the list");
         Assert.assertFalse(findOriginProjectNameInList, "Project name was found in the list");
+    }
+
+    @Test()
+    @Story("Folder")
+    @Description("007 Add Description to Folder")
+    public void testAddDescriptionToFolder() throws IOException, InterruptedException, URISyntaxException {
+        HttpClient httpClient = HttpClient.newHttpClient();
+
+        HttpRequest postCreateProjectRequest = HttpRequest.newBuilder()
+                .uri(new URI(getCreateFolderURL()))
+                .header(HttpHeaders.AUTHORIZATION, getBasicAuthWithToken())
+                .header(HttpHeaders.CONTENT_TYPE, "application/x-www-form-urlencoded")
+                .POST(HttpRequest.BodyPublishers.ofString(getCreateFolderBody(FOLDER_NAME,FOLDER_CREATE_MODE)))
+                .build();
+
+        Allure.step("Send POST request -> Create Folder");
+        httpClient.send(postCreateProjectRequest, HttpResponse.BodyHandlers.ofString());
+
+        HttpRequest postAddDescription = HttpRequest.newBuilder()
+                .uri(new URI(getAddDescriptionURL(FOLDER_NAME)))
+                .header(HttpHeaders.AUTHORIZATION, getBasicAuthWithToken())
+                .header(HttpHeaders.CONTENT_TYPE, "application/x-www-form-urlencoded")
+                .POST(HttpRequest.BodyPublishers.ofString(getAddDescriptionBody(DESCRIPTION)))
+                .build();
+
+        Allure.step("Send POST request -> Add description to folder");
+        HttpResponse<String> postAddDescriptionResponse = httpClient.send(postAddDescription, HttpResponse.BodyHandlers.ofString());
+        Assert.assertEquals(postAddDescriptionResponse.statusCode(), 302);
+
+        HttpRequest deleteRequest = HttpRequest.newBuilder()
+                .uri(new URI(getDeleteItemURL(FOLDER_NAME)))
+                .header(HttpHeaders.AUTHORIZATION, getBasicAuthWithToken())
+                .DELETE()
+                .build();
+
+        Allure.step("Send DELETE request -> Delete Folder");
+        HttpResponse<String> deleteResponse = httpClient.send(deleteRequest, HttpResponse.BodyHandlers.ofString());
+        Allure.step("Expected result: Delete item status code is 204");
+        Assert.assertEquals(deleteResponse.statusCode(), 204);
     }
 }
 
