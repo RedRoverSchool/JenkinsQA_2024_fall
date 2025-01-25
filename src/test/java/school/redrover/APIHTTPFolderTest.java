@@ -10,6 +10,7 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 import school.redrover.runner.BaseAPIHttpTest;
 import school.redrover.runner.ProjectUtils;
+import school.redrover.runner.TestUtils;
 
 import java.io.IOException;
 import java.net.URI;
@@ -119,7 +120,7 @@ public class APIHTTPFolderTest extends BaseAPIHttpTest {
     }
 
     private String getAddDescriptionBody(String description) {
-        return "description=" + description;
+        return "description=" + TestUtils.encodeParam(description);
     }
 
     @Test
@@ -224,6 +225,18 @@ public class APIHTTPFolderTest extends BaseAPIHttpTest {
         Allure.step("Send POST request -> Add description to folder");
         HttpResponse<String> postAddDescriptionResponse = httpClient.send(postAddDescription, HttpResponse.BodyHandlers.ofString());
         Assert.assertEquals(postAddDescriptionResponse.statusCode(), 302);
+
+        HttpRequest getItemByNameRequest = HttpRequest.newBuilder()
+                .uri(new URI(getItemByNameURL(FOLDER_NAME)))
+                .header(HttpHeaders.AUTHORIZATION, getBasicAuthWithToken())
+                .GET()
+                .build();
+
+        Allure.step("Send GET request -> Get item by name");
+        HttpResponse<String> getItemByNameResponse = httpClient.send(getItemByNameRequest, HttpResponse.BodyHandlers.ofString());
+        String body = getItemByNameResponse.body();
+
+        Assert.assertTrue(body.contains("\"description\":null"), "FolderUn");
 
         HttpRequest deleteRequest = HttpRequest.newBuilder()
                 .uri(new URI(getDeleteItemURL(FOLDER_NAME)))
