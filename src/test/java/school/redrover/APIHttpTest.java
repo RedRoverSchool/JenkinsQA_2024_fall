@@ -154,7 +154,7 @@ public class APIHttpTest extends BaseAPIHttpTest {
         httpPost.addHeader(HttpHeaders.CONTENT_TYPE, "application/xml");
         httpPost.addHeader(HttpHeaders.AUTHORIZATION, getBasicAuthWithToken());
 
-
+        Allure.step("Send POST request -> Create Folder");
         try(CloseableHttpClient httpClient = HttpClients.createDefault();
             CloseableHttpResponse response = httpClient.execute(httpPost)) {
 
@@ -169,9 +169,9 @@ public class APIHttpTest extends BaseAPIHttpTest {
         }
 
         HttpGet httpGet = new HttpGet(String.format(ProjectUtils.getUrl() + "job/%s/api/json",FOLDER_NAME_BY_XML_CREATED));
-
         httpGet.addHeader("Authorization", getBasicAuthWithToken());
 
+        Allure.step("Send GET request -> Get item by name");
         try(CloseableHttpClient httpClient = HttpClients.createDefault();
             CloseableHttpResponse response = httpClient.execute(httpGet)) {
 
@@ -198,6 +198,7 @@ public class APIHttpTest extends BaseAPIHttpTest {
         HttpDelete httpDelete = new HttpDelete(String.format(ProjectUtils.getUrl() + "job/%s/", FOLDER_NAME_BY_XML_CREATED));
         httpDelete.addHeader(HttpHeaders.AUTHORIZATION, getBasicAuthWithToken());
 
+        Allure.step("Send DELETE request -> Delete Folder");
         try(CloseableHttpClient httpClient = HttpClients.createDefault();
             CloseableHttpResponse response = httpClient.execute(httpDelete)) {
 
@@ -212,6 +213,7 @@ public class APIHttpTest extends BaseAPIHttpTest {
         HttpGet httpGet = new HttpGet(String.format(ProjectUtils.getUrl() + "job/%s/api/json", FOLDER_NAME_BY_XML_CREATED));
         httpGet.addHeader(HttpHeaders.AUTHORIZATION, getBasicAuthWithToken());
 
+        Allure.step("Send GET request -> Get item by name");
         try (CloseableHttpClient httpClient = HttpClients.createDefault();
              CloseableHttpResponse response = httpClient.execute(httpGet)) {
 

@@ -56,15 +56,12 @@ public class APIHTTPFolderTest extends BaseAPIHttpTest {
         public String get_class() {
             return _class;
         }
-
         public String getName() {
             return name;
         }
-
         public String getUrl() {
             return url;
         }
-
         public String getColor() {
             return color;
         }
@@ -138,7 +135,7 @@ public class APIHTTPFolderTest extends BaseAPIHttpTest {
 
         Allure.step("Send POST request -> Create Folder");
         HttpResponse<String> httpResponse = httpClient.send(postRequest, HttpResponse.BodyHandlers.ofString());
-        Allure.step("Expected result: Successful item creation");
+        Allure.step("Expected result: Successful item creation. Status code 302");
         Assert.assertEquals(httpResponse.statusCode(), 302);
 
         HttpRequest getRequest = HttpRequest.newBuilder()
@@ -177,6 +174,7 @@ public class APIHTTPFolderTest extends BaseAPIHttpTest {
 
         Allure.step("Send POST request -> Rename folder");
         HttpResponse<String> postRenameResponse = httpClient.send(postRequest, HttpResponse.BodyHandlers.ofString());
+        Allure.step("Expected result: Successful item rename. Status code 302");
         Assert.assertEquals(postRenameResponse.statusCode(), 302);
 
         HttpRequest getItemList = HttpRequest.newBuilder()
@@ -224,6 +222,7 @@ public class APIHTTPFolderTest extends BaseAPIHttpTest {
 
         Allure.step("Send POST request -> Add description to folder");
         HttpResponse<String> postAddDescriptionResponse = httpClient.send(postAddDescription, HttpResponse.BodyHandlers.ofString());
+        Allure.step("Expected result: Successful add description to item. Status code 302");
         Assert.assertEquals(postAddDescriptionResponse.statusCode(), 302);
 
         HttpRequest getItemByNameRequest = HttpRequest.newBuilder()
@@ -236,6 +235,7 @@ public class APIHTTPFolderTest extends BaseAPIHttpTest {
         HttpResponse<String> getItemByNameResponse = httpClient.send(getItemByNameRequest, HttpResponse.BodyHandlers.ofString());
         String body = getItemByNameResponse.body();
 
+        Allure.step("Expected result: Response body contains 'description: null' for folder");
         Assert.assertTrue(body.contains("\"description\":null"), "FolderUn");
 
         HttpRequest deleteRequest = HttpRequest.newBuilder()
@@ -246,7 +246,7 @@ public class APIHTTPFolderTest extends BaseAPIHttpTest {
 
         Allure.step("Send DELETE request -> Delete Folder");
         HttpResponse<String> deleteResponse = httpClient.send(deleteRequest, HttpResponse.BodyHandlers.ofString());
-        Allure.step("Expected result: Delete item status code is 204");
+        Allure.step("Expected result: Delete item successful. Status code is 204");
         Assert.assertEquals(deleteResponse.statusCode(), 204);
     }
 }
