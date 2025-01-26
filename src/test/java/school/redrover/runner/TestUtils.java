@@ -12,6 +12,20 @@ import java.net.URLEncoder;
 
 public class TestUtils {
 
+    private static final String PAYLOAD = "payload";
+    private static final String SCHEMA = "schema";
+
+    private static String readFileFromResources(String folder, String name) {
+        try (InputStream inputStream = TestUtils.class.getClassLoader().getResourceAsStream("jenkins/%s/%s".formatted(folder, name))) {
+            if (inputStream == null) {
+                throw new IOException("File not found in resources");
+            }
+            return new String(inputStream.readAllBytes(), StandardCharsets.UTF_8);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public static ExpectedCondition<Boolean> isElementInViewPort(WebElement element) {
         return new ExpectedCondition<>() {
             @Override
@@ -177,16 +191,14 @@ public class TestUtils {
                 .gotoHomePage();
     }
 
-    @Step("Read file '{name}' from resources")
-    public static String readFileFromResources(String name) {
-        try(InputStream inputStream = TestUtils.class.getClassLoader().getResourceAsStream("jenkins/%s".formatted(name))) {
-            if (inputStream == null) {
-                throw new IOException("File not found in resources");
-            }
-            return new String(inputStream.readAllBytes(), StandardCharsets.UTF_8);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+    @Step("Read payload '{name}'")
+    public static String loadPayload(String name) {
+        return readFileFromResources(PAYLOAD, name);
+    }
+
+    @Step("Read schema '{name}'")
+    public static String loadSchema(String name) {
+        return readFileFromResources(SCHEMA, name);
     }
 
     public static String encodeParam(String param) {

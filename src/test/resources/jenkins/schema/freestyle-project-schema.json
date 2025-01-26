@@ -1,0 +1,154 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "properties": {
+    "_class": {
+      "type": "string"
+    },
+    "actions": {
+      "type": "array",
+      "items": [
+        {
+          "type": "object"
+        },
+        {
+          "type": "object"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "_class": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "_class"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "_class": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "_class"
+          ]
+        }
+      ]
+    },
+    "description": {
+      "type": ["null", "string"]
+    },
+    "displayName": {
+      "type": "string"
+    },
+    "displayNameOrNull": {
+      "type": ["null", "string"]
+    },
+    "fullDisplayName": {
+      "type": "string"
+    },
+    "fullName": {
+      "type": "string"
+    },
+    "name": {
+      "type": "string"
+    },
+    "url": {
+      "type": "string"
+    },
+    "buildable": {
+      "type": "boolean"
+    },
+    "builds": {
+      "type": "array",
+      "items": {}
+    },
+    "color": {
+      "type": "string"
+    },
+    "firstBuild": {
+      "type": ["null", "object"]
+    },
+    "healthReport": {
+      "type": "array",
+      "items": {}
+    },
+    "inQueue": {
+      "type": "boolean"
+    },
+    "keepDependencies": {
+      "type": "boolean"
+    },
+    "lastBuild": {
+      "type": ["null", "object"]
+    },
+    "lastCompletedBuild": {
+      "type": ["null", "object"]
+    },
+    "lastFailedBuild": {
+      "type": ["null", "object"]
+    },
+    "lastStableBuild": {
+      "type": ["null", "object"]
+    },
+    "lastSuccessfulBuild": {
+      "type": ["null", "object"]
+    },
+    "lastUnstableBuild": {
+      "type": ["null", "object"]
+    },
+    "lastUnsuccessfulBuild": {
+      "type": ["null", "object"]
+    },
+    "nextBuildNumber": {
+      "type": "integer"
+    },
+    "property": {
+      "type": "array",
+      "items": {}
+    },
+    "queueItem": {
+      "type": ["null", "object"]
+    },
+    "concurrentBuild": {
+      "type": "boolean"
+    },
+    "disabled": {
+      "type": "boolean"
+    },
+    "downstreamProjects": {
+      "type": "array",
+      "items": {}
+    },
+    "labelExpression": {
+      "type": ["null", "string"]
+    },
+    "scm": {
+      "type": "object",
+      "properties": {
+        "_class": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "_class"
+      ]
+    },
+    "upstreamProjects": {
+      "type": "array",
+      "items": {}
+    }
+  },
+  "required": [
+    "_class",
+    "displayName",
+    "displayNameOrNull",
+    "fullDisplayName",
+    "fullName",
+    "name",
+    "url"
+  ]
+}
