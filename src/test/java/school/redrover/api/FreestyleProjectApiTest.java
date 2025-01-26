@@ -8,6 +8,7 @@ import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import org.testng.Assert;
 import org.testng.annotations.Test;
+import school.redrover.model.FreestyleResponse;
 import school.redrover.runner.BaseApiTest;
 import school.redrover.runner.ProjectUtils;
 import school.redrover.runner.Specifications;
@@ -48,10 +49,12 @@ public class FreestyleProjectApiTest extends BaseApiTest {
                 .body(matchesJsonSchema(TestUtils.loadSchema("freestyle-project-schema.json")))
                 .extract().response();
 
-        String projectName = response.body().jsonPath().getString("fullName");
-        String contentType = response.header("Content-Type");
+        FreestyleResponse freestyleResponse = response.as(FreestyleResponse.class);
+        String contentType = response.getHeader("Content-Type");
 
-        Assert.assertEquals(projectName, PROJECT_NAME);
+        Assert.assertEquals(freestyleResponse.getName(), PROJECT_NAME);
+        Assert.assertNull(freestyleResponse.getDescription());
+        Assert.assertEquals(freestyleResponse.getClassField(), "hudson.model.FreeStyleProject");
         Assert.assertEquals(contentType, "application/json;charset=utf-8");
     }
 }
