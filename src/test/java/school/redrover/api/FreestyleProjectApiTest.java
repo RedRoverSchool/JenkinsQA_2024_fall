@@ -1,6 +1,9 @@
 package school.redrover.api;
 
-import io.qameta.allure.*;
+import io.qameta.allure.Allure;
+import io.qameta.allure.Description;
+import io.qameta.allure.Epic;
+import io.qameta.allure.Feature;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import org.testng.Assert;
@@ -11,6 +14,7 @@ import school.redrover.runner.Specifications;
 import school.redrover.runner.TestUtils;
 
 import static io.restassured.RestAssured.given;
+import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchema;
 
 @Epic("API")
 public class FreestyleProjectApiTest extends BaseApiTest {
@@ -21,8 +25,8 @@ public class FreestyleProjectApiTest extends BaseApiTest {
     @Feature("Freestyle project")
     @Description("001 Create freestyle project with valid name")
     public void createFreestyleProjectTest() {
-        Specifications.installSpecification(Specifications.authRequestSpec(), Specifications.baseResponseSpec(200));
-        String xml = TestUtils.readFileFromResources("create-empty-freestyle-project.xml");
+        Specifications.installSpecification(Specifications.authRequestSpec(), Specifications.authResponseSpec(200));
+        String xml = TestUtils.loadPayload("create-empty-freestyle-project.xml");
 
         Allure.step("Creating project with name: " + PROJECT_NAME);
 
@@ -41,6 +45,7 @@ public class FreestyleProjectApiTest extends BaseApiTest {
                 .when()
                 .get("api/json")
                 .then()
+                .body(matchesJsonSchema(TestUtils.loadSchema("freestyle-project-schema.json")))
                 .extract().response();
 
         String projectName = response.body().jsonPath().getString("fullName");
