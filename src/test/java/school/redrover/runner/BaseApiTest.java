@@ -29,6 +29,7 @@ public abstract class BaseApiTest {
         cookieValue = cookies.get(cookieName);
 
         crumbIssuerResponse = given()
+                .filter(new CrumbHidingFilter())
                 .spec(Specifications.baseRequestSpec())
                 .header("Cookie", cookieName + "=" + cookieValue)
                 .when()
