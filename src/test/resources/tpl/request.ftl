@@ -42,9 +42,26 @@
 <#if data.curl??>
     <h3>Curl</h3>
     <div>
-        ${data.curl}
+        <#assign maskedCurl = data.curl>
+        <#if maskedCurl?contains("Authorization: Basic")>
+            <#assign start = maskedCurl?index_of("Authorization: Basic") + 21>
+            <#assign end = maskedCurl?index_of("'", start)>
+            <#assign maskedCurl = maskedCurl[0..(start - 1)] + "*****" + maskedCurl[end..]>
+        </#if>
+        <#if maskedCurl?contains("Cookie:")>
+            <#assign start = maskedCurl?index_of("Cookie:") + 8>
+            <#assign end = maskedCurl?index_of("'", start)>
+            <#assign maskedCurl = maskedCurl[0..(start - 1)] + "*****" + maskedCurl[end..]>
+        </#if>
+        <#if maskedCurl?contains("Jenkins-Crumb:")>
+            <#assign start = maskedCurl?index_of("Jenkins-Crumb:") + 15>
+            <#assign end = maskedCurl?index_of("'", start)>
+            <#assign maskedCurl = maskedCurl[0..(start - 1)] + "*****" + maskedCurl[end..]>
+        </#if>
+        ${maskedCurl}
     </div>
 </#if>
+
 
 <#if (data.formParams)?has_content>
     <h3>FormParams</h3>
