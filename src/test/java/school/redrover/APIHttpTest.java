@@ -336,7 +336,7 @@ public class APIHttpTest extends BaseAPIHttpTest {
             String queryString = "name=" + TestUtils.encodeParam(MULTIBRANCH_PIPELINE_NAME_XML);
 
             HttpPost httpPost = new HttpPost(ProjectUtils.getUrl() + "view/all/createItem?" + queryString);
-            httpPost.setEntity(new StringEntity(TestUtils.readFileFromResources("create-empty-multibranch-pipeline.xml")));
+            httpPost.setEntity(new StringEntity(TestUtils.loadPayload("create-empty-multibranch-pipeline.xml")));
 
             httpPost.addHeader(HttpHeaders.CONTENT_TYPE, "application/xml");
             httpPost.addHeader(HttpHeaders.AUTHORIZATION, getBasicAuthWithToken());
