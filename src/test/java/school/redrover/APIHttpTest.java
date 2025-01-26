@@ -98,7 +98,7 @@ public class APIHttpTest extends BaseAPIHttpTest {
             String queryString = "name=" + TestUtils.encodeParam(PIPELINE_NAME_BY_XML_CREATED);
 
             HttpPost httpPost = new HttpPost(ProjectUtils.getUrl() + "view/all/createItem?" + queryString);
-            httpPost.setEntity(new StringEntity(TestUtils.readFileFromResources("create-empty-pipeline-project.xml")));
+            httpPost.setEntity(new StringEntity(TestUtils.loadPayload("create-empty-pipeline-project.xml")));
 
             httpPost.addHeader(HttpHeaders.CONTENT_TYPE, "application/xml");
             httpPost.addHeader(HttpHeaders.AUTHORIZATION, getBasicAuthWithToken());
@@ -156,7 +156,7 @@ public class APIHttpTest extends BaseAPIHttpTest {
 
             HttpPost httpPost = new HttpPost(ProjectUtils.getUrl() + "/view/all/createItem?" + queryString);
 
-            httpPost.setEntity(new StringEntity(TestUtils.readFileFromResources("create-empty-folder.xml")));
+            httpPost.setEntity(new StringEntity(TestUtils.loadPayload("create-empty-folder.xml")));
             httpPost.addHeader(HttpHeaders.CONTENT_TYPE, "application/xml");
             httpPost.addHeader(HttpHeaders.AUTHORIZATION, getBasicAuthWithToken());
 
@@ -231,7 +231,7 @@ public class APIHttpTest extends BaseAPIHttpTest {
             String query = "name=" + TestUtils.encodeParam(FREESTYLE_PROJECT);
 
             HttpPost httpPost = new HttpPost(ProjectUtils.getUrl() + "view/all/createItem?" + query);
-            httpPost.setEntity(new StringEntity(TestUtils.readFileFromResources("create-empty-freestyle-project.xml")));
+            httpPost.setEntity(new StringEntity(TestUtils.loadPayload("create-empty-freestyle-project.xml")));
 
             httpPost.addHeader(HttpHeaders.CONTENT_TYPE, "application/xml");
             httpPost.addHeader(HttpHeaders.AUTHORIZATION, getBasicAuthWithToken());
