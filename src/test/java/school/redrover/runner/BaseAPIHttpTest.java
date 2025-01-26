@@ -1,10 +1,12 @@
 package school.redrover.runner;
 
+import io.qameta.allure.httpclient.AllureHttpClientRequest;
+import io.qameta.allure.httpclient.AllureHttpClientResponse;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
+import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONObject;
 
@@ -36,10 +38,16 @@ public abstract class BaseAPIHttpTest {
         return "Basic " + Base64.getEncoder().encodeToString(auth.getBytes());
     }
 
+    protected CloseableHttpClient createHttpClientWithAllureLogging() {
+        return HttpClientBuilder.create()
+                .addInterceptorFirst(new AllureHttpClientRequest())
+                .addInterceptorLast(new AllureHttpClientResponse())
+                .build();
+    }
+
     @BeforeMethod
     protected void getToken() {
-        try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
-
+        try (CloseableHttpClient httpClient = createHttpClientWithAllureLogging()) {
             HttpGet httpGet = new HttpGet(ProjectUtils.getUrl() + "crumbIssuer/api/json");
             httpGet.addHeader("Authorization", getBasicAuthWithPassword());
 
@@ -66,8 +74,6 @@ public abstract class BaseAPIHttpTest {
                     JSONObject postJsonResponse = new JSONObject(postResponseBody);
                     token = postJsonResponse.getJSONObject("data").getString("tokenValue");
 
-                    logger.info("Crumb: " + "*".repeat(crumb.length() - 5) + crumb.substring(crumb.length() - 5));
-                    logger.info("Token: " + "*".repeat(token.length() - 5) + token.substring(token.length() - 5));
                 }
             }
         } catch (IOException e) {
