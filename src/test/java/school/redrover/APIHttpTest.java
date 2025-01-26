@@ -230,14 +230,6 @@ public class APIHttpTest extends BaseAPIHttpTest {
                 Allure.step("Expected result: description is null");
                 Assert.assertTrue(jsonResponse.contains("\"description\":null"));
             }
-
-            Allure.step("Send DELETE request -> Delete Folder");
-            HttpDelete deleteFolder = new HttpDelete(ProjectUtils.getUrl() + String.format("job/%s/", TestUtils.encodeParam(FOLDER_NAME)));
-            deleteFolder.addHeader(HttpHeaders.AUTHORIZATION, getBasicAuthWithToken());
-            try (CloseableHttpResponse deleteFolderResponse = httpClient.execute(deleteFolder)) {
-                Allure.step("Expected result: Delete item successful. Status code is 204");
-                Assert.assertEquals(deleteFolderResponse.getStatusLine().getStatusCode(), 204);
-            }
         }
     }
 
@@ -252,9 +244,9 @@ public class APIHttpTest extends BaseAPIHttpTest {
             postRenameItem.addHeader(HttpHeaders.CONTENT_TYPE, "application/x-www-form-urlencoded");
             postRenameItem.setEntity(new StringEntity("newName="+ TestUtils.encodeParam(FOLDER_NEW_NAME)));
 
-            Allure.step("Send POST request -> Create Folder");
+            Allure.step("Send POST request -> Rename Folder");
             try (CloseableHttpResponse postRenameItemResponse = httpClient.execute(postRenameItem)) {
-                Allure.step("Expected result: Item created successful. Status code 302");
+                Allure.step("Expected result: Item renamed successful. Status code 302");
                 Assert.assertEquals(postRenameItemResponse.getStatusLine().getStatusCode(), 302);
 
                 Allure.step(String.format("Expected result: '%s' is displayed on Dashboard", FOLDER_NEW_NAME));
@@ -267,7 +259,7 @@ public class APIHttpTest extends BaseAPIHttpTest {
     @Story("Folder")
     @Description("007 Add Description to Folder")
     public void testAddDescriptionToFolder() throws IOException {
-        String description = "Add description to rename folder!";
+        String description = "Add description to folder!";
         try(CloseableHttpClient httpClient = createHttpClientWithAllureLogging()) {
 
             HttpPost postCreateItem = new HttpPost(ProjectUtils.getUrl() + "createItem");
@@ -304,6 +296,13 @@ public class APIHttpTest extends BaseAPIHttpTest {
                 String jsonResponse = EntityUtils.toString(getItemByNameResponse.getEntity());
                 Allure.step("Expected result: Response body contains 'description: null' for folder(ERR)");
                 Assert.assertTrue(jsonResponse.contains("\"description\":null"), "Description is not null");
+            }
+            Allure.step("Send DELETE request -> Delete Folder");
+            HttpDelete deleteFolder = new HttpDelete(ProjectUtils.getUrl() + String.format("job/%s/", TestUtils.encodeParam(FOLDER_NAME)));
+            deleteFolder.addHeader(HttpHeaders.AUTHORIZATION, getBasicAuthWithToken());
+            try (CloseableHttpResponse deleteFolderResponse = httpClient.execute(deleteFolder)) {
+                Allure.step("Expected result: Delete item successful. Status code is 204");
+                Assert.assertEquals(deleteFolderResponse.getStatusLine().getStatusCode(), 204);
             }
         }
     }
