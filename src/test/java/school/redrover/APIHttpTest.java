@@ -162,6 +162,11 @@ public class APIHttpTest extends BaseAPIHttpTest {
 
 
             try (CloseableHttpResponse response = httpClient.execute(httpPost)) {
+        Allure.step("Send POST request -> Create Folder");
+        try(CloseableHttpClient httpClient = HttpClients.createDefault();
+            CloseableHttpResponse response = httpClient.execute(httpPost)) {
+
+            HttpLogger.logRequestAndResponse(httpPost, response);
 
                 Allure.step("Expected result: Create item status code is 200");
                 Assert.assertEquals(response.getStatusLine().getStatusCode(), 200);
@@ -174,8 +179,13 @@ public class APIHttpTest extends BaseAPIHttpTest {
             HttpGet httpGet = new HttpGet(String.format(ProjectUtils.getUrl() + "job/%s/api/json", FOLDER_NAME_BY_XML_CREATED));
 
             httpGet.addHeader("Authorization", getBasicAuthWithToken());
+        HttpGet httpGet = new HttpGet(String.format(ProjectUtils.getUrl() + "job/%s/api/json",FOLDER_NAME_BY_XML_CREATED));
+        httpGet.addHeader("Authorization", getBasicAuthWithToken());
 
             try (CloseableHttpResponse response = httpClient.execute(httpGet)) {
+        Allure.step("Send GET request -> Get item by name");
+        try(CloseableHttpClient httpClient = HttpClients.createDefault();
+            CloseableHttpResponse response = httpClient.execute(httpGet)) {
 
                 String responseBody = EntityUtils.toString(response.getEntity());
                 JSONObject jsonResponse = new JSONObject(responseBody);
@@ -203,6 +213,9 @@ public class APIHttpTest extends BaseAPIHttpTest {
             httpDelete.addHeader(HttpHeaders.AUTHORIZATION, getBasicAuthWithToken());
 
             try (CloseableHttpResponse response = httpClient.execute(httpDelete)) {
+        Allure.step("Send DELETE request -> Delete Folder");
+        try(CloseableHttpClient httpClient = HttpClients.createDefault();
+            CloseableHttpResponse response = httpClient.execute(httpDelete)) {
 
                 Allure.step("Expected result: Delete item status code is 204");
                 Assert.assertEquals(response.getStatusLine().getStatusCode(), 204);
@@ -216,6 +229,9 @@ public class APIHttpTest extends BaseAPIHttpTest {
             httpGet.addHeader(HttpHeaders.AUTHORIZATION, getBasicAuthWithToken());
 
             try (CloseableHttpResponse response = httpClient.execute(httpGet)) {
+        Allure.step("Send GET request -> Get item by name");
+        try (CloseableHttpClient httpClient = HttpClients.createDefault();
+             CloseableHttpResponse response = httpClient.execute(httpGet)) {
 
                 Allure.step("Expected result: Item not found. Status code is 404");
                 Assert.assertEquals(response.getStatusLine().getStatusCode(), 404);
