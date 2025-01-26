@@ -230,6 +230,14 @@ public class APIHttpTest extends BaseAPIHttpTest {
                 Allure.step("Expected result: description is null");
                 Assert.assertTrue(jsonResponse.contains("\"description\":null"));
             }
+
+            Allure.step("Send DELETE request -> Delete Folder");
+            HttpDelete deleteFolder = new HttpDelete(ProjectUtils.getUrl() + String.format("job/%s/", TestUtils.encodeParam(FOLDER_NAME)));
+            deleteFolder.addHeader(HttpHeaders.AUTHORIZATION, getBasicAuthWithToken());
+            try (CloseableHttpResponse deleteFolderResponse = httpClient.execute(deleteFolder)) {
+                Allure.step("Expected result: Delete item successful. Status code is 204");
+                Assert.assertEquals(deleteFolderResponse.getStatusLine().getStatusCode(), 204);
+            }
         }
     }
 
