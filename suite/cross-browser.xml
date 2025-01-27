@@ -3,14 +3,14 @@
     <test name="Chrome Tests">
         <parameter name="browser" value="chrome"/>
         <classes>
-            <class name="school.redrover.ManageJenkinsTest"/>
+            <class name="school.redrover.FooterTest"/>
         </classes>
     </test>
 
-    <test name="Edge Tests">
-        <parameter name="browser" value="edge"/>
+    <test name="Firefox Tests">
+        <parameter name="browser" value="firefox"/>
         <classes>
-            <class name="school.redrover.ManageJenkinsTest"/>
+            <class name="school.redrover.FooterTest"/>
         </classes>
     </test>
 </suite>
