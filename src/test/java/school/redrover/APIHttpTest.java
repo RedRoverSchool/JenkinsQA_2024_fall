@@ -42,6 +42,8 @@ public class APIHttpTest extends BaseAPIHttpTest {
     private static final String FOLDER_MODE = "com.cloudbees.hudson.plugins.folder.Folder";
     private static final String FREESTYLE_PROJECT = "NewProject";
     private static final String RENAMED_FREESTYLE_PROJECT = "RenamedFreestyle";
+    private static final String MULTIBRANCH_PIPELINE_NAME = "MultibranchPipeline";
+    private static final String MULTIBRANCH_PIPELINE_NAME_XML = "MultibranchPipelineXML";
 
     private List<String> getAllProjectNamesFromJsonResponseList() throws IOException {
         try (CloseableHttpClient httpClient = createHttpClientWithAllureLogging()) {
@@ -412,6 +414,56 @@ public class APIHttpTest extends BaseAPIHttpTest {
             try (CloseableHttpResponse response = httpClient.execute(httpGet)) {
 
                 Assert.assertEquals(response.getStatusLine().getStatusCode(), 404);
+            }
+        }
+    }
+
+    @Story("Multibranch pipeline")
+    @Description("Create Multibranch pipeline with valid name")
+    @Test
+    public void testCreateMultibranchPipeline() throws IOException {
+        try (CloseableHttpClient httpClient = createHttpClientWithAllureLogging()) {
+            HttpPost httpPost = new HttpPost(ProjectUtils.getUrl() + "view/all/createItem");
+
+            List<NameValuePair> nameValuePairs = new ArrayList<>();
+            nameValuePairs.add(new BasicNameValuePair("name", MULTIBRANCH_PIPELINE_NAME));
+            nameValuePairs.add(new BasicNameValuePair("mode", "org.jenkinsci.plugins.workflow.multibranch.WorkflowMultiBranchProject"));
+
+            httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+            httpPost.addHeader(HttpHeaders.AUTHORIZATION, getBasicAuthWithToken());
+
+            try (CloseableHttpResponse response = httpClient.execute(httpPost)) {
+
+                Assert.assertEquals(response.getStatusLine().getStatusCode(), 302);
+                Assert.assertListContainsObject(
+                        getAllProjectNamesFromJsonResponseList(),
+                        MULTIBRANCH_PIPELINE_NAME,
+                        "The project is not created");
+            }
+        }
+    }
+
+    @Story("Multibranch pipeline")
+    @Description("Create Multibranch pipeline with valid name using XML")
+    @Test
+    public void testCreateMultibranchPipelineXML() throws IOException {
+        try (CloseableHttpClient httpClient = createHttpClientWithAllureLogging()) {
+            String queryString = "name=" + TestUtils.encodeParam(MULTIBRANCH_PIPELINE_NAME_XML);
+
+            HttpPost httpPost = new HttpPost(ProjectUtils.getUrl() + "view/all/createItem?" + queryString);
+            httpPost.setEntity(new StringEntity(TestUtils.loadPayload("create-empty-multibranch-pipeline.xml")));
+
+            httpPost.addHeader(HttpHeaders.CONTENT_TYPE, "application/xml");
+            httpPost.addHeader(HttpHeaders.AUTHORIZATION, getBasicAuthWithToken());
+
+            try (CloseableHttpResponse response = httpClient.execute(httpPost)) {
+
+                Assert.assertEquals(response.getStatusLine().getStatusCode(), 200);
+                Assert.assertListContainsObject(
+                        getAllProjectNamesFromJsonResponseList(),
+                        MULTIBRANCH_PIPELINE_NAME_XML,
+                        "The project is not created"
+                );
             }
         }
     }
