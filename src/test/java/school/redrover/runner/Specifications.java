@@ -9,8 +9,9 @@ import io.restassured.filter.log.LogDetail;
 import io.restassured.specification.RequestSpecification;
 import io.restassured.specification.ResponseSpecification;
 
-import java.util.Base64;
 import java.util.List;
+
+import static io.restassured.RestAssured.preemptive;
 
 public class Specifications {
 
@@ -18,11 +19,8 @@ public class Specifications {
         LogConfig logConfig = LogConfig.logConfig().blacklistHeaders(List.of("Authorization", "Cookie", "Jenkins-Crumb"));
         RestAssured.config = RestAssured.config().logConfig(logConfig);
 
-        String auth = ProjectUtils.getUserName() + ":" + ProjectUtils.getPassword();
-        String encodedAuth = Base64.getEncoder().encodeToString(auth.getBytes());
-
         return new RequestSpecBuilder()
-                .addHeader("Authorization", "Basic " + encodedAuth)
+                .setAuth(preemptive().basic(ProjectUtils.getUserName(), ProjectUtils.getPassword()))
                 .setBaseUri(ProjectUtils.getUrl())
                 .log(LogDetail.ALL)
                 .build();
@@ -54,14 +52,6 @@ public class Specifications {
 
     public static void installSpecification(RequestSpecification requestSpec, ResponseSpecification responseSpec) {
         RestAssured.requestSpecification = requestSpec;
-        RestAssured.responseSpecification = responseSpec;
-    }
-
-    public static void installSpecification(RequestSpecification requestSpec) {
-        RestAssured.requestSpecification = requestSpec;
-    }
-
-    public static void installSpecification(ResponseSpecification responseSpec) {
         RestAssured.responseSpecification = responseSpec;
     }
 
