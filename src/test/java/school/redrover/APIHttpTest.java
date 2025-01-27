@@ -32,7 +32,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Epic("Http API  Requests")
-public class APIHttpTest extends BaseAPIHttpTest {
+public class APIHttpTest extends BaseAPIHttpTest {  // Using Apache HttpClient
 
     private static final String PIPELINE_NAME = "Pipeline";
     private static final String PIPELINE_NAME_BY_XML_CREATED = "PipelineXML";
@@ -103,7 +103,7 @@ public class APIHttpTest extends BaseAPIHttpTest {
     @Test
     public void testCreatePipelineXML() throws IOException {
         try (CloseableHttpClient httpClient = createHttpClientWithAllureLogging()) {
-            String queryString = "name=" + TestUtils.encodeParam(PIPELINE_NAME_BY_XML_CREATED);
+            String queryString = "name=" + PIPELINE_NAME_BY_XML_CREATED;
 
             HttpPost httpPost = new HttpPost(ProjectUtils.getUrl() + "view/all/createItem?" + queryString);
             httpPost.setEntity(new StringEntity(TestUtils.loadPayload("create-empty-pipeline-project.xml")));
@@ -151,6 +151,49 @@ public class APIHttpTest extends BaseAPIHttpTest {
                 Assert.assertEquals(response.getStatusLine().getStatusCode(), 200);
                 Assert.assertTrue(jsonResponse.contains("\"description\" : \"" + description + "\""),
                         "Description not found in job details");
+            }
+        }
+    }
+
+    @Test(dependsOnMethods = "testAddDescription")
+    @Story("Pipeline project")
+    @Description("Delete project by HttpDelete request")
+    public void testDeleteProjectByHttpDelete() throws IOException {
+        try (CloseableHttpClient httpClient = createHttpClientWithAllureLogging()) {
+            HttpDelete httpDelete = new HttpDelete(
+                    String.format(ProjectUtils.getUrl() + "/job/%s/", PIPELINE_NAME_BY_XML_CREATED));
+
+            httpDelete.addHeader(HttpHeaders.AUTHORIZATION, getBasicAuthWithToken());
+
+            try (CloseableHttpResponse response = httpClient.execute(httpDelete)) {
+                Assert.assertEquals(response.getStatusLine().getStatusCode(), 204);
+                Assert.assertListNotContainsObject(
+                        getAllProjectNamesFromJsonResponseList(),
+                        PIPELINE_NAME_BY_XML_CREATED,
+                        "Project is not deleted");
+            }
+        }
+    }
+
+    @Test(dependsOnMethods = "testCreatePipeline")
+    @Story("Pipeline project")
+    @Description("Delete project by HttpPost request")
+    public void testDeletePipelineByHttpPost() throws IOException {
+        try (CloseableHttpClient httpClient = createHttpClientWithAllureLogging()) {
+            HttpPost httpPost = new HttpPost(
+                    String.format(ProjectUtils.getUrl() + "/job/%s/doDelete", PIPELINE_NAME));
+            httpPost.addHeader(HttpHeaders.AUTHORIZATION, getBasicAuthWithToken());
+
+            try (CloseableHttpResponse response = httpClient.execute(httpPost)) {
+                Assert.assertEquals(response.getStatusLine().getStatusCode(), 302);
+            }
+
+            HttpGet httpGet = new HttpGet(
+                    String.format(ProjectUtils.getUrl() + "/job/%s/api/json", PIPELINE_NAME));
+            httpGet.addHeader(HttpHeaders.AUTHORIZATION, getBasicAuthWithToken());
+
+            try (CloseableHttpResponse response = httpClient.execute(httpGet)) {
+                Assert.assertEquals(response.getStatusLine().getStatusCode(), 404);
             }
         }
     }
