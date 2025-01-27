@@ -457,6 +457,11 @@ public class APIHttpTest extends BaseAPIHttpTest {  // Using Apache HttpClient
             try (CloseableHttpResponse response = httpClient.execute(httpGet)) {
 
                 Assert.assertEquals(response.getStatusLine().getStatusCode(), 404);
+                Assert.assertListNotContainsObject(
+                        getAllProjectNamesFromJsonResponseList(),
+                        RENAMED_FREESTYLE_PROJECT,
+                        "The project was not deleted");
+
             }
         }
     }
