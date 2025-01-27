@@ -1,5 +1,6 @@
 package school.redrover.runner.order;
 
+import io.qameta.allure.Epic;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -7,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+@Epic("Utils test")
 public class OrderForTestsTest {
 
     private static class Item {
