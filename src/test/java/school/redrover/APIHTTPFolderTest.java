@@ -20,10 +20,9 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
 import java.util.List;
 
-@Epic("Http API  Requests")
+@Epic("Http API Requests")
 public class APIHTTPFolderTest extends BaseAPIHttpTest {
 
     private static final String FOLDER_NAME = "FolderUn";
