@@ -1,6 +1,5 @@
 package school.redrover.api;
 
-import io.qameta.allure.Allure;
 import io.qameta.allure.Description;
 import io.qameta.allure.Epic;
 import io.qameta.allure.Feature;
@@ -8,6 +7,7 @@ import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import org.testng.Assert;
 import org.testng.annotations.Test;
+import school.redrover.model.FreestyleResponse;
 import school.redrover.runner.BaseApiTest;
 import school.redrover.runner.ProjectUtils;
 import school.redrover.runner.Specifications;
@@ -26,21 +26,20 @@ public class FreestyleProjectApiTest extends BaseApiTest {
     @Description("001 Create freestyle project with valid name")
     public void createFreestyleProjectTest() {
         Specifications.installSpecification(Specifications.authRequestSpec(), Specifications.authResponseSpec(200));
-        String xml = TestUtils.loadPayload("create-empty-freestyle-project.xml");
 
-        Allure.step("Creating project with name: " + PROJECT_NAME);
+        String payload = TestUtils.loadPayload("create-empty-freestyle-project.xml");
 
         given()
                 .queryParams("name", PROJECT_NAME)
                 .contentType(ContentType.XML)
-                .body(xml)
+                .body(payload)
                 .baseUri(ProjectUtils.getUrl())
                 .when()
                 .post("createItem")
                 .then();
 
         Response response = given().basePath("job/" + PROJECT_NAME)
-                .body(xml)
+                .body(payload)
                 .baseUri(ProjectUtils.getUrl())
                 .when()
                 .get("api/json")
@@ -48,10 +47,12 @@ public class FreestyleProjectApiTest extends BaseApiTest {
                 .body(matchesJsonSchema(TestUtils.loadSchema("freestyle-project-schema.json")))
                 .extract().response();
 
-        String projectName = response.body().jsonPath().getString("fullName");
-        String contentType = response.header("Content-Type");
+        FreestyleResponse freestyleResponse = response.as(FreestyleResponse.class);
 
-        Assert.assertEquals(projectName, PROJECT_NAME);
-        Assert.assertEquals(contentType, "application/json;charset=utf-8");
+        Assert.assertEquals(response.getHeader("Content-Type"), "application/json;charset=utf-8");
+        Assert.assertTrue(response.getTime() <= 500);
+        Assert.assertEquals(freestyleResponse.getName(), PROJECT_NAME);
+        Assert.assertNull(freestyleResponse.getDescription());
+        Assert.assertEquals(freestyleResponse.getClassField(), "hudson.model.FreeStyleProject");
     }
 }
