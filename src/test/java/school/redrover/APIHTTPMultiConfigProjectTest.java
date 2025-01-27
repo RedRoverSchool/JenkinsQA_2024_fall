@@ -3,6 +3,7 @@ package school.redrover;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import io.qameta.allure.Allure;
+import io.qameta.allure.Epic;
 import org.apache.http.HttpHeaders;
 import org.testng.Assert;
 import org.testng.annotations.Test;
@@ -17,6 +18,7 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
+@Epic("Http API Requests")
 public class APIHTTPMultiConfigProjectTest extends BaseAPIHttpTest { //Using HttpClient from standard Java library
 
     private static final String MULTI_CONFIG_PROJECT_NAME = "MultiConfigName";

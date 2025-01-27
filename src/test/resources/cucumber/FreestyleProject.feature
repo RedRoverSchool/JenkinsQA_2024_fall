@@ -1,3 +1,5 @@
+@allure.label.epic:UI
+@allure.label.feature:Freestyle job
 Feature: Freestyle job
 
   Scenario: Create job

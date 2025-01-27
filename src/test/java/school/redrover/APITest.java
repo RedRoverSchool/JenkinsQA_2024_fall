@@ -3,6 +3,7 @@ package school.redrover;
 
 import com.google.common.net.HttpHeaders;
 import com.google.gson.Gson;
+import io.qameta.allure.Epic;
 import io.restassured.RestAssured;
 import org.hamcrest.Matchers;
 import org.testng.Assert;
@@ -18,6 +19,7 @@ import java.net.http.HttpResponse;
 import java.util.List;
 import java.util.Objects;
 
+@Epic("API")
 @Ignore
 public class APITest {
 
