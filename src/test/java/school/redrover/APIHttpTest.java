@@ -6,6 +6,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import io.qameta.allure.*;
+import org.apache.http.HttpRequest;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -24,6 +25,8 @@ import school.redrover.runner.ProjectUtils;
 import school.redrover.runner.TestUtils;
 
 import java.io.IOException;
+import java.net.URLEncoder;
+import java.net.http.HttpClient;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
@@ -34,6 +37,9 @@ public class APIHttpTest extends BaseAPIHttpTest {
     private static final String PIPELINE_NAME = "Pipeline";
     private static final String PIPELINE_NAME_BY_XML_CREATED = "PipelineXML";
     private static final String FOLDER_NAME_BY_XML_CREATED = "FolderXML";
+    private static final String FOLDER_NAME = "Folder";
+    private static final String FOLDER_NEW_NAME = "NewFolderName";
+    private static final String FOLDER_MODE = "com.cloudbees.hudson.plugins.folder.Folder";
     private static final String FREESTYLE_PROJECT = "NewProject";
     private static final String RENAMED_FREESTYLE_PROJECT = "RenamedFreestyle";
 
@@ -188,6 +194,115 @@ public class APIHttpTest extends BaseAPIHttpTest {
 
                 Allure.step("Expected result: Header 'Content-Type : application/json;charset=utf-8' ");
                 Assert.assertEquals(response.getFirstHeader("Content-Type").getValue(), "application/json;charset=utf-8");
+            }
+        }
+    }
+
+    @Test
+    @Story("Folder")
+    @Description("002 Create Folder with valid name")
+    public void testCreateFolderWithValidName() throws IOException {
+        try(CloseableHttpClient httpClient = createHttpClientWithAllureLogging()) {
+
+            HttpPost postCreateItem = new HttpPost(ProjectUtils.getUrl() + "createItem");
+            postCreateItem.addHeader(HttpHeaders.AUTHORIZATION, getBasicAuthWithToken());
+            postCreateItem.addHeader(HttpHeaders.CONTENT_TYPE, "application/x-www-form-urlencoded");
+            postCreateItem.setEntity(new StringEntity("name="+ FOLDER_NAME +"&mode=" + FOLDER_MODE));
+
+            Allure.step("Send POST request -> Create Folder");
+            try (CloseableHttpResponse postCreateItemResponse = httpClient.execute(postCreateItem)) {
+                Allure.step("Expected result: Successful item creation. Status code 302");
+                Assert.assertEquals(postCreateItemResponse.getStatusLine().getStatusCode(), 302);
+            }
+
+            Allure.step("Send GET request -> Get item by name");
+            HttpGet getItemByName = new HttpGet(ProjectUtils.getUrl() +
+                    String.format("job/%s", URLEncoder.encode(FOLDER_NAME, StandardCharsets.UTF_8)) + "/api/json");
+            getItemByName.addHeader(HttpHeaders.AUTHORIZATION, getBasicAuthWithToken());
+            try (CloseableHttpResponse getItemByNameResponse = httpClient.execute(getItemByName)) {
+                Allure.step("Expected result: Created element is found by name");
+                Assert.assertEquals(getItemByNameResponse.getStatusLine().getStatusCode(),200);
+
+                String jsonResponse = EntityUtils.toString(getItemByNameResponse.getEntity());
+
+                Allure.step(String.format("Expected result: fullName is '%s' response", FOLDER_NAME));
+                Assert.assertTrue(jsonResponse.contains(String.format("\"fullName\":\"%s\"",FOLDER_NAME)),"Folder not found");
+                Allure.step("Expected result: description is null");
+                Assert.assertTrue(jsonResponse.contains("\"description\":null"));
+            }
+        }
+    }
+
+    @Test(dependsOnMethods = "testCreateFolderWithValidName")
+    @Story("Folder")
+    @Description("008 Rename Folder")
+    public void testRenameFolder() throws IOException {
+        try(CloseableHttpClient httpClient = createHttpClientWithAllureLogging()) {
+            HttpPost postRenameItem = new HttpPost(ProjectUtils.getUrl() +
+                    String.format("job/%s/confirmRename",TestUtils.encodeParam(FOLDER_NAME)));
+            postRenameItem.addHeader(HttpHeaders.AUTHORIZATION, getBasicAuthWithToken());
+            postRenameItem.addHeader(HttpHeaders.CONTENT_TYPE, "application/x-www-form-urlencoded");
+            postRenameItem.setEntity(new StringEntity("newName="+ TestUtils.encodeParam(FOLDER_NEW_NAME)));
+
+            Allure.step("Send POST request -> Rename Folder");
+            try (CloseableHttpResponse postRenameItemResponse = httpClient.execute(postRenameItem)) {
+                Allure.step("Expected result: Item renamed successful. Status code 302");
+                Assert.assertEquals(postRenameItemResponse.getStatusLine().getStatusCode(), 302);
+
+                Allure.step(String.format("Expected result: '%s' is displayed on Dashboard", FOLDER_NEW_NAME));
+                Assert.assertListContainsObject(getAllProjectNamesFromJsonResponseList(), FOLDER_NEW_NAME, "List is not contain folder");
+            }
+        }
+    }
+
+    @Test()
+    @Story("Folder")
+    @Description("007 Add Description to Folder")
+    public void testAddDescriptionToFolder() throws IOException {
+        String description = "Add description to folder!";
+        try(CloseableHttpClient httpClient = createHttpClientWithAllureLogging()) {
+
+            HttpPost postCreateItem = new HttpPost(ProjectUtils.getUrl() + "createItem");
+            postCreateItem.addHeader(HttpHeaders.AUTHORIZATION, getBasicAuthWithToken());
+            postCreateItem.addHeader(HttpHeaders.CONTENT_TYPE, "application/x-www-form-urlencoded");
+            postCreateItem.setEntity(new StringEntity("name=" + FOLDER_NAME + "&mode=" + FOLDER_MODE));
+
+            Allure.step("Send POST request -> Create Folder");
+            try (CloseableHttpResponse postCreateItemResponse = httpClient.execute(postCreateItem)) {
+                Allure.step("Expected result: Successful item creation. Status code 302");
+                Assert.assertEquals(postCreateItemResponse.getStatusLine().getStatusCode(), 302);
+            }
+
+            HttpPost postAddDescriptionItem = new HttpPost(ProjectUtils.getUrl() +
+                    String.format("job/%s/submitDescription", TestUtils.encodeParam(FOLDER_NAME)));
+            postAddDescriptionItem.addHeader(HttpHeaders.AUTHORIZATION, getBasicAuthWithToken());
+            postAddDescriptionItem.addHeader(HttpHeaders.CONTENT_TYPE, "application/x-www-form-urlencoded");
+            postAddDescriptionItem.setEntity(new StringEntity("description=" + TestUtils.encodeParam(description)));
+
+            Allure.step("Send POST request -> Add Description to Folder");
+            try (CloseableHttpResponse postAddDescriptionResponse = httpClient.execute(postAddDescriptionItem)) {
+                Allure.step("Expected result: Successful add description to item. Status code 302");
+                Assert.assertEquals(postAddDescriptionResponse.getStatusLine().getStatusCode(), 302);
+            }
+
+            Allure.step("Send GET request -> Get item by name");
+            HttpGet getItemByName = new HttpGet(ProjectUtils.getUrl() +
+                    String.format("job/%s", TestUtils.encodeParam(FOLDER_NAME)) + "/api/json");
+            getItemByName.addHeader(HttpHeaders.AUTHORIZATION, getBasicAuthWithToken());
+            try (CloseableHttpResponse getItemByNameResponse = httpClient.execute(getItemByName)) {
+                Allure.step("Expected result: Created element is found by name");
+                Assert.assertEquals(getItemByNameResponse.getStatusLine().getStatusCode(), 200);
+
+                String jsonResponse = EntityUtils.toString(getItemByNameResponse.getEntity());
+                Allure.step("Expected result: Response body contains 'description: null' for folder(ERR)");
+                Assert.assertTrue(jsonResponse.contains("\"description\":null"), "Description is not null");
+            }
+            Allure.step("Send DELETE request -> Delete Folder");
+            HttpDelete deleteFolder = new HttpDelete(ProjectUtils.getUrl() + String.format("job/%s/", TestUtils.encodeParam(FOLDER_NAME)));
+            deleteFolder.addHeader(HttpHeaders.AUTHORIZATION, getBasicAuthWithToken());
+            try (CloseableHttpResponse deleteFolderResponse = httpClient.execute(deleteFolder)) {
+                Allure.step("Expected result: Delete item successful. Status code is 204");
+                Assert.assertEquals(deleteFolderResponse.getStatusLine().getStatusCode(), 204);
             }
         }
     }
