@@ -35,7 +35,7 @@ public class FooterComponent<T extends BasePage<T>> extends BaseComponent<T> {
 
     @Step("Click 'About Jenkins' option in dropdown menu of Jenkins version number")
     public AboutPage gotoAboutPage() {
-        aboutJenkinsButton.click();
+        getWait2().until(ExpectedConditions.visibilityOf(aboutJenkinsButton)).click();
 
         return new AboutPage(getDriver());
     }
