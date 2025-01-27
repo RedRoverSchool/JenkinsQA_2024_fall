@@ -95,7 +95,7 @@ public class APIHttpTest extends BaseAPIHttpTest {  // Using Apache HttpClient
     @Test
     public void testCreatePipelineXML() throws IOException {
         try (CloseableHttpClient httpClient = createHttpClientWithAllureLogging()) {
-            String queryString = "name=" + TestUtils.encodeParam(PIPELINE_NAME_BY_XML_CREATED);
+            String queryString = "name=" + PIPELINE_NAME_BY_XML_CREATED;
 
             HttpPost httpPost = new HttpPost(ProjectUtils.getUrl() + "view/all/createItem?" + queryString);
             httpPost.setEntity(new StringEntity(TestUtils.loadPayload("create-empty-pipeline-project.xml")));

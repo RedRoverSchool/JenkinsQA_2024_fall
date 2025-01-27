@@ -25,7 +25,7 @@ public class APIHTTPMultiConfigProjectTest extends BaseAPIHttpTest { //Using Htt
     public void testCreate() throws IOException, InterruptedException, URISyntaxException {
         HttpClient httpClient = HttpClient.newHttpClient();
 
-        String query = "name=" + TestUtils.encodeParam(MULTI_CONFIG_PROJECT_NAME);
+        String query = "name=" + MULTI_CONFIG_PROJECT_NAME;
         String createItemUrl = ProjectUtils.getUrl() + "view/all/createItem?" + query;
 
         HttpRequest createRequest = HttpRequest.newBuilder()
@@ -44,8 +44,7 @@ public class APIHTTPMultiConfigProjectTest extends BaseAPIHttpTest { //Using Htt
         HttpResponse<String> createResponse = httpClient.send(createRequest, HttpResponse.BodyHandlers.ofString());
         Assert.assertEquals(createResponse.statusCode(), 200);
 
-        String projectApiUrl = ProjectUtils.getUrl() + "job/" +
-                TestUtils.encodeParam(MULTI_CONFIG_PROJECT_NAME) + "/api/json";
+        String projectApiUrl = String.format(ProjectUtils.getUrl() + "job/%s/api/json", MULTI_CONFIG_PROJECT_NAME);
 
         HttpRequest getRequest = HttpRequest.newBuilder()
                 .uri(new URI(projectApiUrl))
