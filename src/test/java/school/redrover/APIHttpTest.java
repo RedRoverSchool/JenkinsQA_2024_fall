@@ -555,8 +555,8 @@ public class APIHttpTest extends BaseAPIHttpTest {  // Using Apache HttpClient
             HttpGet httpGet = new HttpGet(ProjectUtils.getUrl() + TestUtils.encodeParam(MULTIBRANCH_PIPELINE_NAME_XML));
             httpGet.addHeader(HttpHeaders.AUTHORIZATION, getBasicAuthWithToken());
 
+            Allure.step("Send Get request to check the list of existing projects");
             try (CloseableHttpResponse response = httpClient.execute(httpGet)) {
-                Allure.step("Send GET request to check the list of existing projects");
                 Allure.step("Expected result: " + String.format("%s is deleted and is not displayed on Dashboard", MULTIBRANCH_PIPELINE_NAME_XML));
                 Assert.assertListNotContainsObject(getAllProjectNamesFromJsonResponseList(), MULTIBRANCH_PIPELINE_NAME_XML, "The project is not deleted");
             }
