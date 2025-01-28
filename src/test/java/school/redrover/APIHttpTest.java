@@ -508,8 +508,7 @@ public class APIHttpTest extends BaseAPIHttpTest {  // Using Apache HttpClient
                 Assert.assertListContainsObject(
                         getAllProjectNamesFromJsonResponseList(),
                         MULTIBRANCH_PIPELINE_NAME_XML,
-                        "The project is not created"
-                );
+                        "The project is not created");
             }
         }
     }
@@ -527,17 +526,40 @@ public class APIHttpTest extends BaseAPIHttpTest {  // Using Apache HttpClient
             requestRename.addHeader(HttpHeaders.CONTENT_TYPE, "application/x-www-form-urlencoded");
             requestRename.setEntity(new StringEntity("newName=" + TestUtils.encodeParam(newMultibranchPipelineName)));
 
-            Allure.step("Send POST request -> Rename Multibranch Pipeline");
+            Allure.step("Send POST request -> Rename " + String.format("%s", MULTIBRANCH_PIPELINE_NAME));
             try (CloseableHttpResponse responseRename = httpClient.execute(requestRename)) {
                 Allure.step("Expected result: Status code is 302");
                 Assert.assertEquals(responseRename.getStatusLine().getStatusCode(), 302);
 
                 Allure.step("Expected result: " + String.format("%s is renamed to %s and displayed on Dashboard",
                         MULTIBRANCH_PIPELINE_NAME, newMultibranchPipelineName));
-                Assert.assertListContainsObject(getAllProjectNamesFromJsonResponseList(), newMultibranchPipelineName, "List is not contain folder");
+                Assert.assertListContainsObject(getAllProjectNamesFromJsonResponseList(), newMultibranchPipelineName, "List does not contain the project");
             }
         }
     }
 
-}
+    @Test(dependsOnMethods = "testCreateMultibranchPipelineXML")
+    @Story("Multibranch pipeline")
+    @Description("Delete Multibranch pipeline")
+    public void testDeleteMultibranchPipeline() throws IOException {
+        try(CloseableHttpClient httpClient = createHttpClientWithAllureLogging()) {
+            HttpDelete httpDelete = new HttpDelete(ProjectUtils.getUrl() + String.format("job/%s/", TestUtils.encodeParam(MULTIBRANCH_PIPELINE_NAME_XML)));
+            httpDelete.addHeader(HttpHeaders.AUTHORIZATION, getBasicAuthWithToken());
 
+            Allure.step("Send DELETE request -> Delete " + String.format("%s", MULTIBRANCH_PIPELINE_NAME_XML));
+            try (CloseableHttpResponse responseDelete = httpClient.execute(httpDelete)) {
+                Allure.step("Expected result: Status code is 204");
+                Assert.assertEquals(responseDelete.getStatusLine().getStatusCode(), 204);
+            }
+
+            HttpGet httpGet = new HttpGet(ProjectUtils.getUrl() + TestUtils.encodeParam(MULTIBRANCH_PIPELINE_NAME_XML));
+            httpGet.addHeader(HttpHeaders.AUTHORIZATION, getBasicAuthWithToken());
+
+            try (CloseableHttpResponse response = httpClient.execute(httpGet)) {
+                Allure.step("Send GET request to check the list of existing projects");
+                Allure.step("Expected result: " + String.format("%s is deleted and is not displayed on Dashboard", MULTIBRANCH_PIPELINE_NAME_XML));
+                Assert.assertListNotContainsObject(getAllProjectNamesFromJsonResponseList(), MULTIBRANCH_PIPELINE_NAME_XML, "The project is not deleted");
+            }
+        }
+    }
+}
