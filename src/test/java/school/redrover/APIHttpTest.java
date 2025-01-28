@@ -6,7 +6,6 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import io.qameta.allure.*;
-import org.apache.http.HttpRequest;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -26,7 +25,6 @@ import school.redrover.runner.TestUtils;
 
 import java.io.IOException;
 import java.net.URLEncoder;
-import java.net.http.HttpClient;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
@@ -466,9 +464,9 @@ public class APIHttpTest extends BaseAPIHttpTest {  // Using Apache HttpClient
         }
     }
 
+    @Test
     @Story("Multibranch pipeline")
     @Description("Create Multibranch pipeline with valid name")
-    @Test
     public void testCreateMultibranchPipeline() throws IOException {
         try (CloseableHttpClient httpClient = createHttpClientWithAllureLogging()) {
             HttpPost httpPost = new HttpPost(ProjectUtils.getUrl() + "view/all/createItem");
@@ -491,9 +489,9 @@ public class APIHttpTest extends BaseAPIHttpTest {  // Using Apache HttpClient
         }
     }
 
+    @Test
     @Story("Multibranch pipeline")
     @Description("Create Multibranch pipeline with valid name using XML")
-    @Test
     public void testCreateMultibranchPipelineXML() throws IOException {
         try (CloseableHttpClient httpClient = createHttpClientWithAllureLogging()) {
             String queryString = "name=" + TestUtils.encodeParam(MULTIBRANCH_PIPELINE_NAME_XML);
@@ -515,4 +513,31 @@ public class APIHttpTest extends BaseAPIHttpTest {  // Using Apache HttpClient
             }
         }
     }
+
+    @Test(dependsOnMethods = "testCreateMultibranchPipeline")
+    @Story("Multibranch pipeline")
+    @Description("Rename Multibranch pipeline")
+    public void testRenameMultibranchPipeline() throws IOException {
+        final String newMultibranchPipelineName = "New" + MULTIBRANCH_PIPELINE_NAME;
+
+        try(CloseableHttpClient httpClient = createHttpClientWithAllureLogging()) {
+            HttpPost requestRename = new HttpPost(ProjectUtils.getUrl() +
+                    String.format("/job/%s/confirmRename", TestUtils.encodeParam(MULTIBRANCH_PIPELINE_NAME)));
+            requestRename.addHeader(HttpHeaders.AUTHORIZATION, getBasicAuthWithToken());
+            requestRename.addHeader(HttpHeaders.CONTENT_TYPE, "application/x-www-form-urlencoded");
+            requestRename.setEntity(new StringEntity("newName=" + TestUtils.encodeParam(newMultibranchPipelineName)));
+
+            Allure.step("Send POST request -> Rename Multibranch Pipeline");
+            try (CloseableHttpResponse responseRename = httpClient.execute(requestRename)) {
+                Allure.step("Expected result: Status code is 302");
+                Assert.assertEquals(responseRename.getStatusLine().getStatusCode(), 302);
+
+                Allure.step("Expected result: " + String.format("%s is renamed to %s and displayed on Dashboard",
+                        MULTIBRANCH_PIPELINE_NAME, newMultibranchPipelineName));
+                Assert.assertListContainsObject(getAllProjectNamesFromJsonResponseList(), newMultibranchPipelineName, "List is not contain folder");
+            }
+        }
+    }
+
 }
+
