@@ -1,10 +1,9 @@
 package school.redrover;
 
 import com.google.common.net.HttpHeaders;
+import com.google.gson.Gson;
 import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import io.qameta.allure.*;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
@@ -42,38 +41,40 @@ public class APIHttpTest extends BaseAPIHttpTest {  // Using Apache HttpClient
     private static final String RENAMED_FREESTYLE_PROJECT = "RenamedFreestyle";
     private static final String MULTIBRANCH_PIPELINE_NAME = "MultibranchPipeline";
     private static final String MULTIBRANCH_PIPELINE_NAME_XML = "MultibranchPipelineXML";
+    private static final String VIEW_NAME = "ViewName";
+    private static final String API_JSON_URL = "api/json?pretty=true";
 
-    private List<String> getAllProjectNamesFromJsonResponseList() throws IOException {
+    private List<String> getProjectNamesFromJsonResponseList(String url, String jsonArrayKey) throws IOException {
         try (CloseableHttpClient httpClient = createHttpClientWithAllureLogging()) {
-            HttpGet httpGet = new HttpGet(ProjectUtils.getUrl() + "api/json?pretty=true");
+            HttpGet httpGet = new HttpGet(url);
 
             httpGet.addHeader("Authorization", getBasicAuthWithToken());
 
             try (CloseableHttpResponse response = httpClient.execute(httpGet)) {
-
                 Assert.assertEquals(response.getStatusLine().getStatusCode(), 200);
 
                 String responseBody = EntityUtils.toString(response.getEntity(), StandardCharsets.UTF_8);
-                JsonObject jsonResponse = JsonParser.parseString(responseBody).getAsJsonObject();
-
-                JsonArray jobs = jsonResponse.getAsJsonArray("jobs");
+                JsonArray jobs = new Gson().fromJson(responseBody, JsonObject.class).getAsJsonArray(jsonArrayKey);
 
                 List<String> projectNames = new ArrayList<>();
-
-                for (JsonElement jobElement : jobs) {
-                    JsonObject jobObject = jobElement.getAsJsonObject();
-                    String projectName = jobObject.get("name").getAsString();
-                    projectNames.add(projectName);
-                }
+                jobs.forEach(job -> projectNames.add(job.getAsJsonObject().get("name").getAsString()));
 
                 return projectNames;
             }
         }
     }
 
+    private List<String> getAllProjectNamesFromJsonResponseList() throws IOException {
+        return getProjectNamesFromJsonResponseList(ProjectUtils.getUrl() + API_JSON_URL, "jobs");
+    }
+
+    private List<String> getAllProjectViewNamesFromJsonResponseList() throws IOException {
+        return getProjectNamesFromJsonResponseList(ProjectUtils.getUrl() + API_JSON_URL, "views");
+    }
+
+    @Test
     @Story("Pipeline project")
     @Description("Create Pipeline Project with valid name")
-    @Test
     public void testCreatePipeline() throws IOException {
         try (CloseableHttpClient httpClient = createHttpClientWithAllureLogging()) {
             HttpPost httpPost = new HttpPost(ProjectUtils.getUrl() + "view/all/createItem/");
@@ -96,9 +97,53 @@ public class APIHttpTest extends BaseAPIHttpTest {  // Using Apache HttpClient
         }
     }
 
+    @Test(dependsOnMethods = "testCreatePipeline")
+    @Story("View")
+    @Description("Add List View for project")
+    public void testAddListViewForProject() throws IOException {
+        try (CloseableHttpClient httpClient = createHttpClientWithAllureLogging()) {
+            String query = "name=" + VIEW_NAME;
+            String payloadForProject = String.format(TestUtils.loadPayload("create-list-view.xml"), PIPELINE_NAME);
+
+            HttpPost httpPost = new HttpPost(ProjectUtils.getUrl() + "createView?" + query);
+
+            httpPost.setEntity(new StringEntity(payloadForProject));
+            httpPost.addHeader(HttpHeaders.CONTENT_TYPE, "application/xml ");
+            httpPost.addHeader(HttpHeaders.AUTHORIZATION, getBasicAuthWithToken());
+
+            try (CloseableHttpResponse response = httpClient.execute(httpPost)) {
+
+                Assert.assertEquals(response.getStatusLine().getStatusCode(), 200);
+                Assert.assertListContainsObject(
+                        getAllProjectViewNamesFromJsonResponseList(),
+                        VIEW_NAME,
+                        "View is not created");
+            }
+        }
+    }
+
+    @Test(dependsOnMethods = "testAddListViewForProject")
+    @Story("View")
+    @Description("Delete List View")
+    public void testDeleteListView() throws IOException {
+        try (CloseableHttpClient httpClient = createHttpClientWithAllureLogging()) {
+            HttpPost httpPost = new HttpPost(String.format(ProjectUtils.getUrl() + "view/%s/doDelete/", VIEW_NAME));
+            httpPost.addHeader(HttpHeaders.AUTHORIZATION, getBasicAuthWithToken());
+
+            try (CloseableHttpResponse response = httpClient.execute(httpPost)) {
+
+                Assert.assertEquals(response.getStatusLine().getStatusCode(), 302);
+                Assert.assertListNotContainsObject(
+                        getAllProjectViewNamesFromJsonResponseList(),
+                        VIEW_NAME,
+                        "View is not deleted");
+            }
+        }
+    }
+
+    @Test
     @Story("Pipeline project")
     @Description("Create Pipeline Project with valid name(XML")
-    @Test
     public void testCreatePipelineXML() throws IOException {
         try (CloseableHttpClient httpClient = createHttpClientWithAllureLogging()) {
             String queryString = "name=" + PIPELINE_NAME_BY_XML_CREATED;
@@ -120,9 +165,9 @@ public class APIHttpTest extends BaseAPIHttpTest {  // Using Apache HttpClient
         }
     }
 
+    @Test(dependsOnMethods = "testCreatePipelineXML")
     @Story("Pipeline project")
     @Description("Add description to Pipeline project")
-    @Test(dependsOnMethods = "testCreatePipelineXML")
     public void testAddDescription() throws IOException {
         final String description = "This is a description";
 
@@ -173,7 +218,7 @@ public class APIHttpTest extends BaseAPIHttpTest {  // Using Apache HttpClient
         }
     }
 
-    @Test(dependsOnMethods = "testCreatePipeline")
+    @Test(dependsOnMethods = "testDeleteListView")
     @Story("Pipeline project")
     @Description("Delete project by HttpPost request")
     public void testDeletePipelineByHttpPost() throws IOException {
@@ -192,6 +237,10 @@ public class APIHttpTest extends BaseAPIHttpTest {  // Using Apache HttpClient
 
             try (CloseableHttpResponse response = httpClient.execute(httpGet)) {
                 Assert.assertEquals(response.getStatusLine().getStatusCode(), 404);
+                Assert.assertListNotContainsObject(
+                        getAllProjectNamesFromJsonResponseList(),
+                        PIPELINE_NAME,
+                        "Project is not deleted");
             }
         }
     }
@@ -201,7 +250,7 @@ public class APIHttpTest extends BaseAPIHttpTest {  // Using Apache HttpClient
     @Description("003 Create Folder with valid name (XML)")
     public void testCreateFolderWithValidNameXML() throws IOException {
         try (CloseableHttpClient httpClient = createHttpClientWithAllureLogging()) {
-            String queryString = "name=" + TestUtils.encodeParam(FOLDER_NAME_BY_XML_CREATED);
+            String queryString = "name=" + FOLDER_NAME_BY_XML_CREATED;
 
             HttpPost httpPost = new HttpPost(ProjectUtils.getUrl() + "/view/all/createItem?" + queryString);
 
@@ -245,12 +294,12 @@ public class APIHttpTest extends BaseAPIHttpTest {  // Using Apache HttpClient
     @Story("Folder")
     @Description("002 Create Folder with valid name")
     public void testCreateFolderWithValidName() throws IOException {
-        try(CloseableHttpClient httpClient = createHttpClientWithAllureLogging()) {
+        try (CloseableHttpClient httpClient = createHttpClientWithAllureLogging()) {
 
             HttpPost postCreateItem = new HttpPost(ProjectUtils.getUrl() + "createItem");
             postCreateItem.addHeader(HttpHeaders.AUTHORIZATION, getBasicAuthWithToken());
             postCreateItem.addHeader(HttpHeaders.CONTENT_TYPE, "application/x-www-form-urlencoded");
-            postCreateItem.setEntity(new StringEntity("name="+ FOLDER_NAME +"&mode=" + FOLDER_MODE));
+            postCreateItem.setEntity(new StringEntity("name=" + FOLDER_NAME + "&mode=" + FOLDER_MODE));
 
             Allure.step("Send POST request -> Create Folder");
             try (CloseableHttpResponse postCreateItemResponse = httpClient.execute(postCreateItem)) {
@@ -264,12 +313,12 @@ public class APIHttpTest extends BaseAPIHttpTest {  // Using Apache HttpClient
             getItemByName.addHeader(HttpHeaders.AUTHORIZATION, getBasicAuthWithToken());
             try (CloseableHttpResponse getItemByNameResponse = httpClient.execute(getItemByName)) {
                 Allure.step("Expected result: Created element is found by name");
-                Assert.assertEquals(getItemByNameResponse.getStatusLine().getStatusCode(),200);
+                Assert.assertEquals(getItemByNameResponse.getStatusLine().getStatusCode(), 200);
 
                 String jsonResponse = EntityUtils.toString(getItemByNameResponse.getEntity());
 
                 Allure.step(String.format("Expected result: fullName is '%s' response", FOLDER_NAME));
-                Assert.assertTrue(jsonResponse.contains(String.format("\"fullName\":\"%s\"",FOLDER_NAME)),"Folder not found");
+                Assert.assertTrue(jsonResponse.contains(String.format("\"fullName\":\"%s\"", FOLDER_NAME)), "Folder not found");
                 Allure.step("Expected result: description is null");
                 Assert.assertTrue(jsonResponse.contains("\"description\":null"));
             }
@@ -280,12 +329,12 @@ public class APIHttpTest extends BaseAPIHttpTest {  // Using Apache HttpClient
     @Story("Folder")
     @Description("008 Rename Folder")
     public void testRenameFolder() throws IOException {
-        try(CloseableHttpClient httpClient = createHttpClientWithAllureLogging()) {
+        try (CloseableHttpClient httpClient = createHttpClientWithAllureLogging()) {
             HttpPost postRenameItem = new HttpPost(ProjectUtils.getUrl() +
-                    String.format("job/%s/confirmRename",TestUtils.encodeParam(FOLDER_NAME)));
+                    String.format("job/%s/confirmRename", TestUtils.encodeParam(FOLDER_NAME)));
             postRenameItem.addHeader(HttpHeaders.AUTHORIZATION, getBasicAuthWithToken());
             postRenameItem.addHeader(HttpHeaders.CONTENT_TYPE, "application/x-www-form-urlencoded");
-            postRenameItem.setEntity(new StringEntity("newName="+ TestUtils.encodeParam(FOLDER_NEW_NAME)));
+            postRenameItem.setEntity(new StringEntity("newName=" + TestUtils.encodeParam(FOLDER_NEW_NAME)));
 
             Allure.step("Send POST request -> Rename Folder");
             try (CloseableHttpResponse postRenameItemResponse = httpClient.execute(postRenameItem)) {
@@ -303,7 +352,7 @@ public class APIHttpTest extends BaseAPIHttpTest {  // Using Apache HttpClient
     @Description("007 Add Description to Folder")
     public void testAddDescriptionToFolder() throws IOException {
         String description = "Add description to folder!";
-        try(CloseableHttpClient httpClient = createHttpClientWithAllureLogging()) {
+        try (CloseableHttpClient httpClient = createHttpClientWithAllureLogging()) {
 
             HttpPost postCreateItem = new HttpPost(ProjectUtils.getUrl() + "createItem");
             postCreateItem.addHeader(HttpHeaders.AUTHORIZATION, getBasicAuthWithToken());
