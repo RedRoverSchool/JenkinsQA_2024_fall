@@ -21,7 +21,7 @@ public class Specifications {
 
         return new RequestSpecBuilder()
                 .setAuth(preemptive().basic(ProjectUtils.getUserName(), ProjectUtils.getPassword()))
-                .setBaseUri(ProjectUtils.getUrl())
+                .setBaseUri(RestAssured.baseURI)
                 .log(LogDetail.ALL)
                 .build();
     }
