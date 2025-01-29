@@ -712,7 +712,21 @@ public class APIHttpTest extends BaseAPIHttpTest {  // Using Apache HttpClient
                 Allure.step(String.format("Expected result: Field '_class': %s", MULTICONFIGURATION_MODE));
                 Assert.assertEquals(projectResponse.get_class(), MULTICONFIGURATION_MODE);
             }
-        }
 
+            Allure.step("Send GET request -> Get project list from Dashboard");
+            HttpGet getItemList = new HttpGet(ProjectUtils.getUrl() + "api/json");
+            getItemList.addHeader(HttpHeaders.AUTHORIZATION, getBasicAuthWithToken());
+
+            try (CloseableHttpResponse getItemListResponse = httpClient.execute(getItemList)) {
+                String getItemListResponseBody = EntityUtils.toString(getItemListResponse.getEntity());
+                ProjectListResponse projectListResponse = new Gson().fromJson(getItemListResponseBody, ProjectListResponse.class);
+
+                boolean findFolderNameInProjectList = projectListResponse.getJobs()
+                        .stream().anyMatch(project -> project.getName().equals(MULTICONFIGURATION_NAME));
+
+                Allure.step("Expected result: Project name found in the list");
+                Assert.assertTrue(findFolderNameInProjectList, "Project name was not found in the list");
+            }
+        }
     }
 }
