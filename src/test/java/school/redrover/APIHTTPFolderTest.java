@@ -8,7 +8,7 @@ import io.qameta.allure.Epic;
 import io.qameta.allure.Story;
 import org.testng.Assert;
 import org.testng.annotations.Test;
-import school.redrover.model.FolderResponse;
+import school.redrover.model.ProjectResponse;
 import school.redrover.model.ProjectListResponse;
 import school.redrover.runner.BaseAPIHttpTest;
 import school.redrover.runner.ProjectUtils;
@@ -22,7 +22,6 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
-import java.util.List;
 
 @Epic("Http API Requests")
 public class APIHTTPFolderTest extends BaseAPIHttpTest {
@@ -79,14 +78,14 @@ public class APIHTTPFolderTest extends BaseAPIHttpTest {
         Allure.step("Expected result: Created element is found by name");
         Assert.assertEquals(getResponse.statusCode(), 200);
 
-        FolderResponse folderResponse = new Gson().fromJson(body, FolderResponse.class);
+        ProjectResponse projectResponse = new Gson().fromJson(body, ProjectResponse.class);
         Allure.step(String.format("Expected result: fullName is '%s' response", FOLDER_NAME));
-        Assert.assertEquals(folderResponse.getFullName(), FOLDER_NAME);
+        Assert.assertEquals(projectResponse.getFullName(), FOLDER_NAME);
 
         Allure.step("Expected result: description is null");
-        Assert.assertNull(folderResponse.getDescription());
+        Assert.assertNull(projectResponse.getDescription());
 
-        Assert.assertEquals(folderResponse.get_class(),FOLDER_CREATE_MODE);
+        Assert.assertEquals(projectResponse.get_class(),FOLDER_CREATE_MODE);
     }
 
     @Test(dependsOnMethods = "testCreateFolderWithValidName")
@@ -167,9 +166,9 @@ public class APIHTTPFolderTest extends BaseAPIHttpTest {
         HttpResponse<String> getItemByNameResponse = httpClient.send(getItemByNameRequest, HttpResponse.BodyHandlers.ofString());
         String body = getItemByNameResponse.body();
 
-        FolderResponse folderResponse = new Gson().fromJson(body, FolderResponse.class);
+        ProjectResponse projectResponse = new Gson().fromJson(body, ProjectResponse.class);
         Allure.step("(ERR)Expected result: Response body contains 'description: null' for folder");
-        Assert.assertNull(folderResponse.getDescription());
+        Assert.assertNull(projectResponse.getDescription());
 
         HttpRequest deleteRequest = HttpRequest.newBuilder()
                 .uri(new URI(getDeleteItemURL(FOLDER_NAME)))

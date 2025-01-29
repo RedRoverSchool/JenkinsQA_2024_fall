@@ -15,10 +15,9 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
-import org.json.JSONObject;
 import org.testng.Assert;
 import org.testng.annotations.Test;
-import school.redrover.model.FolderResponse;
+import school.redrover.model.ProjectResponse;
 import school.redrover.model.ProjectListResponse;
 import school.redrover.runner.BaseAPIHttpTest;
 import school.redrover.runner.ProjectUtils;
@@ -27,7 +26,6 @@ import school.redrover.runner.TestUtils;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 @Epic("Http API  Requests")
@@ -45,6 +43,8 @@ public class APIHttpTest extends BaseAPIHttpTest {  // Using Apache HttpClient
     private static final String MULTIBRANCH_PIPELINE_NAME_XML = "MultibranchPipelineXML";
     private static final String VIEW_NAME = "ViewName";
     private static final String API_JSON_URL = "api/json?pretty=true";
+    private static final String MULTICONFIGURATION_NAME = "MultiConfigurationProject";
+    private static final String MULTICONFIGURATION_MODE = "hudson.matrix.MatrixProject";
 
     private List<String> getProjectNamesFromJsonResponseList(String url, String jsonArrayKey) throws IOException {
         try (CloseableHttpClient httpClient = createHttpClientWithAllureLogging()) {
@@ -306,13 +306,13 @@ public class APIHttpTest extends BaseAPIHttpTest {  // Using Apache HttpClient
             try (CloseableHttpResponse response = httpClient.execute(httpGet)) {
                 String responseBody = EntityUtils.toString(response.getEntity());
 
-                FolderResponse folderResponse = new Gson().fromJson(responseBody, FolderResponse.class);
+                ProjectResponse projectResponse = new Gson().fromJson(responseBody, ProjectResponse.class);
 
                 Allure.step("Expected result: Status code is 200");
                 Assert.assertEquals(response.getStatusLine().getStatusCode(), 200);
 
                 Allure.step("Expected result: fullName in json is " + FOLDER_NAME_BY_XML_CREATED);
-                Assert.assertEquals(folderResponse.getFullName(), FOLDER_NAME_BY_XML_CREATED, "Folder didn't find");
+                Assert.assertEquals(projectResponse.getFullName(), FOLDER_NAME_BY_XML_CREATED, "Folder didn't find");
 
                 Allure.step("Send GET request -> Get project list from Dashboard");
                 HttpGet getItemList = new HttpGet(ProjectUtils.getUrl() + "api/json");
@@ -358,14 +358,14 @@ public class APIHttpTest extends BaseAPIHttpTest {  // Using Apache HttpClient
                     Assert.assertEquals(getItemByNameResponse.getStatusLine().getStatusCode(), 200);
 
                     String jsonResponse = EntityUtils.toString(getItemByNameResponse.getEntity());
-                    FolderResponse folderResponse = new Gson().fromJson(jsonResponse, FolderResponse.class);
+                    ProjectResponse projectResponse = new Gson().fromJson(jsonResponse, ProjectResponse.class);
 
                     Allure.step(String.format("Expected result: fullName is '%s' response", FOLDER_NAME));
-                    Assert.assertEquals(folderResponse.getFullName(), FOLDER_NAME, "Folder didn't find");
+                    Assert.assertEquals(projectResponse.getFullName(), FOLDER_NAME, "Folder didn't find");
                     Allure.step("Expected result: description is null");
-                    Assert.assertNull(folderResponse.getDescription());
+                    Assert.assertNull(projectResponse.getDescription());
                     Allure.step(String.format("Expected result: Field '_class': %s", FOLDER_MODE));
-                    Assert.assertEquals(folderResponse.get_class(), FOLDER_MODE);
+                    Assert.assertEquals(projectResponse.get_class(), FOLDER_MODE);
 
                     Allure.step("Send GET request -> Get project list from Dashboard");
                     HttpGet getItemList = new HttpGet(ProjectUtils.getUrl() + "api/json");
@@ -446,10 +446,10 @@ public class APIHttpTest extends BaseAPIHttpTest {  // Using Apache HttpClient
 
                 String jsonResponse = EntityUtils.toString(getItemByNameResponse.getEntity());
 
-                FolderResponse folderResponse = new Gson().fromJson(jsonResponse, FolderResponse.class);
+                ProjectResponse projectResponse = new Gson().fromJson(jsonResponse, ProjectResponse.class);
 
                 Allure.step(String.format("(ERR) Expected result: description is '%s'",description));
-                Assert.assertNull(folderResponse.getDescription());
+                Assert.assertNull(projectResponse.getDescription());
 
             }
 
@@ -676,5 +676,43 @@ public class APIHttpTest extends BaseAPIHttpTest {  // Using Apache HttpClient
                 Assert.assertListNotContainsObject(getAllProjectNamesFromJsonResponseList(), MULTIBRANCH_PIPELINE_NAME_XML, "The project is not deleted");
             }
         }
+    }
+
+    @Test
+    @Story("Multi-Configuration project")
+    @Description("Create Multi-Configuration project with valid name")
+    public void testCreateMultiConfiguration() throws IOException {
+        try (CloseableHttpClient httpClient = createHttpClientWithAllureLogging()) {
+
+            HttpPost postCreateItem = new HttpPost(getCreateItemURL());
+            postCreateItem.addHeader(HttpHeaders.AUTHORIZATION, getBasicAuthWithToken());
+            postCreateItem.addHeader(HttpHeaders.CONTENT_TYPE, "application/x-www-form-urlencoded");
+            postCreateItem.setEntity(new StringEntity(getCreateItemBody(MULTICONFIGURATION_NAME, MULTICONFIGURATION_MODE)));
+
+            try (CloseableHttpResponse postCreateItemResponse = httpClient.execute(postCreateItem)) {
+                Allure.step("Expected result: Successful item creation. Status code 302");
+                Assert.assertEquals(postCreateItemResponse.getStatusLine().getStatusCode(), 302);
+            }
+
+            Allure.step("Send GET request -> Get item by name");
+            HttpGet getItemByName = new HttpGet(getItemByNameURL(MULTICONFIGURATION_NAME));
+            getItemByName.addHeader(HttpHeaders.AUTHORIZATION, getBasicAuthWithToken());
+
+            try (CloseableHttpResponse getItemByNameResponse = httpClient.execute(getItemByName)) {
+                Allure.step("Expected result: Created element is found by name");
+                Assert.assertEquals(getItemByNameResponse.getStatusLine().getStatusCode(), 200);
+
+                String jsonResponse = EntityUtils.toString(getItemByNameResponse.getEntity());
+                ProjectResponse projectResponse = new Gson().fromJson(jsonResponse, ProjectResponse.class);
+
+                Allure.step(String.format("Expected result: fullName is '%s' response", MULTICONFIGURATION_NAME));
+                Assert.assertEquals(projectResponse.getFullName(), MULTICONFIGURATION_NAME, "Folder didn't find");
+                Allure.step("Expected result: description is null");
+                Assert.assertNull(projectResponse.getDescription());
+                Allure.step(String.format("Expected result: Field '_class': %s", MULTICONFIGURATION_MODE));
+                Assert.assertEquals(projectResponse.get_class(), MULTICONFIGURATION_MODE);
+            }
+        }
+
     }
 }

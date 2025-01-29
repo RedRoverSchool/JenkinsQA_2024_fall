@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class FolderResponse {
+public class ProjectResponse {
     private String _class;
     private String description;
     private String displayName;
