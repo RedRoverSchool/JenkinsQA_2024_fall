@@ -8,13 +8,12 @@ import io.restassured.response.Response;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import school.redrover.model.FreestyleResponse;
-import school.redrover.runner.BaseApiTest;
-import school.redrover.runner.ProjectUtils;
-import school.redrover.runner.Specifications;
-import school.redrover.runner.TestUtils;
+import school.redrover.runner.*;
 
 import static io.restassured.RestAssured.given;
 import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchema;
+import static school.redrover.runner.Specifications.installSpecification;
+import static school.redrover.runner.TestUtils.loadPayload;
 
 @Epic("API")
 public class FreestyleProjectApiTest extends BaseApiTest {
@@ -24,23 +23,20 @@ public class FreestyleProjectApiTest extends BaseApiTest {
     @Test
     @Feature("Freestyle project")
     @Description("001 Create freestyle project with valid name")
-    public void testCreateFreestyleProject() {
-        Specifications.installSpecification(Specifications.authRequestSpec(), Specifications.authResponseSpec(200));
+    public void testCreateFreestyleProjectAndGetByName() {
+        installSpecification(Specifications.authRequestSpec(), Specifications.authResponseSpec(200));
 
-        String payload = TestUtils.loadPayload("create-empty-freestyle-project.xml");
+        stubEndpoints(PROJECT_NAME, WireMockStubs::stubCreateProject, WireMockStubs::stubGetProjectByName);
 
         given()
-                .queryParams("name", PROJECT_NAME)
+                .queryParam("name", PROJECT_NAME)
                 .contentType(ContentType.XML)
-                .body(payload)
-                .baseUri(ProjectUtils.getUrl())
+                .body(loadPayload("create-empty-freestyle-project.xml"))
                 .when()
                 .post("createItem")
                 .then();
 
         Response response = given().basePath("job/" + PROJECT_NAME)
-                .body(payload)
-                .baseUri(ProjectUtils.getUrl())
                 .when()
                 .get("api/json")
                 .then()
@@ -55,4 +51,5 @@ public class FreestyleProjectApiTest extends BaseApiTest {
         Assert.assertNull(freestyleResponse.getDescription());
         Assert.assertEquals(freestyleResponse.getClassField(), "hudson.model.FreeStyleProject");
     }
+
 }
