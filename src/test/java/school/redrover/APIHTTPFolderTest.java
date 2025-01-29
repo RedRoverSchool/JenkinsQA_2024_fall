@@ -8,6 +8,8 @@ import io.qameta.allure.Epic;
 import io.qameta.allure.Story;
 import org.testng.Assert;
 import org.testng.annotations.Test;
+import school.redrover.model.FolderResponse;
+import school.redrover.model.ProjectListResponse;
 import school.redrover.runner.BaseAPIHttpTest;
 import school.redrover.runner.ProjectUtils;
 import school.redrover.runner.TestUtils;
@@ -30,94 +32,22 @@ public class APIHTTPFolderTest extends BaseAPIHttpTest {
     private static final String FOLDER_NEW_NAME = "FolderNewName";
     private static final String DESCRIPTION = "Add description to rename folder!";
 
+    private String getCreateFolderURL() {return ProjectUtils.getUrl() + "createItem";}
 
-    private static final class Folder {
-        private String _class;
-        private String description;
-        private String displayName;
-        private String fullName;
-        private String url;
-    }
+    private String getItemByNameURL(String name) {return ProjectUtils.getUrl() + "job/" +
+                URLEncoder.encode(name, StandardCharsets.UTF_8) + "/api/json";}
 
-    private static final class Project {
-        private String _class;
-        private String name;
-        private String url;
-        private String color;
+    private String getItemListURL() {return ProjectUtils.getUrl() + "api/json";}
 
-        public Project(String _class, String url, String color, String  name) {
-            this._class = _class;
-            this.url = url;
-            this.color = color;
-            this.name = name;
-        }
+    private String getDeleteItemURL(String name) {return String.format(ProjectUtils.getUrl() + "job/%s/", name);}
 
-        public String get_class() {
-            return _class;
-        }
-        public String getName() {
-            return name;
-        }
-        public String getUrl() {
-            return url;
-        }
-        public String getColor() {
-            return color;
-        }
-    }
+    private String getRenameItemURL(String name) {return ProjectUtils.getUrl() + String.format("job/%s/confirmRename",name);}
 
-    private static final class Projects {
-        private String _class;
-        private List<Project> jobs;
+    private String getAddDescriptionURL(String name) {return ProjectUtils.getUrl() + String.format("job/%s/submitDescription", name);}
+    private String getCreateFolderBody(String name, String mode) {return "name="+ name +"&mode=" + mode;}
+    private String getRenameFolderBody(String name) {return "newName=" + name;}
 
-        public Projects(String _class, List<Project> jobs) {
-            this._class = _class;
-            this.jobs = jobs;
-        }
-
-        public String get_class() {
-            return _class;
-        }
-
-        public List<Project> getJobs() {
-            return jobs;
-        }
-    }
-
-    private String getCreateFolderURL() {
-        return ProjectUtils.getUrl() + "createItem";
-    }
-
-    private String getItemByNameURL(String name) {
-        return ProjectUtils.getUrl() + "job/" +
-                URLEncoder.encode(name, StandardCharsets.UTF_8) + "/api/json";
-    }
-
-    private String getItemListURL() {
-        return ProjectUtils.getUrl() + "api/json";
-    }
-
-    private String getDeleteItemURL(String name) {
-        return String.format(ProjectUtils.getUrl() + "job/%s/", name);
-    }
-
-    private String getRenameItemURL(String name) {
-        return ProjectUtils.getUrl() + String.format("job/%s/confirmRename",name);
-    }
-
-    private String getAddDescriptionURL(String name) {
-        return ProjectUtils.getUrl() + String.format("job/%s/submitDescription", name);
-    }
-    private String getCreateFolderBody(String name, String mode) {
-        return "name="+ name +"&mode=" + mode;
-    }
-    private String getRenameFolderBody(String name) {
-        return "newName=" + name;
-    }
-
-    private String getAddDescriptionBody(String description) {
-        return "description=" + TestUtils.encodeParam(description);
-    }
+    private String getAddDescriptionBody(String description) {return "description=" + TestUtils.encodeParam(description);}
 
     @Test
     @Story("Folder")
@@ -149,12 +79,14 @@ public class APIHTTPFolderTest extends BaseAPIHttpTest {
         Allure.step("Expected result: Created element is found by name");
         Assert.assertEquals(getResponse.statusCode(), 200);
 
-        Folder folder = new Gson().fromJson(body, Folder.class);
+        FolderResponse folderResponse = new Gson().fromJson(body, FolderResponse.class);
         Allure.step(String.format("Expected result: fullName is '%s' response", FOLDER_NAME));
-        Assert.assertEquals(folder.fullName, FOLDER_NAME);
+        Assert.assertEquals(folderResponse.getFullName(), FOLDER_NAME);
 
         Allure.step("Expected result: description is null");
-        Assert.assertNull(folder.description);
+        Assert.assertNull(folderResponse.getDescription());
+
+        Assert.assertEquals(folderResponse.get_class(),FOLDER_CREATE_MODE);
     }
 
     @Test(dependsOnMethods = "testCreateFolderWithValidName")
@@ -185,14 +117,15 @@ public class APIHTTPFolderTest extends BaseAPIHttpTest {
         Allure.step("Send GET request -> Get project list from Dashboard");
         HttpResponse<String> getItemListResponse = httpClient.send(getItemList, HttpResponse.BodyHandlers.ofString());
         String body = getItemListResponse.body();
-        Projects projects = new Gson().fromJson(body, Projects.class);
-        boolean findNewProjectNameInList = projects.getJobs().stream()
+
+        ProjectListResponse projectListResponse = new Gson().fromJson(body, ProjectListResponse.class);
+        boolean findNewProjectNameInList = projectListResponse.getJobs().stream()
                 .anyMatch(project -> project.getName().equals(FOLDER_NEW_NAME));
 
-        boolean findOriginProjectNameInList = projects.getJobs().stream()
+        boolean findOriginProjectNameInList = projectListResponse.getJobs().stream()
                 .anyMatch(project -> project.getName().equals(FOLDER_NAME));
 
-        Assert.assertTrue(findNewProjectNameInList, "project name was not found in the list");
+        Assert.assertTrue(findNewProjectNameInList, "Project name was not found in the list");
         Assert.assertFalse(findOriginProjectNameInList, "Project name was found in the list");
     }
 
@@ -234,8 +167,9 @@ public class APIHTTPFolderTest extends BaseAPIHttpTest {
         HttpResponse<String> getItemByNameResponse = httpClient.send(getItemByNameRequest, HttpResponse.BodyHandlers.ofString());
         String body = getItemByNameResponse.body();
 
-        Allure.step("Expected result: Response body contains 'description: null' for folder");
-        Assert.assertTrue(body.contains("\"description\":null"), "FolderUn");
+        FolderResponse folderResponse = new Gson().fromJson(body, FolderResponse.class);
+        Allure.step("(ERR)Expected result: Response body contains 'description: null' for folder");
+        Assert.assertNull(folderResponse.getDescription());
 
         HttpRequest deleteRequest = HttpRequest.newBuilder()
                 .uri(new URI(getDeleteItemURL(FOLDER_NAME)))
