@@ -1,5 +1,5 @@
 <hudson.model.ListView>
-    <name>viewww</name>
+    <name></name>
     <filterExecutors>false</filterExecutors>
     <filterQueue>false</filterQueue>
     <properties class="hudson.model.View$PropertyList"/>
