@@ -6,8 +6,8 @@ import io.qameta.allure.Epic;
 import io.qameta.allure.Story;
 import org.openqa.selenium.WebElement;
 import org.testng.Assert;
-import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
+import school.redrover.data.TestDataProvider;
 import school.redrover.page.home.HomePage;
 import school.redrover.runner.BaseTest;
 import school.redrover.runner.TestUtils;
@@ -19,16 +19,6 @@ public class MultibranchPipelineTest extends BaseTest {
 
     private static final String MULTIBRANCH_PIPELINE_NAME = "MultibranchName";
     private static final String MULTIBRANCH_PIPELINE_NAME2 = "NewMultibranchName";
-
-    @DataProvider
-    public Object[][] providerUnsafeCharacters() {
-
-        return new Object[][]{
-                {"\\"}, {"]"}, {":"}, {"#"}, {"&"}, {"?"}, {"!"}, {"@"},
-                {"$"}, {"%"}, {"^"}, {"*"}, {"|"}, {"/"}, {"<"}, {">"},
-                {"["}, {";"}
-        };
-    }
 
     @Test
     @Epic("00 New Item")
@@ -207,7 +197,7 @@ public class MultibranchPipelineTest extends BaseTest {
         Assert.assertListContainsObject(jobNames, MULTIBRANCH_PIPELINE_NAME2, MULTIBRANCH_PIPELINE_NAME2);
     }
 
-    @Test(dataProvider = "providerUnsafeCharacters")
+    @Test(dataProvider = "providerUnsafeCharacters", dataProviderClass = TestDataProvider.class)
     @Epic("00 New Item")
     @Story("US_00.005 Create Multibranch Pipeline")
     @Description("TC_00.005.06 Create Multibranch Pipeline with unsafe characters in name")

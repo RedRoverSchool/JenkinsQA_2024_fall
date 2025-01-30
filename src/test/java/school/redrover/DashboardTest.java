@@ -5,8 +5,8 @@ import io.qameta.allure.Description;
 import io.qameta.allure.Epic;
 import io.qameta.allure.Story;
 import org.testng.Assert;
-import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
+import school.redrover.data.TestDataProvider;
 import school.redrover.page.home.HomePage;
 import school.redrover.runner.BaseTest;
 import school.redrover.runner.TestUtils;
@@ -85,16 +85,7 @@ public class DashboardTest extends BaseTest {
                 .gotoHomePage();
     }
 
-    @DataProvider
-    public Object[][] projectNameProvider() {
-        return new Object[][]{
-                {"FPipelineProject"},
-                {"APipelineProject"},
-                {"ZPipelineProject"}
-        };
-    }
-
-    @Test(dataProvider = "projectNameProvider")
+    @Test(dataProvider = "projectNameProvider", dataProviderClass = TestDataProvider.class)
     @Story("US_16.001 Sort Items")
     @Description("TC_16.001.01 Verify that items are sorted by Name in ascending order by default. Preconditions")
     public void testCreate(String projectName) {

@@ -12,11 +12,14 @@ import io.restassured.specification.ResponseSpecification;
 import java.util.List;
 
 import static io.restassured.RestAssured.preemptive;
+import static org.hamcrest.Matchers.lessThan;
+import static school.redrover.runner.BaseApiTest.cookieName;
+import static school.redrover.runner.BaseApiTest.cookieValue;
 
 public class TestApiUtils {
 
     public static RequestSpecification baseRequestSpec() {
-        LogConfig logConfig = LogConfig.logConfig().blacklistHeaders(List.of("Authorization", "Cookie", "Jenkins-Crumb"));
+        LogConfig logConfig = LogConfig.logConfig().blacklistHeaders(List.of("Authorization", "Jenkins-Crumb"));
         RestAssured.config = RestAssured.config().logConfig(logConfig);
 
         return new RequestSpecBuilder()
@@ -33,13 +36,14 @@ public class TestApiUtils {
                         .setRequestTemplate("request.ftl")
                         .setResponseTemplate("response.ftl"))
                 .addHeader(BaseApiTest.crumbIssuerResponse.getCrumbRequestField(), BaseApiTest.crumbIssuerResponse.getCrumb())
-                .addHeader("Cookie", BaseApiTest.cookieName + "=" + BaseApiTest.cookieValue)
+                .addHeader("Cookie", cookieName + "=" + cookieValue)
                 .build();
     }
 
     public static ResponseSpecification responseSpec(Integer statusCode) {
         return new ResponseSpecBuilder()
                 .expectStatusCode(statusCode)
+                .expectResponseTime(lessThan(500L))
                 .log(LogDetail.ALL)
                 .build();
     }
