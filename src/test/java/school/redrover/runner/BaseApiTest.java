@@ -11,7 +11,7 @@ import school.redrover.model.CrumbIssuerResponse;
 import java.util.Map;
 import java.util.function.Consumer;
 
-import static io.restassured.RestAssured.*;
+import static io.restassured.RestAssured.given;
 
 public abstract class BaseApiTest {
 
@@ -31,7 +31,7 @@ public abstract class BaseApiTest {
         RestAssured.baseURI = PROD_BASE_URI;
 
         Map<String, String> cookies = given()
-                .spec(Specifications.baseRequestSpec())
+                .spec(TestApiUtils.baseRequestSpec())
                 .when()
                 .get()
                 .then()
@@ -42,12 +42,12 @@ public abstract class BaseApiTest {
 
         crumbIssuerResponse = given()
                 .filter(new CrumbHidingFilter())
-                .spec(Specifications.baseRequestSpec())
+                .spec(TestApiUtils.baseRequestSpec())
                 .header("Cookie", cookieName + "=" + cookieValue)
                 .when()
                 .get("crumbIssuer/api/json")
                 .then()
-                .spec(Specifications.baseResponseSpec(200))
+                .statusCode(200)
                 .extract().response().as(CrumbIssuerResponse.class);
 
         if ("qa".equalsIgnoreCase(ENV)) {
