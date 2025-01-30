@@ -11,6 +11,7 @@ import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.message.BasicNameValuePair;
@@ -726,6 +727,33 @@ public class APIHttpTest extends BaseAPIHttpTest {  // Using Apache HttpClient
 
                 Allure.step("Expected result: Project name found in the list");
                 Assert.assertTrue(findFolderNameInProjectList, "Project name was not found in the list");
+            }
+        }
+    }
+
+    @Test
+    @Story("Folder creation")
+    @Description("Create a new folder in Jenkins")
+    public void testCreateFolder() throws IOException {
+        try (CloseableHttpClient httpClient = createHttpClientWithAllureLogging()) {
+            String folderName = "MyTestFolder";
+            String createFolderURL = getCreateItemURL() + "?name=" + folderName;
+
+            String xmlBody = String.format(TestUtils.loadPayload("create-empty-folder.xml"), folderName);
+
+            HttpPost httpPost = new HttpPost(createFolderURL);
+            httpPost.setEntity(new StringEntity(xmlBody, ContentType.APPLICATION_XML));
+            httpPost.addHeader(HttpHeaders.AUTHORIZATION, getBasicAuthWithToken());
+
+            Allure.step("Expected result: The folder creating process is done with 200 status");
+            try (CloseableHttpResponse response = httpClient.execute(httpPost)) {
+                Assert.assertEquals(response.getStatusLine().getStatusCode(), 200, "Folder creation failed");
+
+                Assert.assertListContainsObject(
+                        getAllProjectNamesFromJsonResponseList(),
+                        folderName,
+                        "The folder is not created"
+                );
             }
         }
     }
