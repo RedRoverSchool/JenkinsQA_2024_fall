@@ -14,8 +14,7 @@ import school.redrover.runner.TestUtils;
 
 import static io.restassured.RestAssured.given;
 import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchema;
-import static school.redrover.runner.TestApiUtils.authRequestSpec;
-import static school.redrover.runner.TestApiUtils.baseResponseSpec;
+import static school.redrover.runner.TestApiUtils.*;
 import static school.redrover.runner.TestUtils.loadPayload;
 
 @Epic("API")
@@ -47,7 +46,7 @@ public class PipelineProjectApiTest extends BaseApiTest {
                 .when()
                 .post("createItem")
                 .then()
-                .spec(baseResponseSpec(400))
+                .spec(authResponseSpec(400))
                 .extract()
                 .response();
 
@@ -66,7 +65,7 @@ public class PipelineProjectApiTest extends BaseApiTest {
                 .when()
                 .post("createItem")
                 .then()
-                .spec(baseResponseSpec(200))
+                .spec(authResponseSpec(200))
                 .extract()
                 .response();
 
@@ -83,7 +82,7 @@ public class PipelineProjectApiTest extends BaseApiTest {
                 .when()
                 .get("api/json")
                 .then()
-                .spec(baseResponseSpec(200))
+                .spec(authResponseSpec(200))
                 .body(matchesJsonSchema(TestUtils.loadSchema("pipeline-project-schema.json")))
                 .extract().response();
 
