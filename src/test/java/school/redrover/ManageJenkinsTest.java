@@ -6,8 +6,8 @@ import io.qameta.allure.Epic;
 import io.qameta.allure.Story;
 import org.openqa.selenium.WebElement;
 import org.testng.Assert;
-import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
+import school.redrover.data.TestDataProvider;
 import school.redrover.page.home.HomePage;
 import school.redrover.page.manage.AppearancePage;
 import school.redrover.page.systemConfiguration.PluginsPage;
@@ -18,13 +18,6 @@ import java.util.List;
 
 @Epic("09 Manage Jenkins")
 public class ManageJenkinsTest extends BaseTest {
-
-    @DataProvider
-    public Object[][] provideSystemConfigurationItems() {
-        return new Object[][]{
-                {"System"}, {"Tools"}, {"Plugins"}, {"Nodes"}, {"Clouds"}, {"Appearance"}
-        };
-    }
 
     @Test
     @Story("US_09.003 View 'Manage Jenkins' page > Redirection")
@@ -95,7 +88,7 @@ public class ManageJenkinsTest extends BaseTest {
         Assert.assertEquals(searchField, "Search settings");
     }
 
-    @Test(dataProvider = "provideSystemConfigurationItems")
+    @Test(dataProvider = "provideSystemConfigurationItems", dataProviderClass = TestDataProvider.class)
     @Story("US_09.001 Search settings")
     @Description("TC_09.001.07 Check search system configuration items")
     public void testSearchSystemConfigurationAllItemsAreFound(String systemConfigurationItem) {

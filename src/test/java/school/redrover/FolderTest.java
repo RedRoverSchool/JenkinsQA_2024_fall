@@ -5,10 +5,10 @@ import io.qameta.allure.Description;
 import io.qameta.allure.Epic;
 import io.qameta.allure.Story;
 import org.testng.Assert;
-import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
-import school.redrover.page.home.HomePage;
+import school.redrover.data.TestDataProvider;
 import school.redrover.page.folder.FolderProjectPage;
+import school.redrover.page.home.HomePage;
 import school.redrover.runner.BaseTest;
 import school.redrover.runner.TestUtils;
 
@@ -35,16 +35,6 @@ public class FolderTest extends BaseTest {
         return input.replace("&", "&amp;")
                 .replace("<", "&lt;")
                 .replace(">", "&gt;");
-    }
-
-    @DataProvider
-    public Object[][] providerUnsafeCharacters() {
-
-        return new Object[][]{
-                {"\\"}, {"]"}, {":"}, {"#"}, {"&"}, {"?"}, {"!"}, {"@"},
-                {"$"}, {"%"}, {"^"}, {"*"}, {"|"}, {"/"}, {"<"}, {">"},
-                {"["}, {";"}
-        };
     }
 
     @Test
@@ -651,7 +641,7 @@ public class FolderTest extends BaseTest {
         Assert.assertListNotContainsObject(projectList, FOLDER_NAME, "Folder is not deleted.");
     }
 
-    @Test(dataProvider = "providerUnsafeCharacters")
+    @Test(dataProvider = "providerUnsafeCharacters", dataProviderClass = TestDataProvider.class)
     @Story("US_04.001 Rename Folder")
     @Description("TC_04.001.06 Validate Error message, if New Folder Name contains special characters")
     public void testRenameFolderWithUnsafeCharactersInName(String unsafeCharacter) {

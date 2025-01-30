@@ -5,8 +5,8 @@ import io.qameta.allure.Description;
 import io.qameta.allure.Epic;
 import io.qameta.allure.Story;
 import org.testng.Assert;
-import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
+import school.redrover.data.TestDataProvider;
 import school.redrover.page.freestyle.FreestyleConfigPage;
 import school.redrover.page.freestyle.FreestyleProjectPage;
 import school.redrover.page.home.HomePage;
@@ -28,16 +28,6 @@ public class FreestyleProjectTest extends BaseTest {
         return input.replace("&", "&amp;")
                 .replace("<", "&lt;")
                 .replace(">", "&gt;");
-    }
-
-    @DataProvider
-    public Object[][] providerUnsafeCharacters() {
-
-        return new Object[][]{
-                {"\\"}, {"]"}, {":"}, {"#"}, {"&"}, {"?"}, {"!"}, {"@"},
-                {"$"}, {"%"}, {"^"}, {"*"}, {"|"}, {"/"}, {"<"}, {">"},
-                {"["}, {";"}
-        };
     }
 
     @Test
@@ -132,7 +122,7 @@ public class FreestyleProjectTest extends BaseTest {
         });
     }
 
-    @Test(dataProvider = "providerUnsafeCharacters")
+    @Test(dataProvider = "providerUnsafeCharacters", dataProviderClass = TestDataProvider.class)
     @Story("US_01.002 Rename Project")
     @Description("TC_01.002.02 Rename FreestyleProject with incorrect symbols")
     public void testRenameWithIncorrectSymbols(String unsafeCharacter) {
@@ -552,7 +542,7 @@ public class FreestyleProjectTest extends BaseTest {
         Assert.assertTrue(areAllConfirmationDialogOptionsPresent, "Some dialog options weren't found");
     }
 
-    @Test(dataProvider = "providerUnsafeCharacters")
+    @Test(dataProvider = "providerUnsafeCharacters", dataProviderClass = TestDataProvider.class)
     @Epic("00 New Item")
     @Story("US_00.001 Create Freestyle Project")
     @Description("TC_00.002.06 Validation that error message shown when invalid characters are entered in the projects name field")

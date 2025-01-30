@@ -6,8 +6,8 @@ import io.qameta.allure.Epic;
 import io.qameta.allure.Story;
 import org.openqa.selenium.WebElement;
 import org.testng.Assert;
-import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
+import school.redrover.data.TestDataProvider;
 import school.redrover.page.home.HomePage;
 import school.redrover.page.pipeline.PipelineConfigurePage;
 import school.redrover.page.pipeline.PipelineProjectPage;
@@ -40,15 +40,6 @@ public class PipelineProjectTest extends BaseTest {
             "Configure", "Delete Pipeline", "Stages", "Rename", "Pipeline Syntax");
     private final static List<String> BUILD_PERMALINK_LIST = List.of("Last build", "Last stable build", "Last successful build", "Last completed build");
 
-    @DataProvider
-    public Object[][] providerUnsafeCharacters() {
-
-        return new Object[][]{
-                {"\\"}, {"]"}, {":"}, {"#"}, {"&"}, {"?"}, {"!"}, {"@"},
-                {"$"}, {"%"}, {"^"}, {"*"}, {"|"}, {"/"}, {"<"}, {">"},
-                {"["}, {";"}
-        };
-    }
 
     @Test
     @Story("US_00.002 Create Pipeline Project")
@@ -97,7 +88,7 @@ public class PipelineProjectTest extends BaseTest {
         Assert.assertEquals(errorMessage, "» A job already exists with the name ‘%s’".formatted(PROJECT_NAME));
     }
 
-    @Test(dataProvider = "providerUnsafeCharacters")
+    @Test(dataProvider = "providerUnsafeCharacters", dataProviderClass = TestDataProvider.class)
     @Story("US_00.002 Create Pipeline Project")
     @Description("TC_00.002.03 Create Pipeline Project with unsafe characters in name via sidepanel")
     public void testCreateWithUnsafeCharactersInName(String unsafeCharacter) {
