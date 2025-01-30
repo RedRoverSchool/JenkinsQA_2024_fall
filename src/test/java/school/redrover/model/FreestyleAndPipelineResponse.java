@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class FreestyleResponse {
+public class FreestyleAndPipelineResponse {
     @JsonProperty("_class")
     private String classField;
     private Object description;

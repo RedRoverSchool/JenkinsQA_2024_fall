@@ -13,7 +13,7 @@ import java.util.List;
 
 import static io.restassured.RestAssured.preemptive;
 
-public class Specifications {
+public class TestApiUtils {
 
     public static RequestSpecification baseRequestSpec() {
         LogConfig logConfig = LogConfig.logConfig().blacklistHeaders(List.of("Authorization", "Cookie", "Jenkins-Crumb"));
@@ -37,22 +37,17 @@ public class Specifications {
                 .build();
     }
 
-    public static ResponseSpecification authResponseSpec(Integer statusCode) {
-        return new ResponseSpecBuilder()
-                .expectStatusCode(statusCode)
-                .log(LogDetail.ALL)
-                .build();
-    }
-
     public static ResponseSpecification baseResponseSpec(Integer statusCode) {
         return new ResponseSpecBuilder()
                 .expectStatusCode(statusCode)
                 .build();
     }
 
-    public static void installSpecification(RequestSpecification requestSpec, ResponseSpecification responseSpec) {
-        RestAssured.requestSpecification = requestSpec;
-        RestAssured.responseSpecification = responseSpec;
+    public static ResponseSpecification authResponseSpec(Integer statusCode) {
+        return new ResponseSpecBuilder()
+                .expectStatusCode(statusCode)
+                .log(LogDetail.ALL)
+                .build();
     }
 
 }
