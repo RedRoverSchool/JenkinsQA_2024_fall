@@ -26,7 +26,7 @@ public class TestApiUtils {
                 .build();
     }
 
-    public static RequestSpecification authRequestSpec() {
+    public static RequestSpecification requestSpec() {
         return new RequestSpecBuilder()
                 .addRequestSpecification(baseRequestSpec())
                 .addFilter(new AllureRestAssured()
@@ -37,13 +37,7 @@ public class TestApiUtils {
                 .build();
     }
 
-    public static ResponseSpecification baseResponseSpec(Integer statusCode) {
-        return new ResponseSpecBuilder()
-                .expectStatusCode(statusCode)
-                .build();
-    }
-
-    public static ResponseSpecification authResponseSpec(Integer statusCode) {
+    public static ResponseSpecification responseSpec(Integer statusCode) {
         return new ResponseSpecBuilder()
                 .expectStatusCode(statusCode)
                 .log(LogDetail.ALL)

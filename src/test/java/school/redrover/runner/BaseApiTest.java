@@ -47,7 +47,7 @@ public abstract class BaseApiTest {
                 .when()
                 .get("crumbIssuer/api/json")
                 .then()
-                .spec(TestApiUtils.baseResponseSpec(200))
+                .statusCode(200)
                 .extract().response().as(CrumbIssuerResponse.class);
 
         if ("qa".equalsIgnoreCase(ENV)) {

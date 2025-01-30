@@ -13,7 +13,7 @@ import school.redrover.runner.*;
 import static io.restassured.RestAssured.given;
 import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchema;
 import static school.redrover.runner.TestApiUtils.*;
-import static school.redrover.runner.TestApiUtils.authRequestSpec;
+import static school.redrover.runner.TestApiUtils.requestSpec;
 import static school.redrover.runner.TestUtils.loadPayload;
 
 @Epic("API")
@@ -29,22 +29,22 @@ public class FreestyleProjectApiTest extends BaseApiTest {
         stubEndpoints(PROJECT_NAME, WireMockStubs::stubCreateProject, WireMockStubs::stubGetProjectByName);
 
         given()
-                .spec(authRequestSpec())
+                .spec(requestSpec())
                 .queryParam("name", PROJECT_NAME)
                 .contentType(ContentType.XML)
                 .body(loadPayload("create-empty-freestyle-project.xml"))
                 .when()
                 .post("createItem")
                 .then()
-                .spec(authResponseSpec(200));
+                .spec(responseSpec(200));
 
         Response response = given()
-                .spec(authRequestSpec())
+                .spec(requestSpec())
                 .basePath("job/%s".formatted(PROJECT_NAME))
                 .when()
                 .get("api/json")
                 .then()
-                .spec(authResponseSpec(200))
+                .spec(responseSpec(200))
                 .body(matchesJsonSchema(TestUtils.loadSchema("freestyle-project-schema.json")))
                 .extract().response();
 

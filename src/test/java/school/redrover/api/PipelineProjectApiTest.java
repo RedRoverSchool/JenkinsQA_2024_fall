@@ -39,14 +39,14 @@ public class PipelineProjectApiTest extends BaseApiTest {
     public void testCreateProjectWithEmptyName() {
 
         Response response = given()
-                .spec(authRequestSpec())
+                .spec(requestSpec())
                 .queryParam("name", "")
                 .contentType(ContentType.XML)
                 .body(loadPayload("create-empty-pipeline-project.xml"))
                 .when()
                 .post("createItem")
                 .then()
-                .spec(authResponseSpec(400))
+                .spec(responseSpec(400))
                 .extract()
                 .response();
 
@@ -58,14 +58,14 @@ public class PipelineProjectApiTest extends BaseApiTest {
     public void testCreateProjectWithValidName(String projectName) {
 
         Response response = given()
-                .spec(authRequestSpec())
+                .spec(requestSpec())
                 .queryParam("name", projectName)
                 .contentType(ContentType.XML)
                 .body(loadPayload("create-empty-pipeline-project.xml"))
                 .when()
                 .post("createItem")
                 .then()
-                .spec(authResponseSpec(200))
+                .spec(responseSpec(200))
                 .extract()
                 .response();
 
@@ -77,12 +77,12 @@ public class PipelineProjectApiTest extends BaseApiTest {
     public void testGetProjectByName(String projectName) {
 
         Response response = given()
-                .spec(authRequestSpec())
+                .spec(requestSpec())
                 .basePath("job/%s".formatted(projectName))
                 .when()
                 .get("api/json")
                 .then()
-                .spec(authResponseSpec(200))
+                .spec(responseSpec(200))
                 .body(matchesJsonSchema(TestUtils.loadSchema("pipeline-project-schema.json")))
                 .extract().response();
 
