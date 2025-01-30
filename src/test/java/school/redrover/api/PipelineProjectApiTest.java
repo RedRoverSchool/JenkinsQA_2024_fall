@@ -51,9 +51,7 @@ public class PipelineProjectApiTest extends BaseApiTest {
                 .when()
                 .post("createItem")
                 .then()
-                .spec(responseSpec(200))
-                .extract()
-                .response();
+                .spec(responseSpec(200));
     }
 
     @Test(dependsOnMethods = "testCreateProjectWithValidName",
@@ -102,16 +100,14 @@ public class PipelineProjectApiTest extends BaseApiTest {
             dataProviderClass = TestDataProvider.class)
     @Description("013 Rename Pipeline project")
     public void testRenameProject(String oldName, String newName) {
-       given()
+        given()
                 .spec(requestSpec())
                 .contentType(ContentType.URLENC.withCharset("UTF-8"))
                 .queryParam("newName", newName)
                 .when()
                 .post("job/%s/doRename".formatted(oldName))
                 .then()
-                .spec(responseSpec(302))
-                .extract()
-                .response();
+                .spec(responseSpec(302));
     }
 
 }
