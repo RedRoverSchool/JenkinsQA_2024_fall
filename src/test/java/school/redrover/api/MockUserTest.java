@@ -1,5 +1,8 @@
 package school.redrover.api;
 
+import io.qameta.allure.Description;
+import io.qameta.allure.Epic;
+import io.qameta.allure.Feature;
 import io.restassured.http.ContentType;
 import org.hamcrest.Matchers;
 import org.testng.SkipException;
@@ -12,6 +15,8 @@ import static io.restassured.RestAssured.given;
 import static school.redrover.runner.TestApiUtils.requestSpec;
 import static school.redrover.runner.TestApiUtils.responseSpec;
 
+@Epic("API")
+@Feature("Mock user")
 public class MockUserTest extends BaseApiTest {
 
     @BeforeClass
@@ -23,6 +28,7 @@ public class MockUserTest extends BaseApiTest {
     }
 
     @Test
+    @Description("001 Create user with valid data")
     public void testFullRequestReturns200() {
         String successPayload = """
                 {
@@ -47,6 +53,7 @@ public class MockUserTest extends BaseApiTest {
     }
 
     @Test
+    @Description("002 Create user without e-mail")
     public void testMissingFieldReturns400() {
         given()
                 .spec(requestSpec())
