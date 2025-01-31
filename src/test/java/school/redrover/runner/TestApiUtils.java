@@ -40,10 +40,10 @@ public class TestApiUtils {
                 .build();
     }
 
-    public static ResponseSpecification responseSpec(Integer statusCode) {
+    public static ResponseSpecification responseSpec(Integer statusCode, Long responseTime) {
         return new ResponseSpecBuilder()
                 .expectStatusCode(statusCode)
-                .expectResponseTime(lessThan(500L))
+                .expectResponseTime(lessThan(responseTime))
                 .log(LogDetail.ALL)
                 .build();
     }
