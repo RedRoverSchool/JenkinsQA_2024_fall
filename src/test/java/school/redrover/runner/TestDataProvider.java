@@ -1,4 +1,4 @@
-package school.redrover.data;
+package school.redrover.runner;
 
 import org.testng.annotations.DataProvider;
 

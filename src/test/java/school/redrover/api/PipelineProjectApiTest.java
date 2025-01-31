@@ -7,8 +7,8 @@ import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import org.testng.Assert;
 import org.testng.annotations.Test;
-import school.redrover.data.TestDataProvider;
-import school.redrover.model.FreestyleAndPipelineResponse;
+import school.redrover.runner.TestDataProvider;
+import school.redrover.model.ProjectResponse;
 import school.redrover.runner.BaseApiTest;
 import school.redrover.runner.TestUtils;
 
@@ -33,7 +33,7 @@ public class PipelineProjectApiTest extends BaseApiTest {
                 .when()
                 .post("createItem")
                 .then()
-                .spec(responseSpec(400))
+                .spec(responseSpec(400, 500L))
                 .extract()
                 .response();
 
@@ -51,7 +51,7 @@ public class PipelineProjectApiTest extends BaseApiTest {
                 .when()
                 .post("createItem")
                 .then()
-                .spec(responseSpec(200));
+                .spec(responseSpec(200, 500L));
     }
 
     @Test(dependsOnMethods = "testCreateProjectWithValidName",
@@ -65,16 +65,16 @@ public class PipelineProjectApiTest extends BaseApiTest {
                 .when()
                 .get("api/json")
                 .then()
-                .spec(responseSpec(200))
+                .spec(responseSpec(200, 500L))
                 .body(matchesJsonSchema(TestUtils.loadSchema("pipeline-project-schema.json")))
                 .extract().response();
 
-        FreestyleAndPipelineResponse freestyleAndPipelineResponse = response.as(FreestyleAndPipelineResponse.class);
+        ProjectResponse freestyleAndPipelineResponse = response.as(ProjectResponse.class);
 
         Assert.assertEquals(response.getHeader("Content-Type"), "application/json;charset=utf-8");
         Assert.assertEquals(freestyleAndPipelineResponse.getName(), projectName);
         Assert.assertEquals(freestyleAndPipelineResponse.getDescription(), "");
-        Assert.assertEquals(freestyleAndPipelineResponse.getClassField(), "org.jenkinsci.plugins.workflow.job.WorkflowJob");
+        Assert.assertEquals(freestyleAndPipelineResponse.get_class(), "org.jenkinsci.plugins.workflow.job.WorkflowJob");
     }
 
     @Test(dataProvider = "providerUnsafeCharacters", dataProviderClass = TestDataProvider.class)
@@ -88,7 +88,7 @@ public class PipelineProjectApiTest extends BaseApiTest {
                 .when()
                 .post("createItem")
                 .then()
-                .spec(responseSpec(400))
+                .spec(responseSpec(400, 500L))
                 .extract()
                 .response();
 
@@ -107,7 +107,7 @@ public class PipelineProjectApiTest extends BaseApiTest {
                 .when()
                 .post("job/%s/doRename".formatted(oldName))
                 .then()
-                .spec(responseSpec(302));
+                .spec(responseSpec(302, 500L));
     }
 
 }

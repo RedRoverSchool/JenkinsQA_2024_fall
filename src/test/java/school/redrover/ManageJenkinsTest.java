@@ -7,7 +7,7 @@ import io.qameta.allure.Story;
 import org.openqa.selenium.WebElement;
 import org.testng.Assert;
 import org.testng.annotations.Test;
-import school.redrover.data.TestDataProvider;
+import school.redrover.runner.TestDataProvider;
 import school.redrover.page.home.HomePage;
 import school.redrover.page.manage.AppearancePage;
 import school.redrover.page.systemConfiguration.PluginsPage;

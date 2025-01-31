@@ -9,7 +9,6 @@ import org.testng.annotations.BeforeClass;
 import school.redrover.model.CrumbIssuerResponse;
 
 import java.util.Map;
-import java.util.function.Consumer;
 
 import static io.restassured.RestAssured.given;
 
@@ -19,7 +18,7 @@ public abstract class BaseApiTest {
     protected static String cookieName;
     protected static String cookieValue;
     protected static WireMockServer wireMockServer;
-    private static final String ENV = System.getProperty("env", "prod");
+    protected static final String ENV = System.getProperty("env", "prod");
     private static final String PROD_BASE_URI = ProjectUtils.getUrl();
     private static final String MOCK_HOST = "localhost";
     private static final Integer MOCK_PORT = 20115;
@@ -65,12 +64,12 @@ public abstract class BaseApiTest {
         }
     }
 
-    @SafeVarargs
-    protected final void stubEndpoints(String projectName, Consumer<String>... stubs) {
-        if ("qa".equalsIgnoreCase(ENV)) {
-            for (Consumer<String> stub : stubs) {
-                stub.accept(projectName);
-            }
+    protected static void stubEndpoints(Runnable... stubs) {
+        if (!"qa".equalsIgnoreCase(ENV)) {
+            return;
+        }
+        for (Runnable stub : stubs) {
+            stub.run();
         }
     }
 

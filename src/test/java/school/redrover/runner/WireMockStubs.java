@@ -2,12 +2,13 @@ package school.redrover.runner;
 
 import com.github.tomakehurst.wiremock.client.WireMock;
 
+import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static school.redrover.runner.BaseApiTest.wireMockServer;
 
 public class WireMockStubs {
 
     public static void stubCreateProject(String projectName) {
-        wireMockServer.stubFor(WireMock.post("/createItem?name=%s".formatted(projectName))
+        wireMockServer.stubFor(post("/createItem?name=%s".formatted(projectName))
                 .willReturn(WireMock.aResponse()
                         .withStatus(200)
                         .withHeader("Content-Type", "application/json")
@@ -38,6 +39,44 @@ public class WireMockStubs {
                         .withBody(payload)
                 )
         );
+    }
+
+    public static void stubCreateUser() {
+        String successPayload = """
+                {
+                    "id": "123456",
+                    "userName": "Ivan",
+                    "userFullName": "Ivanov",
+                    "e-mail": "ivan@gmail.com"
+                }
+                """;
+        String errorPayload = """
+            {
+                "error": "Missing required fields"
+            }
+            """;
+
+        wireMockServer.stubFor(post(urlEqualTo("/createUser"))
+                .atPriority(1)
+                .withRequestBody(matchingJsonPath("$.userName"))
+                .withRequestBody(matchingJsonPath("$.userFullName"))
+                .withRequestBody(matchingJsonPath("$.e-mail"))
+                .willReturn(aResponse()
+                        .withStatus(200)
+                        .withHeader("Content-Type", "application/json;charset=utf-8")
+                        .withBody(successPayload)
+                )
+        );
+
+        wireMockServer.stubFor(post(urlEqualTo("/createUser"))
+                .atPriority(2)
+                .willReturn(aResponse()
+                        .withStatus(400)
+                        .withHeader("Content-Type", "application/json;charset=utf-8")
+                        .withBody(errorPayload)
+                )
+        );
+
     }
 
 }
