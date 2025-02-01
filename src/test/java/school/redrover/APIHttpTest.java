@@ -405,7 +405,8 @@ public class APIHttpTest extends BaseAPIHttpTest {  // Using Apache HttpClient
                     }
                 }
             }
-        }
+    }
+
     @Test
     @Story("Folder")
     @Description("015 Create Folder with empty name")
@@ -490,6 +491,7 @@ public class APIHttpTest extends BaseAPIHttpTest {  // Using Apache HttpClient
                     Assert.assertTrue(findFolderNameInProjectList, "Project name was not found in the list");
             }
             deleteItem(FOLDER_NAME_COPY_FROM);
+            deleteItem(FOLDER_NAME);
         }
     }
 
