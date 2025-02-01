@@ -1,4 +1,4 @@
-package school.redrover.api;
+package school.redrover.api.restassured;
 
 import io.qameta.allure.Description;
 import io.qameta.allure.Epic;

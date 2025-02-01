@@ -24,7 +24,7 @@ public abstract class BaseAPIHttpTest {
 
     protected String crumb;
     protected String crumbRequestField;
-    protected String token;
+    protected static String token;
 
     protected static final Logger logger = LoggerFactory.getLogger(BaseAPIHttpTest.class);
 
@@ -33,12 +33,12 @@ public abstract class BaseAPIHttpTest {
         return "Basic " + Base64.getEncoder().encodeToString(auth.getBytes());
     }
 
-    protected String getBasicAuthWithToken() {
+    protected static String getBasicAuthWithToken() {
         String auth = ProjectUtils.getUserName() + ":" + token;
         return "Basic " + Base64.getEncoder().encodeToString(auth.getBytes());
     }
 
-    protected CloseableHttpClient createHttpClientWithAllureLogging() {
+    protected static CloseableHttpClient createHttpClientWithAllureLogging() {
         return HttpClientBuilder.create()
                 .addInterceptorFirst(new AllureHttpClientRequest())
                 .addInterceptorLast(new AllureHttpClientResponse())
