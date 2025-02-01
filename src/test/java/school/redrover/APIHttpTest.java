@@ -22,6 +22,7 @@ import school.redrover.model.ProjectResponse;
 import school.redrover.model.ProjectListResponse;
 import school.redrover.runner.BaseAPIHttpTest;
 import school.redrover.runner.ProjectUtils;
+import school.redrover.runner.TestDataProvider;
 import school.redrover.runner.TestUtils;
 
 import java.io.IOException;
@@ -405,6 +406,7 @@ public class APIHttpTest extends BaseAPIHttpTest {  // Using Apache HttpClient
             try (CloseableHttpResponse postCreateItemResponse = httpclient.execute(postCreateItem)) {
                 Allure.step("Expected result: Create item status code is 400");
                 Assert.assertEquals(postCreateItemResponse.getStatusLine().getStatusCode(), 400);
+                Allure.step("Expected result: Header 'X-Error' : 'No name is specified'");
                 Assert.assertEquals(postCreateItemResponse.getFirstHeader("X-Error").getValue(),"No name is specified");
             }
         }
@@ -412,7 +414,7 @@ public class APIHttpTest extends BaseAPIHttpTest {  // Using Apache HttpClient
 
     @Test
     @Story("Folder")
-    @Description
+    @Description("016 Create Folder by copy from another folder")
     public void testCreateFolderCopyFrom() throws IOException {
         try (CloseableHttpClient httpClient = createHttpClientWithAllureLogging()) {
 
@@ -473,6 +475,27 @@ public class APIHttpTest extends BaseAPIHttpTest {  // Using Apache HttpClient
                     Assert.assertTrue(findFolderNameInProjectList, "Project name was not found in the list");
                 }
             }
+    }
+
+    @Test(dataProvider = "providerUnsafeCharacters", dataProviderClass = TestDataProvider.class)
+    @Story("Folder")
+    @Description("019 Create Folder with unsafe character")
+    public void testCreateFolderWithUnsafeCharacter(String unsafeCharacter) throws IOException {
+        try (CloseableHttpClient httpClient = createHttpClientWithAllureLogging()) {
+
+            Allure.step("Send POST request -> Create Folder");
+            HttpPost postCreateItem = new HttpPost((getCreateItemURL()));
+            postCreateItem.addHeader(HttpHeaders.AUTHORIZATION, getBasicAuthWithToken());
+            postCreateItem.addHeader(HttpHeaders.CONTENT_TYPE, "application/x-www-form-urlencoded");
+            postCreateItem.setEntity(new StringEntity(getCreateItemBody(unsafeCharacter, FOLDER_MODE)));
+
+            try (CloseableHttpResponse postCreateItemResponse = httpClient.execute(postCreateItem)) {
+                Allure.step("Expected result: Failed item creation. Status code 400");
+                Assert.assertEquals(postCreateItemResponse.getStatusLine().getStatusCode(), 400);
+                Allure.step(String.format("Expected result: Header 'X-Error' : '%s' is an unsafe character", unsafeCharacter));
+                Assert.assertEquals(postCreateItemResponse.getFirstHeader("X-Error").getValue(),String.format("%s  is an unsafe character",unsafeCharacter));
+            }
+        }
     }
 
     @Test(dependsOnMethods = "testCreateFolderWithValidName")
