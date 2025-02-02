@@ -2,8 +2,6 @@ package school.redrover;
 
 import com.google.common.net.HttpHeaders;
 import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
 import io.qameta.allure.*;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
@@ -20,6 +18,7 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 import school.redrover.model.ProjectResponse;
 import school.redrover.model.ProjectListResponse;
+import school.redrover.runner.TestApiHttpUtils;
 import school.redrover.runner.BaseAPIHttpTest;
 import school.redrover.runner.ProjectUtils;
 import school.redrover.runner.TestDataProvider;
@@ -33,8 +32,6 @@ import java.util.List;
 @Epic("Http API  Requests")
 public class APIHttpTest extends BaseAPIHttpTest {  // Using Apache HttpClient
 
-    private static final String PIPELINE_NAME = "Pipeline";
-    private static final String PIPELINE_NAME_BY_XML_CREATED = "PipelineXML";
     private static final String FOLDER_NAME_BY_XML_CREATED = "FolderXML";
     private static final String FOLDER_NAME = "Folder";
     private static final String FOLDER_NEW_NAME = "NewFolderName";
@@ -44,38 +41,8 @@ public class APIHttpTest extends BaseAPIHttpTest {  // Using Apache HttpClient
     private static final String RENAMED_FREESTYLE_PROJECT = "RenamedFreestyle";
     private static final String MULTIBRANCH_PIPELINE_NAME = "MultibranchPipeline";
     private static final String MULTIBRANCH_PIPELINE_NAME_XML = "MultibranchPipelineXML";
-    private static final String VIEW_NAME = "ViewName";
-    private static final String API_JSON_URL = "api/json?pretty=true";
-    private static final String MULTICONFIGURATION_NAME = "MultiConfigurationProject";
-    private static final String MULTICONFIGURATION_MODE = "hudson.matrix.MatrixProject";
-
-    private List<String> getProjectNamesFromJsonResponseList(String url, String jsonArrayKey) throws IOException {
-        try (CloseableHttpClient httpClient = createHttpClientWithAllureLogging()) {
-            HttpGet httpGet = new HttpGet(url);
-
-            httpGet.addHeader("Authorization", getBasicAuthWithToken());
-
-            try (CloseableHttpResponse response = httpClient.execute(httpGet)) {
-                Assert.assertEquals(response.getStatusLine().getStatusCode(), 200);
-
-                String responseBody = EntityUtils.toString(response.getEntity(), StandardCharsets.UTF_8);
-                JsonArray jobs = new Gson().fromJson(responseBody, JsonObject.class).getAsJsonArray(jsonArrayKey);
-
-                List<String> projectNames = new ArrayList<>();
-                jobs.forEach(job -> projectNames.add(job.getAsJsonObject().get("name").getAsString()));
-
-                return projectNames;
-            }
-        }
-    }
-
-    private List<String> getAllProjectNamesFromJsonResponseList() throws IOException {
-        return getProjectNamesFromJsonResponseList(ProjectUtils.getUrl() + API_JSON_URL, "jobs");
-    }
-
-    private List<String> getAllProjectViewNamesFromJsonResponseList() throws IOException {
-        return getProjectNamesFromJsonResponseList(ProjectUtils.getUrl() + API_JSON_URL, "views");
-    }
+    private static final String MULTI_CONFIGURATION_PROJECT = "MultiConfigurationProject";
+    private static final String MULTI_CONFIGURATION_MODE = "hudson.matrix.MatrixProject";
 
     private String getCreateItemBody(String name, String mode) {
         return "name=" + TestUtils.encodeParam(name) + "&mode=" + mode;
@@ -93,6 +60,7 @@ public class APIHttpTest extends BaseAPIHttpTest {  // Using Apache HttpClient
         return "description=" + TestUtils.encodeParam(description);
 
     }
+
     private String getItemByNameURL(String name) {
         return ProjectUtils.getUrl() + String.format("job/%s/api/json", TestUtils.encodeParam(name));
     }
@@ -106,7 +74,7 @@ public class APIHttpTest extends BaseAPIHttpTest {  // Using Apache HttpClient
     }
 
     private String getAddDescriptionURL(String name) {
-        return ProjectUtils.getUrl() + String.format("job/%s/submitDescription",TestUtils.encodeParam(name));
+        return ProjectUtils.getUrl() + String.format("job/%s/submitDescription", TestUtils.encodeParam(name));
     }
 
     private void deleteItem(String name) throws IOException {
@@ -120,179 +88,6 @@ public class APIHttpTest extends BaseAPIHttpTest {  // Using Apache HttpClient
 
                 Allure.step("Expected result: Delete item status code is 204");
                 Assert.assertEquals(response.getStatusLine().getStatusCode(), 204);
-            }
-        }
-    }
-
-    @Test
-    @Story("Pipeline project")
-    @Description("Create Pipeline Project with valid name")
-    public void testCreatePipeline() throws IOException {
-        try (CloseableHttpClient httpClient = createHttpClientWithAllureLogging()) {
-            HttpPost httpPost = new HttpPost(ProjectUtils.getUrl() + "view/all/createItem/");
-
-            List<NameValuePair> nameValuePairs = new ArrayList<>();
-            nameValuePairs.add(new BasicNameValuePair("name", PIPELINE_NAME));
-            nameValuePairs.add(new BasicNameValuePair("mode", "org.jenkinsci.plugins.workflow.job.WorkflowJob"));
-
-            httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
-            httpPost.addHeader(HttpHeaders.AUTHORIZATION, getBasicAuthWithToken());
-
-            try (CloseableHttpResponse response = httpClient.execute(httpPost)) {
-
-                Assert.assertEquals(response.getStatusLine().getStatusCode(), 302);
-                Assert.assertListContainsObject(
-                        getAllProjectNamesFromJsonResponseList(),
-                        PIPELINE_NAME,
-                        "The project is not created");
-            }
-        }
-    }
-
-    @Test(dependsOnMethods = "testCreatePipeline")
-    @Story("View")
-    @Description("Add List View for project")
-    public void testAddListViewForProject() throws IOException {
-        try (CloseableHttpClient httpClient = createHttpClientWithAllureLogging()) {
-            String query = "name=" + VIEW_NAME;
-            String payloadForProject = String.format(TestUtils.loadPayload("create-list-view.xml"), PIPELINE_NAME);
-
-            HttpPost httpPost = new HttpPost(ProjectUtils.getUrl() + "createView?" + query);
-
-            httpPost.setEntity(new StringEntity(payloadForProject));
-            httpPost.addHeader(HttpHeaders.CONTENT_TYPE, "application/xml ");
-            httpPost.addHeader(HttpHeaders.AUTHORIZATION, getBasicAuthWithToken());
-
-            try (CloseableHttpResponse response = httpClient.execute(httpPost)) {
-
-                Assert.assertEquals(response.getStatusLine().getStatusCode(), 200);
-                Assert.assertListContainsObject(
-                        getAllProjectViewNamesFromJsonResponseList(),
-                        VIEW_NAME,
-                        "View is not created");
-            }
-        }
-    }
-
-    @Test(dependsOnMethods = "testAddListViewForProject")
-    @Story("View")
-    @Description("Delete List View")
-    public void testDeleteListView() throws IOException {
-        try (CloseableHttpClient httpClient = createHttpClientWithAllureLogging()) {
-            HttpPost httpPost = new HttpPost(String.format(ProjectUtils.getUrl() + "view/%s/doDelete/", VIEW_NAME));
-            httpPost.addHeader(HttpHeaders.AUTHORIZATION, getBasicAuthWithToken());
-
-            try (CloseableHttpResponse response = httpClient.execute(httpPost)) {
-
-                Assert.assertEquals(response.getStatusLine().getStatusCode(), 302);
-                Assert.assertListNotContainsObject(
-                        getAllProjectViewNamesFromJsonResponseList(),
-                        VIEW_NAME,
-                        "View is not deleted");
-            }
-        }
-    }
-
-    @Test
-    @Story("Pipeline project")
-    @Description("Create Pipeline Project with valid name(XML")
-    public void testCreatePipelineXML() throws IOException {
-        try (CloseableHttpClient httpClient = createHttpClientWithAllureLogging()) {
-            String queryString = "name=" + PIPELINE_NAME_BY_XML_CREATED;
-
-            HttpPost httpPost = new HttpPost(ProjectUtils.getUrl() + "view/all/createItem?" + queryString);
-            httpPost.setEntity(new StringEntity(TestUtils.loadPayload("create-empty-pipeline-project.xml")));
-
-            httpPost.addHeader(HttpHeaders.CONTENT_TYPE, "application/xml");
-            httpPost.addHeader(HttpHeaders.AUTHORIZATION, getBasicAuthWithToken());
-
-            try (CloseableHttpResponse response = httpClient.execute(httpPost)) {
-
-                Assert.assertEquals(response.getStatusLine().getStatusCode(), 200);
-                Assert.assertListContainsObject(
-                        getAllProjectNamesFromJsonResponseList(),
-                        PIPELINE_NAME_BY_XML_CREATED,
-                        "The project is not created");
-            }
-        }
-    }
-
-    @Test(dependsOnMethods = "testCreatePipelineXML")
-    @Story("Pipeline project")
-    @Description("Add description to Pipeline project")
-    public void testAddDescription() throws IOException {
-        final String description = "This is a description";
-
-        try (CloseableHttpClient httpClient = createHttpClientWithAllureLogging()) {
-            HttpPost httpPost = new HttpPost(
-                    String.format(ProjectUtils.getUrl() + "job/%s/submitDescription", PIPELINE_NAME_BY_XML_CREATED));
-
-            httpPost.setEntity(new StringEntity("description=" + TestUtils.encodeParam(description)));
-
-            httpPost.addHeader(HttpHeaders.CONTENT_TYPE, "application/x-www-form-urlencoded");
-            httpPost.addHeader(HttpHeaders.AUTHORIZATION, getBasicAuthWithToken());
-
-            try (CloseableHttpResponse response = httpClient.execute(httpPost)) {
-
-                Assert.assertEquals(response.getStatusLine().getStatusCode(), 302);
-            }
-            HttpGet httpGet = new HttpGet(
-                    String.format(ProjectUtils.getUrl() + "job/%s/api/json?pretty=true", PIPELINE_NAME_BY_XML_CREATED));
-            httpGet.addHeader(HttpHeaders.AUTHORIZATION, getBasicAuthWithToken());
-
-            try (CloseableHttpResponse response = httpClient.execute(httpGet)) {
-                String jsonResponse = EntityUtils.toString(response.getEntity());
-
-                Assert.assertEquals(response.getStatusLine().getStatusCode(), 200);
-                Assert.assertTrue(jsonResponse.contains("\"description\" : \"" + description + "\""),
-                        "Description not found in job details");
-            }
-        }
-    }
-
-    @Test(dependsOnMethods = "testAddDescription")
-    @Story("Pipeline project")
-    @Description("Delete project by HttpDelete request")
-    public void testDeleteProjectByHttpDelete() throws IOException {
-        try (CloseableHttpClient httpClient = createHttpClientWithAllureLogging()) {
-            HttpDelete httpDelete = new HttpDelete(
-                    String.format(ProjectUtils.getUrl() + "/job/%s/", PIPELINE_NAME_BY_XML_CREATED));
-
-            httpDelete.addHeader(HttpHeaders.AUTHORIZATION, getBasicAuthWithToken());
-
-            try (CloseableHttpResponse response = httpClient.execute(httpDelete)) {
-                Assert.assertEquals(response.getStatusLine().getStatusCode(), 204);
-                Assert.assertListNotContainsObject(
-                        getAllProjectNamesFromJsonResponseList(),
-                        PIPELINE_NAME_BY_XML_CREATED,
-                        "Project is not deleted");
-            }
-        }
-    }
-
-    @Test(dependsOnMethods = "testDeleteListView")
-    @Story("Pipeline project")
-    @Description("Delete project by HttpPost request")
-    public void testDeletePipelineByHttpPost() throws IOException {
-        try (CloseableHttpClient httpClient = createHttpClientWithAllureLogging()) {
-            HttpPost httpPost = new HttpPost(
-                    String.format(ProjectUtils.getUrl() + "/job/%s/doDelete", PIPELINE_NAME));
-            httpPost.addHeader(HttpHeaders.AUTHORIZATION, getBasicAuthWithToken());
-
-            try (CloseableHttpResponse response = httpClient.execute(httpPost)) {
-                Assert.assertEquals(response.getStatusLine().getStatusCode(), 302);
-            }
-
-            HttpGet httpGet = new HttpGet(
-                    String.format(ProjectUtils.getUrl() + "/job/%s/api/json", PIPELINE_NAME));
-            httpGet.addHeader(HttpHeaders.AUTHORIZATION, getBasicAuthWithToken());
-
-            try (CloseableHttpResponse response = httpClient.execute(httpGet)) {
-                Assert.assertEquals(response.getStatusLine().getStatusCode(), 404);
-                Assert.assertListNotContainsObject(
-                        getAllProjectNamesFromJsonResponseList(),
-                        PIPELINE_NAME,
-                        "Project is not deleted");
             }
         }
     }
@@ -317,7 +112,9 @@ public class APIHttpTest extends BaseAPIHttpTest {  // Using Apache HttpClient
                 Assert.assertEquals(response.getStatusLine().getStatusCode(), 200);
 
                 Allure.step(String.format("Expected result: '%s' is displayed on Dashboard", FOLDER_NAME_BY_XML_CREATED));
-                Assert.assertListContainsObject(getAllProjectNamesFromJsonResponseList(), FOLDER_NAME_BY_XML_CREATED,
+                Assert.assertListContainsObject(
+                        TestApiHttpUtils.getAllProjectNamesFromJsonResponseList(),
+                        FOLDER_NAME_BY_XML_CREATED,
                         "The folder is not created");
             }
 
@@ -334,7 +131,8 @@ public class APIHttpTest extends BaseAPIHttpTest {  // Using Apache HttpClient
                 Assert.assertEquals(response.getStatusLine().getStatusCode(), 200);
 
                 Allure.step("Expected result: fullName in json is " + FOLDER_NAME_BY_XML_CREATED);
-                Assert.assertEquals(projectResponse.getFullName(), FOLDER_NAME_BY_XML_CREATED, "Folder didn't find");
+                Assert.assertEquals(projectResponse.getFullName(), FOLDER_NAME_BY_XML_CREATED,
+                        "Folder didn't find");
 
                 Allure.step("Send GET request -> Get project list from Dashboard");
                 HttpGet getItemList = new HttpGet(ProjectUtils.getUrl() + "api/json");
@@ -358,53 +156,53 @@ public class APIHttpTest extends BaseAPIHttpTest {  // Using Apache HttpClient
     @Story("Folder")
     @Description("002 Create Folder with valid name")
     public void testCreateFolderWithValidName() throws IOException {
-            try (CloseableHttpClient httpClient = createHttpClientWithAllureLogging()) {
+        try (CloseableHttpClient httpClient = createHttpClientWithAllureLogging()) {
 
-                Allure.step("Send POST request -> Create Folder");
-                HttpPost postCreateItem = new HttpPost(getCreateItemURL());
-                postCreateItem.addHeader(HttpHeaders.AUTHORIZATION, getBasicAuthWithToken());
-                postCreateItem.addHeader(HttpHeaders.CONTENT_TYPE, "application/x-www-form-urlencoded");
-                postCreateItem.setEntity(new StringEntity(getCreateItemBody(FOLDER_NAME, FOLDER_MODE)));
+            Allure.step("Send POST request -> Create Folder");
+            HttpPost postCreateItem = new HttpPost(getCreateItemURL());
+            postCreateItem.addHeader(HttpHeaders.AUTHORIZATION, getBasicAuthWithToken());
+            postCreateItem.addHeader(HttpHeaders.CONTENT_TYPE, "application/x-www-form-urlencoded");
+            postCreateItem.setEntity(new StringEntity(getCreateItemBody(FOLDER_NAME, FOLDER_MODE)));
 
-                try (CloseableHttpResponse postCreateItemResponse = httpClient.execute(postCreateItem)) {
-                    Allure.step("Expected result: Successful item creation. Status code 302");
-                    Assert.assertEquals(postCreateItemResponse.getStatusLine().getStatusCode(), 302);
-                }
+            try (CloseableHttpResponse postCreateItemResponse = httpClient.execute(postCreateItem)) {
+                Allure.step("Expected result: Successful item creation. Status code 302");
+                Assert.assertEquals(postCreateItemResponse.getStatusLine().getStatusCode(), 302);
+            }
 
-                Allure.step("Send GET request -> Get item by name");
-                HttpGet getItemByName = new HttpGet(getItemByNameURL(FOLDER_NAME));
-                getItemByName.addHeader(HttpHeaders.AUTHORIZATION, getBasicAuthWithToken());
+            Allure.step("Send GET request -> Get item by name");
+            HttpGet getItemByName = new HttpGet(getItemByNameURL(FOLDER_NAME));
+            getItemByName.addHeader(HttpHeaders.AUTHORIZATION, getBasicAuthWithToken());
 
-                try (CloseableHttpResponse getItemByNameResponse = httpClient.execute(getItemByName)) {
-                    Allure.step("Expected result: Created element is found by name");
-                    Assert.assertEquals(getItemByNameResponse.getStatusLine().getStatusCode(), 200);
+            try (CloseableHttpResponse getItemByNameResponse = httpClient.execute(getItemByName)) {
+                Allure.step("Expected result: Created element is found by name");
+                Assert.assertEquals(getItemByNameResponse.getStatusLine().getStatusCode(), 200);
 
-                    String jsonResponse = EntityUtils.toString(getItemByNameResponse.getEntity());
-                    ProjectResponse projectResponse = new Gson().fromJson(jsonResponse, ProjectResponse.class);
+                String jsonResponse = EntityUtils.toString(getItemByNameResponse.getEntity());
+                ProjectResponse projectResponse = new Gson().fromJson(jsonResponse, ProjectResponse.class);
 
-                    Allure.step(String.format("Expected result: fullName is '%s' response", FOLDER_NAME));
-                    Assert.assertEquals(projectResponse.getFullName(), FOLDER_NAME, "Folder didn't find");
-                    Allure.step("Expected result: description is null");
-                    Assert.assertNull(projectResponse.getDescription());
-                    Allure.step(String.format("Expected result: Field '_class': %s", FOLDER_MODE));
-                    Assert.assertEquals(projectResponse.get_class(), FOLDER_MODE);
+                Allure.step(String.format("Expected result: fullName is '%s' response", FOLDER_NAME));
+                Assert.assertEquals(projectResponse.getFullName(), FOLDER_NAME, "Folder didn't find");
+                Allure.step("Expected result: description is null");
+                Assert.assertNull(projectResponse.getDescription());
+                Allure.step(String.format("Expected result: Field '_class': %s", FOLDER_MODE));
+                Assert.assertEquals(projectResponse.get_class(), FOLDER_MODE);
 
-                    Allure.step("Send GET request -> Get project list from Dashboard");
-                    HttpGet getItemList = new HttpGet(ProjectUtils.getUrl() + "api/json");
-                    getItemList.addHeader(HttpHeaders.AUTHORIZATION, getBasicAuthWithToken());
+                Allure.step("Send GET request -> Get project list from Dashboard");
+                HttpGet getItemList = new HttpGet(ProjectUtils.getUrl() + "api/json");
+                getItemList.addHeader(HttpHeaders.AUTHORIZATION, getBasicAuthWithToken());
 
-                    try (CloseableHttpResponse getItemListResponse = httpClient.execute(getItemList)) {
-                        String getItemListResponseBody = EntityUtils.toString(getItemListResponse.getEntity());
-                        ProjectListResponse projectListResponse = new Gson().fromJson(getItemListResponseBody, ProjectListResponse.class);
+                try (CloseableHttpResponse getItemListResponse = httpClient.execute(getItemList)) {
+                    String getItemListResponseBody = EntityUtils.toString(getItemListResponse.getEntity());
+                    ProjectListResponse projectListResponse = new Gson().fromJson(getItemListResponseBody, ProjectListResponse.class);
 
-                        boolean findFolderNameInProjectList = projectListResponse.getJobs()
-                                .stream().anyMatch(project -> project.getName().equals(FOLDER_NAME));
+                    boolean findFolderNameInProjectList = projectListResponse.getJobs()
+                            .stream().anyMatch(project -> project.getName().equals(FOLDER_NAME));
 
-                        Allure.step("Expected result: Project name found in the list");
-                        Assert.assertTrue(findFolderNameInProjectList, "Project name was not found in the list");
-                    }
+                    Allure.step("Expected result: Project name found in the list");
+                    Assert.assertTrue(findFolderNameInProjectList, "Project name was not found in the list");
                 }
             }
+        }
     }
 
     @Test
@@ -417,13 +215,13 @@ public class APIHttpTest extends BaseAPIHttpTest {  // Using Apache HttpClient
             HttpPost postCreateItem = new HttpPost((getCreateItemURL()));
             postCreateItem.addHeader(HttpHeaders.AUTHORIZATION, getBasicAuthWithToken());
             postCreateItem.addHeader(HttpHeaders.CONTENT_TYPE, "application/x-www-form-urlencoded");
-            postCreateItem.setEntity(new StringEntity(getCreateItemBody("",FOLDER_MODE)));
+            postCreateItem.setEntity(new StringEntity(getCreateItemBody("", FOLDER_MODE)));
 
             try (CloseableHttpResponse postCreateItemResponse = httpclient.execute(postCreateItem)) {
                 Allure.step("Expected result: Create item status code is 400");
                 Assert.assertEquals(postCreateItemResponse.getStatusLine().getStatusCode(), 400);
                 Allure.step("Expected result: Header 'X-Error' : 'No name is specified'");
-                Assert.assertEquals(postCreateItemResponse.getFirstHeader("X-Error").getValue(),"No name is specified");
+                Assert.assertEquals(postCreateItemResponse.getFirstHeader("X-Error").getValue(), "No name is specified");
             }
         }
     }
@@ -438,9 +236,9 @@ public class APIHttpTest extends BaseAPIHttpTest {  // Using Apache HttpClient
             HttpPost postCreateItem = new HttpPost((getCreateItemURL()));
             postCreateItem.addHeader(HttpHeaders.AUTHORIZATION, getBasicAuthWithToken());
             postCreateItem.addHeader(HttpHeaders.CONTENT_TYPE, "application/x-www-form-urlencoded");
-            postCreateItem.setEntity(new StringEntity(getCreateItemBody(FOLDER_NAME,FOLDER_MODE)));
+            postCreateItem.setEntity(new StringEntity(getCreateItemBody(FOLDER_NAME, FOLDER_MODE)));
 
-            try (CloseableHttpResponse postCreateItemResponse = httpClient.execute(postCreateItem)){
+            try (CloseableHttpResponse postCreateItemResponse = httpClient.execute(postCreateItem)) {
                 Allure.step("Expected result: Successful item creation. Status code 302");
                 Assert.assertEquals(postCreateItemResponse.getStatusLine().getStatusCode(), 302);
             }
@@ -449,7 +247,7 @@ public class APIHttpTest extends BaseAPIHttpTest {  // Using Apache HttpClient
             HttpPost postCreateItemCopyFrom = new HttpPost(getCreateItemURL());
             postCreateItemCopyFrom.addHeader(HttpHeaders.AUTHORIZATION, getBasicAuthWithToken());
             postCreateItemCopyFrom.addHeader(HttpHeaders.CONTENT_TYPE, "application/x-www-form-urlencoded");
-            postCreateItemCopyFrom.setEntity(new StringEntity(getCreateItemCopyFromBody(FOLDER_NAME_COPY_FROM,FOLDER_NAME)));
+            postCreateItemCopyFrom.setEntity(new StringEntity(getCreateItemCopyFromBody(FOLDER_NAME_COPY_FROM, FOLDER_NAME)));
 
             try (CloseableHttpResponse postCreateItemCopyFromResponse = httpClient.execute(postCreateItemCopyFrom)) {
 
@@ -476,19 +274,19 @@ public class APIHttpTest extends BaseAPIHttpTest {  // Using Apache HttpClient
                 Assert.assertEquals(projectResponse.get_class(), FOLDER_MODE);
             }
 
-                Allure.step("Send GET request -> Get project list from Dashboard");
-                HttpGet getItemList = new HttpGet(ProjectUtils.getUrl() + "api/json");
-                getItemList.addHeader(HttpHeaders.AUTHORIZATION, getBasicAuthWithToken());
+            Allure.step("Send GET request -> Get project list from Dashboard");
+            HttpGet getItemList = new HttpGet(ProjectUtils.getUrl() + "api/json");
+            getItemList.addHeader(HttpHeaders.AUTHORIZATION, getBasicAuthWithToken());
 
             try (CloseableHttpResponse getItemListResponse = httpClient.execute(getItemList)) {
-                    String getItemListResponseBody = EntityUtils.toString(getItemListResponse.getEntity());
-                    ProjectListResponse projectListResponse = new Gson().fromJson(getItemListResponseBody, ProjectListResponse.class);
+                String getItemListResponseBody = EntityUtils.toString(getItemListResponse.getEntity());
+                ProjectListResponse projectListResponse = new Gson().fromJson(getItemListResponseBody, ProjectListResponse.class);
 
-                    boolean findFolderNameInProjectList = projectListResponse.getJobs()
-                            .stream().anyMatch(project -> project.getName().equals(FOLDER_NAME_COPY_FROM));
+                boolean findFolderNameInProjectList = projectListResponse.getJobs()
+                        .stream().anyMatch(project -> project.getName().equals(FOLDER_NAME_COPY_FROM));
 
-                    Allure.step("Expected result: Project name found in the list");
-                    Assert.assertTrue(findFolderNameInProjectList, "Project name was not found in the list");
+                Allure.step("Expected result: Project name found in the list");
+                Assert.assertTrue(findFolderNameInProjectList, "Project name was not found in the list");
             }
             deleteItem(FOLDER_NAME_COPY_FROM);
             deleteItem(FOLDER_NAME);
@@ -511,7 +309,9 @@ public class APIHttpTest extends BaseAPIHttpTest {  // Using Apache HttpClient
                 Allure.step("Expected result: Failed item creation. Status code 400");
                 Assert.assertEquals(postCreateItemResponse.getStatusLine().getStatusCode(), 400);
                 Allure.step(String.format("Expected result: Header 'X-Error' : '%s' is an unsafe character", unsafeCharacter));
-                Assert.assertEquals(postCreateItemResponse.getFirstHeader("X-Error").getValue(),String.format("%s  is an unsafe character",unsafeCharacter));
+                Assert.assertEquals(
+                        postCreateItemResponse.getFirstHeader("X-Error").getValue(),
+                        String.format("%s  is an unsafe character", unsafeCharacter));
             }
         }
     }
@@ -533,7 +333,8 @@ public class APIHttpTest extends BaseAPIHttpTest {  // Using Apache HttpClient
                 Assert.assertEquals(postRenameItemResponse.getStatusLine().getStatusCode(), 302);
 
                 Allure.step(String.format("Expected result: '%s' is displayed on Dashboard", FOLDER_NEW_NAME));
-                Assert.assertListContainsObject(getAllProjectNamesFromJsonResponseList(), FOLDER_NEW_NAME, "List is not contain folder");
+                Assert.assertListContainsObject(TestApiHttpUtils.getAllProjectNamesFromJsonResponseList(), FOLDER_NEW_NAME,
+                        "List is not contain folder");
             }
             deleteItem(FOLDER_NEW_NAME);
         }
@@ -580,7 +381,7 @@ public class APIHttpTest extends BaseAPIHttpTest {  // Using Apache HttpClient
 
                 ProjectResponse projectResponse = new Gson().fromJson(jsonResponse, ProjectResponse.class);
 
-                Allure.step(String.format("(ERR) Expected result: description is '%s'",description));
+                Allure.step(String.format("(ERR) Expected result: description is '%s'", description));
                 Assert.assertNull(projectResponse.getDescription());
 
             }
@@ -604,7 +405,7 @@ public class APIHttpTest extends BaseAPIHttpTest {  // Using Apache HttpClient
                 Assert.assertEquals(response.getStatusLine().getStatusCode(), 204);
 
                 Allure.step(String.format("Expected result: '%s' is not displayed on Dashboard", FOLDER_NAME_BY_XML_CREATED));
-                Assert.assertListNotContainsObject(getAllProjectNamesFromJsonResponseList(), FOLDER_NAME_BY_XML_CREATED,
+                Assert.assertListNotContainsObject(TestApiHttpUtils.getAllProjectNamesFromJsonResponseList(), FOLDER_NAME_BY_XML_CREATED,
                         "The folder is not deleted");
             }
 
@@ -637,7 +438,7 @@ public class APIHttpTest extends BaseAPIHttpTest {  // Using Apache HttpClient
 
                 Assert.assertEquals(response.getStatusLine().getStatusCode(), 200);
                 Assert.assertListContainsObject(
-                        getAllProjectNamesFromJsonResponseList(),
+                        TestApiHttpUtils.getAllProjectNamesFromJsonResponseList(),
                         FREESTYLE_PROJECT,
                         "The project is not created");
             }
@@ -664,7 +465,7 @@ public class APIHttpTest extends BaseAPIHttpTest {  // Using Apache HttpClient
                 Assert.assertEquals(response.getStatusLine().getStatusCode(), 302);
 
                 Assert.assertListContainsObject(
-                        getAllProjectNamesFromJsonResponseList(),
+                        TestApiHttpUtils.getAllProjectNamesFromJsonResponseList(),
                         RENAMED_FREESTYLE_PROJECT,
                         "The project was not renamed");
             }
@@ -695,7 +496,7 @@ public class APIHttpTest extends BaseAPIHttpTest {  // Using Apache HttpClient
 
                 Assert.assertEquals(response.getStatusLine().getStatusCode(), 404);
                 Assert.assertListNotContainsObject(
-                        getAllProjectNamesFromJsonResponseList(),
+                        TestApiHttpUtils.getAllProjectNamesFromJsonResponseList(),
                         RENAMED_FREESTYLE_PROJECT,
                         "The project was not deleted");
 
@@ -711,8 +512,10 @@ public class APIHttpTest extends BaseAPIHttpTest {  // Using Apache HttpClient
             HttpPost httpPost = new HttpPost(ProjectUtils.getUrl() + "view/all/createItem");
 
             List<NameValuePair> nameValuePairs = new ArrayList<>();
-            nameValuePairs.add(new BasicNameValuePair("name", MULTIBRANCH_PIPELINE_NAME));
-            nameValuePairs.add(new BasicNameValuePair("mode", "org.jenkinsci.plugins.workflow.multibranch.WorkflowMultiBranchProject"));
+            nameValuePairs.add(new BasicNameValuePair(
+                    "name", MULTIBRANCH_PIPELINE_NAME));
+            nameValuePairs.add(new BasicNameValuePair(
+                    "mode", "org.jenkinsci.plugins.workflow.multibranch.WorkflowMultiBranchProject"));
 
             httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
             httpPost.addHeader(HttpHeaders.AUTHORIZATION, getBasicAuthWithToken());
@@ -721,7 +524,7 @@ public class APIHttpTest extends BaseAPIHttpTest {  // Using Apache HttpClient
 
                 Assert.assertEquals(response.getStatusLine().getStatusCode(), 302);
                 Assert.assertListContainsObject(
-                        getAllProjectNamesFromJsonResponseList(),
+                        TestApiHttpUtils.getAllProjectNamesFromJsonResponseList(),
                         MULTIBRANCH_PIPELINE_NAME,
                         "The project is not created");
             }
@@ -745,7 +548,7 @@ public class APIHttpTest extends BaseAPIHttpTest {  // Using Apache HttpClient
 
                 Assert.assertEquals(response.getStatusLine().getStatusCode(), 200);
                 Assert.assertListContainsObject(
-                        getAllProjectNamesFromJsonResponseList(),
+                        TestApiHttpUtils.getAllProjectNamesFromJsonResponseList(),
                         MULTIBRANCH_PIPELINE_NAME_XML,
                         "The project is not created");
             }
@@ -758,7 +561,7 @@ public class APIHttpTest extends BaseAPIHttpTest {  // Using Apache HttpClient
     public void testRenameMultibranchPipeline() throws IOException {
         final String newMultibranchPipelineName = "New" + MULTIBRANCH_PIPELINE_NAME;
 
-        try(CloseableHttpClient httpClient = createHttpClientWithAllureLogging()) {
+        try (CloseableHttpClient httpClient = createHttpClientWithAllureLogging()) {
             HttpPost requestRename = new HttpPost(ProjectUtils.getUrl() +
                     String.format("/job/%s/confirmRename", TestUtils.encodeParam(MULTIBRANCH_PIPELINE_NAME)));
             requestRename.addHeader(HttpHeaders.AUTHORIZATION, getBasicAuthWithToken());
@@ -772,7 +575,10 @@ public class APIHttpTest extends BaseAPIHttpTest {  // Using Apache HttpClient
 
                 Allure.step("Expected result: " + String.format("%s is renamed to %s and displayed on Dashboard",
                         MULTIBRANCH_PIPELINE_NAME, newMultibranchPipelineName));
-                Assert.assertListContainsObject(getAllProjectNamesFromJsonResponseList(), newMultibranchPipelineName, "List does not contain the project");
+                Assert.assertListContainsObject(
+                        TestApiHttpUtils.getAllProjectNamesFromJsonResponseList(),
+                        newMultibranchPipelineName,
+                        "List does not contain the project");
             }
         }
     }
@@ -781,8 +587,9 @@ public class APIHttpTest extends BaseAPIHttpTest {  // Using Apache HttpClient
     @Story("Multibranch pipeline")
     @Description("Delete Multibranch pipeline")
     public void testDeleteMultibranchPipeline() throws IOException {
-        try(CloseableHttpClient httpClient = createHttpClientWithAllureLogging()) {
-            HttpDelete httpDelete = new HttpDelete(ProjectUtils.getUrl() + String.format("job/%s/", TestUtils.encodeParam(MULTIBRANCH_PIPELINE_NAME_XML)));
+        try (CloseableHttpClient httpClient = createHttpClientWithAllureLogging()) {
+            HttpDelete httpDelete = new HttpDelete(
+                    ProjectUtils.getUrl() + String.format("job/%s/", TestUtils.encodeParam(MULTIBRANCH_PIPELINE_NAME_XML)));
             httpDelete.addHeader(HttpHeaders.AUTHORIZATION, getBasicAuthWithToken());
 
             Allure.step("Send DELETE request -> Delete " + String.format("%s", MULTIBRANCH_PIPELINE_NAME_XML));
@@ -796,8 +603,12 @@ public class APIHttpTest extends BaseAPIHttpTest {  // Using Apache HttpClient
 
             Allure.step("Send GET request to check the list of existing projects");
             try (CloseableHttpResponse response = httpClient.execute(httpGet)) {
-                Allure.step("Expected result: " + String.format("%s is deleted and is not displayed on Dashboard", MULTIBRANCH_PIPELINE_NAME_XML));
-                Assert.assertListNotContainsObject(getAllProjectNamesFromJsonResponseList(), MULTIBRANCH_PIPELINE_NAME_XML, "The project is not deleted");
+                Allure.step("Expected result: " + String.format(
+                        "%s is deleted and is not displayed on Dashboard", MULTIBRANCH_PIPELINE_NAME_XML));
+                Assert.assertListNotContainsObject(
+                        TestApiHttpUtils.getAllProjectNamesFromJsonResponseList(),
+                        MULTIBRANCH_PIPELINE_NAME_XML,
+                        "The project is not deleted");
             }
         }
     }
@@ -811,7 +622,7 @@ public class APIHttpTest extends BaseAPIHttpTest {  // Using Apache HttpClient
             HttpPost postCreateItem = new HttpPost(getCreateItemURL());
             postCreateItem.addHeader(HttpHeaders.AUTHORIZATION, getBasicAuthWithToken());
             postCreateItem.addHeader(HttpHeaders.CONTENT_TYPE, "application/x-www-form-urlencoded");
-            postCreateItem.setEntity(new StringEntity(getCreateItemBody(MULTICONFIGURATION_NAME, MULTICONFIGURATION_MODE)));
+            postCreateItem.setEntity(new StringEntity(getCreateItemBody(MULTI_CONFIGURATION_PROJECT, MULTI_CONFIGURATION_MODE)));
 
             try (CloseableHttpResponse postCreateItemResponse = httpClient.execute(postCreateItem)) {
                 Allure.step("Expected result: Successful item creation. Status code 302");
@@ -819,7 +630,7 @@ public class APIHttpTest extends BaseAPIHttpTest {  // Using Apache HttpClient
             }
 
             Allure.step("Send GET request -> Get item by name");
-            HttpGet getItemByName = new HttpGet(getItemByNameURL(MULTICONFIGURATION_NAME));
+            HttpGet getItemByName = new HttpGet(getItemByNameURL(MULTI_CONFIGURATION_PROJECT));
             getItemByName.addHeader(HttpHeaders.AUTHORIZATION, getBasicAuthWithToken());
 
             try (CloseableHttpResponse getItemByNameResponse = httpClient.execute(getItemByName)) {
@@ -829,12 +640,12 @@ public class APIHttpTest extends BaseAPIHttpTest {  // Using Apache HttpClient
                 String jsonResponse = EntityUtils.toString(getItemByNameResponse.getEntity());
                 ProjectResponse projectResponse = new Gson().fromJson(jsonResponse, ProjectResponse.class);
 
-                Allure.step(String.format("Expected result: fullName is '%s' response", MULTICONFIGURATION_NAME));
-                Assert.assertEquals(projectResponse.getFullName(), MULTICONFIGURATION_NAME, "Folder didn't find");
+                Allure.step(String.format("Expected result: fullName is '%s' response", MULTI_CONFIGURATION_PROJECT));
+                Assert.assertEquals(projectResponse.getFullName(), MULTI_CONFIGURATION_PROJECT, "Folder didn't find");
                 Allure.step("Expected result: description is null");
                 Assert.assertNull(projectResponse.getDescription());
-                Allure.step(String.format("Expected result: Field '_class': %s", MULTICONFIGURATION_MODE));
-                Assert.assertEquals(projectResponse.get_class(), MULTICONFIGURATION_MODE);
+                Allure.step(String.format("Expected result: Field '_class': %s", MULTI_CONFIGURATION_MODE));
+                Assert.assertEquals(projectResponse.get_class(), MULTI_CONFIGURATION_MODE);
             }
 
             Allure.step("Send GET request -> Get project list from Dashboard");
@@ -846,7 +657,7 @@ public class APIHttpTest extends BaseAPIHttpTest {  // Using Apache HttpClient
                 ProjectListResponse projectListResponse = new Gson().fromJson(getItemListResponseBody, ProjectListResponse.class);
 
                 boolean findFolderNameInProjectList = projectListResponse.getJobs()
-                        .stream().anyMatch(project -> project.getName().equals(MULTICONFIGURATION_NAME));
+                        .stream().anyMatch(project -> project.getName().equals(MULTI_CONFIGURATION_PROJECT));
 
                 Allure.step("Expected result: Project name found in the list");
                 Assert.assertTrue(findFolderNameInProjectList, "Project name was not found in the list");
@@ -873,7 +684,7 @@ public class APIHttpTest extends BaseAPIHttpTest {  // Using Apache HttpClient
                 Assert.assertEquals(response.getStatusLine().getStatusCode(), 200, "Folder creation failed");
 
                 Assert.assertListContainsObject(
-                        getAllProjectNamesFromJsonResponseList(),
+                        TestApiHttpUtils.getAllProjectNamesFromJsonResponseList(),
                         folderName,
                         "The folder is not created"
                 );

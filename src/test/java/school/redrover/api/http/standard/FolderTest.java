@@ -1,4 +1,4 @@
-package school.redrover;
+package school.redrover.api.http.standard;
 
 import com.google.common.net.HttpHeaders;
 import com.google.gson.Gson;
@@ -23,8 +23,8 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
 
-@Epic("Http API Requests")
-public class APIHTTPFolderTest extends BaseAPIHttpTest {
+@Epic("Standard HttpClient API Requests")
+public class FolderTest extends BaseAPIHttpTest {
 
     private static final String FOLDER_NAME = "FolderUn";
     private static final String FOLDER_CREATE_MODE = "com.cloudbees.hudson.plugins.folder.Folder";

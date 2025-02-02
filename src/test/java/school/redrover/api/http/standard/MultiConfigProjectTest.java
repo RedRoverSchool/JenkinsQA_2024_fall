@@ -1,4 +1,4 @@
-package school.redrover;
+package school.redrover.api.http.standard;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -18,8 +18,8 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
-@Epic("Http API Requests")
-public class APIHTTPMultiConfigProjectTest extends BaseAPIHttpTest { //Using HttpClient from standard Java library
+@Epic("Standard HttpClient API Requests")
+public class MultiConfigProjectTest extends BaseAPIHttpTest {
 
     private static final String MULTI_CONFIG_PROJECT_NAME = "MultiConfigName";
 
