@@ -14,7 +14,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
-public class APITestUtils {
+public class TestApiHttpUtils {
 
     private static final String API_JSON_URL = "api/json?pretty=true";
 

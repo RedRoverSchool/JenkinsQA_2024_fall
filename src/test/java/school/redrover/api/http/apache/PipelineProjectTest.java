@@ -16,7 +16,7 @@ import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 import org.testng.Assert;
 import org.testng.annotations.Test;
-import school.redrover.runner.APITestUtils;
+import school.redrover.runner.TestApiHttpUtils;
 import school.redrover.runner.BaseAPIHttpTest;
 import school.redrover.runner.ProjectUtils;
 import school.redrover.runner.TestUtils;
@@ -50,7 +50,7 @@ public class PipelineProjectTest extends BaseAPIHttpTest {
 
                 Assert.assertEquals(response.getStatusLine().getStatusCode(), 302);
                 Assert.assertListContainsObject(
-                        APITestUtils.getAllProjectNamesFromJsonResponseList(),
+                        TestApiHttpUtils.getAllProjectNamesFromJsonResponseList(),
                         PIPELINE_NAME,
                         "The project is not created");
             }
@@ -75,7 +75,7 @@ public class PipelineProjectTest extends BaseAPIHttpTest {
 
                 Assert.assertEquals(response.getStatusLine().getStatusCode(), 200);
                 Assert.assertListContainsObject(
-                        APITestUtils.getAllProjectViewNamesFromJsonResponseList(),
+                        TestApiHttpUtils.getAllProjectViewNamesFromJsonResponseList(),
                         VIEW_NAME,
                         "View is not created");
             }
@@ -94,7 +94,7 @@ public class PipelineProjectTest extends BaseAPIHttpTest {
 
                 Assert.assertEquals(response.getStatusLine().getStatusCode(), 302);
                 Assert.assertListNotContainsObject(
-                        APITestUtils.getAllProjectViewNamesFromJsonResponseList(),
+                        TestApiHttpUtils.getAllProjectViewNamesFromJsonResponseList(),
                         VIEW_NAME,
                         "View is not deleted");
             }
@@ -118,7 +118,7 @@ public class PipelineProjectTest extends BaseAPIHttpTest {
 
                 Assert.assertEquals(response.getStatusLine().getStatusCode(), 200);
                 Assert.assertListContainsObject(
-                        APITestUtils.getAllProjectNamesFromJsonResponseList(),
+                        TestApiHttpUtils.getAllProjectNamesFromJsonResponseList(),
                         PIPELINE_NAME_BY_XML_CREATED,
                         "The project is not created");
             }
@@ -171,7 +171,7 @@ public class PipelineProjectTest extends BaseAPIHttpTest {
             try (CloseableHttpResponse response = httpClient.execute(httpDelete)) {
                 Assert.assertEquals(response.getStatusLine().getStatusCode(), 204);
                 Assert.assertListNotContainsObject(
-                        APITestUtils.getAllProjectNamesFromJsonResponseList(),
+                        TestApiHttpUtils.getAllProjectNamesFromJsonResponseList(),
                         PIPELINE_NAME_BY_XML_CREATED,
                         "Project is not deleted");
             }
@@ -198,7 +198,7 @@ public class PipelineProjectTest extends BaseAPIHttpTest {
             try (CloseableHttpResponse response = httpClient.execute(httpGet)) {
                 Assert.assertEquals(response.getStatusLine().getStatusCode(), 404);
                 Assert.assertListNotContainsObject(
-                        APITestUtils.getAllProjectNamesFromJsonResponseList(),
+                        TestApiHttpUtils.getAllProjectNamesFromJsonResponseList(),
                         PIPELINE_NAME,
                         "Project is not deleted");
             }

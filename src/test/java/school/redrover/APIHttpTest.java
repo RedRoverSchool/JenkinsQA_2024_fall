@@ -18,7 +18,7 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 import school.redrover.model.ProjectResponse;
 import school.redrover.model.ProjectListResponse;
-import school.redrover.runner.APITestUtils;
+import school.redrover.runner.TestApiHttpUtils;
 import school.redrover.runner.BaseAPIHttpTest;
 import school.redrover.runner.ProjectUtils;
 import school.redrover.runner.TestUtils;
@@ -92,7 +92,7 @@ public class APIHttpTest extends BaseAPIHttpTest {  // Using Apache HttpClient
                 Assert.assertEquals(response.getStatusLine().getStatusCode(), 200);
 
                 Allure.step(String.format("Expected result: '%s' is displayed on Dashboard", FOLDER_NAME_BY_XML_CREATED));
-                Assert.assertListContainsObject(APITestUtils.getAllProjectNamesFromJsonResponseList(), FOLDER_NAME_BY_XML_CREATED,
+                Assert.assertListContainsObject(TestApiHttpUtils.getAllProjectNamesFromJsonResponseList(), FOLDER_NAME_BY_XML_CREATED,
                         "The folder is not created");
             }
 
@@ -199,7 +199,7 @@ public class APIHttpTest extends BaseAPIHttpTest {  // Using Apache HttpClient
                 Assert.assertEquals(postRenameItemResponse.getStatusLine().getStatusCode(), 302);
 
                 Allure.step(String.format("Expected result: '%s' is displayed on Dashboard", FOLDER_NEW_NAME));
-                Assert.assertListContainsObject(APITestUtils.getAllProjectNamesFromJsonResponseList(), FOLDER_NEW_NAME,
+                Assert.assertListContainsObject(TestApiHttpUtils.getAllProjectNamesFromJsonResponseList(), FOLDER_NEW_NAME,
                         "List is not contain folder");
             }
         }
@@ -278,7 +278,7 @@ public class APIHttpTest extends BaseAPIHttpTest {  // Using Apache HttpClient
                 Assert.assertEquals(response.getStatusLine().getStatusCode(), 204);
 
                 Allure.step(String.format("Expected result: '%s' is not displayed on Dashboard", FOLDER_NAME_BY_XML_CREATED));
-                Assert.assertListNotContainsObject(APITestUtils.getAllProjectNamesFromJsonResponseList(), FOLDER_NAME_BY_XML_CREATED,
+                Assert.assertListNotContainsObject(TestApiHttpUtils.getAllProjectNamesFromJsonResponseList(), FOLDER_NAME_BY_XML_CREATED,
                         "The folder is not deleted");
             }
 
@@ -311,7 +311,7 @@ public class APIHttpTest extends BaseAPIHttpTest {  // Using Apache HttpClient
 
                 Assert.assertEquals(response.getStatusLine().getStatusCode(), 200);
                 Assert.assertListContainsObject(
-                        APITestUtils.getAllProjectNamesFromJsonResponseList(),
+                        TestApiHttpUtils.getAllProjectNamesFromJsonResponseList(),
                         FREESTYLE_PROJECT,
                         "The project is not created");
             }
@@ -338,7 +338,7 @@ public class APIHttpTest extends BaseAPIHttpTest {  // Using Apache HttpClient
                 Assert.assertEquals(response.getStatusLine().getStatusCode(), 302);
 
                 Assert.assertListContainsObject(
-                        APITestUtils.getAllProjectNamesFromJsonResponseList(),
+                        TestApiHttpUtils.getAllProjectNamesFromJsonResponseList(),
                         RENAMED_FREESTYLE_PROJECT,
                         "The project was not renamed");
             }
@@ -369,7 +369,7 @@ public class APIHttpTest extends BaseAPIHttpTest {  // Using Apache HttpClient
 
                 Assert.assertEquals(response.getStatusLine().getStatusCode(), 404);
                 Assert.assertListNotContainsObject(
-                        APITestUtils.getAllProjectNamesFromJsonResponseList(),
+                        TestApiHttpUtils.getAllProjectNamesFromJsonResponseList(),
                         RENAMED_FREESTYLE_PROJECT,
                         "The project was not deleted");
 
@@ -395,7 +395,7 @@ public class APIHttpTest extends BaseAPIHttpTest {  // Using Apache HttpClient
 
                 Assert.assertEquals(response.getStatusLine().getStatusCode(), 302);
                 Assert.assertListContainsObject(
-                        APITestUtils.getAllProjectNamesFromJsonResponseList(),
+                        TestApiHttpUtils.getAllProjectNamesFromJsonResponseList(),
                         MULTIBRANCH_PIPELINE_NAME,
                         "The project is not created");
             }
@@ -419,7 +419,7 @@ public class APIHttpTest extends BaseAPIHttpTest {  // Using Apache HttpClient
 
                 Assert.assertEquals(response.getStatusLine().getStatusCode(), 200);
                 Assert.assertListContainsObject(
-                        APITestUtils.getAllProjectNamesFromJsonResponseList(),
+                        TestApiHttpUtils.getAllProjectNamesFromJsonResponseList(),
                         MULTIBRANCH_PIPELINE_NAME_XML,
                         "The project is not created");
             }
@@ -446,7 +446,7 @@ public class APIHttpTest extends BaseAPIHttpTest {  // Using Apache HttpClient
 
                 Allure.step("Expected result: " + String.format("%s is renamed to %s and displayed on Dashboard",
                         MULTIBRANCH_PIPELINE_NAME, newMultibranchPipelineName));
-                Assert.assertListContainsObject(APITestUtils.getAllProjectNamesFromJsonResponseList(), newMultibranchPipelineName,
+                Assert.assertListContainsObject(TestApiHttpUtils.getAllProjectNamesFromJsonResponseList(), newMultibranchPipelineName,
                         "List does not contain the project");
             }
         }
@@ -472,7 +472,7 @@ public class APIHttpTest extends BaseAPIHttpTest {  // Using Apache HttpClient
             Allure.step("Send GET request to check the list of existing projects");
             try (CloseableHttpResponse response = httpClient.execute(httpGet)) {
                 Allure.step("Expected result: " + String.format("%s is deleted and is not displayed on Dashboard", MULTIBRANCH_PIPELINE_NAME_XML));
-                Assert.assertListNotContainsObject(APITestUtils.getAllProjectNamesFromJsonResponseList(), MULTIBRANCH_PIPELINE_NAME_XML,
+                Assert.assertListNotContainsObject(TestApiHttpUtils.getAllProjectNamesFromJsonResponseList(), MULTIBRANCH_PIPELINE_NAME_XML,
                         "The project is not deleted");
             }
         }
@@ -549,7 +549,7 @@ public class APIHttpTest extends BaseAPIHttpTest {  // Using Apache HttpClient
                 Assert.assertEquals(response.getStatusLine().getStatusCode(), 200, "Folder creation failed");
 
                 Assert.assertListContainsObject(
-                        APITestUtils.getAllProjectNamesFromJsonResponseList(),
+                        TestApiHttpUtils.getAllProjectNamesFromJsonResponseList(),
                         folderName,
                         "The folder is not created"
                 );
