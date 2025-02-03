@@ -103,7 +103,7 @@ public abstract class BaseAPIHttpTest {
     }
 
     protected String getAllProjectList() {
-        return ProjectUtils.getUrl() + "job/json";
+        return ProjectUtils.getUrl() + "api/json";
     }
 
     protected String getCreateItemBody(String name, String mode) {
