@@ -11,17 +11,13 @@ import org.testng.annotations.Test;
 import school.redrover.model.ProjectResponse;
 import school.redrover.model.ProjectListResponse;
 import school.redrover.runner.BaseAPIHttpTest;
-import school.redrover.runner.ProjectUtils;
-import school.redrover.runner.TestUtils;
 
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.URLEncoder;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.nio.charset.StandardCharsets;
 
 @Epic("Standard HttpClient API Requests")
 public class FolderTest extends BaseAPIHttpTest {
@@ -31,23 +27,6 @@ public class FolderTest extends BaseAPIHttpTest {
     private static final String FOLDER_NEW_NAME = "FolderNewName";
     private static final String DESCRIPTION = "Add description to rename folder!";
 
-    private String getCreateFolderURL() {return ProjectUtils.getUrl() + "createItem";}
-
-    private String getItemByNameURL(String name) {return ProjectUtils.getUrl() + "job/" +
-                URLEncoder.encode(name, StandardCharsets.UTF_8) + "/api/json";}
-
-    private String getItemListURL() {return ProjectUtils.getUrl() + "api/json";}
-
-    private String getDeleteItemURL(String name) {return String.format(ProjectUtils.getUrl() + "job/%s/", name);}
-
-    private String getRenameItemURL(String name) {return ProjectUtils.getUrl() + String.format("job/%s/confirmRename",name);}
-
-    private String getAddDescriptionURL(String name) {return ProjectUtils.getUrl() + String.format("job/%s/submitDescription", name);}
-    private String getCreateFolderBody(String name, String mode) {return "name="+ name +"&mode=" + mode;}
-    private String getRenameFolderBody(String name) {return "newName=" + name;}
-
-    private String getAddDescriptionBody(String description) {return "description=" + TestUtils.encodeParam(description);}
-
     @Test
     @Story("Folder")
     @Description("002 Create Folder with valid name")
@@ -55,10 +34,10 @@ public class FolderTest extends BaseAPIHttpTest {
         HttpClient httpClient = HttpClient.newHttpClient();
 
         HttpRequest postRequest = HttpRequest.newBuilder()
-                .uri(new URI(getCreateFolderURL()))
+                .uri(new URI(getCreateItemURL()))
                 .header(HttpHeaders.AUTHORIZATION, getBasicAuthWithToken())
                 .header(HttpHeaders.CONTENT_TYPE, "application/x-www-form-urlencoded")
-                .POST(HttpRequest.BodyPublishers.ofString(getCreateFolderBody(FOLDER_NAME,FOLDER_CREATE_MODE)))
+                .POST(HttpRequest.BodyPublishers.ofString(getCreateItemBody(FOLDER_NAME,FOLDER_CREATE_MODE)))
                 .build();
 
         Allure.step("Send POST request -> Create Folder");
@@ -98,7 +77,7 @@ public class FolderTest extends BaseAPIHttpTest {
                 .uri(new URI(getRenameItemURL(FOLDER_NAME)))
                 .header(HttpHeaders.AUTHORIZATION, getBasicAuthWithToken())
                 .header(HttpHeaders.CONTENT_TYPE, "application/x-www-form-urlencoded")
-                .POST(HttpRequest.BodyPublishers.ofString(getRenameFolderBody(FOLDER_NEW_NAME)))
+                .POST(HttpRequest.BodyPublishers.ofString(getRenameItemBody(FOLDER_NEW_NAME)))
                 .build();
 
 
@@ -108,7 +87,7 @@ public class FolderTest extends BaseAPIHttpTest {
         Assert.assertEquals(postRenameResponse.statusCode(), 302);
 
         HttpRequest getItemList = HttpRequest.newBuilder()
-                .uri(new URI(getItemListURL()))
+                .uri(new URI(getAllProjectList()))
                 .header(HttpHeaders.AUTHORIZATION, getBasicAuthWithToken())
                 .GET()
                 .build();
@@ -135,10 +114,10 @@ public class FolderTest extends BaseAPIHttpTest {
         HttpClient httpClient = HttpClient.newHttpClient();
 
         HttpRequest postCreateProjectRequest = HttpRequest.newBuilder()
-                .uri(new URI(getCreateFolderURL()))
+                .uri(new URI(getCreateItemURL()))
                 .header(HttpHeaders.AUTHORIZATION, getBasicAuthWithToken())
                 .header(HttpHeaders.CONTENT_TYPE, "application/x-www-form-urlencoded")
-                .POST(HttpRequest.BodyPublishers.ofString(getCreateFolderBody(FOLDER_NAME,FOLDER_CREATE_MODE)))
+                .POST(HttpRequest.BodyPublishers.ofString(getCreateItemBody(FOLDER_NAME,FOLDER_CREATE_MODE)))
                 .build();
 
         Allure.step("Send POST request -> Create Folder");
