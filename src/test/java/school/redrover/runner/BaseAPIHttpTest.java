@@ -81,5 +81,45 @@ public abstract class BaseAPIHttpTest {
             Assert.fail("IOException occurred: " + e.getMessage());
         }
     }
+
+    protected String getItemByNameURL(String name) {
+        return ProjectUtils.getUrl() + String.format("job/%s/api/json", TestUtils.encodeParam(name));
+    }
+
+    protected String getCreateItemURL() {
+        return ProjectUtils.getUrl() + "createItem";
+    }
+
+    protected String getRenameItemURL(String name) {
+        return ProjectUtils.getUrl() + String.format("job/%s/confirmRename", TestUtils.encodeParam(name));
+    }
+
+    protected String getAddDescriptionURL(String name) {
+        return ProjectUtils.getUrl() + String.format("job/%s/submitDescription", TestUtils.encodeParam(name));
+    }
+
+    protected String getDeleteItemURL(String name) {
+        return ProjectUtils.getUrl() + String.format("job/%s/",TestUtils.encodeParam(name));
+    }
+
+    protected String getAllProjectList() {
+        return ProjectUtils.getUrl() + "job/json";
+    }
+
+    protected String getCreateItemBody(String name, String mode) {
+        return "name=" + TestUtils.encodeParam(name) + "&mode=" + mode;
+    }
+
+    protected String getCreateItemCopyFromBody(String name, String nameFrom) {
+        return "name=" + TestUtils.encodeParam(name) + "&mode=copy" + "&from=" + nameFrom;
+    }
+
+    protected String getRenameItemBody(String name) {
+        return "newName=" + TestUtils.encodeParam(name);
+    }
+
+    protected String getAddDescriptionBody(String description) {
+        return "description=" + TestUtils.encodeParam(description);
+    }
 }
 
