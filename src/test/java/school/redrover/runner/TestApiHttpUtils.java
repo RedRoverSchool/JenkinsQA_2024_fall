@@ -1,5 +1,6 @@
 package school.redrover.runner;
 
+import com.google.common.net.HttpHeaders;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -14,15 +15,18 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
+import static school.redrover.runner.BaseAPIHttpTest.createHttpClientWithAllureLogging;
+import static school.redrover.runner.BaseAPIHttpTest.getBasicAuthWithToken;
+
 public class TestApiHttpUtils {
 
     private static final String API_JSON_URL = "api/json?pretty=true";
 
     public static List<String> getProjectNamesFromJsonResponseList(String url, String jsonArrayKey) throws IOException {
-        try (CloseableHttpClient httpClient = BaseAPIHttpTest.createHttpClientWithAllureLogging()) {
+        try (CloseableHttpClient httpClient = createHttpClientWithAllureLogging()) {
             HttpGet httpGet = new HttpGet(url);
 
-            httpGet.addHeader("Authorization", BaseAPIHttpTest.getBasicAuthWithToken());
+            httpGet.addHeader("Authorization", getBasicAuthWithToken());
 
             try (CloseableHttpResponse response = httpClient.execute(httpGet)) {
                 Assert.assertEquals(response.getStatusLine().getStatusCode(), 200);
@@ -44,5 +48,23 @@ public class TestApiHttpUtils {
 
     public static List<String> getAllProjectViewNamesFromJsonResponseList() throws IOException {
         return getProjectNamesFromJsonResponseList(ProjectUtils.getUrl() + API_JSON_URL, "views");
+    }
+
+    public static JsonObject getProjectJson(String name) throws IOException {
+        try (CloseableHttpClient httpClient = createHttpClientWithAllureLogging()) {
+            HttpGet httpGet = new HttpGet(
+                    String.format(ProjectUtils.getUrl() + "job/%s/api/json?pretty=true", name));
+            httpGet.addHeader(HttpHeaders.AUTHORIZATION, getBasicAuthWithToken());
+
+            try (CloseableHttpResponse response = httpClient.execute(httpGet)) {
+                Assert.assertEquals(response.getStatusLine().getStatusCode(), 200);
+
+                String responseBody = EntityUtils.toString(response.getEntity(), StandardCharsets.UTF_8);
+                Gson gson = new Gson();
+
+                return gson.fromJson(responseBody, JsonObject.class);
+            }
+
+        }
     }
 }
