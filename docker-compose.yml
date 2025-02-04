@@ -1,0 +1,7 @@
+version: '3'
+
+services:
+  my-service:
+    build: .
+    image: fall-2024
+    container_name: test-container
