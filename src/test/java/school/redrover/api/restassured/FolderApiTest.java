@@ -9,7 +9,6 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 import school.redrover.model.ProjectResponse;
 import school.redrover.runner.BaseApiTest;
-import school.redrover.runner.ProjectUtils;
 import school.redrover.runner.TestUtils;
 
 import static io.restassured.RestAssured.given;
@@ -110,7 +109,6 @@ public class FolderApiTest extends BaseApiTest {
         Assert.assertEquals(getItemByNameResponse.get_class(),FOLDER_CREATE_MODE);
     }
 
-
     @Test(dependsOnMethods = "testRenameFolder")
     @Description("007 Add Description to Folder")
     public void testAddDescriptionToFolder() {
@@ -120,7 +118,7 @@ public class FolderApiTest extends BaseApiTest {
                 .contentType("application/x-www-form-urlencoded")
                 .formParam("description",FOLDER_DESCRIPTION)
                 .when()
-                .post(getAddDescriptionURL(FOLDER_NEW_NAME))
+                .post(String.format("job/%s/submitDescription", FOLDER_NEW_NAME))
                 .then()
                 .spec(responseSpec(302, 500L));
 
