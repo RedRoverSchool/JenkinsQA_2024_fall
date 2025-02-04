@@ -22,7 +22,7 @@ import java.net.http.HttpResponse;
 @Epic("Standard HttpClient API Requests")
 public class FolderTest extends BaseAPIHttpTest {
 
-    private static final String FOLDER_NAME = "FolderUn";
+    private static final String FOLDER_NAME = "FolderHTTP";
     private static final String FOLDER_CREATE_MODE = "com.cloudbees.hudson.plugins.folder.Folder";
     private static final String FOLDER_NEW_NAME = "FolderNewName";
     private static final String DESCRIPTION = "Add description to rename folder!";
