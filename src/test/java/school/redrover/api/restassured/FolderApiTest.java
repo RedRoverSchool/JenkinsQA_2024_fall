@@ -25,7 +25,12 @@ public class FolderApiTest extends BaseApiTest {
     private static final String FOLDER_NAME = "FolderApiTest";
     private static final String FOLDER_CREATE_MODE = "com.cloudbees.hudson.plugins.folder.Folder";
     private static final String FOLDER_NEW_NAME = "FolderApiNewName";
-    private static final String FOLDER_DESCRIPTION = "Add descrition to folder!";
+    private static final String FOLDER_DESCRIPTION = "Add description to folder!";
+
+    private static String getCreateItemPath() {return "createItem";}
+    private static String getItemByNamePath(String name) {return "job/%s/api/json".formatted(name);}
+    private static String getRenameItemPath(String name) {return "job/%s/confirmRename".formatted(name);}
+    private static String getAddDescriptionToCreatedItemPath(String name) {return "job/%s/submitDescription".formatted(name);}
 
     @Test
     @Description("002 Create Folder with valid name")
@@ -36,14 +41,14 @@ public class FolderApiTest extends BaseApiTest {
                 .queryParam( "mode", FOLDER_CREATE_MODE)
                 .contentType("application/x-www-form-urlencoded")
                 .when()
-                .post("createItem")
+                .post(getCreateItemPath())
                 .then()
                 .statusCode(302);
 
         Response responseGetCreatedItem = given()
                 .spec(requestSpec())
                 .when()
-                .get("job/%s/api/json".formatted(FOLDER_NAME))
+                .get(getItemByNamePath(FOLDER_NAME))
                 .then()
                 .spec(responseSpec(200,500L))
                 .body(matchesJsonSchema(TestUtils.loadSchema("folder-schema.json")))
@@ -69,7 +74,7 @@ public class FolderApiTest extends BaseApiTest {
                 .queryParam("mode", FOLDER_CREATE_MODE)
                 .contentType("application/x-www-form-urlencoded")
                 .when()
-                .post("createItem")
+                .post(getCreateItemPath())
                 .then()
                 .spec(responseSpec(400, 500L))
                 .extract()
@@ -86,14 +91,14 @@ public class FolderApiTest extends BaseApiTest {
                 .queryParam("newName", FOLDER_NEW_NAME)
                 .contentType("application/x-www-form-urlencoded")
                 .when()
-                .post("job/%s/confirmRename".formatted(FOLDER_NAME))
+                .post(getRenameItemPath(FOLDER_NAME))
                 .then()
                 .spec(responseSpec(302, 500L));
 
         Response responseGetItemByName = given()
                 .spec(requestSpec())
                 .when()
-                .get("job/%s/api/json".formatted(FOLDER_NEW_NAME))
+                .get(getItemByNamePath(FOLDER_NEW_NAME))
                 .then()
                 .spec(responseSpec(200, 500L))
                 .extract()
@@ -118,14 +123,14 @@ public class FolderApiTest extends BaseApiTest {
                 .contentType("application/x-www-form-urlencoded")
                 .formParam("description",FOLDER_DESCRIPTION)
                 .when()
-                .post(String.format("job/%s/submitDescription", FOLDER_NEW_NAME))
+                .post(getAddDescriptionToCreatedItemPath(FOLDER_NEW_NAME))
                 .then()
                 .spec(responseSpec(302, 500L));
 
         Response responseGetItemByName = given()
                 .spec(requestSpec())
                 .when()
-                .get("job/%s/api/json".formatted(FOLDER_NEW_NAME))
+                .get(getItemByNamePath(FOLDER_NEW_NAME))
                 .then()
                 .spec(responseSpec(200, 500L))
                 .extract()
@@ -154,7 +159,7 @@ public class FolderApiTest extends BaseApiTest {
         given()
                 .spec(requestSpec())
                 .when()
-                .get("job/%s/api/json".formatted(FOLDER_NEW_NAME))
+                .get(getItemByNamePath(FOLDER_NEW_NAME))
                 .then()
                 .spec(responseSpec(404, 500L));
     }
