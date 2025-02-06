@@ -98,8 +98,8 @@ public class FolderTest extends BaseAPIHttpTest {
                     boolean findFolderNameInProjectList = projectListResponse.getJobs()
                             .stream().anyMatch(project -> project.getName().equals(FOLDER_NAME_BY_XML_CREATED));
 
-                    Allure.step("Expected result: Project name found in the list");
-                    Assert.assertTrue(findFolderNameInProjectList, "Project name was not found in the list");
+                    Allure.step("Expected result: Folder name found in the list");
+                    Assert.assertTrue(findFolderNameInProjectList, "Folder name not found in the list");
                 }
             }
         }
