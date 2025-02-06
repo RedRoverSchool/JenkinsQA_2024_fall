@@ -28,7 +28,7 @@ public class MultiConfigProjectTest extends BaseAPIHttpTest {
 
     @Test
     @Story("Multi-Configuration project")
-    @Description("009 Create Multi-Configuration project with valid name")
+    @Description("00.003.09 Create Multi-Configuration project with valid name")
     public void testCreateMultiConfiguration() throws IOException {
         try (CloseableHttpClient httpClient = createHttpClientWithAllureLogging()) {
 
