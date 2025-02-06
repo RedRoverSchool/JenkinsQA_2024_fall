@@ -1,0 +1,123 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "properties": {
+    "_class": {
+      "type": "string"
+    },
+    "actions": {
+      "type": "array",
+      "items": [
+        {
+          "type": "object"
+        },
+        {
+          "type": "object"
+        },
+        {
+          "type": "object"
+        },
+        {
+          "type": "object"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "_class": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "_class"
+          ]
+        }
+      ]
+    },
+    "description": {
+      "type": "null"
+    },
+    "displayName": {
+      "type": "string"
+    },
+    "displayNameOrNull": {
+      "type": "null"
+    },
+    "fullDisplayName": {
+      "type": "string"
+    },
+    "fullName": {
+      "type": "string"
+    },
+    "name": {
+      "type": "string"
+    },
+    "url": {
+      "type": "string"
+    },
+    "healthReport": {
+      "type": "array",
+      "items": {}
+    },
+    "jobs": {
+      "type": "array",
+      "items": {}
+    },
+    "primaryView": {
+      "type": "object",
+      "properties": {
+        "_class": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "url": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "_class",
+        "name",
+        "url"
+      ]
+    },
+    "views": {
+      "type": "array",
+      "items": [
+        {
+          "type": "object",
+          "properties": {
+            "_class": {
+              "type": "string"
+            },
+            "name": {
+              "type": "string"
+            },
+            "url": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "_class",
+            "name",
+            "url"
+          ]
+        }
+      ]
+    },
+    "sources": {
+      "type": "array",
+      "items": {}
+    }
+  },
+  "required": [
+    "_class",
+    "description",
+    "displayName",
+    "displayNameOrNull",
+    "fullDisplayName",
+    "fullName",
+    "name",
+    "url"
+  ]
+}
