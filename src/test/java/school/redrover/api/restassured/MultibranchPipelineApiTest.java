@@ -27,8 +27,8 @@ public class MultibranchPipelineApiTest extends BaseApiTest {
     public void testCreateMultibranchPipeline() {
         given()
                 .spec(requestSpec())
-                .queryParam("name", MULTIBRANCH_PIPELINE_NAME)
-                .queryParam("mode", CREATE_MODE)
+                .formParam("name", MULTIBRANCH_PIPELINE_NAME)
+                .formParam("mode", CREATE_MODE)
                 .when()
                 .post("createItem")
                 .then()
