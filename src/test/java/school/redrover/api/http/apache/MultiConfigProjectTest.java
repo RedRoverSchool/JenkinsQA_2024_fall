@@ -17,26 +17,25 @@ import org.testng.annotations.Test;
 import school.redrover.model.ProjectListResponse;
 import school.redrover.model.ProjectResponse;
 import school.redrover.runner.BaseAPIHttpTest;
-import school.redrover.runner.ProjectUtils;
 
 import java.io.IOException;
 
 @Epic("Apache HttpClient API Requests")
 public class MultiConfigProjectTest extends BaseAPIHttpTest {
 
-    private static final String MULTI_CONFIGURATION_PROJECT = "MultiConfigurationProject";
+    private static final String MULTI_CONFIGURATION_NAME = "MultiConfigurationProject";
     private static final String MULTI_CONFIGURATION_MODE = "hudson.matrix.MatrixProject";
 
     @Test
     @Story("Multi-Configuration project")
-    @Description("009 Create Multi-Configuration project with valid name")
+    @Description("00.003.09 Create Multi-Configuration project with valid name")
     public void testCreateMultiConfiguration() throws IOException {
         try (CloseableHttpClient httpClient = createHttpClientWithAllureLogging()) {
 
             HttpPost postCreateItem = new HttpPost(getCreateItemURL());
             postCreateItem.addHeader(HttpHeaders.AUTHORIZATION, getBasicAuthWithToken());
             postCreateItem.addHeader(HttpHeaders.CONTENT_TYPE, "application/x-www-form-urlencoded");
-            postCreateItem.setEntity(new StringEntity(getCreateItemBody(MULTI_CONFIGURATION_PROJECT, MULTI_CONFIGURATION_MODE)));
+            postCreateItem.setEntity(new StringEntity(getCreateItemBody(MULTI_CONFIGURATION_NAME, MULTI_CONFIGURATION_MODE)));
 
             try (CloseableHttpResponse postCreateItemResponse = httpClient.execute(postCreateItem)) {
                 Allure.step("Expected result: Successful item creation. Status code 302");
@@ -44,7 +43,7 @@ public class MultiConfigProjectTest extends BaseAPIHttpTest {
             }
 
             Allure.step("Send GET request -> Get item by name");
-            HttpGet getItemByName = new HttpGet(getItemByNameURL(MULTI_CONFIGURATION_PROJECT));
+            HttpGet getItemByName = new HttpGet(getItemByNameURL(MULTI_CONFIGURATION_NAME));
             getItemByName.addHeader(HttpHeaders.AUTHORIZATION, getBasicAuthWithToken());
 
             try (CloseableHttpResponse getItemByNameResponse = httpClient.execute(getItemByName)) {
@@ -54,8 +53,8 @@ public class MultiConfigProjectTest extends BaseAPIHttpTest {
                 String jsonResponse = EntityUtils.toString(getItemByNameResponse.getEntity());
                 ProjectResponse projectResponse = new Gson().fromJson(jsonResponse, ProjectResponse.class);
 
-                Allure.step(String.format("Expected result: fullName is '%s' response", MULTI_CONFIGURATION_PROJECT));
-                Assert.assertEquals(projectResponse.getFullName(), MULTI_CONFIGURATION_PROJECT, "Folder didn't find");
+                Allure.step(String.format("Expected result: fullName is '%s' response", MULTI_CONFIGURATION_NAME));
+                Assert.assertEquals(projectResponse.getFullName(), MULTI_CONFIGURATION_NAME, "Folder didn't find");
                 Allure.step("Expected result: description is null");
                 Assert.assertNull(projectResponse.getDescription());
                 Allure.step(String.format("Expected result: Field '_class': %s", MULTI_CONFIGURATION_MODE));
@@ -71,7 +70,7 @@ public class MultiConfigProjectTest extends BaseAPIHttpTest {
                 ProjectListResponse projectListResponse = new Gson().fromJson(getItemListResponseBody, ProjectListResponse.class);
 
                 boolean findFolderNameInProjectList = projectListResponse.getJobs()
-                        .stream().anyMatch(project -> project.getName().equals(MULTI_CONFIGURATION_PROJECT));
+                        .stream().anyMatch(project -> project.getName().equals(MULTI_CONFIGURATION_NAME));
 
                 Allure.step("Expected result: Project name found in the list");
                 Assert.assertTrue(findFolderNameInProjectList, "Project name was not found in the list");
