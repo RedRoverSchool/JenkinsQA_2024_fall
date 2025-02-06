@@ -23,7 +23,7 @@ public class MultibranchPipelineApiTest extends BaseApiTest {
 
     @Test
     @Feature("Multibranch Pipeline")
-    @Description("001 Create Multibranch pipeline with valid name")
+    @Description("018 Create Multibranch pipeline with valid name")
     public void testCreateMultibranchPipeline() {
         given()
                 .spec(requestSpec())
