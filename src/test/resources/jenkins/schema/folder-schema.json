@@ -28,7 +28,7 @@
       ]
     },
     "description": {
-      "type": "null"
+      "type": "string"
     },
     "displayName": {
       "type": "string"
