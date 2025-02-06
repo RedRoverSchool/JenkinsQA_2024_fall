@@ -88,6 +88,13 @@ public class FolderApiTest extends BaseApiTest {
                 .anyMatch(project -> project.getName().equals(name));
     }
 
+    private void deleteItem(String name) {
+        given()
+                .spec(requestSpec())
+                .when()
+                .delete(getDeleteItem(name));
+    }
+
     @Test
     @Description("002 Create Folder with valid name")
     public void testCreateFolderWithValidName() {
@@ -250,6 +257,7 @@ public class FolderApiTest extends BaseApiTest {
         Allure.step(String.format("Expected result: Folder name '%s' found in all project list", FOLDER_NAME_COPY_FROM));
         Assert.assertTrue(findItemInAllProjectList(FOLDER_NAME_COPY_FROM));
 
+        deleteItem(FOLDER_NAME);
     }
 
     @Test(dependsOnMethods = "testCreateFolderWithValidName")
