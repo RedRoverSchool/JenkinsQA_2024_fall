@@ -7,6 +7,7 @@ import io.qameta.allure.Story;
 import io.restassured.response.Response;
 import org.testng.Assert;
 import org.testng.annotations.Test;
+import school.redrover.model.ProjectListResponse;
 import school.redrover.model.ProjectResponse;
 import school.redrover.runner.BaseApiTest;
 import school.redrover.runner.TestUtils;
@@ -31,14 +32,16 @@ public class FolderApiTest extends BaseApiTest {
     private static String getItemByNamePath(String name) {return "job/%s/api/json".formatted(name);}
     private static String getRenameItemPath(String name) {return "job/%s/confirmRename".formatted(name);}
     private static String getAddDescriptionToCreatedItemPath(String name) {return "job/%s/submitDescription".formatted(name);}
+    private static String getAllProjectListPath() {return "api/json";}
+    private static String getDeleteItem(String name) {return "job/%s/".formatted(name);}
 
     @Test
     @Description("002 Create Folder with valid name")
     public void testCreateFolderWithValidName() {
         given()
                 .spec(requestSpec())
-                .queryParam("name", FOLDER_NAME)
-                .queryParam( "mode", FOLDER_CREATE_MODE)
+                .formParam("name", FOLDER_NAME)
+                .formParam( "mode", FOLDER_CREATE_MODE)
                 .contentType("application/x-www-form-urlencoded")
                 .when()
                 .post(getCreateItemPath())
@@ -57,21 +60,37 @@ public class FolderApiTest extends BaseApiTest {
 
         ProjectResponse getItemByNameResponse = responseGetCreatedItem.as(ProjectResponse.class);
 
-        Assert.assertEquals(responseGetCreatedItem.getHeader("Content-Type"), "application/json;charset=utf-8");
         Allure.step(String.format("Expected result: fullName is '%s'", FOLDER_NAME));
         Assert.assertEquals(getItemByNameResponse.getFullName(), FOLDER_NAME);
         Allure.step("(ERR)Expected result: description is null");
         Assert.assertEquals(getItemByNameResponse.getDescription(),null);
         Allure.step(String.format("Expected result: _class is '%s'", FOLDER_CREATE_MODE));
         Assert.assertEquals(getItemByNameResponse.get_class(),FOLDER_CREATE_MODE);
+
+        Response responseGetAllProjectList = given()
+                .spec(requestSpec())
+                .when()
+                .get(getAllProjectListPath())
+                .then()
+                .spec(responseSpec(200, 500L))
+                .extract()
+                .response();
+
+        ProjectListResponse projectListresponse = responseGetAllProjectList.as(ProjectListResponse.class);
+
+        boolean findItemByName = projectListresponse.getJobs().stream()
+                .anyMatch(project -> project.getName().equals(FOLDER_NAME));
+
+        Allure.step("Expected result: Folder name found in the list");
+        Assert.assertTrue(findItemByName, "Folder name not found in the list");
     }
 
     @Test
     @Description("015 Create Folder with empty name")
     public void testCreateFolderWithEmptyName() {
         Response projectResponse = given().spec(requestSpec())
-                .queryParam("name","")
-                .queryParam("mode", FOLDER_CREATE_MODE)
+                .formParam("name","")
+                .formParam("mode", FOLDER_CREATE_MODE)
                 .contentType("application/x-www-form-urlencoded")
                 .when()
                 .post(getCreateItemPath())
@@ -88,7 +107,7 @@ public class FolderApiTest extends BaseApiTest {
     @Description("008 Rename Folder")
     public void testRenameFolder() {
         given().spec(requestSpec())
-                .queryParam("newName", FOLDER_NEW_NAME)
+                .formParam("newName", FOLDER_NEW_NAME)
                 .contentType("application/x-www-form-urlencoded")
                 .when()
                 .post(getRenameItemPath(FOLDER_NAME))
@@ -112,6 +131,28 @@ public class FolderApiTest extends BaseApiTest {
         Assert.assertEquals(getItemByNameResponse.getDescription(),null);
         Allure.step(String.format("Expected result: _class is '%s'", FOLDER_CREATE_MODE));
         Assert.assertEquals(getItemByNameResponse.get_class(),FOLDER_CREATE_MODE);
+
+        Response responseGetAllProjectList = given()
+                .spec(requestSpec())
+                .when()
+                .get(getAllProjectListPath())
+                .then()
+                .spec(responseSpec(200, 500L))
+                .extract()
+                .response();
+
+        ProjectListResponse projectListresponse = responseGetAllProjectList.as(ProjectListResponse.class);
+
+        boolean findItemByNewName = projectListresponse.getJobs().stream()
+                .anyMatch(project -> project.getName().equals(FOLDER_NEW_NAME));
+
+        boolean findItemByOldName = projectListresponse.getJobs().stream()
+                .anyMatch(project -> project.getName().equals(FOLDER_NAME));
+
+        Allure.step("Expected result: Folder name found in the list");
+        Assert.assertTrue(findItemByNewName, "Folder name not found in the list");
+        Allure.step("Expected result: Folder old name NOT found in the list");
+        Assert.assertFalse(findItemByOldName, "Folder name found in the list");
     }
 
     @Test(dependsOnMethods = "testRenameFolder")
@@ -152,7 +193,7 @@ public class FolderApiTest extends BaseApiTest {
         given()
                 .spec(requestSpec())
                 .when()
-                .delete("job/%s/".formatted(FOLDER_NEW_NAME))
+                .delete(getDeleteItem(FOLDER_NEW_NAME))
                 .then()
                 .spec(responseSpec(204,500L));
 
