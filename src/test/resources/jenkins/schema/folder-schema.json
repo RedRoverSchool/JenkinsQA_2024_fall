@@ -34,7 +34,7 @@
       "type": "string"
     },
     "displayNameOrNull": {
-      "type": "null"
+      "type": "string"
     },
     "fullDisplayName": {
       "type": "string"
