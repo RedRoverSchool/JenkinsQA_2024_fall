@@ -36,14 +36,13 @@ public class APIHttpTest extends BaseAPIHttpTest {  // Using Apache HttpClient
     @Description("Create Freestyle Project with valid name")
     @Test
     public void testCreateFreestyleProject() throws IOException {
-        try (CloseableHttpClient httpClient = createHttpClientWithAllureLogging()) {
+        try (CloseableHttpClient httpClient = createHttpClientWithTokenAuthAndAllureLogging()) {
             String query = "name=" + TestUtils.encodeParam(FREESTYLE_PROJECT);
 
             HttpPost httpPost = new HttpPost(ProjectUtils.getUrl() + "view/all/createItem?" + query);
             httpPost.setEntity(new StringEntity(TestUtils.loadPayload("create-empty-freestyle-project.xml")));
 
             httpPost.addHeader(HttpHeaders.CONTENT_TYPE, "application/xml");
-            httpPost.addHeader(HttpHeaders.AUTHORIZATION, getBasicAuthWithToken());
 
             try (CloseableHttpResponse response = httpClient.execute(httpPost)) {
 
@@ -60,7 +59,7 @@ public class APIHttpTest extends BaseAPIHttpTest {  // Using Apache HttpClient
     @Description("Rename Freestyle Project with valid name")
     @Test(dependsOnMethods = "testCreateFreestyleProject")
     public void testRenameFreestyleProject() throws IOException {
-        try (CloseableHttpClient httpClient = createHttpClientWithAllureLogging()) {
+        try (CloseableHttpClient httpClient = createHttpClientWithTokenAuthAndAllureLogging()) {
             String renameUrl = ProjectUtils.getUrl() + "job/" + FREESTYLE_PROJECT + "/doRename";
 
             HttpPost httpPost = new HttpPost(renameUrl);
@@ -69,7 +68,6 @@ public class APIHttpTest extends BaseAPIHttpTest {  // Using Apache HttpClient
             httpPost.setEntity(new UrlEncodedFormEntity(params, StandardCharsets.UTF_8));
 
             httpPost.addHeader(HttpHeaders.CONTENT_TYPE, "application/x-www-form-urlencoded");
-            httpPost.addHeader(HttpHeaders.AUTHORIZATION, getBasicAuthWithToken());
 
             try (CloseableHttpResponse response = httpClient.execute(httpPost)) {
 
@@ -87,13 +85,12 @@ public class APIHttpTest extends BaseAPIHttpTest {  // Using Apache HttpClient
     @Description("Delete Freestyle project")
     @Test(dependsOnMethods = "testRenameFreestyleProject")
     public void testDeleteFreestyleProject() throws IOException {
-        try (CloseableHttpClient httpClient = createHttpClientWithAllureLogging()) {
+        try (CloseableHttpClient httpClient = createHttpClientWithTokenAuthAndAllureLogging()) {
             String deleteUrl = ProjectUtils.getUrl() + "job/" + RENAMED_FREESTYLE_PROJECT + "/";
 
             HttpDelete httpDelete = new HttpDelete(deleteUrl);
 
             httpDelete.addHeader(HttpHeaders.CONTENT_TYPE, "application/x-www-form-urlencoded");
-            httpDelete.addHeader(HttpHeaders.AUTHORIZATION, getBasicAuthWithToken());
 
             try (CloseableHttpResponse response = httpClient.execute(httpDelete)) {
 
@@ -101,7 +98,6 @@ public class APIHttpTest extends BaseAPIHttpTest {  // Using Apache HttpClient
             }
 
             HttpGet httpGet = new HttpGet(ProjectUtils.getUrl() + "job/" + RENAMED_FREESTYLE_PROJECT + "/api/json");
-            httpGet.addHeader(HttpHeaders.AUTHORIZATION, getBasicAuthWithToken());
 
             try (CloseableHttpResponse response = httpClient.execute(httpGet)) {
 
@@ -119,7 +115,7 @@ public class APIHttpTest extends BaseAPIHttpTest {  // Using Apache HttpClient
     @Story("Multibranch pipeline")
     @Description("Create Multibranch pipeline with valid name")
     public void testCreateMultibranchPipeline() throws IOException {
-        try (CloseableHttpClient httpClient = createHttpClientWithAllureLogging()) {
+        try (CloseableHttpClient httpClient = createHttpClientWithTokenAuthAndAllureLogging()) {
             HttpPost httpPost = new HttpPost(ProjectUtils.getUrl() + "view/all/createItem");
 
             List<NameValuePair> nameValuePairs = new ArrayList<>();
@@ -129,7 +125,6 @@ public class APIHttpTest extends BaseAPIHttpTest {  // Using Apache HttpClient
                     "mode", "org.jenkinsci.plugins.workflow.multibranch.WorkflowMultiBranchProject"));
 
             httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
-            httpPost.addHeader(HttpHeaders.AUTHORIZATION, getBasicAuthWithToken());
 
             try (CloseableHttpResponse response = httpClient.execute(httpPost)) {
 
@@ -146,14 +141,13 @@ public class APIHttpTest extends BaseAPIHttpTest {  // Using Apache HttpClient
     @Story("Multibranch pipeline")
     @Description("Create Multibranch pipeline with valid name using XML")
     public void testCreateMultibranchPipelineXML() throws IOException {
-        try (CloseableHttpClient httpClient = createHttpClientWithAllureLogging()) {
+        try (CloseableHttpClient httpClient = createHttpClientWithTokenAuthAndAllureLogging()) {
             String queryString = "name=" + TestUtils.encodeParam(MULTIBRANCH_PIPELINE_NAME_XML);
 
             HttpPost httpPost = new HttpPost(ProjectUtils.getUrl() + "view/all/createItem?" + queryString);
             httpPost.setEntity(new StringEntity(TestUtils.loadPayload("create-empty-multibranch-pipeline.xml")));
 
             httpPost.addHeader(HttpHeaders.CONTENT_TYPE, "application/xml");
-            httpPost.addHeader(HttpHeaders.AUTHORIZATION, getBasicAuthWithToken());
 
             try (CloseableHttpResponse response = httpClient.execute(httpPost)) {
 
@@ -172,10 +166,9 @@ public class APIHttpTest extends BaseAPIHttpTest {  // Using Apache HttpClient
     public void testRenameMultibranchPipeline() throws IOException {
         final String newMultibranchPipelineName = "New" + MULTIBRANCH_PIPELINE_NAME;
 
-        try (CloseableHttpClient httpClient = createHttpClientWithAllureLogging()) {
+        try (CloseableHttpClient httpClient = createHttpClientWithTokenAuthAndAllureLogging()) {
             HttpPost requestRename = new HttpPost(ProjectUtils.getUrl() +
                     String.format("/job/%s/confirmRename", TestUtils.encodeParam(MULTIBRANCH_PIPELINE_NAME)));
-            requestRename.addHeader(HttpHeaders.AUTHORIZATION, getBasicAuthWithToken());
             requestRename.addHeader(HttpHeaders.CONTENT_TYPE, "application/x-www-form-urlencoded");
             requestRename.setEntity(new StringEntity("newName=" + TestUtils.encodeParam(newMultibranchPipelineName)));
 
@@ -198,10 +191,9 @@ public class APIHttpTest extends BaseAPIHttpTest {  // Using Apache HttpClient
     @Story("Multibranch pipeline")
     @Description("Delete Multibranch pipeline")
     public void testDeleteMultibranchPipeline() throws IOException {
-        try (CloseableHttpClient httpClient = createHttpClientWithAllureLogging()) {
+        try (CloseableHttpClient httpClient = createHttpClientWithTokenAuthAndAllureLogging()) {
             HttpDelete httpDelete = new HttpDelete(
                     ProjectUtils.getUrl() + String.format("job/%s/", TestUtils.encodeParam(MULTIBRANCH_PIPELINE_NAME_XML)));
-            httpDelete.addHeader(HttpHeaders.AUTHORIZATION, getBasicAuthWithToken());
 
             Allure.step("Send DELETE request -> Delete " + String.format("%s", MULTIBRANCH_PIPELINE_NAME_XML));
             try (CloseableHttpResponse responseDelete = httpClient.execute(httpDelete)) {
@@ -210,12 +202,13 @@ public class APIHttpTest extends BaseAPIHttpTest {  // Using Apache HttpClient
             }
 
             HttpGet httpGet = new HttpGet(ProjectUtils.getUrl() + TestUtils.encodeParam(MULTIBRANCH_PIPELINE_NAME_XML));
-            httpGet.addHeader(HttpHeaders.AUTHORIZATION, getBasicAuthWithToken());
 
             Allure.step("Send GET request to check the list of existing projects");
             try (CloseableHttpResponse response = httpClient.execute(httpGet)) {
                 Allure.step("Expected result: " + String.format(
                         "%s is deleted and is not displayed on Dashboard", MULTIBRANCH_PIPELINE_NAME_XML));
+
+                Assert.assertEquals(response.getStatusLine().getStatusCode(), 404);
                 Assert.assertListNotContainsObject(
                         TestApiHttpUtils.getAllProjectNamesFromJsonResponseList(),
                         MULTIBRANCH_PIPELINE_NAME_XML,
@@ -228,7 +221,7 @@ public class APIHttpTest extends BaseAPIHttpTest {  // Using Apache HttpClient
     @Story("Folder creation")
     @Description("Create a new folder in Jenkins")
     public void testCreateFolder() throws IOException {
-        try (CloseableHttpClient httpClient = createHttpClientWithAllureLogging()) {
+        try (CloseableHttpClient httpClient = createHttpClientWithTokenAuthAndAllureLogging()) {
             String folderName = "MyTestFolder";
             String createFolderURL = getCreateItemURL() + "?name=" + folderName;
 
@@ -236,7 +229,6 @@ public class APIHttpTest extends BaseAPIHttpTest {  // Using Apache HttpClient
 
             HttpPost httpPost = new HttpPost(createFolderURL);
             httpPost.setEntity(new StringEntity(xmlBody, ContentType.APPLICATION_XML));
-            httpPost.addHeader(HttpHeaders.AUTHORIZATION, getBasicAuthWithToken());
 
             Allure.step("Expected result: The folder creating process is done with 200 status");
             try (CloseableHttpResponse response = httpClient.execute(httpPost)) {
