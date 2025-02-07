@@ -261,7 +261,7 @@ public class FolderApiTest extends BaseApiTest {
     }
 
     @Test()
-    @Description("008 Rename Folder")
+    @Description("04.001.08 Rename Folder")
     public void testRenameFolder() {
         createNewFolder(FOLDER_NAME_BY_XML_CREATE);
 
@@ -316,6 +316,20 @@ public class FolderApiTest extends BaseApiTest {
     }
 
     @Test()
+    @Description("04.001.09 Rename Folder with the same name")
+    public void testRenameFolderSameName() {
+        createNewFolder(FOLDER_NAME_BY_XML_CREATE);
+
+        given().spec(requestSpec())
+                .formParam("newName", FOLDER_NAME_BY_XML_CREATE)
+                .contentType("application/x-www-form-urlencoded")
+                .when()
+                .post(getRenameItemPath(FOLDER_NAME_BY_XML_CREATE))
+                .then()
+                .spec(responseSpec(400, 500L));
+    }
+
+    @Test()
     @Description("007 Add Description to Folder")
     public void testAddDescriptionToFolder() {
         createNewFolder(FOLDER_NEW_NAME);
@@ -350,7 +364,7 @@ public class FolderApiTest extends BaseApiTest {
     }
 
     @Test()
-    @Description("004 Delete Folder")
+    @Description("04.003.04 Delete Folder")
     public void testDeleteFolder() {
         createNewFolder(FOLDER_NEW_NAME);
 
@@ -367,5 +381,25 @@ public class FolderApiTest extends BaseApiTest {
                 .get(getItemByNamePath(FOLDER_NEW_NAME))
                 .then()
                 .spec(responseSpec(404, 500L));
+    }
+
+    @Test
+    @Description("04.003.05 Delete deleted Folder")
+    public void testDeleteDeletedFolder() {
+        createNewFolder(FOLDER_NAME);
+
+        given()
+                .spec(requestSpec())
+                .when()
+                .delete(getDeleteItem(FOLDER_NAME))
+                .then()
+                .spec(responseSpec(204,500L));
+
+        given()
+                .spec(requestSpec())
+                .when()
+                .delete(getDeleteItem(FOLDER_NAME))
+                .then()
+                .spec(responseSpec(404,500L));
     }
 }
