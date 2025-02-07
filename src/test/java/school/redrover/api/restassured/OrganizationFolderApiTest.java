@@ -19,20 +19,21 @@ import static school.redrover.runner.TestUtils.loadPayload;
 public class OrganizationFolderApiTest extends BaseApiTest {
 
     private static final String ORGANIZATION_FOLDER_NAME = "OrganizationFolderName";
+    private static final String RENAMED_ORGANIZATION_FOLDER_NAME = "RenamedOrganizationFolderName";
 
     @Test
     @Feature("Organization folder")
     @Description("00.007.01 Create Organization folder with valid name")
     public void testCreateWithXML() {
-       given()
-               .spec(requestSpec())
-               .queryParam("name", ORGANIZATION_FOLDER_NAME)
-               .contentType(ContentType.XML)
-               .body(loadPayload("create-empty-organization-folder.xml"))
-               .when()
-               .post("view/all/createItem")
-               .then()
-               .spec(responseSpec(200, 500L));
+        given()
+                .spec(requestSpec())
+                .queryParam("name", ORGANIZATION_FOLDER_NAME)
+                .contentType(ContentType.XML)
+                .body(loadPayload("create-empty-organization-folder.xml"))
+                .when()
+                .post("view/all/createItem")
+                .then()
+                .spec(responseSpec(200, 500L));
 
         Response response = given()
                 .spec(requestSpec())
@@ -50,5 +51,37 @@ public class OrganizationFolderApiTest extends BaseApiTest {
 
         Assert.assertEquals(projectResponse.getName(), ORGANIZATION_FOLDER_NAME);
         Assert.assertEquals(projectResponse.get_class(), "jenkins.branch.OrganizationFolder");
+    }
+
+    @Test(dependsOnMethods = "testCreateWithXML")
+    @Feature("Organization folder")
+    @Description("06.005.01 Rename Organization folder with valid name")
+    public void testRename() {
+        given()
+                .spec(requestSpec())
+                .contentType("application/x-www-form-urlencoded")
+                .formParam("newName", RENAMED_ORGANIZATION_FOLDER_NAME)
+                .when()
+                .post("job/%s/confirmRename".formatted(ORGANIZATION_FOLDER_NAME))
+                .then()
+                .spec(responseSpec(302, 500L))
+                .extract().response();
+
+        Response response = given()
+                .spec(requestSpec())
+                .when()
+                .get("job/%s/api/json".formatted(RENAMED_ORGANIZATION_FOLDER_NAME))
+                .then()
+                .spec(responseSpec(200, 500L))
+                .extract().response();
+
+        ProjectResponse projectResponse = response.as(ProjectResponse.class);
+
+        Assert.assertTrue(response.getTime() <= 500);
+        Assert.assertEquals(response.getHeader("Content-Type"), "application/json;charset=utf-8");
+
+        Assert.assertEquals(projectResponse.getName(), RENAMED_ORGANIZATION_FOLDER_NAME);
+        Assert.assertEquals(projectResponse.get_class(), "jenkins.branch.OrganizationFolder");
+        Assert.assertEquals(projectResponse.getDisplayName(), RENAMED_ORGANIZATION_FOLDER_NAME);
     }
 }
