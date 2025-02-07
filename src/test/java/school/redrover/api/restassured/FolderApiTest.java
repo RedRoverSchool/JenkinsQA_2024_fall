@@ -11,9 +11,11 @@ import school.redrover.model.ProjectListResponse;
 import school.redrover.model.ProjectResponse;
 import school.redrover.runner.BaseApiTest;
 import school.redrover.runner.TestDataProvider;
+import school.redrover.runner.TestUtils;
 
 import static io.restassured.RestAssured.given;
 
+import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchema;
 import static school.redrover.runner.TestApiUtils.requestSpec;
 import static school.redrover.runner.TestApiUtils.responseSpec;
 import static school.redrover.runner.TestUtils.loadPayload;
@@ -37,12 +39,12 @@ public class FolderApiTest extends BaseApiTest {
     private static String getAllProjectListPath() {return "api/json";}
     private static String getDeleteItem(String name) {return "job/%s/".formatted(name);}
 
-    private void createNewFolder(String name, String mode) {
+    private void createNewFolder(String name) {
         given()
                 .spec(requestSpec())
-                .formParam("name", name)
-                .formParam( "mode", mode)
-                .contentType("application/x-www-form-urlencoded")
+                .contentType("application/xml")
+                .queryParam("name", name)
+                .body(loadPayload("create-empty-folder.xml"))
                 .when()
                 .post(getCreateItemPath());
     }
@@ -112,6 +114,7 @@ public class FolderApiTest extends BaseApiTest {
                 .get(getItemByNamePath(FOLDER_NAME))
                 .then()
                 .spec(responseSpec(200,500L))
+                .body(matchesJsonSchema(TestUtils.loadSchema("folder-schema.json")))
                 .extract()
                 .response();
 
@@ -161,6 +164,7 @@ public class FolderApiTest extends BaseApiTest {
                 .get(getItemByNamePath(FOLDER_NAME_BY_XML_CREATE))
                 .then()
                 .spec(responseSpec(200,500L))
+                .body(matchesJsonSchema(TestUtils.loadSchema("folder-schema.json")))
                 .extract()
                 .response();
 
@@ -168,7 +172,7 @@ public class FolderApiTest extends BaseApiTest {
 
         Allure.step(String.format("Expected result: fullName is '%s'", FOLDER_NAME_BY_XML_CREATE));
         Assert.assertEquals(getItemByNameResponse.getFullName(), FOLDER_NAME_BY_XML_CREATE);
-        Allure.step("(ERR)Expected result: description is null");
+        Allure.step("(Expected result: description is empty");
         Assert.assertEquals(getItemByNameResponse.getDescription(),"");
         Allure.step(String.format("Expected result: _class is '%s'", FOLDER_CREATE_MODE));
         Assert.assertEquals(getItemByNameResponse.get_class(),FOLDER_CREATE_MODE);
@@ -230,7 +234,7 @@ public class FolderApiTest extends BaseApiTest {
     @Test
     @Description("00.006.16 Create Folder by copy from another folder")
     public void testCreateFolderByCopyFromAnotherFolder() {
-        createNewFolder(FOLDER_NAME, FOLDER_CREATE_MODE);
+        createNewFolder(FOLDER_NAME);
 
         given()
                 .spec(requestSpec())
@@ -246,8 +250,8 @@ public class FolderApiTest extends BaseApiTest {
 
         Allure.step(String.format("Expected result: fullName is '%s'", FOLDER_NAME_BY_XML_CREATE));
         Assert.assertEquals(getResponseGetItemByName(FOLDER_NAME_COPY_FROM).getFullName(), FOLDER_NAME_COPY_FROM);
-        Allure.step("(ERR)Expected result: description is null");
-        Assert.assertEquals(getResponseGetItemByName(FOLDER_NAME_COPY_FROM).getDescription(),null);
+        Allure.step("Expected result: description is empty");
+        Assert.assertEquals(getResponseGetItemByName(FOLDER_NAME_COPY_FROM).getDescription(),"");
         Allure.step(String.format("Expected result: _class is '%s'", FOLDER_CREATE_MODE));
         Assert.assertEquals(getResponseGetItemByName(FOLDER_NAME_COPY_FROM).get_class(),FOLDER_CREATE_MODE);
         Allure.step(String.format("Expected result: Folder name '%s' found in all project list", FOLDER_NAME_COPY_FROM));
@@ -256,14 +260,16 @@ public class FolderApiTest extends BaseApiTest {
         deleteItem(FOLDER_NAME);
     }
 
-    @Test(dependsOnMethods = "testCreateFolderWithValidName")
+    @Test()
     @Description("008 Rename Folder")
     public void testRenameFolder() {
+        createNewFolder(FOLDER_NAME_BY_XML_CREATE);
+
         given().spec(requestSpec())
                 .formParam("newName", FOLDER_NEW_NAME)
                 .contentType("application/x-www-form-urlencoded")
                 .when()
-                .post(getRenameItemPath(FOLDER_NAME))
+                .post(getRenameItemPath(FOLDER_NAME_BY_XML_CREATE))
                 .then()
                 .spec(responseSpec(302, 500L));
 
@@ -273,6 +279,7 @@ public class FolderApiTest extends BaseApiTest {
                 .get(getItemByNamePath(FOLDER_NEW_NAME))
                 .then()
                 .spec(responseSpec(200, 500L))
+                .body(matchesJsonSchema(TestUtils.loadSchema("folder-schema.json")))
                 .extract()
                 .response();
 
@@ -280,8 +287,8 @@ public class FolderApiTest extends BaseApiTest {
 
         Allure.step(String.format("Expected result: fullName is '%s'", FOLDER_NEW_NAME));
         Assert.assertEquals(getItemByNameResponse.getFullName(),FOLDER_NEW_NAME);
-        Allure.step("(ERR)Expected result: description is null");
-        Assert.assertEquals(getItemByNameResponse.getDescription(),null);
+        Allure.step("(Expected result: description is empy");
+        Assert.assertEquals(getItemByNameResponse.getDescription(),"");
         Allure.step(String.format("Expected result: _class is '%s'", FOLDER_CREATE_MODE));
         Assert.assertEquals(getItemByNameResponse.get_class(),FOLDER_CREATE_MODE);
 
@@ -300,7 +307,7 @@ public class FolderApiTest extends BaseApiTest {
                 .anyMatch(project -> project.getName().equals(FOLDER_NEW_NAME));
 
         boolean findItemByOldName = projectListresponse.getJobs().stream()
-                .anyMatch(project -> project.getName().equals(FOLDER_NAME));
+                .anyMatch(project -> project.getName().equals(FOLDER_NAME_BY_XML_CREATE));
 
         Allure.step("Expected result: Folder name found in the list");
         Assert.assertTrue(findItemByNewName, "Folder name not found in the list");
@@ -308,9 +315,10 @@ public class FolderApiTest extends BaseApiTest {
         Assert.assertFalse(findItemByOldName, "Folder name found in the list");
     }
 
-    @Test(dependsOnMethods = "testRenameFolder")
+    @Test()
     @Description("007 Add Description to Folder")
     public void testAddDescriptionToFolder() {
+        createNewFolder(FOLDER_NEW_NAME);
 
         given()
                 .spec(requestSpec())
@@ -327,6 +335,7 @@ public class FolderApiTest extends BaseApiTest {
                 .get(getItemByNamePath(FOLDER_NEW_NAME))
                 .then()
                 .spec(responseSpec(200, 500L))
+                .body(matchesJsonSchema(TestUtils.loadSchema("folder-schema.json")))
                 .extract()
                 .response();
 
@@ -334,15 +343,17 @@ public class FolderApiTest extends BaseApiTest {
 
         Allure.step(String.format("Expected result: fullName is '%s'", FOLDER_NEW_NAME));
         Assert.assertEquals(getItemByNameResponse.getFullName(),FOLDER_NEW_NAME);
-        Allure.step("(ERR)Expected result: description is null");
-        Assert.assertEquals(getItemByNameResponse.getDescription(),null);
+        Allure.step("(Expected result: description is empty");
+        Assert.assertEquals(getItemByNameResponse.getDescription(),"");
         Allure.step(String.format("Expected result: _class is '%s'", FOLDER_CREATE_MODE));
         Assert.assertEquals(getItemByNameResponse.get_class(),FOLDER_CREATE_MODE);
     }
 
-    @Test(dependsOnMethods = "testAddDescriptionToFolder")
+    @Test()
     @Description("004 Delete Folder")
     public void testDeleteFolder() {
+        createNewFolder(FOLDER_NEW_NAME);
+
         given()
                 .spec(requestSpec())
                 .when()
@@ -357,5 +368,4 @@ public class FolderApiTest extends BaseApiTest {
                 .then()
                 .spec(responseSpec(404, 500L));
     }
-
 }

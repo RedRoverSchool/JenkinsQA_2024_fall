@@ -28,13 +28,13 @@
       ]
     },
     "description": {
-      "type": "string"
+      "type": ["null", "string"]
     },
     "displayName": {
       "type": "string"
     },
     "displayNameOrNull": {
-      "type": "string"
+      "type": ["null", "string"]
     },
     "fullDisplayName": {
       "type": "string"
