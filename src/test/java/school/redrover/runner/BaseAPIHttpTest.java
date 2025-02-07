@@ -2,6 +2,8 @@ package school.redrover.runner;
 
 import io.qameta.allure.httpclient.AllureHttpClientRequest;
 import io.qameta.allure.httpclient.AllureHttpClientResponse;
+import org.apache.http.HttpHeaders;
+import org.apache.http.HttpRequestInterceptor;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
@@ -28,7 +30,7 @@ public abstract class BaseAPIHttpTest {
 
     protected static final Logger logger = LoggerFactory.getLogger(BaseAPIHttpTest.class);
 
-    protected String getBasicAuthWithPassword() {
+    protected static String getBasicAuthWithPassword() {
         String auth = ProjectUtils.getUserName() + ":" + ProjectUtils.getPassword();
         return "Basic " + Base64.getEncoder().encodeToString(auth.getBytes());
     }
@@ -38,18 +40,28 @@ public abstract class BaseAPIHttpTest {
         return "Basic " + Base64.getEncoder().encodeToString(auth.getBytes());
     }
 
-    protected static CloseableHttpClient createHttpClientWithAllureLogging() {
+    protected static CloseableHttpClient createHttpClientWithPasswordAuthAndAllureLogging() {
         return HttpClientBuilder.create()
                 .addInterceptorFirst(new AllureHttpClientRequest())
                 .addInterceptorLast(new AllureHttpClientResponse())
+                .addInterceptorFirst((HttpRequestInterceptor) (request, context) ->
+                        request.addHeader(HttpHeaders.AUTHORIZATION, getBasicAuthWithPassword()))
+                .build();
+    }
+
+    protected static CloseableHttpClient createHttpClientWithTokenAuthAndAllureLogging() {
+        return HttpClientBuilder.create()
+                .addInterceptorFirst(new AllureHttpClientRequest())
+                .addInterceptorLast(new AllureHttpClientResponse())
+                .addInterceptorFirst((HttpRequestInterceptor) (request, context) ->
+                        request.addHeader(HttpHeaders.AUTHORIZATION, getBasicAuthWithToken()))
                 .build();
     }
 
     @BeforeMethod
-    protected void getToken() {
-        try (CloseableHttpClient httpClient = createHttpClientWithAllureLogging()) {
+    protected void setUp() {
+        try (CloseableHttpClient httpClient = createHttpClientWithPasswordAuthAndAllureLogging()) {
             HttpGet httpGet = new HttpGet(ProjectUtils.getUrl() + "crumbIssuer/api/json");
-            httpGet.addHeader("Authorization", getBasicAuthWithPassword());
 
             try (CloseableHttpResponse response = httpClient.execute(httpGet)) {
                 String jsonString = EntityUtils.toString(response.getEntity());
@@ -63,9 +75,9 @@ public abstract class BaseAPIHttpTest {
                 Assert.assertNotNull(crumb);
                 Assert.assertNotNull(crumbRequestField);
 
-                HttpPost httpPost = new HttpPost(ProjectUtils.getUrl() + "me/descriptorByName/jenkins.security.ApiTokenProperty/generateNewToken");
+                HttpPost httpPost = new HttpPost(
+                        ProjectUtils.getUrl() + "me/descriptorByName/jenkins.security.ApiTokenProperty/generateNewToken");
                 httpPost.addHeader("Jenkins-Crumb", crumb);
-                httpPost.addHeader("Authorization", getBasicAuthWithPassword());
 
                 try (CloseableHttpResponse postResponse = httpClient.execute(httpPost)) {
                     Assert.assertEquals(postResponse.getStatusLine().getStatusCode(), 200);
@@ -99,7 +111,7 @@ public abstract class BaseAPIHttpTest {
     }
 
     protected String getDeleteItemURL(String name) {
-        return ProjectUtils.getUrl() + String.format("job/%s/",TestUtils.encodeParam(name));
+        return ProjectUtils.getUrl() + String.format("job/%s/", TestUtils.encodeParam(name));
     }
 
     protected String getAllProjectList() {
