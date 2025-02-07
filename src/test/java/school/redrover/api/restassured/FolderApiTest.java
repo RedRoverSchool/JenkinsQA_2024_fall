@@ -1,9 +1,6 @@
 package school.redrover.api.restassured;
 
-import io.qameta.allure.Allure;
-import io.qameta.allure.Description;
-import io.qameta.allure.Epic;
-import io.qameta.allure.Story;
+import io.qameta.allure.*;
 import io.restassured.response.Response;
 import org.testng.Assert;
 import org.testng.annotations.Test;
@@ -39,6 +36,7 @@ public class FolderApiTest extends BaseApiTest {
     private static String getAllProjectListPath() {return "api/json";}
     private static String getDeleteItem(String name) {return "job/%s/".formatted(name);}
 
+    @Step("Create new Folder")
     private void createNewFolder(String name) {
         given()
                 .spec(requestSpec())
@@ -261,7 +259,7 @@ public class FolderApiTest extends BaseApiTest {
     }
 
     @Test()
-    @Description("008 Rename Folder")
+    @Description("04.001.08 Rename Folder")
     public void testRenameFolder() {
         createNewFolder(FOLDER_NAME_BY_XML_CREATE);
 
@@ -316,6 +314,20 @@ public class FolderApiTest extends BaseApiTest {
     }
 
     @Test()
+    @Description("04.001.09 Rename Folder with the same name")
+    public void testRenameFolderSameName() {
+        createNewFolder(FOLDER_NAME_BY_XML_CREATE);
+
+        given().spec(requestSpec())
+                .formParam("newName", FOLDER_NAME_BY_XML_CREATE)
+                .contentType("application/x-www-form-urlencoded")
+                .when()
+                .post(getRenameItemPath(FOLDER_NAME_BY_XML_CREATE))
+                .then()
+                .spec(responseSpec(400, 500L));
+    }
+
+    @Test()
     @Description("007 Add Description to Folder")
     public void testAddDescriptionToFolder() {
         createNewFolder(FOLDER_NEW_NAME);
@@ -350,10 +362,11 @@ public class FolderApiTest extends BaseApiTest {
     }
 
     @Test()
-    @Description("004 Delete Folder")
+    @Description("04.003.04 Delete Folder")
     public void testDeleteFolder() {
         createNewFolder(FOLDER_NEW_NAME);
 
+        Allure.step("Delete Folder with name %s".formatted(FOLDER_NEW_NAME));
         given()
                 .spec(requestSpec())
                 .when()
@@ -361,11 +374,34 @@ public class FolderApiTest extends BaseApiTest {
                 .then()
                 .spec(responseSpec(204,500L));
 
+        Allure.step("Get Folder with name %s".formatted(FOLDER_NEW_NAME));
         given()
                 .spec(requestSpec())
                 .when()
                 .get(getItemByNamePath(FOLDER_NEW_NAME))
                 .then()
                 .spec(responseSpec(404, 500L));
+    }
+
+    @Test
+    @Description("04.003.05 Delete deleted Folder")
+    public void testDeleteDeletedFolder() {
+        createNewFolder(FOLDER_NAME);
+
+        Allure.step("Delete Folder with name %s".formatted(FOLDER_NAME));
+        given()
+                .spec(requestSpec())
+                .when()
+                .delete(getDeleteItem(FOLDER_NAME))
+                .then()
+                .spec(responseSpec(204,500L));
+
+        Allure.step("Delete Folder with name %s".formatted(FOLDER_NAME));
+        given()
+                .spec(requestSpec())
+                .when()
+                .delete(getDeleteItem(FOLDER_NAME))
+                .then()
+                .spec(responseSpec(404,500L));
     }
 }
