@@ -1,6 +1,7 @@
 package school.redrover.api.restassured;
 
 import io.qameta.allure.*;
+import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import org.testng.Assert;
 import org.testng.annotations.Test;
@@ -40,13 +41,14 @@ public class FolderApiTest extends BaseApiTest {
     private void createNewFolder(String name) {
         given()
                 .spec(requestSpec())
-                .contentType("application/xml")
+                .contentType(ContentType.XML)
                 .queryParam("name", name)
                 .body(loadPayload("create-empty-folder.xml"))
                 .when()
                 .post(getCreateItemPath());
     }
 
+    @Step("Get Response GET Item by name")
     private ProjectResponse getResponseGetItemByName(String name) {
         Response responseGetCreatedItem = given()
                 .spec(requestSpec())
@@ -71,6 +73,7 @@ public class FolderApiTest extends BaseApiTest {
         return responseGetAllProjectList.as(ProjectListResponse.class);
     }
 
+    @Step("Find  item by name in all projects list from Dashboard")
     private boolean findItemInAllProjectList(String name) {
         Response responseGetAllProjectList = given()
                 .spec(requestSpec())
@@ -100,7 +103,7 @@ public class FolderApiTest extends BaseApiTest {
                 .spec(requestSpec())
                 .formParam("name", FOLDER_NAME)
                 .formParam( "mode", FOLDER_CREATE_MODE)
-                .contentType("application/x-www-form-urlencoded")
+                .contentType(ContentType.URLENC.withCharset("UTF-8"))
                 .when()
                 .post(getCreateItemPath())
                 .then()
@@ -148,7 +151,7 @@ public class FolderApiTest extends BaseApiTest {
     public void testCreateFolderWithValidNameXml() {
         given()
                 .spec(requestSpec())
-                .contentType("application/xml")
+                .contentType(ContentType.XML)
                 .queryParam("name", FOLDER_NAME_BY_XML_CREATE)
                 .body(loadPayload("create-empty-folder.xml"))
                 .when()
@@ -199,7 +202,7 @@ public class FolderApiTest extends BaseApiTest {
         Response projectResponse = given().spec(requestSpec())
                 .formParam("name", unsafeCharacter)
                 .formParam("mode", FOLDER_CREATE_MODE)
-                .contentType("application/x-www-form-urlencoded")
+                .contentType(ContentType.URLENC.withCharset("UTF-8"))
                 .when()
                 .post(getCreateItemPath())
                 .then()
@@ -217,7 +220,7 @@ public class FolderApiTest extends BaseApiTest {
         Response projectResponse = given().spec(requestSpec())
                 .formParam("name","")
                 .formParam("mode", FOLDER_CREATE_MODE)
-                .contentType("application/x-www-form-urlencoded")
+                .contentType(ContentType.URLENC.withCharset("UTF-8"))
                 .when()
                 .post(getCreateItemPath())
                 .then()
@@ -236,7 +239,7 @@ public class FolderApiTest extends BaseApiTest {
 
         given()
                 .spec(requestSpec())
-                .contentType("application/x-www-form-urlencoded")
+                .contentType(ContentType.URLENC.withCharset("UTF-8"))
                 .formParam("name", FOLDER_NAME_COPY_FROM)
                 .formParam("mode", "copy")
                 .formParam("from", FOLDER_NAME)
@@ -265,7 +268,7 @@ public class FolderApiTest extends BaseApiTest {
 
         given().spec(requestSpec())
                 .formParam("newName", FOLDER_NEW_NAME)
-                .contentType("application/x-www-form-urlencoded")
+                .contentType(ContentType.URLENC.withCharset("UTF-8"))
                 .when()
                 .post(getRenameItemPath(FOLDER_NAME_BY_XML_CREATE))
                 .then()
@@ -320,7 +323,7 @@ public class FolderApiTest extends BaseApiTest {
 
         given().spec(requestSpec())
                 .formParam("newName", FOLDER_NAME_BY_XML_CREATE)
-                .contentType("application/x-www-form-urlencoded")
+                .contentType(ContentType.URLENC.withCharset("UTF-8"))
                 .when()
                 .post(getRenameItemPath(FOLDER_NAME_BY_XML_CREATE))
                 .then()
@@ -334,7 +337,7 @@ public class FolderApiTest extends BaseApiTest {
 
         given()
                 .spec(requestSpec())
-                .contentType("application/x-www-form-urlencoded")
+                .contentType(ContentType.URLENC.withCharset("UTF-8"))
                 .formParam("description",FOLDER_DESCRIPTION)
                 .when()
                 .post(getAddDescriptionToCreatedItemPath(FOLDER_NEW_NAME))
@@ -366,7 +369,7 @@ public class FolderApiTest extends BaseApiTest {
     public void testDeleteFolder() {
         createNewFolder(FOLDER_NEW_NAME);
 
-        Allure.step("Delete Folder with name %s".formatted(FOLDER_NEW_NAME));
+        Allure.step("Send DELETE request -> Delete Folder with name %s".formatted(FOLDER_NEW_NAME));
         given()
                 .spec(requestSpec())
                 .when()
@@ -374,7 +377,7 @@ public class FolderApiTest extends BaseApiTest {
                 .then()
                 .spec(responseSpec(204,500L));
 
-        Allure.step("Get Folder with name %s".formatted(FOLDER_NEW_NAME));
+        Allure.step("Send GET request -> Get Folder with name %s".formatted(FOLDER_NEW_NAME));
         given()
                 .spec(requestSpec())
                 .when()
@@ -388,7 +391,7 @@ public class FolderApiTest extends BaseApiTest {
     public void testDeleteDeletedFolder() {
         createNewFolder(FOLDER_NAME);
 
-        Allure.step("Delete Folder with name %s".formatted(FOLDER_NAME));
+        Allure.step("Send DELETE request -> Delete Folder with name %s".formatted(FOLDER_NAME));
         given()
                 .spec(requestSpec())
                 .when()
@@ -396,7 +399,7 @@ public class FolderApiTest extends BaseApiTest {
                 .then()
                 .spec(responseSpec(204,500L));
 
-        Allure.step("Delete Folder with name %s".formatted(FOLDER_NAME));
+        Allure.step("Send DELETE request -> Try to delete Folder with name %s again".formatted(FOLDER_NAME));
         given()
                 .spec(requestSpec())
                 .when()
