@@ -173,6 +173,13 @@ public class MultiConfigurationProjectApiTest extends BaseApiTest {
 
         Allure.step("Expected result: Project name found in the list");
         Assert.assertTrue(findItemByName, "Project name not found in the list");
+
+        given()
+                .spec(requestSpec())
+                .when()
+                .delete("/job/%s/".formatted(MULTI_CONFIG_NAME_XML))
+                .then()
+                .spec(responseSpec(204,500L));
     }
 
     @Test(dependsOnMethods = "testCreateProjectWithValidNameXML")
