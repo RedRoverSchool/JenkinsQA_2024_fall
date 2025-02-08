@@ -30,10 +30,9 @@ public class MultiConfigProjectTest extends BaseAPIHttpTest {
     @Story("Multi-Configuration project")
     @Description("00.003.09 Create Multi-Configuration project with valid name")
     public void testCreateMultiConfiguration() throws IOException {
-        try (CloseableHttpClient httpClient = createHttpClientWithAllureLogging()) {
+        try (CloseableHttpClient httpClient = createHttpClientWithTokenAuthAndAllureLogging()) {
 
             HttpPost postCreateItem = new HttpPost(getCreateItemURL());
-            postCreateItem.addHeader(HttpHeaders.AUTHORIZATION, getBasicAuthWithToken());
             postCreateItem.addHeader(HttpHeaders.CONTENT_TYPE, "application/x-www-form-urlencoded");
             postCreateItem.setEntity(new StringEntity(getCreateItemBody(MULTI_CONFIGURATION_NAME, MULTI_CONFIGURATION_MODE)));
 
@@ -44,7 +43,6 @@ public class MultiConfigProjectTest extends BaseAPIHttpTest {
 
             Allure.step("Send GET request -> Get item by name");
             HttpGet getItemByName = new HttpGet(getItemByNameURL(MULTI_CONFIGURATION_NAME));
-            getItemByName.addHeader(HttpHeaders.AUTHORIZATION, getBasicAuthWithToken());
 
             try (CloseableHttpResponse getItemByNameResponse = httpClient.execute(getItemByName)) {
                 Allure.step("Expected result: Created element is found by name");
@@ -63,7 +61,6 @@ public class MultiConfigProjectTest extends BaseAPIHttpTest {
 
             Allure.step("Send GET request -> Get project list from Dashboard");
             HttpGet getItemList = new HttpGet(getAllProjectList());
-            getItemList.addHeader(HttpHeaders.AUTHORIZATION, getBasicAuthWithToken());
 
             try (CloseableHttpResponse getItemListResponse = httpClient.execute(getItemList)) {
                 String getItemListResponseBody = EntityUtils.toString(getItemListResponse.getEntity());

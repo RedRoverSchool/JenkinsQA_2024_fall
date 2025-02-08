@@ -37,7 +37,7 @@ public class FolderTest extends BaseAPIHttpTest {
                 .uri(new URI(getCreateItemURL()))
                 .header(HttpHeaders.AUTHORIZATION, getBasicAuthWithToken())
                 .header(HttpHeaders.CONTENT_TYPE, "application/x-www-form-urlencoded")
-                .POST(HttpRequest.BodyPublishers.ofString(getCreateItemBody(FOLDER_NAME,FOLDER_CREATE_MODE)))
+                .POST(HttpRequest.BodyPublishers.ofString(getCreateItemBody(FOLDER_NAME, FOLDER_CREATE_MODE)))
                 .build();
 
         Allure.step("Send POST request -> Create Folder");
@@ -64,7 +64,7 @@ public class FolderTest extends BaseAPIHttpTest {
         Allure.step("Expected result: description is null");
         Assert.assertNull(projectResponse.getDescription());
 
-        Assert.assertEquals(projectResponse.get_class(),FOLDER_CREATE_MODE);
+        Assert.assertEquals(projectResponse.get_class(), FOLDER_CREATE_MODE);
     }
 
     @Test(dependsOnMethods = "testCreateFolderWithValidName")
@@ -117,7 +117,7 @@ public class FolderTest extends BaseAPIHttpTest {
                 .uri(new URI(getCreateItemURL()))
                 .header(HttpHeaders.AUTHORIZATION, getBasicAuthWithToken())
                 .header(HttpHeaders.CONTENT_TYPE, "application/x-www-form-urlencoded")
-                .POST(HttpRequest.BodyPublishers.ofString(getCreateItemBody(FOLDER_NAME,FOLDER_CREATE_MODE)))
+                .POST(HttpRequest.BodyPublishers.ofString(getCreateItemBody(FOLDER_NAME, FOLDER_CREATE_MODE)))
                 .build();
 
         Allure.step("Send POST request -> Create Folder");

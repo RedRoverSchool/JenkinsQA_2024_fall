@@ -40,7 +40,7 @@ public class PipelineProjectTest extends BaseAPIHttpTest {
     @Story("Pipeline project")
     @Description("Create Pipeline Project with valid name")
     public void testCreatePipeline() throws IOException {
-        try (CloseableHttpClient httpClient = createHttpClientWithAllureLogging()) {
+        try (CloseableHttpClient httpClient = createHttpClientWithTokenAuthAndAllureLogging()) {
             HttpPost httpPost = new HttpPost(ProjectUtils.getUrl() + "view/all/createItem/");
 
             List<NameValuePair> nameValuePairs = new ArrayList<>();
@@ -48,7 +48,6 @@ public class PipelineProjectTest extends BaseAPIHttpTest {
             nameValuePairs.add(new BasicNameValuePair("mode", "org.jenkinsci.plugins.workflow.job.WorkflowJob"));
 
             httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
-            httpPost.addHeader(HttpHeaders.AUTHORIZATION, getBasicAuthWithToken());
 
             try (CloseableHttpResponse response = httpClient.execute(httpPost)) {
 
@@ -65,7 +64,7 @@ public class PipelineProjectTest extends BaseAPIHttpTest {
     @Story("Pipeline project")
     @Description("Disable Project")
     public void testDisableProject() throws IOException {
-        try (CloseableHttpClient httpClient = createHttpClientWithAllureLogging()) {
+        try (CloseableHttpClient httpClient = createHttpClientWithTokenAuthAndAllureLogging()) {
             HttpPost httpPost = new HttpPost(
                     String.format(ProjectUtils.getUrl() + "job/%s/configSubmit", PIPELINE_NAME));
 
@@ -75,7 +74,6 @@ public class PipelineProjectTest extends BaseAPIHttpTest {
             String body = "json=" + URLEncoder.encode(jsonPayload, StandardCharsets.UTF_8)
                     + "&core:apply=";
 
-            httpPost.addHeader(HttpHeaders.AUTHORIZATION, getBasicAuthWithToken());
             httpPost.addHeader(HttpHeaders.CONTENT_TYPE, "application/x-www-form-urlencoded");
 
             HttpEntity entity = new StringEntity(body, ContentType.APPLICATION_FORM_URLENCODED);
@@ -99,7 +97,7 @@ public class PipelineProjectTest extends BaseAPIHttpTest {
     @Story("View")
     @Description("Add List View for Pipeline project")
     public void testAddListViewForProject() throws IOException {
-        try (CloseableHttpClient httpClient = createHttpClientWithAllureLogging()) {
+        try (CloseableHttpClient httpClient = createHttpClientWithTokenAuthAndAllureLogging()) {
             String query = "name=" + VIEW_NAME;
             String payloadForProject = String.format(TestUtils.loadPayload("create-list-view.xml"), PIPELINE_NAME);
 
@@ -107,7 +105,6 @@ public class PipelineProjectTest extends BaseAPIHttpTest {
 
             httpPost.setEntity(new StringEntity(payloadForProject));
             httpPost.addHeader(HttpHeaders.CONTENT_TYPE, "application/xml ");
-            httpPost.addHeader(HttpHeaders.AUTHORIZATION, getBasicAuthWithToken());
 
             try (CloseableHttpResponse response = httpClient.execute(httpPost)) {
 
@@ -124,9 +121,8 @@ public class PipelineProjectTest extends BaseAPIHttpTest {
     @Story("View")
     @Description("Delete List View from project")
     public void testDeleteListView() throws IOException {
-        try (CloseableHttpClient httpClient = createHttpClientWithAllureLogging()) {
+        try (CloseableHttpClient httpClient = createHttpClientWithTokenAuthAndAllureLogging()) {
             HttpPost httpPost = new HttpPost(String.format(ProjectUtils.getUrl() + "view/%s/doDelete/", VIEW_NAME));
-            httpPost.addHeader(HttpHeaders.AUTHORIZATION, getBasicAuthWithToken());
 
             try (CloseableHttpResponse response = httpClient.execute(httpPost)) {
 
@@ -143,14 +139,13 @@ public class PipelineProjectTest extends BaseAPIHttpTest {
     @Story("Pipeline project")
     @Description("Create Pipeline Project with valid name(XML")
     public void testCreatePipelineXML() throws IOException {
-        try (CloseableHttpClient httpClient = createHttpClientWithAllureLogging()) {
+        try (CloseableHttpClient httpClient = createHttpClientWithTokenAuthAndAllureLogging()) {
             String queryString = "name=" + PIPELINE_NAME_BY_XML_CREATED;
 
             HttpPost httpPost = new HttpPost(ProjectUtils.getUrl() + "view/all/createItem?" + queryString);
             httpPost.setEntity(new StringEntity(TestUtils.loadPayload("create-empty-pipeline-project.xml")));
 
             httpPost.addHeader(HttpHeaders.CONTENT_TYPE, "application/xml");
-            httpPost.addHeader(HttpHeaders.AUTHORIZATION, getBasicAuthWithToken());
 
             try (CloseableHttpResponse response = httpClient.execute(httpPost)) {
 
@@ -169,14 +164,13 @@ public class PipelineProjectTest extends BaseAPIHttpTest {
     public void testAddDescription() throws IOException {
         final String description = "This is a description";
 
-        try (CloseableHttpClient httpClient = createHttpClientWithAllureLogging()) {
+        try (CloseableHttpClient httpClient = createHttpClientWithTokenAuthAndAllureLogging()) {
             HttpPost httpPost = new HttpPost(
                     String.format(ProjectUtils.getUrl() + "job/%s/submitDescription", PIPELINE_NAME_BY_XML_CREATED));
 
             httpPost.setEntity(new StringEntity("description=" + TestUtils.encodeParam(description)));
 
             httpPost.addHeader(HttpHeaders.CONTENT_TYPE, "application/x-www-form-urlencoded");
-            httpPost.addHeader(HttpHeaders.AUTHORIZATION, getBasicAuthWithToken());
 
             try (CloseableHttpResponse response = httpClient.execute(httpPost)) {
 
@@ -196,11 +190,9 @@ public class PipelineProjectTest extends BaseAPIHttpTest {
     @Story("Pipeline project")
     @Description("Delete project by HttpDelete request")
     public void testDeleteProjectByHttpDelete() throws IOException {
-        try (CloseableHttpClient httpClient = createHttpClientWithAllureLogging()) {
+        try (CloseableHttpClient httpClient = createHttpClientWithTokenAuthAndAllureLogging()) {
             HttpDelete httpDelete = new HttpDelete(
                     String.format(ProjectUtils.getUrl() + "/job/%s/", PIPELINE_NAME_BY_XML_CREATED));
-
-            httpDelete.addHeader(HttpHeaders.AUTHORIZATION, getBasicAuthWithToken());
 
             try (CloseableHttpResponse response = httpClient.execute(httpDelete)) {
                 Assert.assertEquals(response.getStatusLine().getStatusCode(), 204);
@@ -216,10 +208,9 @@ public class PipelineProjectTest extends BaseAPIHttpTest {
     @Story("Pipeline project")
     @Description("Delete project by HttpPost request")
     public void testDeletePipelineByHttpPost() throws IOException {
-        try (CloseableHttpClient httpClient = createHttpClientWithAllureLogging()) {
+        try (CloseableHttpClient httpClient = createHttpClientWithTokenAuthAndAllureLogging()) {
             HttpPost httpPost = new HttpPost(
                     String.format(ProjectUtils.getUrl() + "/job/%s/doDelete", PIPELINE_NAME));
-            httpPost.addHeader(HttpHeaders.AUTHORIZATION, getBasicAuthWithToken());
 
             try (CloseableHttpResponse response = httpClient.execute(httpPost)) {
                 Assert.assertEquals(response.getStatusLine().getStatusCode(), 302);
@@ -227,7 +218,6 @@ public class PipelineProjectTest extends BaseAPIHttpTest {
 
             HttpGet httpGet = new HttpGet(
                     String.format(ProjectUtils.getUrl() + "/job/%s/api/json", PIPELINE_NAME));
-            httpGet.addHeader(HttpHeaders.AUTHORIZATION, getBasicAuthWithToken());
 
             try (CloseableHttpResponse response = httpClient.execute(httpGet)) {
                 Assert.assertEquals(response.getStatusLine().getStatusCode(), 404);

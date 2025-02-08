@@ -29,13 +29,11 @@ public class FolderTest extends BaseAPIHttpTest {
     private static final String FOLDER_NAME_COPY_FROM = "FolderCopyFrom";
     private static final String FOLDER_MODE = "com.cloudbees.hudson.plugins.folder.Folder";
 
-
     private void deleteItem(String name) throws IOException {
-        try (CloseableHttpClient httpClient = createHttpClientWithAllureLogging()) {
+        try (CloseableHttpClient httpClient = createHttpClientWithTokenAuthAndAllureLogging()) {
 
             Allure.step("Send DELETE request -> Delete Folder");
             HttpDelete httpDelete = new HttpDelete(String.format(ProjectUtils.getUrl() + "job/%s/", name));
-            httpDelete.addHeader(HttpHeaders.AUTHORIZATION, getBasicAuthWithToken());
 
             try (CloseableHttpResponse response = httpClient.execute(httpDelete)) {
 
@@ -49,14 +47,13 @@ public class FolderTest extends BaseAPIHttpTest {
     @Story("Folder")
     @Description("003 Create Folder with valid name (XML)")
     public void testCreateFolderWithValidNameXML() throws IOException {
-        try (CloseableHttpClient httpClient = createHttpClientWithAllureLogging()) {
+        try (CloseableHttpClient httpClient = createHttpClientWithTokenAuthAndAllureLogging()) {
             String queryString = "name=" + FOLDER_NAME_BY_XML_CREATED;
 
             HttpPost httpPost = new HttpPost(ProjectUtils.getUrl() + "/view/all/createItem?" + queryString);
 
             httpPost.setEntity(new StringEntity(TestUtils.loadPayload("create-empty-folder.xml")));
             httpPost.addHeader(HttpHeaders.CONTENT_TYPE, "application/xml");
-            httpPost.addHeader(HttpHeaders.AUTHORIZATION, getBasicAuthWithToken());
 
             Allure.step("Send POST request -> Create Folder");
             try (CloseableHttpResponse response = httpClient.execute(httpPost)) {
@@ -73,7 +70,6 @@ public class FolderTest extends BaseAPIHttpTest {
 
             Allure.step("Send GET request -> Get item by name");
             HttpGet httpGet = new HttpGet(getItemByNameURL(FOLDER_NAME_BY_XML_CREATED));
-            httpGet.addHeader("Authorization", getBasicAuthWithToken());
 
             try (CloseableHttpResponse response = httpClient.execute(httpGet)) {
                 String responseBody = EntityUtils.toString(response.getEntity());
@@ -89,7 +85,6 @@ public class FolderTest extends BaseAPIHttpTest {
 
                 Allure.step("Send GET request -> Get project list from Dashboard");
                 HttpGet getItemList = new HttpGet(ProjectUtils.getUrl() + "api/json");
-                getItemList.addHeader(HttpHeaders.AUTHORIZATION, getBasicAuthWithToken());
 
                 try (CloseableHttpResponse getItemListResponse = httpClient.execute(getItemList)) {
                     String getItemListResponseBody = EntityUtils.toString(getItemListResponse.getEntity());
@@ -109,11 +104,10 @@ public class FolderTest extends BaseAPIHttpTest {
     @Story("Folder")
     @Description("002 Create Folder with valid name")
     public void testCreateFolderWithValidName() throws IOException {
-        try (CloseableHttpClient httpClient = createHttpClientWithAllureLogging()) {
+        try (CloseableHttpClient httpClient = createHttpClientWithTokenAuthAndAllureLogging()) {
 
             Allure.step("Send POST request -> Create Folder");
             HttpPost postCreateItem = new HttpPost(getCreateItemURL());
-            postCreateItem.addHeader(HttpHeaders.AUTHORIZATION, getBasicAuthWithToken());
             postCreateItem.addHeader(HttpHeaders.CONTENT_TYPE, "application/x-www-form-urlencoded");
             postCreateItem.setEntity(new StringEntity(getCreateItemBody(FOLDER_NAME, FOLDER_MODE)));
 
@@ -124,7 +118,6 @@ public class FolderTest extends BaseAPIHttpTest {
 
             Allure.step("Send GET request -> Get item by name");
             HttpGet getItemByName = new HttpGet(getItemByNameURL(FOLDER_NAME));
-            getItemByName.addHeader(HttpHeaders.AUTHORIZATION, getBasicAuthWithToken());
 
             try (CloseableHttpResponse getItemByNameResponse = httpClient.execute(getItemByName)) {
                 Allure.step("Expected result: Created element is found by name");
@@ -142,7 +135,6 @@ public class FolderTest extends BaseAPIHttpTest {
 
                 Allure.step("Send GET request -> Get project list from Dashboard");
                 HttpGet getItemList = new HttpGet(ProjectUtils.getUrl() + "api/json");
-                getItemList.addHeader(HttpHeaders.AUTHORIZATION, getBasicAuthWithToken());
 
                 try (CloseableHttpResponse getItemListResponse = httpClient.execute(getItemList)) {
                     String getItemListResponseBody = EntityUtils.toString(getItemListResponse.getEntity());
@@ -162,11 +154,10 @@ public class FolderTest extends BaseAPIHttpTest {
     @Story("Folder")
     @Description("015 Create Folder with empty name")
     public void testCreateFolderWithEmptyName() throws IOException {
-        try (CloseableHttpClient httpclient = createHttpClientWithAllureLogging()) {
+        try (CloseableHttpClient httpclient = createHttpClientWithTokenAuthAndAllureLogging()) {
 
             Allure.step("Send POST request -> Create Folder with Empty name");
             HttpPost postCreateItem = new HttpPost((getCreateItemURL()));
-            postCreateItem.addHeader(HttpHeaders.AUTHORIZATION, getBasicAuthWithToken());
             postCreateItem.addHeader(HttpHeaders.CONTENT_TYPE, "application/x-www-form-urlencoded");
             postCreateItem.setEntity(new StringEntity(getCreateItemBody("", FOLDER_MODE)));
 
@@ -183,11 +174,10 @@ public class FolderTest extends BaseAPIHttpTest {
     @Story("Folder")
     @Description("016 Create Folder by copy from another folder")
     public void testCreateFolderCopyFrom() throws IOException {
-        try (CloseableHttpClient httpClient = createHttpClientWithAllureLogging()) {
+        try (CloseableHttpClient httpClient = createHttpClientWithTokenAuthAndAllureLogging()) {
 
             Allure.step("Send POST request -> Create Folder");
             HttpPost postCreateItem = new HttpPost((getCreateItemURL()));
-            postCreateItem.addHeader(HttpHeaders.AUTHORIZATION, getBasicAuthWithToken());
             postCreateItem.addHeader(HttpHeaders.CONTENT_TYPE, "application/x-www-form-urlencoded");
             postCreateItem.setEntity(new StringEntity(getCreateItemBody(FOLDER_NAME, FOLDER_MODE)));
 
@@ -198,7 +188,6 @@ public class FolderTest extends BaseAPIHttpTest {
 
             Allure.step("Send POST request -> Create Folder copy from another folder");
             HttpPost postCreateItemCopyFrom = new HttpPost(getCreateItemURL());
-            postCreateItemCopyFrom.addHeader(HttpHeaders.AUTHORIZATION, getBasicAuthWithToken());
             postCreateItemCopyFrom.addHeader(HttpHeaders.CONTENT_TYPE, "application/x-www-form-urlencoded");
             postCreateItemCopyFrom.setEntity(new StringEntity(getCreateItemCopyFromBody(FOLDER_NAME_COPY_FROM, FOLDER_NAME)));
 
@@ -210,7 +199,6 @@ public class FolderTest extends BaseAPIHttpTest {
 
             Allure.step("Send GET request -> Get item by name");
             HttpGet getItemByName = new HttpGet(getItemByNameURL(FOLDER_NAME_COPY_FROM));
-            getItemByName.addHeader(HttpHeaders.AUTHORIZATION, getBasicAuthWithToken());
 
             try (CloseableHttpResponse getItemByNameResponse = httpClient.execute(getItemByName)) {
                 Allure.step("Expected result: Created element is found by name");
@@ -229,7 +217,6 @@ public class FolderTest extends BaseAPIHttpTest {
 
             Allure.step("Send GET request -> Get project list from Dashboard");
             HttpGet getItemList = new HttpGet(ProjectUtils.getUrl() + "api/json");
-            getItemList.addHeader(HttpHeaders.AUTHORIZATION, getBasicAuthWithToken());
 
             try (CloseableHttpResponse getItemListResponse = httpClient.execute(getItemList)) {
                 String getItemListResponseBody = EntityUtils.toString(getItemListResponse.getEntity());
@@ -250,11 +237,10 @@ public class FolderTest extends BaseAPIHttpTest {
     @Story("Folder")
     @Description("017 Create Folder with unsafe character")
     public void testCreateFolderWithUnsafeCharacter(String unsafeCharacter) throws IOException {
-        try (CloseableHttpClient httpClient = createHttpClientWithAllureLogging()) {
+        try (CloseableHttpClient httpClient = createHttpClientWithTokenAuthAndAllureLogging()) {
 
             Allure.step("Send POST request -> Create Folder");
             HttpPost postCreateItem = new HttpPost((getCreateItemURL()));
-            postCreateItem.addHeader(HttpHeaders.AUTHORIZATION, getBasicAuthWithToken());
             postCreateItem.addHeader(HttpHeaders.CONTENT_TYPE, "application/x-www-form-urlencoded");
             postCreateItem.setEntity(new StringEntity(getCreateItemBody(unsafeCharacter, FOLDER_MODE)));
 
@@ -273,11 +259,10 @@ public class FolderTest extends BaseAPIHttpTest {
     @Story("Folder")
     @Description("008 Rename Folder")
     public void testRenameFolder() throws IOException {
-        try (CloseableHttpClient httpClient = createHttpClientWithAllureLogging()) {
+        try (CloseableHttpClient httpClient = createHttpClientWithTokenAuthAndAllureLogging()) {
 
             Allure.step("Send POST request -> Rename Folder");
             HttpPost postRenameItem = new HttpPost(getRenameItemURL(FOLDER_NAME));
-            postRenameItem.addHeader(HttpHeaders.AUTHORIZATION, getBasicAuthWithToken());
             postRenameItem.addHeader(HttpHeaders.CONTENT_TYPE, "application/x-www-form-urlencoded");
             postRenameItem.setEntity(new StringEntity(getRenameItemBody(FOLDER_NEW_NAME)));
 
@@ -298,11 +283,10 @@ public class FolderTest extends BaseAPIHttpTest {
     @Description("007 Add Description to Folder")
     public void testAddDescriptionToFolder() throws IOException {
         String description = "Add description to folder!";
-        try (CloseableHttpClient httpClient = createHttpClientWithAllureLogging()) {
+        try (CloseableHttpClient httpClient = createHttpClientWithTokenAuthAndAllureLogging()) {
 
             Allure.step("Send POST request -> Create Folder");
             HttpPost postCreateItem = new HttpPost(getCreateItemURL());
-            postCreateItem.addHeader(HttpHeaders.AUTHORIZATION, getBasicAuthWithToken());
             postCreateItem.addHeader(HttpHeaders.CONTENT_TYPE, "application/x-www-form-urlencoded");
             postCreateItem.setEntity(new StringEntity(getCreateItemBody(FOLDER_NAME, FOLDER_MODE)));
 
@@ -313,7 +297,6 @@ public class FolderTest extends BaseAPIHttpTest {
 
             Allure.step("Send POST request -> Add Description to Folder");
             HttpPost postAddDescriptionItem = new HttpPost(getAddDescriptionURL(FOLDER_NAME));
-            postAddDescriptionItem.addHeader(HttpHeaders.AUTHORIZATION, getBasicAuthWithToken());
             postAddDescriptionItem.addHeader(HttpHeaders.CONTENT_TYPE, "application/x-www-form-urlencoded");
             postAddDescriptionItem.setEntity(new StringEntity(getAddDescriptionBody(description)));
 
@@ -324,7 +307,6 @@ public class FolderTest extends BaseAPIHttpTest {
 
             Allure.step("Send GET request -> Get item by name");
             HttpGet getItemByName = new HttpGet(getItemByNameURL(FOLDER_NAME));
-            getItemByName.addHeader(HttpHeaders.AUTHORIZATION, getBasicAuthWithToken());
 
             try (CloseableHttpResponse getItemByNameResponse = httpClient.execute(getItemByName)) {
                 Allure.step("Expected result: Created element is found by name");
@@ -346,11 +328,10 @@ public class FolderTest extends BaseAPIHttpTest {
     @Story("Folder")
     @Description("004 Delete Folder")
     public void testDeleteFolder() throws IOException {
-        try (CloseableHttpClient httpClient = createHttpClientWithAllureLogging()) {
+        try (CloseableHttpClient httpClient = createHttpClientWithTokenAuthAndAllureLogging()) {
 
             Allure.step("Send DELETE request -> Delete Folder");
             HttpDelete httpDelete = new HttpDelete(String.format(ProjectUtils.getUrl() + "job/%s/", FOLDER_NAME_BY_XML_CREATED));
-            httpDelete.addHeader(HttpHeaders.AUTHORIZATION, getBasicAuthWithToken());
 
             try (CloseableHttpResponse response = httpClient.execute(httpDelete)) {
 
@@ -364,7 +345,6 @@ public class FolderTest extends BaseAPIHttpTest {
 
             Allure.step("Send GET request -> Get item by name");
             HttpGet httpGet = new HttpGet(getItemByNameURL(FOLDER_NAME_BY_XML_CREATED));
-            httpGet.addHeader(HttpHeaders.AUTHORIZATION, getBasicAuthWithToken());
 
             try (CloseableHttpResponse response = httpClient.execute(httpGet)) {
 
