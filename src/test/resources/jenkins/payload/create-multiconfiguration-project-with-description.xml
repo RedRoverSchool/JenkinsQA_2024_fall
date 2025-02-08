@@ -1,0 +1,19 @@
+<matrix-project plugin="matrix-project@839.vff91cd7e3a_b_2">
+    <description>Create Project with Description!</description>>
+    <keepDependencies>false</keepDependencies>
+    <properties/>
+    <scm class="hudson.scm.NullSCM"/>
+    <canRoam>true</canRoam>
+    <disabled>false</disabled>
+    <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
+    <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
+    <triggers/>
+    <concurrentBuild>false</concurrentBuild>
+    <axes/>
+    <builders/>
+    <publishers/>
+    <buildWrappers/>
+    <executionStrategy class="hudson.matrix.DefaultMatrixExecutionStrategyImpl">
+        <runSequentially>false</runSequentially>
+    </executionStrategy>
+</matrix-project>
