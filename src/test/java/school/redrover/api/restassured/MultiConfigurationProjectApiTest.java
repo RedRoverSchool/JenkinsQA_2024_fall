@@ -101,7 +101,7 @@ public class MultiConfigurationProjectApiTest extends BaseApiTest {
 
         Allure.step(String.format("Expected result: fullName is '%s'", MULTI_CONFIG_NAME_XML));
         Assert.assertEquals(getItemByNameResponse.getFullName(), MULTI_CONFIG_NAME_XML);
-        Allure.step("(ERR)Expected result: description is null");
+        Allure.step("Expected result: description is empty");
         Assert.assertEquals(getItemByNameResponse.getDescription(),"");
         Allure.step(String.format("Expected result: _class is '%s'", MULTI_CONFIG_MODE));
         Assert.assertEquals(getItemByNameResponse.get_class(),MULTI_CONFIG_MODE);
@@ -152,7 +152,7 @@ public class MultiConfigurationProjectApiTest extends BaseApiTest {
 
         Allure.step(String.format("Expected result: fullName is '%s'", MULTI_CONFIG_NAME_XML));
         Assert.assertEquals(getItemByNameResponse.getFullName(), MULTI_CONFIG_NAME_XML);
-        Allure.step("(ERR)Expected result: description is %s".formatted(description));
+        Allure.step("Expected result: description is %s".formatted(description));
         Assert.assertEquals(getItemByNameResponse.getDescription(),description);
         Allure.step(String.format("Expected result: _class is '%s'", MULTI_CONFIG_MODE));
         Assert.assertEquals(getItemByNameResponse.get_class(),MULTI_CONFIG_MODE);
