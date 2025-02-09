@@ -5,11 +5,10 @@ on:
     workflows: [ "pages-build-deployment" ]
     types:
       - completed
-  workflow_dispatch:
 
 jobs:
   notify:
-    if: ${{ github.event_name == 'workflow_dispatch' || (github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success') }}
+    if: ${{ github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
 
     steps:
@@ -117,7 +116,7 @@ jobs:
         run: |
           TIMESTAMP=$(date +"%Y-%m-%d %H:%M:%S")
           REPORT_LINK="https://redroverschool.github.io/JenkinsQA_2024_fall/${{ steps.find_ci_run.outputs.run_number }}/"
-          CI_RUN_LINK="https://github.com/${{ github.repository }}/actions/runs/${{ steps.find_ci_run.outputs.run_id }}"
+          CI_RUN_LINK="https://github.com/JenkinsQA_2024_fall/actions/runs/${{ steps.find_ci_run.outputs.run_id }}"
           
           ESCAPED_REPORT_LINK=$(echo "$REPORT_LINK" | sed 's|:|\\:|g; s|/|\\/|g')
           ESCAPED_CI_RUN_LINK=$(echo "$CI_RUN_LINK" | sed 's|:|\\:|g; s|/|\\/|g')
@@ -132,7 +131,7 @@ jobs:
           ESCAPED_MESSAGE=$(echo "$MESSAGE" | sed -E 's/([\\`*_{}\[\]()#+\-!|<>])/\\\1/g')
           
           curl -s -X POST "https://api.telegram.org/bot${{ secrets.TELEGRAM_TOKEN }}/sendPhoto" \
-            -F chat_id="@team_jenkins_2024_fall" \
+            -F chat_id="-1002222760706" \
             -F photo="@chart.png" \
             -F caption="$ESCAPED_MESSAGE" \
             -F parse_mode="MarkdownV2"
