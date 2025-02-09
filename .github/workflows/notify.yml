@@ -116,7 +116,7 @@ jobs:
         run: |
           TIMESTAMP=$(date +"%Y-%m-%d %H:%M:%S")
           REPORT_LINK="https://redroverschool.github.io/JenkinsQA_2024_fall/${{ steps.find_ci_run.outputs.run_number }}/"
-          CI_RUN_LINK="https://github.com/JenkinsQA_2024_fall/actions/runs/${{ steps.find_ci_run.outputs.run_id }}"
+          CI_RUN_LINK="https://github.com/RedRoverSchool/JenkinsQA_2024_fall/actions/runs/${{ steps.find_ci_run.outputs.run_id }}"
           
           ESCAPED_REPORT_LINK=$(echo "$REPORT_LINK" | sed 's|:|\\:|g; s|/|\\/|g')
           ESCAPED_CI_RUN_LINK=$(echo "$CI_RUN_LINK" | sed 's|:|\\:|g; s|/|\\/|g')
