@@ -1,0 +1,61 @@
+{
+  "enable": true,
+  "displayNameOrNull": "",
+  "description": "",
+  "projectFactories": {
+    "stapler-class": "org.jenkinsci.plugins.workflow.multibranch.WorkflowMultiBranchProjectFactory",
+    "$class": "org.jenkinsci.plugins.workflow.multibranch.WorkflowMultiBranchProjectFactory",
+    "scriptPath": "Jenkinsfile"
+  },
+  "": [
+    "0",
+    "1"
+  ],
+  "strategy": {
+    "stapler-class": "jenkins.branch.DefaultBranchPropertyStrategy",
+    "$class": "jenkins.branch.DefaultBranchPropertyStrategy"
+  },
+  "com-cloudbees-hudson-plugins-folder-computed-PeriodicFolderTrigger": {
+    "interval": "1d"
+  },
+  "orphanedItemStrategy": {
+    "stapler-class": "com.cloudbees.hudson.plugins.folder.computed.DefaultOrphanedItemStrategy",
+    "$class": "com.cloudbees.hudson.plugins.folder.computed.DefaultOrphanedItemStrategy",
+    "abortBuilds": false,
+    "pruneDeadBranches": true,
+    "daysToKeepStr": "",
+    "numToKeepStr": ""
+  },
+  "icon": {
+    "stapler-class": "jenkins.branch.MetadataActionFolderIcon",
+    "$class": "jenkins.branch.MetadataActionFolderIcon"
+  },
+  "jenkins-branch-OrganizationChildHealthMetricsProperty": {
+    "templates": {
+      "stapler-class": "com.cloudbees.hudson.plugins.folder.health.WorstChildHealthMetric",
+      "$class": "com.cloudbees.hudson.plugins.folder.health.WorstChildHealthMetric",
+      "recursive": true
+    }
+  },
+  "jenkins-branch-OrganizationChildOrphanedItemsProperty": {
+    "": "0",
+    "strategy": {
+      "stapler-class": "jenkins.branch.OrganizationChildOrphanedItemsProperty$Inherit",
+      "$class": "jenkins.branch.OrganizationChildOrphanedItemsProperty$Inherit"
+    }
+  },
+  "jenkins-branch-OrganizationChildTriggersProperty": {
+    "templates": {
+      "stapler-class-bag": "true",
+      "com-cloudbees-hudson-plugins-folder-computed-PeriodicFolderTrigger": {
+        "interval": "1d"
+      }
+    }
+  },
+  "jenkins-branch-NoTriggerOrganizationFolderProperty": {
+    "branches": ".*",
+    "strategy": "NONE"
+  },
+  "Submit": "",
+  "core:apply": ""
+}
