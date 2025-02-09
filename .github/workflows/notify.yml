@@ -122,12 +122,12 @@ jobs:
           ESCAPED_TIMESTAMP=$(echo "$TIMESTAMP" | sed 's|-|\\-|g; s|\.|\\.|g')
           
           MESSAGE="📝 Report: [open](${ESCAPED_REPORT_LINK})
-          📅 Data / time: ${ESCAPED_TIMESTAMP}
+          📅 Data and time: ${ESCAPED_TIMESTAMP}
           ⏱️ Execution time: $DURATION_FINAL
           ⚙️ Build: ${{ steps.find_ci_run.outputs.run_number }}
           🔗 Run: [see](${ESCAPED_CI_RUN_LINK})"
           
-          ESCAPED_MESSAGE=$(echo "$MESSAGE" | sed 's|*|\\*|g; s|_|\\_|g; s|~|\\~|g')
+          ESCAPED_MESSAGE=$(echo "$MESSAGE" | sed -E 's/([\\`*_{}\[\]()#+\-!|<>])/\\\1/g')
           
           curl -s -X POST "https://api.telegram.org/bot${{ secrets.TELEGRAM_TOKEN }}/sendPhoto" \
             -F chat_id="@team_jenkins_2024_fall" \
