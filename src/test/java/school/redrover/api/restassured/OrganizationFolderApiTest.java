@@ -138,4 +138,24 @@ public class OrganizationFolderApiTest extends BaseApiTest {
         Assert.assertEquals(projectResponse.get_class(), "jenkins.branch.OrganizationFolder");
         Assert.assertEquals(projectResponse.getDisplayName(), DISPLAY_NAME_ORG_FOLDER);
     }
+
+    @Test(dependsOnMethods = "testRename")
+    @Feature("Organization folder")
+    @Description("06.005.02 Delete Organization folder")
+    public void testDelete() {
+        given()
+                .spec(requestSpec())
+                .when()
+                .delete("job/%s/".formatted(RENAMED_ORGANIZATION_FOLDER_NAME))
+                .then()
+                .spec(responseSpec(204, 500L))
+                .extract().response();
+
+        given()
+                .spec(requestSpec())
+                .when()
+                .get("job/%s/api/json".formatted(RENAMED_ORGANIZATION_FOLDER_NAME))
+                .then()
+                .spec(responseSpec(404, 500L));
+    }
 }
