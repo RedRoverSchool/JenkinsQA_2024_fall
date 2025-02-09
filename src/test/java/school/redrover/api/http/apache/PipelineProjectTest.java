@@ -68,7 +68,7 @@ public class PipelineProjectTest extends BaseAPIHttpTest {
             HttpPost httpPost = new HttpPost(
                     String.format(ProjectUtils.getUrl() + "job/%s/configSubmit", PIPELINE_NAME));
 
-            String jsonPayload = TestUtils.loadPayload("pipelineConfiguration.json")
+            String jsonPayload = TestUtils.loadPayload("pipeline-configuration.json")
                     .replace("\"enable\": true", "\"enable\": false");
 
             String body = "json=" + URLEncoder.encode(jsonPayload, StandardCharsets.UTF_8)
