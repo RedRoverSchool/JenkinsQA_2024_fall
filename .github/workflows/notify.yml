@@ -45,6 +45,7 @@ jobs:
           FAILED=$(jq '.statistic.failed' summary.json || echo "0")
           BROKEN=$(jq '.statistic.broken' summary.json || echo "0")
           SKIPPED=$(jq '.statistic.skipped' summary.json || echo "0")
+          UNKNOWN=$(jq '.statistic.unknown' summary.json || echo "0")
           DURATION=$(jq '.time.duration' summary.json || echo "0")
           DURATION_FINAL=$(date -ud @$((DURATION / 1000)) +'%M:%S')
 
@@ -52,6 +53,7 @@ jobs:
           echo "FAILED=$FAILED" >> $GITHUB_ENV
           echo "BROKEN=$BROKEN" >> $GITHUB_ENV
           echo "SKIPPED=$SKIPPED" >> $GITHUB_ENV
+          echo "UNKNOWN=$UNKNOWN" >> $GITHUB_ENV
           echo "DURATION_FINAL=$DURATION_FINAL" >> $GITHUB_ENV
 
       - name: Generate test results donut chart
@@ -65,10 +67,11 @@ jobs:
           failed = int(os.getenv('FAILED', 0))
           broken = int(os.getenv('BROKEN', 0))
           skipped = int(os.getenv('SKIPPED', 0))
+          unknown = int(os.getenv('UNKNOWN', 0))
           
-          labels = ['Passed', 'Failed', 'Broken', 'Skipped']
-          values = [passed, failed, broken, skipped]
-          colors = ['#8BC34A', '#F44336', '#FF9800', '#2196F3']
+          labels = ['Passed', 'Failed', 'Broken', 'Skipped', 'Unknown']
+          values = [passed, failed, broken, skipped, unknown]
+          colors = ['#8BC34A', '#F44336', '#FF9800', '#2196F3', '#8A2BE2']
           
           fig, ax = plt.subplots(figsize=(3, 2))
           wedges, texts, autotexts = ax.pie(
@@ -116,7 +119,7 @@ jobs:
         run: |
           TIMESTAMP=$(date +"%Y-%m-%d %H:%M:%S")
           REPORT_LINK="https://redroverschool.github.io/JenkinsQA_2024_fall/${{ steps.find_ci_run.outputs.run_number }}/"
-          CI_RUN_LINK="https://github.com/JenkinsQA_2024_fall/actions/runs/${{ steps.find_ci_run.outputs.run_id }}"
+          CI_RUN_LINK="https://github.com/RedRoverSchool/JenkinsQA_2024_fall/actions/runs/${{ steps.find_ci_run.outputs.run_id }}"
           
           ESCAPED_REPORT_LINK=$(echo "$REPORT_LINK" | sed 's|:|\\:|g; s|/|\\/|g')
           ESCAPED_CI_RUN_LINK=$(echo "$CI_RUN_LINK" | sed 's|:|\\:|g; s|/|\\/|g')
