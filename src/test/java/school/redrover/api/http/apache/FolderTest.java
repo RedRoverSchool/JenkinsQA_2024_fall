@@ -15,8 +15,8 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.util.EntityUtils;
 import org.testng.Assert;
 import org.testng.annotations.Test;
-import school.redrover.model.ProjectListResponse;
-import school.redrover.model.ProjectResponse;
+import school.redrover.models.ProjectListResponse;
+import school.redrover.models.ProjectResponse;
 import school.redrover.runner.*;
 
 import java.io.IOException;

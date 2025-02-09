@@ -8,7 +8,7 @@ import io.restassured.response.Response;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import school.redrover.runner.TestDataProvider;
-import school.redrover.model.ProjectResponse;
+import school.redrover.models.ProjectResponse;
 import school.redrover.runner.BaseApiTest;
 import school.redrover.runner.TestUtils;
 
