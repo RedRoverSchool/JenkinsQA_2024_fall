@@ -7,6 +7,8 @@ import io.qameta.allure.Epic;
 import io.qameta.allure.Feature;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import school.redrover.model.ProjectResponse;
@@ -30,6 +32,17 @@ public class OrganizationFolderApiTest extends BaseApiTest {
     private static final String DISPLAY_NAME_ORG_FOLDER = "DisplayNameOrgFolder";
     private static final String DESCRIPTION = "ProjectDescription";
 
+    private Response requestProjectJson(String name) {
+        return given()
+                .spec(requestSpec())
+                .basePath("job/%s".formatted(name))
+                .when()
+                .get("api/json")
+                .then()
+                .spec(responseSpec(200, 500L))
+                .extract().response();
+    }
+
     @Test
     @Feature("Organization folder")
     @Description("00.007.01 Create Organization folder with valid name")
@@ -44,15 +57,7 @@ public class OrganizationFolderApiTest extends BaseApiTest {
                 .then()
                 .spec(responseSpec(200, 500L));
 
-        Response response = given()
-                .spec(requestSpec())
-                .basePath("job/%s".formatted(ORGANIZATION_FOLDER_NAME))
-                .when()
-                .get("api/json")
-                .then()
-                .spec(responseSpec(200, 500L))
-                .extract().response();
-
+        Response response = requestProjectJson(ORGANIZATION_FOLDER_NAME);
         ProjectResponse projectResponse = response.as(ProjectResponse.class);
 
         Assert.assertEquals(response.getHeader("Content-Type"), "application/json;charset=utf-8");
@@ -63,6 +68,28 @@ public class OrganizationFolderApiTest extends BaseApiTest {
     }
 
     @Test(dependsOnMethods = "testCreateWithXML")
+    @Feature("Organization folder")
+    @Description("00.007.05 Get error message when create Organization Folder with the same name")
+    public void testCreateSameName() {
+        Response htmlResponse = given()
+                .spec(requestSpec())
+                .contentType("application/x-www-form-urlencoded")
+                .formParam("name", ORGANIZATION_FOLDER_NAME)
+                .formParam("mode", "jenkins.branch.OrganizationFolder")
+                .when()
+                .post("view/all/createItem/")
+                .then()
+                .spec(responseSpec(400, 500L))
+                .extract().response();
+
+        Document document = Jsoup.parse(htmlResponse.asString());
+
+        Assert.assertEquals(document.select("h1").text(), "Error");
+        Assert.assertEquals(document.select("p").text(),
+                String.format("A job already exists with the name ‘%s’", ORGANIZATION_FOLDER_NAME));
+    }
+
+    @Test(dependsOnMethods = "testCreateSameName")
     @Feature("Organization folder")
     @Description("06.001.04 Change configurations for Organization folder")
     public void testChangeProjectConfigurations() throws JsonProcessingException {
@@ -88,15 +115,9 @@ public class OrganizationFolderApiTest extends BaseApiTest {
                 .spec((responseSpec(302, 500L)))
                 .extract().response();
 
-        Response response = given()
-                .spec(requestSpec())
-                .when()
-                .get("job/%s/api/json".formatted(ORGANIZATION_FOLDER_NAME))
-                .then()
-                .spec(responseSpec(200, 500L))
-                .extract().response();
-
+        Response response = requestProjectJson(ORGANIZATION_FOLDER_NAME);
         ProjectResponse projectResponse = response.as(ProjectResponse.class);
+
         Assert.assertTrue(response.getTime() <= 500);
         Assert.assertEquals(response.getHeader("Content-Type"), "application/json;charset=utf-8");
 
@@ -121,13 +142,7 @@ public class OrganizationFolderApiTest extends BaseApiTest {
                 .spec(responseSpec(302, 500L))
                 .extract().response();
 
-        Response response = given()
-                .spec(requestSpec())
-                .when()
-                .get("job/%s/api/json".formatted(RENAMED_ORGANIZATION_FOLDER_NAME))
-                .then()
-                .spec(responseSpec(200, 500L))
-                .extract().response();
+        Response response = requestProjectJson(RENAMED_ORGANIZATION_FOLDER_NAME);
 
         ProjectResponse projectResponse = response.as(ProjectResponse.class);
 
