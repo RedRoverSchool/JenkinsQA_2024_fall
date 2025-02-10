@@ -110,4 +110,25 @@ public class PipelineProjectApiTest extends BaseApiTest {
                 .spec(responseSpec(302, 500L));
     }
 
+    @Test(dependsOnMethods = "testRenameProject",
+            dataProvider = "renameProjectNames",
+            dataProviderClass = TestDataProvider.class)
+    @Description("02.005.01 Delete pipeline folder")
+    public void testDelete(String unused, String projectName) {
+        given()
+                .spec(requestSpec())
+                .when()
+                .delete("job/%s/".formatted(projectName))
+                .then()
+                .spec(responseSpec(204, 500L))
+                .extract().response();
+
+        given()
+                .spec(requestSpec())
+                .when()
+                .get("job/%s/api/json".formatted(projectName))
+                .then()
+                .spec(responseSpec(404, 500L));
+    }
+
 }
