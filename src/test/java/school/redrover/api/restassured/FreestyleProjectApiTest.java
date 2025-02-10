@@ -64,5 +64,4 @@ public class FreestyleProjectApiTest extends BaseApiTest {
         Assert.assertEquals(freestyleAndPipelineResponse.get_class(), "hudson.model.FreeStyleProject");
     }
 
-
 }
