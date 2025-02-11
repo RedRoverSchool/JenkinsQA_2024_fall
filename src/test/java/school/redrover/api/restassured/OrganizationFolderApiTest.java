@@ -17,6 +17,7 @@ import school.redrover.runner.TestDataProvider;
 import school.redrover.runner.TestUtils;
 
 import static io.restassured.RestAssured.given;
+import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchema;
 import static school.redrover.runner.TestApiUtils.requestSpec;
 import static school.redrover.runner.TestApiUtils.responseSpec;
 import static school.redrover.runner.TestUtils.loadPayload;
@@ -42,6 +43,7 @@ public class OrganizationFolderApiTest extends BaseApiTest {
                 .get("api/json")
                 .then()
                 .spec(responseSpec(200, 500L))
+                .body(matchesJsonSchema(TestUtils.loadSchema("organization-folder-schema.json")))
                 .extract().response();
     }
 
