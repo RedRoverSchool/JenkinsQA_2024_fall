@@ -13,6 +13,7 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 import school.redrover.model.ProjectResponse;
 import school.redrover.runner.BaseApiTest;
+import school.redrover.runner.TestDataProvider;
 import school.redrover.runner.TestUtils;
 
 import static io.restassured.RestAssured.given;
@@ -32,6 +33,7 @@ public class OrganizationFolderApiTest extends BaseApiTest {
     private static final String RENAMED_ORGANIZATION_FOLDER_NAME = "RenamedOrganizationFolderName";
     private static final String DISPLAY_NAME_ORG_FOLDER = "DisplayNameOrgFolder";
     private static final String DESCRIPTION = "ProjectDescription";
+    private static final String MODE_ORGANIZATION_FOLDER = "jenkins.branch.OrganizationFolder";
 
     private Response requestProjectJson(String name) {
         return given()
@@ -75,9 +77,8 @@ public class OrganizationFolderApiTest extends BaseApiTest {
     public void testCreateSameName() {
         Response htmlResponse = given()
                 .spec(requestSpec())
-                .contentType("application/x-www-form-urlencoded")
                 .formParam("name", ORGANIZATION_FOLDER_NAME)
-                .formParam("mode", "jenkins.branch.OrganizationFolder")
+                .formParam("mode", MODE_ORGANIZATION_FOLDER)
                 .when()
                 .post("view/all/createItem/")
                 .then()
@@ -90,6 +91,67 @@ public class OrganizationFolderApiTest extends BaseApiTest {
         Assert.assertEquals(document.select("p").text(),
                 String.format("A job already exists with the name ‘%s’", ORGANIZATION_FOLDER_NAME));
     }
+
+    @Test
+    @Feature("Organization folder")
+    @Description("00.007.06 Create Organization folder without name")
+    public void testCreateWithoutName() {
+        final String errorMessage = "Query parameter 'name' is required";
+
+        Response response = given()
+                .spec(requestSpec())
+                .formParam("mode", MODE_ORGANIZATION_FOLDER)
+                .when()
+                .post("view/all/createItem/")
+                .then()
+                .spec(responseSpec(400, 500L))
+                .extract().response();
+
+        Assert.assertEquals(Jsoup.parse(response.asString()).select("p").text(), errorMessage);
+        Assert.assertEquals(response.headers().get("X-Error").toString(), "X-Error=" + errorMessage);
+    }
+
+    @Test
+    @Feature("Organization folder")
+    @Description("00.007.07 Create Organization folder without mode")
+    public void testCreateWithoutMode() {
+        final String errorMessage = "No mode given";
+
+        Response response = given()
+                .spec(requestSpec())
+                .formParam("name", "OrgFolder")
+                .when()
+                .post("view/all/createItem/")
+                .then()
+                .spec(responseSpec(400, 500L))
+                .extract().response();
+
+        Assert.assertEquals(Jsoup.parse(response.asString()).select("p").text(), errorMessage);
+        Assert.assertEquals(response.headers().get("X-Error").toString(), "X-Error=" + errorMessage);
+    }
+
+    @Test(dataProvider = "providerUnsafeCharacters", dataProviderClass = TestDataProvider.class)
+    @Feature("Organization folder")
+    @Description("00.007.08 Create Organization folder with unsafe Characters")
+    public void testCreateWithUnsafeCharacters(String unsafeCharacter) {
+        final String errorMessage = "‘%s’ is an unsafe character".formatted(unsafeCharacter);
+
+        Response response = given()
+                .spec(requestSpec())
+                .contentType("application/x-www-form-urlencoded")
+                .formParam("name", unsafeCharacter)
+                .formParam("mode", MODE_ORGANIZATION_FOLDER)
+                .when()
+                .post("view/all/createItem/")
+                .then()
+                .spec(responseSpec(400, 500L))
+                .extract().response();
+
+        Assert.assertEquals(Jsoup.parse(response.asString()).select("p").text(), errorMessage);
+        Assert.assertEquals(response.headers().get("X-Error").toString(),
+                "X-Error=" + errorMessage.replaceAll("‘", "").replaceAll("’", " "));
+    }
+
 
     @Test(dependsOnMethods = "testCreateSameName")
     @Feature("Organization folder")
