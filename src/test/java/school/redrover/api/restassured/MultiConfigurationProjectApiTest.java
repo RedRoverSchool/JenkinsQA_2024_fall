@@ -274,6 +274,24 @@ public class MultiConfigurationProjectApiTest extends BaseApiTest {
                 .anyMatch(project -> project.getColor().equals("disabled"));
 
         Assert.assertTrue(disableProject);
+    }
+
+    @Test(dependsOnMethods = "testDisableCreatedProject")
+    @Description("03.002.02 Enable Project")
+    public void testEnableProject() {
+        given()
+                .spec(requestSpec())
+                .when()
+                .post("/job/%s/enable".formatted(MULTI_CONFIG_NAME_XML))
+                .then()
+                .spec(responseSpec(302, 500L));
+
+        ProjectListResponse projectListresponse = getResponseGetAllProjectList().as(ProjectListResponse.class);
+
+        boolean enableProject = projectListresponse.getJobs().stream().filter(project -> project.getName().equals(MULTI_CONFIG_NAME_XML))
+                .anyMatch(project -> project.getColor().equals("notbuilt"));
+
+        Assert.assertTrue(enableProject);
 
         deleteProject(MULTI_CONFIG_NAME_XML);
     }
