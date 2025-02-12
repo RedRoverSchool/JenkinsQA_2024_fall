@@ -13,6 +13,8 @@ import school.redrover.model.ProjectResponse;
 import school.redrover.runner.BaseApiTest;
 import school.redrover.runner.TestUtils;
 
+import java.nio.charset.StandardCharsets;
+
 import static io.restassured.RestAssured.given;
 import static school.redrover.runner.TestApiUtils.requestSpec;
 import static school.redrover.runner.TestApiUtils.responseSpec;
@@ -25,16 +27,17 @@ public class MultiConfigurationProjectApiTest extends BaseApiTest {
     private final String MULTI_CONFIG_MODE = "hudson.matrix.MatrixProject";
     private final String MULTI_CONFIG_NAME_XML = "MultiConfigurationProjectXML";
     private final String DESCRIPTION = "Add description to Project!";
+    private static final String XML_CREATE_FILE = "create-empty-multi-config.xml";
 
     private static String getCreateItemPath() {return "createItem";}
     private static String getAddDescriptionToCreatedItemPath(String name) {return "job/%s/submitDescription".formatted(name);}
 
-    private static void createNewProjectXML(String name, String xmlFile) {
+    private static void createNewProjectXML(String name) {
         given()
                 .spec(requestSpec())
                 .contentType(ContentType.XML)
                 .queryParam("name", name)
-                .body(TestUtils.loadPayload(xmlFile))
+                .body(TestUtils.loadPayload(XML_CREATE_FILE))
                 .when()
                 .post(getCreateItemPath())
                 .then()
@@ -119,6 +122,8 @@ public class MultiConfigurationProjectApiTest extends BaseApiTest {
 
         Allure.step("Expected result: Project name found in the list");
         Assert.assertTrue(findItemByName, "Project name not found in the list");
+
+        deleteProject(MULTI_CONFIG_NAME);
     }
 
     @Test
@@ -227,7 +232,7 @@ public class MultiConfigurationProjectApiTest extends BaseApiTest {
     @Test
     @Description("03.001.01 Add description to Project")
     public void testAddDescriptionToCreatedProject() {
-        createNewProjectXML(MULTI_CONFIG_NAME_XML,"create-empty-multi-config.xml");
+        createNewProjectXML(MULTI_CONFIG_NAME_XML);
 
         given()
                 .spec(requestSpec())
@@ -254,7 +259,7 @@ public class MultiConfigurationProjectApiTest extends BaseApiTest {
     @Test
     @Description("03.002.01 Disable Project")
     public void testDisableCreatedProject() {
-        createNewProjectXML(MULTI_CONFIG_NAME_XML,"create-empty-multi-config.xml");
+        createNewProjectXML(MULTI_CONFIG_NAME_XML);
 
         given()
                 .spec(requestSpec())
@@ -270,6 +275,33 @@ public class MultiConfigurationProjectApiTest extends BaseApiTest {
 
         Assert.assertTrue(disableProject);
 
+        deleteProject(MULTI_CONFIG_NAME_XML);
+    }
+
+    @Test
+    @Description("03.005.01 Rename Project")
+    public void testRenameProject() {
+        createNewProjectXML(MULTI_CONFIG_NAME_XML);
+
+        given()
+                .spec(requestSpec())
+                .contentType(ContentType.URLENC.withCharset("UTF-8"))
+                .formParam("newName", MULTI_CONFIG_NAME)
+                .when()
+                .post("job/%s/confirmRename".formatted(MULTI_CONFIG_NAME_XML))
+                .then()
+                .spec(responseSpec(302, 500L));
+
+        ProjectResponse responseGetProjectByName = getResponseGetProjectByName(MULTI_CONFIG_NAME).as(ProjectResponse.class);
+
+        Assert.assertEquals(responseGetProjectByName.getFullName(), MULTI_CONFIG_NAME);
+
+        ProjectListResponse responseGetAllProjectList = getResponseGetAllProjectList().as(ProjectListResponse.class);
+
+        Assert.assertTrue(responseGetAllProjectList.getJobs().stream().anyMatch(project -> project.getName().equals(MULTI_CONFIG_NAME)));
+        Assert.assertFalse(responseGetAllProjectList.getJobs().stream().anyMatch(project -> project.getName().equals(MULTI_CONFIG_NAME_XML)));
+
+        deleteProject(MULTI_CONFIG_NAME);
     }
 
     @Test(dependsOnMethods = "testCreateProjectWithValidNameXML")
