@@ -26,6 +26,7 @@ public class ProjectListResponse {
         private String classField;
         private String name;
         private String url;
+        private String color;
     }
 }
 
