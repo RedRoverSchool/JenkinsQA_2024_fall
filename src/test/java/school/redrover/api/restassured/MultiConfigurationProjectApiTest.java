@@ -24,6 +24,33 @@ public class MultiConfigurationProjectApiTest extends BaseApiTest {
     private final String MULTI_CONFIG_NAME = "MultiConfigurationProject";
     private final String MULTI_CONFIG_MODE = "hudson.matrix.MatrixProject";
     private final String MULTI_CONFIG_NAME_XML = "MultiConfigurationProjectXML";
+    private final String DESCRIPTION = "Add description to Project!";
+
+    private static String getCreateItemPath() {return "createItem";}
+    private static String getAddDescriptionToCreatedItemPath(String name) {return "job/%s/submitDescription".formatted(name);}
+
+    private static void createNewProjectXML(String name, String xmlFile) {
+        given()
+                .spec(requestSpec())
+                .contentType(ContentType.XML)
+                .queryParam("name", name)
+                .body(TestUtils.loadPayload(xmlFile))
+                .when()
+                .post(getCreateItemPath())
+                .then()
+                .spec(responseSpec(200, 500L));
+    }
+
+    private static Response getResponseGetProjectByName(String name) {
+        return given()
+                .spec(requestSpec())
+                .when()
+                .get("job/%s/api/json".formatted(name))
+                .then()
+                .spec(responseSpec(200,500L))
+                .extract()
+                .response();
+    }
 
     @Test
     @Description("00.003.09 Create Multi-Configuration Project with valid name")
@@ -182,11 +209,37 @@ public class MultiConfigurationProjectApiTest extends BaseApiTest {
                 .spec(responseSpec(204,500L));
     }
 
-    @Test(dependsOnMethods = "testCreateProjectWithValidNameXML")
-    @Description("04.003.04 Delete Folder")
-    public void testDeleteFolder() {
+    @Test
+    @Description("03.001.01 Add description to Project")
+    public void testAddDescriptionToCreatedProject() {
+        createNewProjectXML(MULTI_CONFIG_NAME_XML,"create-empty-multi-config.xml");
 
-        Allure.step("Send DELETE request -> Delete Folder with name %s".formatted(MULTI_CONFIG_NAME_XML));
+        given()
+                .spec(requestSpec())
+                .contentType(ContentType.URLENC.withCharset("UTF-8"))
+                .formParam("description", DESCRIPTION)
+                .when()
+                .post(getAddDescriptionToCreatedItemPath(MULTI_CONFIG_NAME_XML))
+                .then()
+                .spec(responseSpec(302, 500L));
+
+
+        ProjectResponse getItemByNameResponse = getResponseGetProjectByName(MULTI_CONFIG_NAME_XML).as(ProjectResponse.class);
+
+        Allure.step(String.format("Expected result: fullName is '%s'", MULTI_CONFIG_NAME_XML));
+        Assert.assertEquals(getItemByNameResponse.getFullName(), MULTI_CONFIG_NAME_XML);
+        Allure.step("Expected result: description is empty");
+        Assert.assertEquals(getItemByNameResponse.getDescription(),DESCRIPTION);
+        Allure.step(String.format("Expected result: _class is '%s'", MULTI_CONFIG_MODE));
+        Assert.assertEquals(getItemByNameResponse.get_class(),MULTI_CONFIG_MODE);
+
+    }
+
+    @Test(dependsOnMethods = "testCreateProjectWithValidNameXML")
+    @Description("03.003.01 Delete Project")
+    public void testDeleteProject() {
+
+        Allure.step("Send DELETE request -> Delete Project with name %s".formatted(MULTI_CONFIG_NAME_XML));
         given()
                 .spec(requestSpec())
                 .when()
@@ -194,7 +247,7 @@ public class MultiConfigurationProjectApiTest extends BaseApiTest {
                 .then()
                 .spec(responseSpec(204,500L));
 
-        Allure.step("Send GET request -> Get Folder with name %s".formatted(MULTI_CONFIG_NAME_XML));
+        Allure.step("Send GET request -> Get Project with name %s".formatted(MULTI_CONFIG_NAME_XML));
         given()
                 .spec(requestSpec())
                 .when()
