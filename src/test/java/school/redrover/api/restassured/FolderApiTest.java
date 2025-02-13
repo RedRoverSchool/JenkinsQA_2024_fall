@@ -144,7 +144,7 @@ public class FolderApiTest extends BaseApiTest {
     @Test
     @Description("00.006.16 Create Folder by copy from another folder")
     public void testCreateFolderByCopyFromAnotherFolder() {
-        createNewEmptyProjectXML(FOLDER_NAME,CREATE_EMPTY_FOLDER_XML_FILE);
+        createNewEmptyProjectXML(FOLDER_NAME, CREATE_EMPTY_FOLDER_XML_FILE);
 
         given()
                 .spec(requestSpec())

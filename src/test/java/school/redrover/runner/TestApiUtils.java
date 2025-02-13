@@ -31,9 +31,9 @@ public class TestApiUtils {
     public static String getAddDescriptionToCreatedItemPath(String name) {return "job/%s/submitDescription".formatted(TestUtils.encodeParam(name));}
     public static String getItemByNamePath(String name) {return "job/%s/api/json".formatted(TestUtils.encodeParam(name));}
     public static String getAllProjectListPath() {return "/api/json";}
-    public static String getRenameItemPath(String name) {return "job/%s/confirmRename".formatted(name);}
-    public static String getDisableProjectPath(String name) {return "/job/%s/disable".formatted(name);}
-    public static String getEnableProjectPath(String name) {return "/job/%s/enable".formatted(name);}
+    public static String getRenameItemPath(String name) {return "job/%s/confirmRename".formatted(TestUtils.encodeParam(name));}
+    public static String getDisableProjectPath(String name) {return "/job/%s/disable".formatted(TestUtils.encodeParam(name));}
+    public static String getEnableProjectPath(String name) {return "/job/%s/enable".formatted(TestUtils.encodeParam(name));}
 
     public static RequestSpecification baseRequestSpec() {
         LogConfig logConfig = LogConfig.logConfig().blacklistHeaders(List.of("Authorization", "Jenkins-Crumb"));
@@ -65,6 +65,7 @@ public class TestApiUtils {
                 .build();
     }
 
+    @Step("Create Project (XML) {name}")
     public static void createNewEmptyProjectXML(String name, String xmlFile) {
         given()
                 .spec(requestSpec())
@@ -77,6 +78,7 @@ public class TestApiUtils {
                 .spec(responseSpec(200, 500L));
     }
 
+    @Step(("Send DELETE request -> Delete project {name}"))
     public static void deleteProject(String name) {
         given()
                 .spec(requestSpec())
