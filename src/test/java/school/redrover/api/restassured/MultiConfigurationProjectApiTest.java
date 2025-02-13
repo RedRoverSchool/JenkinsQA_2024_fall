@@ -11,9 +11,8 @@ import org.testng.annotations.Test;
 import school.redrover.model.ProjectListResponse;
 import school.redrover.model.ProjectResponse;
 import school.redrover.runner.BaseApiTest;
+import school.redrover.runner.TestDataProvider;
 import school.redrover.runner.TestUtils;
-
-import java.nio.charset.StandardCharsets;
 
 import static io.restassured.RestAssured.given;
 import static school.redrover.runner.TestApiUtils.requestSpec;
@@ -134,9 +133,9 @@ public class MultiConfigurationProjectApiTest extends BaseApiTest {
                 .spec(requestSpec())
                 .contentType(ContentType.XML)
                 .queryParam("name", MULTI_CONFIG_NAME_XML)
-                .body(TestUtils.loadPayload("create-empty-multi-config.xml"))
+                .body(TestUtils.loadPayload(XML_CREATE_FILE))
                 .when()
-                .post("createItem ")
+                .post(getCreateItemPath())
                 .then()
                 .spec(responseSpec(200, 500L));
 
@@ -177,6 +176,60 @@ public class MultiConfigurationProjectApiTest extends BaseApiTest {
     }
 
     @Test
+    @Description("00.003.12 Create Multi-Configuration Project with empty name")
+    public void testCreateProjectWithEmptyName() {
+        Response response = given()
+                .spec(requestSpec())
+                .contentType(ContentType.URLENC.withCharset("UTF-8"))
+                .formParam("name", "")
+                .formParam("mode", MULTI_CONFIG_MODE)
+                .when()
+                .post(getCreateItemPath())
+                .then()
+                .spec(responseSpec(400, 500L))
+                .extract()
+                .response();
+
+        Allure.step("Expected result: Header 'X-Error' has value 'No name is specified'");
+        Assert.assertEquals(response.getHeaders().getValue("X-Error"),"No name is specified");
+    }
+
+    @Test
+    @Description("00.003.14 Create Multi-Configuration Project without mode")
+    public void testCreateProjectWithoutMode() {
+        Response response = given()
+                .spec(requestSpec())
+                .contentType(ContentType.URLENC.withCharset("UTF-8"))
+                .formParam("name", MULTI_CONFIG_NAME)
+                .when()
+                .post(getCreateItemPath())
+                .then()
+                .spec(responseSpec(400, 500L))
+                .extract()
+                .response();
+        Allure.step("Expected result: Header 'X-Error' has value 'No mode given'");
+        Assert.assertEquals(response.getHeaders().getValue("X-Error"),"No mode given");
+    }
+
+    @Test(dataProvider = "providerUnsafeCharacters", dataProviderClass = TestDataProvider.class)
+    @Description("00.003.13 Create Multi-Configuration Project with with unsafe character")
+    public void testCreateProjectWithUnsafeCharacter(String unsafeCharacter) {
+        Response projectResponse = given().spec(requestSpec())
+                .formParam("name", unsafeCharacter)
+                .formParam("mode", MULTI_CONFIG_MODE)
+                .contentType(ContentType.URLENC.withCharset("UTF-8"))
+                .when()
+                .post(getCreateItemPath())
+                .then()
+                .spec(responseSpec(400, 500L))
+                .extract()
+                .response();
+
+        Allure.step("Expected result: Header 'X-Error' has value '%s is an unsafe character'".formatted(unsafeCharacter));
+        Assert.assertEquals(projectResponse.getHeaders().getValue("X-Error"), "%s  is an unsafe character".formatted(unsafeCharacter));
+    }
+
+    @Test
     @Description("00.003.11 Create Multi-Configuration Project with valid name XML")
     public void testCreateProjectWithValidNameAndDescriptionXML() {
         String description = "Create Project with Description!";
@@ -187,7 +240,7 @@ public class MultiConfigurationProjectApiTest extends BaseApiTest {
                 .queryParam("name", MULTI_CONFIG_NAME_XML)
                 .body(TestUtils.loadPayload("create-multi-config-with-description.xml"))
                 .when()
-                .post("createItem ")
+                .post(getCreateItemPath())
                 .then()
                 .spec(responseSpec(200, 500L));
 
