@@ -8,6 +8,7 @@ import io.restassured.builder.ResponseSpecBuilder;
 import io.restassured.config.LogConfig;
 import io.restassured.filter.log.LogDetail;
 import io.restassured.http.ContentType;
+import io.restassured.module.jsv.JsonSchemaValidator;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 import io.restassured.specification.ResponseSpecification;
@@ -24,9 +25,7 @@ import static school.redrover.runner.BaseApiTest.cookieValue;
 
 public class TestApiUtils {
 
-    public static String getCreateItemPath() {
-        return "createItem";
-    }
+    public static String getCreateItemPath() {return "createItem";}
     public static String getDeleteItemPath(String name) {return "/job/%s/".formatted(TestUtils.encodeParam(name));}
     public static String getAddDescriptionToCreatedItemPath(String name) {return "job/%s/submitDescription".formatted(TestUtils.encodeParam(name));}
     public static String getItemByNamePath(String name) {return "job/%s/api/json".formatted(TestUtils.encodeParam(name));}
@@ -89,7 +88,18 @@ public class TestApiUtils {
     }
 
     @Step("Get Response -> GET Item by name")
-    public static ProjectResponse getResponseGetItemByName(String name) {
+    public static Response getResponseGetItemByName(String name) {
+        return given()
+                .spec(requestSpec())
+                .when()
+                .get(getItemByNamePath(name))
+                .then()
+                .extract()
+                .response();
+    }
+
+    @Step("Get Response as Object -> GET Item by name")
+    public static ProjectResponse getResponseGetItemByNameAsObject(String name) {
         Response responseGetCreatedItem = given()
                 .spec(requestSpec())
                 .when()
@@ -102,7 +112,18 @@ public class TestApiUtils {
     }
 
     @Step("Get Response -> GET All Projects List")
-    public static ProjectListResponse getResponseGetAllProjectList() {
+    public static Response getResponseGetAllProjectList() {
+        return given()
+                .spec(requestSpec())
+                .when()
+                .get(getAllProjectListPath())
+                .then()
+                .extract()
+                .response();
+    }
+
+    @Step("Get Response as Object -> GET All Projects List")
+    public static ProjectListResponse getResponseGetAllProjectListAsObject() {
         Response responseGetAllProjectList = given()
                 .spec(requestSpec())
                 .when()
@@ -128,5 +149,26 @@ public class TestApiUtils {
 
         return  projectListresponse.getJobs().stream()
                 .anyMatch(project -> project.getName().equals(name));
+    }
+
+    /**
+     * Validates whether the response body matches the specified JSON schema.
+     *
+     * This method takes a {@link Response} object and a JSON schema file name as input.
+     * It extracts the response body as a string and validates it against the JSON schema
+     * loaded from the specified file. If the response body matches the schema, the method
+     * returns {@code true}; otherwise, it returns {@code false}.
+     *
+     * @param response The {@link Response} object containing the API response.
+     * @param nameJsonFile The name of the JSON schema file to validate against.
+     */
+    public static boolean matchSchemaWithJsonFile(Response response, String nameJsonFile) {
+        try {
+            String responseBody = response.getBody().asString();
+            return JsonSchemaValidator.matchesJsonSchema(TestUtils.loadSchema(nameJsonFile)).matches(responseBody);
+        } catch (Exception e) {
+            System.err.println("Error parsing response: " + e.getMessage());
+            return false;
+        }
     }
 }
