@@ -277,11 +277,11 @@ public class FolderApiTest extends BaseApiTest {
                 .then()
                 .spec(responseSpec(200, 500L));
 
-        Allure.step("Expected result: Folder name found in the list on Dashboard");
-        Assert.assertTrue(findItemInAllProjectList(FOLDER_NEW_NAME));
-
         Allure.step("Expected result: Project name '%s' NOT found in the list on Dashboard".formatted(name));
         Assert.assertFalse(findItemInAllProjectList(name));
+
+        Allure.step("Expected result: Project name '%s' found inside the Folder '%s'".formatted(name, FOLDER_NEW_NAME));
+        Assert.assertTrue(findProjectByNameInsideFolder(FOLDER_NEW_NAME, name));
     }
 
     @Test(dependsOnMethods = "testCreateProjectInFolder")
