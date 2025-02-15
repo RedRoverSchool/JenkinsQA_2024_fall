@@ -29,7 +29,7 @@ public class SearchBoxTest extends BaseTest {
                 .getTitle();
 
         Allure.step("Expected result: SearchBox title is checking within this action");
-        Assert.assertEquals(title, "Search Box");
+        Assert.assertEquals(title, "Command Palette");
     }
 
     @Test
