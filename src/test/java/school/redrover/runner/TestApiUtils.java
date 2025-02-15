@@ -12,6 +12,7 @@ import io.restassured.module.jsv.JsonSchemaValidator;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 import io.restassured.specification.ResponseSpecification;
+import school.redrover.model.FolderInsideListResponse;
 import school.redrover.model.ProjectListResponse;
 import school.redrover.model.ProjectResponse;
 
@@ -109,6 +110,24 @@ public class TestApiUtils {
                 .response();
 
         return responseGetCreatedItem.as(ProjectResponse.class);
+    }
+
+    public static FolderInsideListResponse getResponseGetFolderInsideListAsObject(String parentFolderName) {
+        Response responseGetFolder = given()
+                .spec(requestSpec())
+                .when()
+                .get("/job/%s/api/json".formatted(parentFolderName))
+                .then()
+                .extract()
+                .response();
+
+        return responseGetFolder.as(FolderInsideListResponse.class);
+    }
+
+    @Step("Find  item {projectName} by name inside Folder {parentFolderName}")
+    public static boolean findProjectByNameInsideFolder(String parentFolderName, String projectName) {
+        return getResponseGetFolderInsideListAsObject(parentFolderName).getJobs().stream()
+                .anyMatch(project -> project.getName().equals(projectName));
     }
 
     @Step("Get Response -> GET All Projects List")
