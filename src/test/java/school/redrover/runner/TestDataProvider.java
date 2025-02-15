@@ -49,4 +49,15 @@ public class TestDataProvider {
         };
     }
 
+    @DataProvider
+    public Object[][] projectNameAndXmlFileCreate() {
+        return new Object[][] {
+                {"FreeStyleProjectName", "create-empty-freestyle-project.xml"},
+                {"PipelineProjectName", "create-empty-pipeline-project.xml"},
+                {"MultiConfigurationProjectName", "create-empty-multi-config.xml"},
+                {"FolderName", "create-empty-folder.xml"},
+                {"MultiBranchPipelineProjectName", "create-empty-multibranch-pipeline.xml"}
+        };
+    }
+
 }
