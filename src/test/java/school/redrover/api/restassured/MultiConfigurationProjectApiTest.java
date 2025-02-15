@@ -8,8 +8,6 @@ import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import org.testng.Assert;
 import org.testng.annotations.Test;
-import school.redrover.model.ProjectListResponse;
-import school.redrover.model.ProjectResponse;
 import school.redrover.runner.BaseApiTest;
 import school.redrover.runner.TestDataProvider;
 import school.redrover.runner.TestUtils;
@@ -24,109 +22,62 @@ public class MultiConfigurationProjectApiTest extends BaseApiTest {
     private final String MULTI_CONFIG_NAME = "MultiConfigurationProject";
     private final String MULTI_CONFIG_MODE = "hudson.matrix.MatrixProject";
     private final String MULTI_CONFIG_NAME_XML = "MultiConfigurationProjectXML";
-    private final String DESCRIPTION = "Add description to Project!";
-    private static final String XML_CREATE_FILE = "create-empty-multi-config.xml";
+    private final String DESCRIPTION = "Create Project with Description!";
+    private static final String XML_CREATE_EMPTY_PROJECT_FILE = "create-empty-multi-config.xml";
+    private static String XML_CREATE_PROJECT_WITH_DESCRIPTION_FILE = "create-multi-config-with-description.xml";
 
 
-    @Test
+    @Test(dataProvider = "projectNames", dataProviderClass = TestDataProvider.class)
     @Description("00.003.09 Create Multi-Configuration Project with valid name")
-    public void testCreateMultiConfigWithValidName() {
+    public void testCreateMultiConfigWithValidName(String projectName) {
         given()
                 .spec(requestSpec())
                 .contentType(ContentType.URLENC.withCharset("UTF-8"))
-                .formParam("name", MULTI_CONFIG_NAME)
+                .formParam("name", projectName)
                 .formParam("mode", MULTI_CONFIG_MODE)
                 .when()
                 .post(getCreateItemPath())
                 .then()
                 .spec(responseSpec(302, 500L));
 
-        Response responseGetCreatedItem = given()
-                .spec(requestSpec())
-                .when()
-                .get(getItemByNamePath(MULTI_CONFIG_NAME))
-                .then()
-                .spec(responseSpec(200,500L))
-                .extract()
-                .response();
-
-        ProjectResponse getItemByNameResponse = responseGetCreatedItem.as(ProjectResponse.class);
-
-        Allure.step(String.format("Expected result: fullName is '%s'", MULTI_CONFIG_NAME));
-        Assert.assertEquals(getItemByNameResponse.getFullName(), MULTI_CONFIG_NAME);
+        Allure.step(String.format("Expected result: fullName is '%s'", projectName));
+        Assert.assertEquals(getResponseGetItemByNameAsObject(projectName).getFullName(), projectName);
         Allure.step("(ERR)Expected result: description is null");
-        Assert.assertEquals(getItemByNameResponse.getDescription(),null);
+        Assert.assertEquals(getResponseGetItemByNameAsObject(projectName).getDescription(),null);
         Allure.step(String.format("Expected result: _class is '%s'", MULTI_CONFIG_MODE));
-        Assert.assertEquals(getItemByNameResponse.get_class(), MULTI_CONFIG_MODE);
-
-        Response responseGetAllProjectList = given()
-                .spec(requestSpec())
-                .when()
-                .get(getAllProjectListPath())
-                .then()
-                .spec(responseSpec(200, 500L))
-                .extract()
-                .response();
-
-        ProjectListResponse projectListresponse = responseGetAllProjectList.as(ProjectListResponse.class);
-
-        boolean findItemByName = projectListresponse.getJobs().stream()
-                .anyMatch(project -> project.getName().equals(MULTI_CONFIG_NAME));
+        Assert.assertEquals(getResponseGetItemByNameAsObject(projectName).get_class(), MULTI_CONFIG_MODE);
 
         Allure.step("Expected result: Project name found in the list");
-        Assert.assertTrue(findItemByName, "Project name not found in the list");
+        Assert.assertTrue(findItemInAllProjectList(projectName), "Project name not found in the list");
 
-        deleteProject(MULTI_CONFIG_NAME);
+        deleteProject(projectName);
     }
 
-    @Test
+    @Test(dataProvider = "projectNames", dataProviderClass = TestDataProvider.class)
     @Description("00.003.10 Create Multi-Configuration Project with valid name XML")
-    public void testCreateProjectWithValidNameXML() {
+    public void testCreateProjectWithValidNameXML(String projectName) {
 
         given()
                 .spec(requestSpec())
                 .contentType(ContentType.XML)
-                .queryParam("name", MULTI_CONFIG_NAME_XML)
-                .body(TestUtils.loadPayload(XML_CREATE_FILE))
+                .queryParam("name", projectName)
+                .body(TestUtils.loadPayload(XML_CREATE_EMPTY_PROJECT_FILE))
                 .when()
                 .post(getCreateItemPath())
                 .then()
                 .spec(responseSpec(200, 500L));
 
-        Response responseGetCreatedItem = given()
-                .spec(requestSpec())
-                .when()
-                .get(getItemByNamePath(MULTI_CONFIG_NAME_XML))
-                .then()
-                .spec(responseSpec(200,500L))
-                .extract()
-                .response();
-
-        ProjectResponse getItemByNameResponse = responseGetCreatedItem.as(ProjectResponse.class);
-
-        Allure.step(String.format("Expected result: fullName is '%s'", MULTI_CONFIG_NAME_XML));
-        Assert.assertEquals(getItemByNameResponse.getFullName(), MULTI_CONFIG_NAME_XML);
+        Allure.step(String.format("Expected result: fullName is '%s'", projectName));
+        Assert.assertEquals(getResponseGetItemByNameAsObject(projectName).getFullName(), projectName);
         Allure.step("Expected result: description is empty");
-        Assert.assertEquals(getItemByNameResponse.getDescription(),"");
+        Assert.assertEquals(getResponseGetItemByNameAsObject(projectName).getDescription(),"");
         Allure.step(String.format("Expected result: _class is '%s'", MULTI_CONFIG_MODE));
-        Assert.assertEquals(getItemByNameResponse.get_class(),MULTI_CONFIG_MODE);
-
-        Response responseGetAllProjectList = given()
-                .spec(requestSpec())
-                .when()
-                .get(getAllProjectListPath())
-                .then()
-                .spec(responseSpec(200, 500L))
-                .extract()
-                .response();
-
-        ProjectListResponse projectListresponse = responseGetAllProjectList.as(ProjectListResponse.class);
-
-        boolean findItemByName = projectListresponse.getJobs().stream()
-                .anyMatch(project -> project.getName().equals(MULTI_CONFIG_NAME_XML));
+        Assert.assertEquals(getResponseGetItemByNameAsObject(projectName).get_class(),MULTI_CONFIG_MODE);
 
         Allure.step("Expected result: Project name found in the list");
-        Assert.assertTrue(findItemByName, "Project name not found in the list");
+        Assert.assertTrue(findItemInAllProjectList(projectName), "Project name not found in the list");
+
+        deleteProject(projectName);
     }
 
     @Test
@@ -187,7 +138,6 @@ public class MultiConfigurationProjectApiTest extends BaseApiTest {
     @Test
     @Description("00.003.11 Create Multi-Configuration Project with valid name XML")
     public void testCreateProjectWithValidNameAndDescriptionXML() {
-        String description = "Create Project with Description!";
 
         given()
                 .spec(requestSpec())
@@ -199,48 +149,53 @@ public class MultiConfigurationProjectApiTest extends BaseApiTest {
                 .then()
                 .spec(responseSpec(200, 500L));
 
-        Response responseGetCreatedItem = given()
-                .spec(requestSpec())
-                .when()
-                .get(getItemByNamePath(MULTI_CONFIG_NAME_XML))
-                .then()
-                .spec(responseSpec(200,500L))
-                .extract()
-                .response();
-
-        ProjectResponse getItemByNameResponse = responseGetCreatedItem.as(ProjectResponse.class);
-
         Allure.step(String.format("Expected result: fullName is '%s'", MULTI_CONFIG_NAME_XML));
-        Assert.assertEquals(getItemByNameResponse.getFullName(), MULTI_CONFIG_NAME_XML);
-        Allure.step("Expected result: description is %s".formatted(description));
-        Assert.assertEquals(getItemByNameResponse.getDescription(),description);
+        Assert.assertEquals(getResponseGetItemByNameAsObject(MULTI_CONFIG_NAME_XML).getFullName(), MULTI_CONFIG_NAME_XML);
+        Allure.step("Expected result: description is %s".formatted(DESCRIPTION));
+        Assert.assertEquals(getResponseGetItemByNameAsObject(MULTI_CONFIG_NAME_XML).getDescription(),DESCRIPTION);
         Allure.step(String.format("Expected result: _class is '%s'", MULTI_CONFIG_MODE));
-        Assert.assertEquals(getItemByNameResponse.get_class(),MULTI_CONFIG_MODE);
-
-        Response responseGetAllProjectList = given()
-                .spec(requestSpec())
-                .when()
-                .get(getAllProjectListPath())
-                .then()
-                .spec(responseSpec(200, 500L))
-                .extract()
-                .response();
-
-        ProjectListResponse projectListresponse = responseGetAllProjectList.as(ProjectListResponse.class);
-
-        boolean findItemByName = projectListresponse.getJobs().stream()
-                .anyMatch(project -> project.getName().equals(MULTI_CONFIG_NAME_XML));
+        Assert.assertEquals(getResponseGetItemByNameAsObject(MULTI_CONFIG_NAME_XML).get_class(),MULTI_CONFIG_MODE);
 
         Allure.step("Expected result: Project name found in the list");
-        Assert.assertTrue(findItemByName, "Project name not found in the list");
+        Assert.assertTrue(findItemInAllProjectList(MULTI_CONFIG_NAME_XML), "Project name not found in the list");
 
+        deleteProject(MULTI_CONFIG_NAME_XML);
+    }
+
+    @Test
+    @Description("00.003.15 Create Multi-Configuration Project by copy from another project")
+    public void testCreateProjectCopyFromAnotherProject() {
+        createNewProjectXML(MULTI_CONFIG_NAME_XML, XML_CREATE_PROJECT_WITH_DESCRIPTION_FILE);
+
+        given()
+                .spec(requestSpec())
+                .contentType(ContentType.URLENC.withCharset("UTF-8"))
+                .formParam("name", MULTI_CONFIG_NAME)
+                .formParam("mode", "copy")
+                .formParam("from", MULTI_CONFIG_NAME_XML)
+                .when()
+                .post(getCreateItemPath())
+                .then()
+                .spec(responseSpec(302, 500L));
+
+        Allure.step(String.format("Expected result: fullName is '%s'", MULTI_CONFIG_NAME));
+        Assert.assertEquals(getResponseGetItemByNameAsObject(MULTI_CONFIG_NAME).getFullName(), MULTI_CONFIG_NAME);
+        Allure.step("Expected result: description is %s".formatted(DESCRIPTION));
+        Assert.assertEquals(getResponseGetItemByNameAsObject(MULTI_CONFIG_NAME).getDescription(),DESCRIPTION);
+        Allure.step(String.format("Expected result: _class is '%s'", MULTI_CONFIG_MODE));
+        Assert.assertEquals(getResponseGetItemByNameAsObject(MULTI_CONFIG_NAME).get_class(),MULTI_CONFIG_MODE);
+
+        Allure.step("Expected result: Project name found in the list");
+        Assert.assertTrue(findItemInAllProjectList(MULTI_CONFIG_NAME), "Project name not found in the list");
+
+        deleteProject(MULTI_CONFIG_NAME);
         deleteProject(MULTI_CONFIG_NAME_XML);
     }
 
     @Test
     @Description("03.001.01 Add description to Project")
     public void testAddDescriptionToCreatedProject() {
-        createNewEmptyProjectXML(MULTI_CONFIG_NAME_XML, XML_CREATE_FILE);
+        createNewProjectXML(MULTI_CONFIG_NAME_XML, XML_CREATE_EMPTY_PROJECT_FILE);
 
         given()
                 .spec(requestSpec())
@@ -252,11 +207,11 @@ public class MultiConfigurationProjectApiTest extends BaseApiTest {
                 .spec(responseSpec(302, 500L));
 
         Allure.step(String.format("Expected result: fullName is '%s'", MULTI_CONFIG_NAME_XML));
-        Assert.assertEquals(getResponseGetItemByName(MULTI_CONFIG_NAME_XML).getFullName(), MULTI_CONFIG_NAME_XML);
+        Assert.assertEquals(getResponseGetItemByNameAsObject(MULTI_CONFIG_NAME_XML).getFullName(), MULTI_CONFIG_NAME_XML);
         Allure.step("Expected result: description is empty");
-        Assert.assertEquals(getResponseGetItemByName(MULTI_CONFIG_NAME_XML).getDescription(),DESCRIPTION);
+        Assert.assertEquals(getResponseGetItemByNameAsObject(MULTI_CONFIG_NAME_XML).getDescription(),DESCRIPTION);
         Allure.step(String.format("Expected result: _class is '%s'", MULTI_CONFIG_MODE));
-        Assert.assertEquals(getResponseGetItemByName(MULTI_CONFIG_NAME_XML).get_class(),MULTI_CONFIG_MODE);
+        Assert.assertEquals(getResponseGetItemByNameAsObject(MULTI_CONFIG_NAME_XML).get_class(),MULTI_CONFIG_MODE);
 
         deleteProject(MULTI_CONFIG_NAME_XML);
     }
@@ -264,7 +219,7 @@ public class MultiConfigurationProjectApiTest extends BaseApiTest {
     @Test
     @Description("03.002.01 Disable Project")
     public void testDisableCreatedProject() {
-        createNewEmptyProjectXML(MULTI_CONFIG_NAME_XML, XML_CREATE_FILE);
+        createNewProjectXML(MULTI_CONFIG_NAME_XML, XML_CREATE_EMPTY_PROJECT_FILE);
 
         given()
                 .spec(requestSpec())
@@ -273,7 +228,7 @@ public class MultiConfigurationProjectApiTest extends BaseApiTest {
                 .then()
                 .spec(responseSpec(302, 500L));
 
-        boolean disableProject = getResponseGetAllProjectList().getJobs().stream().filter(project -> project.getName().equals(MULTI_CONFIG_NAME_XML))
+        boolean disableProject = getResponseGetAllProjectListAsObject().getJobs().stream().filter(project -> project.getName().equals(MULTI_CONFIG_NAME_XML))
                 .anyMatch(project -> project.getColor().equals("disabled"));
 
         Assert.assertTrue(disableProject);
@@ -289,7 +244,7 @@ public class MultiConfigurationProjectApiTest extends BaseApiTest {
                 .then()
                 .spec(responseSpec(302, 500L));
 
-        boolean enableProject = getResponseGetAllProjectList().getJobs().stream().filter(project -> project.getName().equals(MULTI_CONFIG_NAME_XML))
+        boolean enableProject = getResponseGetAllProjectListAsObject().getJobs().stream().filter(project -> project.getName().equals(MULTI_CONFIG_NAME_XML))
                 .anyMatch(project -> project.getColor().equals("notbuilt"));
 
         Assert.assertTrue(enableProject);
@@ -300,7 +255,7 @@ public class MultiConfigurationProjectApiTest extends BaseApiTest {
     @Test
     @Description("03.005.01 Rename Project")
     public void testRenameProject() {
-        createNewEmptyProjectXML(MULTI_CONFIG_NAME_XML, XML_CREATE_FILE);
+        createNewProjectXML(MULTI_CONFIG_NAME_XML, XML_CREATE_EMPTY_PROJECT_FILE);
 
         given()
                 .spec(requestSpec())
@@ -311,17 +266,21 @@ public class MultiConfigurationProjectApiTest extends BaseApiTest {
                 .then()
                 .spec(responseSpec(302, 500L));
 
-        Assert.assertEquals(getResponseGetItemByName(MULTI_CONFIG_NAME).getFullName(), MULTI_CONFIG_NAME);
+        Allure.step(String.format("Expected result: fullName is '%s'", MULTI_CONFIG_NAME));
+        Assert.assertEquals(getResponseGetItemByNameAsObject(MULTI_CONFIG_NAME).getFullName(), MULTI_CONFIG_NAME);
 
-        Assert.assertTrue(getResponseGetAllProjectList().getJobs().stream().anyMatch(project -> project.getName().equals(MULTI_CONFIG_NAME)));
-        Assert.assertFalse(getResponseGetAllProjectList().getJobs().stream().anyMatch(project -> project.getName().equals(MULTI_CONFIG_NAME_XML)));
+        Allure.step("Expected result: Project name '%s' found in the list".formatted(MULTI_CONFIG_NAME));
+        Assert.assertTrue(findItemInAllProjectList(MULTI_CONFIG_NAME));
+        Allure.step("Expected result: Project name '%s' NOT found in the list".formatted(MULTI_CONFIG_NAME_XML));
+        Assert.assertFalse(findItemInAllProjectList(MULTI_CONFIG_NAME_XML));
 
         deleteProject(MULTI_CONFIG_NAME);
     }
 
-    @Test(dependsOnMethods = "testCreateProjectWithValidNameXML")
+    @Test()
     @Description("03.003.01 Delete Project")
     public void testDeleteProject() {
+        createNewProjectXML(MULTI_CONFIG_NAME_XML, XML_CREATE_EMPTY_PROJECT_FILE);
 
         Allure.step("Send DELETE request -> Delete Project with name %s".formatted(MULTI_CONFIG_NAME_XML));
         given()
