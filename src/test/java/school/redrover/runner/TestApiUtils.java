@@ -65,7 +65,7 @@ public class TestApiUtils {
     }
 
     @Step("Create Project (XML) {name}")
-    public static void createNewEmptyProjectXML(String name, String xmlFile) {
+    public static void createNewProjectXML(String name, String xmlFile) {
         given()
                 .spec(requestSpec())
                 .contentType(ContentType.XML)

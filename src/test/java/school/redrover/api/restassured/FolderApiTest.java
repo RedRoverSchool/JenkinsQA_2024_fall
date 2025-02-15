@@ -125,7 +125,7 @@ public class FolderApiTest extends BaseApiTest {
     @Test
     @Description("00.006.16 Create Folder by copy from another folder")
     public void testCreateFolderByCopyFromAnotherFolder() {
-        createNewEmptyProjectXML(FOLDER_NAME, CREATE_EMPTY_FOLDER_XML_FILE);
+        createNewProjectXML(FOLDER_NAME, CREATE_EMPTY_FOLDER_XML_FILE);
 
         given()
                 .spec(requestSpec())
@@ -154,7 +154,7 @@ public class FolderApiTest extends BaseApiTest {
     @Test()
     @Description("04.001.08 Rename Folder")
     public void testRenameFolder() {
-        createNewEmptyProjectXML(FOLDER_NAME_BY_XML_CREATE, CREATE_EMPTY_FOLDER_XML_FILE);
+        createNewProjectXML(FOLDER_NAME_BY_XML_CREATE, CREATE_EMPTY_FOLDER_XML_FILE);
 
         given().spec(requestSpec())
                 .formParam("newName", FOLDER_NEW_NAME)
@@ -180,7 +180,7 @@ public class FolderApiTest extends BaseApiTest {
     @Test()
     @Description("04.001.09 Rename Folder with the same name")
     public void testRenameFolderSameName() {
-        createNewEmptyProjectXML(FOLDER_NAME_BY_XML_CREATE, CREATE_EMPTY_FOLDER_XML_FILE);
+        createNewProjectXML(FOLDER_NAME_BY_XML_CREATE, CREATE_EMPTY_FOLDER_XML_FILE);
 
         given().spec(requestSpec())
                 .formParam("newName", FOLDER_NAME_BY_XML_CREATE)
@@ -194,7 +194,7 @@ public class FolderApiTest extends BaseApiTest {
     @Test()
     @Description("007 Add Description to Folder")
     public void testAddDescriptionToFolder() {
-        createNewEmptyProjectXML(FOLDER_NEW_NAME, CREATE_EMPTY_FOLDER_XML_FILE);
+        createNewProjectXML(FOLDER_NEW_NAME, CREATE_EMPTY_FOLDER_XML_FILE);
 
         given()
                 .spec(requestSpec())
@@ -221,7 +221,7 @@ public class FolderApiTest extends BaseApiTest {
     @Test()
     @Description("04.003.04 Delete Folder")
     public void testDeleteFolder() {
-        createNewEmptyProjectXML(FOLDER_NEW_NAME, CREATE_EMPTY_FOLDER_XML_FILE);
+        createNewProjectXML(FOLDER_NEW_NAME, CREATE_EMPTY_FOLDER_XML_FILE);
 
         Allure.step("Send DELETE request -> Delete Folder with name %s".formatted(FOLDER_NEW_NAME));
         given()
@@ -243,7 +243,7 @@ public class FolderApiTest extends BaseApiTest {
     @Test
     @Description("04.003.05 Delete deleted Folder")
     public void testDeleteDeletedFolder() {
-        createNewEmptyProjectXML(FOLDER_NAME, CREATE_EMPTY_FOLDER_XML_FILE);
+        createNewProjectXML(FOLDER_NAME, CREATE_EMPTY_FOLDER_XML_FILE);
 
         Allure.step("Send DELETE request -> Delete Folder with name %s".formatted(FOLDER_NAME));
         given()
