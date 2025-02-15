@@ -265,9 +265,8 @@ public class FolderApiTest extends BaseApiTest {
 
     @Test(dataProvider = "projectNameAndXmlFileCreate", dataProviderClass = TestDataProvider.class,
             dependsOnMethods = "testRenameFolder")
-    @Description("")
-    public void testCreateAllProjectInFolder(String name, String xmlFile) {
-
+    @Description()
+    public void testCreateProjectInFolder(String name, String xmlFile) {
         given()
                 .spec(requestSpec())
                 .contentType(ContentType.XML)
@@ -278,6 +277,16 @@ public class FolderApiTest extends BaseApiTest {
                 .then()
                 .spec(responseSpec(200, 500L));
 
+        Allure.step("Expected result: Folder name found in the list on Dashboard");
+        Assert.assertTrue(findItemInAllProjectList(FOLDER_NEW_NAME));
 
+        Allure.step("Expected result: Project name '%s' NOT found in the list on Dashboard".formatted(name));
+        Assert.assertFalse(findItemInAllProjectList(name));
+    }
+
+    @Test(dependsOnMethods = "testCreateProjectInFolder")
+    @Description("Delete Folder with Project")
+    public void testDeleteFolderWithProject() {
+        deleteProject(FOLDER_NEW_NAME);
     }
 }
