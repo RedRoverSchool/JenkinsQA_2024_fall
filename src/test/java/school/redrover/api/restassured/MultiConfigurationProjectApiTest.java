@@ -7,7 +7,6 @@ import io.qameta.allure.Story;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import org.testng.Assert;
-import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 import school.redrover.runner.BaseApiTest;
 import school.redrover.runner.TestDataProvider;

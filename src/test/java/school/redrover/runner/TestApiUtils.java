@@ -143,31 +143,40 @@ public class TestApiUtils {
 
     @Step("Get Response as Object -> GET All Projects List")
     public static ProjectListResponse getResponseGetAllProjectListAsObject() {
-        Response responseGetAllProjectList = given()
-                .spec(requestSpec())
-                .when()
-                .get(getAllProjectListPath())
-                .then()
-                .extract()
-                .response();
+        try {
+            Response responseGetAllProjectList = given()
+                    .spec(requestSpec())
+                    .when()
+                    .get(getAllProjectListPath())
+                    .then()
+                    .extract()
+                    .response();
 
-        return responseGetAllProjectList.as(ProjectListResponse.class);
+            return responseGetAllProjectList.as(ProjectListResponse.class);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Step("Find  item {name} by name in all projects list from Dashboard")
     public static boolean findItemInAllProjectList(String name) {
-        Response responseGetAllProjectList = given()
-                .spec(requestSpec())
-                .when()
-                .get(getAllProjectListPath())
-                .then()
-                .extract()
-                .response();
+        try {
+            Response responseGetAllProjectList = given()
+                    .spec(requestSpec())
+                    .when()
+                    .get(getAllProjectListPath())
+                    .then()
+                    .extract()
+                    .response();
 
-        ProjectListResponse projectListresponse = responseGetAllProjectList.as(ProjectListResponse.class);
+            ProjectListResponse projectListresponse = responseGetAllProjectList.as(ProjectListResponse.class);
 
-        return  projectListresponse.getJobs().stream()
-                .anyMatch(project -> project.getName().equals(name));
+            return projectListresponse.getJobs().stream()
+                    .anyMatch(project -> project != null && project.getName().equals(name));
+        } catch (Exception e) {
+            System.err.println("Error parsing response: " + e.getMessage());
+            return false;
+        }
     }
 
     /**

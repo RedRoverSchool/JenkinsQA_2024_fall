@@ -265,7 +265,7 @@ public class FolderApiTest extends BaseApiTest {
 
     @Test(dataProvider = "projectNameAndXmlFileCreate", dataProviderClass = TestDataProvider.class,
             dependsOnMethods = "testRenameFolder")
-    @Description()
+    @Description("04.007.01 Create Project in Folder")
     public void testCreateProjectInFolder(String name, String xmlFile) {
         given()
                 .spec(requestSpec())
@@ -285,8 +285,34 @@ public class FolderApiTest extends BaseApiTest {
     }
 
     @Test(dependsOnMethods = "testCreateProjectInFolder")
-    @Description("Delete Folder with Project")
+    @Description("04.003.06 Delete Folder with Project")
     public void testDeleteFolderWithProject() {
         deleteProject(FOLDER_NEW_NAME);
+    }
+
+    @Test
+    @Description("04.002.01 Move Folder to Folder")
+    public void testMoveFolderToFolder() {
+        String parentFolder = "ParentFolder";
+        String childFolder = "ChildFolder";
+        createNewProjectXML(parentFolder, CREATE_EMPTY_FOLDER_XML_FILE);
+        createNewProjectXML(childFolder, CREATE_EMPTY_FOLDER_XML_FILE);
+
+        given()
+                .spec(requestSpec())
+                .contentType(ContentType.URLENC.withCharset("UTF-8"))
+                .formParam("destination", "/%s".formatted(parentFolder))
+                .when()
+                .post("job/%s/move/move".formatted(childFolder))
+                .then()
+                .spec(responseSpec(302, 500L));
+
+        Allure.step("Expected result: Project name '%s' NOT found in the list on Dashboard".formatted(childFolder));
+        Assert.assertFalse(findItemInAllProjectList(childFolder));
+        Allure.step("Expected result: Project name '%s' found in the list on Dashboard".formatted(parentFolder));
+        Assert.assertTrue(findItemInAllProjectList(parentFolder));
+
+        Allure.step("Expected result: Project name '%s' found inside the Folder '%s'".formatted(childFolder, parentFolder));
+        Assert.assertTrue(findProjectByNameInsideFolder(parentFolder, childFolder));
     }
 }
