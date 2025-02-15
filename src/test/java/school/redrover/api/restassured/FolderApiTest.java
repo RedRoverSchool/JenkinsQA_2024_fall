@@ -8,6 +8,7 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 import school.redrover.runner.BaseApiTest;
 import school.redrover.runner.TestDataProvider;
+import school.redrover.runner.TestUtils;
 
 import static io.restassured.RestAssured.given;
 
@@ -260,5 +261,23 @@ public class FolderApiTest extends BaseApiTest {
                 .delete(getDeleteItemPath(FOLDER_NAME))
                 .then()
                 .spec(responseSpec(404,500L));
+    }
+
+    @Test(dataProvider = "projectNameAndXmlFileCreate", dataProviderClass = TestDataProvider.class,
+            dependsOnMethods = "testRenameFolder")
+    @Description("")
+    public void testCreateAllProjectInFolder(String name, String xmlFile) {
+
+        given()
+                .spec(requestSpec())
+                .contentType(ContentType.XML)
+                .queryParam("name", name)
+                .body(TestUtils.loadPayload(xmlFile))
+                .when()
+                .post("/job/%s/createItem".formatted(FOLDER_NEW_NAME))
+                .then()
+                .spec(responseSpec(200, 500L));
+
+
     }
 }
