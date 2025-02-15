@@ -22,8 +22,9 @@ public class MultiConfigurationProjectApiTest extends BaseApiTest {
     private final String MULTI_CONFIG_NAME = "MultiConfigurationProject";
     private final String MULTI_CONFIG_MODE = "hudson.matrix.MatrixProject";
     private final String MULTI_CONFIG_NAME_XML = "MultiConfigurationProjectXML";
-    private final String DESCRIPTION = "Add description to Project!";
-    private static final String XML_CREATE_FILE = "create-empty-multi-config.xml";
+    private final String DESCRIPTION = "Create Project with Description!";
+    private static final String XML_CREATE_EMPTY_PROJECT_FILE = "create-empty-multi-config.xml";
+    private static String XML_CREATE_PROJECT_WITH_DESCRIPTION_FILE = "create-multi-config-with-description.xml";
 
 
     @Test
@@ -60,7 +61,7 @@ public class MultiConfigurationProjectApiTest extends BaseApiTest {
                 .spec(requestSpec())
                 .contentType(ContentType.XML)
                 .queryParam("name", MULTI_CONFIG_NAME_XML)
-                .body(TestUtils.loadPayload(XML_CREATE_FILE))
+                .body(TestUtils.loadPayload(XML_CREATE_EMPTY_PROJECT_FILE))
                 .when()
                 .post(getCreateItemPath())
                 .then()
@@ -135,7 +136,6 @@ public class MultiConfigurationProjectApiTest extends BaseApiTest {
     @Test
     @Description("00.003.11 Create Multi-Configuration Project with valid name XML")
     public void testCreateProjectWithValidNameAndDescriptionXML() {
-        String description = "Create Project with Description!";
 
         given()
                 .spec(requestSpec())
@@ -149,8 +149,8 @@ public class MultiConfigurationProjectApiTest extends BaseApiTest {
 
         Allure.step(String.format("Expected result: fullName is '%s'", MULTI_CONFIG_NAME_XML));
         Assert.assertEquals(getResponseGetItemByNameAsObject(MULTI_CONFIG_NAME_XML).getFullName(), MULTI_CONFIG_NAME_XML);
-        Allure.step("Expected result: description is %s".formatted(description));
-        Assert.assertEquals(getResponseGetItemByNameAsObject(MULTI_CONFIG_NAME_XML).getDescription(),description);
+        Allure.step("Expected result: description is %s".formatted(DESCRIPTION));
+        Assert.assertEquals(getResponseGetItemByNameAsObject(MULTI_CONFIG_NAME_XML).getDescription(),DESCRIPTION);
         Allure.step(String.format("Expected result: _class is '%s'", MULTI_CONFIG_MODE));
         Assert.assertEquals(getResponseGetItemByNameAsObject(MULTI_CONFIG_NAME_XML).get_class(),MULTI_CONFIG_MODE);
 
@@ -161,9 +161,36 @@ public class MultiConfigurationProjectApiTest extends BaseApiTest {
     }
 
     @Test
+    @Description("00.003.15 Create Multi-Configuration Project by copy from another project")
+    public void testCreateProjectCopyFromAnotherProject() {
+        createNewProjectXML(MULTI_CONFIG_NAME_XML, XML_CREATE_PROJECT_WITH_DESCRIPTION_FILE);
+
+        given()
+                .spec(requestSpec())
+                .contentType(ContentType.URLENC.withCharset("UTF-8"))
+                .formParam("name", MULTI_CONFIG_NAME)
+                .formParam("mode", "copy")
+                .formParam("from", MULTI_CONFIG_NAME_XML)
+                .when()
+                .post(getCreateItemPath())
+                .then()
+                .spec(responseSpec(302, 500L));
+
+        Allure.step(String.format("Expected result: fullName is '%s'", MULTI_CONFIG_NAME));
+        Assert.assertEquals(getResponseGetItemByNameAsObject(MULTI_CONFIG_NAME).getFullName(), MULTI_CONFIG_NAME);
+        Allure.step("Expected result: description is %s".formatted(DESCRIPTION));
+        Assert.assertEquals(getResponseGetItemByNameAsObject(MULTI_CONFIG_NAME).getDescription(),DESCRIPTION);
+        Allure.step(String.format("Expected result: _class is '%s'", MULTI_CONFIG_MODE));
+        Assert.assertEquals(getResponseGetItemByNameAsObject(MULTI_CONFIG_NAME).get_class(),MULTI_CONFIG_MODE);
+
+        Allure.step("Expected result: Project name found in the list");
+        Assert.assertTrue(findItemInAllProjectList(MULTI_CONFIG_NAME), "Project name not found in the list");
+    }
+
+    @Test
     @Description("03.001.01 Add description to Project")
     public void testAddDescriptionToCreatedProject() {
-        createNewEmptyProjectXML(MULTI_CONFIG_NAME_XML, XML_CREATE_FILE);
+        createNewProjectXML(MULTI_CONFIG_NAME_XML, XML_CREATE_EMPTY_PROJECT_FILE);
 
         given()
                 .spec(requestSpec())
@@ -187,7 +214,7 @@ public class MultiConfigurationProjectApiTest extends BaseApiTest {
     @Test
     @Description("03.002.01 Disable Project")
     public void testDisableCreatedProject() {
-        createNewEmptyProjectXML(MULTI_CONFIG_NAME_XML, XML_CREATE_FILE);
+        createNewProjectXML(MULTI_CONFIG_NAME_XML, XML_CREATE_EMPTY_PROJECT_FILE);
 
         given()
                 .spec(requestSpec())
@@ -223,7 +250,7 @@ public class MultiConfigurationProjectApiTest extends BaseApiTest {
     @Test
     @Description("03.005.01 Rename Project")
     public void testRenameProject() {
-        createNewEmptyProjectXML(MULTI_CONFIG_NAME_XML, XML_CREATE_FILE);
+        createNewProjectXML(MULTI_CONFIG_NAME_XML, XML_CREATE_EMPTY_PROJECT_FILE);
 
         given()
                 .spec(requestSpec())
