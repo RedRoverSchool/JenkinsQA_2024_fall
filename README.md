@@ -1,4 +1,12 @@
 # JenkinsQA_2024_fall
+<p align="center">
+  <img src="https://img.shields.io/github/commit-activity/m/RedRoverSchool/JenkinsQA_2024_fall">
+  <img src="https://img.shields.io/github/last-commit/RedRoverSchool/JenkinsQA_2024_fall">
+  <img src="https://img.shields.io/github/contributors/RedRoverSchool/JenkinsQA_2024_fall">
+  <img src="https://github.com/RedRoverSchool/JenkinsQA_2024_fall/actions/workflows/ci.yml/badge.svg">
+  <img src="https://img.shields.io/github/issues/RedRoverSchool/JenkinsQA_2024_fall">
+  <img src="https://img.shields.io/github/issues-pr/RedRoverSchool/JenkinsQA_2024_fall">
+</p>
 
 <h1 align="center">Project for Testing the CI/CD Tool Jenkins</h1>
 <p align="center">
