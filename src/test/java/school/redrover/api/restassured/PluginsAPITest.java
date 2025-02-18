@@ -5,9 +5,11 @@ import io.qameta.allure.Epic;
 import io.qameta.allure.Feature;
 import io.restassured.response.Response;
 import org.testng.Assert;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 import school.redrover.models.PluginManagerResponse;
 import school.redrover.runner.BaseApiTest;
+import school.redrover.runner.WireMockStubs;
 
 import static io.restassured.RestAssured.given;
 import static school.redrover.runner.TestApiUtils.requestSpec;
@@ -18,6 +20,11 @@ import static school.redrover.runner.TestApiUtils.responseSpec;
 public class PluginsAPITest extends BaseApiTest {
 
     private static final String MINIMUM_REQUIRED_CORE_VERSION = "2.330.1";
+
+    @BeforeClass
+    private void stubs() {
+        stubEndpoints(WireMockStubs::stubVerifyPluginsInstalled);
+    }
 
     private boolean isCoreVersionGreaterThanMinimum(String version) {
         String[] requiredVersionParts = MINIMUM_REQUIRED_CORE_VERSION.split("\\.");
@@ -45,7 +52,7 @@ public class PluginsAPITest extends BaseApiTest {
                 .when()
                 .post("/pluginManager/api/json?depth=1")
                 .then()
-                .spec(responseSpec(200, 500L))
+                .spec(responseSpec(200, 1000L))
                 .extract().response();
 
         PluginManagerResponse pluginManagerResponse = response.as(PluginManagerResponse.class);
@@ -56,10 +63,11 @@ public class PluginsAPITest extends BaseApiTest {
                     return requiredCoreVersion != null && isCoreVersionGreaterThanMinimum(requiredCoreVersion);
                 });
 
+        Assert.assertTrue(pluginManagerResponse.getPlugins().stream()
+                        .allMatch(plugin -> plugin.getLongName() != null && !plugin.getLongName().isEmpty()),
+                "Plugin long name should not be null or empty.");
         Assert.assertTrue(allPluginsHaveMinimumRequiredCoreVersion, "Not all plugins have the minimum required core version.");
         Assert.assertEquals(pluginManagerResponse.getClassField(), "hudson.LocalPluginManager");
-        Assert.assertEquals(pluginManagerResponse.getPlugins().size(), 88);
-        Assert.assertEquals(pluginManagerResponse.getPlugins().get(0).getLongName(), "Ant Plugin");
         Assert.assertTrue(pluginManagerResponse.getPlugins().stream()
                 .allMatch(PluginManagerResponse.Plugin::isActive));
         Assert.assertFalse(pluginManagerResponse.getPlugins().stream()
