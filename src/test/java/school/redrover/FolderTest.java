@@ -6,7 +6,7 @@ import io.qameta.allure.Epic;
 import io.qameta.allure.Story;
 import org.testng.Assert;
 import org.testng.annotations.Test;
-import school.redrover.runner.TestDataProvider;
+import school.redrover.testdata.TestDataProvider;
 import school.redrover.page.folder.FolderProjectPage;
 import school.redrover.page.home.HomePage;
 import school.redrover.runner.BaseTest;

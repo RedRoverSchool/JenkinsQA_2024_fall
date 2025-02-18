@@ -6,7 +6,7 @@ import io.qameta.allure.Feature;
 import io.restassured.response.Response;
 import org.testng.Assert;
 import org.testng.annotations.Test;
-import school.redrover.model.PluginManagerResponse;
+import school.redrover.models.PluginManagerResponse;
 import school.redrover.runner.BaseApiTest;
 
 import static io.restassured.RestAssured.given;
