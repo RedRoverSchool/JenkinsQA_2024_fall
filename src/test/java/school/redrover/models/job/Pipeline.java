@@ -1,4 +1,4 @@
-package school.redrover.models.jobs;
+package school.redrover.models.job;
 
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;

@@ -7,7 +7,7 @@ import io.restassured.response.Response;
 import org.assertj.core.api.SoftAssertions;
 import org.testng.annotations.Test;
 import school.redrover.controllers.JobController;
-import school.redrover.models.jobs.JobResponse;
+import school.redrover.models.job.JobResponse;
 import school.redrover.runner.BaseApiTest;
 import school.redrover.testdata.TestDataProvider;
 

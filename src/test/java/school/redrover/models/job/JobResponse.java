@@ -1,4 +1,4 @@
-package school.redrover.models.jobs;
+package school.redrover.models.job;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
