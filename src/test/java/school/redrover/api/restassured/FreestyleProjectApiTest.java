@@ -125,13 +125,12 @@ public class FreestyleProjectApiTest extends BaseApiTest {
     public void testDelete() {
         given()
                 .spec(requestSpec())
-                .queryParam("description", PROJECT_DESCRIPTION)
                 .when()
                 .delete("job/%s/".formatted(PROJECT_NAME))
                 .then()
                 .spec(responseSpec(204, 500L));
 
-        Response response = given()
+        given()
                 .spec(requestSpec())
                 .when()
                 .get("job/%s/api/json".formatted(PROJECT_NAME))
