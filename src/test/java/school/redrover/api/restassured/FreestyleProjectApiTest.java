@@ -20,9 +20,12 @@ import static school.redrover.runner.TestApiUtils.responseSpec;
 import static school.redrover.runner.TestUtils.loadPayload;
 
 @Epic("API")
+@Feature("Freestyle project")
 public class FreestyleProjectApiTest extends BaseApiTest {
 
     private static final String PROJECT_NAME = "FreestyleProject1";
+    private static final String RENAMED_FREESTYLE_PROJECT = "RenamedFreestyle";
+    private static final String PROJECT_DESCRIPTION = "It's my first project";
 
     @BeforeClass
     private void stubs() {
@@ -32,8 +35,7 @@ public class FreestyleProjectApiTest extends BaseApiTest {
     }
 
     @Test
-    @Feature("Freestyle project")
-    @Description("001 Create freestyle project with valid name")
+    @Description("00.001.01 Create Freestyle Project  with valid name")
     public void testCreateFreestyleProjectAndGetByName() {
         given()
                 .spec(requestSpec())
@@ -63,6 +65,79 @@ public class FreestyleProjectApiTest extends BaseApiTest {
         Assert.assertNull(freestyleAndPipelineResponse.getDescription());
         Assert.assertEquals(freestyleAndPipelineResponse.get_class(), "hudson.model.FreeStyleProject");
     }
+    @Test(dependsOnMethods = "testCreateFreestyleProjectAndGetByName")
+    @Description("01.002.01 Rename FreestyleProject with correct name")
+    public void testRename() {
 
+        given()
+                .spec(requestSpec())
+                .contentType("application/x-www-form-urlencoded")
+                .queryParam("newName", RENAMED_FREESTYLE_PROJECT)
+                .when()
+                .post("job/%s/doRename".formatted(PROJECT_NAME))
+                .then()
+                .spec(responseSpec(302, 1000L));
+
+        Response response = given()
+                .spec(requestSpec())
+                .when()
+                .get("job/%s/api/json".formatted(RENAMED_FREESTYLE_PROJECT))
+                .then()
+                .spec(responseSpec(200, 500L))
+                .extract().response();
+
+        ProjectResponse freestyleResponse = response.as(ProjectResponse.class);
+
+        Assert.assertTrue(response.getTime() <= 500);
+        Assert.assertEquals(response.getHeader("Content-Type"), "application/json;charset=utf-8");
+        Assert.assertEquals(freestyleResponse.get_class(), "hudson.model.FreeStyleProject");
+        Assert.assertEquals(freestyleResponse.getName(), RENAMED_FREESTYLE_PROJECT);
+    }
+    @Test(dependsOnMethods = "testCreateFreestyleProjectAndGetByName" )
+    @Description("01.001.02 Add description to an existing FreestyleProject")
+    public void testAddDescription() {
+
+        given()
+                .spec(requestSpec())
+                .queryParam("description", PROJECT_DESCRIPTION)
+                .when()
+                .post("job/%s/submitDescription".formatted(PROJECT_NAME))
+                .then()
+                .spec(responseSpec(302, 500L));
+
+        Response response = given()
+                .spec(requestSpec())
+                .when()
+                .get("job/%s/api/json".formatted(PROJECT_NAME))
+                .then()
+                .spec(responseSpec(200, 500L))
+                .extract().response();
+
+        ProjectResponse freestyleResponse = response.as(ProjectResponse.class);
+
+        Assert.assertTrue(response.getTime() <= 500);
+        Assert.assertEquals(response.getHeader("Content-Type"), "application/json;charset=utf-8");
+        Assert.assertEquals(freestyleResponse.getName(), PROJECT_NAME);
+        Assert.assertEquals(freestyleResponse.getDescription(), PROJECT_DESCRIPTION);
+    }
+    @Test(dependsOnMethods = "testCreateFreestyleProjectAndGetByName" )
+    @Description("01.001.02 Delete the project from the workspace")
+    public void testDelete() {
+        given()
+                .spec(requestSpec())
+                .queryParam("description", PROJECT_DESCRIPTION)
+                .when()
+                .delete("job/%s/".formatted(PROJECT_NAME))
+                .then()
+                .spec(responseSpec(204, 500L));
+
+        Response response = given()
+                .spec(requestSpec())
+                .when()
+                .get("job/%s/api/json".formatted(PROJECT_NAME))
+                .then()
+                .spec(responseSpec(404, 500L))
+                .extract().response();
+    }
 
 }
