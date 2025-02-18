@@ -12,9 +12,16 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class ProjectListResponse {
+public class FolderInsideListResponse {
     @JsonProperty("_class")
     private String classField;
+    private String description;
+    private String displayName;
+    private String displayNameOrNull;
+    private String fullDisplayName;
+    private String fullName;
+    private String name;
+    private String url;
     private List<Project> jobs;
 
     @Getter
