@@ -65,9 +65,10 @@ public class FreestyleProjectApiTest extends BaseApiTest {
         Assert.assertNull(freestyleAndPipelineResponse.getDescription());
         Assert.assertEquals(freestyleAndPipelineResponse.get_class(), "hudson.model.FreeStyleProject");
     }
-    @Test(dependsOnMethods = "testCreateFreestyleProjectAndGetByName")
+    @Test()
     @Description("01.002.01 Rename FreestyleProject with correct name")
     public void testRename() {
+        testCreateFreestyleProjectAndGetByName();
 
         given()
                 .spec(requestSpec())
@@ -93,9 +94,10 @@ public class FreestyleProjectApiTest extends BaseApiTest {
         Assert.assertEquals(freestyleResponse.get_class(), "hudson.model.FreeStyleProject");
         Assert.assertEquals(freestyleResponse.getName(), RENAMED_FREESTYLE_PROJECT);
     }
-    @Test(dependsOnMethods = "testCreateFreestyleProjectAndGetByName" )
+    @Test()
     @Description("01.001.02 Add description to an existing FreestyleProject")
     public void testAddDescription() {
+        testCreateFreestyleProjectAndGetByName();
 
         given()
                 .spec(requestSpec())
@@ -120,9 +122,11 @@ public class FreestyleProjectApiTest extends BaseApiTest {
         Assert.assertEquals(freestyleResponse.getName(), PROJECT_NAME);
         Assert.assertEquals(freestyleResponse.getDescription(), PROJECT_DESCRIPTION);
     }
-    @Test(dependsOnMethods = "testCreateFreestyleProjectAndGetByName" )
+    @Test()
     @Description("01.001.02 Delete the project from the workspace")
     public void testDelete() {
+        testCreateFreestyleProjectAndGetByName();
+
         given()
                 .spec(requestSpec())
                 .when()
