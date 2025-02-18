@@ -2,20 +2,17 @@ package school.redrover.api.restassured;
 
 import io.qameta.allure.*;
 import io.restassured.http.ContentType;
+
 import io.restassured.response.Response;
 import org.testng.Assert;
 import org.testng.annotations.Test;
-import school.redrover.model.ProjectListResponse;
-import school.redrover.model.ProjectResponse;
 import school.redrover.runner.BaseApiTest;
 import school.redrover.runner.TestDataProvider;
 import school.redrover.runner.TestUtils;
 
 import static io.restassured.RestAssured.given;
 
-import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchema;
-import static school.redrover.runner.TestApiUtils.requestSpec;
-import static school.redrover.runner.TestApiUtils.responseSpec;
+import static school.redrover.runner.TestApiUtils.*;
 import static school.redrover.runner.TestUtils.loadPayload;
 
 
@@ -29,171 +26,65 @@ public class FolderApiTest extends BaseApiTest {
     private static final String FOLDER_DESCRIPTION = "Add description to folder!";
     private static final String FOLDER_NAME_BY_XML_CREATE = "FolderCreateByXML";
     private static final String FOLDER_NAME_COPY_FROM = "FolderCopyFrom";
+    private static final String CREATE_EMPTY_FOLDER_XML_FILE = "create-empty-folder.xml";
+    private static final String FOLDER_GET_BY_NAME_SCHEMA_JSON = "folder-schema.json";
 
-    private static String getCreateItemPath() {return "createItem";}
-    private static String getItemByNamePath(String name) {return "job/%s/api/json".formatted(name);}
-    private static String getRenameItemPath(String name) {return "job/%s/confirmRename".formatted(name);}
-    private static String getAddDescriptionToCreatedItemPath(String name) {return "job/%s/submitDescription".formatted(name);}
-    private static String getAllProjectListPath() {return "api/json";}
-    private static String getDeleteItem(String name) {return "job/%s/".formatted(name);}
-
-    @Step("Create new Folder")
-    private void createNewFolder(String name) {
+    @Test(dataProvider = "projectNames", dataProviderClass = TestDataProvider.class)
+    @Description("00.006.02 Create Folder with valid name")
+    public void testCreateFolderWithValidName(String projectName) {
         given()
                 .spec(requestSpec())
-                .contentType(ContentType.XML)
-                .queryParam("name", name)
-                .body(loadPayload("create-empty-folder.xml"))
-                .when()
-                .post(getCreateItemPath());
-    }
-
-    @Step("Get Response GET Item by name")
-    private ProjectResponse getResponseGetItemByName(String name) {
-        Response responseGetCreatedItem = given()
-                .spec(requestSpec())
-                .when()
-                .get(getItemByNamePath(name))
-                .then()
-                .extract()
-                .response();
-
-        return responseGetCreatedItem.as(ProjectResponse.class);
-    }
-
-    private ProjectListResponse getResponseGetAllProjectList() {
-        Response responseGetAllProjectList = given()
-                .spec(requestSpec())
-                .when()
-                .get(getAllProjectListPath())
-                .then()
-                .extract()
-                .response();
-
-        return responseGetAllProjectList.as(ProjectListResponse.class);
-    }
-
-    @Step("Find  item by name in all projects list from Dashboard")
-    private boolean findItemInAllProjectList(String name) {
-        Response responseGetAllProjectList = given()
-                .spec(requestSpec())
-                .when()
-                .get(getAllProjectListPath())
-                .then()
-                .extract()
-                .response();
-
-        ProjectListResponse projectListresponse = responseGetAllProjectList.as(ProjectListResponse.class);
-
-        return  projectListresponse.getJobs().stream()
-                .anyMatch(project -> project.getName().equals(name));
-    }
-
-    private void deleteItem(String name) {
-        given()
-                .spec(requestSpec())
-                .when()
-                .delete(getDeleteItem(name));
-    }
-
-    @Test
-    @Description("002 Create Folder with valid name")
-    public void testCreateFolderWithValidName() {
-        given()
-                .spec(requestSpec())
-                .formParam("name", FOLDER_NAME)
+                .formParam("name", projectName)
                 .formParam( "mode", FOLDER_CREATE_MODE)
                 .contentType(ContentType.URLENC.withCharset("UTF-8"))
                 .when()
                 .post(getCreateItemPath())
                 .then()
-                .statusCode(302);
+                .spec(responseSpec(302, 500L));
 
-        Response responseGetCreatedItem = given()
-                .spec(requestSpec())
-                .when()
-                .get(getItemByNamePath(FOLDER_NAME))
-                .then()
-                .spec(responseSpec(200,500L))
-                .body(matchesJsonSchema(TestUtils.loadSchema("folder-schema.json")))
-                .extract()
-                .response();
+        Allure.step("Expected result: JSON response is matched to JSON schema");
+        Assert.assertTrue(matchSchemaWithJsonFile(getResponseGetItemByName(projectName), FOLDER_GET_BY_NAME_SCHEMA_JSON));
 
-        ProjectResponse getItemByNameResponse = responseGetCreatedItem.as(ProjectResponse.class);
-
-        Allure.step(String.format("Expected result: fullName is '%s'", FOLDER_NAME));
-        Assert.assertEquals(getItemByNameResponse.getFullName(), FOLDER_NAME);
+        Allure.step(String.format("Expected result: fullName is '%s'", projectName));
+        Assert.assertEquals(getResponseGetItemByNameAsObject(projectName).getFullName(), projectName);
         Allure.step("(ERR)Expected result: description is null");
-        Assert.assertEquals(getItemByNameResponse.getDescription(),null);
+        Assert.assertEquals(getResponseGetItemByNameAsObject(projectName).getDescription(),null);
         Allure.step(String.format("Expected result: _class is '%s'", FOLDER_CREATE_MODE));
-        Assert.assertEquals(getItemByNameResponse.get_class(),FOLDER_CREATE_MODE);
-
-        Response responseGetAllProjectList = given()
-                .spec(requestSpec())
-                .when()
-                .get(getAllProjectListPath())
-                .then()
-                .spec(responseSpec(200, 500L))
-                .extract()
-                .response();
-
-        ProjectListResponse projectListresponse = responseGetAllProjectList.as(ProjectListResponse.class);
-
-        boolean findItemByName = projectListresponse.getJobs().stream()
-                .anyMatch(project -> project.getName().equals(FOLDER_NAME));
+        Assert.assertEquals(getResponseGetItemByNameAsObject(projectName).get_class(),FOLDER_CREATE_MODE);
 
         Allure.step("Expected result: Folder name found in the list");
-        Assert.assertTrue(findItemByName, "Folder name not found in the list");
+        Assert.assertTrue(findItemInAllProjectList(projectName), "Folder name not found in the list");
+
+        deleteProject(projectName);
     }
 
-    @Test
+    @Test(dataProvider = "projectNames", dataProviderClass = TestDataProvider.class)
     @Description("00.006.03 Create Folder with valid name (XML)")
-    public void testCreateFolderWithValidNameXml() {
+    public void testCreateFolderWithValidNameXml(String projectName) {
         given()
                 .spec(requestSpec())
                 .contentType(ContentType.XML)
-                .queryParam("name", FOLDER_NAME_BY_XML_CREATE)
-                .body(loadPayload("create-empty-folder.xml"))
+                .queryParam("name", projectName)
+                .body(loadPayload(CREATE_EMPTY_FOLDER_XML_FILE))
                 .when()
                 .post(getCreateItemPath())
                 .then()
                 .spec(responseSpec(200,500L));
 
-        Response response = given()
-                .spec(requestSpec())
-                .when()
-                .get(getItemByNamePath(FOLDER_NAME_BY_XML_CREATE))
-                .then()
-                .spec(responseSpec(200,500L))
-                .body(matchesJsonSchema(TestUtils.loadSchema("folder-schema.json")))
-                .extract()
-                .response();
+        Allure.step("Expected result: JSON response is matched to JSON schema");
+        Assert.assertTrue(matchSchemaWithJsonFile(getResponseGetItemByName(projectName), FOLDER_GET_BY_NAME_SCHEMA_JSON));
 
-        ProjectResponse getItemByNameResponse = response.as(ProjectResponse.class);
-
-        Allure.step(String.format("Expected result: fullName is '%s'", FOLDER_NAME_BY_XML_CREATE));
-        Assert.assertEquals(getItemByNameResponse.getFullName(), FOLDER_NAME_BY_XML_CREATE);
+        Allure.step(String.format("Expected result: fullName is '%s'", projectName));
+        Assert.assertEquals(getResponseGetItemByNameAsObject(projectName).getFullName(), projectName);
         Allure.step("(Expected result: description is empty");
-        Assert.assertEquals(getItemByNameResponse.getDescription(),"");
+        Assert.assertEquals(getResponseGetItemByNameAsObject(projectName).getDescription(),"");
         Allure.step(String.format("Expected result: _class is '%s'", FOLDER_CREATE_MODE));
-        Assert.assertEquals(getItemByNameResponse.get_class(),FOLDER_CREATE_MODE);
-
-        Response responseGetAllProjectList = given()
-                .spec(requestSpec())
-                .when()
-                .get(getAllProjectListPath())
-                .then()
-                .spec(responseSpec(200, 500L))
-                .extract()
-                .response();
-
-        ProjectListResponse projectListresponse = responseGetAllProjectList.as(ProjectListResponse.class);
-
-        boolean findItemByName = projectListresponse.getJobs().stream()
-                .anyMatch(project -> project.getName().equals(FOLDER_NAME_BY_XML_CREATE));
+        Assert.assertEquals(getResponseGetItemByNameAsObject(projectName).get_class(),FOLDER_CREATE_MODE);
 
         Allure.step("Expected result: Folder name found in the list");
-        Assert.assertTrue(findItemByName, "Folder name not found in the list");
+        Assert.assertTrue(findItemInAllProjectList(projectName), "Folder name not found in the list");
+
+        deleteProject(projectName);
     }
 
     @Test(dataProvider = "providerUnsafeCharacters", dataProviderClass = TestDataProvider.class)
@@ -235,7 +126,7 @@ public class FolderApiTest extends BaseApiTest {
     @Test
     @Description("00.006.16 Create Folder by copy from another folder")
     public void testCreateFolderByCopyFromAnotherFolder() {
-        createNewFolder(FOLDER_NAME);
+        createNewProjectXML(FOLDER_NAME, CREATE_EMPTY_FOLDER_XML_FILE);
 
         given()
                 .spec(requestSpec())
@@ -250,21 +141,21 @@ public class FolderApiTest extends BaseApiTest {
 
 
         Allure.step(String.format("Expected result: fullName is '%s'", FOLDER_NAME_BY_XML_CREATE));
-        Assert.assertEquals(getResponseGetItemByName(FOLDER_NAME_COPY_FROM).getFullName(), FOLDER_NAME_COPY_FROM);
+        Assert.assertEquals(getResponseGetItemByNameAsObject(FOLDER_NAME_COPY_FROM).getFullName(), FOLDER_NAME_COPY_FROM);
         Allure.step("Expected result: description is empty");
-        Assert.assertEquals(getResponseGetItemByName(FOLDER_NAME_COPY_FROM).getDescription(),"");
+        Assert.assertEquals(getResponseGetItemByNameAsObject(FOLDER_NAME_COPY_FROM).getDescription(),"");
         Allure.step(String.format("Expected result: _class is '%s'", FOLDER_CREATE_MODE));
-        Assert.assertEquals(getResponseGetItemByName(FOLDER_NAME_COPY_FROM).get_class(),FOLDER_CREATE_MODE);
+        Assert.assertEquals(getResponseGetItemByNameAsObject(FOLDER_NAME_COPY_FROM).get_class(),FOLDER_CREATE_MODE);
         Allure.step(String.format("Expected result: Folder name '%s' found in all project list", FOLDER_NAME_COPY_FROM));
         Assert.assertTrue(findItemInAllProjectList(FOLDER_NAME_COPY_FROM));
 
-        deleteItem(FOLDER_NAME);
+        deleteProject(FOLDER_NAME);
     }
 
     @Test()
     @Description("04.001.08 Rename Folder")
     public void testRenameFolder() {
-        createNewFolder(FOLDER_NAME_BY_XML_CREATE);
+        createNewProjectXML(FOLDER_NAME_BY_XML_CREATE, CREATE_EMPTY_FOLDER_XML_FILE);
 
         given().spec(requestSpec())
                 .formParam("newName", FOLDER_NEW_NAME)
@@ -274,52 +165,23 @@ public class FolderApiTest extends BaseApiTest {
                 .then()
                 .spec(responseSpec(302, 500L));
 
-        Response responseGetItemByName = given()
-                .spec(requestSpec())
-                .when()
-                .get(getItemByNamePath(FOLDER_NEW_NAME))
-                .then()
-                .spec(responseSpec(200, 500L))
-                .body(matchesJsonSchema(TestUtils.loadSchema("folder-schema.json")))
-                .extract()
-                .response();
-
-        ProjectResponse getItemByNameResponse = responseGetItemByName.as(ProjectResponse.class);
-
         Allure.step(String.format("Expected result: fullName is '%s'", FOLDER_NEW_NAME));
-        Assert.assertEquals(getItemByNameResponse.getFullName(),FOLDER_NEW_NAME);
+        Assert.assertEquals(getResponseGetItemByNameAsObject(FOLDER_NEW_NAME).getFullName(),FOLDER_NEW_NAME);
         Allure.step("(Expected result: description is empy");
-        Assert.assertEquals(getItemByNameResponse.getDescription(),"");
+        Assert.assertEquals(getResponseGetItemByNameAsObject(FOLDER_NEW_NAME).getDescription(),"");
         Allure.step(String.format("Expected result: _class is '%s'", FOLDER_CREATE_MODE));
-        Assert.assertEquals(getItemByNameResponse.get_class(),FOLDER_CREATE_MODE);
-
-        Response responseGetAllProjectList = given()
-                .spec(requestSpec())
-                .when()
-                .get(getAllProjectListPath())
-                .then()
-                .spec(responseSpec(200, 500L))
-                .extract()
-                .response();
-
-        ProjectListResponse projectListresponse = responseGetAllProjectList.as(ProjectListResponse.class);
-
-        boolean findItemByNewName = projectListresponse.getJobs().stream()
-                .anyMatch(project -> project.getName().equals(FOLDER_NEW_NAME));
-
-        boolean findItemByOldName = projectListresponse.getJobs().stream()
-                .anyMatch(project -> project.getName().equals(FOLDER_NAME_BY_XML_CREATE));
+        Assert.assertEquals(getResponseGetItemByNameAsObject(FOLDER_NEW_NAME).get_class(),FOLDER_CREATE_MODE);
 
         Allure.step("Expected result: Folder name found in the list");
-        Assert.assertTrue(findItemByNewName, "Folder name not found in the list");
+        Assert.assertTrue(findItemInAllProjectList(FOLDER_NEW_NAME), "Folder name not found in the list");
         Allure.step("Expected result: Folder old name NOT found in the list");
-        Assert.assertFalse(findItemByOldName, "Folder name found in the list");
+        Assert.assertFalse(findItemInAllProjectList(FOLDER_NAME_BY_XML_CREATE), "Folder name found in the list");
     }
 
     @Test()
     @Description("04.001.09 Rename Folder with the same name")
     public void testRenameFolderSameName() {
-        createNewFolder(FOLDER_NAME_BY_XML_CREATE);
+        createNewProjectXML(FOLDER_NAME_BY_XML_CREATE, CREATE_EMPTY_FOLDER_XML_FILE);
 
         given().spec(requestSpec())
                 .formParam("newName", FOLDER_NAME_BY_XML_CREATE)
@@ -333,7 +195,7 @@ public class FolderApiTest extends BaseApiTest {
     @Test()
     @Description("007 Add Description to Folder")
     public void testAddDescriptionToFolder() {
-        createNewFolder(FOLDER_NEW_NAME);
+        createNewProjectXML(FOLDER_NEW_NAME, CREATE_EMPTY_FOLDER_XML_FILE);
 
         given()
                 .spec(requestSpec())
@@ -344,36 +206,29 @@ public class FolderApiTest extends BaseApiTest {
                 .then()
                 .spec(responseSpec(302, 500L));
 
-        Response responseGetItemByName = given()
-                .spec(requestSpec())
-                .when()
-                .get(getItemByNamePath(FOLDER_NEW_NAME))
-                .then()
-                .spec(responseSpec(200, 500L))
-                .body(matchesJsonSchema(TestUtils.loadSchema("folder-schema.json")))
-                .extract()
-                .response();
-
-        ProjectResponse getItemByNameResponse = responseGetItemByName.as(ProjectResponse.class);
+        Allure.step("Expected result: JSON response is matched to JSON schema");
+        Assert.assertTrue(matchSchemaWithJsonFile(getResponseGetItemByName(FOLDER_NEW_NAME), FOLDER_GET_BY_NAME_SCHEMA_JSON));
 
         Allure.step(String.format("Expected result: fullName is '%s'", FOLDER_NEW_NAME));
-        Assert.assertEquals(getItemByNameResponse.getFullName(),FOLDER_NEW_NAME);
+        Assert.assertEquals(getResponseGetItemByNameAsObject(FOLDER_NEW_NAME).getFullName(),FOLDER_NEW_NAME);
         Allure.step("(Expected result: description is empty");
-        Assert.assertEquals(getItemByNameResponse.getDescription(),"");
+        Assert.assertEquals(getResponseGetItemByNameAsObject(FOLDER_NEW_NAME).getDescription(),"");
         Allure.step(String.format("Expected result: _class is '%s'", FOLDER_CREATE_MODE));
-        Assert.assertEquals(getItemByNameResponse.get_class(),FOLDER_CREATE_MODE);
+        Assert.assertEquals(getResponseGetItemByNameAsObject(FOLDER_NEW_NAME).get_class(),FOLDER_CREATE_MODE);
+
+        deleteProject(FOLDER_NEW_NAME);
     }
 
     @Test()
     @Description("04.003.04 Delete Folder")
     public void testDeleteFolder() {
-        createNewFolder(FOLDER_NEW_NAME);
+        createNewProjectXML(FOLDER_NEW_NAME, CREATE_EMPTY_FOLDER_XML_FILE);
 
         Allure.step("Send DELETE request -> Delete Folder with name %s".formatted(FOLDER_NEW_NAME));
         given()
                 .spec(requestSpec())
                 .when()
-                .delete(getDeleteItem(FOLDER_NEW_NAME))
+                .delete(getDeleteItemPath(FOLDER_NEW_NAME))
                 .then()
                 .spec(responseSpec(204,500L));
 
@@ -389,13 +244,13 @@ public class FolderApiTest extends BaseApiTest {
     @Test
     @Description("04.003.05 Delete deleted Folder")
     public void testDeleteDeletedFolder() {
-        createNewFolder(FOLDER_NAME);
+        createNewProjectXML(FOLDER_NAME, CREATE_EMPTY_FOLDER_XML_FILE);
 
         Allure.step("Send DELETE request -> Delete Folder with name %s".formatted(FOLDER_NAME));
         given()
                 .spec(requestSpec())
                 .when()
-                .delete(getDeleteItem(FOLDER_NAME))
+                .delete(getDeleteItemPath(FOLDER_NAME))
                 .then()
                 .spec(responseSpec(204,500L));
 
@@ -403,8 +258,61 @@ public class FolderApiTest extends BaseApiTest {
         given()
                 .spec(requestSpec())
                 .when()
-                .delete(getDeleteItem(FOLDER_NAME))
+                .delete(getDeleteItemPath(FOLDER_NAME))
                 .then()
                 .spec(responseSpec(404,500L));
+    }
+
+    @Test(dataProvider = "projectNameAndXmlFileCreate", dataProviderClass = TestDataProvider.class,
+            dependsOnMethods = "testRenameFolder")
+    @Description("04.007.01 Create Project in Folder")
+    public void testCreateProjectInFolder(String name, String xmlFile) {
+        given()
+                .spec(requestSpec())
+                .contentType(ContentType.XML)
+                .queryParam("name", name)
+                .body(TestUtils.loadPayload(xmlFile))
+                .when()
+                .post("/job/%s/createItem".formatted(FOLDER_NEW_NAME))
+                .then()
+                .spec(responseSpec(200, 500L));
+
+        Allure.step("Expected result: Project name '%s' NOT found in the list on Dashboard".formatted(name));
+        Assert.assertFalse(findItemInAllProjectList(name));
+
+        Allure.step("Expected result: Project name '%s' found inside the Folder '%s'".formatted(name, FOLDER_NEW_NAME));
+        Assert.assertTrue(findProjectByNameInsideFolder(FOLDER_NEW_NAME, name));
+    }
+
+    @Test(dependsOnMethods = "testCreateProjectInFolder")
+    @Description("04.003.06 Delete Folder with Project")
+    public void testDeleteFolderWithProject() {
+        deleteProject(FOLDER_NEW_NAME);
+    }
+
+    @Test
+    @Description("04.002.01 Move Folder to Folder")
+    public void testMoveFolderToFolder() {
+        String parentFolder = "ParentFolder";
+        String childFolder = "ChildFolder";
+        createNewProjectXML(parentFolder, CREATE_EMPTY_FOLDER_XML_FILE);
+        createNewProjectXML(childFolder, CREATE_EMPTY_FOLDER_XML_FILE);
+
+        given()
+                .spec(requestSpec())
+                .contentType(ContentType.URLENC.withCharset("UTF-8"))
+                .formParam("destination", "/%s".formatted(parentFolder))
+                .when()
+                .post("job/%s/move/move".formatted(childFolder))
+                .then()
+                .spec(responseSpec(302, 500L));
+
+        Allure.step("Expected result: Project name '%s' NOT found in the list on Dashboard".formatted(childFolder));
+        Assert.assertFalse(findItemInAllProjectList(childFolder));
+        Allure.step("Expected result: Project name '%s' found in the list on Dashboard".formatted(parentFolder));
+        Assert.assertTrue(findItemInAllProjectList(parentFolder));
+
+        Allure.step("Expected result: Project name '%s' found inside the Folder '%s'".formatted(childFolder, parentFolder));
+        Assert.assertTrue(findProjectByNameInsideFolder(parentFolder, childFolder));
     }
 }

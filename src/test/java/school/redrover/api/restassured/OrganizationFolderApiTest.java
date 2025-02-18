@@ -13,9 +13,11 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 import school.redrover.model.ProjectResponse;
 import school.redrover.runner.BaseApiTest;
+import school.redrover.runner.TestDataProvider;
 import school.redrover.runner.TestUtils;
 
 import static io.restassured.RestAssured.given;
+import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchema;
 import static school.redrover.runner.TestApiUtils.requestSpec;
 import static school.redrover.runner.TestApiUtils.responseSpec;
 import static school.redrover.runner.TestUtils.loadPayload;
@@ -25,12 +27,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.Map;
 
 @Epic("API")
+@Feature("Organization folder")
 public class OrganizationFolderApiTest extends BaseApiTest {
 
     private static final String ORGANIZATION_FOLDER_NAME = "OrganizationFolderName";
     private static final String RENAMED_ORGANIZATION_FOLDER_NAME = "RenamedOrganizationFolderName";
     private static final String DISPLAY_NAME_ORG_FOLDER = "DisplayNameOrgFolder";
     private static final String DESCRIPTION = "ProjectDescription";
+    private static final String MODE_ORGANIZATION_FOLDER = "jenkins.branch.OrganizationFolder";
 
     private Response requestProjectJson(String name) {
         return given()
@@ -40,11 +44,11 @@ public class OrganizationFolderApiTest extends BaseApiTest {
                 .get("api/json")
                 .then()
                 .spec(responseSpec(200, 500L))
+                .body(matchesJsonSchema(TestUtils.loadSchema("organization-folder-schema.json")))
                 .extract().response();
     }
 
     @Test
-    @Feature("Organization folder")
     @Description("00.007.01 Create Organization folder with valid name")
     public void testCreateWithXML() {
         given()
@@ -68,14 +72,12 @@ public class OrganizationFolderApiTest extends BaseApiTest {
     }
 
     @Test(dependsOnMethods = "testCreateWithXML")
-    @Feature("Organization folder")
     @Description("00.007.05 Get error message when create Organization Folder with the same name")
     public void testCreateSameName() {
         Response htmlResponse = given()
                 .spec(requestSpec())
-                .contentType("application/x-www-form-urlencoded")
                 .formParam("name", ORGANIZATION_FOLDER_NAME)
-                .formParam("mode", "jenkins.branch.OrganizationFolder")
+                .formParam("mode", MODE_ORGANIZATION_FOLDER)
                 .when()
                 .post("view/all/createItem/")
                 .then()
@@ -89,8 +91,65 @@ public class OrganizationFolderApiTest extends BaseApiTest {
                 String.format("A job already exists with the name ‘%s’", ORGANIZATION_FOLDER_NAME));
     }
 
+    @Test
+    @Description("00.007.06 Create Organization folder without name")
+    public void testCreateWithoutName() {
+        final String errorMessage = "Query parameter 'name' is required";
+
+        Response response = given()
+                .spec(requestSpec())
+                .formParam("mode", MODE_ORGANIZATION_FOLDER)
+                .when()
+                .post("view/all/createItem/")
+                .then()
+                .spec(responseSpec(400, 500L))
+                .extract().response();
+
+        Assert.assertEquals(Jsoup.parse(response.asString()).select("p").text(), errorMessage);
+        Assert.assertEquals(response.headers().get("X-Error").toString(), "X-Error=" + errorMessage);
+    }
+
+    @Test
+    @Description("00.007.07 Create Organization folder without mode")
+    public void testCreateWithoutMode() {
+        final String errorMessage = "No mode given";
+
+        Response response = given()
+                .spec(requestSpec())
+                .formParam("name", "OrgFolder")
+                .when()
+                .post("view/all/createItem/")
+                .then()
+                .spec(responseSpec(400, 500L))
+                .extract().response();
+
+        Assert.assertEquals(Jsoup.parse(response.asString()).select("p").text(), errorMessage);
+        Assert.assertEquals(response.headers().get("X-Error").toString(), "X-Error=" + errorMessage);
+    }
+
+    @Test(dataProvider = "providerUnsafeCharacters", dataProviderClass = TestDataProvider.class)
+    @Description("00.007.08 Create Organization folder with unsafe Characters")
+    public void testCreateWithUnsafeCharacters(String unsafeCharacter) {
+        final String errorMessage = "‘%s’ is an unsafe character".formatted(unsafeCharacter);
+
+        Response response = given()
+                .spec(requestSpec())
+                .contentType("application/x-www-form-urlencoded")
+                .formParam("name", unsafeCharacter)
+                .formParam("mode", MODE_ORGANIZATION_FOLDER)
+                .when()
+                .post("view/all/createItem/")
+                .then()
+                .spec(responseSpec(400, 500L))
+                .extract().response();
+
+        Assert.assertEquals(Jsoup.parse(response.asString()).select("p").text(), errorMessage);
+        Assert.assertEquals(response.headers().get("X-Error").toString(),
+                "X-Error=" + errorMessage.replaceAll("‘", "").replaceAll("’", " "));
+    }
+
+
     @Test(dependsOnMethods = "testCreateSameName")
-    @Feature("Organization folder")
     @Description("06.001.04 Change configurations for Organization folder")
     public void testChangeProjectConfigurations() throws JsonProcessingException {
         String projectJson = TestUtils.loadPayload("organization-folder-configuration.json");
@@ -129,7 +188,6 @@ public class OrganizationFolderApiTest extends BaseApiTest {
     }
 
     @Test(dependsOnMethods = "testChangeProjectConfigurations")
-    @Feature("Organization folder")
     @Description("06.005.01 Rename Organization folder with valid name")
     public void testRename() {
         given()
@@ -155,7 +213,6 @@ public class OrganizationFolderApiTest extends BaseApiTest {
     }
 
     @Test(dependsOnMethods = "testRename")
-    @Feature("Organization folder")
     @Description("06.005.02 Delete Organization folder")
     public void testDelete() {
         given()
