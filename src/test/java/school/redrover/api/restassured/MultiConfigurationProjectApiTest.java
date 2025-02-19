@@ -1,9 +1,6 @@
 package school.redrover.api.restassured;
 
-import io.qameta.allure.Allure;
-import io.qameta.allure.Description;
-import io.qameta.allure.Epic;
-import io.qameta.allure.Story;
+import io.qameta.allure.*;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import org.testng.Assert;
@@ -16,7 +13,7 @@ import static io.restassured.RestAssured.given;
 import static school.redrover.runner.TestApiUtils.*;
 
 @Epic("API")
-@Story("Multi-Configuration Project")
+@Feature("Multi-Configuration Project")
 public class MultiConfigurationProjectApiTest extends BaseApiTest {
 
     private final String MULTI_CONFIG_NAME = "MultiConfigurationProject";
