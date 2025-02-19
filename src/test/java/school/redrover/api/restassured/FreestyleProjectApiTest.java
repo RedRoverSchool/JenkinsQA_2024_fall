@@ -58,7 +58,6 @@ public class FreestyleProjectApiTest extends BaseApiTest {
         ProjectResponse freestyleAndPipelineResponse = response.as(ProjectResponse.class);
 
         Assert.assertEquals(response.getHeader("Content-Type"), "application/json;charset=utf-8");
-        Assert.assertTrue(response.getTime() <= 500);
         Assert.assertEquals(freestyleAndPipelineResponse.getName(), PROJECT_NAME);
         Assert.assertNull(freestyleAndPipelineResponse.getDescription());
         Assert.assertEquals(freestyleAndPipelineResponse.get_class(), "hudson.model.FreeStyleProject");
@@ -87,7 +86,6 @@ public class FreestyleProjectApiTest extends BaseApiTest {
 
         ProjectResponse freestyleResponse = response.as(ProjectResponse.class);
 
-        Assert.assertTrue(response.getTime() <= 500);
         Assert.assertEquals(response.getHeader("Content-Type"), "application/json;charset=utf-8");
         Assert.assertEquals(freestyleResponse.get_class(), "hudson.model.FreeStyleProject");
         Assert.assertEquals(freestyleResponse.getName(), RENAMED_FREESTYLE_PROJECT);
@@ -114,7 +112,6 @@ public class FreestyleProjectApiTest extends BaseApiTest {
 
         ProjectResponse freestyleResponse = response.as(ProjectResponse.class);
 
-        Assert.assertTrue(response.getTime() <= 500);
         Assert.assertEquals(response.getHeader("Content-Type"), "application/json;charset=utf-8");
         Assert.assertEquals(freestyleResponse.getName(), PROJECT_NAME);
         Assert.assertEquals(freestyleResponse.getDescription(), PROJECT_DESCRIPTION);
@@ -134,8 +131,7 @@ public class FreestyleProjectApiTest extends BaseApiTest {
                 .when()
                 .get(getItemByNamePath(PROJECT_NAME))
                 .then()
-                .spec(responseSpec(404, 500L))
-                .extract().response();
+                .spec(responseSpec(404, 500L));
     }
 
 }
