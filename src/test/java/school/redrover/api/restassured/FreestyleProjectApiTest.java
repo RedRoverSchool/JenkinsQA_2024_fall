@@ -22,9 +22,12 @@ import static school.redrover.runner.TestUtils.loadPayload;
 @Feature("Freestyle project")
 public class FreestyleProjectApiTest extends BaseApiTest {
 
-    private static final String PROJECT_NAME = "FreestyleProject1";
+    private static final String PROJECT_NAME = "FreestyleProject";
+    private static final String NEW_PROJECT = "NewFreestyleProject";
     private static final String RENAMED_FREESTYLE_PROJECT = "RenamedFreestyle";
     private static final String PROJECT_DESCRIPTION = "It's my first project";
+    private static final String CREATE_XML_FILE = "create-empty-freestyle-project.xml";
+
 
     @BeforeClass
     private void stubs() {
@@ -61,18 +64,19 @@ public class FreestyleProjectApiTest extends BaseApiTest {
         Assert.assertEquals(freestyleAndPipelineResponse.getName(), PROJECT_NAME);
         Assert.assertNull(freestyleAndPipelineResponse.getDescription());
         Assert.assertEquals(freestyleAndPipelineResponse.get_class(), "hudson.model.FreeStyleProject");
+
     }
     @Test
     @Description("01.002.01 Rename FreestyleProject with correct name")
     public void testRename() {
-        testCreateFreestyleProjectAndGetByName();
+        createNewProjectXML(NEW_PROJECT, CREATE_XML_FILE);
 
         given()
                 .spec(requestSpec())
                 .contentType("application/x-www-form-urlencoded")
                 .queryParam("newName", RENAMED_FREESTYLE_PROJECT)
                 .when()
-                .post(getRenameItemPath(PROJECT_NAME))
+                .post(getRenameItemPath(NEW_PROJECT))
                 .then()
                 .spec(responseSpec(302, 1000L));
 
@@ -90,22 +94,24 @@ public class FreestyleProjectApiTest extends BaseApiTest {
         Assert.assertEquals(freestyleResponse.get_class(), "hudson.model.FreeStyleProject");
         Assert.assertEquals(freestyleResponse.getName(), RENAMED_FREESTYLE_PROJECT);
     }
-    @Test(dependsOnMethods = "testCreateFreestyleProjectAndGetByName" )
+
+    @Test
     @Description("01.001.02 Add description to an existing FreestyleProject")
     public void testAddDescription() {
+        createNewProjectXML(NEW_PROJECT, CREATE_XML_FILE);
 
         given()
                 .spec(requestSpec())
                 .queryParam("description", PROJECT_DESCRIPTION)
                 .when()
-                .post(getAddDescriptionToCreatedItemPath(PROJECT_NAME))
+                .post(getAddDescriptionToCreatedItemPath(NEW_PROJECT))
                 .then()
                 .spec(responseSpec(302, 500L));
 
         Response response = given()
                 .spec(requestSpec())
                 .when()
-                .get(getItemByNamePath(PROJECT_NAME))
+                .get(getItemByNamePath(NEW_PROJECT))
                 .then()
                 .spec(responseSpec(200, 500L))
                 .extract().response();
@@ -113,23 +119,24 @@ public class FreestyleProjectApiTest extends BaseApiTest {
         ProjectResponse freestyleResponse = response.as(ProjectResponse.class);
 
         Assert.assertEquals(response.getHeader("Content-Type"), "application/json;charset=utf-8");
-        Assert.assertEquals(freestyleResponse.getName(), PROJECT_NAME);
+        Assert.assertEquals(freestyleResponse.getName(), NEW_PROJECT);
         Assert.assertEquals(freestyleResponse.getDescription(), PROJECT_DESCRIPTION);
     }
-    @Test(dependsOnMethods = "testCreateFreestyleProjectAndGetByName" )
+    @Test(dependsOnMethods = "testAddDescription")
     @Description("01.001.02 Delete the project from the workspace")
     public void testDelete() {
+
         given()
                 .spec(requestSpec())
                 .when()
-                .delete(getDeleteItemPath(PROJECT_NAME))
+                .delete(getDeleteItemPath(NEW_PROJECT))
                 .then()
                 .spec(responseSpec(204, 500L));
 
         given()
                 .spec(requestSpec())
                 .when()
-                .get(getItemByNamePath(PROJECT_NAME))
+                .get(getItemByNamePath(NEW_PROJECT))
                 .then()
                 .spec(responseSpec(404, 500L));
     }
