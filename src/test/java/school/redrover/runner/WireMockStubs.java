@@ -51,10 +51,10 @@ public class WireMockStubs {
                 }
                 """;
         String errorPayload = """
-            {
-                "error": "Missing required fields"
-            }
-            """;
+                {
+                    "error": "Missing required fields"
+                }
+                """;
 
         wireMockServer.stubFor(post(urlEqualTo("/createUser"))
                 .atPriority(1)
@@ -76,7 +76,59 @@ public class WireMockStubs {
                         .withBody(errorPayload)
                 )
         );
-
     }
 
+
+    public static void stubVerifyPluginsInstalled() {
+        String payload = """
+                  {
+                  "message": "Mock server is working!",
+                  "_class": "hudson.LocalPluginManager",
+                  "plugins": [
+                    {
+                      "active": true,
+                      "backupVersion": null,
+                      "bundled": false,
+                      "deleted": false,
+                      "dependencies": [],
+                      "detached": true,
+                      "downgradable": false,
+                      "enabled": true,
+                      "hasUpdate": false,
+                      "longName": "PluginA",
+                      "pinned": false,
+                      "requiredCoreVersion": "2.387.3",
+                      "shortName": "pluginA",
+                      "supportsDynamicLoad": "MAYBE",
+                      "url": "https://plugins.jenkins.io/pluginA",
+                      "version": "162.v0e6ec0fcfcf6"
+                    },
+                    {
+                      "active": true,
+                      "backupVersion": null,
+                      "bundled": false,
+                      "deleted": false,
+                      "dependencies": [],
+                      "detached": true,
+                      "downgradable": false,
+                      "enabled": true,
+                      "hasUpdate": false,
+                      "longName": "PluginB",
+                      "pinned": false,
+                      "requiredCoreVersion": "2.440.3",
+                      "shortName": "pluginB",
+                      "supportsDynamicLoad": "YES",
+                      "url": "https://plugins.jenkins.io/pluginB",
+                      "version": "511.v0a_a_1a_334f41b_"
+                    }
+                  ]
+                }
+                """;
+
+        wireMockServer.stubFor(post(urlEqualTo("/pluginManager/api/json?depth=1"))
+                .willReturn(WireMock.aResponse()
+                        .withStatus(200)
+                        .withHeader("Content-Type", "application/json")
+                        .withBody(payload)));
+    }
 }
