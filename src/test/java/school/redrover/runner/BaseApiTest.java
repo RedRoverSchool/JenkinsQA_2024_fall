@@ -6,7 +6,7 @@ import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
 import io.restassured.RestAssured;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
-import school.redrover.model.CrumbIssuerResponse;
+import school.redrover.models.CrumbIssuerResponse;
 
 import java.util.Map;
 

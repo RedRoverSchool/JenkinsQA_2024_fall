@@ -7,7 +7,7 @@ import io.restassured.response.Response;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import school.redrover.runner.BaseApiTest;
-import school.redrover.runner.TestDataProvider;
+import school.redrover.testdata.TestDataProvider;
 import school.redrover.runner.TestUtils;
 
 import static io.restassured.RestAssured.given;
@@ -48,7 +48,7 @@ public class FolderApiTest extends BaseApiTest {
         Allure.step(String.format("Expected result: fullName is '%s'", projectName));
         Assert.assertEquals(getResponseGetItemByNameAsObject(projectName).getFullName(), projectName);
         Allure.step("(ERR)Expected result: description is null");
-        Assert.assertEquals(getResponseGetItemByNameAsObject(projectName).getDescription(),null);
+        Assert.assertNull(getResponseGetItemByNameAsObject(projectName).getDescription());
         Allure.step(String.format("Expected result: _class is '%s'", FOLDER_CREATE_MODE));
         Assert.assertEquals(getResponseGetItemByNameAsObject(projectName).get_class(),FOLDER_CREATE_MODE);
 
