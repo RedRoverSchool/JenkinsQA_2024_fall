@@ -1,5 +1,7 @@
 package school.redrover.runner;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import io.qameta.allure.Step;
 import io.qameta.allure.restassured.AllureRestAssured;
 import io.restassured.RestAssured;
@@ -12,9 +14,9 @@ import io.restassured.module.jsv.JsonSchemaValidator;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 import io.restassured.specification.ResponseSpecification;
-import school.redrover.model.FolderInsideListResponse;
-import school.redrover.model.ProjectListResponse;
-import school.redrover.model.ProjectResponse;
+import school.redrover.models.FolderInsideListResponse;
+import school.redrover.models.ProjectListResponse;
+import school.redrover.models.ProjectResponse;
 
 import java.util.List;
 
@@ -199,4 +201,15 @@ public class TestApiUtils {
             return false;
         }
     }
+
+    public static String toXML(Object classObject) {
+        XmlMapper xmlMapper = new XmlMapper();
+        try {
+            return xmlMapper.writeValueAsString(classObject);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+
 }

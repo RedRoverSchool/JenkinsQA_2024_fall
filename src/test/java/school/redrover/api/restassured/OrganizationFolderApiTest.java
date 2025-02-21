@@ -11,9 +11,9 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.testng.Assert;
 import org.testng.annotations.Test;
-import school.redrover.model.ProjectResponse;
+import school.redrover.models.ProjectResponse;
 import school.redrover.runner.BaseApiTest;
-import school.redrover.runner.TestDataProvider;
+import school.redrover.testdata.TestDataProvider;
 import school.redrover.runner.TestUtils;
 
 import static io.restassured.RestAssured.given;
