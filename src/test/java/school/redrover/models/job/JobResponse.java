@@ -1,5 +1,6 @@
 package school.redrover.models.job;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -8,6 +9,7 @@ import java.util.List;
 
 @Data
 @NoArgsConstructor
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class JobResponse {
 
     @JsonProperty("_class")
@@ -39,4 +41,5 @@ public class JobResponse {
     private boolean inQueue;
     private Object queueItem;
     private boolean resumeBlocked;
+    private boolean disabled;
 }

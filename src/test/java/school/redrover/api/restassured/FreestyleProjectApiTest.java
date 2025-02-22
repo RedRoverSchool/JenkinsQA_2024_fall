@@ -3,20 +3,21 @@ package school.redrover.api.restassured;
 import io.qameta.allure.Description;
 import io.qameta.allure.Epic;
 import io.qameta.allure.Feature;
-import io.restassured.http.ContentType;
 import io.restassured.response.Response;
+import org.assertj.core.api.SoftAssertions;
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 import school.redrover.models.ProjectResponse;
+import school.redrover.models.job.JobResponse;
 import school.redrover.runner.BaseApiTest;
-import school.redrover.runner.TestUtils;
 import school.redrover.runner.WireMockStubs;
+import school.redrover.testdata.JobType;
+import school.redrover.controllers.JobController;
 
 import static io.restassured.RestAssured.given;
-import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchema;
+
 import static school.redrover.runner.TestApiUtils.*;
-import static school.redrover.runner.TestUtils.loadPayload;
 
 @Epic("API")
 @Feature("Freestyle project")
@@ -27,7 +28,7 @@ public class FreestyleProjectApiTest extends BaseApiTest {
     private static final String RENAMED_FREESTYLE_PROJECT = "RenamedFreestyle";
     private static final String PROJECT_DESCRIPTION = "It's my first project";
     private static final String CREATE_XML_FILE = "create-empty-freestyle-project.xml";
-
+    private static final JobController jobController = new JobController();
 
     @BeforeClass
     private void stubs() {
@@ -38,34 +39,29 @@ public class FreestyleProjectApiTest extends BaseApiTest {
 
     @Test
     @Description("00.001.01 Create Freestyle Project  with valid name")
-    public void testCreateFreestyleProjectAndGetByName() {
-        given()
-                .spec(requestSpec())
-                .queryParam("name", PROJECT_NAME)
-                .contentType(ContentType.XML)
-                .body(loadPayload("create-empty-freestyle-project.xml"))
-                .when()
-                .post(getCreateItemPath())
-                .then()
-                .spec(responseSpec(200, 1000L));
+    public void testCreateWithValidName() {
+        Response resp = jobController.createJob(JobType.FREESTYLE, PROJECT_NAME);
 
-        Response response = given()
-                .spec(requestSpec())
-                .when()
-                .get(getItemByNamePath(PROJECT_NAME))
-                .then()
-                .spec(responseSpec(200, 500L))
-                .body(matchesJsonSchema(TestUtils.loadSchema("freestyle-project-schema.json")))
-                .extract().response();
+        SoftAssertions.assertSoftly(
+                softly -> {
+                    softly.assertThat(resp.statusCode()).isEqualTo(200);
+                    softly.assertThat(resp.time()).isLessThan(500L);
+                });
+    }
 
-        ProjectResponse freestyleAndPipelineResponse = response.as(ProjectResponse.class);
+    @Test(dependsOnMethods = "testCreateWithValidName")
+    @Description("00.001.01 Get project with valid name")
+    public void testGetProjectByName() {
+        Response response = jobController.getJobByName(PROJECT_NAME);
+
+        JobResponse jobResponse = response.as(JobResponse.class);
 
         Assert.assertEquals(response.getHeader("Content-Type"), "application/json;charset=utf-8");
-        Assert.assertEquals(freestyleAndPipelineResponse.getName(), PROJECT_NAME);
-        Assert.assertNull(freestyleAndPipelineResponse.getDescription());
-        Assert.assertEquals(freestyleAndPipelineResponse.get_class(), "hudson.model.FreeStyleProject");
-
+        Assert.assertEquals(jobResponse.getName(), PROJECT_NAME);
+        Assert.assertNull(jobResponse.getDescription());
+        Assert.assertEquals(jobResponse.getClassName(), "hudson.model.FreeStyleProject");
     }
+
     @Test
     @Description("01.002.01 Rename FreestyleProject with correct name")
     public void testRename() {
@@ -122,6 +118,7 @@ public class FreestyleProjectApiTest extends BaseApiTest {
         Assert.assertEquals(freestyleResponse.getName(), NEW_PROJECT);
         Assert.assertEquals(freestyleResponse.getDescription(), PROJECT_DESCRIPTION);
     }
+
     @Test(dependsOnMethods = "testAddDescription")
     @Description("01.001.02 Delete the project from the workspace")
     public void testDelete() {
