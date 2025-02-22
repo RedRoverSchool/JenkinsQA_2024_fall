@@ -12,7 +12,7 @@ import school.redrover.models.ProjectResponse;
 import school.redrover.models.job.JobResponse;
 import school.redrover.runner.BaseApiTest;
 import school.redrover.runner.WireMockStubs;
-import school.redrover.testdata.TestData;
+import school.redrover.testdata.JobType;
 import school.redrover.controllers.JobController;
 
 import static io.restassured.RestAssured.given;
@@ -40,7 +40,7 @@ public class FreestyleProjectApiTest extends BaseApiTest {
     @Test
     @Description("00.001.01 Create Freestyle Project  with valid name")
     public void testCreateWithValidName() {
-        Response resp = jobController.createJob(TestData.FREESTYLE, PROJECT_NAME);
+        Response resp = jobController.createJob(JobType.FREESTYLE, PROJECT_NAME);
 
         SoftAssertions.assertSoftly(
                 softly -> {

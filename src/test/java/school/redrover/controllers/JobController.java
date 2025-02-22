@@ -2,6 +2,7 @@ package school.redrover.controllers;
 
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
+import school.redrover.testdata.JobType;
 
 import static io.restassured.RestAssured.given;
 import static school.redrover.runner.TestApiUtils.*;
@@ -9,12 +10,12 @@ import static school.redrover.runner.TestApiUtils.*;
 public class JobController {
     private static final String JOB_ENDPOINT = "job";
 
-    public Response createJob(Object job, String name) {
+    public Response createJob(JobType jobType, String name) {
         return given()
                 .spec(requestSpec())
                 .queryParam("name", name)
                 .contentType(ContentType.XML)
-                .body(toXML(job))
+                .body(toXML(jobType.getProjectConfig()))
                 .when()
                 .post("createItem")
                 .andReturn();
