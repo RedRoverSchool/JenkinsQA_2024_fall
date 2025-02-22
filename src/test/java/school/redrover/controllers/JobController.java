@@ -5,17 +5,16 @@ import io.restassured.response.Response;
 
 import static io.restassured.RestAssured.given;
 import static school.redrover.runner.TestApiUtils.*;
-import static school.redrover.testdata.TestData.PIPELINE;
 
 public class JobController {
     private static final String JOB_ENDPOINT = "job";
 
-    public Response createPipeline(String name) {
+    public Response createJob(Object job, String name) {
         return given()
                 .spec(requestSpec())
                 .queryParam("name", name)
                 .contentType(ContentType.XML)
-                .body(toXML(PIPELINE))
+                .body(toXML(job))
                 .when()
                 .post("createItem")
                 .andReturn();

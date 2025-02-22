@@ -1,5 +1,6 @@
 package school.redrover.testdata;
 
+import school.redrover.models.job.Freestyle;
 import school.redrover.models.job.Pipeline;
 import school.redrover.models.user.User;
 
@@ -20,6 +21,21 @@ public class TestData {
                     .build())
             .triggers("")
             .disabled(false)
+            .build();
+
+    public static final Freestyle FREESTYLE = Freestyle.builder()
+            .keepDependencies(false)
+            .properties("")
+            .scm("hudson.scm.NullSCM")
+            .canRoam(false)
+            .disabled(false)
+            .blockBuildWhenDownstreamBuilding(false)
+            .blockBuildWhenUpstreamBuilding(false)
+            .triggers("")
+            .concurrentBuild(false)
+            .builders("")
+            .publishers("")
+            .buildWrappers("")
             .build();
 
     public static final User USER = User.builder()
