@@ -28,14 +28,37 @@ import static school.redrover.runner.BaseApiTest.cookieValue;
 
 public class TestApiUtils {
 
-    public static String getCreateItemPath() {return "createItem";}
-    public static String getDeleteItemPath(String name) {return "/job/%s/".formatted(TestUtils.encodeParam(name));}
-    public static String getAddDescriptionToCreatedItemPath(String name) {return "job/%s/submitDescription".formatted(TestUtils.encodeParam(name));}
-    public static String getItemByNamePath(String name) {return "job/%s/api/json".formatted(TestUtils.encodeParam(name));}
-    public static String getAllProjectListPath() {return "/api/json";}
-    public static String getRenameItemPath(String name) {return "job/%s/confirmRename".formatted(TestUtils.encodeParam(name));}
-    public static String getDisableProjectPath(String name) {return "/job/%s/disable".formatted(TestUtils.encodeParam(name));}
-    public static String getEnableProjectPath(String name) {return "/job/%s/enable".formatted(TestUtils.encodeParam(name));}
+    public static String getCreateItemPath() {
+        return "createItem";
+    }
+
+    public static String getDeleteItemPath(String name) {
+        return "/job/%s/".formatted(TestUtils.encodeParam(name));
+    }
+
+    public static String getAddDescriptionToCreatedItemPath(String name) {
+        return "job/%s/submitDescription".formatted(TestUtils.encodeParam(name));
+    }
+
+    public static String getItemByNamePath(String name) {
+        return "job/%s/api/json".formatted(TestUtils.encodeParam(name));
+    }
+
+    public static String getAllProjectListPath() {
+        return "/api/json";
+    }
+
+    public static String getRenameItemPath(String name) {
+        return "job/%s/confirmRename".formatted(TestUtils.encodeParam(name));
+    }
+
+    public static String getDisableProjectPath(String name) {
+        return "/job/%s/disable".formatted(TestUtils.encodeParam(name));
+    }
+
+    public static String getEnableProjectPath(String name) {
+        return "/job/%s/enable".formatted(TestUtils.encodeParam(name));
+    }
 
     public static RequestSpecification baseRequestSpec() {
         LogConfig logConfig = LogConfig.logConfig().blacklistHeaders(List.of("Authorization", "Jenkins-Crumb"));
@@ -67,6 +90,12 @@ public class TestApiUtils {
                 .build();
     }
 
+    public static ResponseSpecification responseSpec() {
+        return new ResponseSpecBuilder()
+                .log(LogDetail.ALL)
+                .build();
+    }
+
     @Step("Create Project (XML) {name}")
     public static void createNewProjectXML(String name, String xmlFile) {
         given()
@@ -87,7 +116,7 @@ public class TestApiUtils {
                 .when()
                 .delete(getDeleteItemPath(name))
                 .then()
-                .spec(responseSpec(204,500L));
+                .spec(responseSpec(204, 500L));
     }
 
     @Step("Get Response -> GET Item by name")
@@ -183,13 +212,13 @@ public class TestApiUtils {
 
     /**
      * Validates whether the response body matches the specified JSON schema.
-     *
+     * <p>
      * This method takes a {@link Response} object and a JSON schema file name as input.
      * It extracts the response body as a string and validates it against the JSON schema
      * loaded from the specified file. If the response body matches the schema, the method
      * returns {@code true}; otherwise, it returns {@code false}.
      *
-     * @param response The {@link Response} object containing the API response.
+     * @param response     The {@link Response} object containing the API response.
      * @param nameJsonFile The name of the JSON schema file to validate against.
      */
     public static boolean matchSchemaWithJsonFile(Response response, String nameJsonFile) {

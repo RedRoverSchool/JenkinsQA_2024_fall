@@ -21,7 +21,7 @@ public class JobController {
                 .when()
                 .post("createItem")
                 .then()
-                .log().all()
+                .spec(responseSpec())
                 .extract().response();
     }
 
@@ -32,7 +32,7 @@ public class JobController {
                 .when()
                 .get("%s/api/json".formatted(name))
                 .then()
-                .log().all()
+                .spec(responseSpec())
                 .extract().response();
     }
 
