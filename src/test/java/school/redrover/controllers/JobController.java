@@ -2,7 +2,9 @@ package school.redrover.controllers;
 
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
+import io.restassured.specification.RequestSpecification;
 import school.redrover.testdata.JobType;
+import school.redrover.testdata.ModeType;
 
 import static io.restassured.RestAssured.given;
 import static school.redrover.runner.TestApiUtils.*;
@@ -18,7 +20,9 @@ public class JobController {
                 .body(toXML(jobType.getProjectConfig()))
                 .when()
                 .post("createItem")
-                .andReturn();
+                .then()
+                .spec(responseSpec())
+                .extract().response();
     }
 
     public Response getJobByName(String name) {
@@ -27,17 +31,36 @@ public class JobController {
                 .basePath(JOB_ENDPOINT)
                 .when()
                 .get("%s/api/json".formatted(name))
-                .andReturn();
+                .then()
+                .spec(responseSpec())
+                .extract().response();
+    }
+
+    public Response createWithMode(String name, ModeType modeType) {
+        RequestSpecification request = given()
+                .spec(requestSpec())
+                .formParam("name", name);
+
+        if (modeType != ModeType.NONE) {
+            request.formParam("mode", modeType.getMode());
+        }
+
+        return request
+                .when()
+                .post("createItem")
+                .then()
+                .spec(responseSpec())
+                .extract().response();
     }
 
     public Response renameJob(String oldName, String newName) {
         return given()
                 .spec(requestSpec())
-                .contentType(ContentType.URLENC.withCharset("UTF-8"))
+                .contentType("application/x-www-form-urlencoded")
                 .queryParam("newName", newName)
                 .basePath(JOB_ENDPOINT)
                 .when()
-                .post("%s/doRename".formatted(oldName))
+                .post("%s/confirmRename".formatted(oldName))
                 .andReturn();
     }
 
