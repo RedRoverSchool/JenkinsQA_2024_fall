@@ -49,7 +49,7 @@ public class JobController {
                 .when()
                 .post("createItem")
                 .then()
-                .log().all()
+                .spec(responseSpec())
                 .extract().response();
     }
 
