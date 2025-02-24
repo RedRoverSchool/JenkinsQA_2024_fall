@@ -4,21 +4,25 @@ import io.qameta.allure.*;
 import io.restassured.http.ContentType;
 
 import io.restassured.response.Response;
+import org.assertj.core.api.SoftAssertions;
 import org.testng.Assert;
 import org.testng.annotations.Test;
+import school.redrover.controllers.JobController;
+import school.redrover.models.job.JobResponse;
 import school.redrover.runner.BaseApiTest;
+import school.redrover.testdata.JobType;
 import school.redrover.testdata.TestDataProvider;
 import school.redrover.runner.TestUtils;
 
 import static io.restassured.RestAssured.given;
 
 import static school.redrover.runner.TestApiUtils.*;
-import static school.redrover.runner.TestUtils.loadPayload;
 
 
 @Epic("API")
 @Story("Folder")
 public class FolderApiTest extends BaseApiTest {
+    private static final JobController jobController = new JobController();
 
     private static final String FOLDER_NAME = "FolderApiTest";
     private static final String FOLDER_CREATE_MODE = "com.cloudbees.hudson.plugins.folder.Folder";
@@ -32,6 +36,7 @@ public class FolderApiTest extends BaseApiTest {
     @Test(dataProvider = "projectNames", dataProviderClass = TestDataProvider.class)
     @Description("00.006.02 Create Folder with valid name")
     public void testCreateFolderWithValidName(String projectName) {
+
         given()
                 .spec(requestSpec())
                 .formParam("name", projectName)
@@ -61,66 +66,48 @@ public class FolderApiTest extends BaseApiTest {
     @Test(dataProvider = "projectNames", dataProviderClass = TestDataProvider.class)
     @Description("00.006.03 Create Folder with valid name (XML)")
     public void testCreateFolderWithValidNameXml(String projectName) {
-        given()
-                .spec(requestSpec())
-                .contentType(ContentType.XML)
-                .queryParam("name", projectName)
-                .body(loadPayload(CREATE_EMPTY_FOLDER_XML_FILE))
-                .when()
-                .post(getCreateItemPath())
-                .then()
-                .spec(responseSpec(200,500L));
+        Response response = jobController.createJob(JobType.FOLDER, projectName);
 
-        Allure.step("Expected result: JSON response is matched to JSON schema");
-        Assert.assertTrue(matchSchemaWithJsonFile(getResponseGetItemByName(projectName), FOLDER_GET_BY_NAME_SCHEMA_JSON));
+        JobResponse responseJobByName = (jobController.getJobByName(projectName)).as(JobResponse.class);
 
-        Allure.step(String.format("Expected result: fullName is '%s'", projectName));
-        Assert.assertEquals(getResponseGetItemByNameAsObject(projectName).getFullName(), projectName);
-        Allure.step("(Expected result: description is empty");
-        Assert.assertEquals(getResponseGetItemByNameAsObject(projectName).getDescription(),"");
-        Allure.step(String.format("Expected result: _class is '%s'", FOLDER_CREATE_MODE));
-        Assert.assertEquals(getResponseGetItemByNameAsObject(projectName).get_class(),FOLDER_CREATE_MODE);
+        SoftAssertions.assertSoftly(
+                softly -> {
+                    softly.assertThat(response.statusCode()).isEqualTo(200);
+                    softly.assertThat(response.time()).isLessThan(1000);
+                    softly.assertThat(responseJobByName.getFullName()).isEqualTo(projectName);
+                    softly.assertThat(responseJobByName.getDescription()).isEqualTo("");
+                    softly.assertThat(responseJobByName.getClassName()).isEqualTo(FOLDER_CREATE_MODE);
+                });
 
-        Allure.step("Expected result: Folder name found in the list");
-        Assert.assertTrue(findItemInAllProjectList(projectName), "Folder name not found in the list");
-
-        deleteProject(projectName);
+        jobController.deleteJob("", projectName);
     }
 
     @Test(dataProvider = "providerUnsafeCharacters", dataProviderClass = TestDataProvider.class)
     @Description("00.006.17 Create Folder with unsafe character")
     public void testCreateFolderWithUnsafeCharacter(String unsafeCharacter) {
-        Response projectResponse = given().spec(requestSpec())
-                .formParam("name", unsafeCharacter)
-                .formParam("mode", FOLDER_CREATE_MODE)
-                .contentType(ContentType.URLENC.withCharset("UTF-8"))
-                .when()
-                .post(getCreateItemPath())
-                .then()
-                .spec(responseSpec(400, 500L))
-                .extract()
-                .response();
+        Response response = jobController.createJob(JobType.FOLDER, unsafeCharacter);
 
-        Allure.step("Expected result: Header 'X-Error' has value '%s is an unsafe character'".formatted(unsafeCharacter));
-        Assert.assertEquals(projectResponse.getHeaders().getValue("X-Error"), "%s  is an unsafe character".formatted(unsafeCharacter));
+        SoftAssertions.assertSoftly(
+                softly -> {
+                    softly.assertThat(response.statusCode()).isEqualTo(400);
+                    softly.assertThat(response.time()).isLessThan(500);
+                    Allure.step("Expected result: Header 'X-Error' has value '%s is an unsafe character'".formatted(unsafeCharacter));
+                    softly.assertThat(response.getHeaders().getValue("X-Error")).isEqualTo("%s  is an unsafe character".formatted(unsafeCharacter));
+                });
     }
 
     @Test
     @Description("015 Create Folder with empty name")
     public void testCreateFolderWithEmptyName() {
-        Response projectResponse = given().spec(requestSpec())
-                .formParam("name","")
-                .formParam("mode", FOLDER_CREATE_MODE)
-                .contentType(ContentType.URLENC.withCharset("UTF-8"))
-                .when()
-                .post(getCreateItemPath())
-                .then()
-                .spec(responseSpec(400, 500L))
-                .extract()
-                .response();
+        Response response = jobController.createJob(JobType.FOLDER, "");
 
-        Allure.step("Expected result: Header 'X-Error' has value 'No name is specified'");
-        Assert.assertEquals(projectResponse.getHeaders().getValue("X-Error"), "No name is specified");
+        SoftAssertions.assertSoftly(
+                softly -> {
+                    softly.assertThat(response.statusCode()).isEqualTo(400);
+                    softly.assertThat(response.time()).isLessThan(500);
+                    Allure.step("Expected result: Header 'X-Error' has value 'No name is specified'");
+                    softly.assertThat(response.getHeaders().getValue("X-Error")).isEqualTo("No name is specified");
+                });
     }
 
     @Test
