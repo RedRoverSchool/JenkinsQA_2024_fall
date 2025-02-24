@@ -61,7 +61,7 @@ public class PipelineApiTest extends BaseApiTest {
         SoftAssertions.assertSoftly(
                 softly -> {
                     softly.assertThat(resp.statusCode()).isEqualTo(302);
-                    softly.assertThat(resp.time()).isLessThan(2000);
+                    softly.assertThat(resp.time()).isLessThan(500);
                 });
     }
 
