@@ -66,7 +66,7 @@ public class UserApiTest extends BaseApiTest {
         Assert.assertEquals(allUserResponse.statusCode(), 200);
         Assert.assertTrue(allUserResponse.time() <= 2000);
         Assert.assertFalse(userList.stream().anyMatch(u ->
-                u.getId().equals(UserTestData.getDefaultUser().getUsername())));
+                u.getId().equals(user.getUsername())));
     }
 
 }
