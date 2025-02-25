@@ -14,6 +14,7 @@ import school.redrover.runner.BaseApiTest;
 import school.redrover.runner.WireMockStubs;
 import school.redrover.testdata.JobType;
 import school.redrover.controllers.JobController;
+import school.redrover.testdata.JobTestData;
 
 import static io.restassured.RestAssured.given;
 
@@ -40,7 +41,7 @@ public class FreestyleProjectApiTest extends BaseApiTest {
     @Test
     @Description("00.001.01 Create Freestyle Project  with valid name")
     public void testCreateWithValidName() {
-        Response resp = jobController.createJobXML(JobType.FREESTYLE, PROJECT_NAME);
+        Response resp = jobController.createJob(JobTestData.getDefaultFreestyle(), PROJECT_NAME);
 
         SoftAssertions.assertSoftly(
                 softly -> {

@@ -11,7 +11,7 @@ import java.util.List;
 @Data
 @Builder
 @JacksonXmlRootElement(localName = "com.cloudbees.hudson.plugins.folder.Folder")
-public class Folder {
+public class Folder implements JobType {
 
     @JacksonXmlProperty(isAttribute = true, localName = "plugin")
     private String plugin;

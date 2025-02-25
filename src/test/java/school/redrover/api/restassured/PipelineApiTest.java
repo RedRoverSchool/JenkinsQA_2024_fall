@@ -9,7 +9,7 @@ import org.testng.annotations.Test;
 import school.redrover.controllers.JobController;
 import school.redrover.models.job.JobResponse;
 import school.redrover.runner.BaseApiTest;
-import school.redrover.testdata.JobType;
+import school.redrover.testdata.JobTestData;
 import school.redrover.testdata.TestDataProvider;
 
 @Epic("API")
@@ -20,7 +20,7 @@ public class PipelineApiTest extends BaseApiTest {
     @Test(dataProvider = "projectNames", dataProviderClass = TestDataProvider.class)
     @Description("010 Create pipeline project with valid name")
     public void testCreateProjectWithValidName(String projectName) {
-        Response resp = jobController.createJobXML(JobType.PIPELINE, projectName);
+        Response resp = jobController.createJob(JobTestData.getDefaultPipeline(), projectName);
 
         SoftAssertions.assertSoftly(
                 softly -> {
@@ -90,7 +90,7 @@ public class PipelineApiTest extends BaseApiTest {
     @Test
     @Description("012 Create Pipeline project with empty name")
     public void testCreateProjectWithEmptyName() {
-        Response resp = jobController.createJobXML(JobType.PIPELINE, "");
+        Response resp = jobController.createJob(JobTestData.getDefaultPipeline(), "");
 
         SoftAssertions.assertSoftly(
                 softly -> {
@@ -100,11 +100,10 @@ public class PipelineApiTest extends BaseApiTest {
                 });
     }
 
-
     @Test(dataProvider = "providerUnsafeCharacters", dataProviderClass = TestDataProvider.class)
     @Description("014 Create Pipeline project with unsafe character")
     public void testCreateProjectWithUnsafeCharacter(String unsafeCharacter) {
-        Response resp = jobController.createJobXML(JobType.PIPELINE, unsafeCharacter);
+        Response resp = jobController.createJob(JobTestData.getDefaultPipeline(), unsafeCharacter);
 
         SoftAssertions.assertSoftly(
                 softly -> {

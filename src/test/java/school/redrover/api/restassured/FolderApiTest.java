@@ -1,6 +1,5 @@
 package school.redrover.api.restassured;
 
-import com.beust.ah.A;
 import io.qameta.allure.*;
 import io.restassured.http.ContentType;
 
@@ -11,8 +10,7 @@ import org.testng.annotations.Test;
 import school.redrover.controllers.JobController;
 import school.redrover.models.job.JobResponse;
 import school.redrover.runner.BaseApiTest;
-import school.redrover.testdata.JobType;
-import school.redrover.testdata.ModeType;
+import school.redrover.testdata.JobTestData;
 import school.redrover.testdata.TestDataProvider;
 import school.redrover.runner.TestUtils;
 
@@ -39,46 +37,36 @@ public class FolderApiTest extends BaseApiTest {
     @Description("00.006.02 Create Folder with valid name")
     public void testCreateFolderWithValidName(String projectName) {
 
-        Response response = given()
+        given()
                 .spec(requestSpec())
                 .formParam("name", projectName)
-                .formParam( "mode", ModeType.FOLDER_MODE.getMode())
+                .formParam( "mode", FOLDER_CREATE_MODE)
                 .contentType(ContentType.URLENC.withCharset("UTF-8"))
                 .when()
                 .post(getCreateItemPath())
                 .then()
-                .spec(responseSpec())
-                .extract().response();
+                .spec(responseSpec(302, 500L));
 
-        JobResponse responseJobByName = (jobController.getJobByName(projectName)).as(JobResponse.class);
+        Allure.step("Expected result: JSON response is matched to JSON schema");
+        Assert.assertTrue(matchSchemaWithJsonFile(getResponseGetItemByName(projectName), FOLDER_GET_BY_NAME_SCHEMA_JSON));
 
-        SoftAssertions.assertSoftly(
-                softly -> {
-                    Allure.step("Expected result: Status code is 302");
-                    softly.assertThat(response.statusCode()).isEqualTo(302);
-                    softly.assertThat(response.time()).isLessThan(500L);
-                    Allure.step(String.format("Expected result: fullName is '%s'", projectName));
-                    softly.assertThat(responseJobByName.getFullName()).isEqualTo(projectName);
-                    Allure.step("(ERR)Expected result: description is null");
-                    softly.assertThat(responseJobByName.getDescription()).isEqualTo(null);
-                    Allure.step(String.format("Expected result: _class is '%s'", FOLDER_CREATE_MODE));
-                    softly.assertThat(responseJobByName.getClassName()).isEqualTo(FOLDER_CREATE_MODE);
-                    Allure.step("Expected result: JSON response is matched to JSON schema");
-                    softly.assertThat(responseJobByName).usingRecursiveComparison()
-                            .ignoringFieldsMatchingRegexes(".*").isEqualTo(new JobResponse());
-                }
-        );
+        Allure.step(String.format("Expected result: fullName is '%s'", projectName));
+        Assert.assertEquals(getResponseGetItemByNameAsObject(projectName).getFullName(), projectName);
+        Allure.step("(ERR)Expected result: description is null");
+        Assert.assertNull(getResponseGetItemByNameAsObject(projectName).getDescription());
+        Allure.step(String.format("Expected result: _class is '%s'", FOLDER_CREATE_MODE));
+        Assert.assertEquals(getResponseGetItemByNameAsObject(projectName).get_class(),FOLDER_CREATE_MODE);
 
         Allure.step("Expected result: Folder name found in the list");
         Assert.assertTrue(findItemInAllProjectList(projectName), "Folder name not found in the list");
 
-        jobController.deleteJob("", projectName);
+        deleteProject(projectName);
     }
 
     @Test(dataProvider = "projectNames", dataProviderClass = TestDataProvider.class)
     @Description("00.006.03 Create Folder with valid name (XML)")
     public void testCreateFolderWithValidNameXml(String projectName) {
-        Response response = jobController.createJobXML(JobType.FOLDER, projectName);
+        Response response = jobController.createJob(JobTestData.getDefaultFolder(), projectName);
 
         JobResponse responseJobByName = (jobController.getJobByName(projectName)).as(JobResponse.class);
 
@@ -104,7 +92,7 @@ public class FolderApiTest extends BaseApiTest {
     @Test(dataProvider = "providerUnsafeCharacters", dataProviderClass = TestDataProvider.class)
     @Description("00.006.17 Create Folder with unsafe character")
     public void testCreateFolderWithUnsafeCharacter(String unsafeCharacter) {
-        Response response = jobController.createJobXML(JobType.FOLDER, unsafeCharacter);
+        Response response = jobController.createJob(JobTestData.getDefaultFolder(), unsafeCharacter);
 
         SoftAssertions.assertSoftly(
                 softly -> {
@@ -139,7 +127,7 @@ public class FolderApiTest extends BaseApiTest {
     @Test
     @Description("015 Create Folder with empty name")
     public void testCreateFolderWithEmptyName() {
-        Response response = jobController.createJobXML(JobType.FOLDER, "");
+        Response response = jobController.createJob(JobTestData.getDefaultFolder(), "");
 
         SoftAssertions.assertSoftly(
                 softly -> {
@@ -222,7 +210,7 @@ public class FolderApiTest extends BaseApiTest {
 
     @Test()
     @Description("007 Add Description to Folder")
-    public void testAddDescriuptionToFolder() {
+    public void testAddDescriptionToFolder() {
         createNewProjectXML(FOLDER_NEW_NAME, CREATE_EMPTY_FOLDER_XML_FILE);
 
         given()
@@ -274,7 +262,7 @@ public class FolderApiTest extends BaseApiTest {
     @Test
     @Description("04.003.05 Delete deleted Folder")
     public void testDeleteDeletedFolder() {
-        jobController.createJobXML(JobType.FOLDER, FOLDER_NAME);
+        createNewProjectXML(FOLDER_NAME, CREATE_EMPTY_FOLDER_XML_FILE);
 
         Allure.step("Send DELETE request -> Delete Folder with name %s".formatted(FOLDER_NAME));
         Response response = jobController.deleteJob("", FOLDER_NAME);
