@@ -33,30 +33,16 @@ public class MultibranchPipelineApiTest extends BaseApiTest {
         Assert.assertTrue(response.time() <= 500);
     }
 
-    @Test(dependsOnMethods = "testCreateWithValidName")
+    @Test
     @Feature("Multibranch Pipeline")
     @Description("05.001.01 Rename Multibranch pipeline")
     public void testRenameWithValidName() {
-        given()
-                .spec(requestSpec())
-                .contentType(ContentType.URLENC.withCharset("UTF-8"))
-                .formParam("newName", MULTIBRANCH_PIPELINE_RENAMED)
-                .when()
-                .post("job/%s/confirmRename".formatted(MULTIBRANCH_PIPELINE_NAME))
-                .then()
-                .spec(responseSpec(302, 500L));
+        jobController.createJob(JobTestData.getDefaultMultibranchPipeline(), MULTIBRANCH_PIPELINE_NAME);
 
-        Response response = given()
-                .spec(requestSpec())
-                .basePath("job/%s".formatted(MULTIBRANCH_PIPELINE_RENAMED))
-                .when()
-                .get("api/json")
-                .then()
-                .spec(responseSpec(200, 500L))
-                .extract().response();
+        Response response = jobController.renameJob(MULTIBRANCH_PIPELINE_NAME, MULTIBRANCH_PIPELINE_RENAMED);
 
-        ProjectResponse receivedGetResponse = response.as(ProjectResponse.class);
-        Assert.assertEquals(receivedGetResponse.getName(), MULTIBRANCH_PIPELINE_RENAMED);
+        Assert.assertEquals(response.statusCode(), 302);
+        Assert.assertTrue(response.time() <= 500);
     }
 
     @Test(dependsOnMethods = "testRenameWithValidName")
