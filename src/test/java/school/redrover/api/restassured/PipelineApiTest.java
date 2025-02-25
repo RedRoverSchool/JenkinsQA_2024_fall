@@ -79,7 +79,7 @@ public class PipelineApiTest extends BaseApiTest {
     public void testCreateProjectWithEmptyName() {
         Response resp = jobController.createJob(JobTestData.getDefaultPipeline(), "");
 
-        Assert.assertEquals(resp.statusCode(), 404);
+        Assert.assertEquals(resp.statusCode(), 400);
         Assert.assertTrue(resp.time() <= 2000);
         Assert.assertEquals(resp.getHeader("X-Error"), "No name is specified");
     }
@@ -89,7 +89,7 @@ public class PipelineApiTest extends BaseApiTest {
     public void testCreateProjectWithUnsafeCharacter(String unsafeCharacter) {
         Response resp = jobController.createJob(JobTestData.getDefaultPipeline(), unsafeCharacter);
 
-        Assert.assertEquals(resp.statusCode(), 404);
+        Assert.assertEquals(resp.statusCode(), 400);
         Assert.assertTrue(resp.time() <= 2000);
         Assert.assertEquals(resp.getHeader("X-Error"), "%s  is an unsafe character".formatted(unsafeCharacter));
     }
