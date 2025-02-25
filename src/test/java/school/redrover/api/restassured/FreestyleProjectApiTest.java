@@ -40,7 +40,7 @@ public class FreestyleProjectApiTest extends BaseApiTest {
     @Test
     @Description("00.001.01 Create Freestyle Project  with valid name")
     public void testCreateWithValidName() {
-        Response resp = jobController.createJob(JobType.FREESTYLE, PROJECT_NAME);
+        Response resp = jobController.createJobXML(JobType.FREESTYLE, PROJECT_NAME);
 
         SoftAssertions.assertSoftly(
                 softly -> {

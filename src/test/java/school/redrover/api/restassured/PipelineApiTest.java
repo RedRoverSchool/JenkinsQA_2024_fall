@@ -20,7 +20,7 @@ public class PipelineApiTest extends BaseApiTest {
     @Test(dataProvider = "projectNames", dataProviderClass = TestDataProvider.class)
     @Description("010 Create pipeline project with valid name")
     public void testCreateProjectWithValidName(String projectName) {
-        Response resp = jobController.createJob(JobType.PIPELINE, projectName);
+        Response resp = jobController.createJobXML(JobType.PIPELINE, projectName);
 
         SoftAssertions.assertSoftly(
                 softly -> {
@@ -90,7 +90,7 @@ public class PipelineApiTest extends BaseApiTest {
     @Test
     @Description("012 Create Pipeline project with empty name")
     public void testCreateProjectWithEmptyName() {
-        Response resp = jobController.createJob(JobType.PIPELINE, "");
+        Response resp = jobController.createJobXML(JobType.PIPELINE, "");
 
         SoftAssertions.assertSoftly(
                 softly -> {
@@ -100,10 +100,11 @@ public class PipelineApiTest extends BaseApiTest {
                 });
     }
 
+
     @Test(dataProvider = "providerUnsafeCharacters", dataProviderClass = TestDataProvider.class)
     @Description("014 Create Pipeline project with unsafe character")
     public void testCreateProjectWithUnsafeCharacter(String unsafeCharacter) {
-        Response resp = jobController.createJob(JobType.PIPELINE, unsafeCharacter);
+        Response resp = jobController.createJobXML(JobType.PIPELINE, unsafeCharacter);
 
         SoftAssertions.assertSoftly(
                 softly -> {
