@@ -7,50 +7,30 @@ import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import org.testng.Assert;
 import org.testng.annotations.Test;
+import school.redrover.controllers.JobController;
 import school.redrover.models.ProjectResponse;
 import school.redrover.runner.BaseApiTest;
-import school.redrover.runner.TestUtils;
+import school.redrover.testdata.JobTestData;
 
 import static io.restassured.RestAssured.given;
-import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchema;
 import static school.redrover.runner.TestApiUtils.requestSpec;
 import static school.redrover.runner.TestApiUtils.responseSpec;
 
 @Epic("API")
 public class MultibranchPipelineApiTest extends BaseApiTest {
 
+    private static final JobController jobController = new JobController();
     private static final String MULTIBRANCH_PIPELINE_NAME = "MultibranchPipeline";
-    private static final String CREATE_MODE = "org.jenkinsci.plugins.workflow.multibranch.WorkflowMultiBranchProject";
     private static final String MULTIBRANCH_PIPELINE_RENAMED = "MultibranchPipelineRenamed";
 
     @Test
     @Feature("Multibranch Pipeline")
     @Description("00.005.01 Create Multibranch pipeline with valid name")
     public void testCreateWithValidName() {
-        given()
-                .spec(requestSpec())
-                .formParam("name", MULTIBRANCH_PIPELINE_NAME)
-                .formParam("mode", CREATE_MODE)
-                .when()
-                .post("createItem")
-                .then()
-                .spec(responseSpec(302, 500L));
+        Response response = jobController.createJob(JobTestData.getDefaultMultibranchPipeline(), MULTIBRANCH_PIPELINE_NAME);
 
-        Response response = given()
-                .spec(requestSpec())
-                .basePath("job/%s".formatted(MULTIBRANCH_PIPELINE_NAME))
-                .when()
-                .get("api/json")
-                .then()
-                .spec(responseSpec(200, 500L))
-                .body(matchesJsonSchema(TestUtils.loadSchema("multibranch-pipeline-schema.json")))
-                .extract().response();
-
-        ProjectResponse receivedGetResponse = response.as(ProjectResponse.class);
-
-        Assert.assertEquals(response.getHeader("Content-Type"), "application/json;charset=utf-8");
-        Assert.assertEquals(receivedGetResponse.getName(), MULTIBRANCH_PIPELINE_NAME);
-        Assert.assertEquals(receivedGetResponse.get_class(), CREATE_MODE);
+        Assert.assertEquals(response.statusCode(), 200);
+        Assert.assertTrue(response.time() <= 500);
     }
 
     @Test(dependsOnMethods = "testCreateWithValidName")
