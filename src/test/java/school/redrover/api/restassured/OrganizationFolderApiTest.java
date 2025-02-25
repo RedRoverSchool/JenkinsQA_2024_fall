@@ -13,7 +13,6 @@ import org.jsoup.nodes.Document;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import school.redrover.controllers.JobController;
-import school.redrover.models.ProjectResponse;
 import school.redrover.models.job.JobResponse;
 import school.redrover.runner.BaseApiTest;
 import school.redrover.testdata.ModeType;
@@ -21,7 +20,6 @@ import school.redrover.testdata.TestDataProvider;
 import school.redrover.runner.TestUtils;
 
 import static io.restassured.RestAssured.given;
-import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchema;
 import static school.redrover.runner.TestApiUtils.requestSpec;
 import static school.redrover.runner.TestApiUtils.responseSpec;
 import static school.redrover.runner.TestUtils.loadPayload;
@@ -40,20 +38,7 @@ public class OrganizationFolderApiTest extends BaseApiTest {
     private static final String RENAMED_ORGANIZATION_FOLDER_NAME = "RenamedOrganizationFolderName";
     private static final String DISPLAY_NAME_ORG_FOLDER = "DisplayNameOrgFolder";
     private static final String DESCRIPTION = "ProjectDescription";
-    private static final String MODE_ORGANIZATION_FOLDER = "jenkins.branch.OrganizationFolder";
     private static final JobController jobController = new JobController();
-
-    private Response requestProjectJson(String name) {
-        return given()
-                .spec(requestSpec())
-                .basePath("job/%s".formatted(name))
-                .when()
-                .get("api/json")
-                .then()
-                .spec(responseSpec(200, 500L))
-                .body(matchesJsonSchema(TestUtils.loadSchema("organization-folder-schema.json")))
-                .extract().response();
-    }
 
     @Test
     @Description("00.007.01 Create Organization folder with valid name")
@@ -68,14 +53,16 @@ public class OrganizationFolderApiTest extends BaseApiTest {
                 .then()
                 .spec(responseSpec(200, 500L));
 
-        Response response = requestProjectJson(ORGANIZATION_FOLDER_NAME_BY_XML_CREATED);
-        ProjectResponse projectResponse = response.as(ProjectResponse.class);
+        Response getJobResponse = jobController.getJobByName(ORGANIZATION_FOLDER_NAME_BY_XML_CREATED);
+        JobResponse jobResponse = getJobResponse.as(JobResponse.class);
 
-        Assert.assertEquals(response.getHeader("Content-Type"), "application/json;charset=utf-8");
-        Assert.assertTrue(response.getTime() <= 500L);
-
-        Assert.assertEquals(projectResponse.getName(), ORGANIZATION_FOLDER_NAME_BY_XML_CREATED);
-        Assert.assertEquals(projectResponse.get_class(), "jenkins.branch.OrganizationFolder");
+        SoftAssertions.assertSoftly(softly -> {
+            softly.assertThat(getJobResponse.statusCode()).isEqualTo(200);
+            softly.assertThat(getJobResponse.time()).isLessThan(500L);
+            softly.assertThat(getJobResponse.getHeader("Content-Type")).isEqualTo("application/json;charset=utf-8");
+            softly.assertThat(jobResponse.getName()).isEqualTo(ORGANIZATION_FOLDER_NAME_BY_XML_CREATED);
+            softly.assertThat(jobResponse.getClassName()).isEqualTo(ModeType.ORGANIZATION_FOLDER_MODE.getMode());
+        });
     }
 
     @Test(dependsOnMethods = "testCreateWithXML")
@@ -137,7 +124,7 @@ public class OrganizationFolderApiTest extends BaseApiTest {
 
         SoftAssertions.assertSoftly(softly -> {
             softly.assertThat(response.statusCode()).isEqualTo(400);
-            softly.assertThat(response.time()).isLessThan(500);
+            softly.assertThat(response.time()).isLessThan(500L);
         });
 
         Assert.assertEquals(Jsoup.parse(response.asString()).select("p").text(), errorMessage);
@@ -149,22 +136,16 @@ public class OrganizationFolderApiTest extends BaseApiTest {
     public void testCreateWithUnsafeCharacters(String unsafeCharacter) {
         final String errorMessage = "‘%s’ is an unsafe character".formatted(unsafeCharacter);
 
-        Response response = given()
-                .spec(requestSpec())
-                .contentType("application/x-www-form-urlencoded")
-                .formParam("name", unsafeCharacter)
-                .formParam("mode", MODE_ORGANIZATION_FOLDER)
-                .when()
-                .post("view/all/createItem/")
-                .then()
-                .spec(responseSpec(400, 500L))
-                .extract().response();
+        Response response = jobController.createWithMode(unsafeCharacter, ModeType.ORGANIZATION_FOLDER_MODE);
 
-        Assert.assertEquals(Jsoup.parse(response.asString()).select("p").text(), errorMessage);
-        Assert.assertEquals(response.headers().get("X-Error").toString(),
-                "X-Error=" + errorMessage.replaceAll("‘", "").replaceAll("’", " "));
+        SoftAssertions.assertSoftly(softly -> {
+            softly.assertThat(response.statusCode()).isEqualTo(400);
+            softly.assertThat(response.time()).isLessThan(500L);
+            softly.assertThat(Jsoup.parse(response.asString()).select("p").text()).isEqualTo(errorMessage);
+            softly.assertThat(response.getHeader("X-Error")).isEqualTo(
+                    errorMessage.replaceAll("‘", "").replaceAll("’", " "));
+        });
     }
-
 
     @Test(dependsOnMethods = "testCreateSameName")
     @Description("06.001.04 Change configurations for Organization folder")
@@ -191,17 +172,18 @@ public class OrganizationFolderApiTest extends BaseApiTest {
                 .spec((responseSpec(302, 500L)))
                 .extract().response();
 
-        Response response = requestProjectJson(ORGANIZATION_FOLDER_NAME_BY_XML_CREATED);
-        ProjectResponse projectResponse = response.as(ProjectResponse.class);
+        Response getJobResponse = jobController.getJobByName(ORGANIZATION_FOLDER_NAME_BY_XML_CREATED);
+        JobResponse jobResponse = getJobResponse.as(JobResponse.class);
 
-        Assert.assertTrue(response.getTime() <= 500);
-        Assert.assertEquals(response.getHeader("Content-Type"), "application/json;charset=utf-8");
-
-        Assert.assertEquals(projectResponse.getName(), ORGANIZATION_FOLDER_NAME_BY_XML_CREATED);
-        Assert.assertEquals(projectResponse.get_class(), "jenkins.branch.OrganizationFolder");
-        Assert.assertEquals(projectResponse.getDescription(), DESCRIPTION);
-        Assert.assertEquals(projectResponse.getDisplayName(), DISPLAY_NAME_ORG_FOLDER);
-
+        SoftAssertions.assertSoftly(softly -> {
+            softly.assertThat(getJobResponse.statusCode()).isEqualTo(200);
+            softly.assertThat(getJobResponse.time()).isLessThan(500L);
+            softly.assertThat(getJobResponse.getHeader("Content-Type")).isEqualTo("application/json;charset=utf-8");
+            softly.assertThat(jobResponse.getClassName()).isEqualTo(ModeType.ORGANIZATION_FOLDER_MODE.getMode());
+            softly.assertThat(jobResponse.getName()).isEqualTo(ORGANIZATION_FOLDER_NAME_BY_XML_CREATED);
+            softly.assertThat(jobResponse.getDescription()).isEqualTo(DESCRIPTION);
+            softly.assertThat(jobResponse.getDisplayName()).isEqualTo(DISPLAY_NAME_ORG_FOLDER);
+        });
     }
 
     @Test(dependsOnMethods = "testChangeProjectConfigurations")
@@ -232,19 +214,20 @@ public class OrganizationFolderApiTest extends BaseApiTest {
     @Test(dependsOnMethods = "testRename")
     @Description("06.005.02 Delete Organization folder")
     public void testDelete() {
-        given()
-                .spec(requestSpec())
-                .when()
-                .delete("job/%s/".formatted(RENAMED_ORGANIZATION_FOLDER_NAME))
-                .then()
-                .spec(responseSpec(204, 500L))
-                .extract().response();
+        Response response = jobController.deleteJob("", RENAMED_ORGANIZATION_FOLDER_NAME);
 
-        given()
-                .spec(requestSpec())
-                .when()
-                .get("job/%s/api/json".formatted(RENAMED_ORGANIZATION_FOLDER_NAME))
-                .then()
-                .spec(responseSpec(404, 500L));
+        SoftAssertions.assertSoftly(
+                softly -> {
+                    softly.assertThat(response.statusCode()).isEqualTo(204);
+                    softly.assertThat(response.time()).isLessThan(500L);
+                });
+
+        Response responseGetJob = jobController.getJobByName(RENAMED_ORGANIZATION_FOLDER_NAME);
+
+        SoftAssertions.assertSoftly(
+                softly -> {
+                    softly.assertThat(responseGetJob.statusCode()).isEqualTo(404);
+                    softly.assertThat(responseGetJob.time()).isLessThan(500L);
+                });
     }
 }
