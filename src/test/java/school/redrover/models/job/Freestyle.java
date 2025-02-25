@@ -8,7 +8,7 @@ import lombok.Data;
 @Data
 @Builder
 @JacksonXmlRootElement(localName = "project")
-public class Freestyle {
+public class Freestyle implements JobType  {
     @JacksonXmlProperty(localName = "keepDependencies")
     private boolean keepDependencies;
 

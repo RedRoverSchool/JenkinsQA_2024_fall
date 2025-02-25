@@ -10,7 +10,7 @@ import org.testng.annotations.Test;
 import school.redrover.controllers.UserController;
 import school.redrover.models.user.AllUsersResponse;
 import school.redrover.runner.BaseApiTest;
-import school.redrover.testdata.TestData;
+import school.redrover.testdata.UserTestData;
 
 import java.util.List;
 
@@ -22,7 +22,7 @@ public class UserApiTest extends BaseApiTest {
     @Test
     @Description("13.001.01 Create user with valid data")
     public void testCreateUser() {
-        Response resp = userController.createUser(TestData.USER);
+        Response resp = userController.createUser(UserTestData.getDefaultUser());
 
         SoftAssertions.assertSoftly(
                 softly -> {
@@ -42,7 +42,7 @@ public class UserApiTest extends BaseApiTest {
                 softly -> {
                     softly.assertThat(resp.statusCode()).isEqualTo(200);
                     softly.assertThat(resp.time()).isLessThan(2000);
-                    softly.assertThat(userList.stream().anyMatch(user -> user.getId().equals(TestData.USER.getUsername()))).isTrue();
+                    softly.assertThat(userList.stream().anyMatch(user -> user.getId().equals(UserTestData.getDefaultUser().getUsername()))).isTrue();
                     softly.assertThat(allUsers).usingRecursiveComparison()
                             .ignoringFieldsMatchingRegexes(".*")
                             .isEqualTo(new AllUsersResponse());
@@ -52,7 +52,7 @@ public class UserApiTest extends BaseApiTest {
     @Test(dependsOnMethods = "testGetAllUsers")
     @Description("13.003.01 Delete user")
     public void testDeleteUser() {
-        Response resp = userController.deleteUser(TestData.USER.getUsername());
+        Response resp = userController.deleteUser(UserTestData.getDefaultUser().getUsername());
 
         SoftAssertions.assertSoftly(
                 softly -> {
@@ -69,7 +69,7 @@ public class UserApiTest extends BaseApiTest {
                 softly -> {
                     softly.assertThat(respUsers.statusCode()).isEqualTo(200);
                     softly.assertThat(respUsers.time()).isLessThan(2000);
-                    softly.assertThat(userList.stream().anyMatch(user -> user.getId().equals(TestData.USER.getUsername()))).isFalse();
+                    softly.assertThat(userList.stream().anyMatch(user -> user.getId().equals(UserTestData.getDefaultUser().getUsername()))).isFalse();
                 });
     }
 
