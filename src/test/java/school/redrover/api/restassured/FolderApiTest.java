@@ -79,7 +79,7 @@ public class FolderApiTest extends BaseApiTest {
                     softly.assertThat(responseJobByName.getClassName()).isEqualTo(FOLDER_CREATE_MODE);
                 });
 
-        jobController.deleteJob("", projectName);
+        jobController.deleteJob(projectName);
     }
 
     @Test(dataProvider = "providerUnsafeCharacters", dataProviderClass = TestDataProvider.class)

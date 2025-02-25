@@ -67,11 +67,10 @@ public class UserController {
                 .andReturn();
     }
 
-    public Response deleteUser(String userID) {
-        return given()
+    public void deleteUser(String userID) {
+        given()
                 .spec(requestSpec())
                 .when()
-                .post("securityRealm/user/%s/doDelete".formatted(userID))
-                .andReturn();
+                .post("securityRealm/user/%s/doDelete".formatted(userID));
     }
 }
