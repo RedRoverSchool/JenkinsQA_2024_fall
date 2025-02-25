@@ -1,15 +1,18 @@
 package school.redrover.testdata;
 
 import lombok.Getter;
+import lombok.Setter;
 import school.redrover.models.job.Folder;
 import school.redrover.models.job.Freestyle;
 import school.redrover.models.job.Pipeline;
 
 import java.util.List;
 
-@Getter
-public enum JobType {
-    PIPELINE(Pipeline.builder()
+public class JobTestData {
+
+    @Setter
+    @Getter
+    private static Pipeline defaultPipeline = Pipeline.builder()
             .description("")
             .keepDependencies(false)
             .properties("")
@@ -20,8 +23,11 @@ public enum JobType {
                     .build())
             .triggers("")
             .disabled(false)
-            .build()),
-    FREESTYLE(Freestyle.builder()
+            .build();
+
+    @Setter
+    @Getter
+    private static Freestyle defaultFreestyle = Freestyle.builder()
             .keepDependencies(false)
             .properties("")
             .scm("hudson.scm.NullSCM")
@@ -34,8 +40,11 @@ public enum JobType {
             .builders("")
             .publishers("")
             .buildWrappers("")
-            .build()),
-    FOLDER(Folder.builder()
+            .build();
+
+    @Setter
+    @Getter
+    private static Folder defaultFolder = Folder.builder()
             .description("")
             .properties("")
             .folderViews(Folder.FolderViews.builder()
@@ -49,7 +58,7 @@ public enum JobType {
                                     .filterExecutors(false)
                                     .filterQueue(false)
                                     .properties(Folder.FolderViews.Views.AllView.Properties.builder()
-                                              .className("hudson.model.View$PropertyList").build())
+                                            .className("hudson.model.View$PropertyList").build())
                                     .build()))
                             .build())
                     .tabBar(Folder.FolderViews.TabBar.builder()
@@ -58,12 +67,5 @@ public enum JobType {
             .healthMetrics("")
             .icon(Folder.Icon.builder()
                     .className("com.cloudbees.hudson.plugins.folder.icons.StockFolderIcon").build())
-            .build());
-
-    private final Object projectConfig;
-
-    JobType(Object projectConfig) {
-        this.projectConfig = projectConfig;
-    }
-
+            .build();
 }

@@ -10,7 +10,7 @@ import org.testng.annotations.Test;
 import school.redrover.controllers.JobController;
 import school.redrover.models.job.JobResponse;
 import school.redrover.runner.BaseApiTest;
-import school.redrover.testdata.JobType;
+import school.redrover.testdata.JobTestData;
 import school.redrover.testdata.TestDataProvider;
 import school.redrover.runner.TestUtils;
 
@@ -66,7 +66,7 @@ public class FolderApiTest extends BaseApiTest {
     @Test(dataProvider = "projectNames", dataProviderClass = TestDataProvider.class)
     @Description("00.006.03 Create Folder with valid name (XML)")
     public void testCreateFolderWithValidNameXml(String projectName) {
-        Response response = jobController.createJob(JobType.FOLDER, projectName);
+        Response response = jobController.createJob(JobTestData.getDefaultFolder(), projectName);
 
         JobResponse responseJobByName = (jobController.getJobByName(projectName)).as(JobResponse.class);
 
@@ -85,7 +85,7 @@ public class FolderApiTest extends BaseApiTest {
     @Test(dataProvider = "providerUnsafeCharacters", dataProviderClass = TestDataProvider.class)
     @Description("00.006.17 Create Folder with unsafe character")
     public void testCreateFolderWithUnsafeCharacter(String unsafeCharacter) {
-        Response response = jobController.createJob(JobType.FOLDER, unsafeCharacter);
+        Response response = jobController.createJob(JobTestData.getDefaultFolder(), unsafeCharacter);
 
         SoftAssertions.assertSoftly(
                 softly -> {
@@ -99,7 +99,7 @@ public class FolderApiTest extends BaseApiTest {
     @Test
     @Description("015 Create Folder with empty name")
     public void testCreateFolderWithEmptyName() {
-        Response response = jobController.createJob(JobType.FOLDER, "");
+        Response response = jobController.createJob(JobTestData.getDefaultFolder(), "");
 
         SoftAssertions.assertSoftly(
                 softly -> {
