@@ -20,7 +20,7 @@ import static school.redrover.runner.TestApiUtils.*;
 
 
 @Epic("API")
-@Story("Folder")
+@Feature("Folder")
 public class FolderApiTest extends BaseApiTest {
     private static final JobController jobController = new JobController();
 
@@ -30,8 +30,6 @@ public class FolderApiTest extends BaseApiTest {
     private static final String FOLDER_DESCRIPTION = "Add description to folder!";
     private static final String FOLDER_NAME_BY_XML_CREATE = "FolderCreateByXML";
     private static final String FOLDER_NAME_COPY_FROM = "FolderCopyFrom";
-    private static final String CREATE_EMPTY_FOLDER_XML_FILE = "create-empty-folder.xml";
-    private static final String FOLDER_GET_BY_NAME_SCHEMA_JSON = "folder-schema.json";
 
     @Test(dataProvider = "projectNames", dataProviderClass = TestDataProvider.class)
     @Description("00.006.02 Create Folder with valid name")
@@ -64,7 +62,7 @@ public class FolderApiTest extends BaseApiTest {
             softly.assertThat(findItemInAllProjectList(projectName)).isTrue();
         });
 
-        jobController.deleteJob("",projectName);
+        jobController.deleteJob(projectName);
     }
 
     @Test(dataProvider = "projectNames", dataProviderClass = TestDataProvider.class)
@@ -117,27 +115,27 @@ public class FolderApiTest extends BaseApiTest {
     }
 
     @Test
-    @Description("")
+    @Description("API_AT_00.006.18 Create Folder with same name")
     public void testCreateFolderWithSameName() {
-        jobController.createJob(JobTestData.getDefaultFolder(), ModeType.FOLDER_MODE.getMode());
+        jobController.createJob(JobTestData.getDefaultFolder(), FOLDER_NEW_NAME);
 
-        Response response = jobController.createJob(JobTestData.getDefaultFolder(), ModeType.FOLDER_MODE.getMode());
+        Response response = jobController.createJob(JobTestData.getDefaultFolder(), FOLDER_NEW_NAME);
 
         SoftAssertions.assertSoftly(
                 softly -> {
                     Allure.step("Expected result: Status code is 400");
                     softly.assertThat(response.statusCode()).isEqualTo(400);
                     softly.assertThat(response.time()).isLessThan(500L);
-                    Allure.step("Expected result: Header 'X-Error' has value 'A job already exists with the name  %s'".formatted(FOLDER_NAME));
+                    Allure.step("Expected result: Header 'X-Error' has value 'A job already exists with the name  %s'".formatted(FOLDER_NEW_NAME));
                     softly.assertThat(response.getHeaders().getValue("X-Error"))
-                            .isEqualTo("A job already exists with the name  %s".formatted(FOLDER_NAME));
+                            .isEqualTo("A job already exists with the name  %s".formatted(FOLDER_NEW_NAME));
                     softly.assertThat(response.getHeaders().getValue("Content-Type"))
                             .isEqualTo("text/html;charset=utf-8");
                 });
     }
 
     @Test
-    @Description("015 Create Folder with empty name")
+    @Description("00.006.15 Create Folder with empty name")
     public void testCreateFolderWithEmptyName() {
         Response response = jobController.createJob(JobTestData.getDefaultFolder(), "");
 
@@ -161,7 +159,7 @@ public class FolderApiTest extends BaseApiTest {
                 .contentType(ContentType.URLENC.withCharset("UTF-8"))
                 .formParam("name", FOLDER_NAME_COPY_FROM)
                 .formParam("mode", "copy")
-                .formParam("from", FOLDER_NAME)
+                .formParam("from", FOLDER_NAME_BY_XML_CREATE)
                 .when()
                 .post(getCreateItemPath())
                 .then()
@@ -245,7 +243,7 @@ public class FolderApiTest extends BaseApiTest {
     }
 
     @Test()
-    @Description("007 Add Description to Folder")
+    @Description("04.004.07 Add Description to Folder")
     public void testAddDescriptionToFolder() {
         jobController.createJob(JobTestData.getDefaultFolder(), FOLDER_NAME_BY_XML_CREATE);
 
@@ -254,26 +252,26 @@ public class FolderApiTest extends BaseApiTest {
                 .contentType(ContentType.URLENC.withCharset("UTF-8"))
                 .formParam("description",FOLDER_DESCRIPTION)
                 .when()
-                .post(getAddDescriptionToCreatedItemPath(FOLDER_NEW_NAME))
+                .post(getAddDescriptionToCreatedItemPath(FOLDER_NAME_BY_XML_CREATE))
                 .then()
-                .spec(responseSpec(302, 500L))
+                .spec(responseSpec())
                 .extract().response();
 
-        JobResponse responseJobByName = (jobController.getJobByName(FOLDER_NEW_NAME)).as(JobResponse.class);
+        JobResponse responseJobByName = (jobController.getJobByName(FOLDER_NAME_BY_XML_CREATE)).as(JobResponse.class);
 
         Assert.assertEquals(response.statusCode(), 302);
         Assert.assertTrue(response.time() < 600L);
 
         SoftAssertions.assertSoftly(softly -> {
-            Allure.step(String.format("Expected result: fullName is '%s'", FOLDER_NEW_NAME));
-            softly.assertThat(responseJobByName.getFullName()).isEqualTo(FOLDER_NEW_NAME);
+            Allure.step(String.format("Expected result: fullName is '%s'", FOLDER_NAME_BY_XML_CREATE));
+            softly.assertThat(responseJobByName.getFullName()).isEqualTo(FOLDER_NAME_BY_XML_CREATE);
             Allure.step("(Expected result: description is empty");
             softly.assertThat(responseJobByName.getDescription()).isEqualTo("");
             Allure.step(String.format("Expected result: _class is '%s'", ModeType.FOLDER_MODE.getMode()));
             softly.assertThat(responseJobByName.getClassName()).isEqualTo(ModeType.FOLDER_MODE.getMode());
         });
 
-        jobController.deleteJob(FOLDER_NEW_NAME);
+        jobController.deleteJob(FOLDER_NAME_BY_XML_CREATE);
     }
 
     @Test()
