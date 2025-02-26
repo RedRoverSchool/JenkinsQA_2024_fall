@@ -214,7 +214,7 @@ public class OrganizationFolderApiTest extends BaseApiTest {
     @Test(dependsOnMethods = "testRename")
     @Description("06.005.02 Delete Organization folder")
     public void testDelete() {
-        Response response = jobController.deleteJob("", RENAMED_ORGANIZATION_FOLDER_NAME);
+        Response response = jobController.deleteJob(RENAMED_ORGANIZATION_FOLDER_NAME);
 
         SoftAssertions.assertSoftly(
                 softly -> {
