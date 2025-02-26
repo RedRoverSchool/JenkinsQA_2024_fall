@@ -50,13 +50,13 @@ public class TestDataProvider {
     }
 
     @DataProvider
-    public Object[][] projectNameAndXmlFileCreate() {
+    public static Object[][] projectNameAndXmlFileCreate() {
         return new Object[][] {
-                {"FreeStyleProjectName", "create-empty-freestyle-project.xml"},
-                {"PipelineProjectName", "create-empty-pipeline-project.xml"},
-                {"MultiConfigurationProjectName", "create-empty-multi-config.xml"},
-                {"FolderName", "create-empty-folder.xml"},
-                {"MultiBranchPipelineProjectName", "create-empty-multibranch-pipeline.xml"}
+                {"FreeStyleProjectName", ModeType.FREESTYLE_PROJECT_MODE},
+                {"PipelineProjectName", ModeType.PIPELINE_MODE},
+                {"MultiConfigurationProjectName", ModeType.MULTI_CONFIGURATION_PROJECT_MODE},
+                {"FolderName", ModeType.FOLDER_MODE},
+                {"MultiBranchPipelineProjectName", ModeType.MULTIBRANCH_PIPELINE_MODE}
         };
     }
 

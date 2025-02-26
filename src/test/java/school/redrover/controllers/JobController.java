@@ -73,4 +73,17 @@ public class JobController {
                 .andReturn();
     }
 
+    public static Response createJobInFolder(String projectName, ModeType mode, String folderName) {
+        return given()
+                .spec(requestSpec())
+                .formParam("name", projectName)
+                .formParam("mode", mode.getMode())
+                .contentType(ContentType.URLENC.withCharset("UTF-8"))
+                .when()
+                .post("/job/%s/createItem".formatted(folderName))
+                .then()
+                .spec(responseSpec())
+                .extract().response();
+    }
+
 }
