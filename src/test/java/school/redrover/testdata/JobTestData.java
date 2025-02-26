@@ -2,10 +2,7 @@ package school.redrover.testdata;
 
 import lombok.Getter;
 import lombok.Setter;
-import school.redrover.models.job.Folder;
-import school.redrover.models.job.Freestyle;
-import school.redrover.models.job.MultibranchPipeline;
-import school.redrover.models.job.Pipeline;
+import school.redrover.models.job.*;
 
 import java.util.List;
 
@@ -121,4 +118,29 @@ public class JobTestData {
                     .scriptPath("Jenkinsfile")
                     .build())
             .build();
+    @Setter
+    @Getter
+    private static MultiConfiguration defaultMultiConfiguration = MultiConfiguration.builder()
+            .description("")
+            .keepDependencies(false)
+            .properties("")
+            .scm(MultiConfiguration.Scm.builder()
+                    .className("hudson.scm.NullSCM")
+                    .build())
+            .canRoam(true)
+            .disabled(false)
+            .blockBuildWhenDownstreamBuilding(false)
+            .blockBuildWhenUpstreamBuilding(false)
+            .triggers("")
+            .concurrentBuild(false)
+            .axes("")
+            .builders("")
+            .publishers("")
+            .buildWrappers("")
+            .executionStrategy(MultiConfiguration.ExecutionStrategy.builder()
+                    .className("hudson.matrix.DefaultMatrixExecutionStrategyImpl")
+                    .runSequentially(false)
+                    .build())
+            .build();
+
 }
