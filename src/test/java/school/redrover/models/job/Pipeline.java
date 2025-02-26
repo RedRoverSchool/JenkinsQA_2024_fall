@@ -8,7 +8,7 @@ import lombok.Data;
 @Data
 @Builder
 @JacksonXmlRootElement(localName = "flow-definition")
-public class Pipeline {
+public class Pipeline implements JobType {
 
     @JacksonXmlProperty(localName = "description")
     private String description;
