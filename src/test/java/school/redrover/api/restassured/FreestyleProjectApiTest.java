@@ -12,7 +12,6 @@ import school.redrover.models.ProjectResponse;
 import school.redrover.models.job.JobResponse;
 import school.redrover.runner.BaseApiTest;
 import school.redrover.runner.WireMockStubs;
-import school.redrover.testdata.JobType;
 import school.redrover.controllers.JobController;
 import school.redrover.testdata.JobTestData;
 
