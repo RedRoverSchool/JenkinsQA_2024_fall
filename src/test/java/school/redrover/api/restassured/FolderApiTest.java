@@ -20,7 +20,7 @@ import static school.redrover.runner.TestApiUtils.*;
 
 
 @Epic("API")
-@Feature("Folder")
+@Feature("04 Folder")
 public class FolderApiTest extends BaseApiTest {
     private static final JobController jobController = new JobController();
 
@@ -32,6 +32,7 @@ public class FolderApiTest extends BaseApiTest {
     private static final String FOLDER_NAME_COPY_FROM = "FolderCopyFrom";
 
     @Test(dataProvider = "projectNames", dataProviderClass = TestDataProvider.class)
+    @Story("US_00.006 Create Folder")
     @Description("00.006.02 Create Folder with valid name")
     public void testCreateFolderWithValidName(String projectName) {
 
@@ -66,6 +67,7 @@ public class FolderApiTest extends BaseApiTest {
     }
 
     @Test(dataProvider = "projectNames", dataProviderClass = TestDataProvider.class)
+    @Story("US_00.006 Create Folder")
     @Description("00.006.03 Create Folder with valid name (XML)")
     public void testCreateFolderWithValidNameXml(String projectName) {
         Response response = given()
@@ -98,6 +100,7 @@ public class FolderApiTest extends BaseApiTest {
     }
 
     @Test(dataProvider = "providerUnsafeCharacters", dataProviderClass = TestDataProvider.class)
+    @Story("US_00.006 Create Folder")
     @Description("00.006.17 Create Folder with unsafe character")
     public void testCreateFolderWithUnsafeCharacter(String unsafeCharacter) {
         Response response = jobController.createJob(JobTestData.getDefaultFolder(), unsafeCharacter);
@@ -115,6 +118,7 @@ public class FolderApiTest extends BaseApiTest {
     }
 
     @Test
+    @Story("US_00.006 Create Folder")
     @Description("API_AT_00.006.18 Create Folder with same name")
     public void testCreateFolderWithSameName() {
         jobController.createJob(JobTestData.getDefaultFolder(), FOLDER_NEW_NAME);
@@ -135,6 +139,7 @@ public class FolderApiTest extends BaseApiTest {
     }
 
     @Test
+    @Story("US_00.006 Create Folder")
     @Description("00.006.15 Create Folder with empty name")
     public void testCreateFolderWithEmptyName() {
         Response response = jobController.createJob(JobTestData.getDefaultFolder(), "");
@@ -150,6 +155,7 @@ public class FolderApiTest extends BaseApiTest {
     }
 
     @Test
+    @Story("US_00.006 Create Folder")
     @Description("00.006.16 Create Folder by copy from another folder")
     public void testCreateFolderByCopyFromAnotherFolder() {
         jobController.createJob(JobTestData.getDefaultFolder(), FOLDER_NAME_BY_XML_CREATE);
@@ -187,6 +193,7 @@ public class FolderApiTest extends BaseApiTest {
     }
 
     @Test()
+    @Story("US_04.001 Rename Folder")
     @Description("04.001.08 Rename Folder")
     public void testRenameFolder() {
         jobController.createJob(JobTestData.getDefaultFolder(), FOLDER_NAME_BY_XML_CREATE);
@@ -222,6 +229,7 @@ public class FolderApiTest extends BaseApiTest {
     }
 
     @Test()
+    @Story("US_04.001 Rename Folder")
     @Description("04.001.09 Rename Folder with the same name")
     public void testRenameFolderSameName() {
         jobController.createJob(JobTestData.getDefaultFolder(), FOLDER_NAME_BY_XML_CREATE);
@@ -243,6 +251,7 @@ public class FolderApiTest extends BaseApiTest {
     }
 
     @Test()
+    @Story("US_04.004 Add and edit description of the folder")
     @Description("04.004.07 Add Description to Folder")
     public void testAddDescriptionToFolder() {
         jobController.createJob(JobTestData.getDefaultFolder(), FOLDER_NAME_BY_XML_CREATE);
@@ -275,6 +284,7 @@ public class FolderApiTest extends BaseApiTest {
     }
 
     @Test()
+    @Story("US_04.003 Delete Folder")
     @Description("04.003.04 Delete Folder")
     public void testDeleteFolder() {
         jobController.createJob(JobTestData.getDefaultFolder(), FOLDER_NEW_NAME);
@@ -299,6 +309,7 @@ public class FolderApiTest extends BaseApiTest {
     }
 
     @Test
+    @Story("US_04.003 Delete Folder")
     @Description("04.003.05 Delete deleted Folder")
     public void testDeleteDeletedFolder() {
         jobController.createJob(JobTestData.getDefaultFolder(), FOLDER_NAME);
@@ -317,7 +328,8 @@ public class FolderApiTest extends BaseApiTest {
     }
 
     @Test(dataProvider = "projectNameAndXmlFileCreate", dataProviderClass = TestDataProvider.class)
-    @Description("04.007.01 Create Project in Folder")
+    @Story("US_00.006 Create Folder")
+    @Description("00.006.08 Create Project in Folder")
     public void testCreateProjectInFolder(String name, ModeType mode) {
         jobController.createJob(JobTestData.getDefaultFolder(), FOLDER_NEW_NAME);
 
@@ -343,6 +355,7 @@ public class FolderApiTest extends BaseApiTest {
     }
 
     @Test()
+    @Story("US_04.003 Delete Folder")
     @Description("04.003.06 Delete Folder with Project")
     public void testDeleteFolderWithProject() {
         jobController.createJob(JobTestData.getDefaultFolder(), FOLDER_NEW_NAME);
@@ -352,6 +365,7 @@ public class FolderApiTest extends BaseApiTest {
     }
 
     @Test
+    @Story("US_04.002 Move Folder to Folder")
     @Description("04.002.01 Move Folder to Folder")
     public void testMoveFolderToFolder() {
         String parentFolder = "ParentFolder";
