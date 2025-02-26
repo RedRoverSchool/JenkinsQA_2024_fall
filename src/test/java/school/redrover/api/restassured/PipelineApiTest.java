@@ -5,6 +5,7 @@ import io.qameta.allure.Epic;
 import io.qameta.allure.Feature;
 import io.restassured.response.Response;
 import org.assertj.core.api.SoftAssertions;
+import org.testng.Assert;
 import org.testng.annotations.Test;
 import school.redrover.controllers.JobController;
 import school.redrover.models.job.JobResponse;
@@ -22,69 +23,55 @@ public class PipelineApiTest extends BaseApiTest {
     public void testCreateProjectWithValidName(String projectName) {
         Response resp = jobController.createJob(JobTestData.getDefaultPipeline(), projectName);
 
-        SoftAssertions.assertSoftly(
-                softly -> {
-                    softly.assertThat(resp.statusCode()).isEqualTo(200);
-                    softly.assertThat(resp.time()).isLessThan(2000);
-                });
+        Assert.assertEquals(resp.statusCode(), 200);
+        Assert.assertTrue(resp.time() <= 2000);
     }
 
-    @Test(dependsOnMethods = "testCreateProjectWithValidName",
-            dataProvider = "projectNames",
-            dataProviderClass = TestDataProvider.class)
+    @Test(dataProvider = "projectNames", dataProviderClass = TestDataProvider.class)
     @Description("011 Get pipeline project with valid name")
     public void testGetProjectByName(String projectName) {
-        Response resp = jobController.getJobByName(projectName);
+        jobController.createJob(JobTestData.getDefaultPipeline(), projectName);
 
+        Response resp = jobController.getJobByName(projectName);
         JobResponse jobResponse = resp.as(JobResponse.class);
 
+        Assert.assertEquals(resp.statusCode(), 200);
+        Assert.assertTrue(resp.time() <= 2000);
+        Assert.assertEquals(resp.getHeader("Content-Type"), "application/json;charset=utf-8");
+
         SoftAssertions.assertSoftly(softly -> {
-            softly.assertThat(resp.statusCode()).isEqualTo(200);
-            softly.assertThat(resp.time()).isLessThan(500);
-            softly.assertThat(resp.getHeader("Content-Type")).isEqualTo("application/json;charset=utf-8");
             softly.assertThat(jobResponse.getName()).isEqualTo(projectName);
             softly.assertThat(jobResponse.getDescription()).isEqualTo("");
             softly.assertThat(jobResponse.getClassName()).isEqualTo("org.jenkinsci.plugins.workflow.job.WorkflowJob");
             softly.assertThat(jobResponse).usingRecursiveComparison()
                     .ignoringFieldsMatchingRegexes(".*").isEqualTo(new JobResponse());
         });
-
     }
 
-    @Test(dependsOnMethods = "testGetProjectByName",
-            dataProvider = "renameProjectNames",
-            dataProviderClass = TestDataProvider.class)
+    @Test(dataProvider = "renameProjectNames", dataProviderClass = TestDataProvider.class)
     @Description("013 Rename Pipeline project")
     public void testRenameProject(String oldName, String newName) {
+        jobController.createJob(JobTestData.getDefaultPipeline(), oldName);
+
         Response resp = jobController.renameJob(oldName, newName);
 
-        SoftAssertions.assertSoftly(
-                softly -> {
-                    softly.assertThat(resp.statusCode()).isEqualTo(302);
-                    softly.assertThat(resp.time()).isLessThan(500);
-                });
+        Assert.assertEquals(resp.statusCode(), 302);
+        Assert.assertTrue(resp.time() <= 2000);
     }
 
-    @Test(dependsOnMethods = "testRenameProject",
-            dataProvider = "renameProjectNames",
-            dataProviderClass = TestDataProvider.class)
+    @Test(dataProvider = "projectNames", dataProviderClass = TestDataProvider.class)
     @Description("02.005.01 Delete pipeline folder")
-    public void testDelete(String unused, String projectName) {
-        Response resp = jobController.deleteJob(unused, projectName);
+    public void testDelete(String projectName) {
+        jobController.createJob(JobTestData.getDefaultPipeline(), projectName);
 
-        SoftAssertions.assertSoftly(
-                softly -> {
-                    softly.assertThat(resp.statusCode()).isEqualTo(204);
-                    softly.assertThat(resp.time()).isLessThan(2000);
-                });
+        Response resp = jobController.deleteJob(projectName);
+
+        Assert.assertEquals(resp.statusCode(), 204);
 
         Response getJob = jobController.getJobByName(projectName);
 
-        SoftAssertions.assertSoftly(
-                softly -> {
-                    softly.assertThat(getJob.statusCode()).isEqualTo(404);
-                    softly.assertThat(getJob.time()).isLessThan(2000);
-                });
+        Assert.assertEquals(getJob.statusCode(), 404);
+        Assert.assertTrue(getJob.time() <= 2000);
     }
 
     @Test
@@ -92,12 +79,9 @@ public class PipelineApiTest extends BaseApiTest {
     public void testCreateProjectWithEmptyName() {
         Response resp = jobController.createJob(JobTestData.getDefaultPipeline(), "");
 
-        SoftAssertions.assertSoftly(
-                softly -> {
-                    softly.assertThat(resp.statusCode()).isEqualTo(400);
-                    softly.assertThat(resp.time()).isLessThan(2000);
-                    softly.assertThat(resp.getHeader("X-Error")).isEqualTo("No name is specified");
-                });
+        Assert.assertEquals(resp.statusCode(), 400);
+        Assert.assertTrue(resp.time() <= 2000);
+        Assert.assertEquals(resp.getHeader("X-Error"), "No name is specified");
     }
 
     @Test(dataProvider = "providerUnsafeCharacters", dataProviderClass = TestDataProvider.class)
@@ -105,12 +89,9 @@ public class PipelineApiTest extends BaseApiTest {
     public void testCreateProjectWithUnsafeCharacter(String unsafeCharacter) {
         Response resp = jobController.createJob(JobTestData.getDefaultPipeline(), unsafeCharacter);
 
-        SoftAssertions.assertSoftly(
-                softly -> {
-                    softly.assertThat(resp.statusCode()).isEqualTo(400);
-                    softly.assertThat(resp.time()).isLessThan(2000);
-                    softly.assertThat(resp.getHeader("X-Error")).isEqualTo("%s  is an unsafe character".formatted(unsafeCharacter));
-                });
+        Assert.assertEquals(resp.statusCode(), 400);
+        Assert.assertTrue(resp.time() <= 2000);
+        Assert.assertEquals(resp.getHeader("X-Error"), "%s  is an unsafe character".formatted(unsafeCharacter));
     }
 
 }

@@ -64,7 +64,7 @@ public class JobController {
                 .andReturn();
     }
 
-    public Response deleteJob(String unused, String projectName) {
+    public Response deleteJob(String projectName) {
         return given()
                 .spec(requestSpec())
                 .basePath(JOB_ENDPOINT)

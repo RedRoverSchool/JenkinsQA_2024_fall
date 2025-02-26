@@ -96,7 +96,7 @@ public class FolderApiTest extends BaseApiTest {
                     softly.assertThat(responseJobByName.getClassName()).isEqualTo(FOLDER_CREATE_MODE);
                 });
 
-        jobController.deleteJob("",projectName);
+        jobController.deleteJob(projectName);
     }
 
     @Test(dataProvider = "providerUnsafeCharacters", dataProviderClass = TestDataProvider.class)
@@ -109,6 +109,8 @@ public class FolderApiTest extends BaseApiTest {
 
         SoftAssertions.assertSoftly(
                 softly -> {
+                    softly.assertThat(response.statusCode()).isEqualTo(400);
+                    softly.assertThat(response.time()).isLessThan(500);
                     Allure.step("Expected result: Header 'X-Error' has value '%s is an unsafe character'".formatted(unsafeCharacter));
                     softly.assertThat(response.getHeaders().getValue("X-Error")).isEqualTo("%s  is an unsafe character".formatted(unsafeCharacter));
                 });
