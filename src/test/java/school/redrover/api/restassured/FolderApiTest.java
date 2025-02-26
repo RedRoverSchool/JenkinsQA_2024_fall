@@ -185,7 +185,7 @@ public class FolderApiTest extends BaseApiTest {
 
         });
 
-        jobController.deleteJob("", FOLDER_NAME_COPY_FROM);
+        jobController.deleteJob(FOLDER_NAME_COPY_FROM);
     }
 
     @Test()
@@ -220,7 +220,7 @@ public class FolderApiTest extends BaseApiTest {
             softly.assertThat(findItemInAllProjectList(FOLDER_NAME_BY_XML_CREATE)).isFalse();
         });
 
-        jobController.deleteJob("", FOLDER_NEW_NAME);
+        jobController.deleteJob(FOLDER_NEW_NAME);
     }
 
     @Test()
@@ -241,7 +241,7 @@ public class FolderApiTest extends BaseApiTest {
         Assert.assertTrue(response.time() < 600L);
         Assert.assertEquals(response.getHeaders().getValue("X-Error"), "The new name is the same as the current name.");
 
-        jobController.deleteJob("", FOLDER_NAME_BY_XML_CREATE);
+        jobController.deleteJob(FOLDER_NAME_BY_XML_CREATE);
     }
 
     @Test()
@@ -273,7 +273,7 @@ public class FolderApiTest extends BaseApiTest {
             softly.assertThat(responseJobByName.getClassName()).isEqualTo(ModeType.FOLDER_MODE.getMode());
         });
 
-        jobController.deleteJob("", FOLDER_NEW_NAME);
+        jobController.deleteJob(FOLDER_NEW_NAME);
     }
 
     @Test()
@@ -306,13 +306,13 @@ public class FolderApiTest extends BaseApiTest {
         jobController.createJob(JobTestData.getDefaultFolder(), FOLDER_NAME);
 
         Allure.step("Send DELETE request -> Delete Folder with name %s".formatted(FOLDER_NAME));
-        Response response = jobController.deleteJob("", FOLDER_NAME);
+        Response response = jobController.deleteJob(FOLDER_NAME);
 
         Assert.assertEquals(response.statusCode(), 204);
         Assert.assertTrue(response.time() < 600L);
 
         Allure.step("Send DELETE request -> Try to delete Folder with name %s again".formatted(FOLDER_NAME));
-        Response responseDeleteJob = jobController.deleteJob("", FOLDER_NAME);
+        Response responseDeleteJob = jobController.deleteJob(FOLDER_NAME);
 
         Assert.assertEquals(responseDeleteJob.statusCode(), 404);
         Assert.assertTrue(responseDeleteJob.time() < 600L);
@@ -350,7 +350,7 @@ public class FolderApiTest extends BaseApiTest {
         jobController.createJob(JobTestData.getDefaultFolder(), FOLDER_NEW_NAME);
         createSeveralJobsInFolder(FOLDER_NEW_NAME);
 
-        jobController.deleteJob("",FOLDER_NEW_NAME);
+        jobController.deleteJob(FOLDER_NEW_NAME);
     }
 
     @Test
