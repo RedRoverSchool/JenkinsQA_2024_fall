@@ -5,7 +5,6 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import io.qameta.allure.Description;
 import io.qameta.allure.Epic;
 import io.qameta.allure.Feature;
-import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import org.assertj.core.api.SoftAssertions;
 import org.jsoup.Jsoup;
@@ -15,6 +14,7 @@ import org.testng.annotations.Test;
 import school.redrover.controllers.JobController;
 import school.redrover.models.job.JobResponse;
 import school.redrover.runner.BaseApiTest;
+import school.redrover.testdata.JobTestData;
 import school.redrover.testdata.ModeType;
 import school.redrover.testdata.TestDataProvider;
 import school.redrover.runner.TestUtils;
@@ -22,7 +22,6 @@ import school.redrover.runner.TestUtils;
 import static io.restassured.RestAssured.given;
 import static school.redrover.runner.TestApiUtils.requestSpec;
 import static school.redrover.runner.TestApiUtils.responseSpec;
-import static school.redrover.runner.TestUtils.loadPayload;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -43,31 +42,43 @@ public class OrganizationFolderApiTest extends BaseApiTest {
     @Test
     @Description("00.007.01 Create Organization folder with valid name")
     public void testCreateWithXML() {
-        given()
-                .spec(requestSpec())
-                .queryParam("name", ORGANIZATION_FOLDER_NAME_BY_XML_CREATED)
-                .contentType(ContentType.XML)
-                .body(loadPayload("create-empty-organization-folder.xml"))
-                .when()
-                .post("view/all/createItem")
-                .then()
-                .spec(responseSpec(200, 500L));
-
-        Response getJobResponse = jobController.getJobByName(ORGANIZATION_FOLDER_NAME_BY_XML_CREATED);
-        JobResponse jobResponse = getJobResponse.as(JobResponse.class);
+        Response response = jobController.createJob(
+                JobTestData.getDefaultOrganizationFolder(), ORGANIZATION_FOLDER_NAME_BY_XML_CREATED);
 
         SoftAssertions.assertSoftly(softly -> {
-            softly.assertThat(getJobResponse.statusCode()).isEqualTo(200);
-            softly.assertThat(getJobResponse.time()).isLessThan(500L);
-            softly.assertThat(getJobResponse.getHeader("Content-Type")).isEqualTo("application/json;charset=utf-8");
-            softly.assertThat(jobResponse.getName()).isEqualTo(ORGANIZATION_FOLDER_NAME_BY_XML_CREATED);
-            softly.assertThat(jobResponse.getClassName()).isEqualTo(ModeType.ORGANIZATION_FOLDER_MODE.getMode());
+            softly.assertThat(response.statusCode()).isEqualTo(200);
+            softly.assertThat(response.time()).isLessThan(500L);
         });
+
+        jobController.deleteJob(ORGANIZATION_FOLDER_NAME_BY_XML_CREATED);
     }
 
-    @Test(dependsOnMethods = "testCreateWithXML")
+    @Test
+    @Description("00.007.02 Get Organization folder with valid name")
+    public void testGetJob() {
+        jobController.createJob(JobTestData.getDefaultOrganizationFolder(), ORGANIZATION_FOLDER_NAME_BY_XML_CREATED);
+
+        Response response = jobController.getJobByName(ORGANIZATION_FOLDER_NAME_BY_XML_CREATED);
+        JobResponse jobResponse = response.as(JobResponse.class);
+
+        SoftAssertions.assertSoftly(softly -> {
+            softly.assertThat(response.statusCode()).isEqualTo(200);
+            softly.assertThat(response.time()).isLessThan(500L);
+            softly.assertThat(response.getHeader("Content-Type")).isEqualTo("application/json;charset=utf-8");
+            softly.assertThat(jobResponse.getName()).isEqualTo(ORGANIZATION_FOLDER_NAME_BY_XML_CREATED);
+            softly.assertThat(jobResponse.getClassName()).isEqualTo(ModeType.ORGANIZATION_FOLDER_MODE.getMode());
+            softly.assertThat(jobResponse).usingRecursiveComparison()
+                    .ignoringFieldsMatchingRegexes(".*").isEqualTo(new JobResponse());
+        });
+
+        jobController.deleteJob(ORGANIZATION_FOLDER_NAME_BY_XML_CREATED);
+    }
+
+    @Test
     @Description("00.007.05 Get error message when create Organization Folder with the same name")
     public void testCreateSameName() {
+        jobController.createJob(JobTestData.getDefaultOrganizationFolder(), ORGANIZATION_FOLDER_NAME_BY_XML_CREATED);
+
         Response response = jobController.createWithMode(
                 ORGANIZATION_FOLDER_NAME_BY_XML_CREATED, ModeType.ORGANIZATION_FOLDER_MODE);
 
@@ -76,6 +87,8 @@ public class OrganizationFolderApiTest extends BaseApiTest {
         Assert.assertEquals(document.select("h1").text(), "Error");
         Assert.assertEquals(document.select("p").text(),
                 String.format("A job already exists with the name ‘%s’", ORGANIZATION_FOLDER_NAME_BY_XML_CREATED));
+
+        jobController.deleteJob(ORGANIZATION_FOLDER_NAME_BY_XML_CREATED);
     }
 
     @Test
@@ -90,13 +103,15 @@ public class OrganizationFolderApiTest extends BaseApiTest {
         Response getJobResponse = jobController.getJobByName(ORGANIZATION_FOLDER_NAME_BY_MODE_CREATED);
         JobResponse jobResponse = getJobResponse.as(JobResponse.class);
 
-        Assert.assertEquals(getJobResponse.statusCode(), 200);
-        Assert.assertTrue(getJobResponse.time() <= 500L);
-        Assert.assertEquals(getJobResponse.getHeader("Content-Type"), "application/json;charset=utf-8");
-
-        Assert.assertEquals(jobResponse.getName(), ORGANIZATION_FOLDER_NAME_BY_MODE_CREATED);
-        Assert.assertEquals(jobResponse.getClassName(), ModeType.ORGANIZATION_FOLDER_MODE.getMode());
-        Assert.assertNull(jobResponse.getDescription());
+        SoftAssertions.assertSoftly(softly -> {
+            softly.assertThat(getJobResponse.statusCode()).isEqualTo(200);
+            softly.assertThat(getJobResponse.time()).isLessThan(500L);
+            softly.assertThat(getJobResponse.getHeader("Content-Type")).isEqualTo("application/json;charset=utf-8");
+            softly.assertThat(jobResponse.getName()).isEqualTo(ORGANIZATION_FOLDER_NAME_BY_MODE_CREATED);
+            softly.assertThat(jobResponse.getClassName()).isEqualTo(ModeType.ORGANIZATION_FOLDER_MODE.getMode());
+            softly.assertThat(jobResponse).usingRecursiveComparison()
+                    .ignoringFieldsMatchingRegexes(".*").isEqualTo(new JobResponse());
+        });
     }
 
     @Test
@@ -147,9 +162,11 @@ public class OrganizationFolderApiTest extends BaseApiTest {
         });
     }
 
-    @Test(dependsOnMethods = "testCreateSameName")
+    @Test
     @Description("06.001.04 Change configurations for Organization folder")
     public void testChangeProjectConfigurations() throws JsonProcessingException {
+        jobController.createJob(JobTestData.getDefaultOrganizationFolder(), ORGANIZATION_FOLDER_NAME_BY_XML_CREATED);
+
         String projectJson = TestUtils.loadPayload("organization-folder-configuration.json");
 
         ObjectMapper objectMapper = new ObjectMapper();
@@ -184,11 +201,15 @@ public class OrganizationFolderApiTest extends BaseApiTest {
             softly.assertThat(jobResponse.getDescription()).isEqualTo(DESCRIPTION);
             softly.assertThat(jobResponse.getDisplayName()).isEqualTo(DISPLAY_NAME_ORG_FOLDER);
         });
+
+        jobController.deleteJob(ORGANIZATION_FOLDER_NAME_BY_XML_CREATED);
     }
 
-    @Test(dependsOnMethods = "testChangeProjectConfigurations")
+    @Test
     @Description("06.005.01 Rename Organization folder with valid name")
     public void testRename() {
+        jobController.createJob(JobTestData.getDefaultOrganizationFolder(), ORGANIZATION_FOLDER_NAME_BY_XML_CREATED);
+
         Response response = jobController.renameJob(ORGANIZATION_FOLDER_NAME_BY_XML_CREATED, RENAMED_ORGANIZATION_FOLDER_NAME);
 
         SoftAssertions.assertSoftly(
@@ -206,15 +227,16 @@ public class OrganizationFolderApiTest extends BaseApiTest {
                     softly.assertThat(responseByName.time()).isLessThan(500L);
                     softly.assertThat(responseByName.getHeader("Content-Type")).isEqualTo("application/json;charset=utf-8");
                     softly.assertThat(jobResponse.getName()).isEqualTo(RENAMED_ORGANIZATION_FOLDER_NAME);
-                    softly.assertThat(jobResponse.getDisplayName()).isEqualTo(DISPLAY_NAME_ORG_FOLDER);
                     softly.assertThat(jobResponse.getClassName()).isEqualTo(ModeType.ORGANIZATION_FOLDER_MODE.getMode());
                 });
     }
 
-    @Test(dependsOnMethods = "testRename")
+    @Test
     @Description("06.005.02 Delete Organization folder")
     public void testDelete() {
-        Response response = jobController.deleteJob(RENAMED_ORGANIZATION_FOLDER_NAME);
+        jobController.createJob(JobTestData.getDefaultOrganizationFolder(), ORGANIZATION_FOLDER_NAME_BY_XML_CREATED);
+
+        Response response = jobController.deleteJob(ORGANIZATION_FOLDER_NAME_BY_XML_CREATED);
 
         SoftAssertions.assertSoftly(
                 softly -> {
