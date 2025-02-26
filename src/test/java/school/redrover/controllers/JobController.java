@@ -3,7 +3,7 @@ package school.redrover.controllers;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
-import school.redrover.testdata.JobType;
+import school.redrover.models.job.JobType;
 import school.redrover.testdata.ModeType;
 
 import static io.restassured.RestAssured.given;
@@ -12,12 +12,12 @@ import static school.redrover.runner.TestApiUtils.*;
 public class JobController {
     private static final String JOB_ENDPOINT = "job";
 
-    public Response createJob(JobType jobType, String name) {
+    public <T extends JobType> Response createJob(T jobType, String name) {
         return given()
                 .spec(requestSpec())
                 .queryParam("name", name)
                 .contentType(ContentType.XML)
-                .body(toXML(jobType.getProjectConfig()))
+                .body(toXML(jobType))
                 .when()
                 .post("createItem")
                 .then()
@@ -64,13 +64,26 @@ public class JobController {
                 .andReturn();
     }
 
-    public Response deleteJob(String unused, String projectName) {
+    public Response deleteJob(String projectName) {
         return given()
                 .spec(requestSpec())
                 .basePath(JOB_ENDPOINT)
                 .when()
                 .delete("%s/".formatted(projectName))
                 .andReturn();
+    }
+
+    public static Response createJobInFolder(String projectName, ModeType mode, String folderName) {
+        return given()
+                .spec(requestSpec())
+                .formParam("name", projectName)
+                .formParam("mode", mode.getMode())
+                .contentType(ContentType.URLENC.withCharset("UTF-8"))
+                .when()
+                .post("/job/%s/createItem".formatted(folderName))
+                .then()
+                .spec(responseSpec())
+                .extract().response();
     }
 
 }

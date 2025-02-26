@@ -7,16 +7,23 @@ import lombok.Data;
 
 @Data
 @Builder
-@JacksonXmlRootElement(localName = "project")
-public class Freestyle implements JobType  {
+@JacksonXmlRootElement(localName = "matrix-project")
+public class MultiConfiguration implements JobType {
+
+    @JacksonXmlProperty(isAttribute = true)
+    private String plugin;
+
+    @JacksonXmlProperty(localName = "description")
+    private String description;
+
     @JacksonXmlProperty(localName = "keepDependencies")
     private boolean keepDependencies;
 
     @JacksonXmlProperty(localName = "properties")
     private String properties;
 
-    @JacksonXmlProperty(localName = "scm", isAttribute = true)
-    private String scm;
+    @JacksonXmlProperty(localName = "scm")
+    private Scm scm;
 
     @JacksonXmlProperty(localName = "canRoam")
     private boolean canRoam;
@@ -36,6 +43,9 @@ public class Freestyle implements JobType  {
     @JacksonXmlProperty(localName = "concurrentBuild")
     private boolean concurrentBuild;
 
+    @JacksonXmlProperty(localName = "axes")
+    private String axes;
+
     @JacksonXmlProperty(localName = "builders")
     private String builders;
 
@@ -44,4 +54,24 @@ public class Freestyle implements JobType  {
 
     @JacksonXmlProperty(localName = "buildWrappers")
     private String buildWrappers;
+
+    @JacksonXmlProperty(localName = "executionStrategy")
+    private ExecutionStrategy executionStrategy;
+
+    @Builder
+    public static class Scm {
+
+        @JacksonXmlProperty(isAttribute = true, localName = "class")
+        private String className;
+    }
+
+    @Builder
+    public static class ExecutionStrategy {
+
+        @JacksonXmlProperty(isAttribute = true, localName = "class")
+        private String className;
+
+        @JacksonXmlProperty(localName = "runSequentially")
+        private boolean runSequentially;
+    }
 }

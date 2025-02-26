@@ -17,6 +17,9 @@ import io.restassured.specification.ResponseSpecification;
 import school.redrover.models.FolderInsideListResponse;
 import school.redrover.models.ProjectListResponse;
 import school.redrover.models.ProjectResponse;
+import school.redrover.testdata.ModeType;
+import school.redrover.testdata.TestDataProvider;
+import school.redrover.controllers.JobController;
 
 import java.util.List;
 
@@ -240,5 +243,13 @@ public class TestApiUtils {
         }
     }
 
+    public static void createSeveralJobsInFolder(String folder) {
+        Object[][] projects = TestDataProvider.projectNameAndXmlFileCreate();
+        for (Object[] projectData : projects) {
+            String projectName = (String) projectData[0];
+            ModeType mode = (ModeType) projectData[1];
+            JobController.createJobInFolder(projectName, mode, folder);
+        }
+    }
 
 }
