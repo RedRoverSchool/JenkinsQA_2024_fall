@@ -232,6 +232,23 @@ public class OrganizationFolderApiTest extends BaseApiTest {
     }
 
     @Test
+    @Description("06.006.01 Create List view for Organization Folder")
+    public void testAddJobListView() {
+        final String viewName = "ViewName";
+
+        jobController.createJob(JobTestData.getDefaultOrganizationFolder(), ORGANIZATION_FOLDER_NAME_BY_XML_CREATED);
+
+        Response response = JobController.addJobListView(viewName, ORGANIZATION_FOLDER_NAME_BY_XML_CREATED);
+
+        SoftAssertions.assertSoftly(
+                softly -> {
+                    softly.assertThat(response.statusCode()).isEqualTo(200);
+                    softly.assertThat(response.time()).isLessThan(500L);
+                }
+        );
+    }
+
+    @Test
     @Description("06.005.02 Delete Organization folder")
     public void testDelete() {
         jobController.createJob(JobTestData.getDefaultOrganizationFolder(), ORGANIZATION_FOLDER_NAME_BY_XML_CREATED);
