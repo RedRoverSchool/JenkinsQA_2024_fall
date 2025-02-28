@@ -118,6 +118,7 @@ public class JobTestData {
                     .scriptPath("Jenkinsfile")
                     .build())
             .build();
+
     @Setter
     @Getter
     private static MultiConfiguration defaultMultiConfiguration = MultiConfiguration.builder()

@@ -22,12 +22,15 @@ import school.redrover.runner.TestApiHttpUtils;
 import school.redrover.runner.BaseAPIHttpTest;
 import school.redrover.runner.ProjectUtils;
 import school.redrover.runner.TestUtils;
+import school.redrover.testdata.ListViewTestData;
 
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
+
+import static school.redrover.runner.TestApiUtils.toXML;
 
 @Epic("Apache HttpClient API Requests")
 public class PipelineProjectTest extends BaseAPIHttpTest {
@@ -99,7 +102,7 @@ public class PipelineProjectTest extends BaseAPIHttpTest {
     public void testAddListViewForProject() throws IOException {
         try (CloseableHttpClient httpClient = createHttpClientWithTokenAuthAndAllureLogging()) {
             String query = "name=" + VIEW_NAME;
-            String payloadForProject = String.format(TestUtils.loadPayload("create-list-view.xml"), PIPELINE_NAME);
+            String payloadForProject = String.format(toXML(ListViewTestData.getListView(PIPELINE_NAME)));
 
             HttpPost httpPost = new HttpPost(ProjectUtils.getUrl() + "createView?" + query);
 

@@ -4,6 +4,7 @@ import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 import school.redrover.models.job.JobType;
+import school.redrover.testdata.ListViewTestData;
 import school.redrover.testdata.ModeType;
 
 import static io.restassured.RestAssured.given;
@@ -86,4 +87,16 @@ public class JobController {
                 .extract().response();
     }
 
+    public static Response addJobListView(String viewName, String projectName) {
+        return given()
+                .spec(requestSpec())
+                .contentType(ContentType.XML)
+                .queryParam("name", viewName)
+                .body(String.format(toXML(ListViewTestData.getListView(projectName))))
+                .when()
+                .post("createView")
+                .then()
+                .spec(responseSpec())
+                .extract().response();
+    }
 }
