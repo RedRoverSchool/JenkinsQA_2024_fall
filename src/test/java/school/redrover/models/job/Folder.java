@@ -9,7 +9,7 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-@Builder
+@Builder(toBuilder = true)
 @JacksonXmlRootElement(localName = "com.cloudbees.hudson.plugins.folder.Folder")
 public class Folder implements JobType {
 
