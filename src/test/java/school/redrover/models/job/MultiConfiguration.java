@@ -6,7 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 
 @Data
-@Builder
+@Builder(toBuilder = true)
 @JacksonXmlRootElement(localName = "matrix-project")
 public class MultiConfiguration implements JobType {
 
