@@ -74,8 +74,8 @@ public class JobController {
                 .andReturn();
     }
 
-    public static Response createJobInFolder(String projectName, ModeType mode, String folderName) {
-        return given()
+    public static void createJobInFolder(String projectName, ModeType mode, String folderName) {
+        given()
                 .spec(requestSpec())
                 .formParam("name", projectName)
                 .formParam("mode", mode.getMode())
@@ -83,8 +83,7 @@ public class JobController {
                 .when()
                 .post("/job/%s/createItem".formatted(folderName))
                 .then()
-                .spec(responseSpec())
-                .extract().response();
+                .spec(responseSpec());
     }
 
     public static Response addJobListView(String viewName, String projectName) {
@@ -95,6 +94,18 @@ public class JobController {
                 .body(toXML(ListViewTestData.getListView(projectName)))
                 .when()
                 .post("createView")
+                .then()
+                .spec(responseSpec())
+                .extract().response();
+    }
+
+    public Response moveFolderToFolder(String parentFolder, String childFolder) {
+        return given()
+                .spec(requestSpec())
+                .contentType(ContentType.URLENC.withCharset("UTF-8"))
+                .formParam("destination", "/%s".formatted(parentFolder))
+                .when()
+                .post("job/%s/move/move".formatted(childFolder))
                 .then()
                 .spec(responseSpec())
                 .extract().response();
