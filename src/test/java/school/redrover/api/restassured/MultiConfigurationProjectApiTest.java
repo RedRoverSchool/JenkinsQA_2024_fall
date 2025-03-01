@@ -17,12 +17,11 @@ import static io.restassured.RestAssured.given;
 import static school.redrover.runner.TestApiUtils.*;
 
 @Epic("API")
-@Feature("Multi-Configuration Project")
+@Feature("03 Multi-Configuration Project")
 public class MultiConfigurationProjectApiTest extends BaseApiTest {
     private static final JobController jobController = new JobController();
 
     private final String MULTI_CONFIG_NAME = "MultiConfigurationProject";
-    private final String MULTI_CONFIG_MODE = "hudson.matrix.MatrixProject";
     private final String MULTI_CONFIG_NAME_XML = "MultiConfigurationProjectXML";
     private final String DESCRIPTION = "Create Project with Description!";
 
@@ -203,7 +202,7 @@ public class MultiConfigurationProjectApiTest extends BaseApiTest {
     }
 
     @Test
-    @Story("03.001 Add/edit description")
+    @Story("US_03.001 Add/edit description")
     @Description("03.001.01 Add description to Project")
     public void testAddDescriptionToCreatedProject() {
         jobController.createJob(JobTestData.getDefaultMultiConfiguration(), MULTI_CONFIG_NAME_XML);
@@ -237,7 +236,7 @@ public class MultiConfigurationProjectApiTest extends BaseApiTest {
     }
 
     @Test
-    @Story("03.002 Enable / Disable Project")
+    @Story("US_03.002 Enable / Disable Project")
     @Description("03.002.01 Disable Project")
     public void testDisableCreatedProject() {
         jobController.createJob(JobTestData.getDefaultMultiConfiguration(), MULTI_CONFIG_NAME_XML);
@@ -262,7 +261,7 @@ public class MultiConfigurationProjectApiTest extends BaseApiTest {
     }
 
     @Test()
-    @Story("03.002 Enable / Disable Project")
+    @Story("US_03.002 Enable / Disable Project")
     @Description("03.002.02 Enable Project")
     public void testEnableProject() {
         jobController.createJob(JobTestData.getDefaultMultiConfiguration().toBuilder().disabled(true).build(), MULTI_CONFIG_NAME_XML);
@@ -287,7 +286,7 @@ public class MultiConfigurationProjectApiTest extends BaseApiTest {
     }
 
     @Test
-    @Story("03.005 Rename Project")
+    @Story("US_03.005 Rename Project")
     @Description("03.005.01 Rename Project")
     public void testRenameProject() {
         jobController.createJob(JobTestData.getDefaultMultiConfiguration(), MULTI_CONFIG_NAME_XML);
@@ -325,7 +324,7 @@ public class MultiConfigurationProjectApiTest extends BaseApiTest {
     }
 
     @Test
-    @Story("03.005 Rename Project")
+    @Story("US_03.005 Rename Project")
     @Description("03.005.02 Rename Project with the same name")
     public void testRenameWithSameName() {
         jobController.createJob(JobTestData.getDefaultMultiConfiguration(), MULTI_CONFIG_NAME);
@@ -339,7 +338,7 @@ public class MultiConfigurationProjectApiTest extends BaseApiTest {
     }
 
     @Test()
-    @Story("03.003 Delete Project")
+    @Story("US_03.003 Delete Project")
     @Description("03.003.01 Delete Project")
     public void testDeleteProject() {
         jobController.createJob(JobTestData.getDefaultMultiConfiguration(), MULTI_CONFIG_NAME_XML);
