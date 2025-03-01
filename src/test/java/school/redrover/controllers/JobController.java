@@ -92,7 +92,7 @@ public class JobController {
                 .spec(requestSpec())
                 .contentType(ContentType.XML)
                 .queryParam("name", viewName)
-                .body(String.format(toXML(ListViewTestData.getListView(projectName))))
+                .body(toXML(ListViewTestData.getListView(projectName)))
                 .when()
                 .post("createView")
                 .then()

@@ -9,7 +9,7 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-@Builder
+@Builder(toBuilder = true)
 @JacksonXmlRootElement(localName = "jenkins.branch.OrganizationFolder")
 public class OrganizationFolder implements JobType {
 
