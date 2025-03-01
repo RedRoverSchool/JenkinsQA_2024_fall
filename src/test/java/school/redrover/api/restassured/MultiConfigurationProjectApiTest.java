@@ -138,7 +138,7 @@ public class MultiConfigurationProjectApiTest extends BaseApiTest {
 
     @Test
     @Story("US_00.003 Create Multi-Configuration Project")
-    @Description("00.003.11 Create Multi-Configuration Project with valid name XML")
+    @Description("00.003.11 Create Multi-Configuration Project with valid name and description XML")
     public void testCreateProjectWithValidNameAndDescriptionXML() {
 
         Response response = jobController.createJob(JobTestData.getDefaultMultiConfiguration().toBuilder()
@@ -322,6 +322,20 @@ public class MultiConfigurationProjectApiTest extends BaseApiTest {
         });
 
         jobController.deleteJob(MULTI_CONFIG_NAME);
+    }
+
+    @Test
+    @Story("03.005 Rename Project")
+    @Description("03.005.02 Rename Project with the same name")
+    public void testRenameWithSameName() {
+        jobController.createJob(JobTestData.getDefaultMultiConfiguration(), MULTI_CONFIG_NAME);
+
+        Response response = jobController.renameJob(MULTI_CONFIG_NAME, MULTI_CONFIG_NAME);
+
+        Assert.assertEquals(response.statusCode(), 400);
+        Assert.assertTrue(response.time() < 600L);
+        Assert.assertEquals(response.getHeaders().getValue("X-Error"),
+                "The new name is the same as the current name.");
     }
 
     @Test()
