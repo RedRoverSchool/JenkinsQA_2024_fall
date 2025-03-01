@@ -102,7 +102,7 @@ public class PipelineProjectTest extends BaseAPIHttpTest {
     public void testAddListViewForProject() throws IOException {
         try (CloseableHttpClient httpClient = createHttpClientWithTokenAuthAndAllureLogging()) {
             String query = "name=" + VIEW_NAME;
-            String payloadForProject = String.format(toXML(ListViewTestData.getListView(PIPELINE_NAME)));
+            String payloadForProject = toXML(ListViewTestData.getListView(PIPELINE_NAME));
 
             HttpPost httpPost = new HttpPost(ProjectUtils.getUrl() + "createView?" + query);
 

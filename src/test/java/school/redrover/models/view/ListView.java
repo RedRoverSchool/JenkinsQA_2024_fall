@@ -6,7 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 
 @Data
-@Builder
+@Builder(toBuilder = true)
 @JacksonXmlRootElement(localName = "hudson.model.ListView")
 public class ListView {
 

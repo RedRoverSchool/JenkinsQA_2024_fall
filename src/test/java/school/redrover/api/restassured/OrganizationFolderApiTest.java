@@ -13,6 +13,7 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 import school.redrover.controllers.JobController;
 import school.redrover.models.job.JobResponse;
+import school.redrover.models.job.OrganizationFolder;
 import school.redrover.runner.BaseApiTest;
 import school.redrover.testdata.JobTestData;
 import school.redrover.testdata.ModeType;
@@ -69,6 +70,24 @@ public class OrganizationFolderApiTest extends BaseApiTest {
             softly.assertThat(jobResponse.getClassName()).isEqualTo(ModeType.ORGANIZATION_FOLDER_MODE.getMode());
             softly.assertThat(jobResponse).usingRecursiveComparison()
                     .ignoringFieldsMatchingRegexes(".*").isEqualTo(new JobResponse());
+        });
+
+        jobController.deleteJob(ORGANIZATION_FOLDER_NAME_BY_XML_CREATED);
+    }
+
+    @Test
+    @Description("00.007.10 Create Organization folder with configurations")
+    public void testCreateWithConfigurations() {
+        OrganizationFolder organizationFolder = JobTestData.getDefaultOrganizationFolder().toBuilder()
+                .disabled(true)
+                .description(DESCRIPTION)
+                .build();
+
+        Response response = jobController.createJob(organizationFolder, ORGANIZATION_FOLDER_NAME_BY_XML_CREATED);
+
+        SoftAssertions.assertSoftly(softly -> {
+            softly.assertThat(response.statusCode()).isEqualTo(200);
+            softly.assertThat(response.time()).isLessThan(500L);
         });
 
         jobController.deleteJob(ORGANIZATION_FOLDER_NAME_BY_XML_CREATED);
