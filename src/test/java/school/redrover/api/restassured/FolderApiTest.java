@@ -30,6 +30,8 @@ public class FolderApiTest extends BaseApiTest {
     private static final String FOLDER_DESCRIPTION = "Add description to folder!";
     private static final String FOLDER_NAME_BY_XML_CREATE = "FolderCreateByXML";
     private static final String FOLDER_NAME_COPY_FROM = "FolderCopyFrom";
+    private static final String PARENT_FOLDER = "ParentFolder";
+    private static final String CHILD_FOLDER = "ChildFolder";
 
     @Test(dataProvider = "projectNames", dataProviderClass = TestDataProvider.class)
     @Story("US_00.006 Create Folder")
@@ -368,18 +370,15 @@ public class FolderApiTest extends BaseApiTest {
     @Story("US_04.002 Move Folder to Folder")
     @Description("04.002.01 Move Folder to Folder")
     public void testMoveFolderToFolder() {
-        String parentFolder = "ParentFolder";
-        String childFolder = "ChildFolder";
-
-        jobController.createJob(JobTestData.getDefaultFolder(), parentFolder);
-        jobController.createJob(JobTestData.getDefaultFolder(), childFolder);
+        jobController.createJob(JobTestData.getDefaultFolder(), PARENT_FOLDER);
+        jobController.createJob(JobTestData.getDefaultFolder(), CHILD_FOLDER);
 
         Response response = given()
                 .spec(requestSpec())
                 .contentType(ContentType.URLENC.withCharset("UTF-8"))
-                .formParam("destination", "/%s".formatted(parentFolder))
+                .formParam("destination", "/%s".formatted(PARENT_FOLDER))
                 .when()
-                .post("job/%s/move/move".formatted(childFolder))
+                .post("job/%s/move/move".formatted(CHILD_FOLDER))
                 .then()
                 .spec(responseSpec())
                 .extract().response();
@@ -387,12 +386,37 @@ public class FolderApiTest extends BaseApiTest {
         Assert.assertEquals(response.statusCode(), 302);
         Assert.assertTrue(response.time() < 600L);
 
-        Allure.step("Expected result: Project name '%s' NOT found in the list on Dashboard".formatted(childFolder));
-        Assert.assertFalse(findItemInAllProjectList(childFolder));
-        Allure.step("Expected result: Project name '%s' found in the list on Dashboard".formatted(parentFolder));
-        Assert.assertTrue(findItemInAllProjectList(parentFolder));
+        Allure.step("Expected result: Project name '%s' NOT found in the list on Dashboard".formatted(CHILD_FOLDER));
+        Assert.assertFalse(findItemInAllProjectList(CHILD_FOLDER));
+        Allure.step("Expected result: Project name '%s' found in the list on Dashboard".formatted(PARENT_FOLDER));
+        Assert.assertTrue(findItemInAllProjectList(PARENT_FOLDER));
 
-        Allure.step("Expected result: Project name '%s' found inside the Folder '%s'".formatted(childFolder, parentFolder));
-        Assert.assertTrue(findProjectByNameInsideFolder(parentFolder, childFolder));
+        Allure.step("Expected result: Project name '%s' found inside the Folder '%s'".formatted(CHILD_FOLDER, PARENT_FOLDER));
+        Assert.assertTrue(findProjectByNameInsideFolder(PARENT_FOLDER, CHILD_FOLDER));
+
+        jobController.deleteJob(PARENT_FOLDER);
+    }
+
+    @Test
+    @Story("US_04.002 Move Folder to Folder")
+    @Description("04.002.01 Move Folder with Project to Folder")
+    public void testMoveFolderWithProjectToFolder() {
+        jobController.createJob(JobTestData.getDefaultFolder(), PARENT_FOLDER);
+        jobController.createJob(JobTestData.getDefaultFolder(), CHILD_FOLDER);
+        createSeveralJobsInFolder(CHILD_FOLDER);
+
+        Response response = jobController.moveFolderToFolder(PARENT_FOLDER, CHILD_FOLDER);
+
+        Assert.assertEquals(response.statusCode(), 302);
+        Assert.assertTrue(response.time() < 600L);
+
+        SoftAssertions.assertSoftly(softly -> {
+            softly.assertThat(findItemInAllProjectList(PARENT_FOLDER)).isTrue();
+            softly.assertThat(findItemInAllProjectList(CHILD_FOLDER)).isFalse();
+            softly.assertThat(findProjectByNameInsideFolder(PARENT_FOLDER, CHILD_FOLDER)).isTrue();
+        });
+
+        jobController.deleteJob(PARENT_FOLDER);
+
     }
 }

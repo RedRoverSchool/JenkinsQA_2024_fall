@@ -2,10 +2,7 @@ package school.redrover.api.http.apache;
 
 import com.google.common.net.HttpHeaders;
 import com.google.gson.Gson;
-import io.qameta.allure.Allure;
-import io.qameta.allure.Description;
-import io.qameta.allure.Epic;
-import io.qameta.allure.Story;
+import io.qameta.allure.*;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
@@ -18,11 +15,15 @@ import org.testng.annotations.Test;
 import school.redrover.models.ProjectListResponse;
 import school.redrover.models.ProjectResponse;
 import school.redrover.runner.*;
+import school.redrover.testdata.JobTestData;
 import school.redrover.testdata.TestDataProvider;
 
 import java.io.IOException;
 
+import static school.redrover.runner.TestApiUtils.toXML;
+
 @Epic("Apache HttpClient API Requests")
+@Feature("04 Folder")
 public class FolderTest extends BaseAPIHttpTest {
     private static final String FOLDER_NAME_BY_XML_CREATED = "FolderXML";
     private static final String FOLDER_NAME = "Folder";
@@ -45,15 +46,15 @@ public class FolderTest extends BaseAPIHttpTest {
     }
 
     @Test
-    @Story("Folder")
-    @Description("003 Create Folder with valid name (XML)")
+    @Story("US_00.006 Create Folder")
+    @Description("00.006.03 Create Folder with valid name (XML)")
     public void testCreateFolderWithValidNameXML() throws IOException {
         try (CloseableHttpClient httpClient = createHttpClientWithTokenAuthAndAllureLogging()) {
             String queryString = "name=" + FOLDER_NAME_BY_XML_CREATED;
 
             HttpPost httpPost = new HttpPost(ProjectUtils.getUrl() + "/view/all/createItem?" + queryString);
 
-            httpPost.setEntity(new StringEntity(TestUtils.loadPayload("create-empty-folder.xml")));
+            httpPost.setEntity(new StringEntity(toXML(JobTestData.getDefaultFolder())));
             httpPost.addHeader(HttpHeaders.CONTENT_TYPE, "application/xml");
 
             Allure.step("Send POST request -> Create Folder");
@@ -65,8 +66,7 @@ public class FolderTest extends BaseAPIHttpTest {
                 Allure.step(String.format("Expected result: '%s' is displayed on Dashboard", FOLDER_NAME_BY_XML_CREATED));
                 Assert.assertListContainsObject(
                         TestApiHttpUtils.getAllProjectNamesFromJsonResponseList(),
-                        FOLDER_NAME_BY_XML_CREATED,
-                        "The folder is not created");
+                        FOLDER_NAME_BY_XML_CREATED, "The folder is not created");
             }
 
             Allure.step("Send GET request -> Get item by name");
@@ -102,8 +102,8 @@ public class FolderTest extends BaseAPIHttpTest {
     }
 
     @Test
-    @Story("Folder")
-    @Description("002 Create Folder with valid name")
+    @Story("US_00.006 Create Folder")
+    @Description("00.006.02 Create Folder with valid name")
     public void testCreateFolderWithValidName() throws IOException {
         try (CloseableHttpClient httpClient = createHttpClientWithTokenAuthAndAllureLogging()) {
 
@@ -152,8 +152,8 @@ public class FolderTest extends BaseAPIHttpTest {
     }
 
     @Test
-    @Story("Folder")
-    @Description("015 Create Folder with empty name")
+    @Story("US_00.006 Create Folder")
+    @Description("00.006.15 Create Folder with empty name")
     public void testCreateFolderWithEmptyName() throws IOException {
         try (CloseableHttpClient httpclient = createHttpClientWithTokenAuthAndAllureLogging()) {
 
@@ -172,8 +172,8 @@ public class FolderTest extends BaseAPIHttpTest {
     }
 
     @Test
-    @Story("Folder")
-    @Description("016 Create Folder by copy from another folder")
+    @Story("US_00.006 Create Folder")
+    @Description("00.006.16 Create Folder by copy from another folder")
     public void testCreateFolderCopyFrom() throws IOException {
         try (CloseableHttpClient httpClient = createHttpClientWithTokenAuthAndAllureLogging()) {
 
@@ -235,8 +235,8 @@ public class FolderTest extends BaseAPIHttpTest {
     }
 
     @Test(dataProvider = "providerUnsafeCharacters", dataProviderClass = TestDataProvider.class)
-    @Story("Folder")
-    @Description("017 Create Folder with unsafe character")
+    @Story("US_00.006 Create Folder")
+    @Description("00.006.17 Create Folder with unsafe character")
     public void testCreateFolderWithUnsafeCharacter(String unsafeCharacter) throws IOException {
         try (CloseableHttpClient httpClient = createHttpClientWithTokenAuthAndAllureLogging()) {
 
@@ -257,8 +257,8 @@ public class FolderTest extends BaseAPIHttpTest {
     }
 
     @Test(dependsOnMethods = "testCreateFolderWithValidName")
-    @Story("Folder")
-    @Description("008 Rename Folder")
+    @Story("US_04.001 Rename Folder")
+    @Description("04.001.08 Rename Folder")
     public void testRenameFolder() throws IOException {
         try (CloseableHttpClient httpClient = createHttpClientWithTokenAuthAndAllureLogging()) {
 
@@ -280,8 +280,8 @@ public class FolderTest extends BaseAPIHttpTest {
     }
 
     @Test()
-    @Story("Folder")
-    @Description("007 Add Description to Folder")
+    @Story("US_04.004 Add and edit description of the folder")
+    @Description("04.004.07 Add Description to Folder")
     public void testAddDescriptionToFolder() throws IOException {
         String description = "Add description to folder!";
         try (CloseableHttpClient httpClient = createHttpClientWithTokenAuthAndAllureLogging()) {
@@ -326,8 +326,8 @@ public class FolderTest extends BaseAPIHttpTest {
     }
 
     @Test(dependsOnMethods = "testCreateFolderWithValidNameXML")
-    @Story("Folder")
-    @Description("004 Delete Folder")
+    @Story("US_04.003 Delete Folder")
+    @Description("04.003.04 Delete Folder")
     public void testDeleteFolder() throws IOException {
         try (CloseableHttpClient httpClient = createHttpClientWithTokenAuthAndAllureLogging()) {
 
