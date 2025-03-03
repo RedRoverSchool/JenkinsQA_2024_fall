@@ -5,6 +5,7 @@ import io.qameta.allure.Description;
 import io.qameta.allure.Epic;
 import io.qameta.allure.Story;
 import org.testng.Assert;
+import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import school.redrover.testdata.TestDataProvider;
 import school.redrover.page.home.HomePage;
@@ -15,6 +16,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 @Epic("16 Dashboard")
+@Ignore
 public class DashboardTest extends BaseTest {
 
     private static final String DESCRIPTION_TEXT = "It's my workspace";

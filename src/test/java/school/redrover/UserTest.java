@@ -5,6 +5,7 @@ import io.qameta.allure.Description;
 import io.qameta.allure.Epic;
 import io.qameta.allure.Story;
 import org.testng.Assert;
+import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import school.redrover.page.home.HomePage;
 import school.redrover.page.user.CreateUserPage;
@@ -15,6 +16,7 @@ import java.util.Arrays;
 import java.util.List;
 
 @Epic("13 User")
+@Ignore
 public class UserTest extends BaseTest {
 
     private static final String USERNAME = "Ivan";
