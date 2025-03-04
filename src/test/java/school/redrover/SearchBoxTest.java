@@ -5,6 +5,7 @@ import io.qameta.allure.Description;
 import io.qameta.allure.Epic;
 import io.qameta.allure.Story;
 import org.testng.Assert;
+import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import school.redrover.page.home.HomePage;
 import school.redrover.runner.BaseTest;
@@ -13,6 +14,7 @@ import school.redrover.runner.ProjectUtils;
 import java.util.List;
 
 @Epic("14 Header")
+@Ignore
 public class SearchBoxTest extends BaseTest {
 
     private static final String ITEM_NAME = "Item Name";

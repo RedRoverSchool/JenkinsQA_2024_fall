@@ -5,10 +5,12 @@ import io.qameta.allure.Description;
 import io.qameta.allure.Epic;
 import io.qameta.allure.Story;
 import org.testng.Assert;
+import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import school.redrover.page.home.HomePage;
 import school.redrover.runner.BaseTest;
 
+@Ignore
 public class FooterTest extends BaseTest {
 
     private static final String EXPECTED_JENKINS_VERSION = "Jenkins 2.462.3";

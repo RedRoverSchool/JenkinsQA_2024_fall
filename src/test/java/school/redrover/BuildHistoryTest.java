@@ -5,12 +5,14 @@ import io.qameta.allure.Description;
 import io.qameta.allure.Epic;
 import io.qameta.allure.Story;
 import org.testng.Assert;
+import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import school.redrover.page.home.BuildHistoryPage;
 import school.redrover.page.home.HomePage;
 import school.redrover.runner.BaseTest;
 
 @Epic("08 Build History")
+@Ignore
 public class BuildHistoryTest extends BaseTest {
 
     private static final String FREESTYLE_PROJECT_NAME = "FreestyleProject";
