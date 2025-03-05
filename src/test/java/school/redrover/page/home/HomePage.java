@@ -45,9 +45,6 @@ public class HomePage extends BasePage<HomePage> {
     @FindBy(xpath = "//button[@data-id='ok']")
     private WebElement yesButton;
 
-    @FindBy(xpath = "//p[contains(text(), 'This page is where')]")
-    private WebElement headerDescription;
-
     @FindBy(xpath = "//div[@class='empty-state-block']/h1")
     private WebElement welcomeTitle;
 
