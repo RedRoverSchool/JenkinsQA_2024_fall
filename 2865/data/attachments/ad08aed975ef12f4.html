@@ -1,0 +1,129 @@
+<div>
+    POST to
+    http://localhost:8080/createItem?name=OrganizationFolderName
+</div>
+
+    <h3>Body</h3>
+    <div>
+        <pre class="preformated-text">
+&lt;jenkins.branch.OrganizationFolder plugin=&quot;branch-api@2.1197.vfa_d0c47c267d&quot;&gt;
+  &lt;actions&gt;
+    &lt;someField/&gt;
+  &lt;/actions&gt;
+  &lt;description&gt;ProjectDescription&lt;/description&gt;
+  &lt;properties&gt;
+    &lt;jenkins.branch.OrganizationChildHealthMetricsProperty/&gt;
+    &lt;jenkins.branch.OrganizationChildOrphanedItemsProperty/&gt;
+    &lt;jenkins.branch.OrganizationChildTriggersProperty/&gt;
+    &lt;jenkins.branch.NoTriggerOrganizationFolderProperty/&gt;
+  &lt;/properties&gt;
+  &lt;folderViews&gt;
+    &lt;class&gt;com.cloudbees.hudson.plugins.folder.views.DefaultFolderViewHolder&lt;/class&gt;
+    &lt;plugin&gt;branch-api@2.1197.vfa_d0c47c267d&lt;/plugin&gt;
+    &lt;owner&gt;
+      &lt;class&gt;org.jenkinsci.plugins.workflow.multibranch.WorkflowMultiBranchProject&lt;/class&gt;
+      &lt;reference&gt;../../../..&lt;/reference&gt;
+    &lt;/owner&gt;
+  &lt;/folderViews&gt;
+  &lt;healthMetrics/&gt;
+  &lt;icon&gt;
+    &lt;class&gt;com.cloudbees.hudson.plugins.folder.icons.StockFolderIcon&lt;/class&gt;
+    &lt;plugin&gt;branch-api@2.1197.vfa_d0c47c267d&lt;/plugin&gt;
+    &lt;owner&gt;
+      &lt;class&gt;org.jenkinsci.plugins.workflow.multibranch.WorkflowMultiBranchProject&lt;/class&gt;
+      &lt;reference&gt;../../../..&lt;/reference&gt;
+    &lt;/owner&gt;
+  &lt;/icon&gt;
+  &lt;orphanedItemStrategy plugin=&quot;cloudbees-folder@6.955.v81e2a_35c08d3&quot;&gt;
+    &lt;class&gt;com.cloudbees.hudson.plugins.folder.computed.DefaultOrphanedItemStrategy&lt;/class&gt;
+    &lt;pruneDeadBranches&gt;true&lt;/pruneDeadBranches&gt;
+    &lt;daysToKeep&gt;-1&lt;/daysToKeep&gt;
+    &lt;numToKeep&gt;-1&lt;/numToKeep&gt;
+    &lt;abortBuilds&gt;false&lt;/abortBuilds&gt;
+  &lt;/orphanedItemStrategy&gt;
+  &lt;triggers/&gt;
+  &lt;navigators/&gt;
+  &lt;projectFactories&gt;
+    &lt;org.jenkinsci.plugins.workflow.multibranch.WorkflowMultiBranchProjectFactory&gt;
+      &lt;scriptPath&gt;Jenkinsfile&lt;/scriptPath&gt;
+    &lt;/org.jenkinsci.plugins.workflow.multibranch.WorkflowMultiBranchProjectFactory&gt;
+  &lt;/projectFactories&gt;
+  &lt;buildStrategies/&gt;
+  &lt;strategy&gt;
+    &lt;properties/&gt;
+  &lt;/strategy&gt;
+  &lt;disabled&gt;true&lt;/disabled&gt;
+&lt;/jenkins.branch.OrganizationFolder&gt;        </pre>
+    </div>
+
+    <h3>Headers</h3>
+    <div>
+            <div>
+                    Cookie: ****
+            </div>
+            <div>
+                    Jenkins-Crumb: ****
+            </div>
+            <div>
+                    Accept: */*
+            </div>
+            <div>
+                    Content-Type: application/xml; charset=ISO-8859-1
+            </div>
+    </div>
+
+
+
+    <h3>Curl</h3>
+    <div>
+        curl -v -X POST &#39;http://localhost:8080/createItem?name=OrganizationFolderName&#39; -H &#39;Cookie: *****&#39; -H &#39;Jenkins-Crumb: *****&#39; -H &#39;Accept: */*&#39; -H &#39;Content-Type: application/xml; charset=ISO-8859-1&#39; -d &#39;&lt;jenkins.branch.OrganizationFolder plugin=&quot;branch-api@2.1197.vfa_d0c47c267d&quot;&gt;
+  &lt;actions&gt;
+    &lt;someField/&gt;
+  &lt;/actions&gt;
+  &lt;description&gt;ProjectDescription&lt;/description&gt;
+  &lt;properties&gt;
+    &lt;jenkins.branch.OrganizationChildHealthMetricsProperty/&gt;
+    &lt;jenkins.branch.OrganizationChildOrphanedItemsProperty/&gt;
+    &lt;jenkins.branch.OrganizationChildTriggersProperty/&gt;
+    &lt;jenkins.branch.NoTriggerOrganizationFolderProperty/&gt;
+  &lt;/properties&gt;
+  &lt;folderViews&gt;
+    &lt;class&gt;com.cloudbees.hudson.plugins.folder.views.DefaultFolderViewHolder&lt;/class&gt;
+    &lt;plugin&gt;branch-api@2.1197.vfa_d0c47c267d&lt;/plugin&gt;
+    &lt;owner&gt;
+      &lt;class&gt;org.jenkinsci.plugins.workflow.multibranch.WorkflowMultiBranchProject&lt;/class&gt;
+      &lt;reference&gt;../../../..&lt;/reference&gt;
+    &lt;/owner&gt;
+  &lt;/folderViews&gt;
+  &lt;healthMetrics/&gt;
+  &lt;icon&gt;
+    &lt;class&gt;com.cloudbees.hudson.plugins.folder.icons.StockFolderIcon&lt;/class&gt;
+    &lt;plugin&gt;branch-api@2.1197.vfa_d0c47c267d&lt;/plugin&gt;
+    &lt;owner&gt;
+      &lt;class&gt;org.jenkinsci.plugins.workflow.multibranch.WorkflowMultiBranchProject&lt;/class&gt;
+      &lt;reference&gt;../../../..&lt;/reference&gt;
+    &lt;/owner&gt;
+  &lt;/icon&gt;
+  &lt;orphanedItemStrategy plugin=&quot;cloudbees-folder@6.955.v81e2a_35c08d3&quot;&gt;
+    &lt;class&gt;com.cloudbees.hudson.plugins.folder.computed.DefaultOrphanedItemStrategy&lt;/class&gt;
+    &lt;pruneDeadBranches&gt;true&lt;/pruneDeadBranches&gt;
+    &lt;daysToKeep&gt;-1&lt;/daysToKeep&gt;
+    &lt;numToKeep&gt;-1&lt;/numToKeep&gt;
+    &lt;abortBuilds&gt;false&lt;/abortBuilds&gt;
+  &lt;/orphanedItemStrategy&gt;
+  &lt;triggers/&gt;
+  &lt;navigators/&gt;
+  &lt;projectFactories&gt;
+    &lt;org.jenkinsci.plugins.workflow.multibranch.WorkflowMultiBranchProjectFactory&gt;
+      &lt;scriptPath&gt;Jenkinsfile&lt;/scriptPath&gt;
+    &lt;/org.jenkinsci.plugins.workflow.multibranch.WorkflowMultiBranchProjectFactory&gt;
+  &lt;/projectFactories&gt;
+  &lt;buildStrategies/&gt;
+  &lt;strategy&gt;
+    &lt;properties/&gt;
+  &lt;/strategy&gt;
+  &lt;disabled&gt;true&lt;/disabled&gt;
+&lt;/jenkins.branch.OrganizationFolder&gt;&#39;
+    </div>
+
+
