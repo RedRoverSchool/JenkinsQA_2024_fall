@@ -18,7 +18,6 @@ import java.util.List;
 @Epic("16 Dashboard")
 public class DashboardTest extends BaseTest {
 
-    //testPossibilityOfCreatingNewItemFromBreadcrumbBar
     private static final String DESCRIPTION_TEXT = "It's my workspace";
     private static final String NEW_TEXT = "Hello! ";
     private static final String TEXT_DESCRIPTION_BUTTON = "Add description";

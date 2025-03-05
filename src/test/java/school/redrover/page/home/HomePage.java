@@ -135,7 +135,7 @@ public class HomePage extends BasePage<HomePage> {
     @FindBy(xpath = "//td[text()= 'No builds in the queue.' ]")
     private WebElement buildQueueText;
 
-    @FindBy(xpath = "//div[@class='tippy-box']//a")
+    @FindBy(xpath = "//div[@class='jenkins-dropdown']//a")
     private List<WebElement> breadcrumbBarMenuList;
 
     @FindBy(xpath = "//div[@id='executors']/div[@class='pane-header']/a")
@@ -143,6 +143,9 @@ public class HomePage extends BasePage<HomePage> {
 
     @FindBy(xpath = "div[@id='executors']/div[@class='pane-content']/div/div/a")
     private List<WebElement> nodeList;
+
+    @FindBy(xpath = "//div[@id='breadcrumbBar']//a/button")
+    private WebElement dashboardChevron;
 
     public HomePage(WebDriver driver) {
         super(driver);
@@ -565,15 +568,14 @@ public class HomePage extends BasePage<HomePage> {
     public HomePage selectBreadcrumbBarMenu() {
         new Actions(getDriver()).moveToElement(getDriver().findElement(By.xpath("//div[@id='breadcrumbBar']//a"))).perform();
 
-        TestUtils.moveAndClickWithJS(getDriver(), getWait5().until(ExpectedConditions.visibilityOfElementLocated(
-                By.xpath("//div[@id='breadcrumbBar']//a/button"))));
+        TestUtils.moveAndClickWithJS(getDriver(), getWait10().until(ExpectedConditions.visibilityOf(dashboardChevron)));
 
         return this;
     }
 
     @Step("Get BreadcrumbBar menu list")
     public List<WebElement> getBreadcrumbBarMenuList() {
-        return breadcrumbBarMenuList;
+        return getWait10().until(ExpectedConditions.visibilityOfAllElements(breadcrumbBarMenuList));
     }
 
     @Step("Get the list of Node names from the 'Build Executors Status' block on the Home page")
