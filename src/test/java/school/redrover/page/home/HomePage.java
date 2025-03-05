@@ -69,9 +69,6 @@ public class HomePage extends BasePage<HomePage> {
     @FindBy(xpath = "//a[contains(@href,'/user/admin/preferences')]")
     private WebElement preferencesAdminDropdown;
 
-    @FindBy(xpath = "//*[@href='/user/admin']")
-    private WebElement admin;
-
     @FindBy(xpath = "//a[contains(@href,'/user/admin/credentials')]")
     private WebElement credentialsDropdown;
 
