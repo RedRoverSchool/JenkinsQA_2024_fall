@@ -60,8 +60,8 @@ public class HomePage extends BasePage<HomePage> {
     @FindBy(xpath = "//tr/td/a[@class='jenkins-table__link model-link inside']")
     private List<WebElement> projectList;
 
-    @FindBy(xpath = "//div[@class='tippy-content']")
-    private WebElement buildScheduledTooltip;
+    @FindBy(xpath = "//div[@id='notification-bar']")
+    private WebElement buildScheduledNotificationBar;
 
     @FindBy(xpath = "(//button[@class='jenkins-menu-dropdown-chevron'])[1]")
     private WebElement adminDropdown;
@@ -362,8 +362,8 @@ public class HomePage extends BasePage<HomePage> {
         getWait10().until(ExpectedConditions.visibilityOf(getDriver().findElement(
                         By.xpath("//td[@class='jenkins-table__cell--tight']//a[@tooltip='Schedule a Build for %s']".formatted(name)))))
                 .click();
-        getWait10().until(ExpectedConditions.visibilityOf(buildScheduledTooltip));
-        getWait10().until(ExpectedConditions.invisibilityOf(buildScheduledTooltip));
+        getWait10().until(ExpectedConditions.attributeContains(buildScheduledNotificationBar, "class", "--visible"));
+        getWait10().until(ExpectedConditions.attributeContains(buildScheduledNotificationBar, "class", "--hidden"));
 
         return this;
     }
