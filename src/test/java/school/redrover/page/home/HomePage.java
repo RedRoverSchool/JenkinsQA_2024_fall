@@ -69,8 +69,8 @@ public class HomePage extends BasePage<HomePage> {
     @FindBy(xpath = "(//button[@class='jenkins-menu-dropdown-chevron'])[1]")
     private WebElement adminDropdown;
 
-    @FindBy(xpath = "//a[contains(@href,'/user/admin/configure')]")
-    private WebElement configureAdminDropdown;
+    @FindBy(xpath = "//a[contains(@href,'/user/admin/preferences')]")
+    private WebElement preferencesAdminDropdown;
 
     @FindBy(xpath = "//*[@href='/user/admin']")
     private WebElement admin;
@@ -542,8 +542,8 @@ public class HomePage extends BasePage<HomePage> {
     }
 
     @Step("Click 'Configure' at user dropdown menu")
-    public UserConfigPage clickConfigureAdminDropdownMenu() {
-        getWait2().until(ExpectedConditions.elementToBeClickable(configureAdminDropdown)).click();
+    public UserConfigPage clickPreferencesAdminDropdownMenu() {
+        getWait5().until(ExpectedConditions.elementToBeClickable(preferencesAdminDropdown)).click();
 
         return new UserConfigPage(getDriver());
     }

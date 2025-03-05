@@ -5,7 +5,6 @@ import io.qameta.allure.Description;
 import io.qameta.allure.Epic;
 import io.qameta.allure.Story;
 import org.testng.Assert;
-import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import school.redrover.testdata.TestDataProvider;
 import school.redrover.page.home.HomePage;
@@ -15,9 +14,14 @@ import school.redrover.runner.TestUtils;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+
 @Epic("16 Dashboard")
-@Ignore
 public class DashboardTest extends BaseTest {
+
+    //testGetStatusIDDescription
+    //testPossibilityOfCreatingNewItemFromBreadcrumbBar
+    //testVerifyProjectOrderByStatusASCByDefault
+
 
     private static final String DESCRIPTION_TEXT = "It's my workspace";
     private static final String NEW_TEXT = "Hello! ";
@@ -204,7 +208,7 @@ public class DashboardTest extends BaseTest {
     public void testGetStatusIDDescription() {
         String adminDescription = new HomePage(getDriver())
                 .openAdminDropdownMenu()
-                .clickConfigureAdminDropdownMenu()
+                .clickPreferencesAdminDropdownMenu()
                 .clickStatusSidebar()
                 .getUserIDText();
 
