@@ -17,7 +17,7 @@ public class FreestyleProjectPage extends BaseProjectPage<FreestyleProjectPage, 
     @FindBy(xpath = "//div[@id='jenkins-build-history']/div/div[1]/div/a")
     private WebElement lastBuildNumber;
 
-    @FindBy(xpath = "//tbody/tr[2]/td/div[2]/a")
+    @FindBy(xpath = "//div[@id='jenkins-build-history']/div/div/div/a/span/div")
     private WebElement lastBuildDateTime;
 
     @FindBy(tagName = "h1")

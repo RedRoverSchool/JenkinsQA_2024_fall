@@ -458,7 +458,7 @@ public class FreestyleProjectTest extends BaseTest {
     public void testTotalBuildTimeForProjectsBuild() {
         TestUtils.createFreestyleProject(getDriver(), PROJECT_NAME);
 
-        int lastBuildTotalTime = new HomePage(getDriver())
+        double lastBuildTotalTime = new HomePage(getDriver())
                 .openFreestyleProject(PROJECT_NAME)
                 .clickBuildNowSidebarAndWaite()
                 .clickLastBuildDateTime()

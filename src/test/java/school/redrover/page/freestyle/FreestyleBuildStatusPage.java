@@ -14,8 +14,8 @@ public class FreestyleBuildStatusPage extends BasePage<FreestyleBuildStatusPage>
         super(driver);
     }
 
-    public int getLastBuildTotalTime(){
+    public double getLastBuildTotalTime(){
         String [] array = totalBuildTime.getText().split(" ");
-        return Integer.parseInt(array[0]);
+        return Double.parseDouble(array[0]);
     }
 }
