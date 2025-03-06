@@ -20,10 +20,16 @@ public class UserConfigPage extends BasePage<UserConfigPage> {
     @FindBy(xpath = "//span[contains(@class,'task-link-wrapper')]/a[@href='/user/admin/']")
     private WebElement statusSidebarButton;
 
-    @FindBy (xpath = "//textarea[@name='_.description']")
+    @FindBy(xpath = "//span[text()='Account']/..")
+    private WebElement accountSidebarButton;
+
+    @FindBy(xpath = "//a[@id='description-link']")
+    private WebElement descriptionButton;
+
+    @FindBy (xpath = "//textarea[@name='description']")
     private WebElement descriptionField;
 
-    @FindBy (xpath = "//button[@name='Submit'] ")
+    @FindBy (xpath = "//button[@name='Submit']")
     private WebElement submitButton;
 
     @FindBy (xpath = "//select[@checkdependson='timeZoneName']")
@@ -47,6 +53,7 @@ public class UserConfigPage extends BasePage<UserConfigPage> {
     }
 
     public UserConfigPage enterDescription (String description) {
+        descriptionButton.click();
         descriptionField.sendKeys(description);
         return this;
     }
@@ -57,12 +64,19 @@ public class UserConfigPage extends BasePage<UserConfigPage> {
         return new UserPage(getDriver());
     }
 
+    @Step("Click 'Account' at sidebar")
+    public UserConfigPage clickAccountSidebar() {
+        getWait5().until(ExpectedConditions.elementToBeClickable(accountSidebarButton)).click();
+
+        return this;
+    }
+
     @Step("Add user time zone")
-    public UserPage addUserTimeZone() {
+    public UserConfigPage addUserTimeZone(String value) {
         Select timeZone = new Select(selectTimeZone);
-        timeZone.selectByValue("Etc/GMT+2");
+        timeZone.selectByValue(value);
         submitButton.click();
-        return new UserPage(getDriver());
+        return new UserConfigPage(getDriver());
     }
 
     @Step("Get user time zone")
