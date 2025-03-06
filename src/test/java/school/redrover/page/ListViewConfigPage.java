@@ -23,25 +23,31 @@ public class ListViewConfigPage extends BasePage<ListViewConfigPage> {
     @FindBy(xpath = "//div[@class = 'tabBar']//a")
     private List<WebElement> viewsList;
 
+    @FindBy(xpath = "//button[@suffix='jobFilters']")
+    private WebElement addJobFilterButton;
+
+    @FindBy(xpath = "//button[@name='Submit']")
+    private WebElement saveButton;
+
     public ListViewConfigPage(WebDriver driver) {
         super(driver);
     }
 
     public ListViewConfigPage selectJobCheckBoxByName(String name) {
-        getWait2().until(ExpectedConditions.elementToBeClickable(By.xpath("//label[@title='%s']".formatted(name)))).click();
+        getWait2().until(ExpectedConditions.elementToBeClickable(By.xpath("//label[text()='%s']".formatted(name)))).click();
 
         return this;
     }
 
     @Step("Click 'Ok' button")
     public ViewPage clickOkButton() {
-        getDriver().findElement(By.xpath("//button[@name='Submit']")).click();
+        saveButton.click();
 
         return new ViewPage(getDriver());
     }
 
     public ListViewConfigPage clickDeleteColumnByName(String name) {
-        TestUtils.scrollToBottomWithJS(getDriver());
+        TestUtils.scrollToElementWithJS(getDriver(), addJobFilterButton);
 
         WebElement columnOption = columnList
                 .stream()
@@ -52,8 +58,7 @@ public class ListViewConfigPage extends BasePage<ListViewConfigPage> {
         WebElement closeButton = columnOption.findElement(By.xpath(".//button"));
         closeButton.click();
 
-        getWait10().until(ExpectedConditions.numberOfElementsToBe(
-                By.xpath("//div[@class='repeated-chunk__header']"), 6));
+        getWait10().until(driver -> columnList.size() == 6);
 
         return this;
     }

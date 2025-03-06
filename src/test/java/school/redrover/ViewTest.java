@@ -5,7 +5,6 @@ import io.qameta.allure.Description;
 import io.qameta.allure.Epic;
 import io.qameta.allure.Story;
 import org.testng.Assert;
-import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import school.redrover.page.home.HomePage;
 import school.redrover.page.NewViewPage;
@@ -15,7 +14,6 @@ import school.redrover.runner.TestUtils;
 import java.util.List;
 import java.util.Map;
 
-@Ignore
 public class ViewTest extends BaseTest {
 
     private static final String PIPELINE_NAME = "PipelineName";

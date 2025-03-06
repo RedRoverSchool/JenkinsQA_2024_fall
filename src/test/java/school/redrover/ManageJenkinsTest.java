@@ -6,7 +6,6 @@ import io.qameta.allure.Epic;
 import io.qameta.allure.Story;
 import org.openqa.selenium.WebElement;
 import org.testng.Assert;
-import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import school.redrover.testdata.TestDataProvider;
 import school.redrover.page.home.HomePage;
@@ -18,7 +17,6 @@ import school.redrover.runner.ProjectUtils;
 import java.util.List;
 
 @Epic("09 Manage Jenkins")
-@Ignore
 public class ManageJenkinsTest extends BaseTest {
 
     @Test

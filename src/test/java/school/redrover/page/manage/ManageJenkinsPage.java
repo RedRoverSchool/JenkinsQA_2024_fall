@@ -47,10 +47,10 @@ public class ManageJenkinsPage extends BasePage<ManageJenkinsPage> {
     @FindBy(css = "input[id=settings-search-bar]")
     private WebElement searchFieldForPressEnter;
 
-    @FindBy(css = "[class='jenkins-search__shortcut']")
+    @FindBy(id = "button-open-command-palette")
     private WebElement tooltip;
 
-    @FindBy(xpath = "//div[@aria-describedby='tippy-6']")
+    @FindBy(xpath = "//button[@aria-describedby='tippy-6']")
     private WebElement hiddenTooltipValue;
 
     @FindBy(xpath = "//div[@class='jenkins-search__results']//a")
