@@ -35,14 +35,14 @@ public class FooterComponent<T extends BasePage<T>> extends BaseComponent<T> {
 
     @Step("Click 'About Jenkins' option in dropdown menu of Jenkins version number")
     public AboutPage gotoAboutPage() {
-        getWait2().until(ExpectedConditions.visibilityOf(aboutJenkinsButton)).click();
+        getWait5().until(ExpectedConditions.visibilityOf(aboutJenkinsButton)).click();
 
         return new AboutPage(getDriver());
     }
 
     @Step("Get 'About Jenkins' option in dropdown menu of Jenkins version number")
     public String getAboutJenkinsDropdownLabelText() {
-        return getWait2().until(ExpectedConditions.visibilityOf(aboutJenkinsButton)).getText();
+        return getWait5().until(ExpectedConditions.visibilityOf(aboutJenkinsButton)).getText();
     }
 
 }
