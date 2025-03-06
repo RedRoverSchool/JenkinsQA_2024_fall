@@ -14,29 +14,35 @@ public class FreestyleProjectPage extends BaseProjectPage<FreestyleProjectPage, 
     @FindBy(tagName = "h1")
     private WebElement projectName;
 
-    @FindBy(xpath = "//tbody//tr[2]//td//a[contains(@class, 'display-name')]")
+    @FindBy(xpath = "//div[@id='jenkins-build-history']/div/div[1]/div/a")
     private WebElement lastBuildNumber;
 
-    @FindBy(xpath = "//tbody/tr[2]/td/div[2]/a")
+    @FindBy(xpath = "//div[@id='jenkins-build-history']/div/div/div/a/span/div")
     private WebElement lastBuildDateTime;
 
     @FindBy(tagName = "h1")
     private WebElement workspaceTitle;
 
-    @FindBy(xpath = "//tr")
+    @FindBy(xpath = "//div[@id='jenkins-build-history']/div/div")
     private List<WebElement> listOfBuilds;
 
-    @FindBy(tagName = "dialog")
-    private List<WebElement> wipeOutCurrentWorkspaceDialog;
+    @FindBy(xpath = "//dialog[@class='jenkins-dialog']")
+    private WebElement wipeOutCurrentWorkspaceDialog;
 
-    @FindBy(css = "dialog *")
+    @FindBy(xpath = "//dialog[@class='jenkins-dialog']/*")
     private List<WebElement> wipeOutCurrentWorkspaceDialogOptions;
+
+    @FindBy(xpath = "//dialog[@class='jenkins-dialog']/div/button")
+    private List<WebElement> wipeOutCurrentWorkspaceDialogOptionsButtons;
 
     @FindBy(xpath = "//a[@data-build-success='Build scheduled']")
     private WebElement buildNowSidebar;
 
-    @FindBy(xpath = "//tbody//tr[2]//a")
+    @FindBy(xpath = "//div[@id='jenkins-build-history']/div/div[1]/a")
     private WebElement lastBuildSuccessBuildIcon;
+
+    @FindBy(xpath = "//span[text()='Build scheduled']")
+    private WebElement buildScheduledTooltip;
 
     @FindBy(xpath = "//button[@data-id='ok']")
     private WebElement yesButton;
@@ -103,27 +109,41 @@ public class FreestyleProjectPage extends BaseProjectPage<FreestyleProjectPage, 
     }
 
     @Step("Click 'Build Now' sidebar")
-    public FreestyleProjectPage clickBuildNowSidebar() {
+    public FreestyleProjectPage clickBuildNowSidebarAndWaite() {
         getWait5().until(ExpectedConditions.elementToBeClickable(buildNowSidebar)).click();
+        getWait10().until(ExpectedConditions.visibilityOf(buildScheduledTooltip));
 
         return this;
     }
 
     public List<String> getListOfBuilds() {
-        return getWait5().until(ExpectedConditions.visibilityOfAllElements(listOfBuilds))
+        return getWait10().until(ExpectedConditions.visibilityOfAllElements(listOfBuilds))
                 .stream()
                 .map(WebElement::getText)
                 .toList();
     }
 
-    public boolean verifyConfirmationDialogOptionsPresence(List<String> dialogOptions) {
-        getWait10().until(ExpectedConditions.visibilityOfAllElements(wipeOutCurrentWorkspaceDialog));
+    public boolean verifyConfirmationDialogOptionsPresenceText(List<String> dialogOptions) {
+        getWait10().until(ExpectedConditions.visibilityOf(wipeOutCurrentWorkspaceDialog));
         List<String> confirmationDialogOptions = wipeOutCurrentWorkspaceDialogOptions.stream()
                 .map(WebElement::getText)
                 .toList();
 
         for (String option : dialogOptions) {
             if (!confirmationDialogOptions.contains(option))
+                return false;
+        }
+        return true;
+    }
+
+    public boolean verifyConfirmationDialogButtonsName(List<String> dialogOptionButtonName) {
+        getWait10().until(ExpectedConditions.visibilityOf(wipeOutCurrentWorkspaceDialog));
+        List<String> confirmationDialogButton = wipeOutCurrentWorkspaceDialogOptionsButtons.stream()
+                .map(WebElement::getText)
+                .toList();
+
+        for (String button : dialogOptionButtonName) {
+            if (!confirmationDialogButton.contains(button))
                 return false;
         }
         return true;
