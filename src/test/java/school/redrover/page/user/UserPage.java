@@ -12,9 +12,6 @@ public class UserPage extends BasePage<UserPage> {
     @FindBy(xpath = "//a[@href='/user/admin/configure']")
     private WebElement configureAdminSidebar;
 
-    @FindBy(css = "a[href*='configure']")
-    private WebElement configureUserSidebar;
-
     @FindBy(xpath = "//div[@id='main-panel']/div[3]")
     private WebElement adminDescription;
 
@@ -23,13 +20,6 @@ public class UserPage extends BasePage<UserPage> {
 
     public UserPage(WebDriver driver) {
         super(driver);
-    }
-
-    @Step("Click configure user sidebar")
-    public UserConfigPage clickConfigureUserSidebar() {
-        getWait2().until(ExpectedConditions.elementToBeClickable(configureUserSidebar)).click();
-
-        return new UserConfigPage(getDriver());
     }
 
     @Step("Get user ID text")
