@@ -1,9 +1,6 @@
 package school.redrover;
 
-import io.qameta.allure.Allure;
-import io.qameta.allure.Description;
-import io.qameta.allure.Epic;
-import io.qameta.allure.Story;
+import io.qameta.allure.*;
 import org.openqa.selenium.WebElement;
 import org.testng.Assert;
 import org.testng.annotations.Test;
@@ -14,7 +11,7 @@ import school.redrover.runner.TestUtils;
 
 import java.util.List;
 
-@Epic("05 Multibranch pipeline")
+@Feature("05 Multibranch pipeline")
 public class MultibranchPipelineTest extends BaseTest {
 
     private static final String MULTIBRANCH_PIPELINE_NAME = "MultibranchName";
@@ -23,7 +20,7 @@ public class MultibranchPipelineTest extends BaseTest {
     @Test
     @Epic("00 New Item")
     @Story("US_00.005 Create Multibranch Pipeline")
-    @Description("TC_00.005.01 Create Multiconfiguration project with left sidebar button")
+    @Description("TC_00.005.01 Create Multibranch Pipeline with left sidebar button")
     public void testCreate() {
         List<String> projectList = new HomePage(getDriver())
                 .clickNewItem()
@@ -118,7 +115,7 @@ public class MultibranchPipelineTest extends BaseTest {
 
     @Test
     @Story("US_05.001 Multibranch pipeline")
-    @Description("TC_05.001.03 Rename its title using dropdown on the dashboard  (EM)")
+    @Description("TC_05.001.03 Rename its title using dropdown on the dashboard (EM)")
     public void testRenameProjectViaDashboardChevron() {
         TestUtils.createMultiBranchPipeline(getDriver(), MULTIBRANCH_PIPELINE_NAME);
 
@@ -177,21 +174,13 @@ public class MultibranchPipelineTest extends BaseTest {
     }
 
     @Test
+    @Epic("00 New Item")
+    @Story("US_00.005 Create Multibranch Pipeline")
     public void testCreateJobAndDisplayAmongOtherJobsOnStartPage() {
+        TestUtils.createPipelineProject(getDriver(), MULTIBRANCH_PIPELINE_NAME);
+        TestUtils.createPipelineProject(getDriver(), MULTIBRANCH_PIPELINE_NAME2);
 
         List<String> jobNames = new HomePage(getDriver())
-                .clickNewItem()
-                .enterItemName(MULTIBRANCH_PIPELINE_NAME)
-                .selectMultibranchPipelineAndClickOk()
-                .clickSaveButton()
-                .getHeader()
-                .gotoHomePage()
-                .clickNewItem()
-                .enterItemName(MULTIBRANCH_PIPELINE_NAME2)
-                .selectMultibranchPipelineAndClickOk()
-                .clickSaveButton()
-                .getHeader()
-                .gotoHomePage()
                 .getItemList();
 
         Assert.assertListContainsObject(jobNames, MULTIBRANCH_PIPELINE_NAME2, MULTIBRANCH_PIPELINE_NAME2);
