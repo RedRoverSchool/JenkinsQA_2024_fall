@@ -14,7 +14,7 @@ public class FreestyleProjectPage extends BaseProjectPage<FreestyleProjectPage, 
     @FindBy(tagName = "h1")
     private WebElement projectName;
 
-    @FindBy(xpath = "//tbody//tr[2]//td//a[contains(@class, 'display-name')]")
+    @FindBy(xpath = "//div[@id='jenkins-build-history']/div/div[1]/div/a")
     private WebElement lastBuildNumber;
 
     @FindBy(xpath = "//tbody/tr[2]/td/div[2]/a")
@@ -23,7 +23,7 @@ public class FreestyleProjectPage extends BaseProjectPage<FreestyleProjectPage, 
     @FindBy(tagName = "h1")
     private WebElement workspaceTitle;
 
-    @FindBy(xpath = "//tr")
+    @FindBy(xpath = "//div[@id='jenkins-build-history']/div/div")
     private List<WebElement> listOfBuilds;
 
     @FindBy(tagName = "dialog")
@@ -114,7 +114,7 @@ public class FreestyleProjectPage extends BaseProjectPage<FreestyleProjectPage, 
     }
 
     public List<String> getListOfBuilds() {
-        return getWait5().until(ExpectedConditions.visibilityOfAllElements(listOfBuilds))
+        return getWait10().until(ExpectedConditions.visibilityOfAllElements(listOfBuilds))
                 .stream()
                 .map(WebElement::getText)
                 .toList();

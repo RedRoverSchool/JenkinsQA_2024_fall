@@ -438,7 +438,9 @@ public class FreestyleProjectTest extends BaseTest {
 
         FreestyleProjectPage freestyleProjectPage = new HomePage(getDriver())
                 .openFreestyleProject(PROJECT_NAME)
+                .clickBuildNowSidebarAndWaite()
                 .clickBuildNowSidebarAndWaite();
+
         String lastBuildNumber = freestyleProjectPage.getLastBuildNumber();
 
         freestyleProjectPage
