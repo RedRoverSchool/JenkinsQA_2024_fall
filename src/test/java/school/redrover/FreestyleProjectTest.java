@@ -41,7 +41,7 @@ public class FreestyleProjectTest extends BaseTest {
                 .selectFreestyleProject()
                 .getEmptyNameMessage();
 
-        Allure.step("Expected result: Error message is displayed");
+        Allure.step(" \uD83D\uDCCC Expected result: Error message is displayed");
         Assert.assertEquals(emptyNameMessage, "» This field cannot be empty, please enter a valid name");
     }
 
@@ -62,7 +62,7 @@ public class FreestyleProjectTest extends BaseTest {
                 .selectFreestyleProject()
                 .getErrorMessage();
 
-        Allure.step("Expected result: Error message is displayed");
+        Allure.step(" \uD83D\uDCCC Expected result: Error message is displayed");
         Assert.assertEquals(errorMessage, "» A job already exists with the name ‘%s’".formatted(PROJECT_NAME));
     }
 
@@ -80,7 +80,7 @@ public class FreestyleProjectTest extends BaseTest {
                 .gotoHomePage()
                 .getItemList();
 
-        Allure.step(String.format("Expected result: Project '%s' is displayed on Home page", PROJECT_NAME), () -> {
+        Allure.step(String.format(" \uD83D\uDCCC Expected result: Project '%s' is displayed on Home page", PROJECT_NAME), () -> {
             Assert.assertEquals(actualProjectsList.size(), 1, "The projects list size is not as expected");
             Assert.assertEquals(actualProjectsList.get(0), PROJECT_NAME, "The project name does not match the expected value");
         });
@@ -98,7 +98,7 @@ public class FreestyleProjectTest extends BaseTest {
                 .clickRenameButton()
                 .getProjectName();
 
-        Allure.step(String.format("Expected result: Renamed project '%s' is displayed on Project page", NEW_PROJECT_NAME));
+        Allure.step(String.format(" \uD83D\uDCCC Expected result: Renamed project '%s' is displayed on Project page", NEW_PROJECT_NAME));
         Assert.assertEquals(renamedProject, NEW_PROJECT_NAME);
     }
 
@@ -116,7 +116,7 @@ public class FreestyleProjectTest extends BaseTest {
                 .gotoHomePage()
                 .getItemList();
 
-        Allure.step(String.format("Expected result: project '%s' is displayed on Home page", PROJECT_NAME), () -> {
+        Allure.step(String.format(" \uD83D\uDCCC Expected result: project '%s' is displayed on Home page", PROJECT_NAME), () -> {
             Assert.assertEquals(projectName.size(), 1);
             Assert.assertEquals(projectName.get(0), PROJECT_NAME);
         });
@@ -135,7 +135,7 @@ public class FreestyleProjectTest extends BaseTest {
                 .clickRenameButtonLeadingToError()
                 .getErrorMessage();
 
-        Allure.step("Expected result: Error message is displayed");
+        Allure.step(" \uD83D\uDCCC Expected result: Error message is displayed");
         Assert.assertEquals(invalidNameMessage, "‘%s’ is an unsafe character".formatted(escapeHtml(unsafeCharacter)));
     }
 
@@ -153,7 +153,7 @@ public class FreestyleProjectTest extends BaseTest {
                 .gotoHomePage()
                 .getItemList();
 
-        Allure.step(String.format("Expected result: project '%s' is displayed on Home page", PROJECT_NAME), () -> {
+        Allure.step(String.format(" \uD83D\uDCCC Expected result: project '%s' is displayed on Home page", PROJECT_NAME), () -> {
             Assert.assertEquals(actualProjectsList.size(), 1);
             Assert.assertEquals(actualProjectsList.get(0), PROJECT_NAME);
         });
@@ -178,7 +178,7 @@ public class FreestyleProjectTest extends BaseTest {
                 .clickSidebarConfigButton()
                 .getTimePeriod();
 
-        Allure.step(String.format("Expected result: The selected duration period is '%s'", durationPeriod));
+        Allure.step(String.format(" \uD83D\uDCCC Expected result: The selected duration period is '%s'", durationPeriod));
         Assert.assertEquals(periodCheckbox, durationPeriod);
     }
 
@@ -192,7 +192,7 @@ public class FreestyleProjectTest extends BaseTest {
                 .clickSubmitButton()
                 .getDescription();
 
-        Allure.step(String.format("Expected result: The description '%s' added for project '%s'", DESCRIPTION, PROJECT_NAME));
+        Allure.step(String.format(" \uD83D\uDCCC Expected result: The description '%s' added for project '%s'", DESCRIPTION, PROJECT_NAME));
         Assert.assertEquals(description, DESCRIPTION);
     }
 
@@ -209,7 +209,7 @@ public class FreestyleProjectTest extends BaseTest {
                 .clickSubmitButton()
                 .getDescription();
 
-        Allure.step(String.format("Expected result: The description '%s' updated for project '%s'", newDescription, PROJECT_NAME));
+        Allure.step(String.format(" \uD83D\uDCCC Expected result: The description '%s' updated for project '%s'", newDescription, PROJECT_NAME));
         Assert.assertEquals(actualDescription, newDescription);
     }
 
@@ -225,7 +225,7 @@ public class FreestyleProjectTest extends BaseTest {
                 .clickSaveButton()
                 .getDescription();
 
-        Allure.step(String.format("Expected result: The description '%s' added for project '%s'", DESCRIPTION, PROJECT_NAME));
+        Allure.step(String.format(" \uD83D\uDCCC Expected result: The description '%s' added for project '%s'", DESCRIPTION, PROJECT_NAME));
         Assert.assertEquals(actualDescription, DESCRIPTION);
     }
 
@@ -238,7 +238,7 @@ public class FreestyleProjectTest extends BaseTest {
                 .clearDescription()
                 .getDescription();
 
-        Allure.step(String.format("Expected result: The description is successfully deleted for project '%s'", PROJECT_NAME));
+        Allure.step(String.format(" \uD83D\uDCCC Expected result: The description is successfully deleted for project '%s'", PROJECT_NAME));
         Assert.assertEquals(description, "");
     }
 
@@ -255,7 +255,7 @@ public class FreestyleProjectTest extends BaseTest {
                 .clickRenameButton()
                 .getProjectName();
 
-        Allure.step(String.format("Expected result: The project is renamed to '%s'", newName));
+        Allure.step(String.format(" \uD83D\uDCCC Expected result: The project is renamed to '%s'", newName));
         Assert.assertEquals(actualProjectName, newName);
     }
 
@@ -270,7 +270,7 @@ public class FreestyleProjectTest extends BaseTest {
                 .clickRenameButtonLeadingToError()
                 .getErrorMessage();
 
-        Allure.step("Expected result: Warning message is displayed");
+        Allure.step(" \uD83D\uDCCC Expected result: Warning message is displayed");
         Assert.assertEquals(emptyNameWarning, "No name is specified");
     }
 
@@ -285,7 +285,7 @@ public class FreestyleProjectTest extends BaseTest {
                 .clickRenameButtonLeadingToError()
                 .getErrorMessage();
 
-        Allure.step("Expected result: Warning message is displayed");
+        Allure.step(" \uD83D\uDCCC Expected result: Warning message is displayed");
         Assert.assertEquals(theSameNameWarning, "The new name is the same as the current name.");
     }
 
@@ -303,7 +303,7 @@ public class FreestyleProjectTest extends BaseTest {
                 .clickRenameButton()
                 .getProjectName();
 
-        Allure.step(String.format("Expected result: The project is renamed to '%s'", newName));
+        Allure.step(String.format(" \uD83D\uDCCC Expected result: The project is renamed to '%s'", newName));
         Assert.assertEquals(actualProjectName, newName);
     }
 
@@ -320,7 +320,7 @@ public class FreestyleProjectTest extends BaseTest {
                 .openFreestyleProject(PROJECT_NAME)
                 .getSidebarItemList();
 
-        Allure.step("Expected result: The sidebar menu contains the correct items");
+        Allure.step(" \uD83D\uDCCC Expected result: The sidebar menu contains the correct items");
         Assert.assertEquals(actualSidebarMenu, templateSidebarMenu);
     }
 
@@ -342,7 +342,7 @@ public class FreestyleProjectTest extends BaseTest {
                 .clickSidebarConfigButton()
                 .getTextExecuteShellTextArea();
 
-        Allure.step(String.format("Expected result: The Shell command '%s' is successfully added and displayed", testCommand));
+        Allure.step(String.format(" \uD83D\uDCCC Expected result: The Shell command '%s' is successfully added and displayed", testCommand));
         Assert.assertEquals(extractedText, testCommand);
     }
 
@@ -358,7 +358,7 @@ public class FreestyleProjectTest extends BaseTest {
                 .clickOnSuccessBuildIconForLastBuild()
                 .getConsoleOutputText();
 
-        Allure.step("Expected result: The project build is successfully triggered");
+        Allure.step(" \uD83D\uDCCC Expected result: The project build is successfully triggered");
         Assert.assertTrue(buildInfo.contains("Finished: SUCCESS"));
     }
 
@@ -374,7 +374,7 @@ public class FreestyleProjectTest extends BaseTest {
                 .clickSaveButton()
                 .getStatusTitle();
 
-        Allure.step(String.format("Expected result: The build display name '%s' is successfully added to the build title", BUILD_NAME));
+        Allure.step(String.format(" \uD83D\uDCCC Expected result: The build display name '%s' is successfully added to the build title", BUILD_NAME));
         Assert.assertTrue(actualBuildName.contains(BUILD_NAME), "Title doesn't contain build name");
     }
 
@@ -392,7 +392,7 @@ public class FreestyleProjectTest extends BaseTest {
                 .clickSaveButton()
                 .getStatusTitle();
 
-        Allure.step(String.format("Expected result: The build display name is successfully updated to '%s'", newDisplayName));
+        Allure.step(String.format(" \uD83D\uDCCC Expected result: The build display name is successfully updated to '%s'", newDisplayName));
         Assert.assertTrue(actualBuildName.contains(newDisplayName));
     }
 
@@ -408,7 +408,7 @@ public class FreestyleProjectTest extends BaseTest {
                 .clickSaveButton()
                 .getBuildDescription();
 
-        Allure.step(String.format("Expected result: The build description '%s' is successfully added", DESCRIPTION));
+        Allure.step(String.format(" \uD83D\uDCCC Expected result: The build description '%s' is successfully added", DESCRIPTION));
         Assert.assertEquals(actualDescription, DESCRIPTION);
     }
 
@@ -426,7 +426,7 @@ public class FreestyleProjectTest extends BaseTest {
                 .clickSaveButton()
                 .getBuildDescription();
 
-        Allure.step(String.format("Expected result: The build description is successfully updated to '%s'", newDescription));
+        Allure.step(String.format(" \uD83D\uDCCC Expected result: The build description is successfully updated to '%s'", newDescription));
         Assert.assertEquals(actualDescription, newDescription);
     }
 
@@ -448,7 +448,7 @@ public class FreestyleProjectTest extends BaseTest {
                 .clickDeleteBuildSidebar()
                 .confirmDeleteBuild();
 
-        Allure.step("Expected result: The last build is successfully deleted from the project");
+        Allure.step(" \uD83D\uDCCC Expected result: The last build is successfully deleted from the project");
         Assert.assertListNotContainsObject(freestyleProjectPage.getListOfBuilds(), lastBuildNumber, "The last build wasn't deleted");
     }
 
@@ -464,7 +464,7 @@ public class FreestyleProjectTest extends BaseTest {
                 .clickLastBuildDateTime()
                 .getLastBuildTotalTime();
 
-        Allure.step("Expected result: The total build time for the project build is greater than 0");
+        Allure.step(" \uD83D\uDCCC Expected result: The total build time for the project build is greater than 0");
         Assert.assertTrue(lastBuildTotalTime > 0);
     }
 
@@ -477,7 +477,7 @@ public class FreestyleProjectTest extends BaseTest {
                 .clickDeleteButtonSidebarAndConfirm()
                 .getWelcomeTitle();
 
-        Allure.step("Expected result: The project is successfully deleted, and the welcome text is displayed on the dashboard");
+        Allure.step(" \uD83D\uDCCC Expected result: The project is successfully deleted, and the welcome text is displayed on the dashboard");
         Assert.assertEquals(welcomeText, "Welcome to Jenkins!", "There is a project on Dashboard");
     }
 
@@ -491,7 +491,7 @@ public class FreestyleProjectTest extends BaseTest {
                 .selectDeleteFromItemMenuAndClickYes(PROJECT_NAME)
                 .getWelcomeTitle();
 
-        Allure.step("Expected result: The project is successfully deleted, and the welcome text is displayed on the dashboard");
+        Allure.step(" \uD83D\uDCCC Expected result: The project is successfully deleted, and the welcome text is displayed on the dashboard");
         Assert.assertEquals(welcomeText, "Welcome to Jenkins!");
     }
 
@@ -506,7 +506,7 @@ public class FreestyleProjectTest extends BaseTest {
                 .selectDeleteFromItemMenuAndClickYes(PROJECT_NAME)
                 .getItemList();
 
-        Allure.step(String.format("Expected result: The first project is successfully deleted and the remaining project is '%s'", secondProject), () -> {
+        Allure.step(String.format(" \uD83D\uDCCC Expected result: The first project is successfully deleted and the remaining project is '%s'", secondProject), () -> {
             Assert.assertEquals(projectsList.size(), 1);
             Assert.assertEquals(projectsList.get(0), secondProject);
         });
@@ -524,7 +524,7 @@ public class FreestyleProjectTest extends BaseTest {
                 .clickWorkspaceSidebar()
                 .getWorkspaceTitle();
 
-        Allure.step("Expected result: The workspace is successfully deleted.");
+        Allure.step(" \uD83D\uDCCC Expected result: The workspace is successfully deleted.");
         Assert.assertEquals(workspaceText, "Error: no workspace");
     }
 
@@ -541,9 +541,9 @@ public class FreestyleProjectTest extends BaseTest {
                 .clickWipeOutCurrentWorkspaceSidebar();
 
 
-        Allure.step("Expected result: All confirmation dialog texts are present");
+        Allure.step(" \uD83D\uDCCC Expected result: All confirmation dialog texts are present");
         Assert.assertTrue(areAllConfirmationDialogOptionsPresent.verifyConfirmationDialogOptionsPresenceText(dialogOptions), "Some dialog options weren't found");
-        Allure.step("Expected result: All confirmation dialog buttons are present");
+        Allure.step(" \uD83D\uDCCC Expected result: All confirmation dialog buttons are present");
         Assert.assertTrue(areAllConfirmationDialogOptionsPresent.verifyConfirmationDialogButtonsName(dialogOptionButtonName), "Some dialog options weren't found");
     }
 
@@ -558,7 +558,7 @@ public class FreestyleProjectTest extends BaseTest {
                 .selectFreestyleProject()
                 .getInvalidNameMessage();
 
-        Allure.step(String.format("Expected result: Error message is displayed for invalid character '%s' in project name", unsafeCharacter));
+        Allure.step(String.format(" \uD83D\uDCCC Expected result: Error message is displayed for invalid character '%s' in project name", unsafeCharacter));
         Assert.assertEquals(invalidNameMessage, "» ‘%s’ is an unsafe character".formatted(unsafeCharacter));
     }
 
@@ -574,7 +574,7 @@ public class FreestyleProjectTest extends BaseTest {
                 .clickPreview()
                 .getPreviewDescriptionText();
 
-        Allure.step(String.format("Expected result: The description preview matches the entered description '%s'", DESCRIPTION));
+        Allure.step(String.format(" \uD83D\uDCCC Expected result: The description preview matches the entered description '%s'", DESCRIPTION));
         Assert.assertEquals(descriptionPreview, DESCRIPTION);
     }
 
@@ -589,7 +589,7 @@ public class FreestyleProjectTest extends BaseTest {
         Boolean isSorted = new HomePage(getDriver())
                 .isInAlphabeticalOrder();
 
-        Allure.step("Expected result: Projects are sorted alphabetically");
+        Allure.step(" \uD83D\uDCCC Expected result: Projects are sorted alphabetically");
         Assert.assertTrue(isSorted, "Projects is not sorted alphabetically");
     }
 
@@ -603,7 +603,7 @@ public class FreestyleProjectTest extends BaseTest {
                 .selectBuildNowFromItemMenu(PROJECT_NAME)
                 .getNotificationBarStatus();
 
-        Allure.step(String.format("Expected result: Notification bar appears for project '%s'", PROJECT_NAME));
+        Allure.step(String.format(" \uD83D\uDCCC Expected result: Notification bar appears for project '%s'", PROJECT_NAME));
         Assert.assertEquals(notificationBar, "Build Now: Done.");
     }
 
@@ -616,7 +616,7 @@ public class FreestyleProjectTest extends BaseTest {
                 .refreshAfterBuild()
                 .getNumberOfRuns();
 
-        Allure.step(String.format("Expected result: The counter of runs increases and shows number of it for project '%s'", PROJECT_NAME));
+        Allure.step(String.format(" \uD83D\uDCCC Expected result: The counter of runs increases and shows number of it for project '%s'", PROJECT_NAME));
         Assert.assertEquals(progressBar, "#2");
     }
 
@@ -627,7 +627,7 @@ public class FreestyleProjectTest extends BaseTest {
         String statusBuild = new HomePage(getDriver())
                 .getStatusBuild(PROJECT_NAME);
 
-        Allure.step(String.format("Expected result: Success building status for project '%s' is displayed", PROJECT_NAME));
+        Allure.step(String.format(" \uD83D\uDCCC Expected result: Success building status for project '%s' is displayed", PROJECT_NAME));
         Assert.assertEquals(statusBuild, "Success");
     }
 
@@ -641,7 +641,7 @@ public class FreestyleProjectTest extends BaseTest {
                 .gotoBuildHistoryPageFromLeftPanel()
                 .getListOfStatuses();
 
-        Allure.step(String.format("Expected result: The build history for project '%s' is empty", PROJECT_NAME));
+        Allure.step(String.format(" \uD83D\uDCCC Expected result: The build history for project '%s' is empty", PROJECT_NAME));
         Assert.assertEquals(emptyHistory.size(), 0);
     }
 
@@ -656,7 +656,7 @@ public class FreestyleProjectTest extends BaseTest {
                 .gotoBuildHistoryPageFromLeftPanel()
                 .getListOfStatuses();
 
-        Allure.step(String.format("Expected result: After executing the build, one stable build status is displayed for project '%s'",
+        Allure.step(String.format(" \uD83D\uDCCC Expected result: After executing the build, one stable build status is displayed for project '%s'",
                 PROJECT_NAME), () -> {
             Assert.assertEquals(oneExecution.get(0), "stable");
             Assert.assertEquals(oneExecution.size(), 1);
@@ -677,7 +677,7 @@ public class FreestyleProjectTest extends BaseTest {
                 .gotoBuildHistoryPageFromLeftPanel()
                 .getListOfStatuses();
 
-        Allure.step(String.format("Expected result: After changing the config, there should be two executions for project '%s'", PROJECT_NAME));
+        Allure.step(String.format(" \uD83D\uDCCC Expected result: After changing the config, there should be two executions for project '%s'", PROJECT_NAME));
         Assert.assertEquals(changeConfig.size(), 2);
     }
 
@@ -693,7 +693,7 @@ public class FreestyleProjectTest extends BaseTest {
                 .clickWorkspaceSidebar()
                 .getBreadCrumb();
 
-        Allure.step(String.format("Expected result: The workspace for project '%s' should be opened and displayed correctly", PROJECT_NAME));
+        Allure.step(String.format(" \uD83D\uDCCC Expected result: The workspace for project '%s' should be opened and displayed correctly", PROJECT_NAME));
         Assert.assertEquals(workspace, "Workspace of " + PROJECT_NAME + " on Built-In Node");
     }
 
@@ -708,7 +708,7 @@ public class FreestyleProjectTest extends BaseTest {
                 .clickOnSuccessBuildIconForLastBuild()
                 .getBreadCrumb();
 
-        Allure.step(String.format("Expected result: The last build for project '%s' is displayed correctly", PROJECT_NAME));
+        Allure.step(String.format(" \uD83D\uDCCC Expected result: The last build for project '%s' is displayed correctly", PROJECT_NAME));
         Assert.assertEquals(secondBuild, "#2");
     }
 
@@ -722,7 +722,7 @@ public class FreestyleProjectTest extends BaseTest {
                 .clickDeleteBreadcrumbDropdownAndConfirm()
                 .getItemList();
 
-        Allure.step(String.format("Expected result: The project '%s' is not listed on Home page", PROJECT_NAME));
+        Allure.step(String.format(" \uD83D\uDCCC Expected result: The project '%s' is not listed on Home page", PROJECT_NAME));
         Assert.assertListNotContainsObject(projectList, PROJECT_NAME, "Project is not deleted.");
     }
 
@@ -743,7 +743,7 @@ public class FreestyleProjectTest extends BaseTest {
                 .gotoHomePage()
                 .getItemList();
 
-        Allure.step(String.format("Expected result: The project '%s' is displayed on Home page", secondProjectName));
+        Allure.step(String.format(" \uD83D\uDCCC Expected result: The project '%s' is displayed on Home page", secondProjectName));
         Assert.assertTrue(itemNameList.contains(secondProjectName));
     }
 
@@ -758,7 +758,7 @@ public class FreestyleProjectTest extends BaseTest {
                 .clickSidebarConfigButton()
                 .getEnablingCurrentState();
 
-        Allure.step(String.format("Expected result: The current state of the project '%s' is enabled", PROJECT_NAME));
+        Allure.step(String.format(" \uD83D\uDCCC Expected result: The current state of the project '%s' is enabled", PROJECT_NAME));
         Assert.assertTrue(currentState);
     }
 
@@ -772,7 +772,7 @@ public class FreestyleProjectTest extends BaseTest {
                 .changeEnablingState()
                 .getDisabledProjectIndicator();
 
-        Allure.step(String.format("Expected result: The project '%s' is disabled and shows the correct indicator text", PROJECT_NAME));
+        Allure.step(String.format(" \uD83D\uDCCC Expected result: The project '%s' is disabled and shows the correct indicator text", PROJECT_NAME));
         Assert.assertEquals(indicatorText, "This project is currently disabled\n" + "Enable");
     }
 
@@ -789,7 +789,7 @@ public class FreestyleProjectTest extends BaseTest {
                 .clickSidebarConfigButton()
                 .getEnablingCurrentState();
 
-        Allure.step(String.format("Expected result: The project '%s' is enabled", PROJECT_NAME));
+        Allure.step(String.format(" \uD83D\uDCCC Expected result: The project '%s' is enabled", PROJECT_NAME));
         Assert.assertTrue(currentState);
     }
 
@@ -812,7 +812,7 @@ public class FreestyleProjectTest extends BaseTest {
                 .clickSidebarConfigButton()
                 .getEnablingCurrentState();
 
-        Allure.step(String.format("Expected result: The project '%s' is enabled", PROJECT_NAME));
+        Allure.step(String.format(" \uD83D\uDCCC Expected result: The project '%s' is enabled", PROJECT_NAME));
         Assert.assertTrue(currentState);
     }
 }
