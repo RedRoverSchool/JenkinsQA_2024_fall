@@ -1,0 +1,45 @@
+<div>POST to /view/all/createItem?name=NewProject</div>
+
+<h4>Body</h4>
+<div>
+    <pre class="preformated-text">
+&lt;project&gt;
+    &lt;keepDependencies&gt;false&lt;/keepDependencies&gt;
+    &lt;properties/&gt;
+    &lt;scm class=&quot;hudson.scm.NullSCM&quot;/&gt;
+    &lt;canRoam&gt;false&lt;/canRoam&gt;
+    &lt;disabled&gt;false&lt;/disabled&gt;
+    &lt;blockBuildWhenDownstreamBuilding&gt;false&lt;/blockBuildWhenDownstreamBuilding&gt;
+    &lt;blockBuildWhenUpstreamBuilding&gt;false&lt;/blockBuildWhenUpstreamBuilding&gt;
+    &lt;triggers/&gt;
+    &lt;concurrentBuild&gt;false&lt;/concurrentBuild&gt;
+    &lt;builders/&gt;
+    &lt;publishers/&gt;
+    &lt;buildWrappers/&gt;
+&lt;/project&gt;    </pre>
+</div>
+
+<h4>Headers</h4>
+<div>
+        <div>Content-Type: application/xml</div>
+</div>
+
+
+
+<h4>Curl</h4>
+<div>
+curl -v -X POST &#39;/view/all/createItem?name=NewProject&#39; -H &#39;Content-Type: application/xml&#39; -d &#39;&lt;project&gt;
+    &lt;keepDependencies&gt;false&lt;/keepDependencies&gt;
+    &lt;properties/&gt;
+    &lt;scm class=&quot;hudson.scm.NullSCM&quot;/&gt;
+    &lt;canRoam&gt;false&lt;/canRoam&gt;
+    &lt;disabled&gt;false&lt;/disabled&gt;
+    &lt;blockBuildWhenDownstreamBuilding&gt;false&lt;/blockBuildWhenDownstreamBuilding&gt;
+    &lt;blockBuildWhenUpstreamBuilding&gt;false&lt;/blockBuildWhenUpstreamBuilding&gt;
+    &lt;triggers/&gt;
+    &lt;concurrentBuild&gt;false&lt;/concurrentBuild&gt;
+    &lt;builders/&gt;
+    &lt;publishers/&gt;
+    &lt;buildWrappers/&gt;
+&lt;/project&gt;&#39;
+</div>
