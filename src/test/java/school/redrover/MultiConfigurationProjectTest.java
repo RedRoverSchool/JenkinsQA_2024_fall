@@ -1,9 +1,6 @@
 package school.redrover;
 
-import io.qameta.allure.Allure;
-import io.qameta.allure.Description;
-import io.qameta.allure.Epic;
-import io.qameta.allure.Story;
+import io.qameta.allure.*;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.testng.Assert;
@@ -15,6 +12,7 @@ import school.redrover.runner.TestUtils;
 
 import java.util.List;
 
+@Feature("03 MultiConfiguration project")
 public class MultiConfigurationProjectTest extends BaseTest {
 
     private static final String PROJECT_NAME = "MultiConfigurationProject";
@@ -38,11 +36,12 @@ public class MultiConfigurationProjectTest extends BaseTest {
         Assert.assertEquals(itemList.get(0), PROJECT_NAME);
     }
 
-    @Test(dependsOnMethods = "testCreateProjectWithoutDescription")
-    @Epic("03 MultiConfiguration project")
+    @Test()
     @Story("US_03.001 Add/edit description")
     @Description("TC_03.001.01 Add description to the Multiconfiguration project")
     public void testAddDescriptions() {
+        TestUtils.createMultiConfigurationProject(getDriver(), PROJECT_NAME);
+
         String addDescription = new HomePage(getDriver())
                 .openMultiConfigurationProject(PROJECT_NAME)
                 .editDescription(DESCRIPTIONS)
@@ -69,7 +68,6 @@ public class MultiConfigurationProjectTest extends BaseTest {
     }
 
     @Test
-    @Epic("03 MultiConfiguration project")
     @Story("US_03.004 Build")
     @Description("TC_03.004.01 Check the select time period throttle builds")
     public void testSelectTimePeriodThrottleBuilds() {
@@ -90,7 +88,6 @@ public class MultiConfigurationProjectTest extends BaseTest {
     }
 
     @Test
-    @Epic("03 MultiConfiguration project")
     @Story("US_03.003 Delete project")
     @Description("TC_03.003.03 Confirmation popup appears when deleting a project on the project page")
     public void testDeletionPopupAppearsOnProjectPage() {
@@ -106,7 +103,6 @@ public class MultiConfigurationProjectTest extends BaseTest {
     }
 
     @Test(dependsOnMethods = "testDeletionPopupAppearsOnProjectPage")
-    @Epic("03 MultiConfiguration project")
     @Story("US_03.003 Delete project")
     @Description("TC_03.003.05 Confirmation popup appears when deleting a project from the main page via dropdown menu")
     public void testDeletionPopupAppearsOnMainPage() {
@@ -119,7 +115,6 @@ public class MultiConfigurationProjectTest extends BaseTest {
     }
 
     @Test(dependsOnMethods = "testDeletionPopupAppearsOnMainPage")
-    @Epic("03 MultiConfiguration project")
     @Story("US_03.003 Delete project")
     @Description("TC_03.003.06 Confirmation popup appears when deleting a project from 'My views' page")
     public void testDeletionPopupAppearsOnMyViews() {
@@ -134,7 +129,6 @@ public class MultiConfigurationProjectTest extends BaseTest {
     }
 
     @Test
-    @Epic("03 MultiConfiguration project")
     @Story("US_03.003 Delete project")
     @Description("TC_03.003.02 Delete project directly from project's page")
     public void testDeleteProjectFromProjectPage() {
@@ -148,10 +142,10 @@ public class MultiConfigurationProjectTest extends BaseTest {
         Allure.step(" \uD83D\uDCCC Expected result: A welcome message is displayed on the main page");
         Assert.assertEquals(welcomeText, "Welcome to Jenkins!");
     }
-    @Epic("03 MultiConfiguration project")
+
+    @Test
     @Story("US_03.003 Delete project")
     @Description("TC_03.003.08 Cancel deleting in 'Delete Multi-configuration project' window via 'Cancel' button")
-    @Test
     public void testCancelDeleteProjectFromProjectPage() {
         TestUtils.createMultiConfigurationProject(getDriver(), PROJECT_NAME);
 
@@ -168,7 +162,6 @@ public class MultiConfigurationProjectTest extends BaseTest {
     }
 
     @Test
-    @Epic("03 MultiConfiguration project")
     @Story("US_03.003 Delete project")
     @Description("TC_03.003.01 Delete MultiConfiguration project from the main page via 'Dropdown menu'")
     public void testDeleteViaDropDownMenu() {
@@ -183,7 +176,6 @@ public class MultiConfigurationProjectTest extends BaseTest {
     }
 
     @Test
-    @Epic("03 MultiConfiguration project")
     @Story("US_03.003 Delete project")
     @Description("TC_03.003.04 Delete MultiConfiguration project  from 'My views' page via 'Dropdown menu'")
     public void testDeleteFromMyViewsPage() {
