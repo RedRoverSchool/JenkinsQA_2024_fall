@@ -5,7 +5,6 @@ import io.qameta.allure.Description;
 import io.qameta.allure.Epic;
 import io.qameta.allure.Story;
 import org.testng.Assert;
-import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import school.redrover.testdata.TestDataProvider;
 import school.redrover.page.freestyle.FreestyleConfigPage;
@@ -17,7 +16,6 @@ import school.redrover.runner.TestUtils;
 import java.util.List;
 
 @Epic("01 FreestyleProject")
-@Ignore
 public class FreestyleProjectTest extends BaseTest {
 
     private static final String PROJECT_NAME = "MyFreestyleProject";
@@ -356,7 +354,7 @@ public class FreestyleProjectTest extends BaseTest {
 
         String buildInfo = new HomePage(getDriver())
                 .openFreestyleProject(PROJECT_NAME)
-                .clickBuildNowSidebar()
+                .clickBuildNowSidebarAndWaite()
                 .clickOnSuccessBuildIconForLastBuild()
                 .getConsoleOutputText();
 
@@ -440,7 +438,7 @@ public class FreestyleProjectTest extends BaseTest {
 
         FreestyleProjectPage freestyleProjectPage = new HomePage(getDriver())
                 .openFreestyleProject(PROJECT_NAME)
-                .clickBuildNowSidebar();
+                .clickBuildNowSidebarAndWaite();
         String lastBuildNumber = freestyleProjectPage.getLastBuildNumber();
 
         freestyleProjectPage
@@ -460,7 +458,7 @@ public class FreestyleProjectTest extends BaseTest {
 
         int lastBuildTotalTime = new HomePage(getDriver())
                 .openFreestyleProject(PROJECT_NAME)
-                .clickBuildNowSidebar()
+                .clickBuildNowSidebarAndWaite()
                 .clickLastBuildDateTime()
                 .getLastBuildTotalTime();
 
@@ -686,7 +684,7 @@ public class FreestyleProjectTest extends BaseTest {
 
         String workspace = new HomePage(getDriver())
                 .openFreestyleProject(PROJECT_NAME)
-                .clickBuildNowSidebar()
+                .clickBuildNowSidebarAndWaite()
                 .clickWorkspaceSidebar()
                 .getBreadCrumb();
 
@@ -700,7 +698,7 @@ public class FreestyleProjectTest extends BaseTest {
     public void testLastBuildIsOpened() {
         String secondBuild = new HomePage(getDriver())
                 .openFreestyleProject(PROJECT_NAME)
-                .clickBuildNowSidebar()
+                .clickBuildNowSidebarAndWaite()
                 .clickWorkspaceSidebar()
                 .clickOnSuccessBuildIconForLastBuild()
                 .getBreadCrumb();

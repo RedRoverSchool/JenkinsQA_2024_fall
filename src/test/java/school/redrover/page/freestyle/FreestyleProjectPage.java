@@ -35,8 +35,11 @@ public class FreestyleProjectPage extends BaseProjectPage<FreestyleProjectPage, 
     @FindBy(xpath = "//a[@data-build-success='Build scheduled']")
     private WebElement buildNowSidebar;
 
-    @FindBy(xpath = "//tbody//tr[2]//a")
+    @FindBy(xpath = "//div[@id='jenkins-build-history']/div/div[1]/a")
     private WebElement lastBuildSuccessBuildIcon;
+
+    @FindBy(xpath = "//span[text()='Build scheduled']")
+    private WebElement buildScheduledTooltip;
 
     @FindBy(xpath = "//button[@data-id='ok']")
     private WebElement yesButton;
@@ -103,8 +106,9 @@ public class FreestyleProjectPage extends BaseProjectPage<FreestyleProjectPage, 
     }
 
     @Step("Click 'Build Now' sidebar")
-    public FreestyleProjectPage clickBuildNowSidebar() {
+    public FreestyleProjectPage clickBuildNowSidebarAndWaite() {
         getWait5().until(ExpectedConditions.elementToBeClickable(buildNowSidebar)).click();
+        getWait10().until(ExpectedConditions.visibilityOf(buildScheduledTooltip));
 
         return this;
     }
