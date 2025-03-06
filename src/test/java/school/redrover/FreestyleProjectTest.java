@@ -532,16 +532,19 @@ public class FreestyleProjectTest extends BaseTest {
     @Story("US_01.007 Workspace delete")
     @Description("TC_01.007.02 Workspace confirmation options are displayed before deletion ")
     public void testDeleteWorkspaceConfirmationOptions() {
-        List<String> dialogOptions = List.of("Wipe Out Current Workspace", "Are you sure about wiping out the workspace?", "Cancel", "Yes");
+        List<String> dialogOptions = List.of("Wipe Out Current Workspace", "Are you sure about wiping out the workspace?");
+        List<String> dialogOptionButtonName = List.of("Cancel", "Yes");
 
-        boolean areAllConfirmationDialogOptionsPresent = new HomePage(getDriver())
+        FreestyleProjectPage areAllConfirmationDialogOptionsPresent = new HomePage(getDriver())
                 .openFreestyleProject(PROJECT_NAME)
                 .clickWorkspaceSidebar()
-                .clickWipeOutCurrentWorkspaceSidebar()
-                .verifyConfirmationDialogOptionsPresence(dialogOptions);
+                .clickWipeOutCurrentWorkspaceSidebar();
 
-        Allure.step("Expected result: All confirmation dialog options are present");
-        Assert.assertTrue(areAllConfirmationDialogOptionsPresent, "Some dialog options weren't found");
+
+        Allure.step("Expected result: All confirmation dialog texts are present");
+        Assert.assertTrue(areAllConfirmationDialogOptionsPresent.verifyConfirmationDialogOptionsPresenceText(dialogOptions), "Some dialog options weren't found");
+        Allure.step("Expected result: All confirmation dialog buttons are present");
+        Assert.assertTrue(areAllConfirmationDialogOptionsPresent.verifyConfirmationDialogButtonsName(dialogOptionButtonName), "Some dialog options weren't found");
     }
 
     @Test(dataProvider = "providerUnsafeCharacters", dataProviderClass = TestDataProvider.class)

@@ -26,11 +26,14 @@ public class FreestyleProjectPage extends BaseProjectPage<FreestyleProjectPage, 
     @FindBy(xpath = "//div[@id='jenkins-build-history']/div/div")
     private List<WebElement> listOfBuilds;
 
-    @FindBy(tagName = "dialog")
-    private List<WebElement> wipeOutCurrentWorkspaceDialog;
+    @FindBy(xpath = "//dialog[@class='jenkins-dialog']")
+    private WebElement wipeOutCurrentWorkspaceDialog;
 
-    @FindBy(css = "dialog *")
+    @FindBy(xpath = "//dialog[@class='jenkins-dialog']/*")
     private List<WebElement> wipeOutCurrentWorkspaceDialogOptions;
+
+    @FindBy(xpath = "//dialog[@class='jenkins-dialog']/div/button")
+    private List<WebElement> wipeOutCurrentWorkspaceDialogOptionsButtons;
 
     @FindBy(xpath = "//a[@data-build-success='Build scheduled']")
     private WebElement buildNowSidebar;
@@ -120,14 +123,27 @@ public class FreestyleProjectPage extends BaseProjectPage<FreestyleProjectPage, 
                 .toList();
     }
 
-    public boolean verifyConfirmationDialogOptionsPresence(List<String> dialogOptions) {
-        getWait10().until(ExpectedConditions.visibilityOfAllElements(wipeOutCurrentWorkspaceDialog));
+    public boolean verifyConfirmationDialogOptionsPresenceText(List<String> dialogOptions) {
+        getWait10().until(ExpectedConditions.visibilityOf(wipeOutCurrentWorkspaceDialog));
         List<String> confirmationDialogOptions = wipeOutCurrentWorkspaceDialogOptions.stream()
                 .map(WebElement::getText)
                 .toList();
 
         for (String option : dialogOptions) {
             if (!confirmationDialogOptions.contains(option))
+                return false;
+        }
+        return true;
+    }
+
+    public boolean verifyConfirmationDialogButtonsName(List<String> dialogOptionButtonName) {
+        getWait10().until(ExpectedConditions.visibilityOf(wipeOutCurrentWorkspaceDialog));
+        List<String> confirmationDialogButton = wipeOutCurrentWorkspaceDialogOptionsButtons.stream()
+                .map(WebElement::getText)
+                .toList();
+
+        for (String button : dialogOptionButtonName) {
+            if (!confirmationDialogButton.contains(button))
                 return false;
         }
         return true;
