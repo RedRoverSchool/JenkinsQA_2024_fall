@@ -8,17 +8,11 @@ import school.redrover.page.base.BasePage;
 
 public class SearchPage extends BasePage<SearchPage> {
 
-    @FindAll({
-        @FindBy(xpath = "//li[@id = 'item_Built-In Node']/a"),
-        @FindBy(xpath = "//a[@class='jenkins-table__link']")
-    })
+    @FindBy (xpath = "//h1")
     private WebElement searchResult;
 
     @FindBy(xpath = "//h1")
     private WebElement title;
-
-    @FindBy(className = "error")
-    private WebElement messageError;
 
     public SearchPage(WebDriver driver) {
         super(driver);

@@ -88,9 +88,7 @@ public class NewItemTest extends BaseTest {
                 .clickNewItem()
                 .selectFreestyleProject()
                 .selectPipeline()
-                .selectMultibranchPipelineProject()
                 .selectFolderType()
-                .selectMultibranchPipelineProject()
                 .getErrorMessage();
 
         Allure.step(String.format("Expected Result: Warning message '%s' is displayed when creating project with empty name field", MESSAGE));

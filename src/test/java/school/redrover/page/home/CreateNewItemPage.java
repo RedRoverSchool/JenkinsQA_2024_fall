@@ -19,7 +19,7 @@ import java.util.List;
 
 public class CreateNewItemPage extends BasePage<CreateNewItemPage> {
 
-    @FindBy(xpath = "//span[text()= 'Multibranch Pipeline']")
+    @FindBy(xpath = "//span[text()='Multibranch Pipeline']")
     private WebElement multibranchPipeline;
 
     @FindBy(xpath = "//span[text()='Folder']")

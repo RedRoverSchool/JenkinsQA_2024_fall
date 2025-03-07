@@ -1,7 +1,7 @@
 package school.redrover.page.component;
 
 import io.qameta.allure.Step;
-import org.openqa.selenium.Keys;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
@@ -14,24 +14,22 @@ import school.redrover.page.base.BasePage;
 import school.redrover.page.home.HomePage;
 import school.redrover.page.manage.ManageJenkinsPage;
 
-import java.util.List;
-
 public class HeaderComponent<T extends BasePage<T>> extends BaseComponent<T> {
 
     @FindBy(id = "jenkins-home-link")
     private WebElement logo;
 
-    @FindBy(xpath = "//a[contains(@class,'main-search')]")
-    private WebElement iconQuestion;
+    @FindBy(xpath = "//button[@data-keyboard-shortcut='CMD+K']")
+    private WebElement search;
 
-    @FindBy(id = "search-box")
+    @FindBy(xpath = "//*[@id='search-results']/a")
+    private WebElement questionMark;
+
+    @FindBy(xpath = "//input[@autocorrect='off']")
     private WebElement searchBox;
 
-    @FindBy(xpath = "//div[@class='yui-ac-bd']/ul/li[1]")
-    private WebElement firstSuggestion;
-
-    @FindBy(xpath = "//div[@class='yui-ac-bd']/ul/li[3]")
-    private WebElement suggestedManage;
+    @FindBy(xpath = "//div[@id='search-results']")
+    private WebElement resultField;
 
     @FindBy(css = "a[id='visible-am-button'] svg")
     private WebElement iconBell;
@@ -39,8 +37,8 @@ public class HeaderComponent<T extends BasePage<T>> extends BaseComponent<T> {
     @FindBy(xpath = "//a[@href='/manage']")
     private WebElement manageJenkinsLink;
 
-    @FindBy(xpath = "//div[@class='yui-ac-bd']/ul/li[not(contains(@style, 'display: none'))]")
-    private List<WebElement> listSuggestion;
+    @FindBy(xpath = "//p[@class='jenkins-command-palette__info']")
+    private WebElement searchField;
 
     public HeaderComponent(WebDriver driver, T owner) {
         super(driver, owner);
@@ -53,33 +51,27 @@ public class HeaderComponent<T extends BasePage<T>> extends BaseComponent<T> {
         return new HomePage(getDriver());
     }
 
-    @Step("Click icon question in search field")
-    public SearchBoxPage gotoSearchBox() {
-        iconQuestion.click();
-
-        return new SearchBoxPage(getDriver());
-    }
-
     @Step("Enter text into search field")
     public HeaderComponent<T> enterSearchText(String text) {
-        searchBox.sendKeys(text);
+        getWait5().until(ExpectedConditions.elementToBeClickable(searchBox)).sendKeys(text);
+        getWait5().until(ExpectedConditions.not(ExpectedConditions.textToBePresentInElementLocated(By.xpath("//div[@id='search-results']"), "Get help using Jenkins search")));
 
         return this;
     }
 
     @Step("Press Enter")
     public SearchPage pressEnter() {
-        searchBox.sendKeys(Keys.ENTER);
+        getWait5().until(ExpectedConditions.refreshed(ExpectedConditions.visibilityOf(resultField))).click();
 
         return new SearchPage(getDriver());
     }
 
     @Step("Select first suggestion")
-    public HeaderComponent<T> selectFirstSuggestion() {
-        getWait2().until(ExpectedConditions.elementToBeClickable(firstSuggestion));
-        new Actions(getDriver()).moveToElement(firstSuggestion).click().perform();
+    public SearchPage selectFirstSuggestion() {
+        getWait2().until(ExpectedConditions.refreshed(ExpectedConditions.elementToBeClickable(resultField)));
+        new Actions(getDriver()).moveToElement(resultField).click().perform();
 
-        return this;
+        return new SearchPage(getDriver());
     }
 
     @Step("Click 'Bell' icon")
@@ -96,18 +88,22 @@ public class HeaderComponent<T extends BasePage<T>> extends BaseComponent<T> {
         return new ManageJenkinsPage(getDriver());
     }
 
-    @Step("Get list of suggestions")
-    public List<String> getListSuggestion() {
-        getWait5().until(ExpectedConditions.elementToBeClickable(firstSuggestion));
+    @Step("Click Search icon")
+    public HeaderComponent<T> clickSearch() {
+        getWait5().until(ExpectedConditions.refreshed(ExpectedConditions.visibilityOf(search))).click();
 
-        return listSuggestion.stream().map(WebElement::getText).toList();
+        return this;
     }
 
-    @Step("Click on 'Manage Jenkins' suggestion")
-    public ManageJenkinsPage clickOnSuggestedManage() {
-        getWait2().until(ExpectedConditions.elementToBeClickable(suggestedManage)).click();
+    @Step("Click icon question in search field")
+    public SearchBoxPage clickQuestionMark() {
+        questionMark.click();
 
-        return new ManageJenkinsPage(getDriver());
+        return new SearchBoxPage(getDriver());
     }
 
+    @Step("Get text from search field")
+    public String getSearchFieldText() {
+        return searchField.getText();
+    }
 }
