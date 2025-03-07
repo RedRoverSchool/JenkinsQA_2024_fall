@@ -18,7 +18,6 @@ import java.util.List;
 import java.util.Map;
 
 @Epic("02 Pipeline")
-
 public class PipelineProjectTest extends BaseTest {
 
     private final static String PIPELINE_NAME = "TestName";
